@@ -17,7 +17,7 @@ const Socials = [
   { href: '', icon: FaLinkedin }
 ]
 
-const Links = [
+const pageLinks = [
   { path: 'Terms and Conditions', url: '/terms' },
   { path: 'Privacy Policy', url: '/privacy-policy' },
   { path: 'FAQ', url: '' },
@@ -63,12 +63,12 @@ const Footer = () => {
             </div>
           </div>
           <div className='w-full h-fit bg-primary py-3 px-4 text-gray-200 text-sm'>
-            <div className='text-[#2cd4d9] text-center text-base'>Hundreds of Airdrops</div>
+            <div className='text-lightgreen text-center text-base'>Hundreds of Airdrops</div>
             <div className='text-center text-4xl mt-4'>Be the first to know</div>
             <div className='text-center mt-8'>Join our newsletter and receive the latest giveaways, airdrops and crypto news straight in your inbox.</div>
             <form className='flex flex-col gap-3 mt-6' onSubmit={SubmitForm}>
               <FormInput placeholder='Email address' type='email' value={email} onChange={event => { setEmail(event.target.value) }} className='text-white !rounded-md' />
-              <FormButton title='Subscribe' className='py-2 text-black text-sm !rounded-md font-medium bg-[#2cd4d9]' />
+              <FormButton title='Subscribe' className='py-2 !text-black text-sm !rounded-md font-medium !bg-lightgreen' />
               <div className='flex gap-2'>
                 <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='outline-none'></input>
                 <div>I consent to receiving your newsletter and special offers via email.</div>
@@ -76,10 +76,10 @@ const Footer = () => {
             </form>
           </div>
         </div>
-        <div className='w-full bg-[#171b4a] h-fit p-4 text-white'>
-          <div className='grid grid-cols-4'>
-            {Links.map((item, i) => (
-              <Link to={item.url} key={i}>{item.path}</Link>
+        <div className='w-full bg-primary h-fit p-4 text-white'>
+          <div className='grid grid-cols-4 gap-4'>
+            {pageLinks.map((item, i) => (
+              <Link to={item.url} key={i} className='hover:text-lightgreen'>{item.path}</Link>
             ))}
           </div>
         </div>

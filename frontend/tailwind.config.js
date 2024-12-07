@@ -8,9 +8,9 @@ export default {
     extend: {
       colors:{
         "primary": "#212134",
-        "btn": "#204b53",
-        "btn2": "#01d676",
-        "orange": "#E96E28",
+        "secondary": "#171828",
+        "ash": "#204b53",
+        "lightgreen": "#01d676",
         "font": "#ffffff",
         "font2": "#a9a9ca",
       }

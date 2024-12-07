@@ -5,10 +5,12 @@ import PasswordInputField from '../../utils/PasswordInputField'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import { ErrorAlert } from '../../utils/pageUtils'
+import Loading from '../../GeneralComponents/Loading'
 
 const SignUpPage = () => {
   const [check, setCheck] = useState(false)
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     first_name: '',
     surname: '',
@@ -42,13 +44,12 @@ const SignUpPage = () => {
 
   return (
     <PageLayout>
-      <div className='w-11/12 mx-auto py-20'>
-        <div className='flex items-center justify-center max-w-lg mx-auto'>
+      <div className='w-11/12 mx-auto py-28'>
+        <div className='flex items-center justify-center max-w-lg mx-auto relative'>
+          {loading && <Loading />}
           <div className='w-full h-full flex flex-col'>
-            <div className='uppercase text-2xl font-extrabold italic text-center'>velo<span className='text-orange'>x</span>
-            </div>
-            <div className='text-3xl font-bold text-center mt-8'>Create an account</div>
-            <div className='text-sm mt-2 text-center'>Already have an account? <Link to='/login' className='text-orange cursor-pointer'>Sign in</Link></div>
+            <div className='text-3xl font-bold text-center'>Create an account</div>
+            <div className='text-sm mt-2 text-center'>Already have an account? <Link to='/login' className='text-ash cursor-pointer'>Sign in</Link></div>
             <form className='mt-10' onSubmit={CreateAccount}>
               <div className='flex flex-col gap-4'>
                 <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
@@ -68,7 +69,7 @@ const SignUpPage = () => {
               <div className='flex flex-col gap-4 items-center mt-6'>
                 <div className='flex gap-2 text-sm'>
                   <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='outline-none'></input>
-                  <div>I agree to Velox <Link to='/terms' className='text-blue-500'>Terms and Conditions</Link> and <Link to='/privacy-policy' className='text-blue-500'>Privacy Policy</Link></div>
+                  <div>I agree to MonieQuest <Link to='/terms' className='text-blue-500'>Terms and Conditions</Link> and <Link to='/privacy-policy' className='text-blue-500'>Privacy Policy</Link></div>
                 </div>
                 <FormButton title='Sign Up' className='!w-4/5' />
               </div>

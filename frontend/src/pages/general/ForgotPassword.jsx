@@ -1,14 +1,12 @@
 import React from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 
-
-const HomePage = () => {
+const ForgotPassword = () => {
   return (
     <PageLayout>
-      <div className='w-11/12 mx-auto py-28'>
-      </div>
+      <div className='w-11/12 mx-auto py-28'>ForgotPassword</div>
     </PageLayout>
   )
 }
 
-export default HomePage
+export default ForgotPassword
