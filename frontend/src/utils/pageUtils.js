@@ -14,6 +14,7 @@ export const SuccessAlert = (message) => {
 
 export const MoveToTop = () => {
     document.documentElement.scrollTo({
-        top: 0
+        top: 0,
+        behavior: 'smooth'
     })
 }

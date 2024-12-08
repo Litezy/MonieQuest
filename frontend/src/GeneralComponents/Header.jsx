@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { MoveToTop } from '../utils/pageUtils';
 import { LiaBarsSolid } from "react-icons/lia";
 import { LuX } from "react-icons/lu";
+import Logo from '../assets/logo.jpeg'
 
 const pageLinks = [
   { path: 'airdrops', dir: '#footer' },
@@ -16,7 +17,8 @@ const Header = () => {
   return (
     <div className='fixed top-0 left-0 w-full bg-white z-50 border-b shadow-sm'>
       <div className='flex justify-between items-center w-11/12 mx-auto py-4'>
-        <Link to='/' onClick={MoveToTop} className='uppercase text-2xl font-extrabold italic'>monie<span className='text-ash'>quest</span>
+        <Link to='/' onClick={MoveToTop} >
+        <img src={Logo}  className="w-52 rounded-sm" alt="logo" />
         </Link>
         <div className='lg:hidden text-3xl cursor-pointer' onClick={() => setDropDown(!dropdown)}>
           {dropdown ? <LuX /> : <LiaBarsSolid />}
