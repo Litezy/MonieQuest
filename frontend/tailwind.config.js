@@ -6,13 +6,12 @@ export default {
   ],
   theme: {
     extend: {
-      colors:{
+      colors: {
         "primary": "#212134",
         "secondary": "#171828",
         "ash": "#204b53",
         "lightgreen": "#01d676",
-        "font": "#ffffff",
-        "font2": "#a9a9ca",
+        "font": "#a9a9ca",
       }
     },
   },

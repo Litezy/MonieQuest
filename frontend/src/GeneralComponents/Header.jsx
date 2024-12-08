@@ -5,7 +5,7 @@ import { LiaBarsSolid } from "react-icons/lia";
 import { LuX } from "react-icons/lu";
 
 const pageLinks = [
-  { path: 'airdrops', dir: '' },
+  { path: 'airdrops', dir: '#footer' },
   { path: 'trade crypto', dir: '' },
   { path: 'profit tools', dir: '' },
 ]
@@ -23,29 +23,29 @@ const Header = () => {
         </div>
         <div className='lg:flex gap-10 hidden'>
           {pageLinks.map((item, i) => (
-            <div className='hover:text-lightgreen cursor-pointer capitalize'>{item.path}</div>
+            <a href={item.dir} className='hover:text-lightgreen cursor-pointer capitalize' key={i}>{item.path}</a>
           ))}
         </div>
         <div className='lg:flex gap-4 hidden'>
           <Link to='/login' onClick={MoveToTop}>
-            <button className=' outline-0 w-fit h-fit py-2 px-7 border border-ash  text-sm text-ash hover:bg-ash hover:text-white font-medium rounded-lg flex items-center justify-center capitalize'>sign in</button>
+            <button className=' outline-0 w-fit h-fit py-1.5 px-7 border border-ash  text-sm text-ash hover:bg-ash hover:text-white font-medium rounded-xl flex items-center justify-center capitalize'>sign in</button>
           </Link>
           <Link to='/signup' onClick={MoveToTop}>
-            <button className=' outline-0 w-fit h-fit py-2 px-7 text-sm text-white bg-ash border border-ash hover:bg-transparent hover:text-ash font-medium rounded-lg flex items-center justify-center capitalize' >sign up</button>
+            <button className=' outline-0 w-fit h-fit py-1.5 px-7 text-sm text-white bg-ash border border-ash hover:bg-transparent hover:text-ash font-medium rounded-xl flex items-center justify-center capitalize' >sign up</button>
           </Link>
         </div>
       </div>
       {dropdown &&
-        <div className='w-full h-72 border-t flex lg:hidden flex-col gap-8 items-center bg-white pt-6'>
+        <div className='w-full h-64 border-t flex lg:hidden flex-col gap-8 items-center bg-white pt-6'>
           {pageLinks.map((item, i) => (
-            <div className='hover:text-lightgreen cursor-pointer capitalize font-semibold'>{item.path}</div>
+            <a href={item.dir} className='hover:text-lightgreen cursor-pointer capitalize font-semibold' key={i}>{item.path}</a>
           ))}
           <div className='flex gap-8'>
-            <Link to='/login' onClick={MoveToTop}>
-              <button className=' outline-0 w-fit h-fit py-2 px-7 border border-ash  text-sm text-ash hover:bg-ash hover:text-white font-medium rounded-lg flex items-center justify-center capitalize'>sign in</button>
+            <Link to='/login' onClick={() => { MoveToTop; setDropDown(false) }}>
+              <button className=' outline-0 w-fit h-fit py-1.5 px-7 border border-ash  text-sm text-ash hover:bg-ash hover:text-white font-medium rounded-xl flex items-center justify-center capitalize'>sign in</button>
             </Link>
-            <Link to='/signup' onClick={MoveToTop}>
-              <button className=' outline-0 w-fit h-fit py-2 px-7 text-sm text-white bg-ash border border-ash hover:bg-transparent hover:text-ash font-medium rounded-lg flex items-center justify-center capitalize' >sign up</button>
+            <Link to='/signup' onClick={() => { MoveToTop; setDropDown(false) }}>
+              <button className=' outline-0 w-fit h-fit py-1.5 px-7 text-sm text-white bg-ash border border-ash hover:bg-transparent hover:text-ash font-medium rounded-xl flex items-center justify-center capitalize' >sign up</button>
             </Link>
           </div>
         </div>

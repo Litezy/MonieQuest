@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import PasswordInputField from '../../utils/PasswordInputField'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
-import { ErrorAlert } from '../../utils/pageUtils'
+import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Loading from '../../GeneralComponents/Loading'
 
 const SignUpPage = () => {
@@ -39,6 +39,7 @@ const SignUpPage = () => {
     if (form.password !== form.confirm_password) return ErrorAlert('Password(s) mismatch')
     if (!check) return ErrorAlert('Must agree with terms and privacy policy')
     navigate(`/verify-account?v=${form.email}`)
+    MoveToTop()
   }
 
 
@@ -49,29 +50,27 @@ const SignUpPage = () => {
           {loading && <Loading />}
           <div className='w-full h-full flex flex-col'>
             <div className='text-3xl font-bold text-center'>Create an account</div>
-            <div className='text-sm mt-2 text-center'>Already have an account? <Link to='/login' className='text-ash cursor-pointer'>Sign in</Link></div>
-            <form className='mt-10' onSubmit={CreateAccount}>
-              <div className='flex flex-col gap-4'>
-                <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
-                  <FormInput label='First name' placeholder='Your first name' name='first_name' value={form.first_name} onChange={formHandler} />
-                  <FormInput label='Surname' placeholder='Your surname' name='surname' value={form.surname} onChange={formHandler} />
-                </div>
-                <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
-                  <FormInput label='Email address' placeholder='example@gmail.com' name='email' value={form.email} onChange={formHandler} type='email' />
-                  <FormInput label='Phone number' placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} />
-                </div>
-                <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
-                  <PasswordInputField label='Password' placeholder='password' name='password' value={form.password} onChange={formHandler} />
-                  <PasswordInputField label='Confirm password' placeholder='Confirm password' name='confirm_password' value={form.confirm_password} onChange={formHandler} />
-                </div>
-                <FormInput label='Referral ID(Optional)' placeholder='Enter Referral ID' name='referral_id' value={form.referral_id} onChange={formHandler} />
+            <div className='text-sm mt-2 text-center'>Already have an account? <Link to='/login' onClick={MoveToTop} className='text-ash cursor-pointer'>Sign in</Link></div>
+            <form className='flex flex-col gap-5 mt-10' onSubmit={CreateAccount}>
+              <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
+                <FormInput label='First name' placeholder='Your first name' name='first_name' value={form.first_name} onChange={formHandler} />
+                <FormInput label='Surname' placeholder='Your surname' name='surname' value={form.surname} onChange={formHandler} />
               </div>
-              <div className='flex flex-col gap-4 items-center mt-6'>
+              <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
+                <FormInput label='Email address' placeholder='example@gmail.com' name='email' value={form.email} onChange={formHandler} type='email' />
+                <FormInput label='Phone number' placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} />
+              </div>
+              <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
+                <PasswordInputField label='Password' placeholder='password' name='password' value={form.password} onChange={formHandler} />
+                <PasswordInputField label='Confirm password' placeholder='Confirm password' name='confirm_password' value={form.confirm_password} onChange={formHandler} />
+              </div>
+              <FormInput label='Referral ID(Optional)' placeholder='Enter Referral ID' name='referral_id' value={form.referral_id} onChange={formHandler} />
+              <div className='flex flex-col gap-5 items-center'>
                 <div className='flex gap-2 text-sm'>
                   <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='outline-none'></input>
-                  <div>I agree to MonieQuest <Link to='/terms' className='text-blue-500'>Terms and Conditions</Link> and <Link to='/privacy-policy' className='text-blue-500'>Privacy Policy</Link></div>
+                  <span>I agree to MonieQuest <Link to='/terms' onClick={MoveToTop} className='text-blue-500'>Terms and Conditions</Link> and <Link to='/privacy-policy' onClick={MoveToTop} className='text-blue-500'>Privacy Policy</Link></span>
                 </div>
-                <FormButton title='Sign Up' className='!w-4/5' />
+                <FormButton title='Sign up' className='!w-5/6' />
               </div>
             </form>
           </div>
