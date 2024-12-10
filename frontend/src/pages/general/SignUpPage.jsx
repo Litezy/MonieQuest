@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PageLayout from '../../GeneralComponents/PageLayout'
 import { Link, useNavigate } from 'react-router-dom'
 import PasswordInputField from '../../utils/PasswordInputField'
 import FormInput from '../../utils/FormInput'
@@ -44,8 +43,7 @@ const SignUpPage = () => {
 
 
   return (
-    <PageLayout>
-      <div className='w-11/12 mx-auto py-28'>
+      <div className='w-11/12 mx-auto py-20'>
         <div className='flex items-center justify-center max-w-lg mx-auto relative'>
           {loading && <Loading />}
           <div className='w-full h-full flex flex-col'>
@@ -71,12 +69,12 @@ const SignUpPage = () => {
                   <span>I agree to MonieQuest <Link to='/terms' onClick={MoveToTop} className='text-blue-500'>Terms and Conditions</Link> and <Link to='/privacy-policy' onClick={MoveToTop} className='text-blue-500'>Privacy Policy</Link></span>
                 </div>
                 <FormButton title='Sign up' className='!w-5/6' />
+                <Link to='/' className='text-blue-500' onClick={MoveToTop}>Go back home</Link>
               </div>
             </form>
           </div>
         </div>
       </div>
-    </PageLayout>
   )
 }
 

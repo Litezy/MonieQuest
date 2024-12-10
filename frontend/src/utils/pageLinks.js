@@ -1,3 +1,4 @@
+import AirdropsPage from "../pages/general/AirdropsPage";
 import ForgotPassword from "../pages/general/ForgotPassword";
 import HomePage from "../pages/general/HomePage";
 import LoginPage from "../pages/general/LoginPage";
@@ -16,4 +17,5 @@ export const GeneralPagesLinks = [
     { path: '/forgot-password', component: ForgotPassword },
     { path: '/terms', component: TermsPage },
     { path: '/privacy-policy', component: PrivacyPolicy },
+    { path: '/airdrops', component: AirdropsPage },
 ]

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PageLayout from '../../GeneralComponents/PageLayout'
 import Loading from '../../GeneralComponents/Loading'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
@@ -8,7 +7,6 @@ import { MdVerified } from "react-icons/md";
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import PinForm from '../../utils/PinForm'
 import PasswordInputField from '../../utils/PasswordInputField'
-import { LuCheck } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import SuccessCheck from '../../utils/SuccessCheck'
 
@@ -55,8 +53,7 @@ const ForgotPassword = () => {
 
 
   return (
-    <PageLayout>
-      <div className='w-11/12 mx-auto py-28'>
+      <div className='w-11/12 mx-auto py-20'>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
           {loading && <Loading />}
           <div className='w-full h-full flex flex-col'>
@@ -67,7 +64,7 @@ const ForgotPassword = () => {
                   <div className='w-12 h-12 border-2 border-black rounded-full flex items-center justify-center'>
                     <IoLockClosedOutline className='text-2xl' />
                   </div>
-                  <div className='font-bold'>Trouble logging in?</div>
+                  <div className='font-bold'>Trouble signing in?</div>
                   <div className='text-center text-sm font-[600]'>Enter your email address to find your account and reset password</div>
                 </div>
                 <div className='flex flex-col gap-5 mt-10'>
@@ -125,7 +122,6 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
-    </PageLayout>
   )
 }
 

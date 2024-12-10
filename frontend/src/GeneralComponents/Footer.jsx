@@ -8,7 +8,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import FormInput from '../utils/FormInput';
 import FormButton from '../utils/FormButton';
-import { ErrorAlert } from '../utils/pageUtils';
+import { ErrorAlert, MoveToTop } from '../utils/pageUtils';
 
 const Socials = [
   { href: '', icon: RiFacebookFill },
@@ -68,7 +68,7 @@ const Footer = () => {
             <div className='text-center mt-6'>Join our newsletter and receive the latest giveaways, airdrops and crypto news straight in your inbox.</div>
             <form className='flex flex-col gap-3 mt-6' onSubmit={SubmitForm}>
               <FormInput placeholder='Email address' type='email' value={email} onChange={event => { setEmail(event.target.value) }} className='text-white !rounded-md' />
-              <FormButton title='Subscribe' className='py-2 !text-black text-sm !rounded-md font-medium !bg-lightgreen' />
+              <FormButton title='Subscribe' className='py-2 !text-ash text-sm !rounded-md !font-medium !bg-lightgreen' />
               <div className='flex gap-2'>
                 <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='outline-none'></input>
                 <div>I consent to receiving your newsletter and special offers via email.</div>
@@ -80,7 +80,7 @@ const Footer = () => {
           <div className='w-11/12 mx-auto'>
             <div className='grid md:grid-cols-4 grid-cols-2 gap-4'>
               {pageLinks.map((item, i) => (
-                <Link to={item.url} key={i} className='hover:text-lightgreen text-sm'>{item.path}</Link>
+                <Link to={item.url} key={i} className='hover:text-lightgreen text-sm w-fit' onClick={MoveToTop}>{item.path}</Link>
               ))}
             </div>
           </div>
