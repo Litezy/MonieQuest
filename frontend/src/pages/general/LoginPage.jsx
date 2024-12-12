@@ -5,6 +5,7 @@ import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Loading from '../../GeneralComponents/Loading'
+import Header from '../../GeneralComponents/Header'
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false)
@@ -29,6 +30,8 @@ const LoginPage = () => {
   }
 
   return (
+    <>
+      <Header />
       <div className='w-11/12 mx-auto py-20'>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
           {loading && <Loading />}
@@ -40,11 +43,11 @@ const LoginPage = () => {
               <PasswordInputField label='Password' placeholder='*********' name='password' value={form.password} onChange={formHandler} />
               <Link to='/forgot-password' onClick={MoveToTop} className='text-ash text-sm ml-auto cursor-pointer'>Can't remember password?</Link>
               <FormButton title='Sign in' />
-              <Link to='/' className='text-blue-500' onClick={MoveToTop}>Go back home</Link>
             </form>
           </div>
         </div>
       </div>
+    </>
   )
 }
 

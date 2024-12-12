@@ -5,6 +5,7 @@ import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Loading from '../../GeneralComponents/Loading'
+import Header from '../../GeneralComponents/Header'
 
 const SignUpPage = () => {
   const [check, setCheck] = useState(false)
@@ -43,6 +44,8 @@ const SignUpPage = () => {
 
 
   return (
+    <>
+      <Header />
       <div className='w-11/12 mx-auto py-20'>
         <div className='flex items-center justify-center max-w-lg mx-auto relative'>
           {loading && <Loading />}
@@ -69,12 +72,12 @@ const SignUpPage = () => {
                   <span>I agree to MonieQuest <Link to='/terms' onClick={MoveToTop} className='text-blue-500'>Terms and Conditions</Link> and <Link to='/privacy-policy' onClick={MoveToTop} className='text-blue-500'>Privacy Policy</Link></span>
                 </div>
                 <FormButton title='Sign up' className='!w-5/6' />
-                <Link to='/' className='text-blue-500' onClick={MoveToTop}>Go back home</Link>
               </div>
             </form>
           </div>
         </div>
       </div>
+    </>
   )
 }
 

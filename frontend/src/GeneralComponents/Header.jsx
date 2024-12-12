@@ -8,8 +8,8 @@ import logo from '../assets/images/logo.png'
 const pageLinks = [
   { path: 'home', url: '/' },
   { path: 'airdrops', url: '/airdrops' },
-  { path: 'buy & sell crypto', url: '' },
-  { path: 'profit tools', url: '' },
+  { path: 'products', url: '/products' },
+  { path: 'contact us', url: '/contact' },
 ]
 
 const Header = () => {
@@ -17,14 +17,14 @@ const Header = () => {
   const location = useLocation()
 
   return (
-    <div className='fixed top-0 left-0 w-full bg-white z-50 border-b shadow-sm'>
+    <div className='sticky top-0 left-0 w-full bg-white z-50 border-b shadow-sm'>
       <div className='flex justify-between items-center w-11/12 mx-auto'>
         <Link to='/' onClick={MoveToTop} className='uppercase text-2xl font-extrabold italic'>
           <img alt='moniequest logo' src={logo} className='h-20 w-auto'></img>
         </Link>
         <div className='lg:flex gap-2 hidden'>
           {pageLinks.map((item, i) => (
-            <Link key={i} to={item.url} className={`hover:text-lightgreen cursor-pointer capitalize px-3 ${location.pathname === item.url && 'font-bold border-b border-black'}`}>{item.path}</Link>
+            <Link key={i} to={item.url} onClick={MoveToTop} className={`hover:text-lightgreen cursor-pointer capitalize px-3 ${location.pathname === item.url && 'font-bold border-b border-black'}`}>{item.path}</Link>
           ))}
         </div>
         <div className='lg:flex gap-4 hidden'>
@@ -42,7 +42,7 @@ const Header = () => {
       <div className={`w-full ${menu ? 'h-80' : 'h-0'} sl_trans overflow-hidden border-t lg:hidden bg-white`}>
         <div className='flex flex-col gap-8 items-center pt-6'>
           {pageLinks.map((item, i) => (
-            <Link key={i} to={item.url} className='hover:text-lightgreen cursor-pointer capitalize' onClick={() => setMenu(false)}>{item.path}</Link>
+            <Link key={i} to={item.url} className='hover:text-lightgreen cursor-pointer capitalize' onClick={() => {setMenu(false); MoveToTop()}}>{item.path}</Link>
           ))}
           <div className='flex gap-8'>
             <Link to='/login' onClick={() => { MoveToTop(); setMenu(false) }}>

@@ -9,6 +9,7 @@ import PinForm from '../../utils/PinForm'
 import PasswordInputField from '../../utils/PasswordInputField'
 import { Link } from 'react-router-dom'
 import SuccessCheck from '../../utils/SuccessCheck'
+import Header from '../../GeneralComponents/Header';
 
 const ForgotPassword = () => {
   const [screen, setScreen] = useState(1)
@@ -53,6 +54,8 @@ const ForgotPassword = () => {
 
 
   return (
+    <>
+      <Header />
       <div className='w-11/12 mx-auto py-20'>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
           {loading && <Loading />}
@@ -122,6 +125,7 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
+    </>
   )
 }
 

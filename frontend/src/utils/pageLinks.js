@@ -1,9 +1,11 @@
 import AirdropsPage from "../pages/general/AirdropsPage";
+import ContactPage from "../pages/general/ContactPage";
 import ForgotPassword from "../pages/general/ForgotPassword";
 import HomePage from "../pages/general/HomePage";
 import LoginPage from "../pages/general/LoginPage";
 import Notfound from "../pages/general/Notfound";
 import PrivacyPolicy from "../pages/general/PrivacyPolicy";
+import ProductsPage from "../pages/general/ProductsPage";
 import SignUpPage from "../pages/general/SignUpPage";
 import TermsPage from "../pages/general/TermsPage";
 import VerifyAccount from "../pages/general/VerifyAccount";
@@ -18,4 +20,6 @@ export const GeneralPagesLinks = [
     { path: '/terms', component: TermsPage },
     { path: '/privacy-policy', component: PrivacyPolicy },
     { path: '/airdrops', component: AirdropsPage },
+    { path: '/contact', component: ContactPage },
+    { path: '/products', component: ProductsPage },
 ]
