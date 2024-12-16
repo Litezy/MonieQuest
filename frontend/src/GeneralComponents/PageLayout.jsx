@@ -7,11 +7,12 @@ import { useLocation } from 'react-router-dom'
 const PageLayout = ({ children }) => {
 
   const location = useLocation()
+  const paths = ['verify-account','login','signup','forgot-password']
   const [showFooter, setShowFooter] = useState(true)
   const pathName = location.pathname
 
   useEffect(() => {
-    if (pathName.includes('login') || pathName.includes('signup')) {
+    if(paths.some( path => pathName.includes(path))){
       setShowFooter(false)
     }
   },[pathName])
