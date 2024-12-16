@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import PageLayout from '../../GeneralComponents/PageLayout'
 import PinForm from '../../utils/PinForm';
 import FormButton from '../../utils/FormButton';
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils';
-import { LuCheck } from "react-icons/lu";
 import { Link, useSearchParams } from 'react-router-dom';
 import Loading from '../../GeneralComponents/Loading';
 import SuccessCheck from '../../utils/SuccessCheck';
+import Header from '../../GeneralComponents/Header';
 
 const VerifyAccount = () => {
     const [loading, setLoading] = useState(false)
@@ -24,8 +23,9 @@ const VerifyAccount = () => {
     }
 
     return (
-        <PageLayout>
-            <div className='w-11/12 mx-auto py-28'>
+        <>
+            <Header />
+            <div className='w-11/12 mx-auto pt-40 pb-20'>
                 <div className='flex items-center justify-center max-w-md mx-auto relative'>
                     {loading && <Loading />}
                     <div className='w-full h-full flex flex-col'>
@@ -57,7 +57,7 @@ const VerifyAccount = () => {
                     </div>
                 </div>
             </div>
-        </PageLayout>
+        </>
     )
 }
 

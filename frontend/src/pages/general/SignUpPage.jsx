@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import PageLayout from '../../GeneralComponents/PageLayout'
 import { Link, useNavigate } from 'react-router-dom'
 import PasswordInputField from '../../utils/PasswordInputField'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Loading from '../../GeneralComponents/Loading'
+import Header from '../../GeneralComponents/Header'
 
 const SignUpPage = () => {
   const [check, setCheck] = useState(false)
@@ -44,8 +44,9 @@ const SignUpPage = () => {
 
 
   return (
-    <PageLayout>
-      <div className='w-11/12 mx-auto py-28'>
+    <>
+      <Header />
+      <div className='w-11/12 mx-auto pt-40 pb-20'>
         <div className='flex items-center justify-center max-w-lg mx-auto relative'>
           {loading && <Loading />}
           <div className='w-full h-full flex flex-col'>
@@ -76,7 +77,7 @@ const SignUpPage = () => {
           </div>
         </div>
       </div>
-    </PageLayout>
+    </>
   )
 }
 

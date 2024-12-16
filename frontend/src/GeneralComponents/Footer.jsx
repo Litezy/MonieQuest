@@ -8,7 +8,8 @@ import { FaLinkedin } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import FormInput from '../utils/FormInput';
 import FormButton from '../utils/FormButton';
-import { ErrorAlert } from '../utils/pageUtils';
+import { ErrorAlert, MoveToTop } from '../utils/pageUtils';
+import Loading from './Loading';
 
 const Socials = [
   { href: '', icon: RiFacebookFill },
@@ -18,25 +19,27 @@ const Socials = [
 ]
 
 const pageLinks = [
-  { path: 'Terms & Conditions', url: '/terms' },
-  { path: 'Privacy Policy', url: '/privacy-policy' },
-  { path: 'FAQ', url: '' },
-  { path: 'Blog', url: '' },
+  { path: 'terms & conditions', url: '/terms' },
+  { path: 'privacy policy', url: '/privacy-policy' },
+  { path: 'contact us', url: '/contact' },
+  { path: 'blog', url: '' },
 ]
 
 const Footer = () => {
   const [email, setEmail] = useState('')
   const [check, setCheck] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const SubmitForm = (e) => {
     e.preventDefault()
 
     if (!email) return ErrorAlert('Enter an email address')
     if (!check) return ErrorAlert('Must consent to receiving newsletter')
+    setLoading(true)
   }
 
   return (
-    <div className='w-11/12 mx-auto mt-20'>
+    <div className='w-11/12 mx-auto'>
       <div className='flex flex-col gap-2 pb-4'>
         <div className='grid md:grid-cols-2 grid-cols-1 gap-8'>
           <div className='flex flex-col gap-4'>
@@ -62,13 +65,14 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className='w-full h-fit bg-primary py-3 px-4 text-gray-200 text-sm' id='footer'>
+          <div className='w-full h-fit bg-primary py-3 px-4 text-gray-200 text-sm relative' id='footer'>
+            {loading && <Loading />}
             <div className='text-lightgreen text-center md:text-base text-sm'>Hundreds of Airdrops</div>
             <div className='text-center md:text-4xl text-2xl mt-4'>Be the first to know</div>
             <div className='text-center mt-6'>Join our newsletter and receive the latest giveaways, airdrops and crypto news straight in your inbox.</div>
             <form className='flex flex-col gap-3 mt-6' onSubmit={SubmitForm}>
               <FormInput placeholder='Email address' type='email' value={email} onChange={event => { setEmail(event.target.value) }} className='text-white !rounded-md' />
-              <FormButton title='Subscribe' className='py-2 !text-black text-sm !rounded-md font-medium !bg-lightgreen' />
+              <FormButton title='Subscribe' className='py-2 !text-ash text-sm !rounded-md !font-semibold !bg-lightgreen' />
               <div className='flex gap-2'>
                 <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='outline-none'></input>
                 <div>I consent to receiving your newsletter and special offers via email.</div>
@@ -80,7 +84,7 @@ const Footer = () => {
           <div className='w-11/12 mx-auto'>
             <div className='grid md:grid-cols-4 grid-cols-2 gap-4'>
               {pageLinks.map((item, i) => (
-                <Link to={item.url} key={i} className='hover:text-lightgreen text-sm'>{item.path}</Link>
+                <Link to={item.url} key={i} className='hover:text-lightgreen text-sm w-fit capitalize' onClick={MoveToTop}>{item.path}</Link>
               ))}
             </div>
           </div>

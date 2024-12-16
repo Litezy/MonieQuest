@@ -18,17 +18,13 @@ const PageLayout = ({ children }) => {
   },[pathName])
 
   return (
-    <>
-      <div className='h-16'>
-        <Header />
-      </div>
-      <div>
+    <div>
+      <Header />
+      <div className='mt-20'>
         {children}
       </div>
-      <div>
-        {showFooter ? <Footer /> :''}
-      </div>
-    </>
+      <Footer />
+    </div>
   )
 }
 

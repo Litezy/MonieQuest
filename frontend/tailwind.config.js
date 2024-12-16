@@ -10,7 +10,7 @@ export default {
         "primary": "#212134",
         "secondary": "#171828",
         "ash": "#204b53",
-        "lightgreen": "#01d676",
+        "lightgreen": "#7BFC61",
         "font": "#a9a9ca",
       }
     },
