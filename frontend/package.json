@@ -12,6 +12,9 @@
   "dependencies": {
     "aos": "^2.3.4",
     "axios": "^1.7.9",
+    "embla-carousel": "^8.5.1",
+    "embla-carousel-autoplay": "^8.5.1",
+    "embla-carousel-react": "^8.5.1",
     "jotai": "^2.10.3",
     "js-cookie": "^3.0.5",
     "moment": "^2.30.1",

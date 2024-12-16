@@ -46,7 +46,7 @@ const SignUpPage = () => {
   return (
     <>
       <Header />
-      <div className='w-11/12 mx-auto py-20'>
+      <div className='w-11/12 mx-auto pt-40 pb-20'>
         <div className='flex items-center justify-center max-w-lg mx-auto relative'>
           {loading && <Loading />}
           <div className='w-full h-full flex flex-col'>
