@@ -236,7 +236,7 @@ body {
 /*animation stops */
 
 .homeBg {
-  background-image: url('./assets/images/banner.webp');
+  background-image: url('./assets/images/home_banner.webp');
   width: 100%;
   height: fit-content;
   background-position: center;
@@ -244,8 +244,13 @@ body {
   background-size: cover;
 }
 
-.sl_trans {
-  transition: 0.2s ease-in-out;
+.airdropBg {
+  background-image: url('./assets/images/airdrop_banner.jfif');
+  width: 100%;
+  height: fit-content;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .sha {
