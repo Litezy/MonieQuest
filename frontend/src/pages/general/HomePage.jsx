@@ -22,7 +22,7 @@ const HomePage = () => {
 
   return (
     <PageLayout>
-      <div className='pb-20'>
+      <div className='pb-20 w-full bg-dark'>
         <div className='homeBg overflow-hidden'>
           <div className='w-full h-full bg-[#212134ea] md:pt-16 pb-10 pt-12'>
             <div className='md:text-5xl text-3xl font-extrabold text-white text-center lg:w-3/5 w-5/6 mx-auto '><span className='text-lightgreen'>Get paid</span> for testing apps, games and surveys</div>
@@ -37,7 +37,7 @@ const HomePage = () => {
         </div>
         <div className='w-11/12 mx-auto'>
           <div className='md:w-11/12 w-full mx-auto' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
-            <div className='w-full h-fit bg-secondary mt-1 p-4 text-gray-200 overflow-hidden'>
+            <div className='w-full h-fit  mt-5 p-4 text-gray-200 overflow-hidden'>
               <div className='flex flex-wrap gap-9 items-center justify-center'>
                 <div className='flex flex-col gap-2'>
                   <div className='capitalize font-medium'>featured airdrops</div>
@@ -101,7 +101,7 @@ const HomePage = () => {
               <div className='border-t-4 border-zinc-500 md:w-48 w-32 absolute top-0 right-0'></div>
               <div className='border-b-4 border-zinc-500 md:w-48 w-32 absolute -bottom-2 left-0'></div>
             </div>
-            <div className='h-fit w-full md:px-20 xl:px-28 px-6 pt-10 pb-16 bg-gradient-to-tr from-primary from-50% to-[#33335a] text-white' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
+            <div className='h-fit w-full md:px-20 xl:px-28 px-6 pt-10 pb-16 bg-gradient-to-tr  text-white' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
               <div className='text-center md:text-4xl text-2xl font-bold  capitalize'>Trade, create and earn with us</div>
               <div className='text-center text-semi-white md:text-base text-sm font-semibold md:w-3/4 mx-auto mt-4'>Below are some of the frequently asked questions on our platform, if you have any more questions, kindly contact us via support.</div>
               <div className='flex flex-col md:gap-10 gap-7 mt-10'>
