@@ -5,9 +5,9 @@ import AirdropDiv from '../../GeneralComponents/AirdropDiv'
 const AirdropsPage = () => {
   return (
     <PageLayout>
-      <div className='w-11/12 mx-auto py-20'>
+      <div className='w-11/12 mx-auto pb-20 pt-10 '>
         <div className='text-5xl font-bold'>Airdrops</div>
-        <div className='flex flex-col gap-16 mt-16'>
+        <div className='flex flex-col gap-16 mt-8'>
           <div className='flex flex-col gap-8'>
             <div className='flex flex-col gap-2'>
               <span className='capitalize font-bold text-2xl'>featured airdrops</span>

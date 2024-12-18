@@ -146,6 +146,7 @@ body {
 }
 .embla__container {
   display: flex;
+  width: 100%;
   touch-action: pan-y pinch-zoom;
   margin-left: calc(var(--slide-spacing) * -1);
 }
@@ -154,6 +155,13 @@ body {
   flex: 0 0 var(--slide-size);
   min-width: 0;
   padding-left: var(--slide-spacing);
+}
+
+/* small screen  */
+@media (max-width: 48rem) {
+  .embla__slide{
+    min-width: 100%;
+  } 
 }
 .embla_slide_number {
   box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);

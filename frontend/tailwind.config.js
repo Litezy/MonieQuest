@@ -10,8 +10,10 @@ export default {
         "primary": "#212134",
         "secondary": "#171828",
         "ash": "#204b53",
-        "lightgreen": "#7BFC61",
+        "lightgreen": "#00fe5e",
         "font": "#a9a9ca",
+        "bg-green":"#18a26b",
+        "dark":"#141523"
       }
     },
   },

@@ -6,7 +6,7 @@ import testImage from '../assets/images/testimage.jfif'
 
 const AirdropDiv = ({ item, className }) => {
     return (
-        <div className={`h-fit w-fit bg-primary border border-[#325042] rounded-md p-4 flex flex-col gap-4 text-white ${className}`}>
+        <div className={`h-fit w-fit bg-primary border hover:border-bg-green  border-[#325042] rounded-md p-4 flex flex-col gap-4 text-white ${className}`}>
             <div className='flex items-center gap-2'>
                 <img alt='airdrop logo' src={testImage} className='w-14 h-14 rounded-full object-cover'></img>
                 <div className='flex flex-col gap-1'>

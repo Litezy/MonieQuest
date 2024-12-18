@@ -11,11 +11,11 @@ const PageLayout = ({ children }) => {
   const [showFooter, setShowFooter] = useState(true)
   const pathName = location.pathname
 
-  useEffect(() => {
-    if(paths.some( path => pathName.includes(path))){
-      setShowFooter(false)
-    }
-  },[pathName])
+  // useEffect(() => {
+  //   if(paths.some( path => pathName.includes(path))){
+  //     setShowFooter(false)
+  //   }
+  // },[pathName])
 
   return (
     <div>
