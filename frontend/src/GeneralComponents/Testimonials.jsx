@@ -80,7 +80,6 @@ export default function Testimonials(props) {
                         disabled={nextBtnDisabled}
                     />
                 </div>
-
             </div>
         </div>
     )

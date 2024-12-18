@@ -22,8 +22,8 @@ const HomePage = () => {
 
   return (
     <PageLayout>
-      <div className='pb-20  bg-dark'>
-        <div className='homeBg overflow-hidden' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
+      <div className='pb-20'>
+        <div className='homeBg overflow-hidden'>
           <div className='w-full h-full bg-[#212134ea] md:pt-16 pb-10 pt-12'>
             <div className='md:text-5xl text-3xl font-extrabold text-white text-center lg:w-3/5 w-5/6 mx-auto '><span className='text-lightgreen'>Get paid</span> for testing apps, games and surveys</div>
             <div className='flex md:flex-row flex-col gap-4 items-center mt-8 justify-center text-sm text-gray-100 text-center'>
@@ -36,8 +36,8 @@ const HomePage = () => {
           </div>
         </div>
         <div className='w-11/12 mx-auto'>
-          <div className='md:w-11/12 w-full mx-auto'>
-            <div className='w-full h-fit bg-secondary mt-1 p-4 text-gray-200 overflow-hidden' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
+          <div className='md:w-11/12 w-full mx-auto' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
+            <div className='w-full h-fit bg-secondary mt-1 p-4 text-gray-200 overflow-hidden'>
               <div className='flex flex-wrap gap-9 items-center justify-center'>
                 <div className='flex flex-col gap-2'>
                   <div className='capitalize font-medium'>featured airdrops</div>

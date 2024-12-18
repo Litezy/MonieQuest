@@ -39,7 +39,7 @@ const Header = () => {
           {menu ? <PiX /> : <SlMenu />}
         </div>
       </div>
-      <div className={`w-full ${menu ? 'h-80' : 'h-0'} sl_trans overflow-hidden border-t lg:hidden bg-white`}>
+      <div className={`w-full ${menu ? 'h-80' : 'h-0'} transition-all overflow-hidden border-t lg:hidden bg-white`}>
         <div className='flex flex-col gap-8 items-center pt-6'>
           {pageLinks.map((item, i) => (
             <Link key={i} to={item.url} className='hover:text-lightgreen cursor-pointer capitalize' onClick={() => {setMenu(false); MoveToTop()}}>{item.path}</Link>
