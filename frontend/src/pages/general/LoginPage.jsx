@@ -5,7 +5,6 @@ import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Loading from '../../GeneralComponents/Loading'
-import Header from '../../GeneralComponents/Header'
 import logo from '../../assets/images/logo.png'
 
 const LoginPage = () => {
@@ -31,14 +30,12 @@ const LoginPage = () => {
   }
 
   return (
-    <>
-      {/* <Header /> */}
       <div className="w-full bg-dark h-[110dvh]">
         <div className='w-11/12 mx-auto pt-20 pb-10 '>
           <div className='flex items-center justify-center max-w-md mx-auto relative'>
             {loading && <Loading />}
             <div className='w-full h-full flex flex-col text-white'>
-              <div className="flex items-center justify-center w-full  ">
+              <div className="flex items-center justify-center w-full">
                 <img src={logo} className='w-52' alt="logo alt" />
               </div>
               <div className='text-3xl font-bold text-center text-white'>Welcome back!</div>
@@ -46,16 +43,14 @@ const LoginPage = () => {
               <form className='flex flex-col gap-5 mt-10' onSubmit={LoginAccount}>
                 <FormInput label='Email address' placeholder='example@gmail.com' name='email' value={form.email} onChange={formHandler} type='email' />
                 <PasswordInputField label='Password' placeholder='*********' name='password' value={form.password} onChange={formHandler} />
-                <Link to='/forgot-password' onClick={MoveToTop} className='text-lightgreen text-sm cursor-pointer ml-auto'>forgot password?</Link>
+                <Link to='/forgot-password' onClick={MoveToTop} className='text-lightgreen text-sm cursor-pointer ml-auto'>Forgot password?</Link>
                 <FormButton title='Sign in' />
                 <Link className='text-sm text-center text-lightgreen underline' to={'/'}>Go Back Home</Link>
-
               </form>
             </div>
           </div>
         </div>
       </div>
-    </>
   )
 }
 

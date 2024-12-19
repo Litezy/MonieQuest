@@ -243,16 +243,7 @@ body {
 
 /*animation stops */
 
-.homeBg {
-  background-image: url('./assets/images/home_banner.webp');
-  width: 100%;
-  height: fit-content;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.airdropBg {
+.pageBg {
   background-image: url('./assets/images/airdrop_banner.jfif');
   width: 100%;
   height: fit-content;
@@ -261,6 +252,16 @@ body {
   background-size: cover;
 }
 
-.sha {
-  box-shadow: 0px 5px 10px rgb(201, 200, 200);
+.edge {
+  height: 0;
+  width: 0;
+  border-left: 10.1px solid transparent;
+  border-right: 10.1px solid transparent;
+  border-bottom: 13.1px solid #B2212F;
+  position: absolute;
+  top: 1.35rem;
+  left: -0.65rem;
+  transform: rotate(40deg);
+  z-index: -2;
 }
+

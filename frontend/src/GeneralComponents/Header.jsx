@@ -17,7 +17,7 @@ const Header = () => {
   const location = useLocation()
 
   return (
-    <div className='fixed top-0 left-0 w-full bg-dark z-50  shadow-sm'>
+    <div className='fixed top-0 left-0 w-full bg-dark z-50 border-b-2 border-primary'>
       <div className='flex justify-between items-center w-11/12 mx-auto'>
         <Link to='/' onClick={MoveToTop} className='uppercase text-2xl font-extrabold italic'>
           <img alt='moniequest logo' src={logo} className='h-20 w-auto'></img>
@@ -35,11 +35,11 @@ const Header = () => {
             <button className=' outline-0 w-fit h-fit py-2 px-7 text-sm text-white bg-ash border border-ash hover:bg-transparent hover:text-ash hover:bg-white  font-medium rounded-md flex items-center justify-center capitalize' >sign up</button>
           </Link>
         </div>
-        <div className='lg:hidden text-2xl cursor-pointer' onClick={() => setMenu(!menu)}>
+        <div className='lg:hidden text-2xl cursor-pointer text-white' onClick={() => setMenu(!menu)}>
           {menu ? <PiX /> : <SlMenu />}
         </div>
       </div>
-      <div className={`w-full ${menu ? 'h-80' : 'h-0'} transition-all overflow-hidden border-t lg:hidden bg-white`}>
+      <div className={`w-full ${menu ? 'h-80' : 'h-0'} transition-all overflow-hidden lg:hidden bg-slate-100`}>
         <div className='flex flex-col gap-8 items-center pt-6'>
           {pageLinks.map((item, i) => (
             <Link key={i} to={item.url} className='hover:text-lightgreen cursor-pointer capitalize' onClick={() => {setMenu(false); MoveToTop()}}>{item.path}</Link>
