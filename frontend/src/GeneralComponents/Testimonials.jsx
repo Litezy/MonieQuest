@@ -58,7 +58,7 @@ export default function Testimonials(props) {
             <div className="embla__viewport" ref={emblaRef}>
                 <div className="embla__container">
                     {HomeTestimonials.map((item, index) => (
-                        <div className="embla__slide border px-5 pt-5 lg:p-10 text-zinc-300" key={index}>
+                        <div className="embla__slide border border-[grey] px-5 pt-5 lg:p-10 text-zinc-300" key={index}>
                             <div className="">
                                 <img src={item.img} alt="" className="size-28 object-cover border-4 border-white shadow-2xl rounded-full" />
                             </div>

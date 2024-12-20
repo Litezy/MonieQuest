@@ -17,8 +17,8 @@ const Header = () => {
   const location = useLocation()
 
   return (
-    <div className='fixed top-0 left-0 w-full h-16  bg-dark z-50  shadow-sm'>
-      <div className='flex justify-between h-full items-center w-11/12 mx-auto'>
+    <div className='fixed top-0 left-0 w-full bg-dark z-50 border-b-2 border-primary'>
+      <div className='flex justify-between items-center w-11/12 mx-auto'>
         <Link to='/' onClick={MoveToTop} className='uppercase text-2xl font-extrabold italic'>
           <img alt='moniequest logo' src={logo} className='h-20 w-auto'></img>
         </Link>

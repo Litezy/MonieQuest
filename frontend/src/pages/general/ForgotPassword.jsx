@@ -9,7 +9,7 @@ import PinForm from '../../utils/PinForm'
 import PasswordInputField from '../../utils/PasswordInputField'
 import { Link } from 'react-router-dom'
 import SuccessCheck from '../../utils/SuccessCheck'
-import Header from '../../GeneralComponents/Header';
+import logo from '../../assets/images/logo.png'
 
 const ForgotPassword = () => {
   const [screen, setScreen] = useState(1)
@@ -54,22 +54,23 @@ const ForgotPassword = () => {
 
 
   return (
-    <>
-      {/* <Header /> */}
-     <div className={`w-full bg-dark ${screen === 3  ? 'h-[110dvh]' :'h-[100dvh]'}`}>
-     <div className='w-11/12 mx-auto py-20'>
+    <div className='w-full bg-dark h-[110dvh]'>
+      <div className='w-11/12 mx-auto py-20'>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
           {loading && <Loading />}
           <div className='w-full h-full flex flex-col'>
+            <div className="flex items-center justify-center w-full ">
+              <img src={logo} className='w-52' alt="logo alt" />
+            </div>
             <div className='text-3xl font-bold text-center text-zinc-300'>Forgot password</div>
             {screen === 1 &&
               <form onSubmit={SendOTP}>
                 <div className='flex justify-center text-zinc-300 flex-col gap-2 items-center mt-6'>
-                  <div className='w-12 h-12 border-2 border-white rounded-full flex items-center justify-center'>
-                    <IoLockClosedOutline className='text-2xl' />
+                  <div className='w-12 h-12 border-2 border-lightgreen rounded-full flex items-center justify-center'>
+                    <IoLockClosedOutline className='text-2xl text-lightgreen' />
                   </div>
-                  <div className='font-bold text-lightgreen'>Trouble signing in?</div>
-                  <div className='text-center text-sm font-[600]'>Enter your email address to find your account and reset password</div>
+                  <div className='font-bold text-zinc-300'>Trouble signing in?</div>
+                  <div className='text-left text-sm text-lightgreen'>Enter your email address to find your account and reset password</div>
                 </div>
                 <div className='flex flex-col gap-5 mt-10 text-white'>
                   <FormInput label='Email address' type='email' placeholder='E.g: john14@gmail.com' name='email' value={form.email} onChange={formHandler} />
@@ -114,7 +115,7 @@ const ForgotPassword = () => {
             {screen === 4 &&
               <div className='flex flex-col gap-6'>
                 <div className='flex flex-col gap-4  items-center justify-center mt-6'>
-                  <SuccessCheck  />
+                  <SuccessCheck />
                   <div className='text-3xl font-bold text-center text-lightgreen'>Password Reset <br></br>Succcessful</div>
                   <div className='text-left text-zinc-300 text-sm'>Password change successful, you can now sign in with new password created</div>
                 </div>
@@ -126,8 +127,7 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
-     </div>
-    </>
+    </div>
   )
 }
 

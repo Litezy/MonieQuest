@@ -5,8 +5,8 @@ import AirdropDiv from '../../GeneralComponents/AirdropDiv'
 const AirdropsPage = () => {
   return (
     <PageLayout>
-      <div className='pb-20'>
-        <div className='airdropBg'>
+      <div className='pb-20 bg-dark w-full text-gray-200'>
+        <div className='pageBg'>
           <div className='w-full h-full bg-[#212134ea] py-10'>
             <div className='text-4xl font-bold text-white text-center'>Airdrops</div>
           </div>
@@ -20,7 +20,7 @@ const AirdropsPage = () => {
               </div>
               <div className='flex flex-wrap gap-4 justify-center'>
                 {new Array(8).fill(0).map((item, i) => (
-                  <AirdropDiv key={i} item={item} className='!bg-white sha !border-none !text-black' />
+                  <AirdropDiv key={i} item={item}  />
                 ))}
               </div>
             </div>
@@ -31,7 +31,7 @@ const AirdropsPage = () => {
               </div>
               <div className='flex flex-wrap gap-4 justify-center'>
                 {new Array(8).fill(0).map((item, i) => (
-                  <AirdropDiv key={i} item={item} className='bg-white sha !border-none !text-black' />
+                  <AirdropDiv key={i} item={item} />
                 ))}
               </div>
             </div>
@@ -42,7 +42,7 @@ const AirdropsPage = () => {
               </div>
               <div className='flex flex-wrap gap-4 justify-center'>
                 {new Array(8).fill(0).map((item, i) => (
-                  <AirdropDiv key={i} item={item} className='bg-white sha !border-none !text-black' />
+                  <AirdropDiv key={i} item={item} />
                 ))}
               </div>
             </div>

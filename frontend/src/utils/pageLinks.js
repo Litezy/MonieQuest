@@ -7,6 +7,7 @@ import Notfound from "../pages/general/Notfound";
 import PrivacyPolicy from "../pages/general/PrivacyPolicy";
 import ProductsPage from "../pages/general/ProductsPage";
 import SignUpPage from "../pages/general/SignUpPage";
+import SingleProductPage from "../pages/general/SingleProductPage";
 import TermsPage from "../pages/general/TermsPage";
 import VerifyAccount from "../pages/general/VerifyAccount";
 
@@ -22,4 +23,5 @@ export const GeneralPagesLinks = [
     { path: '/airdrops', component: AirdropsPage },
     { path: '/contact', component: ContactPage },
     { path: '/products', component: ProductsPage },
+    { path: '/products/:id', component: SingleProductPage },
 ]
