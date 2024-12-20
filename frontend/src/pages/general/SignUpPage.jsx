@@ -46,7 +46,7 @@ const SignUpPage = () => {
   return (
     <>
       {/* <Header /> */}
-      <div className="w-full h-[140dvh] lg:h-[120dvh] bg-dark">
+      <div className="w-full h-fit lg:h-[120dvh] bg-dark">
         <div className='w-11/12 mx-auto py-10'>
           <div className='flex items-center justify-center max-w-xl mx-auto relative'>
             {loading && <Loading />}

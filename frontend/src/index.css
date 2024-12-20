@@ -160,7 +160,7 @@ body {
 /* small screen  */
 @media (max-width: 48rem) {
   .embla__slide{
-    min-width: 100%;
+    min-width: 90%;
   } 
 }
 .embla_slide_number {
