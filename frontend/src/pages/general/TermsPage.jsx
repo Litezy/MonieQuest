@@ -4,7 +4,11 @@ import PageLayout from '../../GeneralComponents/PageLayout'
 const TermsPage = () => {
   return (
     <PageLayout>
-      <div className='w-11/12 mx-auto py-20'>TermsPage</div>
+      <div className='bg-dark w-full py-20'>
+        <div className='w-11/12 mx-auto'>
+          <div className='text-white'>TermsPage</div>
+        </div>
+      </div>
     </PageLayout>
   )
 }

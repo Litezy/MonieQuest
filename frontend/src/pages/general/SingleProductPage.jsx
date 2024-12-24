@@ -29,9 +29,6 @@ const SingleProductPage = () => {
                             <Rating
                                 value={5}
                                 readOnly
-                            // onChange={(event, newValue) => {
-                            //     setValue(newValue);
-                            // }}
                             />
                             <div>Score of 5.0 based on 3 reviews</div>
                         </div>

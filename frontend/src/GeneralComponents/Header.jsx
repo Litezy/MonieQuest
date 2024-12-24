@@ -29,27 +29,27 @@ const Header = () => {
         </div>
         <div className='lg:flex gap-4 hidden'>
           <Link to='/login' onClick={MoveToTop}>
-            <button className=' outline-0 w-fit h-fit py-2 px-7 border border-ash bg-white  text-sm text-ash hover:bg-ash hover:text-white font-medium rounded-md flex items-center justify-center capitalize'>sign in</button>
+            <button className=' outline-0 w-fit h-fit py-2 px-7 bg-white text-ash hover:bg-ash hover:text-white text-sm font-semibold rounded-md flex items-center justify-center capitalize'>sign in</button>
           </Link>
           <Link to='/signup' onClick={MoveToTop}>
-            <button className=' outline-0 w-fit h-fit py-2 px-7 text-sm text-white bg-ash border border-ash hover:bg-transparent hover:text-ash hover:bg-white  font-medium rounded-md flex items-center justify-center capitalize' >sign up</button>
+            <button className=' outline-0 w-fit h-fit py-2 px-7 bg-ash text-white hover:bg-white hover:text-ash text-sm font-semibold rounded-md flex items-center justify-center capitalize' >sign up</button>
           </Link>
         </div>
         <div className='lg:hidden text-2xl cursor-pointer text-white' onClick={() => setMenu(!menu)}>
           {menu ? <PiX /> : <SlMenu />}
         </div>
       </div>
-      <div className={`w-full ${menu ? 'h-80' : 'h-0'} transition-all overflow-hidden lg:hidden bg-slate-100`}>
+      <div className={`w-full ${menu ? 'h-80' : 'h-0'} transition-all overflow-hidden lg:hidden bg-slate-300`}>
         <div className='flex flex-col gap-8 items-center pt-6'>
           {pageLinks.map((item, i) => (
             <Link key={i} to={item.url} className='hover:text-lightgreen cursor-pointer capitalize' onClick={() => {setMenu(false); MoveToTop()}}>{item.path}</Link>
           ))}
           <div className='flex gap-8'>
             <Link to='/login' onClick={() => { MoveToTop(); setMenu(false) }}>
-              <button className=' outline-0 w-fit h-fit py-2 px-7 border border-ash  text-sm text-ash hover:bg-ash hover:text-white font-medium rounded-md flex items-center justify-center capitalize'>sign in</button>
+              <button className=' outline-0 w-fit h-fit py-2 px-7 bg-white text-ash hover:bg-ash hover:text-white text-sm font-semibold rounded-md flex items-center justify-center capitalize'>sign in</button>
             </Link>
             <Link to='/signup' onClick={() => { MoveToTop(); setMenu(false) }}>
-              <button className=' outline-0 w-fit h-fit py-2 px-7 text-sm text-white bg-ash border border-ash hover:bg-transparent hover:text-ash font-medium rounded-md flex items-center justify-center capitalize' >sign up</button>
+              <button className=' outline-0 w-fit h-fit py-2 px-7 bg-ash text-white hover:bg-white hover:text-ash text-sm font-semibold rounded-md flex items-center justify-center capitalize' >sign up</button>
             </Link>
           </div>
         </div>
