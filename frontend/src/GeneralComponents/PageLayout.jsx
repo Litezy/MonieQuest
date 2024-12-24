@@ -20,7 +20,7 @@ const PageLayout = ({ children }) => {
   return (
     <div>
       <Header />
-      <div className='mt-20'>
+      <div className='pt-10'>
         {children}
       </div>
       <Footer />
