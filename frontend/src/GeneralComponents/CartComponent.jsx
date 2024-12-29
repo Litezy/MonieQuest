@@ -3,6 +3,7 @@ import payment from '../assets/images/payment.png'
 import emptybox from '../assets/images/emptybox1.png'
 
 const CartComponent = ({ cartItems, setCartItems }) => {
+    const localName = 'products'
     const [quanity, setQuantity] = useState(1)
     let oldTotalPrice = 0
     let newTotalPrice = 0
@@ -12,8 +13,10 @@ const CartComponent = ({ cartItems, setCartItems }) => {
     ))
 
     const RemoveCart = (item) => {
-        const filterout = cartItems.filter(ele => ele.id !== item.id)
-        setCartItems(filterout)
+        const localData = JSON.parse(localStorage.getItem(localName))
+        const filteredData = localData.filter(ele => ele.id !== item.id)
+        localStorage.setItem(localName, JSON.stringify(filteredData))
+        setCartItems(filteredData)
     }
 
     return (

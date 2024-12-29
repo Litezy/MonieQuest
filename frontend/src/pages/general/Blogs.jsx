@@ -14,10 +14,10 @@ const Blogs = () => {
             const query = "crypto";
             const totalResults = 100;
             const lang = `language=en`;
-    
+
             let allNews = [];
             let nextPage = null;
-    
+
             do {
                 const url = nextPage ? `${baseUrl}?apikey=${apiKey}&q=${query}&${lang}&page=${nextPage}`
                     : `${baseUrl}?apikey=${apiKey}&q=${query}&${lang}`;
@@ -28,15 +28,15 @@ const Blogs = () => {
                 }
                 nextPage = data.nextPage;
             } while (nextPage && allNews.length < totalResults);
-    
+
             const final = allNews.slice(0, totalResults);
             localStorage.setItem("news", JSON.stringify(final));
             setBlogs(final);
         };
-    
+
         const localName = "news";
         const storedNews = localStorage.getItem(localName);
-    
+
         if (storedNews) {
             const parsedNews = JSON.parse(storedNews);
             setBlogs(parsedNews);
@@ -46,48 +46,40 @@ const Blogs = () => {
             });
         }
     }, []);
-    
+
 
 
     return (
         <PageLayout>
-            <div className="">
-                <div className='pb-20 bg-dark w-full text-gray-200'>
-                    <div className='pageBg'>
-                        <div className='w-full h-full bg-[#212134ea] py-16 md:py-32'>
-                            <div className='text-4xl font-bold text-white text-center'>Crypto Blog News</div>
-                        </div>
-                    </div>
-                    <div className="w-full relative">
-                        <div className="flex w-11/12 mx-auto items-start gap-10 flex-col lg:flex-row">
-                            <div className="w-full lg:w-10/12 mx-auto">
-                                <div className="w-full flex flex-col gap-10 items-start">
-                                    {blogs.length > 0 ? blogs.map((blog, index) => {
-                                        return (
-                                            <div key={index} className="w-full flex flex-col lg:flex-row items-start lg:items-center gap-10">
-                                                <div className="lg:w-[30%] w-full">
-                                                    <img src={blog.image_url}  className={`w-full `} alt={blog.image_url ?blog.source_id : ''} />
-                                                </div>
-                                                <div className="w-[70%] flex items-start gap-3">
-                                                    <div className="">{blog.title}</div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                :
-                                <div className="w-full bg-white h-32">
-                                    <Loading/>
-                                </div>
-                                }
-                                </div>
-
-                            </div>
-                           
-                        </div>
+            <div className='pb-20 bg-dark w-full text-gray-200'>
+                <div className='pageBg'>
+                    <div className='w-full h-full bg-[#212134ea] py-20'>
+                        <div className='text-4xl font-bold text-white text-center'>Crypto Blog News</div>
                     </div>
                 </div>
-            </div>
-        </PageLayout>
+                <div className="lg:w-4/5 w-11/12 mx-auto mt-20">
+                    <div className="w-full flex flex-col gap-10 items-start">
+                        {blogs.length > 0 ? blogs.map((blog, index) => {
+                            return (
+                                <div key={index} className="w-full flex flex-col lg:flex-row items-start lg:items-center gap-10">
+                                    <div className="lg:w-[30%] w-full">
+                                        <img src={blog.image_url} className={`w-full `} alt={blog.image_url ? blog.source_id : ''} />
+                                    </div>
+                                    <div className="lg:w-[70%] w-full flex items-start gap-3">
+                                        <div className="">{blog.title}</div>
+                                    </div>
+                                </div>
+                            )
+                        })
+                            :
+                            <div className="w-full bg-white h-32">
+                                <Loading />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div >
+        </PageLayout >
     )
 }
 

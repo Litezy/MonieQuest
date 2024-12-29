@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageLayout from "../../GeneralComponents/PageLayout";
 import testimg from "../../assets/images/pdt.jpg";
 import testimg2 from "../../assets/images/pdt2.jpg";
@@ -15,7 +15,7 @@ const products1 = [
     category: "fonts",
     old_price: 6,
     new_price: 3,
-    id: Math.random(5),
+    id: 1,
   },
 ];
 
@@ -26,22 +26,34 @@ const products2 = [
     category: "graphics",
     old_price: 120,
     new_price: 12,
-    id: Math.random(5),
+    id: 2,
   },
 ];
 
 const ProductsPage = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const localName = 'products'
+  const localData = JSON.parse(localStorage.getItem(localName))
+  const [cartItems, setCartItems] = useState(localData || []);
+
+  useEffect(() => {
+    if (!localData) {
+      localStorage.setItem(localName, JSON.stringify([]))
+    }
+  }, [cartItems])
 
   const AddToCart = (item) => {
     const findIfCartExist = cartItems.find((ele) => ele.id === item.id);
     if (!findIfCartExist) {
       setCartItems([...cartItems, item]);
+      const currentData = JSON.parse(localStorage.getItem(localName))
+      currentData.push(item)
+      localStorage.setItem(localName, JSON.stringify(currentData))
     }
   };
 
-  const getCartButton = (item) => {
-    return cartItems.includes(item) ? (
+  const CartButton = (id) => {
+    const exists = cartItems.some(item => item.id === id)
+    return exists ? (
       <span>Added to Cart</span>
     ) : (
       <>
@@ -51,22 +63,11 @@ const ProductsPage = () => {
     );
   };
 
-  const getDiscountBadge = (index) => {
-    if ([0, 2].includes(index)) {
-      return (
-        <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
-          50% Off
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <PageLayout>
       <div className="pb-20 bg-dark">
         <div className="pageBg">
-          <div className="w-full h-full bg-[#212134ea] py-10">
+          <div className="w-full h-full bg-[#212134ea] py-20">
             <div className="md:text-4xl text-3xl font-bold text-white text-center">
               Products
             </div>
@@ -85,7 +86,12 @@ const ProductsPage = () => {
                       key={index}
                       className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
                     >
-                      {getDiscountBadge(index)}
+                      <>
+                        <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
+                          90% Off
+                        </div>
+                        <div className="edge"></div>
+                      </>
                       <Link to={`/products/${index}`} onClick={MoveToTop}>
                         <img
                           src={item.image}
@@ -117,7 +123,7 @@ const ProductsPage = () => {
                           className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
                           onClick={() => AddToCart(item)}
                         >
-                          {getCartButton(item)}
+                          {CartButton(item.id)}
                         </button>
                       </div>
                     </div>
@@ -136,6 +142,12 @@ const ProductsPage = () => {
                       key={index}
                       className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
                     >
+                      <>
+                        <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
+                          90% Off
+                        </div>
+                        <div className="edge"></div>
+                      </>
                       <Link to={`/products/${index}`} onClick={MoveToTop}>
                         <img
                           src={item.image}
@@ -167,7 +179,7 @@ const ProductsPage = () => {
                           className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
                           onClick={() => AddToCart(item)}
                         >
-                          {getCartButton(item)}
+                          {CartButton(item.id)}
                         </button>
                       </div>
                     </div>

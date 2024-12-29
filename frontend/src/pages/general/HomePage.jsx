@@ -29,7 +29,7 @@ const HomePage = () => {
               <div className="text-lg">Our platform ensures you are always ahead in the crypto space and maximizing your earnings.</div>
               <div className="text-zinc-300 text-base">The simplest and fastest way of making money online.</div>
               <div className="text-lg">With over <span className='text-lightgreen font-bold '>500 updates</span> available, you could earn up to <span className='text-lightgreen font-bold'>$2,000</span> per month by just participating</div>
-              
+
               <div className="text-lg md:text-xl lg:text-2xl ">Also trade your <span className='text-lightgreen font-bold'>Coins</span> and <span className='text-lightgreen font-bold'>Gift Cards</span> with us today</div>
             </div>
           </div>
@@ -38,13 +38,10 @@ const HomePage = () => {
           <div className='flex flex-wrap gap-9 items-center justify-center text-gray-200 mt-8' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
             <div className='flex flex-col gap-2'>
               <div className='capitalize font-medium'>featured airdrops</div>
-              <div className='flex gap-2'>
-                <div className='flex flex-col gap-4'>
-                  {new Array(4).fill(0).map((item, i) => (
-                    <AirdropDiv key={i} item={item} />
-                  ))}
-                </div>
-                {/* <div className='w-1.5 h-[27rem] bg-ash rounded-full'></div> */}
+              <div className='flex flex-col gap-4'>
+                {new Array(4).fill(0).map((item, i) => (
+                  <AirdropDiv key={i} item={item} />
+                ))}
               </div>
               <Link to='/airdrops' onClick={MoveToTop}>
                 <FormButton title='show more featured airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
@@ -52,13 +49,10 @@ const HomePage = () => {
             </div>
             <div className='flex flex-col gap-2'>
               <div className='capitalize font-medium'>solana airdrops</div>
-              <div className='flex gap-2'>
-                <div className='flex flex-col gap-4'>
-                  {new Array(4).fill(0).map((item, i) => (
-                    <AirdropDiv key={i} item={item} />
-                  ))}
-                </div>
-                {/* <div className='w-1.5 h-[27rem] bg-ash rounded-full'></div> */}
+              <div className='flex flex-col gap-4'>
+                {new Array(4).fill(0).map((item, i) => (
+                  <AirdropDiv key={i} item={item} />
+                ))}
               </div>
               <Link to='/airdrops' onClick={MoveToTop}>
                 <FormButton title='show more solana airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
@@ -66,13 +60,10 @@ const HomePage = () => {
             </div>
             <div className='flex flex-col gap-2'>
               <div className='capitalize font-medium'>deFi airdrops</div>
-              <div className='flex gap-2'>
-                <div className='flex flex-col gap-4'>
-                  {new Array(4).fill(0).map((item, i) => (
-                    <AirdropDiv key={i} item={item} />
-                  ))}
-                </div>
-                {/* <div className='w-1.5 h-[27rem] bg-ash rounded-full'></div> */}
+              <div className='flex flex-col gap-4'>
+                {new Array(4).fill(0).map((item, i) => (
+                  <AirdropDiv key={i} item={item} />
+                ))}
               </div>
               <Link to='/airdrops' onClick={MoveToTop}>
                 <FormButton title='show more deFi airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
