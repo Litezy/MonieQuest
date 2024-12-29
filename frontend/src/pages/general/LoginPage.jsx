@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import PasswordInputField from '../../utils/PasswordInputField'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
@@ -19,13 +19,14 @@ const LoginPage = () => {
       [e.target.name]: e.target.value
     })
   }
+  const navigate = useNavigate()
 
   const LoginAccount = (e) => {
     e.preventDefault()
-
-    if (!form.email) return ErrorAlert('Enter email address')
-    if (!form.password) return ErrorAlert('Enter password')
-    setLoading(true)
+   navigate('/dashboard')
+    // if (!form.email) return ErrorAlert('Enter email address')
+    // if (!form.password) return ErrorAlert('Enter password')
+    // setLoading(true)
 
   }
 
