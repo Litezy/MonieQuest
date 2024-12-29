@@ -44,7 +44,7 @@ const ProductsPage = () => {
         <PageLayout>
             <div className='pb-20 bg-dark'>
                 <div className='pageBg'>
-                    <div className='w-full h-full bg-[#212134ea] py-10'>
+                    <div className='w-full h-full bg-[#212134ea] py-16 md:py-32'>
                         <div className='text-4xl font-bold text-white text-center'>Products</div>
                     </div>
                 </div>

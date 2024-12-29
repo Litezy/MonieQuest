@@ -39,7 +39,7 @@ const ContactPage = () => {
               </div>
               <img src={contactImg} alt='contact image' className='w-auto h-auto'></img>
             </div>
-            <div className='w-full h-fit rounded-xl bg-gradient-to-bl from-ash to-primary text-white py-8 md:px-8 px-5 relative'>
+            <div className='w-full h-fit rounded-xl b text-white py-8 md:px-8 px-5 relative'>
               {loading && <Loading />}
               <div className='md:text-4xl text-3xl font-bold text-center mt-4'>Send us a message</div>
               <div className='md:w-3/5 text-center mx-auto mt-2'>Your email address will not be published. Required fields are marked.</div>
