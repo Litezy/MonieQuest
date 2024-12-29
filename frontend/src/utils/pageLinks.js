@@ -1,4 +1,9 @@
+import Dashboard from "../pages/authuser/Dashboard";
+import Exchange from "../pages/authuser/Exchange";
+import ProductsTools from "../pages/authuser/ProductsTools";
+import Profile from "../pages/authuser/Profile";
 import AirdropsPage from "../pages/general/AirdropsPage";
+import Blogs from "../pages/general/Blogs";
 import ContactPage from "../pages/general/ContactPage";
 import ForgotPassword from "../pages/general/ForgotPassword";
 import HomePage from "../pages/general/HomePage";
@@ -23,5 +28,13 @@ export const GeneralPagesLinks = [
     { path: '/airdrops', component: AirdropsPage },
     { path: '/contact', component: ContactPage },
     { path: '/products', component: ProductsPage },
+    { path: '/blogs', component: Blogs },
     { path: '/products/:id', component: SingleProductPage },
+]
+
+export const AuthPagesLinks = [
+    { path: '/dashboard', component: Dashboard },
+    { path: '/exchange', component: Exchange },
+    { path: '/profit_tools', component: ProductsTools },
+    { path: '/profile', component: Profile},
 ]

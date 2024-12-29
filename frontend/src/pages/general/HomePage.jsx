@@ -24,13 +24,13 @@ const HomePage = () => {
       <div className='pb-20 w-full bg-dark'>
         <div className='pageBg overflow-hidden'>
           <div className='w-full h-full bg-[#212134ea] md:pt-16 pb-10 pt-12'>
-            <div className='md:text-5xl text-3xl font-extrabold text-white text-center lg:w-3/5 w-5/6 mx-auto '><span className='text-lightgreen'>Get paid</span> for testing apps, games and surveys</div>
-            <div className='flex md:flex-row flex-col gap-4 items-center mt-8 justify-center text-sm text-gray-100 text-center'>
-              <div>Earn up to <span className='font-bold text-white'>$40.32</span> per offer</div>
-              <div className='flex gap-2 items-center'>
-                <div className='h-2.5 w-2.5 rounded-full bg-lightgreen'></div>
-                <div><span className='font-bold text-white'>537</span> available offers now</div>
-              </div>
+            <div className='md:text-5xl text-3xl font-extrabold text-white text-center lg:w-3/5 w-5/6 mx-auto '><span className='text-lightgreen'>Get paid</span> for participating in Airdrops</div>
+            <div className='flex  flex-col gap-4 items-center mt-8 justify-center text-sm text-gray-100 text-center'>
+              <div className="text-lg">Our platform ensures you are always ahead in the crypto space and maximizing your earnings.</div>
+              <div className="text-zinc-300 text-base">The simplest and fastest way of making money online.</div>
+              <div className="text-lg">With over <span className='text-lightgreen font-bold '>500 updates</span> available, you could earn up to <span className='text-lightgreen font-bold'>$2,000</span> per month by just participating</div>
+              
+              <div className="text-lg md:text-xl lg:text-2xl ">Also trade your <span className='text-lightgreen font-bold'>Coins</span> and <span className='text-lightgreen font-bold'>Gift Cards</span> with us today</div>
             </div>
           </div>
         </div>
@@ -44,7 +44,7 @@ const HomePage = () => {
                     <AirdropDiv key={i} item={item} />
                   ))}
                 </div>
-                <div className='w-1.5 h-[27rem] bg-ash rounded-full'></div>
+                {/* <div className='w-1.5 h-[27rem] bg-ash rounded-full'></div> */}
               </div>
               <Link to='/airdrops' onClick={MoveToTop}>
                 <FormButton title='show more featured airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
@@ -58,7 +58,7 @@ const HomePage = () => {
                     <AirdropDiv key={i} item={item} />
                   ))}
                 </div>
-                <div className='w-1.5 h-[27rem] bg-ash rounded-full'></div>
+                {/* <div className='w-1.5 h-[27rem] bg-ash rounded-full'></div> */}
               </div>
               <Link to='/airdrops' onClick={MoveToTop}>
                 <FormButton title='show more solana airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
@@ -72,7 +72,7 @@ const HomePage = () => {
                     <AirdropDiv key={i} item={item} />
                   ))}
                 </div>
-                <div className='w-1.5 h-[27rem] bg-ash rounded-full'></div>
+                {/* <div className='w-1.5 h-[27rem] bg-ash rounded-full'></div> */}
               </div>
               <Link to='/airdrops' onClick={MoveToTop}>
                 <FormButton title='show more deFi airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />

@@ -22,7 +22,7 @@ const pageLinks = [
   { path: 'terms & conditions', url: '/terms' },
   { path: 'privacy policy', url: '/privacy-policy' },
   { path: 'contact us', url: '/contact' },
-  { path: 'blog', url: '/blog' },
+  { path: 'blogs', url: '/blogs' },
 ]
 
 const Footer = () => {
@@ -39,7 +39,7 @@ const Footer = () => {
   }
 
   return (
-   <div className="w-full bg-dark  ">
+   <div className="w-full bg-dark z-50 ">
      <div className='w-11/12 mx-auto border-t border-t-ash  py-5 '>
       <div className='flex flex-col gap-2 pb-4'>
         <div className='grid md:grid-cols-2 grid-cols-1 gap-8'>
