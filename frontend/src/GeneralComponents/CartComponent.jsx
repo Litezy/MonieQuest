@@ -4,11 +4,11 @@ import emptybox from '../assets/images/emptybox1.png'
 
 const CartComponent = ({ cartItems, setCartItems }) => {
     const [quanity, setQuantity] = useState(1)
-    let oldPrices = 0
-    let totalPrice = 0
+    let oldTotalPrice = 0
+    let newTotalPrice = 0
     cartItems.map((ele) => (
-        oldPrices += ele.old_price,
-        totalPrice += ele.new_price
+        oldTotalPrice += ele.old_price,
+        newTotalPrice += ele.new_price
     ))
 
     const RemoveCart = (item) => {
@@ -57,14 +57,14 @@ const CartComponent = ({ cartItems, setCartItems }) => {
                         <div className='flex flex-col gap-4'>
                             <div className='flex justify-between'>
                                 <div className='capitalize'>cart subtotal</div>
-                                <div className='font-bold'>${totalPrice.toFixed(2)}</div>
+                                <div className='font-bold'>${newTotalPrice.toFixed(2)}</div>
                             </div>
-                            <div className='text-lightgreen border-b border-zinc-500 pb-4'>You are saving ${oldPrices - totalPrice}</div>
+                            <div className='text-lightgreen border-b border-zinc-500 pb-4'>You are saving ${oldTotalPrice - newTotalPrice}</div>
                         </div>
                         <div className='flex flex-col gap-4 mt-8'>
                             <div className='flex justify-between font-bold uppercase'>
                                 <div>Total</div>
-                                <div className='text-xl'>${totalPrice.toFixed(2)}</div>
+                                <div className='text-xl'>${newTotalPrice.toFixed(2)}</div>
                             </div>
                             <button className='bg-lightgreen text-ash uppercase font-extrabold w-full h-fit py-3 rounded-[3px]'>proceed to checkout</button>
                         </div>
