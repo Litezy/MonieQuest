@@ -5,6 +5,7 @@ import { FaXTwitter } from 'react-icons/fa6'
 import { SiTelegram } from 'react-icons/si'
 import { LuArrowRightLeft } from 'react-icons/lu'
 import testimg from '../../assets/images/testimg.webp'
+import airdropLogo from '../../assets/images/testimage.jfif'
 
 const SingleAirdropPage = () => {
   const { id } = useParams()
@@ -16,7 +17,12 @@ const SingleAirdropPage = () => {
         <div className='md:w-5/6 w-11/12 mx-auto text-gray-200'>
           <div className='flex flex-col gap-14'>
             <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
-              <span className='capitalize md:text-4xl text-3xl font-bold'>ape express</span>
+              <div className='flex items-center gap-2'>
+                <div>
+                  <img alt={singleAirdrop.logo} src={airdropLogo} className='w-14 h-14 rounded-full object-cover'></img>
+                </div>
+                <div className='capitalize md:text-4xl text-3xl font-bold'>ape express</div>
+              </div>
               <div className='flex lg:flex-row lg:gap-40 flex-col gap-8 ml-auto'>
                 <div className='flex items-center gap-2 justify-end'>
                   <a href='' className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
