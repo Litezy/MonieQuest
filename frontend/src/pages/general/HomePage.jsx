@@ -10,6 +10,11 @@ import Testimonials from '../../GeneralComponents/Testimonials';
 
 const HomePage = () => {
   const [faq, setFaq] = useState('')
+  const [dataLoading, setDataLoading] = useState(true)
+
+  setTimeout(() => {
+    setDataLoading(false)
+  }, 2000)
 
   const handleQuestions = i => {
     if (i !== faq) {
@@ -39,9 +44,19 @@ const HomePage = () => {
             <div className='flex flex-col gap-2'>
               <div className='capitalize font-medium'>featured airdrops</div>
               <div className='flex flex-col gap-4'>
-                {new Array(4).fill(0).map((item, i) => (
-                  <AirdropDiv key={i} item={item} />
-                ))}
+                {dataLoading ?
+                  <>
+                    {new Array(4).fill(0).map((_, i) => (
+                      <div key={i} className='w-72 h-40 rounded-md bg-slate-400 animate-pulse'></div>
+                    ))}
+                  </>
+                  :
+                  <>
+                    {new Array(4).fill(0).map((item, i) => (
+                      <AirdropDiv key={i} item={item} />
+                    ))}
+                  </>
+                }
               </div>
               <Link to='/airdrops' onClick={MoveToTop}>
                 <FormButton title='show more featured airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
@@ -50,9 +65,19 @@ const HomePage = () => {
             <div className='flex flex-col gap-2'>
               <div className='capitalize font-medium'>solana airdrops</div>
               <div className='flex flex-col gap-4'>
-                {new Array(4).fill(0).map((item, i) => (
-                  <AirdropDiv key={i} item={item} />
-                ))}
+                {dataLoading ?
+                  <>
+                    {new Array(4).fill(0).map((_, i) => (
+                      <div key={i} className='w-72 h-40 rounded-md bg-slate-400 animate-pulse'></div>
+                    ))}
+                  </>
+                  :
+                  <>
+                    {new Array(4).fill(0).map((item, i) => (
+                      <AirdropDiv key={i} item={item} />
+                    ))}
+                  </>
+                }
               </div>
               <Link to='/airdrops' onClick={MoveToTop}>
                 <FormButton title='show more solana airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
@@ -61,9 +86,19 @@ const HomePage = () => {
             <div className='flex flex-col gap-2'>
               <div className='capitalize font-medium'>deFi airdrops</div>
               <div className='flex flex-col gap-4'>
-                {new Array(4).fill(0).map((item, i) => (
-                  <AirdropDiv key={i} item={item} />
-                ))}
+                {dataLoading ?
+                  <>
+                    {new Array(4).fill(0).map((_, i) => (
+                      <div key={i} className='w-72 h-40 rounded-md bg-slate-400 animate-pulse'></div>
+                    ))}
+                  </>
+                  :
+                  <>
+                    {new Array(4).fill(0).map((item, i) => (
+                      <AirdropDiv key={i} item={item} />
+                    ))}
+                  </>
+                }
               </div>
               <Link to='/airdrops' onClick={MoveToTop}>
                 <FormButton title='show more deFi airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
