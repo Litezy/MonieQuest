@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import payment from '../assets/images/payment.png'
-import emptybox from '../assets/images/emptybox1.png'
+import emptybox from '../assets/images/emptybox.png'
 
 const CartComponent = ({ cartItems, setCartItems }) => {
     const localName = 'products'
@@ -32,8 +32,10 @@ const CartComponent = ({ cartItems, setCartItems }) => {
                     <div className='flex flex-col gap-5 mt-8'>
                         {cartItems.map((item, i) => (
                             <div className='w-full h-fit bg-primary flex md:py-0 py-3 rounded-[3px] overflow-hidden' key={i}>
-                                <img src={item.image} alt='product image' className='md:w-60 w-28 md:h-28 h-20 md:pl-0 pl-3 object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
-                                <div className='px-4 md:py-3 w-full flex flex-col'>
+                                <div className='md:w-[25%] w-[30%]'>
+                                    <img src={item.image} alt='product image' className='w-full md:h-28 h-20 md:pl-0 pl-3 object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
+                                </div>
+                                <div className='md:w-[75%] w-[70%] px-4 md:py-3 flex flex-col'>
                                     <div className='flex md:flex-row flex-col md:justify-between gap-1'>
                                         <div className='capitalize font-bold md:text-base text-sm'>{item.title}</div>
                                         <div className='flex items-center md:flex-col flex-row gap-2'>
@@ -44,7 +46,7 @@ const CartComponent = ({ cartItems, setCartItems }) => {
                                     <div className='flex gap-4 md:text-sm text-xs items-center md:mt-0 mt-1'>
                                         <div className='flex gap-4 items-center'>
                                             <div>Quantity</div>
-                                            <input className='outline-none border border-gray-500 bg-transparent w-10 h-fit py-1.5 px-3 lg:text-sm text-base rounded-[3px]' value={quanity} onChange={(e) => setQuantity(e.target.value)}></input>
+                                            <input className='outline-none border border-gray-500 bg-transparent w-10 h-fit md:py-1.5 py-1 px-3 lg:text-sm text-base rounded-[3px]' value={quanity} onChange={(e) => setQuantity(e.target.value)}></input>
                                         </div>
                                         <div className='border-l border-zinc-500 md:pl-4 pl-2 cursor-pointer hover:text-lightgreen' onClick={() => RemoveCart(item)}>Remove</div>
                                     </div>

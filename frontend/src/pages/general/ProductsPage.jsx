@@ -10,23 +10,23 @@ import CartComponent from "../../GeneralComponents/CartComponent";
 
 const products1 = [
   {
+    id: 1,
     image: testimg,
     title: "playwrite",
     category: "fonts",
     old_price: 6,
     new_price: 3,
-    id: 1,
   },
 ];
 
 const products2 = [
   {
+    id: 2,
     image: testimg2,
     title: "the grinch mas",
     category: "graphics",
     old_price: 120,
     new_price: 12,
-    id: 2,
   },
 ];
 
@@ -52,7 +52,7 @@ const ProductsPage = () => {
   };
 
   const CartButton = (id) => {
-    const exists = cartItems.some(item => item.id === id)
+    const exists = cartItems.some(ele => ele.id === id)
     return exists ? (
       <span>Added to Cart</span>
     ) : (

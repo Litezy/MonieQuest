@@ -28,7 +28,7 @@ const HomePage = () => {
             <div className='flex  flex-col gap-4 items-center mt-8 justify-center text-sm text-gray-100 text-center'>
               <div className="text-lg">Our platform ensures you are always ahead in the crypto space and maximizing your earnings.</div>
               <div className="text-zinc-300 text-base">The simplest and fastest way of making money online.</div>
-              <div className="text-lg">With over <span className='text-lightgreen font-bold '>500 updates</span> available, you could earn up to <span className='text-lightgreen font-bold'>$2,000</span> per month by just participating</div>
+              <div className="text-lg">With over <span className='text-lightgreen font-bold '>500 updates</span> available, you could earn up to <span className='text-lightgreen font-bold'>$2,000</span> per month by just participating.</div>
 
               <div className="text-lg md:text-xl lg:text-2xl ">Also trade your <span className='text-lightgreen font-bold'>Coins</span> and <span className='text-lightgreen font-bold'>Gift Cards</span> with us today</div>
             </div>

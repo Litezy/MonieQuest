@@ -16,7 +16,7 @@ const AirdropsPage = () => {
             <div className='flex flex-col gap-8'>
               <div className='flex flex-col gap-2'>
                 <span className='capitalize font-bold text-2xl'>featured airdrops</span>
-                <span>Below are the available featured airdrops on our platform, click on the links and start earning today.</span>
+                <span>Below are the available featured airdrops on our platform, click on an airdrop to see details.</span>
               </div>
               <div className='flex flex-wrap gap-4 justify-center'>
                 {new Array(8).fill(0).map((item, i) => (
@@ -27,7 +27,7 @@ const AirdropsPage = () => {
             <div className='flex flex-col gap-8'>
               <div className='flex flex-col gap-2'>
                 <span className='capitalize font-bold text-2xl'>solana airdrops</span>
-                <span>Below are the available solana airdrops on our platform, click on the links and start earning today.</span>
+                <span>Below are the available solana airdrops on our platform, click on an airdrop to see details.</span>
               </div>
               <div className='flex flex-wrap gap-4 justify-center'>
                 {new Array(8).fill(0).map((item, i) => (
@@ -38,7 +38,7 @@ const AirdropsPage = () => {
             <div className='flex flex-col gap-8'>
               <div className='flex flex-col gap-2'>
                 <span className='capitalize font-bold text-2xl'>deFi airdrops</span>
-                <span>Below are the available deFi airdrops on our platform, click on the links and start earning today.</span>
+                <span>Below are the available deFi airdrops on our platform, click on an airdrop to see details.</span>
               </div>
               <div className='flex flex-wrap gap-4 justify-center'>
                 {new Array(8).fill(0).map((item, i) => (

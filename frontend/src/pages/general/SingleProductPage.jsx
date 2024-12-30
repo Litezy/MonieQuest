@@ -10,11 +10,34 @@ import { MoveToTop } from '../../utils/pageUtils'
 import Rating from '@mui/material/Rating';
 
 const SingleProductPage = () => {
+    const localName = 'products'
+    const localData = JSON.parse(localStorage.getItem(localName))
     const { id } = useParams()
     const [track, setTrack] = useState(0)
     const [rating, setRating] = useState(1)
     const [submit, setSubmit] = useState(false)
-    // console.log(id)
+    const [singleProduct, setSingleProduct] = useState({})
+
+    // const AddToCart = () => {
+    //     const findIfCartExist = localData.find((ele) => ele.id === singleProduct.id);
+    //     if (!findIfCartExist) {
+    //         const currentData = JSON.parse(localStorage.getItem(localName))
+    //         currentData.push(singleProduct)
+    //         localStorage.setItem(localName, JSON.stringify(currentData))
+    //     }
+    // };
+
+    const CartButton = () => {
+        const exists = localData.some(ele => ele.id === parseInt(id))
+        return exists ? (
+            <span>Added to Cart</span>
+        ) : (
+            <>
+                <IoCart className="text-lg" />
+                <span>Add to Cart</span>
+            </>
+        );
+    }
 
     return (
         <PageLayout>
@@ -39,7 +62,7 @@ const SingleProductPage = () => {
                             <div className='flex gap-1 items-center justify-center'>
                                 {new Array(4).fill(0).map((item, i) => (
                                     <div className={`${i === track && 'border-2 border-lightgreen rounded-sm'} cursor-pointer`} key={i} onClick={() => setTrack(i)}>
-                                        <img alt='profit tool' src={testimg} className='h-16 w-auto'></img>
+                                        <img alt={singleProduct.image} src={testimg} className='h-16 w-auto'></img>
                                     </div>
                                 ))}
                             </div>
@@ -56,8 +79,7 @@ const SingleProductPage = () => {
                                         <span className='line-through text-sm'>$6.00</span>
                                     </div>
                                     <button className='outline-none w-full h-fit flex gap-2 items-center justify-center p-3 bg-lightgreen uppercase text-sm font-extrabold rounded-[4px] text-ash tracking-wider'>
-                                        <IoCart className='text-lg' />
-                                        <span>add to cart</span>
+                                        {CartButton()}
                                     </button>
                                 </div>
                                 <div className='grid md:grid-cols-2 grid-cols-1 gap-8 mt-8 text-sm items-center pb-4'>
