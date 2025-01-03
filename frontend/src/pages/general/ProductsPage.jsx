@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageLayout from "../../GeneralComponents/PageLayout";
 import testimg from "../../assets/images/pdt.jpg";
 import testimg2 from "../../assets/images/pdt2.jpg";
@@ -10,38 +10,55 @@ import CartComponent from "../../GeneralComponents/CartComponent";
 
 const products1 = [
   {
+    id: 1,
     image: testimg,
     title: "playwrite",
     category: "fonts",
     old_price: 6,
     new_price: 3,
-    id: Math.random(5),
   },
 ];
 
 const products2 = [
   {
+    id: 2,
     image: testimg2,
     title: "the grinch mas",
     category: "graphics",
     old_price: 120,
     new_price: 12,
-    id: Math.random(5),
   },
 ];
 
 const ProductsPage = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const localName = 'products'
+  const localData = JSON.parse(localStorage.getItem(localName))
+  const [cartItems, setCartItems] = useState(localData || []);
+  const [dataLoading, setDataLoading] = useState(true)
+
+  setTimeout(() => {
+    setDataLoading(false)
+  }, 2000)
+
+  useEffect(() => {
+    if (!localData) {
+      localStorage.setItem(localName, JSON.stringify([]))
+    }
+  }, [cartItems])
 
   const AddToCart = (item) => {
     const findIfCartExist = cartItems.find((ele) => ele.id === item.id);
     if (!findIfCartExist) {
       setCartItems([...cartItems, item]);
+      const currentData = JSON.parse(localStorage.getItem(localName))
+      currentData.push(item)
+      localStorage.setItem(localName, JSON.stringify(currentData))
     }
   };
 
-  const getCartButton = (item) => {
-    return cartItems.includes(item) ? (
+  const CartButton = (id) => {
+    const exists = cartItems.some(ele => ele.id === id)
+    return exists ? (
       <span>Added to Cart</span>
     ) : (
       <>
@@ -51,22 +68,11 @@ const ProductsPage = () => {
     );
   };
 
-  const getDiscountBadge = (index) => {
-    if ([0, 2].includes(index)) {
-      return (
-        <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
-          50% Off
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <PageLayout>
       <div className="pb-20 bg-dark">
         <div className="pageBg">
-          <div className="w-full h-full bg-[#212134ea] py-10">
+          <div className="w-full h-full bg-[#212134ea] py-20">
             <div className="md:text-4xl text-3xl font-bold text-white text-center">
               Products
             </div>
@@ -79,50 +85,65 @@ const ProductsPage = () => {
             <div className="flex flex-col gap-8">
               <div className="text-2xl font-bold">Popular this week</div>
               <div className="flex flex-wrap gap-6 justify-center">
-                {products1.map((item) =>
-                  new Array(4).fill().map((_, index) => (
-                    <div
-                      key={index}
-                      className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
-                    >
-                      {getDiscountBadge(index)}
-                      <Link to={`/products/${index}`} onClick={MoveToTop}>
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="w-full h-48 rounded-t-[4px] object-cover object-center"
-                        />
-                      </Link>
-                      <div className="flex flex-col gap-4 px-2 py-4">
-                        <div className="flex justify-between items-center">
-                          <div className="capitalize text-sm font-bold">
-                            {item.title}
-                          </div>
-                          <FaCheckCircle className="text-lightgreen text-xl" />
-                        </div>
-                        <div className="flex justify-between">
-                          <div className="text-xs capitalize">
-                            in <span className="text-lightgreen">{item.category}</span>
-                          </div>
-                          <div className="flex gap-2 items-center text-sm font-extrabold">
-                            <div className="text-[#B2212F] underline">
-                              ${item.new_price.toFixed(2)}
-                            </div>
-                            <div className="line-through">
-                              ${item.old_price.toFixed(2)}
-                            </div>
-                          </div>
-                        </div>
-                        <button
-                          className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
-                          onClick={() => AddToCart(item)}
+                {dataLoading ?
+                  <>
+                    {new Array(4).fill(0).map((_, i) => (
+                      <div key={i} className='w-72 h-80 rounded-[4px] bg-slate-400 animate-pulse'></div>
+                    ))}
+                  </>
+                  :
+                  <>
+                    {products1.map((item) =>
+                      new Array(4).fill().map((_, index) => (
+                        <div
+                          key={index}
+                          className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
                         >
-                          {getCartButton(item)}
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
+                          <>
+                            <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
+                              90% Off
+                            </div>
+                            <div className="edge"></div>
+                          </>
+                          <Link to={`/products/${index}`} onClick={MoveToTop}>
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              className="w-full h-48 rounded-t-[4px] object-cover object-center"
+                            />
+                          </Link>
+                          <div className="flex flex-col gap-4 px-2 py-4">
+                            <div className="flex justify-between items-center">
+                              <div className="capitalize text-sm font-bold">
+                                {item.title}
+                              </div>
+                              <FaCheckCircle className="text-lightgreen text-xl" />
+                            </div>
+                            <div className="flex justify-between">
+                              <div className="text-xs capitalize">
+                                in <span className="text-lightgreen">{item.category}</span>
+                              </div>
+                              <div className="flex gap-2 items-center text-sm font-extrabold">
+                                <div className="text-[#B2212F] underline">
+                                  ${item.new_price.toFixed(2)}
+                                </div>
+                                <div className="line-through">
+                                  ${item.old_price.toFixed(2)}
+                                </div>
+                              </div>
+                            </div>
+                            <button
+                              className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
+                              onClick={() => AddToCart(item)}
+                            >
+                              {CartButton(item.id)}
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </>
+                }
               </div>
             </div>
 
@@ -130,49 +151,65 @@ const ProductsPage = () => {
             <div className="flex flex-col gap-8">
               <div className="text-2xl font-bold">New releases</div>
               <div className="flex flex-wrap gap-6 justify-center">
-                {products2.map((item) =>
-                  new Array(4).fill().map((_, index) => (
-                    <div
-                      key={index}
-                      className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
-                    >
-                      <Link to={`/products/${index}`} onClick={MoveToTop}>
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="w-full h-48 rounded-t-[4px] object-cover object-center"
-                        />
-                      </Link>
-                      <div className="flex flex-col gap-4 px-2 py-4">
-                        <div className="flex justify-between items-center">
-                          <div className="capitalize text-sm font-bold">
-                            {item.title}
-                          </div>
-                          <FaCheckCircle className="text-lightgreen text-xl" />
-                        </div>
-                        <div className="flex justify-between">
-                          <div className="text-xs capitalize">
-                            in <span className="text-lightgreen">{item.category}</span>
-                          </div>
-                          <div className="flex gap-2 items-center text-sm font-extrabold">
-                            <div className="text-[#B2212F] underline">
-                              ${item.new_price.toFixed(2)}
-                            </div>
-                            <div className="line-through">
-                              ${item.old_price.toFixed(2)}
-                            </div>
-                          </div>
-                        </div>
-                        <button
-                          className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
-                          onClick={() => AddToCart(item)}
+                {dataLoading ?
+                  <>
+                    {new Array(4).fill(0).map((_, i) => (
+                      <div key={i} className='w-72 h-80 rounded-[4px] bg-slate-400 animate-pulse'></div>
+                    ))}
+                  </>
+                  :
+                  <>
+                    {products2.map((item) =>
+                      new Array(4).fill().map((_, index) => (
+                        <div
+                          key={index}
+                          className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
                         >
-                          {getCartButton(item)}
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
+                          <>
+                            <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
+                              90% Off
+                            </div>
+                            <div className="edge"></div>
+                          </>
+                          <Link to={`/products/${index}`} onClick={MoveToTop}>
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              className="w-full h-48 rounded-t-[4px] object-cover object-center"
+                            />
+                          </Link>
+                          <div className="flex flex-col gap-4 px-2 py-4">
+                            <div className="flex justify-between items-center">
+                              <div className="capitalize text-sm font-bold">
+                                {item.title}
+                              </div>
+                              <FaCheckCircle className="text-lightgreen text-xl" />
+                            </div>
+                            <div className="flex justify-between">
+                              <div className="text-xs capitalize">
+                                in <span className="text-lightgreen">{item.category}</span>
+                              </div>
+                              <div className="flex gap-2 items-center text-sm font-extrabold">
+                                <div className="text-[#B2212F] underline">
+                                  ${item.new_price.toFixed(2)}
+                                </div>
+                                <div className="line-through">
+                                  ${item.old_price.toFixed(2)}
+                                </div>
+                              </div>
+                            </div>
+                            <button
+                              className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
+                              onClick={() => AddToCart(item)}
+                            >
+                              {CartButton(item.id)}
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </>
+                }
               </div>
             </div>
           </div>
