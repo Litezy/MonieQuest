@@ -9,7 +9,7 @@ import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import { MoveToTop } from '../../utils/pageUtils'
 import Rating from '@mui/material/Rating';
 import CarouselComponent from '../../GeneralComponents/Carousel.jsx'
-import image1 from '../../assets/images/pdt2.jpg'
+import image1 from '../../assets/images/pdt.jpg'
 import image2 from '../../assets/images/airdrop_banner.jfif'
 import image3 from '../../assets/images/testimg.webp'
 
@@ -80,7 +80,7 @@ const SingleProductPage = () => {
                             </div>
                             <div className='grid lg:grid-cols-2 grid-cols-1 gap-6'>
                                 <div className='flex flex-col gap-4'>
-                                    <div className='w-full md:h-80 h-56 rounded-lg bg-slate-400 animate-pulse'></div>
+                                    <div className='w-full md:h-80 h-56 bg-slate-400 animate-pulse'></div>
                                     <div className='flex gap-1 items-center justify-center'>
                                         {new Array(3).fill(0).map((_, i) => (
                                             <div key={i} className='w-28 h-16 rounded-sm bg-slate-400 animate-pulse'></div>
