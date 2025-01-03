@@ -76,6 +76,17 @@ const Crypto = () => {
         }
     }, [forms.amount, rate])
 
+    const handlePaste = (e) => {
+        const pastedData = e.clipboardData.getData('text');
+        // const fieldName = e.target.name;
+        const fieldValue = pastedData.trim();
+        setForms({
+            ...forms,
+            wallet_add: fieldValue,
+        })
+
+        console.log('Pasted data:', pastedData);
+    };
 
     return (
         <div className='w-full'>
@@ -141,7 +152,7 @@ const Crypto = () => {
                                 <div className="font-bold text-lg">Network</div>
                                 <div className="w-full ">
                                     <input
-                                        className={`outline-none border w-full bg-transparent  rounded-md  py-3 px-4 lg:text-sm text-base  `} onChange={handleChange} name='network' value={forms.network} placeholder={`network`} type={'text'}
+                                        className={`outline-none border w-full bg-transparent  rounded-md  py-3 px-4 lg:text-sm text-base  `} onChange={handleChange} onPaste={handlePaste} name='network' value={forms.network} placeholder={`network`} type={'text'}
                                     ></input>
 
                                 </div>
@@ -150,9 +161,20 @@ const Crypto = () => {
                                 <div className="font-bold text-lg">Wallet Address</div>
                                 <div className="w-full flex items-center gap-1 border rounded-md py-3 px-2">
                                     <input
-                                        className={`outline-none  w-full bg-transparent    lg:text-sm text-base  `} onChange={handleChange} name='network' value={forms.wallet_add} placeholder={`wallet address`} type={'text'}
+                                        className={`outline-none  w-full bg-transparent    lg:text-sm text-base  `} onChange={handleChange} name='wallet_add' value={forms.wallet_add} placeholder={`wallet address`} type={'text'}
                                     ></input>
-                                      <div className="text-sm cursor-pointer text-lightgreen">paste</div>
+                                    <div
+                                        onClick={() =>
+                                            navigator.clipboard.readText().then((text) => {
+                                                setForms((prevForms) => ({
+                                                    ...prevForms,
+                                                    wallet_add: text,
+                                                }));
+                                                console.log('Pasted data:', text);
+                                            })
+
+                                        }
+                                        className="text-sm cursor-pointer text-lightgreen">paste</div>
                                 </div>
                             </div>
                             <div className="flex w-full items-start gap-2 flex-col  ">
