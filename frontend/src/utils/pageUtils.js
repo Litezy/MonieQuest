@@ -1,17 +1,32 @@
-import toast from 'react-hot-toast'
+import {toast} from 'sonner'
 import customer1 from '../assets/images/customer1.jfif'
 
 
 export const ErrorAlert = (message) => {
     return toast.error(message, {
         position: "top-center",
+        className: 'bg-red-600 text-white ',
     })
 }
 
 export const SuccessAlert = (message) => {
     return toast.success(message, {
-        position: "top-center"
+        position: "top-center",
+        className: 'bg-green-600 text-white ',
+
     })
+}
+export const errorMessage = (message) => {
+    toast.error(message, {
+        position: "top-center", 
+        className: 'bg-red-600 text-white ',
+    });
+};
+export const successMessage = (message) => {
+    return toast.success(message),{
+        className: 'bg-green-600 text-white ',
+    }
+    
 }
 
 export const MoveToTop = () => {

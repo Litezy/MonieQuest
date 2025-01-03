@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import { Toaster } from 'react-hot-toast'
+import { Toaster } from 'sonner'
 import 'aos/dist/aos.css'
 import AOS from 'aos'
 
