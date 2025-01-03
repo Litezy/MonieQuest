@@ -5,7 +5,7 @@ const AuthPageLayout = ({children}) => {
     return (
       <div>
         <AuthHeader />
-        <div className=''>
+        <div className=' bg-primary'>
           {children}
         </div>
       </div>
