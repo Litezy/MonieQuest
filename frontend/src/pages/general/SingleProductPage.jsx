@@ -8,12 +8,22 @@ import { MdPersonAddAlt1 } from "react-icons/md";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import { MoveToTop } from '../../utils/pageUtils'
 import Rating from '@mui/material/Rating';
+import CarouselComponent from '../../GeneralComponents/Carousel.jsx'
+import image1 from '../../assets/images/pdt2.jpg'
+import image2 from '../../assets/images/airdrop_banner.jfif'
+import image3 from '../../assets/images/testimg.webp'
+
+const singleProductImages = [
+    image1,
+    image2,
+    image3
+]
 
 const SingleProductPage = () => {
     const localName = 'products'
     const localData = JSON.parse(localStorage.getItem(localName))
     const { id } = useParams()
-    const [track, setTrack] = useState(0)
+    const [track, setTrack] = useState('')
     const [rating, setRating] = useState(1)
     const [submit, setSubmit] = useState(false)
     const [singleProduct, setSingleProduct] = useState({})
@@ -21,8 +31,8 @@ const SingleProductPage = () => {
 
     setTimeout(() => {
         setDataLoading(false)
-      }, 2000)
-    
+    }, 2000)
+
 
     // const AddToCart = () => {
     //     const findIfCartExist = localData.find((ele) => ele.id === singleProduct.id);
@@ -70,9 +80,9 @@ const SingleProductPage = () => {
                             </div>
                             <div className='grid lg:grid-cols-2 grid-cols-1 gap-6'>
                                 <div className='flex flex-col gap-4'>
-                                    <div className='w-full h-80 bg-slate-400 animate-pulse'></div>
+                                    <div className='w-full md:h-80 h-56 rounded-lg bg-slate-400 animate-pulse'></div>
                                     <div className='flex gap-1 items-center justify-center'>
-                                        {new Array(4).fill(0).map((_, i) => (
+                                        {new Array(3).fill(0).map((_, i) => (
                                             <div key={i} className='w-28 h-16 rounded-sm bg-slate-400 animate-pulse'></div>
                                         ))}
                                     </div>
@@ -116,11 +126,11 @@ const SingleProductPage = () => {
                             </div>
                             <div className='grid lg:grid-cols-2 grid-cols-1 gap-6'>
                                 <div className='flex flex-col gap-4'>
-                                    <img alt='profit tool' src={testimg} className='w-full h-auto'></img>
+                                    <CarouselComponent singleProductImages={singleProductImages} setTrack={setTrack} />
                                     <div className='flex gap-1 items-center justify-center'>
-                                        {new Array(4).fill(0).map((item, i) => (
-                                            <div className={`${i === track && 'border-2 border-lightgreen rounded-sm'} cursor-pointer`} key={i} onClick={() => setTrack(i)}>
-                                                <img alt={singleProduct.image} src={testimg} className='h-16 w-auto'></img>
+                                        {singleProductImages.map((item, i) => (
+                                            <div className={`${i === track && 'border-2 border-lightgreen rounded-sm'}`} key={i}>
+                                                <img alt={item} src={item} className='h-16 w-28 object-cover'></img>
                                             </div>
                                         ))}
                                     </div>
