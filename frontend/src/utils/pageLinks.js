@@ -24,14 +24,14 @@ export const GeneralPagesLinks = [
     { path: '/signup', component: SignUpPage },
     { path: '/verify-account', component: VerifyAccount },
     { path: '/forgot-password', component: ForgotPassword },
+    { path: '/airdrops', component: AirdropsPage },
+    { path: '/airdrops/:id/:slug', component: SingleAirdropPage },
+    { path: '/products', component: ProductsPage },
+    { path: '/products/:id/:slug', component: SingleProductPage },
+    { path: '/contact', component: ContactPage },
+    { path: '/blogs', component: Blogs },
     { path: '/terms', component: TermsPage },
     { path: '/privacy-policy', component: PrivacyPolicy },
-    { path: '/airdrops', component: AirdropsPage },
-    { path: '/airdrops/:id', component: SingleAirdropPage },
-    { path: '/contact', component: ContactPage },
-    { path: '/products', component: ProductsPage },
-    { path: '/blogs', component: Blogs },
-    { path: '/products/:id', component: SingleProductPage },
 ]
 
 export const AuthPagesLinks = [

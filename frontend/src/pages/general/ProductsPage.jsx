@@ -3,12 +3,14 @@ import PageLayout from "../../GeneralComponents/PageLayout";
 import testimg from "../../assets/images/pdt.jpg";
 import testimg2 from "../../assets/images/pdt2.jpg";
 import { FaCheckCircle } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 import { IoCart } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { MoveToTop } from "../../utils/pageUtils";
 import CartComponent from "../../GeneralComponents/CartComponent";
+import FormInput from "../../utils/FormInput";
 
-const products1 = [
+const products = [
   {
     id: 1,
     image: testimg,
@@ -17,9 +19,6 @@ const products1 = [
     old_price: 6,
     new_price: 3,
   },
-];
-
-const products2 = [
   {
     id: 2,
     image: testimg2,
@@ -28,13 +27,15 @@ const products2 = [
     old_price: 120,
     new_price: 12,
   },
-];
+]
+
 
 const ProductsPage = () => {
   const localName = 'products'
   const localData = JSON.parse(localStorage.getItem(localName))
   const [cartItems, setCartItems] = useState(localData || []);
   const [dataLoading, setDataLoading] = useState(true)
+  const [search, setSearch] = useState('')
 
   setTimeout(() => {
     setDataLoading(false)
@@ -73,145 +74,86 @@ const ProductsPage = () => {
       <div className="pb-20 bg-dark">
         <div className="pageBg">
           <div className="w-full h-full bg-[#212134ea] py-20">
-            <div className="md:text-4xl text-3xl font-bold text-white text-center">
-              Products
+            <div className="md:text-4xl text-3xl font-bold text-white text-center capitalize">
+              profit tools
             </div>
           </div>
         </div>
         <div className="w-11/12 mx-auto text-gray-200 mt-16">
           <CartComponent cartItems={cartItems} setCartItems={setCartItems} />
-          <div className="flex flex-col gap-16 mt-20">
-            {/* Popular this week */}
-            <div className="flex flex-col gap-8">
-              <div className="text-2xl font-bold">Popular this week</div>
-              <div className="flex flex-wrap gap-6 justify-center">
-                {dataLoading ?
-                  <>
-                    {new Array(4).fill(0).map((_, i) => (
-                      <div key={i} className='w-72 h-80 rounded-[4px] bg-slate-400 animate-pulse'></div>
-                    ))}
-                  </>
-                  :
-                  <>
-                    {products1.map((item) =>
-                      new Array(4).fill().map((_, index) => (
-                        <div
-                          key={index}
-                          className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
-                        >
-                          <>
-                            <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
-                              90% Off
+          <div className="flex flex-col gap-2 items-center mt-20">
+            <div className="text-3xl font-bold text-center">Say Goodbye to Stress, Simplify your Hustle, Maximize your Wealth!
+            </div>
+            <div className="text-lg font-bold text-center">“Tools you can Trust, Knowledge that pays”</div>
+            <div className="flex gap-2 items-center mt-2">
+              <FormInput placeholder='Find available tools and eBooks' className='md:!w-80 !w-64 -mt-2' value={search} onChange={(e) => setSearch(e.target.value)} />
+              <button className="outline-none w-fit h-fit bg-ash py-2 px-4 text-2xl rounded-lg">
+                <IoIosSearch />
+              </button>
+            </div>
+            <div className="mt-2 lg:w-1/2 text-center">Equip yourself with tools and knowledge designed by experts to help you simplify your workflow, manage income effectively and turn your dreams into reality.
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-6 justify-center mt-16">
+            {dataLoading ?
+              <>
+                {new Array(4).fill(0).map((_, i) => (
+                  <div key={i} className='w-72 h-80 rounded-[4px] bg-slate-400 animate-pulse'></div>
+                ))}
+              </>
+              :
+              <>
+                {products.map((item) =>
+                  new Array(4).fill().map((_, index) => (
+                    <div
+                      key={index}
+                      className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
+                    >
+                      <>
+                        <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
+                          {(item.old_price - item.new_price) / item.old_price * 100}% off
+                        </div>
+                        <div className="edge"></div>
+                      </>
+                      <Link to={`/products/${index}/${item.title}`} onClick={MoveToTop}>
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-48 rounded-t-[4px] object-cover object-center"
+                        />
+                      </Link>
+                      <div className="flex flex-col gap-4 px-2 py-4">
+                        <div className="flex justify-between items-center">
+                          <div className="capitalize text-sm font-bold">
+                            {item.title}
+                          </div>
+                          <FaCheckCircle className="text-lightgreen text-xl" />
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="text-xs capitalize">
+                            in <span className="text-lightgreen">{item.category}</span>
+                          </div>
+                          <div className="flex gap-2 items-center text-sm font-extrabold">
+                            <div className="text-[#B2212F] underline">
+                              ${item.new_price.toFixed(2)}
                             </div>
-                            <div className="edge"></div>
-                          </>
-                          <Link to={`/products/${index}`} onClick={MoveToTop}>
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              className="w-full h-48 rounded-t-[4px] object-cover object-center"
-                            />
-                          </Link>
-                          <div className="flex flex-col gap-4 px-2 py-4">
-                            <div className="flex justify-between items-center">
-                              <div className="capitalize text-sm font-bold">
-                                {item.title}
-                              </div>
-                              <FaCheckCircle className="text-lightgreen text-xl" />
+                            <div className="line-through">
+                              ${item.old_price.toFixed(2)}
                             </div>
-                            <div className="flex justify-between">
-                              <div className="text-xs capitalize">
-                                in <span className="text-lightgreen">{item.category}</span>
-                              </div>
-                              <div className="flex gap-2 items-center text-sm font-extrabold">
-                                <div className="text-[#B2212F] underline">
-                                  ${item.new_price.toFixed(2)}
-                                </div>
-                                <div className="line-through">
-                                  ${item.old_price.toFixed(2)}
-                                </div>
-                              </div>
-                            </div>
-                            <button
-                              className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
-                              onClick={() => AddToCart(item)}
-                            >
-                              {CartButton(item.id)}
-                            </button>
                           </div>
                         </div>
-                      ))
-                    )}
-                  </>
-                }
-              </div>
-            </div>
-
-            {/* New releases */}
-            <div className="flex flex-col gap-8">
-              <div className="text-2xl font-bold">New releases</div>
-              <div className="flex flex-wrap gap-6 justify-center">
-                {dataLoading ?
-                  <>
-                    {new Array(4).fill(0).map((_, i) => (
-                      <div key={i} className='w-72 h-80 rounded-[4px] bg-slate-400 animate-pulse'></div>
-                    ))}
-                  </>
-                  :
-                  <>
-                    {products2.map((item) =>
-                      new Array(4).fill().map((_, index) => (
-                        <div
-                          key={index}
-                          className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
+                        <button
+                          className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
+                          onClick={() => AddToCart(item)}
                         >
-                          <>
-                            <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
-                              90% Off
-                            </div>
-                            <div className="edge"></div>
-                          </>
-                          <Link to={`/products/${index}`} onClick={MoveToTop}>
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              className="w-full h-48 rounded-t-[4px] object-cover object-center"
-                            />
-                          </Link>
-                          <div className="flex flex-col gap-4 px-2 py-4">
-                            <div className="flex justify-between items-center">
-                              <div className="capitalize text-sm font-bold">
-                                {item.title}
-                              </div>
-                              <FaCheckCircle className="text-lightgreen text-xl" />
-                            </div>
-                            <div className="flex justify-between">
-                              <div className="text-xs capitalize">
-                                in <span className="text-lightgreen">{item.category}</span>
-                              </div>
-                              <div className="flex gap-2 items-center text-sm font-extrabold">
-                                <div className="text-[#B2212F] underline">
-                                  ${item.new_price.toFixed(2)}
-                                </div>
-                                <div className="line-through">
-                                  ${item.old_price.toFixed(2)}
-                                </div>
-                              </div>
-                            </div>
-                            <button
-                              className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
-                              onClick={() => AddToCart(item)}
-                            >
-                              {CartButton(item.id)}
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </>
-                }
-              </div>
-            </div>
+                          {CartButton(item.id)}
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </>
+            }
           </div>
         </div>
       </div>

@@ -8,8 +8,8 @@ import logo from '../assets/images/logo.png'
 const pageLinks = [
   { path: 'home', url: '/' },
   { path: 'airdrops', url: '/airdrops' },
-  { path: 'products', url: '/products' },
-  { path: 'contact us', url: '/contact' },
+  { path: 'profit tools', url: '/products' },
+  { path: 'blogs', url: '/blogs' },
 ]
 
 const Header = () => {

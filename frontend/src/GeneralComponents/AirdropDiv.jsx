@@ -8,7 +8,7 @@ import { MoveToTop } from '../utils/pageUtils'
 
 const AirdropDiv = ({ item }) => {
     return (
-        <Link to='/airdrops/1' onClick={MoveToTop} className='h-fit w-fit bg-primary border hover:border-bg-green border-ash rounded-md p-4 flex flex-col gap-4 text-white'>
+        <Link to='/airdrops/1/airdrop_title' onClick={MoveToTop} className='h-fit w-fit bg-primary border hover:border-bg-green border-ash rounded-md p-4 flex flex-col gap-4 text-white'>
             <div className='flex items-center gap-2'>
                 <img alt='airdrop logo' src={testImage} className='w-14 h-14 rounded-full object-cover'></img>
                 <div className='flex flex-col gap-1'>

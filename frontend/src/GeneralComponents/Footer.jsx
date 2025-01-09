@@ -22,7 +22,7 @@ const pageLinks = [
   { path: 'terms & conditions', url: '/terms' },
   { path: 'privacy policy', url: '/privacy-policy' },
   { path: 'contact us', url: '/contact' },
-  { path: 'blogs', url: '/blogs' },
+  { path: 'about us', url: '/about' },
 ]
 
 const Footer = () => {
