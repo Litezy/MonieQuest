@@ -2,7 +2,7 @@ import React from 'react'
 
 const Loading = ({className}) => {
     return (
-        <div className={`w-full h-full absolute top-0 left-0  flex items-center justify-center bg-[#1415239d] z-20 ${className}`}>
+        <div className={`w-full h-full absolute top-0 left-0  flex items-center justify-center bg-[#1415238a] z-20 ${className}`}>
             <div className="loader">
                 <div className="bar1"></div>
                 <div className="bar2"></div>
