@@ -12,22 +12,32 @@ const AuthHeader = () => {
         // { label: 'Blogs', url: '/auth_blogs' }
     ]
 
+      {/* <div className="w-[20%]  p-2">
+          <div className="font-bold text-xl mb-4">MonieQuest Exchange</div>
+          <div className="flex items-start flex-col gap-2">
+            {tags.map((tag,i) =>{
+              return (
+                <div onClick={()=> setActive(tag)} className={`font-bold text-ash cursor-pointer ${tag ===  active ? 'bg-lightgreen text-white' : 'bg-ash text-lightgreen'}  text-[18px] leading-[30px] px-3 py-1.5  w-full text-center`} key={i}>{tag}</div>
+              )
+            })}
+          </div>
+        </div> */}
     const location = useLocation()
     const pathName = location.pathname
     return (
         <div className='w-full py-1 bg-primary'>
-            <div className="w-11/12 mx-auto flex items-center justify-between">
+            <div className="w-11/12 mx-auto hidden lg:flex items-center justify-between">
                 <div className="">
                     <img src={logo} className='h-16' alt="moniequest-logo" />
                 </div>
-                <div className="flex items-center gap-5  text-white">
+                <div className="lg:flex hidden items-center gap-5  text-white">
                     {links.map((link, i) => {
                         return (
                             <Link to={link.url} className={`${pathName === link.url ? 'border-b border-b-lightgreen':''}`} key={i}>{link.label}</Link>
                         )
                     })}
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="hidden lg:flex items-center gap-3">
                     <Link to={'/profile'} className="flex items-center gap-2 bg-secondary py-1 px-5 rounded-md">
                         <div className="p-2 rounded-full flex items-center justify-center bg-white">
                             <FaUserAlt className='text-lg' />

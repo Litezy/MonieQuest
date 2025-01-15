@@ -5,7 +5,7 @@ import { errorMessage } from '../utils/pageUtils';
 
 
 const Crypto = () => {
-    const [screen, setScreen] = useState(2)
+    const [screen, setScreen] = useState(1)
     const tags = ['BUY', 'SELL']
     const rate = 1715
     const coins = ['Bitcoin', 'Ethereum', 'USDT', 'TRON', 'BNB']
@@ -64,15 +64,17 @@ const Crypto = () => {
         e.preventDefault()
         if (!forms.amount) return errorMessage('amount is required')
         if (!forms.type) return errorMessage('coin type is required')
+        //     const convert = parseInt(forms.amount.replace(/,/g, ''))
+        // const naira = convert * rate
+        //     console.log(`amount${forms.amount}, naira : ${naira.toLocaleString()}`)
         setScreen(2)
     }
 
     const [inNaira, setInNaira] = useState('')
     useEffect(() => {
         if (forms.amount) {
-            const naira = parseInt(forms.amount) * rate
+            const naira = parseInt(forms.amount.replace(/,/g, '')) * rate
             setInNaira(naira.toLocaleString())
-
         }
     }, [forms.amount, rate])
 
@@ -85,14 +87,14 @@ const Crypto = () => {
             wallet_add: fieldValue,
         })
 
-        console.log('Pasted data:', pastedData);
+        // console.log('Pasted data:', pastedData);
     };
 
     return (
         <div className='w-full'>
 
             <div className="w-full ">
-                <div className="mt-5 w-10/12 mx-auto  gap-10 flex items-center justify-center">
+                <div className="mt-5 w-11/12 mx-auto  gap-10 flex items-center justify-center">
                     {tags.map((tag, i) => {
                         return (
                             <div onClick={() => setActive(tag)} className={`cursor-pointer w-full py-3 ${tag === active && tag === 'BUY' ? 'bg-green-600 text-white' : tag === active && tag === 'SELL' ? 'bg-red-600 text-white' : 'text-dark bg-white'} text-center `} key={i}>{tag}</div>
@@ -102,7 +104,7 @@ const Crypto = () => {
 
                 {screen === 1 && active === 'BUY' &&
                     <div className="w-full flex items-center justify-center">
-                        <div className="flex w-1/2  mx-auto mt-5 items-start gap-5 flex-col">
+                        <div className="flex w-11/12  mx-auto mt-5 items-start gap-5 flex-col">
                             <div className="flex items-start gap-2 flex-col w-full">
                                 <div className="font-bold text-lg">Coin Type:</div>
                                 <select onChange={(e) => setForms({ ...forms, type: e.target.value })} className="bg-white w-full text-dark border border-gray-300 rounded-md py-2 px-4">
@@ -161,7 +163,7 @@ const Crypto = () => {
                                 <div className="font-bold text-lg">Wallet Address</div>
                                 <div className="w-full flex items-center gap-1 border rounded-md py-3 px-2">
                                     <input
-                                        className={`outline-none  w-full bg-transparent    lg:text-sm text-base  `} onChange={handleChange} name='wallet_add' value={forms.wallet_add} placeholder={`wallet address`} type={'text'}
+                                        className={` outline-none border-none w-full bg-transparent    lg:text-sm text-base  `} onChange={handleChange} name='wallet_add' value={forms.wallet_add} placeholder={`wallet address`} type={'text'}
                                     ></input>
                                     <div
                                         onClick={() =>
@@ -170,7 +172,7 @@ const Crypto = () => {
                                                     ...prevForms,
                                                     wallet_add: text,
                                                 }));
-                                                console.log('Pasted data:', text);
+                                                // console.log('Pasted data:', text);
                                             })
 
                                         }
