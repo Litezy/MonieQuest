@@ -1,10 +1,11 @@
 import React from 'react'
 
-const FormInput = ({ formtype = 'text', label, type = 'text', value, name, placeholder, className, onChange, onKeyUp }) => {
+const FormInput = ({ formtype = 'text',border=true, label, type = 'text', value, name, placeholder, className, onChange, onKeyUp }) => {
   return (
     <div className='flex flex-col gap-2'>
       <div className='text-sm font-medium'>{label}</div>
-      {formtype === 'text' && <input className={`outline-none border border-gray-400 bg-transparent w-full h-fit py-3 px-4 lg:text-sm text-base rounded-xl ${className}`} name={name} value={value} placeholder={placeholder} onChange={onChange} type={type} onKeyUp={onKeyUp} ></input>}
+      {formtype === 'text' && <input className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 focus:border   ${border ? 'border border-gray-400':'border-none'} bg-transparent w-full h-fit 
+        py-3 px-4 lg:text-sm text-base rounded-md ${className}`} name={name} value={value} placeholder={placeholder} onChange={onChange} type={type} onKeyUp={onKeyUp} ></input>}
       {formtype === 'number' && <input  className={`outline-none border border-gray-40 bg-transparent w-full  py-3 px-4 lg:text-sm text-base rounded-xl ${className}`} name={name} value={value} placeholder={placeholder} onChange={onChange} type={Number} onKeyUp={onKeyUp} ></input>}
       {formtype === 'textarea' && <textarea type={type} className={`border h-32 border-gray-400 bg-transparent outline-none lg:text-sm text-base w-full rounded-xl py-3 px-4 ${className}`} placeholder={placeholder} ></textarea>}
     </div>

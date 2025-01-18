@@ -24,6 +24,7 @@ export const errorMessage = (message) => {
 };
 export const successMessage = (message) => {
     return toast.success(message),{
+        position: "top-center",
         className: 'bg-green-600 text-white ',
     }
     

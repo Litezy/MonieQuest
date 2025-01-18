@@ -1,7 +1,9 @@
 import Dashboard from "../pages/authuser/Dashboard";
 import Exchange from "../pages/authuser/Exchange";
+import Giftcards from "../pages/authuser/Giftcards";
 import ProductsTools from "../pages/authuser/ProductsTools";
 import Profile from "../pages/authuser/Profile";
+import TransHistory from "../pages/authuser/TransHistory";
 import AirdropsPage from "../pages/general/AirdropsPage";
 import Blogs from "../pages/general/Blogs";
 import ContactPage from "../pages/general/ContactPage";
@@ -35,8 +37,10 @@ export const GeneralPagesLinks = [
 ]
 
 export const AuthPagesLinks = [
-    { path: '/dashboard', component: Dashboard },
-    { path: '/exchange', component: Exchange },
-    { path: '/profit_tools', component: ProductsTools },
-    { path: '/profile', component: Profile},
+    { path: '/user/dashboard', component: Dashboard },
+    { path: '/user/giftcards', component: Giftcards },
+    { path: '/user/exchange', component: Exchange },
+    { path: '/user/profit_tools', component: ProductsTools },
+    { path: '/user/profile', component: Profile},
+    { path: '/user/transactions_history', component: TransHistory},
 ]
