@@ -21,7 +21,7 @@ const AuthHeader = () => {
                         </div>
                         <div className="bg-[#1e4642] px-3 h-full flex items-center text-white font-bold justify-center rounded-e-sm">$0.05</div>
                     </div>
-                    <Link to={'/profile'} className="flex items-center gap-2 bg-[#2f3043] py-1  px-5 rounded-md">
+                    <Link to={'/user/profile'} className="flex items-center gap-2 bg-[#2f3043] py-1  px-5 rounded-md">
                         <div className="p-2 rounded-full flex items-center justify-center bg-white">
                             <FaUserAlt className='text-lg' />
                         </div>

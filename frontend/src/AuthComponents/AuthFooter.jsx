@@ -12,22 +12,22 @@ const AuthFooter = () => {
         {
             name: 'Dashboard',
             symbol: MdDashboard,
-            url: '/dashboard'
+            url: '/user/dashboard'
         },
         {
             name: 'Crypto Exchange',
             symbol: MdCurrencyExchange,
-            url: '/exchange'
+            url: '/user/exchange'
         },
         {
             name: 'Gift Cards',
             symbol: BsGiftFill,
-            url: '/giftcards'
+            url: '/user/giftcards'
         },
         {
             name: 'Profit Tools',
             symbol: CgToolbox,
-            url: '/profit_tools'
+            url: '/user/profit_tools'
         },
     ]
     const [active, setActive] = useState(icons[0].url)
