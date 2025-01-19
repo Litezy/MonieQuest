@@ -6,18 +6,14 @@ import { MdContentCopy } from "react-icons/md";
 import { SlClock } from "react-icons/sl";
 import Loading from './Loading';
 
-const CartComponent = ({ cartItems, setCartItems }) => {
+const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     const localName = 'products'
     const activeScreen = JSON.parse(localStorage.getItem('screen'))
     const [email, setEmail] = useState('')
     const [screen, setScreen] = useState(activeScreen || 1)
     const [loading, setLoading] = useState(false)
-    const [dataLoading, setDataLoading] = useState(true)
     const [copy, setCopy] = useState(false)
 
-    setTimeout(() => {
-        setDataLoading(false)
-    }, 2000)
 
     let oldTotalPrice = 0
     let newTotalPrice = 0

@@ -19,22 +19,29 @@ const Socials = [
 ]
 
 const pageLinks = [
+  { path: 'about us', url: '/about' },
+  { path: 'contact us', url: '/contact' },
   { path: 'terms & conditions', url: '/terms' },
   { path: 'privacy policy', url: '/privacy-policy' },
-  { path: 'contact us', url: '/contact' },
-  { path: 'about us', url: '/about' },
 ]
 
 const Footer = () => {
-  const [email, setEmail] = useState('')
-  const [check, setCheck] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState({
+    email: '',
+    phone: '',
+  })
+  const formHandler = e => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    })
+  }
 
   const SubmitForm = (e) => {
     e.preventDefault()
 
-    if (!email) return ErrorAlert('Enter an email address')
-    if (!check) return ErrorAlert('Must consent to receiving newsletter')
+    if (!form.email || !form.phone) return ErrorAlert('Enter email address and phone number')
     setLoading(true)
   }
 
@@ -67,17 +74,20 @@ const Footer = () => {
             </div>
             <div className='py-3 lg:px-4 text-gray-200 text-sm relative'>
               {loading && <Loading />}
-              <div className="flex items-start gap-2 flex-col">
-                <div className='text-lightgreen md:text-base text-sm'>Hundreds of Airdrops</div>
-                <div className='md:text-4xl text-2xl '>Be the first to know</div>
-                <div className='text-[16px] leading-5'>Join our newsletter and receive the latest giveaways, airdrops and crypto news straight in your inbox.</div>
+              <div className="flex gap-2 flex-col">
+                <div className='text-lightgreen md:text-base text-sm text-center'>Don't miss out on the latest Airdrops</div>
+                <div className='md:text-4xl text-2xl text-center'>Be the first to know</div>
+                <div className='text-base text-center'>Join our 2.5k MQ Squad and gain access to the latest
+                  Contact our Nigerian Local Team @08186890156 Airdrops, best Crypto rewards and must know tips
+                  To stay ahead in the crypto world!</div>
               </div>
               <form className='flex flex-col gap-3 mt-6' onSubmit={SubmitForm}>
-                <FormInput placeholder='Email address' type='email' value={email} onChange={event => { setEmail(event.target.value) }} className='text-white !rounded-md' />
-                <FormButton title='Subscribe' className='py-2 !text-ash text-sm !rounded-md !font-semibold !bg-lightgreen' />
-                <div className='flex gap-2'>
-                  <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='outline-none'></input>
-                  <div>I consent to receiving your newsletter and special offers via email.</div>
+                <FormInput placeholder='Email address' type='email' name='email' value={form.email} onChange={formHandler} className='text-white !rounded-md' />
+                <div className='relative'>
+                  <FormInput placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} className='text-white !rounded-md' />
+                  <div className='absolute top-2 right-0'>
+                    <FormButton title='Subscribe' className='!py-3.5 !px-8 !text-ash text-sm !rounded-md !font-semibold !bg-lightgreen' />
+                  </div>
                 </div>
               </form>
             </div>

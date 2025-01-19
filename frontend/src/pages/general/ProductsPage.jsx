@@ -80,7 +80,7 @@ const ProductsPage = () => {
           </div>
         </div>
         <div className="w-11/12 mx-auto text-gray-200 mt-16">
-          <CartComponent cartItems={cartItems} setCartItems={setCartItems} />
+          <CartComponent cartItems={cartItems} setCartItems={setCartItems} dataLoading={dataLoading} />
           <div className="flex flex-col gap-2 items-center mt-20">
             <div className="text-3xl font-bold text-center">Say Goodbye to Stress, Simplify your Hustle, Maximize your Wealth!
             </div>

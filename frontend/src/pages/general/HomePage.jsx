@@ -40,109 +40,125 @@ const HomePage = () => {
           </div>
         </div>
         <div className='w-11/12 mx-auto'>
-          <div className='flex flex-wrap gap-9 items-center justify-center text-gray-200 mt-8' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
-            <div className='flex flex-col gap-2'>
-              <div className='capitalize font-medium'>featured airdrops</div>
-              <div className='flex flex-col gap-4'>
-                {dataLoading ?
-                  <>
-                    {new Array(4).fill(0).map((_, i) => (
-                      <div key={i} className='w-72 h-40 rounded-md bg-slate-400 animate-pulse'></div>
-                    ))}
-                  </>
-                  :
-                  <>
-                    {new Array(4).fill(0).map((item, i) => (
-                      <AirdropDiv key={i} item={item} />
-                    ))}
-                  </>
-                }
-              </div>
-              <Link to='/airdrops' onClick={MoveToTop}>
-                <FormButton title='show more featured airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
-              </Link>
-            </div>
-            <div className='flex flex-col gap-2'>
-              <div className='capitalize font-medium'>solana airdrops</div>
-              <div className='flex flex-col gap-4'>
-                {dataLoading ?
-                  <>
-                    {new Array(4).fill(0).map((_, i) => (
-                      <div key={i} className='w-72 h-40 rounded-md bg-slate-400 animate-pulse'></div>
-                    ))}
-                  </>
-                  :
-                  <>
-                    {new Array(4).fill(0).map((item, i) => (
-                      <AirdropDiv key={i} item={item} />
-                    ))}
-                  </>
-                }
-              </div>
-              <Link to='/airdrops' onClick={MoveToTop}>
-                <FormButton title='show more solana airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
-              </Link>
-            </div>
-            <div className='flex flex-col gap-2'>
-              <div className='capitalize font-medium'>deFi airdrops</div>
-              <div className='flex flex-col gap-4'>
-                {dataLoading ?
-                  <>
-                    {new Array(4).fill(0).map((_, i) => (
-                      <div key={i} className='w-72 h-40 rounded-md bg-slate-400 animate-pulse'></div>
-                    ))}
-                  </>
-                  :
-                  <>
-                    {new Array(4).fill(0).map((item, i) => (
-                      <AirdropDiv key={i} item={item} />
-                    ))}
-                  </>
-                }
-              </div>
-              <Link to='/airdrops' onClick={MoveToTop}>
-                <FormButton title='show more deFi airdrops' className='!text-sm !capitalize !font-bold !rounded-md !py-5' />
-              </Link>
-            </div>
+          <div className='flex flex-col gap-8 mt-6' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
+            {dataLoading ?
+              <>
+                <div className='flex md:gap-32 gap-10 items-center justify-center'>
+                  {new Array(2).fill(0).map((_, i) => (
+                    <div key={i} className='w-36 h-12 rounded-md bg-slate-400 animate-pulse'></div>
+                  ))}
+                </div>
+                <div className='flex flex-wrap gap-14 justify-center'>
+                  {new Array(3).fill(0).map((_, i) => (
+                    <div className='flex flex-col gap-2' key={i}>
+                      <div className='flex flex-col gap-4'>
+                        {new Array(2).fill(0).map((_, i) => (
+                          <div key={i} className='w-72 h-40 rounded-md bg-slate-400 animate-pulse'></div>
+                        ))}
+                      </div>
+                      <div className='w-full h-14 rounded-md bg-slate-400 animate-pulse'></div>
+                    </div>
+                  ))}
+                </div>
+              </>
+              :
+              <>
+                <div className='flex md:gap-32 gap-10 items-center justify-center'>
+                  <Link to='/airdrops' onClick={MoveToTop}>
+                    <FormButton title='Browse for Airdrops' className='!text-sm !rounded-md !py-3 !px-4 !w-fit' />
+                  </Link>
+                  <Link to='/airdrops' onClick={MoveToTop}>
+                    <FormButton title='solana airdrops' className='!text-sm !capitalize !rounded-md !py-3 !px-6 !w-fit' />
+                  </Link>
+                </div>
+                <div className='flex flex-wrap gap-14 justify-center text-gray-200'>
+                  <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-4'>
+                      {new Array(2).fill(0).map((item, i) => (
+                        <AirdropDiv key={i} item={item} />
+                      ))}
+                    </div>
+                    <Link to='/airdrops/featured' onClick={MoveToTop}>
+                      <FormButton title='show more featured airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                    </Link>
+                  </div>
+                  <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-4'>
+                      {new Array(2).fill(0).map((item, i) => (
+                        <AirdropDiv key={i} item={item} />
+                      ))}
+                    </div>
+                    <Link to='/airdrops/NFT' onClick={MoveToTop}>
+                      <FormButton title='show more NFT airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                    </Link>
+                  </div>
+                  <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-4'>
+                      {new Array(2).fill(0).map((item, i) => (
+                        <AirdropDiv key={i} item={item} />
+                      ))}
+                    </div>
+                    <Link to='/airdrops/new' onClick={MoveToTop}>
+                      <FormButton title='show more new airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                    </Link>
+                  </div>
+                  <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-4'>
+                      {new Array(2).fill(0).map((item, i) => (
+                        <AirdropDiv key={i} item={item} />
+                      ))}
+                    </div>
+                    <Link to='/airdrops/deFi' onClick={MoveToTop}>
+                      <FormButton title='show more deFi airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                    </Link>
+                  </div>
+                  <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-4'>
+                      {new Array(2).fill(0).map((item, i) => (
+                        <AirdropDiv key={i} item={item} />
+                      ))}
+                    </div>
+                    <Link to='/airdrops/others' onClick={MoveToTop}>
+                      <FormButton title='show more ways to earn crypto' className='!text-sm !capitalize !rounded-md !py-4' />
+                    </Link>
+                  </div>
+                  <div className='max-w-xs h-fit bg-primary p-4'>
+                    <div className='text-lg font-bold text-center'>How it works for Airdrop Farmers</div>
+                    <div className='flex flex-col gap-4 mt-8 pb-4'>
+                      <div className='flex flex-col gap-2'>
+                        <div className='text-lightgreen uppercase'>1. <span className='pl-1'>browse airdrops</span></div>
+                        <div className='text-sm pl-5 w-11/12'>Use advanced filters to easily search through airdrop opportunities and find ones that match your interests and which blockchain you prefer to farm on.</div>
+                      </div>
+                      <div className='flex flex-col gap-2'>
+                        <div className='text-lightgreen uppercase'>2. <span className='pl-1'>select and participate</span></div>
+                        <div className='text-sm pl-5 w-11/12'>Choose a crypto airdrop campaign on your preferred blockchain, follow the step-by-step guide provided, and start participating right away.</div>
+                      </div>
+                      <div className='flex flex-col gap-2'>
+                        <div className='text-lightgreen uppercase'>3. <span className='pl-1'>stay updated</span></div>
+                        <div className='text-sm pl-5 w-11/12'>Enable notifications to receive real-time alerts about the latest airdrops, TGE’S, and airdrop eligibility checks, ensuring you never out on free crypto tokens</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            }
           </div>
           <div className='mt-20 h-fit w-full bg-primary text-white py-10 px-4 flex flex-col gap-8 justify-center items-center' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
             <div className='relative w-fit'>
-              <div className='md:text-5xl text-3xl font-bold capitalize py-2'>exchange crypto</div>
-              <div className='border-t-4 border-zinc-300 md:w-56 w-36 absolute top-0 left-0'></div>
-              <div className='border-b-4 border-zinc-300 md:w-56 w-36 absolute bottom-0 right-0'></div>
+              <div className='md:text-5xl text-3xl font-bold capitalize py-2'>exchange</div>
+              <div className='border-t-4 border-zinc-300 md:w-36 w-24 absolute top-0 left-0'></div>
+              <div className='border-b-4 border-zinc-300 md:w-36 w-24 absolute bottom-0 right-0'></div>
             </div>
-            <div className='text-center md:text-lg text-base max-w-2xl mx-auto'>Join over 100K persons on our fast rising peer to peer platform. Buy and sell cryptocurrency today with bank transfers.</div>
+            <div className='text-center md:text-lg text-base max-w-2xl mx-auto'>Easily Buy & Sell Gift Cards and Crypto instantly using bank transfers. <span className='text-lightgreen'>Simple, fast and reliable.</span></div>
             <Link to='/login'>
-              <FormButton title='Trade crypto' className='!w-fit !px-10 !rounded-md' onClick={MoveToTop} />
-            </Link>
-          </div>
-          <div className='mt-20 h-fit w-full bg-primary text-white py-10 px-4 flex flex-col gap-8 justify-center items-center' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
-            <div className='relative w-fit'>
-              <div className='md:text-5xl text-3xl font-bold capitalize py-2'>Trade gift cards</div>
-              <div className='border-t-4 border-zinc-300 md:w-56 w-36 absolute top-0 right-0'></div>
-              <div className='border-b-4 border-zinc-300 md:w-56 w-36 absolute bottom-0 left-0'></div>
-            </div>
-            <div className='text-center md:text-lg text-base max-w-2xl mx-auto'>Buy and sell gift cards for juicy rates with bank transfers on our fast rising peer to peer platform today.</div>
-            <Link to='/login'>
-              <FormButton title='Trade now' className='!w-fit !px-10 !rounded-md' onClick={MoveToTop} />
-            </Link>
-          </div>
-          <div className='mt-20 h-fit w-full bg-primary text-white py-10 px-4 flex flex-col gap-8 justify-center items-center' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
-            <div className='relative w-fit'>
-              <div className='md:text-5xl text-3xl font-bold capitalize py-2'>profit tools</div>
-              <div className='border-t-4 border-zinc-300 md:w-40 w-24 absolute top-0 left-0'></div>
-              <div className='border-b-4 border-zinc-300 md:w-40 w-24 absolute bottom-0 right-0'></div>
-            </div>
-            <div className='text-center md:text-lg text-base max-w-2xl mx-auto'>Easily upload and sell graphics, fonts, artworks and other digital products with us today. We help you market your products to the right clients and for the best prices.</div>
-            <Link to='/login'>
-              <FormButton title='Get started' className='!w-fit !px-10 !rounded-md' onClick={MoveToTop} />
+              <FormButton title='Tap and Trade' className='!w-fit !px-10 !rounded-md' onClick={MoveToTop} />
             </Link>
           </div>
           <div className='flex flex-col gap-10 mt-20'>
             <div className='relative w-fit mx-auto text-white'>
-              <div className='md:text-5xl text-3xl font-bold capitalize py-2'>fAQ questions</div>
-              <div className='border-t-4 border-zinc-500 md:w-48 w-32 absolute top-0 right-0'></div>
-              <div className='border-b-4 border-zinc-500 md:w-48 w-32 absolute -bottom-2 left-0'></div>
+              <div className='md:text-5xl text-3xl font-bold capitalize py-2'>fAQ</div>
+              <div className='border-t-4 border-zinc-500 md:w-16 w-10 absolute top-0 right-0'></div>
+              <div className='border-b-4 border-zinc-500 md:w-16 w-10 absolute -bottom-2 left-0'></div>
             </div>
             <div className='h-fit w-full md:px-20 xl:px-28 px-6 pt-10 pb-16 bg-gradient-to-tr from-primary from-10% to-secondary  text-white' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
               <div className='text-center md:text-4xl text-2xl font-bold  capitalize'>Trade, upload and earn with us</div>
