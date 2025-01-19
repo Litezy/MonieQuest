@@ -3,7 +3,7 @@ import { TbSwitch2 } from "react-icons/tb";
 import FormButton from '../utils/FormButton';
 import { errorMessage, SuccessAlert, successMessage } from '../utils/pageUtils';
 import FormInput from '../utils/FormInput';
-import { BankAcc, blockchainNetworks, coins, currencies, instructions } from './AuthUtils';
+import { BankAcc, blockchainNetworks, coins, currencies, instructions, sellInstruction } from './AuthUtils';
 import ModalLayout from '../utils/ModalLayout';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCopy } from 'react-icons/fa';
@@ -11,18 +11,19 @@ import { TfiTimer } from "react-icons/tfi";
 import { Link, useNavigate } from 'react-router-dom';
 
 
-const Crypto = () => {
+const SellCrypto = () => {
     const [screen, setScreen] = useState(1)
+    const tags = ['BUY', 'SELL']
     const [modal, setModal] = useState(false)
-    const rate = 1715
+    const rate = 1690
     const [forms, setForms] = useState({
         amount: '',
         type: coins[0],
-        network: '',
-        wallet_add: '',
-        isExpired: 'No'
+        network: 'BTC',
+        wallet_add: 'addre4783718jfbfbivnia848882993-20939484883'
     })
 
+    const [active, setActive] = useState(tags[0])
     const handleChange = (e) => {
         setForms({
             ...forms,
@@ -66,8 +67,7 @@ const Crypto = () => {
             setForms({ ...forms, amount: newAmnt.toLocaleString() })
         }
     }
-
-    const limit = 2000
+    const limit = 2500
     const nairaLimit = limit * rate
     const minimum = 10
     const submit = (e) => {
@@ -78,13 +78,11 @@ const Crypto = () => {
         if (selectedCurr.name !== 'USD' && selectedCurr.symbol !== '$') {
             const amt = forms.amount.replace(/,/g, '')
             const newamt = amt * rate
-            console.log(`new Amout :${newamt},currency : ${selectedCurr}`)
-            if (newamt > nairaLimit) return errorMessage(`Sorry, you can't buy above ${currencies[1].symbol}${nairaLimit.toLocaleString()}`)
+            if (newamt > nairaLimit) return errorMessage(`Sorry, you can't sell above ${currencies[1].symbol}${nairaLimit.toLocaleString()}`)
         }
         if (selectedCurr.name === 'USD' && selectedCurr.symbol === '$') {
             const amt = forms.amount.replace(/,/g, '')
-            console.log(`newamt: ${amt},currency : ${selectedCurr.symbol}`)
-            if (amt > limit) return errorMessage(`Sorry, you can't buy above $2,000`)
+            if (amt > limit) return errorMessage(`Sorry, you can't sell above ${currencies[0].symbol}${limit.toLocaleString()}`)
         }
 
         setScreen(2)
@@ -94,7 +92,7 @@ const Crypto = () => {
     const [inNaira, setInNaira] = useState('')
     useEffect(() => {
         if (forms.amount) {
-            const naira = parseInt(forms.amount.replace(/,/g, '')) * rate
+            const naira = parseInt(forms.amount) * rate
             setInNaira(naira.toLocaleString())
         }
     }, [forms.amount, rate])
@@ -107,21 +105,23 @@ const Crypto = () => {
     }
 
     const copyToClip = () => {
-        navigator.clipboard.writeText(BankAcc.accountNumber)
-            .then(() => { SuccessAlert('account number copied successfully') })
-            .catch(() => { console.log(`failed to copy account number`) })
+        navigator.clipboard.writeText(forms.wallet_add)
+            .then(() => { SuccessAlert('wallet address copied successfully') })
+            .catch(() => { console.log(`failed to copy wallet address`) })
     }
 
     const navigate = useNavigate()
+    const sellDetails = {
+
+    }
     return (
         <div className='w-full'>
 
-            <div className="w-11/12  mx-auto lg:w-full">
-
-                {screen === 1 &&
+            <div className="w-11/12 mx-auto lg:w-full ">
+                {screen === 1 && active === 'BUY' &&
                     <div className="w-full  lg:w-2/3 mx-auto flex items-center justify-center">
                         <div className="flex w-full  mx-auto mt-5 items-start gap-5 flex-col">
-                            {/* <div className="text-center font-bold text-green-500 w-full">Buy Crypto</div> */}
+                            {/* <div className="text-center font-bold text-red-500 w-full">Sell Crypto</div> */}
                             <div className="flex items-start gap-2 flex-col w-full">
                                 <div className="font-bold text-lg">Coin Type:</div>
                                 <select onChange={(e) => setForms({ ...forms, type: e.target.value })} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
@@ -131,7 +131,7 @@ const Crypto = () => {
                                         )
                                     })}
                                 </select>
-                                <div className="w- text-red-500 text-sm">Please Note: you can only buy a minimum of $5 a nd maximum of $2,000 and an additional
+                                <div className="w- text-red-500 text-sm">Please Note: you can only sell a minimum of $10 a nd maximum of $2,500 and an additional
                                     fee of $2 (₦3,400) is added</div>
                             </div>
                             <div className="flex w-full items-start gap-2 flex-col  ">
@@ -152,10 +152,10 @@ const Crypto = () => {
                                 </div>
                             </div>
                             <div className="flex w-full item-center text-base lg:text-sm justify-between">
-                                <div className="text-sm">Buying rate</div>
+                                <div className="text-sm">Selling rate</div>
                                 <div className="">{rate}/$</div>
                             </div>
-                            <button onClick={submit} className={`bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-full h-fit py-3.5 text-lg rounded-xl`}>Buy Crypto</button>
+                            <button onClick={submit} className={`bg-red-600 hover:bg-lightgreen text-white hover:text-ash w-full h-fit py-3.5 text-lg rounded-xl`}>Sell Crypto</button>
 
                         </div>
                     </div>
@@ -172,7 +172,7 @@ const Crypto = () => {
                                             <div className="text-xl font-bold">Please read the instructions below</div>
                                         </div>
                                         <div className="flex flex-col items-start gap-2 mt-2">
-                                            {instructions.map((inst, i) => {
+                                            {sellInstruction.map((inst, i) => {
                                                 return (
                                                     <ul key={i} className=" list-disc text-sm">
                                                         <li>{inst}</li>
@@ -189,81 +189,29 @@ const Crypto = () => {
                                 </ModalLayout>
                             }
                             <div className="flex items-start gap-2 flex-col w-full">
-                                <div className="text-center  w-full text-2xl">Buying <span className='text-lightgreen font-bold'>{currencies[0].symbol}{forms.amount}</span> worth of {forms.type} at <br /> <span className='text-lightgreen font-bold'>{currencies[1].symbol}{inNaira}</span></div>
+                                <div className="text-center  w-full text-2xl">Selling <span className='text-red-500 font-bold'>{currencies[0].symbol}{forms.amount}</span> worth of {forms.type} at <br /> <span className='text-red-500 font-bold'>{currencies[1].symbol}{inNaira}</span></div>
                             </div>
-                            <div className="text-sm text-center w-full">kindly provide your wallet address</div>
+                            <div className="text-sm text-center w-full">kindly send tokens to the wallet address below</div>
 
                             <div className="flex w-full items-start gap-2 flex-col  ">
                                 <div className="font-bold text-lg">Network</div>
                                 <div className="w-full ">
-                                    <select className='w-full bg-dark rounded-md'>
-                                        {blockchainNetworks.map((network) => (
-                                            <option className='bg-' key={network.value} value={network.value}>
-                                                {network.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {/* <FormInput name={`network`} value={forms.network} onChange={handleChange} /> */}
-
+                                    <input readOnly type="text" value={forms.network}
+                                        className='w-full bg-dark focus:border-zinc-300 focus-ring-0 outline-none '
+                                    />
                                 </div>
                             </div>
                             <div className="flex w-full items-start gap-2 flex-col  ">
                                 <div className="font-bold text-lg">Wallet Address</div>
                                 <div className="w-full flex items-center gap-1 border rounded-md  px-2">
                                     <div className="w-full">
-                                        <FormInput name={`wallet_add`} border={false} value={forms.wallet_add} onChange={handleChange} />
+                                        <FormInput border={false} value={forms.wallet_add} />
                                     </div>
-                                    <div
-                                        onClick={() =>
-                                            navigator.clipboard.readText().then((text) => {
-                                                setForms((prevForms) => ({
-                                                    ...prevForms,
-                                                    wallet_add: text,
-                                                }));
-                                                // console.log('Pasted data:', text);
-                                            })
+                                    <FaCopy onClick={copyToClip} className='text-white text-xl cursor-pointer' />
 
-                                        }
-                                        className="text-sm cursor-pointer text-lightgreen">paste</div>
                                 </div>
                             </div>
-                            <div className="flex w-full items-start gap-2 flex-col  ">
-                                <div className="font-bold text-lg">Does this wallet expire?</div>
-                                <div className="w-full ">
-                                    {/* <Select
-                                        options={options}
-                                        value={selectedOption}
-                                        onChange={handleOption}
-                                        styles={{
-                                            control: (base, state) => ({
-                                                ...base,
-                                                backgroundColor: 'white', // Custom control background color
-                                                color: 'white',
-                                                boxShadow: state.isFocused ? 'none' : base.boxShadow, 
-                                                borderColor: state.isFocused ? '#10b981' : base.borderColor,
-                                                outline: 'none',
-                                                '&:hover': {
-                                                    borderColor: '#10b981', 
-                                                },
-                                            }),
-                                            menu: (base) => ({
-                                                ...base,
-                                                backgroundColor: '#141523'// Custom menu background
-                                            }),
-                                            option: (base, state) => ({
-                                                ...base,
-                                                backgroundColor: state.isFocused ? '#141523' : '#171828',
-                                                color: 'white',
-                                            }),
-                                        }}
-                                    /> */}
-                                    <select onChange={(e) => setForms({ ...forms, isExpired: e.target.value })} className=" border-gray-300 bg-dark   
-                                    w-full text-white border   rounded-md py-2 px-4">
-                                        <option value={`no`} className="outline-none">No</option>
-                                        <option value={`yes`} className="outline-none bg-transparent">Yes</option>
-                                    </select>
-                                </div>
-                            </div>
+
                             <div className="flex items-center justify-between w-full gap-10">
                                 <button onClick={() => setScreen(1)} className='w-1/2 bg-dark text-lg rounded-xl py-3'>back</button>
                                 <button onClick={() => setModal(true)} className={`bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-1/2 h-fit py-3 text-lg rounded-xl`}>Confirm</button>
@@ -284,7 +232,7 @@ const Crypto = () => {
                                 <div className="text-sm text-lightgreen">bank transfer</div>
                             </div>
 
-                            <div className="">Kindly pay the above amount to the payment details below</div>
+                            <div className="">Kindly confirm your bank payment details below</div>
                             <div className=" w-8/12 px-5 text-dark py-5 bg-[#fafafa] rounded-md lg:w-2/3 mx-auto flex items-center justify-between flex-col ">
                                 <div className="flex items-center justify-between w-full">
                                     <div className="">Bank Name</div>
@@ -302,14 +250,16 @@ const Crypto = () => {
                                     <div className="">{BankAcc.accountName}</div>
                                 </div>
                             </div>
-                            <button onClick={() => setScreen(4)} className={`bg-green-500 mt-10 hover:bg-lightgreen text-white hover:text-ash lg:w-2/3 py-2 w-8/12 text-lg rounded-xl`}>I have made the payment</button>
+                            <button onClick={() => setScreen(4)}
+                                className={`bg-green-500 mt-10 hover:bg-lightgreen text-white 
+                            hover:text-ash lg:w-2/3 py-2 w-8/12 mx-auto text-lg rounded-xl`}>I confirm my details</button>
                         </div>
                     </div>
                 }
 
                 {screen === 4 &&
                     <div className="">
-                        <div className="w-11/12 mx-auto min-h-[80dvh] flex items-center justify-center">
+                        <div className="w-11/12 mx-auto min-h-[70dvh] flex items-center justify-center">
 
                             <div className="w-full flex items-center  flex-col">
                                 <div className="rounded-full h-20 w-20 flex items-center justify-center border border-lightgreen">
@@ -333,4 +283,4 @@ const Crypto = () => {
     )
 }
 
-export default Crypto
+export default SellCrypto

@@ -30,6 +30,7 @@
     "react-jwt": "^1.2.2",
     "react-qr-code": "^2.0.15",
     "react-router-dom": "^7.0.2",
+    "react-select": "^5.9.0",
     "sonner": "^1.7.1"
   },
   "devDependencies": {
