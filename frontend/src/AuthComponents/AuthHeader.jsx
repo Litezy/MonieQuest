@@ -8,12 +8,11 @@ import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 
 const AuthHeader = () => {
     return (
-        <div className='w-full fixed top-0 h-12 hidden lg:block bg-[#1d1e30]'>
+        <div className='w-full fixed top-0 h-fit hidden lg:block bg-[#1d1e30] z-50'>
             <div className="w-11/12 mx-auto hidden lg:flex items-center justify-between">
                 <div className="">
                     <img src={logo} className='h-14' alt="moniequest-logo" />
                 </div>
-                
                 <div className="hidden lg:flex items-center gap-3">
                     <div className="flex items-center h-10 w-32">
                         <div className="bg-[#067544] w-1/3 h-full rounded-s-sm flex items-center justify-center">
