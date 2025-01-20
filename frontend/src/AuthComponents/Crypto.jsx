@@ -131,7 +131,7 @@ const Crypto = () => {
                                         )
                                     })}
                                 </select>
-                                <div className="w- text-red-500 text-sm">Please Note: you can only buy a minimum of $5 a nd maximum of $2,000 and an additional
+                                <div className="w- text-red-500 text-xs">Please Note: you can only buy a minimum of $5 a nd maximum of $2,000 and an additional
                                     fee of $2 (₦3,400) is added</div>
                             </div>
                             <div className="flex w-full items-start gap-2 flex-col  ">
