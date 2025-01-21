@@ -1,7 +1,6 @@
 import Dashboard from "../pages/authuser/Dashboard";
 import Exchange from "../pages/authuser/Exchange";
 import Giftcards from "../pages/authuser/Giftcards";
-import ProductsTools from "../pages/authuser/ProductsTools";
 import Profile from "../pages/authuser/Profile";
 import AboutPage from "../pages/general/AboutPage";
 import TransHistory from "../pages/authuser/TransHistory";
@@ -21,6 +20,8 @@ import SingleProductPage from "../pages/general/SingleProductPage";
 import TermsPage from "../pages/general/TermsPage";
 import VerifyAccount from "../pages/general/VerifyAccount";
 import Notification from "../pages/authuser/Notification";
+import CreateTools from "../pages/authuser/CreateTools";
+import ProfitTools from "../pages/authuser/ProfitTools";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -45,7 +46,8 @@ export const AuthPagesLinks = [
     { path: '/user/dashboard', component: Dashboard },
     { path: '/user/giftcards', component: Giftcards },
     { path: '/user/exchange', component: Exchange },
-    { path: '/user/profit_tools', component: ProductsTools },
+    { path: '/user/profit_tools/create', component: CreateTools },
+    { path: '/user/profit_tools/all_tools', component: ProfitTools },
     { path: '/user/profile', component: Profile},
     { path: '/user/transactions_history', component: TransHistory},
     { path: '/user/notifications', component: Notification},

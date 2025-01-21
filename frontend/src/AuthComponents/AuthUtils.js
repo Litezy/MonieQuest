@@ -13,13 +13,13 @@ export const currencies = [
     { name: 'NGN', symbol: '₦' },
 ]
 export const links = [
-    { label: 'Dashboard', url: '/user/dashboard', icon: MdDashboard,last:false },
-    { label: 'Crypto Exchange', url: '/user/exchange', icon: MdCurrencyExchange,last:false },
-    { label: 'Gift  Cards', url: '/user/giftcards', icon: BsGiftFill,last:false },
-    { label: 'Profit Tools', url: '/user/profit_tools', icon: CgToolbox ,last:false},
-    { label: 'Profile', url: '/user/profile', icon: FaUser },
-    { label: 'Transaction History', url: '/user/transactions_history', icon: GoHistory,last:false },
-    { label: 'Notifications', url: '/user/notifications', icon:IoNotificationsSharp,last:true  },
+    { label: 'dashboard', url: '/user/dashboard', icon: MdDashboard, last:false },
+    { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange, last:false },
+    { label: 'gift cards', url: '/user/giftcards', icon: BsGiftFill, last:false },
+    { label: 'profit tools', main: 'user/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox , last:false},
+    { label: 'profile', url: '/user/profile', icon: FaUser },
+    { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory, last:false },
+    { label: 'notifications', url: '/user/notifications', icon:IoNotificationsSharp, last:true  },
 
 ]
 export const blockchainNetworks = [
