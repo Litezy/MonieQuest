@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import { Link, useParams } from 'react-router-dom'
 import { IoCart } from 'react-icons/io5'
-import { FaCheckCircle } from 'react-icons/fa'
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
+import { GiCheckMark } from "react-icons/gi";
 import { MoveToTop } from '../../utils/pageUtils'
 import Rating from '@mui/material/Rating';
 import testimg from '../../assets/images/pdt.jpg'
@@ -115,21 +115,23 @@ const SingleProductPage = () => {
                                         <div className='text-sm'>Playwrite is a lovely signature font that boasts sophisticated charm with its delicate curves and flowing lines. Ideal for enhancing the elegance of wedding invites, crafts design, logotype, print design, social media graphics, or branding materials.</div>
                                         <div className='flex flex-col gap-2'>
                                             <div className='uppercase font-bold'>key features:</div>
-                                            <div className='flex gap-2'>
-                                                <FaCheckCircle className='text-lightgreen text-lg' />
-                                                <span>Include this font</span>
+                                            <div className='flex gap-2 items-baseline'>
+                                                <div className='w-[3%]'>
+                                                    <GiCheckMark className='text-lightgreen text-sm' />
+                                                </div>
+                                                <div className='w-[97%]'><span className='font-bold capitalize'>creative design:</span> Generates visually stunning AI-powered graphics, layouts, and designs tailored to your specifications.</div>
                                             </div>
-                                            <div className='flex gap-2'>
-                                                <FaCheckCircle className='text-lightgreen text-lg' />
-                                                <span>Unlimited access to hundreds of fonts</span>
+                                            <div className='flex gap-2 items-baseline'>
+                                                <div className='w-[3%]'>
+                                                    <GiCheckMark className='text-lightgreen text-sm' />
+                                                </div>
+                                                <div className='w-[97%]'><span className='font-bold capitalize'>content generation:</span> Produces AI-enhanced documents and presentations, streamlining workflows for writers, marketers, and designers.</div>
                                             </div>
-                                            <div className='flex gap-2'>
-                                                <FaCheckCircle className='text-lightgreen text-lg' />
-                                                <span>New fonts added daily</span>
-                                            </div>
-                                            <div className='flex gap-2'>
-                                                <FaCheckCircle className='text-lightgreen text-lg' />
-                                                <span>Get 10 downloads 100% free</span>
+                                            <div className='flex gap-2 items-baseline'>
+                                                <div className='w-[3%]'>
+                                                    <GiCheckMark className='text-lightgreen text-sm' />
+                                                </div>
+                                                <div className='w-[97%]'><span className='font-bold capitalize'>interactive elements:</span> Integrates animations, transitions, and dynamic effects into projects seamlessly.</div>
                                             </div>
                                         </div>
                                         <div className='flex justify-end'>

@@ -24,14 +24,17 @@ const AuthPageLayout = ({ children }) => {
               return (
                 <Link to={link.url}
                   className={` py-2 group text-base flex items-center gap-2 px-5 w-full ${pathName === link.url ? 'text-lightgreen  rounded-sm bg-[#1e333c]  ' : 'hover:bg-primary rounded-sm  text-[#9696b5] '} `} key={i}>
-                  <link.icon className="transform group-hover:rotate-180 duration-300" />
+                  <div className="relative">
+                   {link.last && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}
+                  <link.icon className="transform group-hover:rotate-180 text-xl duration-300" />
+                  </div>
                   <div className="">{link.label}</div>
                 </Link>
               )
             })}
           </div>
         </div>
-        <div className='w-full bg-[#141523] lg:py-20 pt-10 pb-20 lg:w-[80%] h-[100dvh] overflow-y-auto text-white'>
+        <div className='w-full bg-[#141523] py-20 lg:w-[80%] h-[100dvh] overflow-y-auto text-white'>
           {children}
         </div>
       </div>

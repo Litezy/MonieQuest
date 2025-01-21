@@ -75,9 +75,9 @@ const AirdropsPage = () => {
                       <span>KYC</span>
                       <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='cursor-pointer'></input>
                     </div>
-                    <SelectComp title='Status' options={{ option1: 'Hello', option2: 'Hey', option3: 'Yeah' }} />
-                    <SelectComp title='Categories' options={{ option1: 'Hello', option2: 'Hey', option3: 'Yeah' }} />
-                    <SelectComp title='Blockchain' options={{ option1: 'Hello', option2: 'Hey', option3: 'Yeah' }} />
+                    <SelectComp title='Status' options={["hello", "hey", "yeah"]} />
+                    <SelectComp title='Categories' options={["hello", "hey", "yeah"]} />
+                    <SelectComp title='Blockchain' options={["hello", "hey", "yeah"]} />
                   </div>
                   <button className='outline-none w-fit h-fit bg-lightgreen text-black rounded-full py-3 px-8 text-sm font-medium'>Search</button>
                 </div>

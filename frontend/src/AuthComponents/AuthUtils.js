@@ -4,6 +4,8 @@ import { MdDashboard } from "react-icons/md";
 import { CgToolbox } from "react-icons/cg";
 import { GoHistory } from "react-icons/go";
 import { FaUser } from "react-icons/fa";
+import { IoNotificationsSharp } from "react-icons/io5";
+
 
 export const coins = ['Bitcoin', 'Ethereum', 'USDT', 'TRON', 'BNB']
 export const currencies = [
@@ -11,12 +13,14 @@ export const currencies = [
     { name: 'NGN', symbol: '₦' },
 ]
 export const links = [
-    { label: 'Dashboard', url: '/user/dashboard', icon: MdDashboard },
-    { label: 'Crypto Exchange', url: '/user/exchange', icon: MdCurrencyExchange },
-    { label: 'Gift  Cards', url: '/user/giftcards', icon: BsGiftFill },
-    { label: 'Profit Tools', url: '/user/profit_tools', icon: CgToolbox },
-    { label: 'Transaction History', url: '/user/transactions_history', icon: GoHistory },
-    { label: 'Profile', url: '/user/profile', icon: FaUser }
+    { label: 'Dashboard', url: '/user/dashboard', icon: MdDashboard,last:false },
+    { label: 'Crypto Exchange', url: '/user/exchange', icon: MdCurrencyExchange,last:false },
+    { label: 'Gift  Cards', url: '/user/giftcards', icon: BsGiftFill,last:false },
+    { label: 'Profit Tools', url: '/user/profit_tools', icon: CgToolbox ,last:false},
+    { label: 'Profile', url: '/user/profile', icon: FaUser },
+    { label: 'Transaction History', url: '/user/transactions_history', icon: GoHistory,last:false },
+    { label: 'Notifications', url: '/user/notifications', icon:IoNotificationsSharp,last:true  },
+
 ]
 export const blockchainNetworks = [
     { value: "bitcoin", label: "Bitcoin (BTC)" },

@@ -15,7 +15,8 @@ const SellGiftcard = () => {
     const rate = 1370
     const [carderror, setCarderror] = useState({
         status: false,
-        msg: ''
+        msg: '',
+        color:''
     })
     const [proceed,setProceed] = useState(false)
     const [selectedCard, setSelectedCard] = useState({
@@ -93,22 +94,22 @@ const SellGiftcard = () => {
         const selectedBrand = giftCardValidations.find(item => item.brand === selectedCard.brand)
         if (!selectedBrand) return errorMessage("Invalid brand selected");
         if (parseInt(selectedCard.codelength) !== selectedBrand.length) {
-            setCarderror({
-                status: true,
-                msg: 'code too short'
-            });
+            setCarderror({status: true,msg: 'code too short',color:'red-600'});
             errorMessage(`Code must be ${selectedCard.length} characters long`);
             return setTimeout(()=>{
-                setCarderror({status: false,msg: '' })},4000)
+                setCarderror({status: false,msg: '',color:'' })},4000)
         }
         if (selectedCard.regex.test(selectedCard.regex)) {
             console.log("Invalid code")
             return setCarderror({status: true,msg: 'Invalid code'});
         }
         // If all validations pass
-        setCarderror({status: false,msg: ""});
+        setCarderror({status: true,msg: "valid code",color:'green-600'});
         SuccessAlert('valid code')
         setProceed(true)
+        return setTimeout(()=>{
+            setCarderror({status: false,msg: "",color:''});
+            },4000)
     }
 
     const handleCode = (e) => {
@@ -179,7 +180,7 @@ const SellGiftcard = () => {
                         <div className="">Giftcard Code</div>
                         <div className="w-full">
                             <input
-                                className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 uppercase focus:border ${carderror.status ? 'border-2 border-red-500' : 'border border-gray-400'} bg-transparent w-full h-fit  px-4 lg:text-sm text-base rounded-md `}
+                                className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 uppercase focus:border ${carderror.status ? `border-2 border-${carderror.color}` : 'border border-gray-400'} bg-transparent w-full h-fit  px-4 lg:text-sm text-base rounded-md `}
                                 placeholder={`XXXX-XXXX-XXXX-XXXX`}
                                 onKeyUp={() => setProceed(false)}
                                 type={`text`}
@@ -188,7 +189,7 @@ const SellGiftcard = () => {
                                 value={cards.code}
                             >
                             </input>
-                            {carderror.status && <div className="text-red-500 text-sm">{carderror.msg}</div>}
+                            {carderror.status && <div className={`text-${carderror.color} text-sm`}>{carderror.msg}</div>}
                         </div>
                     </div>
                     <div className="mt-5 w-full">

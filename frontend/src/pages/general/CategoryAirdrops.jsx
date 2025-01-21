@@ -28,7 +28,7 @@ const CategoryAirdropsPage = () => {
                         </div>
                         :
                         <div className='flex flex-col gap-6'>
-                            <div className='text-3xl font-bold'>All featured airdrops</div>
+                            <div className='text-2xl font-bold'>{category === 'others' ? 'More ways to earn crypto' : `All ${category} airdrops`}</div>
                             <div className='flex flex-wrap gap-4'>
                                 {new Array(12).fill(0).map((item, i) => (
                                     <AirdropDiv key={i} item={item} />

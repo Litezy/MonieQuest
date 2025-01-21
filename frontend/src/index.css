@@ -36,6 +36,9 @@ input[type=number]:focus {
 .ipt::placeholder {
   text-align: center;
 }
+.iptt::placeholder {
+  font-size: 0.85rem;
+}
 
 
 .scroll::-webkit-scrollbar {
