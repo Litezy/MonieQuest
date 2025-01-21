@@ -2,7 +2,7 @@ import React from 'react'
 
 const TransHistory = () => {
   return (
-    <div>TransHistory</div>
+    <div className="w-11/12 mx-auto">TransHistory</div>
   )
 }
 

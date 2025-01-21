@@ -3,9 +3,11 @@ import Exchange from "../pages/authuser/Exchange";
 import Giftcards from "../pages/authuser/Giftcards";
 import ProductsTools from "../pages/authuser/ProductsTools";
 import Profile from "../pages/authuser/Profile";
+import AboutPage from "../pages/general/AboutPage";
 import TransHistory from "../pages/authuser/TransHistory";
 import AirdropsPage from "../pages/general/AirdropsPage";
 import Blogs from "../pages/general/Blogs";
+import CategoryAirdropsPage from "../pages/general/CategoryAirdrops";
 import ContactPage from "../pages/general/ContactPage";
 import ForgotPassword from "../pages/general/ForgotPassword";
 import HomePage from "../pages/general/HomePage";
@@ -28,9 +30,11 @@ export const GeneralPagesLinks = [
     { path: '/forgot-password', component: ForgotPassword },
     { path: '/airdrops', component: AirdropsPage },
     { path: '/airdrops/:id/:slug', component: SingleAirdropPage },
+    { path: '/airdrops/:category', component: CategoryAirdropsPage },
     { path: '/products', component: ProductsPage },
     { path: '/products/:id/:slug', component: SingleProductPage },
     { path: '/contact', component: ContactPage },
+    { path: '/about', component: AboutPage },
     { path: '/blogs', component: Blogs },
     { path: '/terms', component: TermsPage },
     { path: '/privacy-policy', component: PrivacyPolicy },

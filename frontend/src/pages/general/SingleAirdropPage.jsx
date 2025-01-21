@@ -58,8 +58,8 @@ const SingleAirdropPage = () => {
               </div>
               <div className='grid lg:grid-cols-6 grid-cols-1 gap-8'>
                 <div className='lg:col-span-2 col-span-1'>
-                  <div className='grid lg:grid-cols-2 grid-cols-4 md:gap-4 gap-1.5'>
-                    {new Array(4).fill(0).map((_, i) => (
+                  <div className='grid grid-cols-2 gap-4'>
+                    {new Array(2).fill(0).map((_, i) => (
                       <div key={i} className='w-full h-24 rounded-md bg-slate-400 animate-pulse'></div>
                     ))}
                   </div>
@@ -98,7 +98,6 @@ const SingleAirdropPage = () => {
               <div className='grid lg:grid-cols-5 grid-cols-1 gap-8'>
                 <div className='lg:col-span-3 col-span-1'>
                   <p>Ape express blends ancient traditions with cutting-edge blockchain technology, creating a seamless platform of trust and innovation. With AI-driven insights and decentralized solutions, it transforms spiritual guidance into an advanced digital experience.</p>
-                  <p className='pt-4'>The Airdrop Campaign offers 200,000,000 $CAML tokens, worth $500,000 USDT. By completing simple tasks, participants unlock rewards, explore MiRA’s Web3 ecosystem, and experience the future of metaphysical services</p>
                   <p className='pt-4'>Ape express uses blockchain and advanced AI to bring transparency and personalization to metaphysical consulting. It modernizes practices like Feng Shui and astrology, bridging ancient wisdom with cutting-edge technology for a secure and transformative experience.</p>
                 </div>
                 <div className='lg:col-span-2 col-span-1'>
@@ -107,15 +106,7 @@ const SingleAirdropPage = () => {
               </div>
               <div className='grid lg:grid-cols-6 grid-cols-1 gap-8'>
                 <div className='lg:col-span-2 col-span-1'>
-                  <div className='grid lg:grid-cols-2 grid-cols-4 md:gap-4 gap-1.5'>
-                    <div className='border border-ash bg-secondary w-full h-24 rounded-md flex flex-col gap-2 justify-center items-center overflow-hidden p-4'>
-                      <span className='md:text-lg text-sm font-bold text-center capitalize'>$500,000</span>
-                      <span className='text-gray-400 md:text-base text-xs text-center'>Aprrox. value</span>
-                    </div>
-                    <div className='border border-ash bg-secondary w-full h-24 rounded-md flex flex-col gap-2 justify-center items-center overflow-hidden p-4'>
-                      <span className='md:text-lg text-sm font-bold text-center capitalize'>200 million</span>
-                      <span className='text-gray-400 md:text-base text-xs text-center'>$CAML</span>
-                    </div>
+                  <div className='grid grid-cols-2 gap-4'>
                     <div className='border border-ash bg-secondary w-full h-24 rounded-md flex flex-col gap-2 justify-center items-center overflow-hidden p-4'>
                       <span className='md:text-lg text-sm font-bold text-center capitalize'>binance</span>
                       <span className='text-gray-400 md:text-base text-xs text-center'>Blockchain</span>
@@ -128,27 +119,23 @@ const SingleAirdropPage = () => {
                 </div>
                 <div className='lg:col-span-4 col-span-1'>
                   <div className='w-full h-fit border border-ash bg-secondary rounded-md py-10 px-4'>
-                    <div className='text-xl font-bold'>Step by step guide <span className='capitalize'>ape express</span> Airdrop</div>
+                    <div className='text-xl font-bold'>Step by step guide on <span className='capitalize'>ape express</span> Airdrop</div>
                     <div className='flex flex-col gap-4 mt-8'>
                       <div className='flex md:gap-8 gap-4 items-center md:px-8 px-4 py-3 hover:bg-primary hover:rounded-md'>
                         <span className='text-lg font-bold'>1</span>
-                        <span className='text-sm'>Launch the <span className='text-lightgreen capitalize'>ape express</span> GameBot on Telegram and click “Play Ape.</span>
+                        <span className='text-sm'>Launch the <a href='' className='text-lightgreen capitalize'>ape express</a> GameBot on Telegram and click “Play Ape.</span>
                       </div>
                       <div className='flex md:gap-8 gap-4 items-center md:px-8 px-4 py-3 hover:bg-primary hover:rounded-md'>
                         <span className='text-lg font-bold'>2</span>
-                        <span className='text-sm'>Click the USDT icon in the top-right corner and copy your BSC address.</span>
-                      </div>
-                      <div className='flex md:gap-8 gap-4 items-center md:px-8 px-4 py-3 hover:bg-primary hover:rounded-md'>
-                        <span className='text-lg font-bold'>3</span>
                         <span className='text-sm'>Go to the Ape Express Airdrop page, paste your BSC address, and click “Confirm”.</span>
                       </div>
                       <div className='flex md:gap-8 gap-4 items-center md:px-8 px-4 py-3 hover:bg-primary hover:rounded-md'>
-                        <span className='text-lg font-bold'>4</span>
+                        <span className='text-lg font-bold'>3</span>
                         <span className='text-sm'>Complete tasks like following <a href='' className='text-lightgreen'>@APE__WEB3</a> on X, logging in daily, and engaging in Team Blessings via the “Room” page to maximize your rewards.</span>
                       </div>
                     </div>
-                    <div className='pt-12 text-sm'>
-                      <span className='font-bold'>* Note:</span> Earn higher rewards by inviting friends and maintaining daily logins. Embrace <span className='capitalize'>ape express's</span> journey!
+                    <div className='pt-10 text-sm'>
+                      <span className='capitalize'>referral link: </span><a href='https://app.gradient.network/signup?code=DXD99K' className='text-lightgreen'>https://app.gradient.network/signup?code=DXD99K</a>
                     </div>
                   </div>
                 </div>
