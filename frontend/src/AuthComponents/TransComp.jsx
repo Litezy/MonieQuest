@@ -1,20 +1,17 @@
 import React, { useState } from 'react'
-import { GoArrowDownLeft, GoArrowDownRight, GoArrowRight, GoArrowUpLeft, GoArrowUpRight } from 'react-icons/go'
+import { GoArrowDownLeft, GoArrowDownRight, GoArrowUpRight } from 'react-icons/go'
 import { currencies } from './AuthUtils'
 import ModalLayout from '../utils/ModalLayout'
 import TransModal from './TransModal'
 
 const TransComp = ({ trans }) => {
     const [modal, setModal] = useState(false)
-    const [selected, setSelected] = useState({})
 
     const closeView = () => {
         setModal(false)
-        setSelected({})
     }
     const openView = () => {
         setModal(true)
-        console.log(selected, modal)
     }
     return (
         <div className='w-full mb-5'>
@@ -24,13 +21,13 @@ const TransComp = ({ trans }) => {
                     <div className="w-full p-5 lg:p-10  bg-primary rounded-md">
                         <div className="text-center">More Details</div>
                         <div className="flex mt-5 items-center justify-between">
-                            {selected && <TransModal selected={selected} />}
+                            <TransModal selected={trans} />
                         </div>
-                        <button className='mt-5 w-full text-center bg-red-600 py-2 rounded-md' >close</button>
+                        <button className='mt-5 w-full text-center bg-red-600 py-2 rounded-md' onClick={closeView} >close</button>
                     </div>
                 </ModalLayout>
             }
-            <div onClick={openView} onMouseOver={() => setSelected(trans)} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2 ">
+            <div onClick={openView} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2 ">
                 <div className="flex items-start gap-5 w-fit lg:w-full ">
                     <div className="w-fit px-4 py-4 rounded-full bg-primary">
                         {trans.type === 'buy' && <GoArrowDownLeft className='text-lightgreen' />}
