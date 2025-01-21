@@ -41,12 +41,12 @@ const TransHistory = () => {
           {tags.map((tag) => {
             return (
               <div onClick={() => CheckTag(tag)} onDoubleClick={() => setActive('')}
-                className={`px-10 text-center py-1 rounded-md ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'}   cursor-pointer`}>{tag}</div>
+                className={`flex items-center justify-center lg:text-center py-1 text-sm rounded-md ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'}   cursor-pointer`}>{tag}</div>
             )
           })}
         </div>
       </div>
-      <div className="text-zinc-400 mt-2">{active ? active === 'Withdrawal' ? 'Bank Withdrawal' : active : 'All'} Transactions</div>
+      <div className="text-zinc-400 mt-5">{active ? active === 'Withdrawal' ? 'Bank Withdrawal' : active : 'All'} Transactions</div>
       <div className="w-full mt-5 ">
         {active === 'Crypto' &&
           <CryptoTransactions />
