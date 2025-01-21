@@ -12,52 +12,57 @@ const AuthFooter = () => {
 
     const icons = [
         {
-            name: 'Dashboard',
+            name: 'dashboard',
             symbol: MdDashboard,
             url: '/user/dashboard'
         },
         {
-            name: 'Profile',
-            symbol: FaUser,
-            url: '/user/profile'
-        },
-        {
-            name: 'Crypto Exchange',
+            name: 'crypto exchange',
             symbol: MdCurrencyExchange,
             url: '/user/exchange'
         },
         {
-            name: 'Gift Cards',
+            name: 'gift cards',
             symbol: BsGiftFill,
             url: '/user/giftcards'
         },
         {
-            name: 'Profit Tools',
+            name: 'profit tools',
             symbol: CgToolbox,
-            url: '/user/profit_tools'
+            main: 'user/profit_tools',
+            url: '/user/profit_tools/create'
         },
-        
         {
-            name: 'Transaction History',
+            name: 'profile',
+            symbol: FaUser,
+            url: '/user/profile'
+        },
+        {
+            name: 'transaction history',
             symbol: GoHistory,
             url: '/user/transactions_history'
         }
     ]
     const location = useLocation()
     const pathName = location.pathname
+    const active = 'text-lightgreen' 
+    const nonactive = 'text-white/60 hover:text-lightgreen'
     
 
     return (
         <div className='w-full fixed bottom-1 z-50'>
-            <div className="w-[95%] mx-auto  px-5 flex relative items-center bg-[#212134] rounded-full justify-around gap-2">
+            <div className="w-[95%] mx-auto px-5 flex relative items-center bg-[#212134] rounded-full justify-around gap-2">
                 {icons.map((item, i) => {
                     return (
                         <div key={i} className="flex items-center pt-5 pb-3 relative" >
-                            {item.url === pathName &&
+                            {item.name === 'profit tools' ? pathName.includes(item.main) && 
+                                <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full "></div>
+                                :
+                                pathName === item.url &&
                                 <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full "></div>
                             }
                             <Link  to={item.url}
-                                className={` group-hover:text-lightgreen ${pathName === item.url ? ' px-2 text-lightgreen ' : 'text-white/60 hover:text-lightgreen'} cursor-pointer flex items-center flex-col gap-1"`}>
+                                className={` group-hover:text-lightgreen px-2  ${item.name === 'profit tools' ? pathName.includes(item.main) ? active : nonactive : pathName === item.url ? active : nonactive} cursor-pointer flex items-center flex-col gap-1"`}>
                                 <div className="text-[1.5rem]  ">{<item.symbol />}</div>
                             </Link>
                         </div>

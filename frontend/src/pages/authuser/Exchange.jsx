@@ -9,7 +9,7 @@ const Exchange = () => {
   return (
     <div className="w-full  flex items-start ">
       <div className="w-full ">
-        <div className="mt-5 w-11/12 bg-[#1d1e30] rounded-md py-1 px-1 lg:w-2/3 mx-auto  gap-10 flex items-center justify-center">
+        <div className="mt-5 w-11/12 bg-[#1d1e30] rounded-md p-1.5 lg:w-2/3 mx-auto  gap-10 flex items-center justify-center">
           {tags.map((tag, i) => {
             return (
               <div onClick={() => setActive(tag)}

@@ -27,7 +27,7 @@ const AuthHeader = () => {
                         </div>
                         <div className="text-white font-bold">Litezy</div>
                     </Link>
-                    <Link to='/user/notification' className="relative">
+                    <Link to='/user/notifications' className="relative">
                         <IoNotificationsSharp className='text-2xl cursor-pointer text-lightgreen' />
                         <div className="absolute w-2 h-2 rounded-full bg-red-500 top-1 right-1"></div>
                     </Link>

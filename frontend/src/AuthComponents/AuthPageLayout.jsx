@@ -9,6 +9,8 @@ import { Link, useLocation } from 'react-router-dom'
 const AuthPageLayout = ({ children }) => {
   const location = useLocation()
   const pathName = location.pathname
+  const active = 'text-lightgreen rounded-sm bg-[#1e333c]'
+  const nonactive = 'hover:bg-primary rounded-sm text-[#9696b5]'
 
 
   return (
@@ -23,7 +25,7 @@ const AuthPageLayout = ({ children }) => {
             {links.map((link, i) => {
               return (
                 <Link to={link.url}
-                  className={` py-2 group text-base flex items-center gap-2 px-5 w-full ${pathName === link.url ? 'text-lightgreen  rounded-sm bg-[#1e333c]  ' : 'hover:bg-primary rounded-sm  text-[#9696b5] '} `} key={i}>
+                  className={` py-2 group text-base flex items-center gap-2 px-5 w-full capitalize ${link.label === 'profit tools' ? pathName.includes(link.main) ? active : nonactive : pathName === link.url ? active : nonactive} `} key={i}>
                   <div className="relative">
                    {link.last && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}
                   <link.icon className="transform group-hover:rotate-180 text-xl duration-300" />
