@@ -20,6 +20,7 @@ import SingleAirdropPage from "../pages/general/SingleAirdropPage";
 import SingleProductPage from "../pages/general/SingleProductPage";
 import TermsPage from "../pages/general/TermsPage";
 import VerifyAccount from "../pages/general/VerifyAccount";
+import Notification from "../pages/authuser/Notification";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -47,4 +48,5 @@ export const AuthPagesLinks = [
     { path: '/user/profit_tools', component: ProductsTools },
     { path: '/user/profile', component: Profile},
     { path: '/user/transactions_history', component: TransHistory},
+    { path: '/user/notification', component: Notification},
 ]
