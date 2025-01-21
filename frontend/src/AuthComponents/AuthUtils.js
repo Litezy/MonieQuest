@@ -107,5 +107,101 @@ export const giftCardValidations = [
     { brand: "GOOGLE PLAY", length: 20, regex: /^[A-Za-z0-9]{20}$/ },
     { brand: "OFFGAMERS", length: 16, regex: /^[A-Za-z0-9]{16}$/ },
   ];
+
+  export const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+})
    
-  
+  export const alltransactions = [
+    {
+        tag: 'crypto',
+        type:'buy',
+        amount: '200',
+        date: '22 Feb 2024',
+        status: 'completed',
+        trans_id:'28fndjfhbfvfj',
+        trans_hash:'28fndjfhbfvfjhashgraph',
+        receiving_wallet:'0xrfnfu488493494',
+        get desc() {
+            return `Your p2p buy order of $${this.amount} is marked as completed, kindly check your balance.`;
+        },
+        id: 1
+    },
+    {
+        tag: 'crypto',
+        type:'sell',
+        amount: '210',
+        date: '22 Feb 2024',
+        status: 'completed',
+        trans_id:'28fndjfhbfvfj9400',
+        sending_wallet:'0xrfnfu488493494',
+        get desc() {
+            return `Your p2p sell order of $${this.amount} is marked as completed, kindly check your balance.`;
+        },
+        id: 2
+    },
+    {
+        tag: 'withdrawal',
+        amount: '1000',
+        date: '20 Feb 2024',
+        status: 'pending',
+        account_number: '274774783827',
+        bank_account: 'Moniepoint',
+        account_name: 'Moniequest Basit',
+        trans_id:'7583ndjfiufuf0r9994',
+        reference_id:'7583ndjfiufuf0r9994222',
+        get desc() {
+            return `Your withdrawal of $${this.amount} is marked as ${this.status}, kindly wait as we process your transaction.`;
+        },
+        id: 3
+    },
+    {
+        tag: 'withdrawal',
+        amount: '1000',
+        date: '20 Feb 2024',
+        status: 'completed',
+        account_number: '274774783827',
+        bank_acount: 'Moniepoint',
+        account_name: 'Moniequest Basit',
+        trans_id:'7583ndjfiufuf',
+        reference_id:'7583ndjfiufu33fkf',
+        get desc() {
+            return `Your withdrawal of $${this.amount} is marked as ${this.status}, kindly check your local bank.`;
+        },
+        id: 4
+    },
+    {
+        tag: 'giftcard',
+        type:'sell',
+        amount: '200',
+        date: '20 March 2024',
+        status: 'declined',
+        trans_id:'7583ndjfiufuf0r9994gift',
+        card_code:'7583ndjfiufuf0r9994code',
+        card_brand:'apple',
+        card_pin:'294',
+        get desc() {
+            return `Your order of $${this.amount} is marked as ${this.status}, kindly check notifications or email to find out more about your failed transaction.`;
+        },
+        id: 5
+    },
+    {
+        tag: 'giftcard',
+        type:'sell',
+        amount: '200',
+        date: '20 March 2024',
+        status: 'completed',
+        trans_id:'7583ndjfiufuf0r9994gift99',
+        card_code:'7583ndjfiufuf0r9994code88',
+        card_brand:'amazon',
+        card_pin:'',
+        get desc() {
+            return `Your order of $${this.amount} is marked as ${this.status}, kindly check your balance.`;
+        },
+        id: 6
+    },
+    
+]
