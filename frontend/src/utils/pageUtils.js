@@ -16,19 +16,6 @@ export const SuccessAlert = (message) => {
 
     })
 }
-export const errorMessage = (message) => {
-    toast.error(message, {
-        position: "top-center", 
-        className: 'bg-red-600 text-white ',
-    });
-};
-export const successMessage = (message) => {
-    return toast.success(message),{
-        position: "top-center",
-        className: 'bg-green-600 text-white ',
-    }
-    
-}
 
 export const MoveToTop = () => {
     document.documentElement.scrollTo({

@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout'
 import ToolComp from '../../AuthComponents/ToolComp';
+import { CiSearch } from 'react-icons/ci';
+import FormInput from '../../utils/FormInput';
 
 const ProfitTools = () => {
     const tags = ['all', 'pending', 'approved', 'declined']
     const [active, setActive] = useState(tags[0])
+    const [search, setSearch] = useState('')
     const [dataLoading, setDataLoading] = useState(true)
     const [allTools, setAllTools] = useState([
         {
@@ -43,7 +46,13 @@ const ProfitTools = () => {
     return (
         <ProfitToolsLayout>
             <div className='w-11/12 mx-auto'>
-                <div className="flex lg:items-center lg:flex-row flex-col gap-2">
+                <div className="w-full lg:w-2/3 mx-auto relative">
+                    <FormInput placeholder='Search by type and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" />
+                    <div className="absolute top-5 right-3">
+                        <CiSearch className='text-xl cursor-pointer text-white' />
+                    </div>
+                </div>
+                <div className="flex lg:items-center lg:flex-row flex-col gap-2 mt-4">
                     <div className="text-lightgreen/70 font-semibold capitalize text-sm lg:text-base">Sort tools by:</div>
                     <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 lg:w-3/4 mx-auto items-center w-full ">
                         {tags.map((tag) => {
