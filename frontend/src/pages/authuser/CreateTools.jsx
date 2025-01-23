@@ -330,7 +330,7 @@ const CreateTools = () => {
                     :
                     <div className='w-72 h-44 border rounded-lg flex flex-col gap-2 items-center justify-center'>
                       <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
-                      <span className='text-xs'>click to add image</span>
+                      <span className='text-sm'>click to add image</span>
                     </div>
                   }
                   <input ref={imgref} type="file" onChange={handleUpload} hidden />

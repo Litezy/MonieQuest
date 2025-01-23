@@ -21,14 +21,14 @@ const CategoryAirdropsPage = () => {
                         <div className='flex flex-col gap-6'>
                             <div className='w-64 h-4 rounded-full bg-slate-400 animate-pulse'></div>
                             <div className='flex flex-wrap gap-4'>
-                                {new Array(4).fill(0).map((item, i) => (
-                                    <div className='w-72 h-40 rounded-md bg-slate-400 animate-pulse'></div>
+                                {new Array(4).fill(0).map((_, i) => (
+                                    <div className='w-72 h-40 rounded-md bg-slate-400 animate-pulse' key={i}></div>
                                 ))}
                             </div>
                         </div>
                         :
                         <div className='flex flex-col gap-6'>
-                            <div className='text-2xl font-bold'>{category === 'others' ? 'More ways to earn crypto' : `All ${category} airdrops`}</div>
+                            <div className='text-2xl font-bold capitalize'>{category === 'others' ? 'More ways to earn crypto' : `All ${category} airdrops`}</div>
                             <div className='flex flex-wrap gap-4'>
                                 {new Array(12).fill(0).map((item, i) => (
                                     <AirdropDiv key={i} item={item} />
