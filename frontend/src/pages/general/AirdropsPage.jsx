@@ -6,6 +6,7 @@ import FormInput from '../../utils/FormInput'
 import { LuChevronRight, LuChevronLeft } from "react-icons/lu";
 import { GiArrowScope } from "react-icons/gi";
 import SelectComp from '../../GeneralComponents/SelectComp'
+import { MoveToTop } from '../../utils/pageUtils'
 
 const AirdropsPage = () => {
   const [check, setCheck] = useState('')
@@ -89,7 +90,7 @@ const AirdropsPage = () => {
                         <span className='capitalize font-bold'>featured airdrops</span>
                       </div>
                       <div className='md:flex gap-4 items-center hidden'>
-                        <Link to='/airdrops/featured' className='capitalize text-sm hover:text-lightgreen'>view all</Link>
+                        <Link to='/airdrops/featured' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
                         <div className='flex gap-2 items-center'>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
@@ -111,7 +112,7 @@ const AirdropsPage = () => {
                         <span className='capitalize font-bold'>new airdrops</span>
                       </div>
                       <div className='md:flex gap-4 items-center hidden'>
-                        <Link to='/airdrops/new' className='capitalize text-sm hover:text-lightgreen'>view all</Link>
+                        <Link to='/airdrops/new' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
                         <div className='flex gap-2 items-center'>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
@@ -133,7 +134,7 @@ const AirdropsPage = () => {
                         <span className='capitalize font-bold'>NFT airdrops</span>
                       </div>
                       <div className='md:flex gap-4 items-center hidden'>
-                        <Link to='/airdrops/NFT' className='capitalize text-sm hover:text-lightgreen'>view all</Link>
+                        <Link to='/airdrops/NFT' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
                         <div className='flex gap-2 items-center'>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
@@ -155,7 +156,7 @@ const AirdropsPage = () => {
                         <span className='capitalize font-bold'>deFi airdrops</span>
                       </div>
                       <div className='md:flex gap-4 items-center hidden'>
-                        <Link to='/airdrops/deFi' className='capitalize text-sm hover:text-lightgreen'>view all</Link>
+                        <Link to='/airdrops/deFi' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
                         <div className='flex gap-2 items-center'>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
@@ -177,7 +178,7 @@ const AirdropsPage = () => {
                         <span className='capitalize font-bold'>more ways to earn crypto</span>
                       </div>
                       <div className='md:flex gap-4 items-center hidden'>
-                        <Link to='/airdrops/others' className='capitalize text-sm hover:text-lightgreen'>view all</Link>
+                        <Link to='/airdrops/others' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
                         <div className='flex gap-2 items-center'>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
                           <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { TbSwitch2 } from 'react-icons/tb'
 import FormInput from '../utils/FormInput'
 import { currencies, giftCardValidations } from './AuthUtils'
-import { errorMessage, SuccessAlert } from '../utils/pageUtils'
+import { ErrorAlert, SuccessAlert } from '../utils/pageUtils'
 import ModalLayout from '../utils/ModalLayout'
 import Loading from '../GeneralComponents/Loading'
 import { SlClock } from 'react-icons/sl'
 import { Link } from 'react-router-dom'
 
-const SellGiftcard = ({screen,setScreen}) => {
+const SellGiftcard = ({ screen, setScreen }) => {
 
     //defining states
     const [cards, setCards] = useState({
@@ -34,7 +34,7 @@ const SellGiftcard = ({screen,setScreen}) => {
 
 
     //defining functions
-   
+
 
     const handleType = (e) => {
         setCards({ ...cards, code: '', type: e.target.value, amount: '' })
@@ -88,17 +88,17 @@ const SellGiftcard = ({screen,setScreen}) => {
 
     const checkCode = () => {
         if (!selectedCard || !selectedCard.brand) {
-            return errorMessage("Please select a gift card brand ");
+            return ErrorAlert("Please select a gift card brand ");
         }
         if (!selectedCard.codelength) {
-            return errorMessage(`Please enter a valid ${selectedCard.brand} code or re-enter last digits of your code.`);
+            return ErrorAlert(`Please enter a valid ${selectedCard.brand} code or re-enter last digits of your code.`);
         }
-        if (!cards.amount) return errorMessage('Please input a valid amount')
+        if (!cards.amount) return ErrorAlert('Please input a valid amount')
         const selectedBrand = giftCardValidations.find(item => item.brand === selectedCard.brand)
-        if (!selectedBrand) return errorMessage("Invalid brand selected");
+        if (!selectedBrand) return ErrorAlert("Invalid brand selected");
         if (parseInt(selectedCard.codelength) !== selectedBrand.length) {
             setCarderror({ status: true, msg: 'code too short', color: 'red-600' });
-            errorMessage(`Code must be ${selectedCard.length} characters long`);
+            ErrorAlert(`Code must be ${selectedCard.length} characters long`);
             return setTimeout(() => {
                 setCarderror({ status: false, msg: '', color: '' })
             }, 4000)
@@ -119,7 +119,7 @@ const SellGiftcard = ({screen,setScreen}) => {
     const handleCode = (e) => {
         let value = e.target.value.replace(/[^A-Za-z0-9]/g, '');
         const selectedBrand = selectedCard.brand
-        if (!selectedBrand) errorMessage('please select a giftcard brand')
+        if (!selectedBrand) ErrorAlert('please select a giftcard brand')
         value = value.substring(0, selectedCard.length);
         const formattedValue = value.match(/.{1,4}/g)?.join('-') || value;
         const newval = formattedValue.replace(/-/g, '')
@@ -136,9 +136,9 @@ const SellGiftcard = ({screen,setScreen}) => {
 
     const sellCard = (e) => {
         e.preventDefault()
-        if (!cards.type) return errorMessage('giftcard brand is required')
-        if (!cards.amount) return errorMessage('giftcard amount is required')
-        if (!cards.code) return errorMessage('giftcard code is missing, try again')
+        if (!cards.type) return ErrorAlert('giftcard brand is required')
+        if (!cards.amount) return ErrorAlert('giftcard amount is required')
+        if (!cards.code) return ErrorAlert('giftcard code is missing, try again')
         setLoading(true)
         return setTimeout(() => {
             setLoading(false)
@@ -150,76 +150,76 @@ const SellGiftcard = ({screen,setScreen}) => {
 
     return (
         <div className='w-full mt-5 lg:mt-10'>
+            {screen === 1 ?
+                <div className="w-full">
+                    {loading &&
+                        <ModalLayout>
+                            <div className="flex gap-5 flex-col mx-auto">
+                                <Loading />
+                                <div className="mt-20 text-white"> ...Submitting</div>
+                            </div>
+                        </ModalLayout>
+                    }
+                    <div className="w-11/12 lg:w-2/3  mx-auto">
 
-            {screen === 1 ? <div className="w-full">
-                {loading &&
-                    <ModalLayout setModal={setLoading} clas={`w-11/12 mx-auto lg:w-1/2`}>
-                        <div className="w-1/2 flex gap-5 justify-center items-center flex-col mx-auto text-center  text-white ">
-                            <Loading />
-                            <div className="mt-20"> ...Submitting</div>
-                        </div>
-                    </ModalLayout>
-                }
-                <div className="w-11/12 lg:w-2/3  mx-auto">
+                        <div className="w-full flex items-start flex-col gap-4">
+                            <div className="flex items-start gap-2 flex-col w-full">
+                                <div className="">Giftcard type</div>
 
-                    <div className="w-full flex items-start flex-col gap-4">
-                        <div className="flex items-start gap-2 flex-col w-full">
-                            <div className="">Giftcard type</div>
+                                <select onChange={handleType} value={cards.type} name={`type`} className='w-full bg-secondary' id="">
+                                    {giftCardValidations.map((gift, i) => {
+                                        return (
+                                            <option key={i} value={gift.brand}>{gift.brand}</option>
+                                        )
+                                    })}
+                                </select>
 
-                            <select onChange={handleType} value={cards.type} name={`type`} className='w-full bg-secondary' id="">
-                                {giftCardValidations.map((gift, i) => {
-                                    return (
-                                        <option key={i} value={gift.brand}>{gift.brand}</option>
-                                    )
-                                })}
-                            </select>
-
-                            <div className="text-xs text-red-500">Please Note: you can only buy a minimum of $5 and maximum of $2000 and
-                                an additional fee of $2 (₦3400) is added</div>
-                        </div>
-                        <div className="flex w-full items-start gap-2 flex-col  ">
-                            <div className="font-bold text-lg">Amount:</div>
-                            <div className="w-full items-center flex px-2 justify-center py-1 gap-2 border border-gray-400 rounded-lg">
-                                <div className="w-full ">
-                                    <FormInput name={`amount`} border={false} value={cards.amount} onChange={handleAmount} placeholder={selectedCurr.symbol} />
+                                <div className="text-xs text-red-500">Please Note: you can only buy a minimum of $5 and maximum of $2000 and
+                                    an additional fee of $2 (₦3400) is added</div>
+                            </div>
+                            <div className="flex w-full items-start gap-2 flex-col  ">
+                                <div className="font-bold text-lg">Amount:</div>
+                                <div className="w-full items-center flex px-2 justify-center py-1 gap-2 border border-gray-400 rounded-lg">
+                                    <div className="w-full ">
+                                        <FormInput name={`amount`} border={false} value={cards.amount} onChange={handleAmount} placeholder={selectedCurr.symbol} />
+                                    </div>
+                                    <div className="">{selectedCurr.name}</div>
                                 </div>
-                                <div className="">{selectedCurr.name}</div>
-                            </div>
 
-                        </div>
-                        <div className="flex item-center justify-between w-full">
-                            <div className="text-sm">Amount in Naira</div>
-                            <div onClick={changeCurrency} className="flex items-center gap-1 cursor-pointer">
-                                <div className="text-sm">set by {selectedCurr.name === 'USD' ? 'naira' : 'usd'}</div>
-                                <TbSwitch2 className='text-lightgreen ' />
                             </div>
-                        </div>
-                        <div className="flex w-full item-center text-base lg:text-sm justify-between">
-                            <div className="text-sm">Buying rate</div>
-                            <div className="">{rate}/$</div>
-                        </div>
-                        <div className="flex items-start gap-2 w-full flex-col">
-                            <div className="">Giftcard Code</div>
-                            <div className="w-full">
-                                <input
-                                    className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 uppercase focus:border ${carderror.status ? `border-2 border-${carderror.color}` : 'border border-gray-400'} bg-transparent w-full h-fit  px-4 lg:text-sm text-base rounded-md `}
-                                    placeholder={`XXXX-XXXX-XXXX-XXXX`}
-                                    onKeyUp={() => setProceed(false)}
-                                    type={`text`}
-                                    onChange={handleCode}
-                                    name='code'
-                                    value={cards.code}
-                                >
-                                </input>
-                                {carderror.status && <div className={`text-${carderror.color} text-sm`}>{carderror.msg}</div>}
+                            <div className="flex item-center justify-between w-full">
+                                <div className="text-sm">Amount in Naira</div>
+                                <div onClick={changeCurrency} className="flex items-center gap-1 cursor-pointer">
+                                    <div className="text-sm">set by {selectedCurr.name === 'USD' ? 'naira' : 'usd'}</div>
+                                    <TbSwitch2 className='text-lightgreen ' />
+                                </div>
                             </div>
-                        </div>
-                        <div className="mt-5 w-full">
-                            <button onClick={proceed ? sellCard : checkCode} className={`w-full ${proceed ? 'bg-red-600' : 'bg-ash'}  py-3 font-bold rounded-md`}>{proceed ? 'Sell' : 'Check Code'}</button>
+                            <div className="flex w-full item-center text-base lg:text-sm justify-between">
+                                <div className="text-sm">Buying rate</div>
+                                <div className="">{rate}/$</div>
+                            </div>
+                            <div className="flex items-start gap-2 w-full flex-col">
+                                <div className="">Giftcard Code</div>
+                                <div className="w-full">
+                                    <input
+                                        className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 uppercase focus:border ${carderror.status ? `border-2 border-${carderror.color}` : 'border border-gray-400'} bg-transparent w-full h-fit  px-4 lg:text-sm text-base rounded-md `}
+                                        placeholder={`XXXX-XXXX-XXXX-XXXX`}
+                                        onKeyUp={() => setProceed(false)}
+                                        type={`text`}
+                                        onChange={handleCode}
+                                        name='code'
+                                        value={cards.code}
+                                    >
+                                    </input>
+                                    {carderror.status && <div className={`text-${carderror.color} text-sm`}>{carderror.msg}</div>}
+                                </div>
+                            </div>
+                            <div className="mt-5 w-full">
+                                <button onClick={proceed ? sellCard : checkCode} className={`w-full ${proceed ? 'bg-red-600' : 'bg-ash'}  py-3 font-bold rounded-md`}>{proceed ? 'Sell' : 'Check Code'}</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div> :
+                </div> :
                 <div className="w-full">
                     <div className='flex flex-col gap-7 items-center max-w-md mx-auto mt-20'>
                         <SlClock className='text-8xl' />
@@ -227,7 +227,7 @@ const SellGiftcard = ({screen,setScreen}) => {
                         <Link to="/user/dashboard">
                             <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-16 rounded-lg outline-none uppercase font-bold'>go to dashboard</button>
                         </Link>
-                        <button onClick={()=> setScreen(1)} className='text-sm text-white px-4 py-2 rounded-md bg-red-600'>Sell another card</button>
+                        <button onClick={() => setScreen(1)} className='text-sm text-white px-4 py-2 rounded-md bg-red-600'>Sell another card</button>
                     </div>
                 </div>
             }

@@ -6,6 +6,8 @@ import { MdOutlineEdit } from 'react-icons/md'
 import { Link } from 'react-router-dom';
 import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout';
 import { ErrorAlert } from '../../utils/pageUtils';
+import ModalLayout from '../../utils/ModalLayout';
+import Loading from '../../GeneralComponents/Loading';
 
 const aiTools = [
   "Test-to-Image", "Test-to-Text", "code generators", "AI assistants"
@@ -39,6 +41,7 @@ const eBooks = [
 const CreateTools = () => {
   const [screen, setScreen] = useState(1)
   const [select, setSelect] = useState('')
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     textField: '',
     price: '',
@@ -89,6 +92,14 @@ const CreateTools = () => {
   return (
     <ProfitToolsLayout>
       <div className='w-11/12 mx-auto'>
+        {loading &&
+          <ModalLayout>
+            <div className="flex gap-5 flex-col mx-auto">
+              <Loading />
+              <div className="mt-20 text-white">...Submitting</div>
+            </div>
+          </ModalLayout>
+        }
         {screen === 1 &&
           <div className='max-w-2xl mx-auto h-fit p-6 border border-gray-400'>
             <div className='flex flex-col gap-4'>
@@ -319,7 +330,7 @@ const CreateTools = () => {
                     :
                     <div className='w-72 h-44 border rounded-lg flex flex-col gap-2 items-center justify-center'>
                       <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
-                      <span className='text-xs'>click to add image</span>
+                      <span className='text-sm'>click to add image</span>
                     </div>
                   }
                   <input ref={imgref} type="file" onChange={handleUpload} hidden />

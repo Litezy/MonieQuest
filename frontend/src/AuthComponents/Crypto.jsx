@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
-import FormButton from '../utils/FormButton';
-import { errorMessage, SuccessAlert, successMessage } from '../utils/pageUtils';
+import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
 import FormInput from '../utils/FormInput';
 import { BankAcc, blockchainNetworks, coins, currencies, instructions } from './AuthUtils';
 import ModalLayout from '../utils/ModalLayout';
@@ -9,10 +8,12 @@ import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCopy } from 'react-icons/fa';
 import { TfiTimer } from "react-icons/tfi";
 import { Link, useNavigate } from 'react-router-dom';
+import Loading from '../GeneralComponents/Loading';
 
 
 const Crypto = () => {
     const [screen, setScreen] = useState(1)
+    const [loading, setLoading] = useState(false)
     const [modal, setModal] = useState(false)
     const rate = 1715
     const [forms, setForms] = useState({
@@ -72,19 +73,19 @@ const Crypto = () => {
     const minimum = 10
     const submit = (e) => {
         e.preventDefault()
-        if (!forms.amount) return errorMessage('amount is required')
-        if (forms.amount < minimum) return errorMessage('amount is too small')
-        if (!forms.type) return errorMessage('coin type is required')
+        if (!forms.amount) return ErrorAlert('amount is required')
+        if (forms.amount < minimum) return ErrorAlert('amount is too small')
+        if (!forms.type) return ErrorAlert('coin type is required')
         if (selectedCurr.name !== 'USD' && selectedCurr.symbol !== '$') {
             const amt = forms.amount.replace(/,/g, '')
             const newamt = amt * rate
             console.log(`new Amout :${newamt},currency : ${selectedCurr}`)
-            if (newamt > nairaLimit) return errorMessage(`Sorry, you can't buy above ${currencies[1].symbol}${nairaLimit.toLocaleString()}`)
+            if (newamt > nairaLimit) return ErrorAlert(`Sorry, you can't buy above ${currencies[1].symbol}${nairaLimit.toLocaleString()}`)
         }
         if (selectedCurr.name === 'USD' && selectedCurr.symbol === '$') {
             const amt = forms.amount.replace(/,/g, '')
             console.log(`newamt: ${amt},currency : ${selectedCurr.symbol}`)
-            if (amt > limit) return errorMessage(`Sorry, you can't buy above $2,000`)
+            if (amt > limit) return ErrorAlert(`Sorry, you can't buy above $2,000`)
         }
 
         setScreen(2)
@@ -115,9 +116,15 @@ const Crypto = () => {
     const navigate = useNavigate()
     return (
         <div className='w-full'>
-
-            <div className="w-11/12  mx-auto lg:w-full">
-
+            {loading &&
+                <ModalLayout>
+                    <div className="flex gap-5 flex-col mx-auto">
+                        <Loading />
+                        <div className="mt-20 text-white">...Submitting</div>
+                    </div>
+                </ModalLayout>
+            }
+            <div className="w-11/12 mx-auto lg:w-full">
                 {screen === 1 &&
                     <div className="w-full  lg:w-2/3 mx-auto flex items-center justify-center">
                         <div className="flex w-full  mx-auto mt-5 items-start gap-5 flex-col">
@@ -131,7 +138,7 @@ const Crypto = () => {
                                         )
                                     })}
                                 </select>
-                                <div className="w- text-red-500 text-xs">Please Note: you can only buy a minimum of $5 a nd maximum of $2,000 and an additional
+                                <div className="text-red-500 text-sm">Please Note: you can only buy a minimum of $5 a nd maximum of $2,000 and an additional
                                     fee of $2 (₦3,400) is added</div>
                             </div>
                             <div className="flex w-full items-start gap-2 flex-col  ">

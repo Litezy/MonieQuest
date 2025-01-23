@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
-import FormButton from '../utils/FormButton';
-import { errorMessage, SuccessAlert, successMessage } from '../utils/pageUtils';
+import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
 import FormInput from '../utils/FormInput';
 import { BankAcc, blockchainNetworks, coins, currencies, instructions, sellInstruction } from './AuthUtils';
 import ModalLayout from '../utils/ModalLayout';
@@ -9,12 +8,14 @@ import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCopy } from 'react-icons/fa';
 import { TfiTimer } from "react-icons/tfi";
 import { Link, useNavigate } from 'react-router-dom';
+import Loading from '../GeneralComponents/Loading';
 
 
 const SellCrypto = () => {
     const [screen, setScreen] = useState(1)
     const tags = ['BUY', 'SELL']
     const [modal, setModal] = useState(false)
+    const [loading, setLoading] = useState(false)
     const rate = 1690
     const [forms, setForms] = useState({
         amount: '',
@@ -72,17 +73,17 @@ const SellCrypto = () => {
     const minimum = 10
     const submit = (e) => {
         e.preventDefault()
-        if (!forms.amount) return errorMessage('amount is required')
-        if (forms.amount < minimum) return errorMessage('amount is too small')
-        if (!forms.type) return errorMessage('coin type is required')
+        if (!forms.amount) return ErrorAlert('amount is required')
+        if (forms.amount < minimum) return ErrorAlert('amount is too small')
+        if (!forms.type) return ErrorAlert('coin type is required')
         if (selectedCurr.name !== 'USD' && selectedCurr.symbol !== '$') {
             const amt = forms.amount.replace(/,/g, '')
             const newamt = amt * rate
-            if (newamt > nairaLimit) return errorMessage(`Sorry, you can't sell above ${currencies[1].symbol}${nairaLimit.toLocaleString()}`)
+            if (newamt > nairaLimit) return ErrorAlert(`Sorry, you can't sell above ${currencies[1].symbol}${nairaLimit.toLocaleString()}`)
         }
         if (selectedCurr.name === 'USD' && selectedCurr.symbol === '$') {
             const amt = forms.amount.replace(/,/g, '')
-            if (amt > limit) return errorMessage(`Sorry, you can't sell above ${currencies[0].symbol}${limit.toLocaleString()}`)
+            if (amt > limit) return ErrorAlert(`Sorry, you can't sell above ${currencies[0].symbol}${limit.toLocaleString()}`)
         }
 
         setScreen(2)
@@ -116,7 +117,14 @@ const SellCrypto = () => {
     }
     return (
         <div className='w-full'>
-
+            {loading &&
+                <ModalLayout>
+                    <div className="flex gap-5 flex-col mx-auto">
+                        <Loading />
+                        <div className="mt-20 text-white">...Submitting</div>
+                    </div>
+                </ModalLayout>
+            }
             <div className="w-11/12 mx-auto lg:w-full ">
                 {screen === 1 && active === 'BUY' &&
                     <div className="w-full  lg:w-2/3 mx-auto flex items-center justify-center">
