@@ -41,7 +41,7 @@ const TransComp = ({ trans }) => {
                         <div className="flex items-center gap-3">
                             <div className={`text-zinc-200 capitalize`}>{trans.tag === 'withdrawal' ? 'bank withdrawal' : trans.tag}</div>
                             {trans.type && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
-                            {trans.type && <div className={` ${trans.type === 'buy' ? "text-green-500" : 'text-red-600'} capitalize`}> {trans.type}</div>}
+                            {trans.type && <div className={` ${trans.type === 'buy' ? "text-lightgreen" : 'text-red-600'} capitalize`}> {trans.type}</div>}
                         </div>
                         <div className="flex items-center gap-1">
                             <div className="">{trans.date}</div>
@@ -51,7 +51,7 @@ const TransComp = ({ trans }) => {
                     </div>
                 </div>
                 <div
-                    className={` flex items-center justify-center lg:w-full rounded-md ${trans.status === 'pending' ? "text-yellow-300" : trans.status === 'completed' ? 'text-green-400  ' : 'text-red-600'}`}>
+                    className={` flex items-center text-sm justify-center lg:w-full rounded-md ${trans.status === 'pending' ? "text-yellow-300" : trans.status === 'completed' ? 'text-lightgreen/90  ' : 'text-red-600'}`}>
                     {trans.status}</div>
 
                 <div

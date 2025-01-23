@@ -7,7 +7,7 @@ import GiftcardTransactions from '../../AuthComponents/GiftcardTransactions';
 import TransComp from '../../AuthComponents/TransComp';
 
 const TransHistory = () => {
-  const tags = ['All','Crypto', 'GiftCards',  'Withdrawal']
+  const tags = ['All','Crypto','Profit Tools', 'GiftCards',  'Withdrawal']
   const [active, setActive] = useState(tags[0])
 
   const CheckTag = (tag) => {
@@ -19,10 +19,10 @@ const TransHistory = () => {
   }
   return (
     <div className="w-11/12 mx-auto">
-      <div className="mb-3 w-1/2 py-4 mx-auto flex items-center justify-center lg:w-2/3 bg-ash rounded-xl">
+      <div className="mb-3 w-1/2 py-2 mx-auto flex items-center justify-center lg:w-2/3 bg-white/80 rounded-xl">
         <div className="flex items-center justify-center flex-col w-full">
-          <div className="">Account Balance:</div>
-          <div className="text-lightgreen text-2xl font-bold">{currencies[1].symbol}25,000</div>
+          <div className="text-dark font-bold">Account Balance:</div>
+          <div className="text-primary text-2xl font-bold">{currencies[1].symbol}25,000</div>
         </div>
       </div>
       <div className="w-full my-2">
@@ -35,13 +35,13 @@ const TransHistory = () => {
       </div>
 
       <div className="my-5  text-2xl font-bold lg:text-center text-lightgreen">Recent Transactions</div>
-      <div className="flex lg:items-center lg:flex-row flex-col">
-        <div className="text-lightgreen/70 font-semibold capitalize text-sm lg:text-base">Sort transactions by:</div>
+      <div className="flex lg:items-center lg:flex-row flex-col gap-1">
+        <div className="text-zinc-300  font-semibold capitalize text-sm lg:text-base">Sort transactions by:</div>
         <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 lg:w-3/4 mx-auto  items-center w-full ">
           {tags.map((tag) => {
             return (
               <div onClick={() => CheckTag(tag)} onDoubleClick={() => setActive('')}
-                className={`flex items-center justify-center lg:text-center py-1 text-sm rounded-md ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'}   cursor-pointer`}>{tag}</div>
+                className={`flex items-center md:text-base justify-center lg:text-center py-1 text-sm rounded-md ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'}   cursor-pointer`}>{tag}</div>
             )
           })}
         </div>

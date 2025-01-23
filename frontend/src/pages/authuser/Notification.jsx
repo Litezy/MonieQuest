@@ -10,7 +10,7 @@ const Notification = () => {
   const [notifications, setNotifications] = useState([
     {
       title: 'new order made',
-      content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit.',
+      content: 'Lorem, ipsum dolor  sit amet consectetur adipisicing elit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit.',
       read: 'true',
       url: '/user/profit_tools/create',
     },
