@@ -1,10 +1,11 @@
 import { MdCurrencyExchange } from "react-icons/md";
 import { BsGiftFill } from "react-icons/bs";
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard,MdLeaderboard  } from "react-icons/md";
 import { CgToolbox } from "react-icons/cg";
 import { GoHistory } from "react-icons/go";
 import { FaUser } from "react-icons/fa";
 import { IoNotificationsSharp } from "react-icons/io5";
+
 
 
 export const coins = ['Bitcoin', 'Ethereum', 'USDT', 'TRON', 'BNB']
@@ -20,6 +21,7 @@ export const links = [
     { label: 'profile', url: '/user/profile', icon: FaUser },
     { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory, last:false },
     { label: 'notifications', url: '/user/notifications', icon:IoNotificationsSharp, last:true  },
+    { label: 'leaderboard', url: '/user/leaderboard', icon:MdLeaderboard, last:false  },
 
 ]
 export const blockchainNetworks = [
@@ -144,7 +146,7 @@ export const giftCardValidations = [
         id: 2
     },
     {
-        tag: 'withdrawal',
+        tag: 'bank withdrawal',
         amount: '1000',
         date: '20 Feb 2024',
         status: 'pending',
@@ -159,33 +161,30 @@ export const giftCardValidations = [
         id: 3
     },
     {
-        tag: 'withdrawal',
+        tag: 'bank withdrawal',
         amount: '1000',
         date: '20 Feb 2024',
         status: 'completed',
         account_number: '274774783827',
         bank_acount: 'Moniepoint',
         account_name: 'Moniequest Basit',
-        trans_id:'7583ndjfiufuf',
-        reference_id:'7583ndjfiufu33fkf',
+        trans_id:'75383ndjf84',
+        reference_id:'72583ndjfiufu33fkf4',
         get desc() {
             return `Your withdrawal of $${this.amount} is marked as ${this.status}, kindly check your local bank.`;
         },
         id: 4
     },
     {
-        tag: 'giftcard',
-        type:'sell',
-        amount: '200',
-        date: '20 March 2024',
-        status: 'declined',
-        trans_id:'7583ndjfiufuf0r9994gift',
-        card_code:'7583ndjfiufuf0r9994code',
-        card_brand:'apple',
-        card_pin:'294',
-        get desc() {
-            return `Your order of $${this.amount} is marked as ${this.status}, kindly check notifications or email to find out more about your failed transaction.`;
-        },
+        tag: 'profit tools',
+        amount: '1500',
+        date: '20 Feb 2024',
+        tap:'tools',
+        status: 'completed',
+        order_no: '274774783827',
+        produt_title: 'Diets',
+        product_desc: 'How to eat smart',
+        trans_id:'753283ndjfiufuf2',
         id: 5
     },
     {
@@ -193,15 +192,42 @@ export const giftCardValidations = [
         type:'sell',
         amount: '200',
         date: '20 March 2024',
+        status: 'declined',
+        trans_id:'75832ndjfiufuf0r9994gift',
+        card_code:'70583ndjfiufuf0r9994code',
+        card_brand:'apple',
+        card_pin:'294',
+        get desc() {
+            return `Your order of $${this.amount} is marked as ${this.status}, kindly check notifications or email to find out more about your failed transaction.`;
+        },
+        id: 6
+    },
+    {
+        tag: 'giftcard',
+        type:'sell',
+        amount: '200',
+        date: '20 March 2024',
         status: 'completed',
-        trans_id:'7583ndjfiufuf0r9994gift99',
-        card_code:'7583ndjfiufuf0r9994code88',
+        trans_id:'75183ndjfiufuf0r9994gift99',
+        card_code:'7222583ndjfiufuf0r9994code88',
         card_brand:'amazon',
         card_pin:'',
         get desc() {
             return `Your order of $${this.amount} is marked as ${this.status}, kindly check your balance.`;
         },
-        id: 6
+        id: 7
+    },
+    {
+        tag: 'profit tools',
+        amount: '1200',
+        date: '20 Feb 2024',
+        status: 'pending',
+        tap:'tools',
+        order_no: '274774783827',
+        produt_title: 'Deodorants',
+        product_desc: 'How to apply deodorants',
+        trans_id:'7099583ndjfiufuf',
+        id: 8
     },
     
 ]

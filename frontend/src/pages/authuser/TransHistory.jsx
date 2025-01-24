@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { alltransactions, currencies } from '../../AuthComponents/AuthUtils'
 import { CiSearch } from "react-icons/ci";
 import CryptoTransactions from '../../AuthComponents/CryptoTransactions';
 import BankWithdrawals from '../../AuthComponents/BankWithdrawals';
 import GiftcardTransactions from '../../AuthComponents/GiftcardTransactions';
 import TransComp from '../../AuthComponents/TransComp';
+import Profit_toolsTrans from '../../AuthComponents/Profit_toolsTrans';
 
 const TransHistory = () => {
-  const tags = ['All','Crypto','Profit Tools', 'GiftCards',  'Withdrawal']
+  const tags = ['All', 'Crypto', 'Profit Tools', 'GiftCards', 'Withdrawal']
   const [active, setActive] = useState(tags[0])
 
   const CheckTag = (tag) => {
@@ -17,6 +18,29 @@ const TransHistory = () => {
       setActive(tag)
     }
   }
+
+  const [records, setRecords] = useState([])
+  const [searchValue,setSearchValue] = useState('')
+  const filterTrans = () => {
+    const value = searchValue.trim();
+    if (value.length > 1) {
+      const filtered = alltransactions.filter(
+        (trans) =>
+          String(trans.tag).toLowerCase().startsWith(value.toLowerCase()) ||
+          String(trans.type).toLowerCase().startsWith(value.toLowerCase()) ||
+          String(trans.trans_id).toLowerCase().startsWith(value.toLowerCase())
+      );
+      setRecords(filtered.length > 0 ? filtered : []);
+    } else {
+      setRecords(alltransactions);
+    }
+  };
+  
+  useEffect(() => {
+    filterTrans();
+  }, [searchValue]);
+  
+  
   return (
     <div className="w-11/12 mx-auto">
       <div className="mb-3 w-1/2 py-2 mx-auto flex items-center justify-center lg:w-2/3 bg-white/80 rounded-xl">
@@ -27,9 +51,12 @@ const TransHistory = () => {
       </div>
       <div className="w-full my-2">
         <div className="w-full lg:w-2/3 flex gap-2 pr-2 mx-auto items-center border border-zinc-500 rounded-lg ">
-          <input type="text" placeholder='Search by type and ID ' className='outline-none focus-within:outline-none focus:outline-none focus:ring-0 bg-transparent border-none focus:border-none focus:border w-[95%]' />
+          <input type="text" onChange={(e) => setSearchValue(e.target.value)}
+          placeholder='Search by tag , type or ID ' 
+          value={searchValue}
+          className='outline-none focus-within:outline-none focus:outline-none focus:ring-0 bg-transparent border-none focus:border-none focus:border w-[95%]' />
           <div className="">
-            <CiSearch className='text-xl cursor-pointer text-white' />
+            <CiSearch onClick={filterTrans} className='text-xl cursor-pointer text-white' />
           </div>
         </div>
       </div>
@@ -57,16 +84,27 @@ const TransHistory = () => {
         {active === 'Withdrawal' &&
           <BankWithdrawals />
         }
-        {active === '' || active === 'All'&&
+        {active === tags[2] &&
+          <Profit_toolsTrans />
+        }
+        {active === '' || active === 'All' &&
 
           <div className="">
 
-            {alltransactions.map((trans,i)=>{
+            {!searchValue && records.length > 0 && records.map((trans, i) => {
               return (
-                <TransComp key={i} trans={trans}/>
+                <TransComp key={i} trans={trans} />
               )
             })}
-           
+            {searchValue && records.length > 0 && records.map((trans, i) => {
+              return (
+                <TransComp key={i} trans={trans} />
+              )
+            })}
+            {searchValue && records.length === 0 && 
+            <div className="w-full text-gray-400 text-center">No results found.</div>
+            }
+
           </div>
         }
 

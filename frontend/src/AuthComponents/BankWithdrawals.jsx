@@ -5,7 +5,7 @@ import { alltransactions } from './AuthUtils'
 const BankWithdrawals = () => {
     return (
         <div className='w-full'>
-            {alltransactions.filter((trx) => trx.tag === 'withdrawal').map((trans, i) => {
+            {alltransactions.filter((trx) => trx.tag === 'bank withdrawal').map((trans, i) => {
                 return (
                     <TransComp key={i} trans={trans} />
                 )

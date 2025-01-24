@@ -22,6 +22,7 @@ import VerifyAccount from "../pages/general/VerifyAccount";
 import Notification from "../pages/authuser/Notification";
 import CreateTools from "../pages/authuser/CreateTools";
 import ProfitTools from "../pages/authuser/ProfitTools";
+import Leaderboards from "../AuthComponents/Leaderboards";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -51,4 +52,6 @@ export const AuthPagesLinks = [
     { path: '/user/profile', component: Profile},
     { path: '/user/transactions_history', component: TransHistory},
     { path: '/user/notifications', component: Notification},
+    { path: '/user/leaderboard', component: Leaderboards},
+
 ]

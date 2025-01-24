@@ -14,7 +14,9 @@ const SellGiftcard = ({ screen, setScreen }) => {
     const [cards, setCards] = useState({
         type: '',
         amount: '',
-        code: ''
+        code: '',
+        pin: '',
+        has_pin: 'no'
     })
     const rate = 1370
     const [carderror, setCarderror] = useState({
@@ -24,7 +26,7 @@ const SellGiftcard = ({ screen, setScreen }) => {
     })
     const [proceed, setProceed] = useState(false)
     const [selectedCard, setSelectedCard] = useState({
-        brand: '', length: '', regex: '', codelength: ''
+        brand: '', length: '', regex: '', codelength: '', pin: ''
     })
     const [selectedCurr, setSelectedCurr] = useState({
         name: currencies[0].name,
@@ -133,13 +135,26 @@ const SellGiftcard = ({ screen, setScreen }) => {
         })
     };
 
-
+    const handlePin = (e) => {
+        let value = e.target.value.replace(/[^0-9]/g, '');
+        value = value.substring(0, 4);
+        setCards({
+            ...cards,
+            pin: value
+        });
+        setSelectedCard({
+            ...selectedCard,
+            pin: newval
+        })
+    }
     const sellCard = (e) => {
         e.preventDefault()
         if (!cards.type) return ErrorAlert('giftcard brand is required')
         if (!cards.amount) return ErrorAlert('giftcard amount is required')
         if (!cards.code) return ErrorAlert('giftcard code is missing, try again')
+        if (cards.has_pin === 'yes' && cards.pin === '') return ErrorAlert('giftcard pin is missing, try again')
         setLoading(true)
+        setCards({...cards,type: '',amount: '',code: '',pin: '',has_pin: 'no'})
         return setTimeout(() => {
             setLoading(false)
             setScreen(2)
@@ -147,7 +162,12 @@ const SellGiftcard = ({ screen, setScreen }) => {
 
     }
 
-
+    const handleChange = (e) => {
+        setCards({
+            ...cards,
+            [e.target.name]: e.target.value
+        })
+    }
     return (
         <div className='w-full mt-5 lg:mt-10'>
             {screen === 1 ?
@@ -164,7 +184,7 @@ const SellGiftcard = ({ screen, setScreen }) => {
 
                         <div className="w-full flex items-start flex-col gap-4">
                             <div className="flex items-start gap-2 flex-col w-full">
-                                <div className="">Giftcard type</div>
+                                <div className="">Giftcard Brand</div>
 
                                 <select onChange={handleType} value={cards.type} name={`type`} className='w-full bg-secondary' id="">
                                     {giftCardValidations.map((gift, i) => {
@@ -214,6 +234,26 @@ const SellGiftcard = ({ screen, setScreen }) => {
                                     {carderror.status && <div className={`text-${carderror.color} text-sm`}>{carderror.msg}</div>}
                                 </div>
                             </div>
+                            <div className="flex f w-full gap-2">
+                                <div className="">Has PIN?</div>
+                                <select onChange={handleChange}
+                                    className='w-1/4 bg-secondary' name="has_pin" value={cards.has_pin} id="">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                            {cards.has_pin === 'yes' &&
+                                <div className="flex items-center gap-2 ">
+                                    <div className="">Card PIN</div>
+                                    <input type="text"
+                                        className={`outline-none  w-1/2 focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 bg-dark `}
+                                        placeholder={`XXXX`}
+                                        onChange={handlePin}
+                                        name='pin'
+                                        value={cards.pin}
+                                    />
+                                </div>
+                            }
                             <div className="mt-5 w-full">
                                 <button onClick={proceed ? sellCard : checkCode} className={`w-full ${proceed ? 'bg-red-600' : 'bg-ash'}  py-3 font-bold rounded-md`}>{proceed ? 'Sell' : 'Check Code'}</button>
                             </div>
