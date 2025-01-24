@@ -292,7 +292,7 @@ const Crypto = () => {
                             </div>
 
                             <div className="">Kindly pay the above amount to the payment details below</div>
-                            <div className=" w-8/12 px-5 text-dark py-5 bg-[#fafafa] rounded-md lg:w-2/3 mx-auto flex items-center justify-between flex-col ">
+                            <div className="w-11/12 px-5 text-dark py-5 bg-[#fafafa] rounded-md lg:w-2/3 mx-auto flex items-center justify-between flex-col ">
                                 <div className="flex items-center justify-between w-full">
                                     <div className="">Bank Name</div>
                                     <div className="">{BankAcc.name}</div>
@@ -309,7 +309,7 @@ const Crypto = () => {
                                     <div className="">{BankAcc.accountName}</div>
                                 </div>
                             </div>
-                            <button onClick={() => setScreen(4)} className={`bg-green-500 mt-10 hover:bg-lightgreen text-white hover:text-ash lg:w-2/3 py-2 w-8/12 text-lg rounded-xl`}>I have made the payment</button>
+                            <button onClick={() => setScreen(4)} className={`bg-green-500 mt-10 hover:bg-lightgreen text-white hover:text-ash lg:w-2/3 py-3 w-11/12 text-lg rounded-xl`}>I have made the payment</button>
                         </div>
                     </div>
                 }

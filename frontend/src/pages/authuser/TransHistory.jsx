@@ -19,7 +19,7 @@ const TransHistory = () => {
   }
   return (
     <div className="w-11/12 mx-auto">
-      <div className="mb-3 w-1/2 py-4 mx-auto flex items-center justify-center lg:w-2/3 bg-ash rounded-xl">
+      <div className="mt-5 mb-3 w-1/2 py-4 mx-auto flex items-center justify-center lg:w-2/3 bg-ash rounded-xl">
         <div className="flex items-center justify-center flex-col w-full">
           <div className="">Account Balance:</div>
           <div className="text-lightgreen text-2xl font-bold">{currencies[1].symbol}25,000</div>
@@ -38,9 +38,9 @@ const TransHistory = () => {
       <div className="flex lg:items-center lg:flex-row flex-col">
         <div className="text-lightgreen/70 font-semibold capitalize text-sm lg:text-base">Sort transactions by:</div>
         <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 lg:w-3/4 mx-auto  items-center w-full ">
-          {tags.map((tag) => {
+          {tags.map((tag, i) => {
             return (
-              <div onClick={() => CheckTag(tag)} onDoubleClick={() => setActive('')}
+              <div key={i} onClick={() => CheckTag(tag)} onDoubleClick={() => setActive('')}
                 className={`flex items-center justify-center lg:text-center py-1 text-sm rounded-md ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'}   cursor-pointer`}>{tag}</div>
             )
           })}

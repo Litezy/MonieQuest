@@ -52,15 +52,17 @@ const Notification = () => {
                 {notifications.map((item, i) => (
                   <div key={i} className={`p-3 ${item.read === 'true' ? 'bg-primary' : 'bg-[#212144]'} relative w-full h-fit text-sm cursor-pointer rounded-md overflow-hidden shadow_auth`} >
                     <Link to={item.url} className='flex flex-col gap-2'>
-                      <div className='flex gap-1 items-center border-b border-[grey] w-fit'>
-                        <div className='capitalize text-base font-extrabold'>{item.title}</div>
-                        {item.status !== 'failed' ?
-                          <HiCheckCircle className='text-lightgreen' />
-                          :
-                          <MdError className='text-red-600' />}
+                      <div className='flex flex-col gap-3'>
+                        <div className='flex gap-1 items-center border-b border-[grey] w-fit'>
+                          <div className='capitalize text-base font-extrabold'>{item.title}</div>
+                          {item.status !== 'failed' ?
+                            <HiCheckCircle className='text-lightgreen' />
+                            :
+                            <MdError className='text-red-600' />}
+                        </div>
+                        <div className='font-medium'>{item.content}</div>
                       </div>
-                      <div className='font-medium'>{item.content}</div>
-                      <div className=' text-xs text-gray-300 font-bold mt-2'>{moment(item.createdAt).fromNow()}</div>
+                      <div className=' text-xs text-gray-300 font-bold mt-2 ml-auto'>{moment(item.createdAt).fromNow()}</div>
                     </Link>
                     <FaXmark className='text-gray-300 hover:text-lightgreen text-xl p-1 cursor-pointer bg-secondary absolute top-1 right-1 rounded-full' />
                   </div>
