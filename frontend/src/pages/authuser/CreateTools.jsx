@@ -154,7 +154,7 @@ const CreateTools = () => {
                   </div>
                 </div>
               </div>
-              <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-16 rounded-lg outline-none uppercase font-bold mx-auto' onClick={() => setScreen(2)}>continue</button>
+              <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-20 rounded-lg outline-none uppercase font-bold mx-auto' onClick={() => setScreen(2)}>continue</button>
             </div>
           </div>
         }
@@ -177,7 +177,9 @@ const CreateTools = () => {
                     </div>
                     {aiTools.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className={`w-4 h-4 rounded-full cursor-pointer ${select === item ? 'bg-lightgreen' : ' border border-white'}`} onClick={() => setSelect(item)}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        </div>
                         <div className='text-sm capitalize'>{item} {item === 'AI assistants' && <span>(<span className='lowercase'>e.g.,</span> chatbots, writing tools)</span>}</div>
                       </div>
                     ))}
@@ -190,7 +192,9 @@ const CreateTools = () => {
                     </div>
                     {creativeTools.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className={`w-4 h-4 rounded-full cursor-pointer ${select === item ? 'bg-lightgreen' : ' border border-white'}`} onClick={() => setSelect(item)}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
@@ -203,7 +207,9 @@ const CreateTools = () => {
                     </div>
                     {productivityTools.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className={`w-4 h-4 rounded-full cursor-pointer ${select === item ? 'bg-lightgreen' : ' border border-white'}`} onClick={() => setSelect(item)}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
@@ -216,7 +222,9 @@ const CreateTools = () => {
                     </div>
                     {businessResources.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className={`w-4 h-4 rounded-full cursor-pointer ${select === item ? 'bg-lightgreen' : ' border border-white'}`} onClick={() => setSelect(item)}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
@@ -229,7 +237,9 @@ const CreateTools = () => {
                     </div>
                     {learningDevelopment.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className={`w-4 h-4 rounded-full cursor-pointer ${select === item ? 'bg-lightgreen' : ' border border-white'}`} onClick={() => setSelect(item)}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
@@ -242,7 +252,9 @@ const CreateTools = () => {
                     </div>
                     {mediaGenerators.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className={`w-4 h-4 rounded-full cursor-pointer ${select === item ? 'bg-lightgreen' : ' border border-white'}`} onClick={() => setSelect(item)}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
@@ -255,7 +267,9 @@ const CreateTools = () => {
                     </div>
                     {automationTools.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className={`w-4 h-4 rounded-full cursor-pointer ${select === item ? 'bg-lightgreen' : ' border border-white'}`} onClick={() => setSelect(item)}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
@@ -268,7 +282,9 @@ const CreateTools = () => {
                     </div>
                     {techSolutions.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className={`w-4 h-4 rounded-full cursor-pointer ${select === item ? 'bg-lightgreen' : ' border border-white'}`} onClick={() => setSelect(item)}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
@@ -281,7 +297,9 @@ const CreateTools = () => {
                     </div>
                     {eBooks.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className={`w-4 h-4 rounded-full cursor-pointer ${select === item ? 'bg-lightgreen' : ' border border-white'}`} onClick={() => setSelect(item)}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}

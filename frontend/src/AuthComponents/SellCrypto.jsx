@@ -241,7 +241,7 @@ const SellCrypto = () => {
                             </div>
 
                             <div className="">Kindly confirm your bank payment details below</div>
-                            <div className=" w-8/12 px-5 text-dark py-5 bg-[#fafafa] rounded-md lg:w-2/3 mx-auto flex items-center justify-between flex-col ">
+                            <div className="w-11/12 px-5 text-dark py-5 bg-[#fafafa] rounded-md lg:w-2/3 mx-auto flex items-center justify-between flex-col ">
                                 <div className="flex items-center justify-between w-full">
                                     <div className="">Bank Name</div>
                                     <div className="">{BankAcc.name}</div>
@@ -260,7 +260,7 @@ const SellCrypto = () => {
                             </div>
                             <button onClick={() => setScreen(4)}
                                 className={`bg-green-500 mt-10 hover:bg-lightgreen text-white 
-                            hover:text-ash lg:w-2/3 py-2 w-8/12 mx-auto text-lg rounded-xl`}>I confirm my details</button>
+                            hover:text-ash lg:w-2/3 py-3 w-11/12 mx-auto text-lg rounded-xl`}>I confirm my details</button>
                         </div>
                     </div>
                 }

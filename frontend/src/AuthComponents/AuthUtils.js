@@ -18,8 +18,8 @@ export const links = [
     { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange, last:false },
     { label: 'gift cards', url: '/user/giftcards', icon: BsGiftFill, last:false },
     { label: 'profit tools', main: 'user/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox , last:false},
-    { label: 'profile', url: '/user/profile', icon: FaUser },
     { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory, last:false },
+    { label: 'profile', url: '/user/profile', icon: FaUser, last:false },
     { label: 'notifications', url: '/user/notifications', icon:IoNotificationsSharp, last:true  },
     { label: 'leaderboard', url: '/user/leaderboard', icon:MdLeaderboard, last:false  },
 

@@ -64,7 +64,7 @@ const Profile = () => {
 
   return (
     <div>
-      <div className='h-36 w-full -mt-6 py-8 bg-gradient-to-br from-ash to-primary'>
+      <div className='h-36 w-full -mt-10 py-8 bg-gradient-to-br from-ash to-primary'>
         <div className='w-11/12 mx-auto flex gap-2 justify-end items-center text-2xl font-bold uppercase mt-14'>
           <span>profile</span>
           <FaRegUserCircle className='text-lightgreen' />
@@ -129,8 +129,8 @@ const Profile = () => {
               <PasswordInputField label='New password' placeholder='Create new password' name='new_password' value={form.new_password} onChange={formHandler} className={{ icon: '!text-gray-400' }} />
             </div>
           </div>
-          <div>
-            <FormButton title='Save changes' className='!max-w-sm' />
+          <div className='grid md:grid-cols-2 grid-cols-1'>
+            <FormButton title='Save changes'/>
           </div>
           <div className='flex flex-col gap-6'>
             <div className='text-xl capitalize font-medium text-lightgreen'>add a bank account</div>

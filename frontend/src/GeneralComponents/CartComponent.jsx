@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import emptybox from '../assets/images/emptybox.png'
 import FormInput from '../utils/FormInput'
-import { ErrorAlert } from '../utils/pageUtils'
+import { ErrorAlert, SuccessAlert } from '../utils/pageUtils'
 import { MdContentCopy } from "react-icons/md";
 import { SlClock } from "react-icons/sl";
 import Loading from './Loading';
@@ -12,7 +12,6 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     const [email, setEmail] = useState('')
     const [screen, setScreen] = useState(activeScreen || 1)
     const [loading, setLoading] = useState(false)
-    const [copy, setCopy] = useState(false)
 
 
     let oldTotalPrice = 0
@@ -23,11 +22,8 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     ))
 
     const copyFunction = () => {
-        setTimeout(() => {
-            setCopy(false)
-        }, 2000)
         navigator.clipboard.writeText('8260456789')
-        setCopy(true)
+        SuccessAlert('Account number copied successfully')
     }
 
     const RemoveCart = (item) => {
@@ -144,7 +140,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                                 <span>Account number</span>
                                                 <div className='flex gap-2 items-center'>
                                                     <span>8260456789</span>
-                                                    <div className={`cursor-pointer ${copy && 'text-lightgreen'}`} onClick={copyFunction}>
+                                                    <div className='cursor-pointer' onClick={copyFunction}>
                                                         <MdContentCopy />
                                                     </div>
                                                 </div>
