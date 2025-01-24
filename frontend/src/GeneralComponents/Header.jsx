@@ -8,24 +8,44 @@ import logo from '../assets/images/logo.png'
 const pageLinks = [
   { path: 'home', url: '/' },
   { path: 'airdrops', url: '/airdrops' },
+  { path: 'about us', url: '/aboutus' },
   { path: 'profit tools', url: '/products' },
   { path: 'blogs', url: '/blogs' },
+  { path: 'faqs', url: '/faqs' },
+  { path: 'terms of service', url: '/terms_of_service' },
+  { path: 'privacy policy', url: '/privacy_policy' },
 ]
 
 const Header = () => {
   const [menu, setMenu] = useState(false)
+  const [opensub,setOpenSub] = useState(false)
   const location = useLocation()
 
+  const changeSub = ()=>{
+    setOpenSub((prev) =>{
+      return !prev
+    })
+  }
   return (
     <div className='fixed top-0 left-0 w-full bg-dark z-50 border-b-2 border-primary'>
       <div className='flex justify-between items-center w-11/12 mx-auto'>
         <Link to='/' onClick={MoveToTop} className='uppercase text-2xl font-extrabold italic'>
           <img alt='moniequest logo' src={logo} className='h-16 w-auto'></img>
         </Link>
-        <div className='lg:flex gap-2 hidden'>
-          {pageLinks.map((item, i) => (
+        <div className='lg:flex gap-2 hidden relative'>
+          {pageLinks.slice(0,5).map((item, i) => (
             <Link key={i} to={item.url} onClick={MoveToTop} className={`hover:text-lightgreen text-white cursor-pointer capitalize px-3 ${location.pathname === item.url && 'font-bold border-b border-bg-green'}`}>{item.path}</Link>
           ))}
+          <div onClick={changeSub} className="text-white cursor-pointer">Others</div>
+          {opensub && 
+          <div className="h-fit py-2 px-2 w-fit bg-primary absolute top-8 rounded-md -right-5">
+            <div className="flex flex-col">
+            {pageLinks.slice(5,pageLinks.length).map((item, i) => (
+            <Link key={i} to={item.url} onClick={MoveToTop} className={`hover:text-lightgreen text-white cursor-pointer capitalize px-3 ${location.pathname === item.url && 'font-bold border-b border-bg-green'}`}>{item.path}</Link>
+          ))}
+            </div>
+          </div>
+          }
         </div>
         <div className='lg:flex gap-4 hidden'>
           <Link to='/login' onClick={MoveToTop}>

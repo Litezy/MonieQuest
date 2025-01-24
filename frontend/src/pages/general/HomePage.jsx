@@ -3,7 +3,7 @@ import PageLayout from '../../GeneralComponents/PageLayout'
 import AirdropDiv from '../../GeneralComponents/AirdropDiv';
 import FormButton from '../../utils/FormButton';
 import { Link } from 'react-router-dom';
-import { MoveToTop } from '../../utils/pageUtils';
+import { examplefaqs, MoveToTop } from '../../utils/pageUtils';
 import { FiPlus, FiMinus } from "react-icons/fi";
 import Testimonials from '../../GeneralComponents/Testimonials';
 
@@ -160,20 +160,24 @@ const HomePage = () => {
               <div className='border-t-4 border-zinc-500 md:w-16 w-10 absolute top-0 right-0'></div>
               <div className='border-b-4 border-zinc-500 md:w-16 w-10 absolute -bottom-2 left-0'></div>
             </div>
-            <div className='h-fit w-full md:px-20 xl:px-28 px-6 pt-10 pb-16 bg-gradient-to-tr from-primary from-10% to-secondary  text-white' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
+            <div className='h-fit w-full md:px-20 xl:px-28 px-6 pt-10 pb-10 bg-gradient-to-tr from-primary from-10% to-secondary  text-white' data-aos="fade-zoom-in" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600">
               <div className='text-center md:text-4xl text-2xl font-bold  capitalize'>Trade, upload and earn with us</div>
-              <div className='text-center text-semi-white md:text-base text-sm font-semibold md:w-3/4 mx-auto mt-4'>Below are some of the frequently asked questions on our platform, if you have any more questions, kindly contact us via support.</div>
+              <div className='text-center text-semi-white md:text-lg text-sm font-semibold md:w-3/4 mx-auto mt-4'>Below are some of the frequently asked questions on our platform, if you have any more questions, kindly goto view more to see all <Link to={`/faqs`} className='text-lightgreen'>FAQS</Link></div>
               <div className='flex flex-col md:gap-10 gap-7 mt-10'>
-                {new Array(6).fill(0).map((item, i) => (
+                {examplefaqs.map((item, i) => (
                   <div className={`w-full h-fit flex flex-col gap-4`} key={i}>
                     <div onClick={() => handleQuestions(i)} className='flex justify-between gap-4 items-center w-full h-fit cursor-pointer md:text-2xl text-lg font-bold'>
-                      <span>Lorem ipsum dolor sit, amet consectetur adip</span>
-                      <div className='md:text-2xl text-lg'>{faq !== i ? <FiPlus /> : <FiMinus />}</div>
+                      <span className='text-zinc-400'>{item.title}</span>
+                      <div className='md:text-2xl text-lg text-lightgreen'>{faq !== i ? <FiPlus /> : <FiMinus />}</div>
                     </div>
-                    <div className={`md:text-base text-sm border-b pb-2 ${faq === i ? 'block' : 'hidden'}`}>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab dicta aliquid maxime placeat ullam autem non facere harum quas, aliquam sint voluptatem quasi adipis.</div>
+                    <div className={`md:text-base text-sm border-b pb-2 ${faq === i ? 'block' : 'hidden'}`}>{item.desc}</div>
                   </div>
                 ))
                 }
+
+              </div>
+              <div className="w-full ml-auto mt-10">
+                <Link to={`/faqs`} className='w-fit px-4 py-2 rounded-xl bg-ash '>view more</Link>
               </div>
             </div>
           </div>

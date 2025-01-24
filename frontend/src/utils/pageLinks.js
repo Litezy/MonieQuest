@@ -23,6 +23,7 @@ import Notification from "../pages/authuser/Notification";
 import CreateTools from "../pages/authuser/CreateTools";
 import ProfitTools from "../pages/authuser/ProfitTools";
 import Leaderboards from "../AuthComponents/Leaderboards";
+import FAQS from "../pages/general/FAQS";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -37,10 +38,11 @@ export const GeneralPagesLinks = [
     { path: '/products', component: ProductsPage },
     { path: '/products/:id/:slug', component: SingleProductPage },
     { path: '/contact', component: ContactPage },
-    { path: '/about', component: AboutPage },
+    { path: '/aboutus', component: AboutPage },
     { path: '/blogs', component: Blogs },
-    { path: '/terms', component: TermsPage },
-    { path: '/privacy-policy', component: PrivacyPolicy },
+    { path: '/terms_of_service', component: TermsPage },
+    { path: '/faqs', component: FAQS },
+    { path: '/privacy_policy', component: PrivacyPolicy },
 ]
 
 export const AuthPagesLinks = [
