@@ -46,7 +46,7 @@ const AuthPageLayout = ({ children }) => {
             })}
           </div>
         </div>
-        <div className='w-full bg-[#141523] pt-10 pb-20 ml-[20%] lg:pb-10 lg:w-[80%]  overflow-y-auto overflow-x-hidden text-white move min-h-[100dvh]'>
+        <div className='w-full bg-[#141523] pt-10 pb-20 lg:ml-[20%] lg:pb-10 lg:w-[80%]  overflow-y-auto overflow-x-hidden text-white move min-h-[100dvh]'>
           {children}
         </div>
       </div>

@@ -5,6 +5,7 @@ import { CgToolbox } from "react-icons/cg";
 import { GoHistory } from "react-icons/go";
 import { FaUser } from "react-icons/fa";
 import { IoNotificationsSharp } from "react-icons/io5";
+import { BiMoneyWithdraw } from "react-icons/bi";
 
 
 
@@ -18,6 +19,7 @@ export const links = [
     { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange, last:false },
     { label: 'gift cards', url: '/user/giftcards', icon: BsGiftFill, last:false },
     { label: 'profit tools', main: 'user/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox , last:false},
+    { label: 'bank withdrawal', url: '/user/bank_withdrawal', icon:BiMoneyWithdraw, last:false  },
     { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory, last:false },
     { label: 'profile', url: '/user/profile', icon: FaUser, last:false },
     { label: 'notifications', url: '/user/notifications', icon:IoNotificationsSharp, last:true  },
@@ -231,3 +233,49 @@ export const giftCardValidations = [
     },
     
 ]
+
+export const banksArr = [
+    "AB Microfinance Bank",
+    "Access Bank",
+    "Accion Microfinance Bank",
+    "ALAT by Wema Bank",
+    "Bank of Agriculture (BOA)",
+    "Bank of Industry (BOI)",
+    "Carbon",
+    "Chipper Cash",
+    "Coronation Merchant Bank",
+    "Development Bank of Nigeria (DBN)",
+    "Eyowo",
+    "FairMoney",
+    "FCMB (First City Monument Bank)",
+    "FBNQuest Merchant Bank",
+    "First Bank of Nigeria (FBN)",
+    "Flutterwave",
+    "Fidelity Bank",
+    "GTBank (Guaranty Trust Bank)",
+    "Jaiz Bank",
+    "Kuda Bank",
+    "LAPO Microfinance Bank",
+    "Moniepoint",
+    "NIRSAL Microfinance Bank",
+    "Opay",
+    "PalmPay",
+    "Paystack",
+    "Polaris Bank",
+    "Rand Merchant Bank (RMB Nigeria)",
+    "Stanbic IBTC Bank",
+    "Sterling Bank",
+    "Union Bank of Nigeria",
+    "United Bank for Africa (UBA)",
+    "Unity Bank",
+    "VBank",
+    "Wema Bank",
+    "Zenith Bank"
+  ];
+
+  export const bankacc = {
+    bank:'Zenith Bank',
+    account_name:'Basit MoneyQuest',
+    account_number:'1234567890',
+  }
+  

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { FaCoins } from "react-icons/fa6";
 import CarouselComp from '../../GeneralComponents/Carousel';
 import iconImg from '../../assets/images/db_icon.png'
 import TradingChart from '../../GeneralComponents/TradingChart';
 import SelectComp from '../../GeneralComponents/SelectComp'
-import { MoveToTop } from '../../utils/pageUtils';
 import { currencies } from '../../AuthComponents/AuthUtils';
 
 const calender = [

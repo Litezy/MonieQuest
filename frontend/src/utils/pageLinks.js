@@ -24,6 +24,7 @@ import CreateTools from "../pages/authuser/CreateTools";
 import ProfitTools from "../pages/authuser/ProfitTools";
 import Leaderboards from "../pages/authuser/Leaderboards";
 import FAQS from "../pages/general/FAQS";
+import BankWithdrawal from "../pages/authuser/BankWithdrawal";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -55,5 +56,6 @@ export const AuthPagesLinks = [
     { path: '/user/transactions_history', component: TransHistory},
     { path: '/user/notifications', component: Notification},
     { path: '/user/leaderboard', component: Leaderboards},
+    { path: '/user/bank_withdrawal', component: BankWithdrawal},
 
 ]
