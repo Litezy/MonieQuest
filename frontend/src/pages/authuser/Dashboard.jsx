@@ -5,6 +5,7 @@ import iconImg from '../../assets/images/db_icon.png'
 import TradingChart from '../../GeneralComponents/TradingChart';
 import SelectComp from '../../GeneralComponents/SelectComp'
 import { MoveToTop } from '../../utils/pageUtils';
+import { currencies } from '../../AuthComponents/AuthUtils';
 
 const calender = [
   "daily", "monthly", "yearly"
@@ -28,21 +29,21 @@ const Dashboard = () => {
           <div className='flex justify-between gap-4 items-center'>
             <div className='flex flex-col gap-3'>
               <div className='text-lightgreen capitalize'>current balance</div>
-              <div className='md:text-5xl text-4xl font-bold'>$78,224.59</div>
+              <div className='md:text-5xl text-4xl font-bold'>{currencies[1].symbol}78,000</div>
               <div className='flex md:gap-10 gap-6 items-center mt-2'>
                 <div className='flex flex-col gap-1'>
                   <div className='flex gap-1 items-center'>
-                    <div className='w-3.5 h-3.5 bg-white rounded-full'></div>
+                    <div className='w-3.5 h-3.5 bg-lightgreen rounded-full'></div>
                     <div className='md:text-sm text-xs capitalize font-medium'>total deposit</div>
                   </div>
-                  <div className='font-bold'>$238,224.60</div>
+                  <div className='font-bold'>{currencies[1].symbol}238,224.60</div>
                 </div>
                 <div className='flex flex-col gap-1 border-l-2 md:pl-10 pl-6'>
                   <div className='flex gap-1 items-center'>
-                    <div className='w-3.5 h-3.5 bg-white rounded-full'></div>
+                    <div className='w-3.5 h-3.5 bg-red-600 rounded-full'></div>
                     <div className='md:text-sm text-xs capitalize font-medium'>outflow</div>
                   </div>
-                  <div className='font-bold'>$160,000.01</div>
+                  <div className='font-bold'>{currencies[1].symbol}160,000.01</div>
                 </div>
               </div>
             </div>

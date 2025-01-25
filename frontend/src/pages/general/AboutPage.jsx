@@ -8,7 +8,7 @@ const AboutPage = () => {
       <div className='pb-20 bg-dark w-full text-gray-200'>
         <div className='pageBg'>
           <div className='w-full bg-[#212134ea] py-10'>
-            <div className='text-3xl md:text-4xl font-bold text-white text-center capitalize'><span className='text-lightgreen'>MoneyQuest:</span> Redefining Earning in the Digital Age</div>
+            <div className='text-3xl md:text-4xl font-bold text-white text-center capitalize'><span className='text-lightgreen'>MonieQuest:</span> Redefining Earning in the Digital Age</div>
           </div>
 
         </div>
