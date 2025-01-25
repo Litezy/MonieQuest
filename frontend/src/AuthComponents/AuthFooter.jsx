@@ -7,6 +7,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { GoHistory } from "react-icons/go";
 import { FaUser } from "react-icons/fa";
 import { MoveToTop } from '../utils/pageUtils';
+import { CiMenuKebab } from "react-icons/ci";
 
 
 const AuthFooter = () => {
@@ -38,11 +39,20 @@ const AuthFooter = () => {
             symbol: FaUser,
             url: '/user/profile'
         },
+        
+        {
+            name: 'more',
+            symbol: CiMenuKebab ,
+            url: '/user/transactions_history'
+        }
+    ]
+
+    const extras = [
         {
             name: 'transaction history',
             symbol: GoHistory,
             url: '/user/transactions_history'
-        }
+        },
     ]
     const location = useLocation()
     const pathName = location.pathname
