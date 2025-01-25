@@ -13,6 +13,8 @@ const AirdropsPage = () => {
   const [search, setSearch] = useState('')
   const [dataLoading, setDataLoading] = useState(true)
 
+  const options = ["hello", "hey", "yeah"]
+
   setTimeout(() => {
     setDataLoading(false)
   }, 2000)
@@ -72,15 +74,15 @@ const AirdropsPage = () => {
                 <div className='flex lg:flex-row flex-col lg:gap-8 gap-4 items-center justify-center'>
                   <div className='capitalize font-bold'>filter here:</div>
                   <div className='grid md:grid-cols-4 grid-cols-2 gap-4 items-center'>
-                    <div className='bg-[lightgrey] w-28 h-fit rounded-full flex justify-between items-center text-[#585858] p-3 font-medium'>
+                    <div className='bg-[lightgrey] w-28 h-fit rounded-full flex justify-between items-center text-[#585858] p-3 font-semibold'>
                       <span>KYC</span>
                       <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='cursor-pointer'></input>
                     </div>
-                    <SelectComp title='Status' options={["hello", "hey", "yeah"]} />
-                    <SelectComp title='Categories' options={["hello", "hey", "yeah"]} />
-                    <SelectComp title='Blockchain' options={["hello", "hey", "yeah"]} />
+                    <SelectComp title='Status' options={options} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} />
+                    <SelectComp title='Categories' options={options} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} />
+                    <SelectComp title='Blockchain' options={options} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} />
                   </div>
-                  <button className='outline-none w-fit h-fit bg-lightgreen text-black rounded-full py-3 px-8 text-sm font-medium'>Search</button>
+                  <button className='outline-none w-fit h-fit bg-lightgreen text-black rounded-full py-3 px-8'>Search</button>
                 </div>
                 <div className='flex flex-col gap-12'>
                   <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>

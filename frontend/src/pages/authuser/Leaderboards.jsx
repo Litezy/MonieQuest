@@ -7,6 +7,7 @@ const Leaderboards = () => {
     useEffect(()=>{
      setTimeout(()=>{setLoading(false)},2000)
     },[])
+    
     return (
         <div className='w-11/12 mx-auto'>
             <div className="flex justify-center w-full  items-center gap-3 mb-10">

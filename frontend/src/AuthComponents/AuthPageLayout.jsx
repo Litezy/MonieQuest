@@ -4,7 +4,7 @@ import { links } from './AuthUtils'
 import { Link, useLocation } from 'react-router-dom'
 import logo from '../assets/images/logo.png'
 import user from '../assets/images/customer1.jfif'
-
+import { MoveToTop, MoveToTopAuth } from '../utils/pageUtils'
 
 
 const AuthPageLayout = ({ children }) => {
@@ -15,12 +15,12 @@ const AuthPageLayout = ({ children }) => {
 
 
   return (
-    <div className='w-full relative'>
+    <div className='w-full'>
       <div className="flex w-full bg-[#1d1e30]">
         <div
           data-aos="zoom-in"
           data-aos-delay="100"
-          className="h-screen hidden lg:block lg:w-[20%] pt-10">
+          className="h-screen hidden lg:block lg:w-[20%] pt-10 overflow-y-auto scrollHide">
           <div>
             <img src={logo} alt='moniequest-logo' className='h-14 w-auto mx-auto'></img>
           </div>
@@ -31,7 +31,7 @@ const AuthPageLayout = ({ children }) => {
           <div className="lg:flex hidden py-10 flex-col items-start px-5 gap-4">
             {links.map((link, i) => {
               return (
-                <Link to={link.url}
+                <Link onClick={MoveToTop} to={link.url}
                   className={` py-2 group text-base flex items-center gap-2 px-5 w-full capitalize ${link.label === 'profit tools' ? pathName.includes(link.main) ? active : nonactive : pathName === link.url ? active : nonactive} `} key={i}>
                   <div className="relative">
                     {link.last && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}
@@ -43,14 +43,13 @@ const AuthPageLayout = ({ children }) => {
             })}
           </div>
         </div>
-        <div className='w-full bg-[#141523] pt-10 pb-20 lg:pb-10 lg:w-[80%] h-[100dvh] overflow-y-auto text-white'>
+        <div className='w-full bg-[#141523] pt-10 pb-20 lg:pb-10 lg:w-[80%] h-[100dvh] overflow-y-auto overflow-x-hidden text-white move'>
           {children}
         </div>
       </div>
       <div className="lg:hidden">
         <AuthFooter />
       </div>
-
     </div>
   )
 }

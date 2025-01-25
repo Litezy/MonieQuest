@@ -1,14 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaCoins } from "react-icons/fa6";
 import CarouselComp from '../../GeneralComponents/Carousel';
+import iconImg from '../../assets/images/db_icon.png'
+import TradingChart from '../../GeneralComponents/TradingChart';
+import SelectComp from '../../GeneralComponents/SelectComp'
+
+const calender = [
+  "daily", "monthly", "yearly"
+]
+const tradeOverviewFilter = [
+  "All Coins", "All Gift Card", "All Products", "All Categories", "Recent Trades"
+]
+
+const tradingAnalyticFilter = [
+  "Popular", "Top Gainers", "Top Losers", "Most Traded"
+]
 
 
 const Dashboard = () => {
+  const [active, setActive] = useState(calender[0])
+
   return (
     <div className="w-11/12 mx-auto">
-      <div className='grid md:grid-cols-6 grid-cols-1 gap-6'>
-        <div className='md:col-span-4 col-span-1 bg-primary w-full h-fit pt-5 pb-10 px-5 overflow-hidden'>
-          <div className='flex justify-between items-center gap-4'>
+      <div className='grid md:grid-cols-6 grid-cols-1 gap-6 h-fit'>
+        <div className='md:col-span-4 col-span-1 bg-primary w-full h-fit px-6 md:pt-2 pt-4 md:pb-4 pb-6  overflow-hidden'>
+          <div className='flex justify-between gap-4 items-center'>
             <div className='flex flex-col gap-3'>
               <div className='text-lightgreen capitalize'>current balance</div>
               <div className='md:text-5xl text-4xl font-bold'>$78,224.59</div>
@@ -29,19 +45,42 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className='text-yellow-300 md:text-[9rem] text-7xl md:pr-4 pr-0'>
-              <FaCoins />
+            <div>
+              <img src={iconImg} alt='dashboard_icon' className='md:h-44 h-20 w-auto'></img>
             </div>
           </div>
         </div>
-        <div className='md:col-span-2 col-span-1 h-52'>
+        <div className='md:col-span-2 col-span-1 md:h-full h-56'>
           <CarouselComp />
         </div>
       </div>
-      <div className='grid md:grid-cols-2 grid-cols-1 gap-6 mt-10'>
-        <div>{/**crypto api here*/}</div>
+      <div className='grid md:grid-cols-2 grid-cols-1 gap-6 mt-12'>
+        <div className='flex flex-col gap-2'>
+          <div className='flex justify-between gap-4 items-start'>
+            <div className='text-2xl capitalize font-bold'>trading analytics</div>
+            <SelectComp options={tradingAnalyticFilter} style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem'}} />
+          </div>
+          <div className='grid grid-cols-2 gap-4'>
+            {new Array(4).fill(0).map((_, i) => (
+              <div className='w-full bg-primary h-44' key={i}></div>
+            ))}
+          </div>
+        </div>
         <div className='flex flex-col gap-4'>
           <div className='text-2xl capitalize font-bold'>your trading overview</div>
+          <div className='bg-primary h-fit w-full px-4 pt-4 flex flex-col gap-2 overflow-hidden'>
+            <div className='flex justify-between gap-2'>
+              <SelectComp options={tradeOverviewFilter} style={{ bg: '#171828', color: 'lightgrey', font: '0.8rem'}} />
+              <div className='flex items-center'>
+                {calender.map((item, i) => (
+                  <div key={i} onClick={() => setActive(item)} className={`w-fit h-fit md:px-4 px-3 py-1.5 md:text-sm text-xs capitalize cursor-pointer ${active === item && 'bg-[#143f75] rounded-full'}`}>{item}</div>
+                ))}
+              </div>
+            </div>
+            <div className='flex items-center'>
+              <TradingChart />
+            </div>
+          </div>
         </div>
       </div>
     </div>

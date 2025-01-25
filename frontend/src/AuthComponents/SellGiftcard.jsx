@@ -154,7 +154,7 @@ const SellGiftcard = ({ screen, setScreen }) => {
         if (!cards.code) return ErrorAlert('giftcard code is missing, try again')
         if (cards.has_pin === 'yes' && cards.pin === '') return ErrorAlert('giftcard pin is missing, try again')
         setLoading(true)
-        setCards({...cards,type: '',amount: '',code: '',pin: '',has_pin: 'no'})
+        setCards({ ...cards, type: '', amount: '', code: '', pin: '', has_pin: 'no' })
         return setTimeout(() => {
             setLoading(false)
             setScreen(2)
@@ -180,7 +180,7 @@ const SellGiftcard = ({ screen, setScreen }) => {
                             </div>
                         </ModalLayout>
                     }
-                    <div className="w-11/12 lg:w-2/3  mx-auto">
+                    <div className="w-full lg:w-2/3 mx-auto">
 
                         <div className="w-full flex items-start flex-col gap-4">
                             <div className="flex items-start gap-2 flex-col w-full">
@@ -259,7 +259,8 @@ const SellGiftcard = ({ screen, setScreen }) => {
                             </div>
                         </div>
                     </div>
-                </div> :
+                </div>
+                :
                 <div className="w-full">
                     <div className='flex flex-col gap-7 items-center max-w-md mx-auto mt-20'>
                         <SlClock className='text-8xl' />

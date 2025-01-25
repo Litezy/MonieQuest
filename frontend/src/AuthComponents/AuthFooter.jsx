@@ -6,6 +6,7 @@ import { CgToolbox } from "react-icons/cg";
 import { Link, useLocation } from 'react-router-dom';
 import { GoHistory } from "react-icons/go";
 import { FaUser } from "react-icons/fa";
+import { MoveToTop } from '../utils/pageUtils';
 
 
 const AuthFooter = () => {
@@ -61,7 +62,7 @@ const AuthFooter = () => {
                                 pathName === item.url &&
                                 <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full "></div>
                             }
-                            <Link  to={item.url}
+                            <Link to={item.url} onClick={MoveToTop}
                                 className={` group-hover:text-lightgreen px-2  ${item.name === 'profit tools' ? pathName.includes(item.main) ? active : nonactive : pathName === item.url ? active : nonactive} cursor-pointer flex items-center flex-col gap-1"`}>
                                 <div className="text-[1.5rem]  ">{<item.symbol />}</div>
                             </Link>

@@ -100,7 +100,7 @@ const Profile = () => {
             <span>Log out</span>
           </div>
         </div>
-        <div className='flex flex-col gap-8'>
+        <form className='flex flex-col gap-8'>
           <div className='flex flex-col gap-6 mt-16'>
             <div className='text-xl capitalize font-medium text-lightgreen'>personal details</div>
             <div className='grid md:grid-cols-2 grid-cols-1 gap-6'>
@@ -125,8 +125,8 @@ const Profile = () => {
           <div className='flex flex-col gap-6'>
             <div className='text-xl capitalize font-medium text-lightgreen'>password & security</div>
             <div className='grid md:grid-cols-2 grid-cols-1 gap-6'>
-              <PasswordInputField label='Old password' placeholder='Enter old password' name='old_password' value={form.old_password} onChange={formHandler} className={{ icon: '!text-gray-400' }} />
-              <PasswordInputField label='New password' placeholder='Create new password' name='new_password' value={form.new_password} onChange={formHandler} className={{ icon: '!text-gray-400' }} />
+              <PasswordInputField label='Old password' placeholder='Enter old password' name='old_password' value={form.old_password} onChange={formHandler} className={{ icon: '!text-gray-400' }}  />
+              <PasswordInputField label='New password' placeholder='Create new password' name='new_password' value={form.new_password}  onChange={formHandler} className={{ icon: '!text-gray-400' }} />
             </div>
           </div>
           <div className='grid md:grid-cols-2 grid-cols-1'>
@@ -138,10 +138,10 @@ const Profile = () => {
               <FormInput placeholder='Bank name' name='bank' value={form.bank} onChange={formHandler} className='!bg-secondary !w-60' border={false} />
               <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={formHandler} className='!bg-secondary !w-60' border={false} />
               <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!bg-secondary !w-60' border={false} />
-              <FormButton title='Save' className='!py-3 !text-base mt-2' />
+              <FormButton title='Save' className='!py-3 !text-base mt-2' type='button' />
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   )

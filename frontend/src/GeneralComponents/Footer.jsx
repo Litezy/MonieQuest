@@ -21,8 +21,9 @@ const Socials = [
 const pageLinks = [
   { path: 'about us', url: '/about' },
   { path: 'contact us', url: '/contact' },
-  { path: 'terms & conditions', url: '/terms' },
-  { path: 'privacy policy', url: '/privacy-policy' },
+  { path: 'FAQS', url: '/faqs' },
+  { path: 'terms & conditions', url: '/terms_of_service' },
+  { path: 'privacy policy', url: '/privacy_policy' },
 ]
 
 const Footer = () => {
@@ -94,7 +95,7 @@ const Footer = () => {
           </div>
           <div className='w-full border-b border-b-ash h-fit py-4 text-white'>
             <div className='w-11/12 mx-auto'>
-              <div className='grid md:grid-cols-4 grid-cols-2 gap-4'>
+              <div className='grid md:grid-cols-5 grid-cols-2 gap-4'>
                 {pageLinks.map((item, i) => (
                   <Link to={item.url} key={i} className='hover:text-lightgreen text-sm w-fit capitalize' onClick={MoveToTop}>{item.path}</Link>
                 ))}

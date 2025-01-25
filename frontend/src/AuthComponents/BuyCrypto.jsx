@@ -11,7 +11,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../GeneralComponents/Loading';
 
 
-const Crypto = () => {
+const BuyCrypto = () => {
     const [screen, setScreen] = useState(1)
     const [loading, setLoading] = useState(false)
     const [modal, setModal] = useState(false)
@@ -128,7 +128,7 @@ const Crypto = () => {
                 {screen === 1 &&
                     <div className="w-full  lg:w-2/3 mx-auto flex items-center justify-center">
                         <div className="flex w-full  mx-auto mt-5 items-start gap-5 flex-col">
-                            {/* <div className="text-center font-bold text-green-500 w-full">Buy Crypto</div> */}
+                            {/* <div className="text-center font-bold text-green-500 w-full">Buy Buy</div> */}
                             <div className="flex items-start gap-2 flex-col w-full">
                                 <div className="font-bold text-lg">Coin Type:</div>
                                 <select onChange={(e) => setForms({ ...forms, type: e.target.value })} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
@@ -340,4 +340,4 @@ const Crypto = () => {
     )
 }
 
-export default Crypto
+export default BuyCrypto

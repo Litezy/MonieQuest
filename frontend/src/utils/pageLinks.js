@@ -22,7 +22,7 @@ import VerifyAccount from "../pages/general/VerifyAccount";
 import Notification from "../pages/authuser/Notification";
 import CreateTools from "../pages/authuser/CreateTools";
 import ProfitTools from "../pages/authuser/ProfitTools";
-import Leaderboards from "../AuthComponents/Leaderboards";
+import Leaderboards from "../pages/authuser/Leaderboards";
 import FAQS from "../pages/general/FAQS";
 
 export const GeneralPagesLinks = [
@@ -38,7 +38,7 @@ export const GeneralPagesLinks = [
     { path: '/products', component: ProductsPage },
     { path: '/products/:id/:slug', component: SingleProductPage },
     { path: '/contact', component: ContactPage },
-    { path: '/aboutus', component: AboutPage },
+    { path: '/about', component: AboutPage },
     { path: '/blogs', component: Blogs },
     { path: '/terms_of_service', component: TermsPage },
     { path: '/faqs', component: FAQS },

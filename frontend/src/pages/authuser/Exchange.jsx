@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Crypto from '../../AuthComponents/Crypto'
 import SellCrypto from '../../AuthComponents/SellCrypto'
+import BuyCrypto from '../../AuthComponents/BuyCrypto'
 
 const Exchange = () => {
   const tags = ['BUY', 'SELL']
@@ -19,7 +19,7 @@ const Exchange = () => {
         </div>
         {active === 'BUY' ?
           <div className="">
-            <Crypto />
+            <BuyCrypto />
           </div>
           :
           <div className="">

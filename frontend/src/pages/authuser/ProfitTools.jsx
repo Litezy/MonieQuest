@@ -1,53 +1,68 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout'
 import ToolComp from '../../AuthComponents/ToolComp';
 import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
+const records = [
+    {
+        gen_id: '123456789',
+        title: 'acrobat',
+        catgory: 'AI assistant',
+        price: 100,
+        link: 'https://app.gradient.network',
+        contact_details: '09011234567',
+        status: 'approved'
+    },
+    {
+        gen_id: '123456789',
+        title: 'playwrite',
+        catgory: 'font',
+        price: 20,
+        link: 'https://app.gradient.network',
+        contact_details: '09011234567',
+        status: 'declined'
+    },
+    {
+        gen_id: '123456789',
+        title: 'the grinch mas',
+        catgory: 'graphics',
+        price: 50,
+        link: 'https://app.gradient.network',
+        contact_details: '09011234567',
+        status: 'pending'
+    }
+]
 
 const ProfitTools = () => {
     const tags = ['all', 'pending', 'approved', 'declined']
     const [active, setActive] = useState(tags[0])
     const [search, setSearch] = useState('')
     const [dataLoading, setDataLoading] = useState(true)
-    const [allTools, setAllTools] = useState([
-        {
-            gen_id: '123456789',
-            title: 'acrobat',
-            catgory: 'AI assistant',
-            price: 100,
-            link: 'https://app.gradient.network',
-            contact_details: '09011234567',
-            status: 'approved'
-        },
-        {
-            gen_id: '123456789',
-            title: 'playwrite',
-            catgory: 'font',
-            price: 20,
-            link: 'https://app.gradient.network',
-            contact_details: '09011234567',
-            status: 'declined'
-        },
-        {
-            gen_id: '123456789',
-            title: 'the grinch mas',
-            catgory: 'graphics',
-            price: 50,
-            link: 'https://app.gradient.network',
-            contact_details: '09011234567',
-            status: 'pending'
-        }
-    ])
+    const [allTools, setAllTools] = useState([])
+
+    useEffect(() => {
+        setAllTools(records);
+    }, []);
 
     setTimeout(() => {
         setDataLoading(false)
     }, 2000)
 
+    const filterTools = () => {
+        const mainData = records
+        if (search.length > 1) {
+            const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
+            setAllTools(filtered)
+        } else {
+            setAllTools(mainData)
+        }
+    }
+
     return (
         <ProfitToolsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
-                    <FormInput placeholder='Search by type and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" />
+                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg"  onKeyUp={filterTools}/>
                     <div className="absolute top-5 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>
@@ -71,7 +86,7 @@ const ProfitTools = () => {
                         </div>
                         :
                         <>
-                            {allTools.length > 0 &&
+                            {allTools.length > 0 ?
                                 <>
                                     <div className='flex flex-col gap-4'>
                                         {active === 'all' &&
@@ -104,6 +119,8 @@ const ProfitTools = () => {
                                         }
                                     </div>
                                 </>
+                                :
+                                <div className="w-full text-gray-400 text-center">No results found...</div>
                             }
                         </>
                     }
