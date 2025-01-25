@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaCoins } from "react-icons/fa6";
 import CarouselComp from '../../GeneralComponents/Carousel';
 import iconImg from '../../assets/images/db_icon.png'
 import TradingChart from '../../GeneralComponents/TradingChart';
 import SelectComp from '../../GeneralComponents/SelectComp'
+import { MoveToTop } from '../../utils/pageUtils';
 
 const calender = [
   "daily", "monthly", "yearly"
@@ -58,7 +59,7 @@ const Dashboard = () => {
         <div className='flex flex-col gap-2'>
           <div className='flex justify-between gap-4 items-start'>
             <div className='text-2xl capitalize font-bold'>trading analytics</div>
-            <SelectComp options={tradingAnalyticFilter} style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem'}} />
+            <SelectComp options={tradingAnalyticFilter} style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem' }} />
           </div>
           <div className='grid grid-cols-2 gap-4'>
             {new Array(4).fill(0).map((_, i) => (
@@ -70,7 +71,7 @@ const Dashboard = () => {
           <div className='text-2xl capitalize font-bold'>your trading overview</div>
           <div className='bg-primary h-fit w-full px-4 pt-4 flex flex-col gap-2 overflow-hidden'>
             <div className='flex justify-between gap-2'>
-              <SelectComp options={tradeOverviewFilter} style={{ bg: '#171828', color: 'lightgrey', font: '0.8rem'}} />
+              <SelectComp options={tradeOverviewFilter} style={{ bg: '#171828', color: 'lightgrey', font: '0.8rem' }} />
               <div className='flex items-center'>
                 {calender.map((item, i) => (
                   <div key={i} onClick={() => setActive(item)} className={`w-fit h-fit md:px-4 px-3 py-1.5 md:text-sm text-xs capitalize cursor-pointer ${active === item && 'bg-[#143f75] rounded-full'}`}>{item}</div>

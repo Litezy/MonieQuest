@@ -1,6 +1,5 @@
 import { toast } from 'sonner'
 import customer1 from '../assets/images/customer1.jfif'
-import { useEffect } from 'react'
 
 
 export const ErrorAlert = (message) => {
@@ -23,10 +22,6 @@ export const MoveToTop = () => {
         top: 0,
     })
 }
-
-useEffect(() => {
-    MoveToTop()
-}, [])
 
 export const MoveToTopAuth = () => {
     const move = document.querySelector('.move')

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AuthFooter from './AuthFooter'
 import { links } from './AuthUtils'
 import { Link, useLocation } from 'react-router-dom'
@@ -13,6 +13,9 @@ const AuthPageLayout = ({ children }) => {
   const active = 'text-lightgreen rounded-sm bg-[#1e333c]'
   const nonactive = 'hover:bg-primary rounded-sm text-[#9696b5]'
 
+  useEffect(() => {
+    MoveToTop()
+  }, [])
 
   return (
     <div className='w-full'>
