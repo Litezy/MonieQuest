@@ -34,7 +34,7 @@ const Profile = () => {
 
   const logoutAccount = () => {
     // Cookies.remove(CookieName)
-    navigate('/')
+    navigate('/login')
   }
 
   const formHandler = (event) => {

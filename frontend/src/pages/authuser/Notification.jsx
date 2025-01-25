@@ -41,9 +41,9 @@ const Notification = () => {
         <div className='text-3xl font-bold'>Notifications</div>
         <div className='text-sm capitalize cursor-pointer hover:text-lightgreen'>mark all as read</div>
       </div>
-      <div className='mt-8'>
+      <div className='mt-8 '>
         {dataLoading ?
-          <div className='w-full md:h-32 h-40 rounded-md bg-slate-500 animate-pulse'>
+          <div className='w-full  md:h-32 h-40 rounded-md bg-slate-500 animate-pulse'>
           </div>
           :
           <>

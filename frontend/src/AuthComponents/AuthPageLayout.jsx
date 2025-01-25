@@ -21,9 +21,9 @@ const AuthPageLayout = ({ children }) => {
     <div className='w-full'>
       <div className="flex w-full bg-[#1d1e30]">
         <div
-          data-aos="zoom-in"
-          data-aos-delay="100"
-          className="h-screen hidden lg:block lg:w-[20%] pt-10 overflow-y-auto scrollHide">
+          // data-aos="zoom-in"
+          // data-aos-delay="100"
+          className="h-screen fixed z-50 hidden lg:block lg:w-[20%] pt-10 overflow-y-auto scrollHide ">
           <div>
             <img src={logo} alt='moniequest-logo' className='h-14 w-auto mx-auto'></img>
           </div>
@@ -31,7 +31,7 @@ const AuthPageLayout = ({ children }) => {
             <img src={user} alt='user_profile' className='h-14 w-14 object-cover rounded-full border-2 border-ash'></img>
             <div className='text-xl font-bold capitalize text-gray-200'>allen williams</div>
           </div>
-          <div className="lg:flex hidden py-10 flex-col items-start px-5 gap-4">
+          <div className="lg:flex hidden py-10 mt-5 scroll flex-col items-start px-5 gap-4 h-[70dvh] overflow-y-auto">
             {links.map((link, i) => {
               return (
                 <Link onClick={MoveToTop} to={link.url}
@@ -46,7 +46,7 @@ const AuthPageLayout = ({ children }) => {
             })}
           </div>
         </div>
-        <div className='w-full bg-[#141523] pt-10 pb-20 lg:pb-10 lg:w-[80%] h-[100dvh] overflow-y-auto overflow-x-hidden text-white move'>
+        <div className='w-full bg-[#141523] pt-10 pb-20 ml-[20%] lg:pb-10 lg:w-[80%]  overflow-y-auto overflow-x-hidden text-white move min-h-[100dvh]'>
           {children}
         </div>
       </div>

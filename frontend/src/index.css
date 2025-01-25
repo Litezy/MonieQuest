@@ -47,7 +47,7 @@ input[type=number]:focus {
 .scroll::-webkit-scrollbar-thumb {
   width: 5px;
   height: 20px;
-  background-color: rgb(196, 195, 195);
+  background-color: #1e333c;
   border-radius: 3px;
 }
 
