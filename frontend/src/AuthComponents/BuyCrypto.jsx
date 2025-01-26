@@ -8,7 +8,7 @@ import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCopy } from 'react-icons/fa';
 import { TfiTimer } from "react-icons/tfi";
 import { Link, useNavigate } from 'react-router-dom';
-import Loading from '../GeneralComponents/Loading';
+import Loader from '../GeneralComponents/Loader';
 
 
 const BuyCrypto = () => {
@@ -117,10 +117,10 @@ const BuyCrypto = () => {
     return (
         <div className='w-full'>
             {loading &&
-                <ModalLayout>
-                    <div className="flex gap-5 flex-col mx-auto">
-                        <Loading />
-                        <div className="mt-20 text-white">...Submitting</div>
+                <ModalLayout clas={`w-11/12 mx-auto`}>
+                    <div className="w-full flex-col h-fit flex items-center justify-center">
+                        <Loader />
+                        <div>...submitting</div>
                     </div>
                 </ModalLayout>
             }
@@ -325,7 +325,7 @@ const BuyCrypto = () => {
                                 <div className="mt-10 flex flex-col items-center gap-2">
                                     <div className="">Your transaction is being processed, keep an eye on your dashboard.
                                     </div>
-                                    <button onClick={() => navigate('/dashboard')} className={`bg-green-500  mt-10 hover:bg-lightgreen text-white hover:text-ash py-2 text-center rounded-md w-full`}>
+                                    <button onClick={() => navigate('/user/dashboard')} className={`bg-green-500  mt-10 hover:bg-lightgreen text-white hover:text-ash py-2 text-center rounded-md w-full`}>
                                         Go back to dashboard
                                     </button>
                                 </div>

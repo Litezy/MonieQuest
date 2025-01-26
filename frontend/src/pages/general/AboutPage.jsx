@@ -10,7 +10,6 @@ const AboutPage = () => {
           <div className='w-full bg-[#212134ea] py-10'>
             <div className='text-3xl md:text-4xl font-bold text-white text-center capitalize'><span className='text-lightgreen'>MonieQuest:</span> Redefining Earning in the Digital Age</div>
           </div>
-
         </div>
         <div className="flex w-11/12 text-lg  text-gray-300 mx-auto mt-5 items-start flex-col gap-8">
           <div className="">At MoneyQuest, we empower individuals to explore new opportunities for earning and growth in the cryptocurrency and digital finance world. From completing surveys and participating in airdrops to redeeming gift cards and utilizing profit-enhancing tools, our platform bridges the gap between effort and reward.</div>

@@ -382,7 +382,7 @@ const CreateTools = () => {
               <div className='flex flex-col gap-4 items-center'>
                 <div className=''>We Accept: AI tools, eBooks, Productive tools, Creative resources and lots
                   More! All submissions are manually reviewed by our staff.</div>
-                <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-16 rounded-lg outline-none uppercase font-bold' onClick={() => setScreen(2)}>submit</button>
+                <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-24 rounded-lg outline-none uppercase font-bold' onClick={() => setScreen(2)}>submit</button>
               </div>
             </div>
           </form>

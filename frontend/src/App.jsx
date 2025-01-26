@@ -14,6 +14,7 @@ const App = () => {
       once: false,
     });
   }, []);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -21,7 +22,7 @@ const App = () => {
           <Route key={index} path={`${item.path}`} element={<item.component />} />
         ))}
         {AuthPagesLinks.map((item, index) => (
-          <Route key={index} path={`${item.path}`} element={<AuthPageLayout><item.component /></AuthPageLayout>} />
+          <Route key={index} path={`${item.path}`} element={<item.component />} />
         ))}
       </Routes>
     </BrowserRouter>

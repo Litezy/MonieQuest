@@ -70,7 +70,7 @@ const SignUpPage = () => {
               <div className='flex flex-col gap-5 items-center'>
                 <div className='flex gap-2 text-sm'>
                   <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='outline-none'></input>
-                  <span>I agree to MonieQuest <Link to='/terms' onClick={MoveToTop} className='text-lightgreen'>Terms and Conditions</Link> and <Link to='/privacy-policy' onClick={MoveToTop} className='text-lightgreen'>Privacy Policy</Link></span>
+                  <span>I agree to MonieQuest <Link to='/terms_of_service' onClick={MoveToTop} className='text-lightgreen'>Terms and Conditions</Link> and <Link to='/privacy_policy' onClick={MoveToTop} className='text-lightgreen'>Privacy Policy</Link></span>
                 </div>
                 <FormButton title='Sign up' className='!w-5/6' />
                 <Link className='text-sm text-lightgreen underline' to={'/'}>Go Back Home</Link>

@@ -25,7 +25,7 @@ const AirdropsPage = () => {
       <div className='pb-20 bg-dark w-full text-gray-200'>
         <div className='pageBg'>
           <div className='w-full h-full bg-[#212134ea] py-10'>
-            <div className='text-4xl font-bold text-white text-center'>Airdrops</div>
+            <div className='text-3xl md:text-4xl font-bold text-white text-center'>Airdrops</div>
           </div>
         </div>
         <div className='w-11/12 mx-auto mt-16'>

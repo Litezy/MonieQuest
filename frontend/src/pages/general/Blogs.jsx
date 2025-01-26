@@ -54,7 +54,7 @@ const Blogs = () => {
             <div className='pb-20 bg-dark w-full text-gray-200'>
                 <div className='pageBg'>
                     <div className='w-full h-full bg-[#212134ea] py-10'>
-                        <div className='text-4xl font-bold text-white text-center'>Crypto Blog News</div>
+                        <div className='md:text-4xl text-3xl font-bold text-white text-center'>Crypto Blog News</div>
                     </div>
                 </div>
                 <div className="lg:w-4/5 w-11/12 mx-auto mt-20">
