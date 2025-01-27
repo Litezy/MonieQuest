@@ -4,13 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const SelectComp = ({ title, options, style }) => {
-  const [value, setValue] = useState('')
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
+const SelectComp = ({ title, options, style, handleChange }) => {
 
   return (
     <div>

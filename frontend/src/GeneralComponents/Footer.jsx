@@ -24,6 +24,7 @@ const pageLinks = [
   { path: 'FAQS', url: '/faqs' },
   { path: 'terms & conditions', url: '/terms_of_service' },
   { path: 'privacy policy', url: '/privacy_policy' },
+  { path: 'we are hiring', url: '/we_are_hiring' },
 ]
 
 const Footer = () => {
@@ -95,7 +96,7 @@ const Footer = () => {
           </div>
           <div className='w-full border-b border-b-ash h-fit py-4 text-white'>
             <div className='w-11/12 mx-auto'>
-              <div className='grid md:grid-cols-5 grid-cols-2 gap-4'>
+              <div className='grid md:grid-cols-6 grid-cols-2 gap-4'>
                 {pageLinks.map((item, i) => (
                   <Link to={item.url} key={i} className='hover:text-lightgreen text-sm w-fit capitalize' onClick={MoveToTop}>{item.path}</Link>
                 ))}

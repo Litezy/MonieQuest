@@ -61,7 +61,7 @@ const TransHistory = () => {
         <div className="my-5 text-2xl font-bold lg:text-center text-lightgreen">Recent Transactions</div>
         <div className="flex flex-col gap-1">
           <div className="grid md:grid-cols-6 grid-cols-1 gap-2 items-center mt-4">
-            <div className="text-zinc-300 font-semibold lg:capitalize text-sm lg:text-base col-span-1">sort transactions:</div>
+            <div className="text-zinc-300 font-semibold capitalize text-sm lg:text-base col-span-1">sort transactions:</div>
             <div className='md:col-span-5 col-span-1'>
               <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 items-center lg:w-11/12 w-full mx-auto">
                 {tags.map((tag, i) => {

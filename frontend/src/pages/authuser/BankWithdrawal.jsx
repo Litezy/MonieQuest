@@ -116,14 +116,14 @@ const formsal = () => {
                         <div className='flex md:gap-10 gap-6 items-center mt-2'>
                             <div className='flex flex-col gap-1'>
                                 <div className='flex gap-1 items-center'>
-                                    <div className='w-3.5 h-3.5 bg-lightgreen rounded-full'></div>
+                                    <div className='md:size-3.5 size-3 bg-lightgreen rounded-full'></div>
                                     <div className='md:text-sm text-xs capitalize font-medium'>total deposit</div>
                                 </div>
                                 <div className='font-bold'>{currencies[1].symbol}238,224.60</div>
                             </div>
                             <div className='flex flex-col gap-1 border-l-2 md:pl-10 pl-6'>
                                 <div className='flex gap-1 items-center'>
-                                    <div className='w-3.5 h-3.5 bg-red-600 rounded-full'></div>
+                                    <div className='md:size-3.5 size-3 bg-red-600 rounded-full'></div>
                                     <div className='md:text-sm text-xs capitalize font-medium'>outflow</div>
                                 </div>
                                 <div className='font-bold'>{currencies[1].symbol}160,000.01</div>

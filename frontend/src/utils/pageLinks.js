@@ -25,6 +25,7 @@ import ProfitTools from "../pages/authuser/ProfitTools";
 import Leaderboards from "../pages/authuser/Leaderboards";
 import FAQS from "../pages/general/FAQS";
 import BankWithdrawal from "../pages/authuser/BankWithdrawal";
+import Hiring from "../pages/general/Hiring";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -44,6 +45,7 @@ export const GeneralPagesLinks = [
     { path: '/terms_of_service', component: TermsPage },
     { path: '/faqs', component: FAQS },
     { path: '/privacy_policy', component: PrivacyPolicy },
+    { path: '/we_are_hiring', component: Hiring },
 ]
 
 export const AuthPagesLinks = [
