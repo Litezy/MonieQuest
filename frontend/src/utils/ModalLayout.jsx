@@ -12,8 +12,8 @@ const ModalLayout = ({children,setModal,clas}) => {
               }
             },true)
         }
-        // eslint-disable-next-ling
     },[])
+    
     return (
         <div className="w-full z-50 h-screen fixed flex top-0 left-0 items-center justify-center bg-dark/30 backdrop-blur-sm">
             <div ref={refdiv} className={`${clas} max-h-[90dvh] overflow-y-auto `}>{children}</div>

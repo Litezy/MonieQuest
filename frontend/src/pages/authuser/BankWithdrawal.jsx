@@ -9,6 +9,7 @@ import Loader from '../../GeneralComponents/Loader'
 import Lottie from 'react-lottie'
 import animationData from '../../utils/lottie.json'
 import WithdrawComp from '../../GeneralComponents/WithdrawComp'
+import AuthPageLayout from '../../AuthComponents/AuthPageLayout'
 
 
 const formsal = () => {
@@ -75,7 +76,7 @@ const formsal = () => {
 
     const afterSub = () => {
         setShowModal(true)
-         setLoading(false) 
+        setLoading(false)
     }
 
     const submitRequest = (e) => {
@@ -86,116 +87,116 @@ const formsal = () => {
         setLoading(true)
         setForms({ accountName: "", accountNumber: '', amount: '', bank: "" })
         setPrefillAcc({ status: false, value: '' })
-        return setTimeout(()=>{afterSub()},4000)
+        return setTimeout(() => { afterSub() }, 4000)
     }
     return (
-        <div className='w-full mx-auto '>
-            {loading &&
-                <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 min-h-20`}>
-                    <div className="w-full flex-col h-fit flex items-center justify-center">
-                        <Loader />
-                        <div className="">...submitting</div>
-                    </div>
-                </ModalLayout>
-
-            }
-            {showModal &&
-                <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 min-h-20`}>
-                    <div className="w-full flex-col h-fit flex items-center justify-center">
-                        <Lottie options={defaultOptions} height={250} width={300} />
-                        <div className="text-base">Your withdrawal is successful</div>
-                        <button onClick={() => setShowModal(false)} className="mt-10 w-fit px-8 py-2 rounded-md bg-red-600">close</button>
-                    </div>
-                </ModalLayout>
-
-            }
-            {!showModal && <><div className=' w-11/12 mx-auto flex items-center justify-center'>
-                <div className='rounded-xl bg-primary flex-col gap-3 p-5 flex items-center w-full lg:w-[75%]'>
-                    <div className='text-lightgreen capitalize'>available balance</div>
-                    <div className='md:text-5xl text-4xl font-bold'>{currencies[1].symbol}{bal.toLocaleString()}</div>
-                    <div className='flex md:gap-10 gap-6 items-center mt-2'>
-                        <div className='flex flex-col gap-1'>
-                            <div className='flex gap-1 items-center'>
-                                <div className='w-3.5 h-3.5 bg-lightgreen rounded-full'></div>
-                                <div className='md:text-sm text-xs capitalize font-medium'>total deposit</div>
-                            </div>
-                            <div className='font-bold'>{currencies[1].symbol}238,224.60</div>
+        <AuthPageLayout>
+            <div className='w-full'>
+                {loading &&
+                    <ModalLayout clas={`w-11/12 mx-auto`}>
+                        <div className="w-full flex-col h-fit flex items-center justify-center">
+                            <Loader />
+                            <div>...submitting</div>
                         </div>
-                        <div className='flex flex-col gap-1 border-l-2 md:pl-10 pl-6'>
-                            <div className='flex gap-1 items-center'>
-                                <div className='w-3.5 h-3.5 bg-red-600 rounded-full'></div>
-                                <div className='md:text-sm text-xs capitalize font-medium'>outflow</div>
+                    </ModalLayout>
+                }
+                {showModal &&
+                    <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 min-h-20`}>
+                        <div className="w-full flex-col h-fit flex items-center justify-center">
+                            <Lottie options={defaultOptions} height={250} width={300} />
+                            <div className="text-base">Your withdrawal is successful</div>
+                            <button onClick={() => setShowModal(false)} className="mt-10 w-fit px-8 py-2 rounded-md bg-red-600">close</button>
+                        </div>
+                    </ModalLayout>
+                }
+                {!showModal && <><div className=' w-11/12 mx-auto flex items-center justify-center'>
+                    <div className='rounded-xl bg-primary flex-col gap-3 p-5 flex items-center w-full lg:w-[75%]'>
+                        <div className='text-lightgreen capitalize'>available balance</div>
+                        <div className='md:text-5xl text-4xl font-bold'>{currencies[1].symbol}{bal.toLocaleString()}</div>
+                        <div className='flex md:gap-10 gap-6 items-center mt-2'>
+                            <div className='flex flex-col gap-1'>
+                                <div className='flex gap-1 items-center'>
+                                    <div className='md:size-3.5 size-3 bg-lightgreen rounded-full'></div>
+                                    <div className='md:text-sm text-xs capitalize font-medium'>total deposit</div>
+                                </div>
+                                <div className='font-bold'>{currencies[1].symbol}238,224.60</div>
                             </div>
-                            <div className='font-bold'>{currencies[1].symbol}160,000.01</div>
+                            <div className='flex flex-col gap-1 border-l-2 md:pl-10 pl-6'>
+                                <div className='flex gap-1 items-center'>
+                                    <div className='md:size-3.5 size-3 bg-red-600 rounded-full'></div>
+                                    <div className='md:text-sm text-xs capitalize font-medium'>outflow</div>
+                                </div>
+                                <div className='font-bold'>{currencies[1].symbol}160,000.01</div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
+                    <div className="w-full mt-10">
+                        <form onSubmit={submitRequest} className="w-full bg-primary p-5">
+                            <div className="flex items-center flex-col lg:flex-row w-full justify-between  mb-5">
+                                <div className="text-xl lg:text-3xl font-bold text-gray-300  ">Request Withdrawal</div>
+                                <div className="text-sm text-red-600">minimum of {currencies[1].symbol}10,000 to initiate withdrawal</div>
+                            </div>
+                            <div onClick={prefillBank} className="mb-5 w-fit px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
+                            <div className="flex items-start flex-col lg:flex-row w-full gap-5 lg:gap-10 mb-5">
+                                <div className="w-full lg:w-1/2 flex items-start flex-col gap-4 ">
+                                    <div className="flex w-full flex-col items-start gap-">
+                                        <div className="text-lightgreen">Account Name</div>
+                                        <div className="w-full">
+                                            <FormInput placeholder={`account name`} name={`accountName`} value={forms.accountName} onChange={handleChange} />
+                                        </div>
+                                    </div>
+                                    <div className="flex w-full flex-col items-start gap-">
+                                        <div className="text-lightgreen">Amount ({currencies[1].symbol})</div>
+                                        <div className="w-full">
+                                            <FormInput placeholder={`amount`} name={`amounnt`} value={forms.amount} onChange={handleAmount} />
+                                        </div>
+                                    </div>
 
+                                </div>
+                                <div className="w-full lg:w-1/2 flex items-start flex-col gap-4">
+                                    <div className="flex w-full flex-col items-start gap-">
+                                        <div className="text-lightgreen">Account Number</div>
+                                        <div className="w-full">
+                                            <FormInput placeholder={`account number`} name={`accountNumber`} value={forms.accountNumber} onChange={handleChange} />
+                                        </div>
+                                    </div>
+                                    <div className="">
+                                        <div className="text-lightgreen">Bank Name</div>
+                                        <div className="w-full">
+                                            <WithdrawComp
+                                                options={banksArr}
+                                                prefillVal={prefillAcc.status}
+                                                preVal={prefillAcc.value}
+                                                onChange={handleBankName}
+                                                min={false} max={450} size={false} style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem', rounded: '5%' }} />
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div className="w-full lg:w-1/2 mx-auto mb-10">
+                                <FormButton disabled={bal < thresh ? true : false} title={`Request Withdrawal`} />
+                            </div>
+
+                        </form>
+
+
+
+                        <div className="text-xl w-11/12 mx-auto mt-5  lg:text-3xl font-bold text-gray-300 ">Latest Bank Transactions</div>
+                        <div className="mt-5 w-11/12 mx-auto">
+                            {alltransactions.filter((trnx) => trnx.tag === 'bank withdrawal').map((trans, i) => {
+                                return (
+                                    <TransComp key={i} trans={trans} />
+                                )
+                            })}
+                        </div>
+                    </div></>}
             </div>
-                <div className="w-full mt-10">
-                    <form onSubmit={submitRequest} className="w-full bg-primary p-5">
-                        <div className="flex items-center flex-col lg:flex-row w-full justify-between  mb-5">
-                            <div className="text-xl lg:text-3xl font-bold text-gray-300  ">Request Withdrawal</div>
-                            <div className="text-sm text-red-600">minimum of {currencies[1].symbol}10,000 to initiate withdrawal</div>
-                        </div>
-                        <div onClick={prefillBank} className="mb-5 w-fit px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
-                        <div className="flex items-start flex-col lg:flex-row w-full gap-5 lg:gap-10 mb-5">
-                            <div className="w-full lg:w-1/2 flex items-start flex-col gap-4 ">
-                                <div className="flex w-full flex-col items-start gap-">
-                                    <div className="text-lightgreen">Account Name</div>
-                                    <div className="w-full">
-                                        <FormInput placeholder={`account name`} name={`accountName`} value={forms.accountName} onChange={handleChange} />
-                                    </div>
-                                </div>
-                                <div className="flex w-full flex-col items-start gap-">
-                                    <div className="text-lightgreen">Amount ({currencies[1].symbol})</div>
-                                    <div className="w-full">
-                                        <FormInput placeholder={`amount`} name={`amounnt`} value={forms.amount} onChange={handleAmount} />
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="w-full lg:w-1/2 flex items-start flex-col gap-4">
-                                <div className="flex w-full flex-col items-start gap-">
-                                    <div className="text-lightgreen">Account Number</div>
-                                    <div className="w-full">
-                                        <FormInput placeholder={`account number`} name={`accountNumber`} value={forms.accountNumber} onChange={handleChange} />
-                                    </div>
-                                </div>
-                                <div className="">
-                                    <div className="text-lightgreen">Bank Name</div>
-                                    <div className="w-full">
-                                        <WithdrawComp
-                                            options={banksArr}
-                                            prefillVal={prefillAcc.status}
-                                            preVal={prefillAcc.value}
-                                            onChange={handleBankName}
-                                            min={false} max={450} size={false} style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem', rounded: '5%' }} />
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div className="w-full lg:w-1/2 mx-auto mb-10">
-                            <FormButton disabled={bal < thresh ? true : false} title={`Request Withdrawal`} />
-                        </div>
-
-                    </form>
-
-
-
-                    <div className="text-xl w-11/12 mx-auto mt-5  lg:text-3xl font-bold text-gray-300 ">Latest Bank Transactions</div>
-                    <div className="mt-5 w-11/12 mx-auto">
-                        {alltransactions.filter((trnx) => trnx.tag === 'bank withdrawal').map((trans, i) => {
-                            return (
-                                <TransComp key={i} trans={trans} />
-                            )
-                        })}
-                    </div>
-                </div></>}
-        </div>
+        </AuthPageLayout>
     )
 }
 

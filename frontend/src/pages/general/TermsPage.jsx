@@ -10,10 +10,10 @@ const TermsPage = () => {
       <div className='bg-dark w-full'>
         <div className='pageBg'>
           <div className='w-full h-full bg-[#212134ea] py-10'>
-            <div className='text-4xl font-bold text-white text-center'>Our Terms of service</div>
+            <div className='md:text-4xl text-3xl font-bold text-white text-center'>Our Terms of service</div>
           </div>
         </div>
-        <div className='w-11/12 mx-auto text-lg mt-5 '>
+        <div className='w-11/12 mx-auto text-lg pt-5 pb-10'>
           <div className='text-white text-xl'>Welcome to MonieQuest! By accessing our platform, you agree to the terms below.</div>
 
           <div className="flex text-gray-300 items-start gap-3 flex-col mt-10">

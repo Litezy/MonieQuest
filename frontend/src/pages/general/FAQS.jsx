@@ -15,7 +15,7 @@ const FAQS = () => {
                 </div>
 
                 <div className="w-11/12 mx-auto text-lg">
-                    <div className="flex items-start gap-10 mt-10 flex-col">
+                    <div className="flex items-start gap-10 py-10 flex-col">
                         <div className="flex items-start gap-3 flex-col">
                             <div className="text-3xl font-bold text-lightgreen">General Questions</div>
                             <div className="">{generalfaqs.map((que,i)=>{

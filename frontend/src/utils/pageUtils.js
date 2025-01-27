@@ -23,13 +23,6 @@ export const MoveToTop = () => {
     })
 }
 
-export const MoveToTopAuth = () => {
-    const move = document.querySelector('.move')
-    move.documentElement.scrollTo({
-        top: 0,
-    })
-}
-
 export const HomeTestimonials = [
     {
         user: 'henry calvin',

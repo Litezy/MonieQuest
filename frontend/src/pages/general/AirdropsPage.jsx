@@ -8,12 +8,20 @@ import { GiArrowScope } from "react-icons/gi";
 import SelectComp from '../../GeneralComponents/SelectComp'
 import { MoveToTop } from '../../utils/pageUtils'
 
+const statuses = ["ongoing", "finished"]
+const categories = ["Featured", "New", "DeFi", "NFTs", "Others"]
+const blockchains = ["Ton", "BNB", "ETH", "Solana"]
+
 const AirdropsPage = () => {
   const [check, setCheck] = useState('')
   const [search, setSearch] = useState('')
+  const [select, setSelect] = useState({
+    status: '',
+    category: '',
+    blockchain: ''
+  })
   const [dataLoading, setDataLoading] = useState(true)
-
-  const options = ["hello", "hey", "yeah"]
+console.log(select.blockchain)
 
   setTimeout(() => {
     setDataLoading(false)
@@ -25,7 +33,7 @@ const AirdropsPage = () => {
       <div className='pb-20 bg-dark w-full text-gray-200'>
         <div className='pageBg'>
           <div className='w-full h-full bg-[#212134ea] py-10'>
-            <div className='text-4xl font-bold text-white text-center'>Airdrops</div>
+            <div className='text-3xl md:text-4xl font-bold text-white text-center'>Airdrops</div>
           </div>
         </div>
         <div className='w-11/12 mx-auto mt-16'>
@@ -78,9 +86,9 @@ const AirdropsPage = () => {
                       <span>KYC</span>
                       <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='cursor-pointer'></input>
                     </div>
-                    <SelectComp title='Status' options={options} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} />
-                    <SelectComp title='Categories' options={options} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} />
-                    <SelectComp title='Blockchain' options={options} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} />
+                    <SelectComp title='Status' options={statuses} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} value={select.status} handleChange={(e) => setSelect({...select, status: e.target.value})} />
+                    <SelectComp title='Categories' options={categories} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} value={select.category} handleChange={(e) => setSelect({...select, category: e.target.value})} />
+                    <SelectComp title='Blockchain' options={blockchains} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} value={select.blockchain} handleChange={(e) => setSelect({...select, blockchain: e.target.value})} />
                   </div>
                   <button className='outline-none w-fit h-fit bg-lightgreen text-black rounded-full py-3 px-8'>Search</button>
                 </div>

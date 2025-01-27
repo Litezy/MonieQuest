@@ -62,20 +62,22 @@ const ProfitTools = () => {
         <ProfitToolsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
-                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg"  onKeyUp={filterTools}/>
+                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={filterTools} />
                     <div className="absolute top-5 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>
                 </div>
-                <div className="flex lg:items-center lg:flex-row flex-col gap-2 mt-4">
-                    <div className="text-lightgreen/70 font-semibold capitalize text-sm lg:text-base">Sort tools by:</div>
-                    <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 lg:w-3/4 mx-auto items-center w-full ">
-                        {tags.map((tag) => {
-                            return (
-                                <div onClick={() => setActive(tag)}
-                                    className={`px-10 flex items-center justify-center text-center py-1 rounded-md capitalize ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'} cursor-pointer`}>{tag}</div>
-                            )
-                        })}
+                <div className="grid md:grid-cols-6 grid-cols-1 gap-2 items-center mt-4">
+                    <div className="text-zinc-300 font-semibold capitalize text-sm lg:text-base col-span-1">Sort tools by:</div>
+                    <div className='md:col-span-5 col-span-1'>
+                        <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 items-center lg:w-11/12 w-full mx-auto">
+                            {tags.map((tag) => {
+                                return (
+                                    <div onClick={() => setActive(tag)}
+                                        className={`w-full h-fit py-1 text-sm md:text-base flex items-center justify-center text-center rounded-md capitalize ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'} cursor-pointer`}>{tag}</div>
+                                )
+                            })}
+                        </div>
                     </div>
                 </div>
                 <div className='mt-10'>

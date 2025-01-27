@@ -13,7 +13,7 @@ const PrivacyPolicy = () => {
             </div>
           </div>
         </div>
-        <div className='w-11/12 mx-auto text-lg mt-5 '>
+        <div className='w-11/12 mx-auto text-lg pt-5 pb-10'>
           <div className='text-white'>We operate the MonieQuest platform and associated services (the "Service"). This Privacy Policy explains how we collect, use, and protect your personal information. By using the Service, you agree to the practices outlined below.</div>
 
           <div className="flex text-gray-300 items-start gap-3 flex-col mt-10">

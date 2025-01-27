@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import SellCrypto from '../../AuthComponents/SellCrypto'
 import BuyCrypto from '../../AuthComponents/BuyCrypto'
+import AuthPageLayout from '../../AuthComponents/AuthPageLayout'
 
 const Exchange = () => {
   const tags = ['BUY', 'SELL']
   const [active, setActive] = useState(tags[0])
 
   return (
-    <div className="w-full flex items-start ">
+    <AuthPageLayout>
       <div className="w-full">
-        <div className="mt-5 w-11/12 bg-[#1d1e30] rounded-md p-1.5 lg:w-2/3 mx-auto  gap-10 flex items-center justify-center">
+        <div className="mt-5 bg-[#1d1e30] rounded-md p-1.5 w-11/12 lg:w-2/3 mx-auto  gap-10 flex items-center justify-center">
           {tags.map((tag, i) => {
             return (
               <div onClick={() => setActive(tag)}
@@ -27,7 +28,7 @@ const Exchange = () => {
           </div>
         }
       </div>
-    </div>
+    </AuthPageLayout>
   )
 }
 
