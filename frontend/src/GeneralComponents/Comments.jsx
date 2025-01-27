@@ -4,6 +4,7 @@ import { FaReply } from "react-icons/fa";
 import { PiChatTeardropTextFill } from "react-icons/pi";
 import { HiChevronDoubleDown } from "react-icons/hi2";
 import { Link, useSearchParams } from 'react-router-dom';
+import { MoveToTop } from '../utils/pageUtils';
 import ModalLayout from '../utils/ModalLayout';
 
 const Comments = ({ i,param,feature }) => {
@@ -50,7 +51,7 @@ const Comments = ({ i,param,feature }) => {
               })}
               <div className="ml-auto w-fit ">
                 <Link 
-                to={`/blogs/${feature}/${param}/comment/${i+1}`}
+                to={`/blogs/${feature}/${param}/comment/${i+1}`} onClick={MoveToTop}
                 className='px-4 py-1.5 rounded-md bg-ash'>view all comments</Link>
               </div>
             </div>

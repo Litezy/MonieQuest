@@ -1,6 +1,17 @@
 import { toast } from 'sonner'
 import customer1 from '../assets/images/customer1.jfif'
 
+export const CookieName = 'moniequestweb001'
+export const UserRoles = [
+    {
+        role: 'user',
+        url: '/user/dashboard'
+    },
+    {
+        role: 'admin',
+        url: '/admin/dashboard'
+    },
+]
 
 export const ErrorAlert = (message) => {
     return toast.error(message, {

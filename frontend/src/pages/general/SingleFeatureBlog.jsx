@@ -3,13 +3,10 @@ import PageLayout from '../../GeneralComponents/PageLayout'
 import { useParams} from 'react-router-dom'
 import { GiArrowScope } from 'react-icons/gi'
 import BlogDiv from '../../GeneralComponents/BlogDiv'
-import { MoveToTop } from '../../utils/pageUtils'
 
 const SingleFeatureBlog = () => {
     const { feature } = useParams()
-    useEffect(()=>{
-        MoveToTop()
-    })
+
     return (
         <PageLayout>
             <div className="bg-dark py-1 w-full text-white">

@@ -5,20 +5,9 @@ import TransComp from '../../AuthComponents/TransComp';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 
 const TransHistory = () => {
-  const tags = ['All', 'Crypto', 'GiftCards', 'Profit Tools', 'Withdrawal']
+  const tags = ['All', 'Crypto', 'GiftCards', 'Withdrawal']
   const [active, setActive] = useState(tags[0])
 
-  const CheckTag = (tag) => {
-    if (active === tag) {
-      if (tag === 'All') {
-        return;
-      } else {
-        setActive(tags[0])
-      }
-    } else {
-      setActive(tag)
-    }
-  }
 
   const [searchValue, setSearchValue] = useState('')
   const [records, setRecords] = useState([])
@@ -66,7 +55,7 @@ const TransHistory = () => {
               <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 items-center lg:w-11/12 w-full mx-auto">
                 {tags.map((tag, i) => {
                   return (
-                    <div key={i} onClick={() => CheckTag(tag)} onDoubleClick={() => setActive('')}
+                    <div key={i} onClick={() => setActive(tag)}
                       className={`w-full h-fit py-1 text-sm md:text-base flex items-center justify-center text-center rounded-md capitalize ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'} cursor-pointer`}>{tag}</div>
                   )
                 })}
@@ -106,15 +95,6 @@ const TransHistory = () => {
                 </>
               }
               {active === tags[3] &&
-                <>
-                  {records.filter((trx) => trx.tag === 'profit tools').map((trans, i) => {
-                    return (
-                      <TransComp key={i} trans={trans} />
-                    )
-                  })}
-                </>
-              }
-              {active === tags[4] &&
                 <>
                   {records.filter((trx) => trx.tag === 'bank withdrawal').map((trans, i) => {
                     return (

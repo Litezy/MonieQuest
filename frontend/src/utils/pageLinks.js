@@ -26,9 +26,9 @@ import Leaderboards from "../pages/authuser/Leaderboards";
 import FAQS from "../pages/general/FAQS";
 import BankWithdrawal from "../pages/authuser/BankWithdrawal";
 import SingleBlog from "../pages/general/SingleBlog";
-import SingleComment from "../GeneralComponents/SingleComment";
 import SingleFeatureBlog from "../pages/general/SingleFeatureBlog";
 import Hiring from "../pages/general/Hiring";
+import SingleComment from "../pages/general/SingleComment";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },

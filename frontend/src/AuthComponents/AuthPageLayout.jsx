@@ -44,7 +44,7 @@ const AuthPageLayout = ({ children }) => {
             <button className="text-sm px-3 py-2 rounded-md bg-ash text-white">Not Seeing What You Need? Tap and Contact Support Now!</button>
           </div>
         </div>
-        <div className='w-full bg-[#141523] pt-10 pb-20 lg:pb-10 lg:w-[80%] h-[100dvh] overflow-y-auto overflow-x-hidden text-white move'>
+        <div className='w-full bg-[#141523] pt-10 pb-20 lg:pb-10 lg:w-[80%] h-[100dvh] overflow-y-auto overflow-x-hidden text-white'>
           {children}
         </div>
       </div>

@@ -4,6 +4,7 @@ import img1 from '../assets/images/blog1.jpg'
 import img2 from '../assets/images/blog2.jpg'
 import { Link, useParams } from 'react-router-dom';
 import { PiArrowUpRight } from "react-icons/pi";
+import { MoveToTop } from '../utils/pageUtils';
 
 const BlogDiv = ({ item, isEven,i,feat }) => {
 
@@ -29,7 +30,7 @@ const BlogDiv = ({ item, isEven,i,feat }) => {
                     </div>
                 </div>
             </div> :
-                <Link to={`/blogs/${feat}/${i+1}`} className={`w-full`}>
+                <Link to={`/blogs/${feat}/${i+1}`} className={`w-full`} onClick={MoveToTop} >
                     <div className="   w-full">
                         <img src={isEven ? img1 : img2} alt="blog" className="w-full rounded-xl max-h-40 object-cover " />
                     </div>

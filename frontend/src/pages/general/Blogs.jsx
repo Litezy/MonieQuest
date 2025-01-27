@@ -3,6 +3,7 @@ import PageLayout from '../../GeneralComponents/PageLayout'
 import { GiArrowScope } from "react-icons/gi";
 import BlogDiv from '../../GeneralComponents/BlogDiv';
 import { Link } from 'react-router-dom';
+import { MoveToTop } from '../../utils/pageUtils';
 
 
 
@@ -23,7 +24,7 @@ const Blogs = () => {
                         <div className="text-xl"><GiArrowScope /></div>
                         <div className="text-lg">Latest articles on Airdrops</div>
                         <Link
-                        to={`/blogs/airdrops`}
+                        to={`/blogs/airdrops`} onClick={MoveToTop}
                         className="w-fit px-4 ml-auto lg:ml-0 text-xl">view all</Link>
                     </div>
                     <div className="mt-3 w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
@@ -40,7 +41,7 @@ const Blogs = () => {
                         <div className="text-xl"><GiArrowScope /></div>
                         <div className="text-lg">Latest articles on Trading</div>
                         <Link
-                        to={`/blogs/trading`}
+                        to={`/blogs/trading`} onClick={MoveToTop}
                         className="w-fit px-4 ml-auto lg:ml-0 text-xl">view all</Link>
                     </div>
                     <div className="mt-3 w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
@@ -57,7 +58,7 @@ const Blogs = () => {
                         <div className="text-xl"><GiArrowScope /></div>
                         <div className="text-lg">Latest on Personal Finances</div>
                         <Link
-                        to={`/blogs/personal_finance`}
+                        to={`/blogs/personal_finance`} onClick={MoveToTop}
                         className="w-fit px-4 ml-auto lg:ml-0 text-xl ">view all</Link>
                     </div>
                     <div className="mt-3 w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
