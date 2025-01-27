@@ -19,7 +19,14 @@ body {
   margin: 0;
   font-family: "Nunito Sans", "Nunito";
 }
+.poppins {
+  font-family: "Poppins", serif;
+}
 
+
+.mont {
+  font-family: "Montserrat", serif;
+}
 .input-off {
   -webkit-appearance: none;
   -webkit-border-radius: 0px;

@@ -25,6 +25,9 @@ import ProfitTools from "../pages/authuser/ProfitTools";
 import Leaderboards from "../pages/authuser/Leaderboards";
 import FAQS from "../pages/general/FAQS";
 import BankWithdrawal from "../pages/authuser/BankWithdrawal";
+import SingleBlog from "../pages/general/SingleBlog";
+import SingleComment from "../GeneralComponents/SingleComment";
+import SingleFeatureBlog from "../pages/general/SingleFeatureBlog";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -44,6 +47,9 @@ export const GeneralPagesLinks = [
     { path: '/terms_of_service', component: TermsPage },
     { path: '/faqs', component: FAQS },
     { path: '/privacy_policy', component: PrivacyPolicy },
+    { path: '/blogs/:feature/:id', component: SingleBlog },
+    { path: '/blogs/:feature/:id/comment/:commentid', component: SingleComment },
+    { path: '/blogs/:feature', component: SingleFeatureBlog },
 ]
 
 export const AuthPagesLinks = [

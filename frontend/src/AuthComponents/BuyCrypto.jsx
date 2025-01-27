@@ -325,7 +325,7 @@ const BuyCrypto = () => {
                                 <div className="mt-10 flex flex-col items-center gap-2">
                                     <div className="">Your transaction is being processed, keep an eye on your dashboard.
                                     </div>
-                                    <button onClick={() => navigate('/dashboard')} className={`bg-green-500  mt-10 hover:bg-lightgreen text-white hover:text-ash py-2 text-center rounded-md w-full`}>
+                                    <button onClick={() => navigate('/user/dashboard')} className={`bg-green-500  mt-10 hover:bg-lightgreen text-white hover:text-ash py-2 text-center rounded-md w-full`}>
                                         Go back to dashboard
                                     </button>
                                 </div>

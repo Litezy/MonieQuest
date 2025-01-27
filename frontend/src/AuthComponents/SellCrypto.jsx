@@ -229,7 +229,7 @@ const SellCrypto = () => {
                     </div>
                 }
 
-                {screen === 3 &&
+                {/* {screen === 5 &&
                     <div className="w-full min-h-[70dvh] flex items-center justify-center">
                         <div className="w-full flex items-center gap-5 flex-col">
                             <div className="flex flex-col items-center gap-2">
@@ -263,9 +263,9 @@ const SellCrypto = () => {
                             hover:text-ash lg:w-2/3 py-3 w-11/12 mx-auto text-lg rounded-xl`}>I confirm my details</button>
                         </div>
                     </div>
-                }
+                } */}
 
-                {screen === 4 &&
+                {screen === 3 &&
                     <div className="">
                         <div className="w-11/12 mx-auto min-h-[70dvh] flex items-center justify-center">
 
@@ -276,7 +276,7 @@ const SellCrypto = () => {
                                 <div className="mt-10 flex flex-col items-center gap-2">
                                     <div className="">Your transaction is being processed, keep an eye on your dashboard.
                                     </div>
-                                    <button onClick={() => navigate('/dashboard')} className={`bg-green-500  mt-10 hover:bg-lightgreen text-white hover:text-ash py-2 text-center rounded-md w-full`}>
+                                    <button onClick={() => navigate('/user/dashboard')} className={`bg-green-500  mt-10 hover:bg-lightgreen text-white hover:text-ash py-2 text-center rounded-md w-full`}>
                                         Go back to dashboard
                                     </button>
                                 </div>

@@ -1,29 +1,45 @@
 import { MdCurrencyExchange } from "react-icons/md";
 import { BsGiftFill } from "react-icons/bs";
-import { MdDashboard,MdLeaderboard  } from "react-icons/md";
+import { MdDashboard, MdLeaderboard } from "react-icons/md";
 import { CgToolbox } from "react-icons/cg";
 import { GoHistory } from "react-icons/go";
 import { FaUser } from "react-icons/fa";
 import { IoNotificationsSharp } from "react-icons/io5";
+import { MdManageSearch } from "react-icons/md";
 import { BiMoneyWithdraw } from "react-icons/bi";
 
 
 
-export const coins = ['Bitcoin', 'Ethereum', 'USDT', 'TRON', 'BNB']
+export const coins = [
+    `Solana (SOL)`,
+        `Bitcoin (BTC)`,
+        `Ethereum (ETH)`,
+        `Litecoin (LTC)`,
+        `Tron (TRX)`,
+        `USDT (BEP20)`,
+        `USDT (TRC20)`,
+        `TON`,
+        `Sui`,
+        `Dogecoin (DOGE)`,
+        `USDC`,
+        `BNB Smart Chain (BNB)`,
+]
 export const currencies = [
     { name: 'USD', symbol: '$' },
     { name: 'NGN', symbol: '₦' },
 ]
 export const links = [
-    { label: 'dashboard', url: '/user/dashboard', icon: MdDashboard, last:false },
-    { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange, last:false },
-    { label: 'gift cards', url: '/user/giftcards', icon: BsGiftFill, last:false },
-    { label: 'profit tools', main: 'user/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox , last:false},
-    { label: 'bank withdrawal', url: '/user/bank_withdrawal', icon:BiMoneyWithdraw, last:false  },
-    { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory, last:false },
-    { label: 'profile', url: '/user/profile', icon: FaUser, last:false },
-    { label: 'notifications', url: '/user/notifications', icon:IoNotificationsSharp, last:true  },
-    { label: 'leaderboard', url: '/user/leaderboard', icon:MdLeaderboard, last:false  },
+    { label: 'dashboard', url: '/user/dashboard', icon: MdDashboard, last: false },
+    { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange, last: false },
+    { label: 'gift cards', url: '/user/giftcards', icon: BsGiftFill, last: false },
+    { label: 'profit tools', main: 'user/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox, last: false },
+    { label: 'bank withdrawal', url: '/user/bank_withdrawal', icon: BiMoneyWithdraw, last: false },
+    { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory, last: false },
+    { label: 'profile', url: '/user/profile', icon: FaUser, last: false },
+    { label: 'notifications', url: '/user/notifications', icon: IoNotificationsSharp, last: true },
+    { label: 'leaderboard', url: '/user/leaderboard', icon: MdLeaderboard, last: false },
+//     { label: `Not Seeing What You Need?
+// Tap and Contact Support Now!`, url: '', icon: MdLeaderboard, last: false },
 
 ]
 export const blockchainNetworks = [
@@ -110,25 +126,25 @@ export const giftCardValidations = [
     { brand: "STEAM", length: 15, regex: /^[A-Za-z0-9]{15}$/ },
     { brand: "GOOGLE PLAY", length: 20, regex: /^[A-Za-z0-9]{20}$/ },
     { brand: "OFFGAMERS", length: 16, regex: /^[A-Za-z0-9]{16}$/ },
-  ];
+];
 
-  export const formatter = new Intl.NumberFormat('en-US', {
+export const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
 })
-   
-  export const alltransactions = [
+
+export const alltransactions = [
     {
         tag: 'crypto',
-        type:'buy',
+        type: 'buy',
         amount: '200',
         date: '22 Feb 2024',
         status: 'completed',
-        trans_id:'28fndjfhbfvfj',
-        trans_hash:'28fndjfhbfvfjhashgraph',
-        receiving_wallet:'0xrfnfu488493494',
+        trans_id: '28fndjfhbfvfj33',
+        trans_hash: '28fndjfhbfvfjhashgraph',
+        receiving_wallet: '0xrfnfu488493494',
         get desc() {
             return `Your p2p buy order of $${this.amount} is marked as completed, kindly check your balance.`;
         },
@@ -136,12 +152,12 @@ export const giftCardValidations = [
     },
     {
         tag: 'crypto',
-        type:'sell',
+        type: 'sell',
         amount: '210',
         date: '22 Feb 2024',
         status: 'completed',
-        trans_id:'28fndjfhbfvfj9400',
-        sending_wallet:'0xrfnfu488493494',
+        trans_id: '28fndjfhbfvfj9400',
+        sending_wallet: '0xrfnfu488493494',
         get desc() {
             return `Your p2p sell order of $${this.amount} is marked as completed, kindly check your balance.`;
         },
@@ -155,8 +171,8 @@ export const giftCardValidations = [
         account_number: '274774783827',
         bank_account: 'Moniepoint',
         account_name: 'Moniequest Basit',
-        trans_id:'7583ndjfiufuf0r9994',
-        reference_id:'7583ndjfiufuf0r9994222',
+        trans_id: '7583ndjfiufuf0r9994',
+        reference_id: '7583ndjfiufuf0r9994222',
         get desc() {
             return `Your withdrawal of $${this.amount} is marked as ${this.status}, kindly wait as we process your transaction.`;
         },
@@ -170,8 +186,8 @@ export const giftCardValidations = [
         account_number: '274774783827',
         bank_acount: 'Moniepoint',
         account_name: 'Moniequest Basit',
-        trans_id:'75383ndjf84',
-        reference_id:'72583ndjfiufu33fkf4',
+        trans_id: '75383ndjf84',
+        reference_id: '72583ndjfiufu33fkf4',
         get desc() {
             return `Your withdrawal of $${this.amount} is marked as ${this.status}, kindly check your local bank.`;
         },
@@ -181,24 +197,24 @@ export const giftCardValidations = [
         tag: 'profit tools',
         amount: '1500',
         date: '20 Feb 2024',
-        tap:'tools',
+        tap: 'tools',
         status: 'completed',
         order_no: '274774783827',
         produt_title: 'Diets',
         product_desc: 'How to eat smart',
-        trans_id:'753283ndjfiufuf2',
+        trans_id: '753283ndjfiufuf2',
         id: 5
     },
     {
         tag: 'giftcard',
-        type:'sell',
+        type: 'sell',
         amount: '200',
         date: '20 March 2024',
         status: 'declined',
-        trans_id:'75832ndjfiufuf0r9994gift',
-        card_code:'70583ndjfiufuf0r9994code',
-        card_brand:'apple',
-        card_pin:'294',
+        trans_id: '75832ndjfiufuf0r9994gift',
+        card_code: '70583ndjfiufuf0r9994code',
+        card_brand: 'apple',
+        card_pin: '294',
         get desc() {
             return `Your order of $${this.amount} is marked as ${this.status}, kindly check notifications or email to find out more about your failed transaction.`;
         },
@@ -206,14 +222,14 @@ export const giftCardValidations = [
     },
     {
         tag: 'giftcard',
-        type:'sell',
+        type: 'sell',
         amount: '200',
         date: '20 March 2024',
         status: 'completed',
-        trans_id:'75183ndjfiufuf0r9994gift99',
-        card_code:'7222583ndjfiufuf0r9994code88',
-        card_brand:'amazon',
-        card_pin:'',
+        trans_id: '75183ndjfiufuf0r9994gift99',
+        card_code: '7222583ndjfiufuf0r9994code88',
+        card_brand: 'amazon',
+        card_pin: '',
         get desc() {
             return `Your order of $${this.amount} is marked as ${this.status}, kindly check your balance.`;
         },
@@ -224,14 +240,14 @@ export const giftCardValidations = [
         amount: '1200',
         date: '20 Feb 2024',
         status: 'pending',
-        tap:'tools',
+        tap: 'tools',
         order_no: '274774783827',
         produt_title: 'Deodorants',
         product_desc: 'How to apply deodorants',
-        trans_id:'7099583ndjfiufuf',
+        trans_id: '7099583ndjfiufuf',
         id: 8
     },
-    
+
 ]
 
 export const banksArr = [
@@ -271,11 +287,10 @@ export const banksArr = [
     "VBank",
     "Wema Bank",
     "Zenith Bank"
-  ];
+];
 
-  export const bankacc = {
-    bank:'Zenith Bank',
-    account_name:'Basit MoneyQuest',
-    account_number:'1234567890',
-  }
-  
+export const bankacc = {
+    bank: 'Zenith Bank',
+    account_name: 'Basit MoneyQuest',
+    account_number: '1234567890',
+}

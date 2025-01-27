@@ -33,6 +33,7 @@ const AuthPageLayout = ({ children }) => {
           </div>
           <div className="lg:flex hidden py-10 mt-5 scroll flex-col items-start px-5 gap-4 h-[70dvh] overflow-y-auto">
             {links.map((link, i) => {
+              // const lastItem = links.length -1
               return (
                 <Link onClick={MoveToTop} to={link.url}
                   className={` py-2 group text-base flex items-center gap-2 px-5 w-full capitalize ${link.label === 'profit tools' ? pathName.includes(link.main) ? active : nonactive : pathName === link.url ? active : nonactive} `} key={i}>
@@ -40,10 +41,11 @@ const AuthPageLayout = ({ children }) => {
                     {link.last && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}
                     <link.icon className="transform group-hover:rotate-180 text-xl duration-300" />
                   </div>
-                  <div className="">{link.label}</div>
+                  <div className={``}>{link.label}</div>
                 </Link>
               )
             })}
+            <button className="text-sm px-3 py-2 rounded-md bg-ash text-white">Not Seeing What You Need? Tap and Contact Support Now!</button>
           </div>
         </div>
         <div className='w-full bg-[#141523] pt-10 pb-20 lg:ml-[20%] lg:pb-10 lg:w-[80%]  overflow-y-auto overflow-x-hidden text-white move min-h-[100dvh]'>
