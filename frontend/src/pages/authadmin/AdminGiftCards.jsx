@@ -4,7 +4,7 @@ import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 const AdminGiftCards = () => {
     return (
         <AdminPageLayout>
-            <div className='w-11/12 mx-auto mt-5'>AdminGiftCards</div>
+            <div className='w-11/12 mx-auto'>AdminGiftCards</div>
         </AdminPageLayout>
     )
 }

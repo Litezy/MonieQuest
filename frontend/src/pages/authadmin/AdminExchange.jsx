@@ -4,7 +4,7 @@ import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 const AdminExchange = () => {
     return (
         <AdminPageLayout>
-            <div className='w-11/12 mx-auto mt-5'>AdminExchange</div>
+            <div className='w-11/12 mx-auto'>AdminExchange</div>
         </AdminPageLayout>
     )
 }

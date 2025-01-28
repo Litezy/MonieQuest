@@ -38,7 +38,7 @@ const AdminNotification = () => {
 
     return (
         <AdminPageLayout>
-            <div className="w-11/12 mx-auto mt-5">
+            <div className="w-11/12 mx-auto">
                 <div className='flex justify-between gap-4 items-center'>
                     <div className='text-3xl font-bold'>Notifications</div>
                     <div className='text-sm capitalize cursor-pointer hover:text-lightgreen'>mark all as read</div>
