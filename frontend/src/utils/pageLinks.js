@@ -29,6 +29,7 @@ import SingleBlog from "../pages/general/SingleBlog";
 import SingleFeatureBlog from "../pages/general/SingleFeatureBlog";
 import Hiring from "../pages/general/Hiring";
 import SingleComment from "../pages/general/SingleComment";
+import UserKYC from "../pages/authuser/UserKYC";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -65,5 +66,6 @@ export const AuthPagesLinks = [
     { path: '/user/notifications', component: Notification},
     { path: '/user/leaderboard', component: Leaderboards},
     { path: '/user/bank_withdrawal', component: BankWithdrawal},
+    { path: '/user/profile/kyc', component: UserKYC },
 
 ]

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import user from '../../assets/images/customer1.jfif'
 import { MdVerified, MdOutlineDateRange, MdEmail } from "react-icons/md";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -12,6 +12,7 @@ import PasswordInputField from '../../utils/PasswordInputField';
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import FormButton from '../../utils/FormButton';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
+import { FaRegIdCard } from "react-icons/fa";
 
 const Profile = () => {
   const [form, setForm] = useState({
@@ -101,6 +102,12 @@ const Profile = () => {
               <IoLogOut />
               <span>Log out</span>
             </div>
+            <Link 
+            to={`/user/profile/kyc`}
+            className='bg-primary w-fit h-fit py-1.5 px-5 rounded-lg md:text-base text-sm text-lightgreen font-medium flex gap-1 items-center mt-4 cursor-pointer hover:bg-[#2f2f47]' >
+              <FaRegIdCard />
+              <span>Apply for KYC Verification</span>
+            </Link>
           </div>
           <form className='flex flex-col gap-8 mt-16'>
             <div className='flex flex-col gap-5'>
