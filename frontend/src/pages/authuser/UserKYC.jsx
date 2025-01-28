@@ -11,7 +11,7 @@ import { TfiTimer } from 'react-icons/tfi';
 
 const UserKYC = () => {
     const [loading, setLoading] = useState(false)
-    const [screen, setScreen] = useState(2)
+    const [screen, setScreen] = useState(1)
     const frontRef = useRef()
     const backRef = useRef()
     const [forms, setForms] = useState({
