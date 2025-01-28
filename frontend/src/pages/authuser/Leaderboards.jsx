@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { FaRankingStar } from "react-icons/fa6";
 import { BiSolidToTop } from "react-icons/bi";
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 
@@ -11,7 +10,7 @@ const Leaderboards = () => {
 
     return (
         <AuthPageLayout>
-            <div className='w-11/12 mx-auto'>
+            <div className='w-11/12 mx-auto mt-5'>
                 <div className="flex justify-center w-full  items-center gap-3 mb-10">
                     <BiSolidToTop className='text-3xl text-lightgreen' />
                     <div className="text-2xl font-bold ">Top Traders on MonieQuest</div>

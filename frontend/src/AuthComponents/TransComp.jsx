@@ -7,15 +7,8 @@ import TransModal from './TransModal'
 const TransComp = ({ trans }) => {
     const [modal, setModal] = useState(false)
 
-    const closeView = () => {
-        setModal(false)
-    }
-    const openView = () => {
-        setModal(true)
-    }
     return (
         <div className='w-full mb-5'>
-
             {modal &&
                 <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 scroll`} setModal={setModal}>
                     <div className="w-full p-5 lg:p-10  bg-primary rounded-md ">
@@ -23,11 +16,11 @@ const TransComp = ({ trans }) => {
                         <div className="flex mt-5 items-center justify-between">
                             <TransModal selected={trans} />
                         </div>
-                        <button className='mt-5 w-full text-center bg-red-600 py-2 rounded-md' onClick={closeView} >close</button>
+                        <button className='mt-5 w-full text-center bg-red-600 py-2 rounded-md' onClick={() => setModal(false)} >close</button>
                     </div>
                 </ModalLayout>
             }
-            <div onClick={openView} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2 ">
+            <div onClick={() => setModal(true)} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2 ">
                 <div className="flex items-start gap-2 lg:gap-5 w-fit lg:w-full ">
                     <div className="w-fit px-4 py-4 rounded-full bg-primary">
                         {trans.type === 'buy' && <GoArrowDownLeft className='text-lightgreen' />}

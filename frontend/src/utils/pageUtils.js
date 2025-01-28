@@ -9,7 +9,7 @@ export const UserRoles = [
     },
     {
         role: 'admin',
-        url: '/admin/dashboard'
+        url: '/admin/exchange'
     },
 ]
 

@@ -23,7 +23,7 @@ const LoginPage = () => {
 
   const LoginAccount = (e) => {
     e.preventDefault()
-   navigate('/user/dashboard')
+   navigate('/admin/exchange')
     // if (!form.email) return ErrorAlert('Enter email address')
     // if (!form.password) return ErrorAlert('Enter password')
     // setLoading(true)

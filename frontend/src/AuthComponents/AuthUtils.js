@@ -28,6 +28,7 @@ export const currencies = [
     { name: 'USD', symbol: '$' },
     { name: 'NGN', symbol: '₦' },
 ]
+
 export const links = [
     { label: 'dashboard', url: '/user/dashboard', icon: MdDashboard, last: false },
     { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange, last: false },
@@ -38,9 +39,6 @@ export const links = [
     { label: 'profile', url: '/user/profile', icon: FaUser, last: false },
     { label: 'notifications', url: '/user/notifications', icon: IoNotificationsSharp, last: true },
     { label: 'leaderboard', url: '/user/leaderboard', icon: MdLeaderboard, last: false },
-//     { label: `Not Seeing What You Need?
-// Tap and Contact Support Now!`, url: '', icon: MdLeaderboard, last: false },
-
 ]
 export const blockchainNetworks = [
     { value: "bitcoin", label: "Bitcoin (BTC)" },

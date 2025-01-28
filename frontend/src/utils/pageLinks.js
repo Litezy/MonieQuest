@@ -30,6 +30,14 @@ import SingleFeatureBlog from "../pages/general/SingleFeatureBlog";
 import Hiring from "../pages/general/Hiring";
 import SingleComment from "../pages/general/SingleComment";
 import UserKYC from "../pages/authuser/UserKYC";
+import AdminExchange from "../pages/authadmin/AdminExchange";
+import AdminBankWithdrawals from "../pages/authadmin/AdminBankWithdrawals";
+import AdminGiftCards from "../pages/authadmin/AdminGiftCards";
+import AdminTools from "../pages/authadmin/AdminTools";
+import AdminProfile from "../pages/authadmin/AdminProfile";
+import AdminNotification from "../pages/authadmin/AdminNotification";
+import AdminLeaderboards from "../pages/authadmin/AdminLeaderboards";
+import AdminSettings from "../pages/authadmin/AdminSettings";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -67,5 +75,15 @@ export const AuthPagesLinks = [
     { path: '/user/leaderboard', component: Leaderboards},
     { path: '/user/bank_withdrawal', component: BankWithdrawal},
     { path: '/user/profile/kyc', component: UserKYC },
+]
 
+export const AdminPagesLinks = [
+    { path: '/admin/exchange', component: AdminExchange },
+    { path: '/admin/giftcards', component: AdminGiftCards },
+    { path: '/admin/profit_tools', component: AdminTools },
+    { path: '/admin/bank_withdrawals', component: AdminBankWithdrawals },
+    { path: '/admin/settings', component: AdminSettings },
+    { path: '/admin/profile', component: AdminProfile },
+    { path: '/admin/notifications', component: AdminNotification },
+    { path: '/admin/leaderboard', component: AdminLeaderboards },
 ]

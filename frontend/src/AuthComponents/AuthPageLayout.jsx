@@ -15,13 +15,15 @@ const AuthPageLayout = ({ children }) => {
 
   const {user,profile,kyc} = useParams()
   console.log(user,profile,kyc)
+
+
   return (
     <div className='w-full'>
       <div className="flex w-full bg-[#1d1e30]">
         <div
           // data-aos="zoom-in"
           // data-aos-delay="100"
-          className="h-screen z-50 fixed hidden lg:block lg:w-[20%] pt-10">
+          className="h-screen z-30 hidden lg:block lg:w-[20%] pt-10 overflow-hidden">
           <div>
             <img src={logo} alt='moniequest-logo' className='h-14 w-auto mx-auto'></img>
           </div>
@@ -31,7 +33,6 @@ const AuthPageLayout = ({ children }) => {
           </div>
           <div className="flex mt-10 pb-10 flex-col items-start px-5 gap-4 h-[65vh] overflow-y-auto scroll">
             {links.map((link, i) => {
-              // const lastItem = links.length -1
               return (
                 <Link onClick={MoveToTop} to={link.url}
                   className={` py-2 group text-base flex items-center gap-2 px-5 w-full capitalize ${link.label === 'profit tools' ? pathName.includes(link.main) ? active : nonactive : pathName === link.url || pathName.includes(link.label) ? active : nonactive} `} key={i}>
@@ -46,7 +47,7 @@ const AuthPageLayout = ({ children }) => {
             <button className="text-sm px-3 py-2 rounded-md bg-ash text-white">Not Seeing What You Need? Tap and Contact Support Now!</button>
           </div>
         </div>
-        <div className='w-full lg:ml-[20%] min-h-screen bg-[#141523] pt-5 pb-20 lg:pb-10 lg:w-[80%] h-sc overflow-y-auto overflow-x-hidden text-white'>
+        <div className='lg:w-[80%] w-full h-screen bg-[#141523] pt-5 pb-20 lg:pb-10 h-sc overflow-y-auto overflow-x-hidden text-white'>
           {children}
         </div>
       </div>

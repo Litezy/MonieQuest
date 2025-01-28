@@ -7,15 +7,14 @@ import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 import Loading from '../../GeneralComponents/Loading';
 import Loader from '../../GeneralComponents/Loader';
 import ModalLayout from '../../utils/ModalLayout';
+import { ErrorAlert } from '../../utils/pageUtils';
 
 
-const UserKYC = ({ }) => {
+const UserKYC = () => {
     const [loading, setLoading] = useState(false)
     const [load, setLoad] = useState(false)
     const [data, setData] = useState({})
     const [confirm, setConfirm] = useState(false)
-
-
 
     const frontRef = useRef()
     const navigate = useNavigate()
@@ -52,7 +51,7 @@ const UserKYC = ({ }) => {
         const file = e.target.files[0]
         if (!file.type.startsWith(`image/`)) {
             frontRef.current.value = null
-            // return errorMessage('Invalid file format detected, try with a different photo')
+            return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
         }
         setfrontImg({
             img: URL.createObjectURL(file),
@@ -63,7 +62,7 @@ const UserKYC = ({ }) => {
         const file = e.target.files[0]
         if (!file.type.startsWith(`image/`)) {
             backRef.current.value = null
-            // return errorMessage('Invalid file format detected, try with a different photo')
+            return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
         }
         setbackImg({
             img: URL.createObjectURL(file),
@@ -71,50 +70,36 @@ const UserKYC = ({ }) => {
         })
     }
 
-    const changeImageback = (e) => {
-        setbackImg({
-            img: e.target.src,
-            image: null
-        })
-    }
-    const changeImagefront = (e) => {
-        setfrontImg({
-            img: e.target.src,
-            image: null
-        })
-    }
-
-    const submit = (e)=>{
+    const submit = (e) => {
         e.preventDefault()
         setLoading(true)
-        return setTimeout(()=>{
+        return setTimeout(() => {
             setLoading(false)
-        },5000)
+        }, 5000)
     }
 
     const text = 'text-lightgreen'
     return (
 
         <AuthPageLayout>
-            <div className=' w-11/12 mx-auto   '>
+            <div className=' w-11/12 mx-auto '>
                 <div className="w-full  ">
                     <Link to={'/user/profile'} className="w-fit  rounded-md px-5 py-1 bg-ash  text-white mr-auto cursor-pointer ">
                         back to profile
                     </Link>
-
                 </div>
 
                 <form onSubmit={submit} className=" h-fit relative   rounded-md text-sm  pt-3 ">
 
                     {loading &&
-                       <ModalLayout setModal={setLoading} clas={``}>
-                         <div className="absolute top-0  backdrop-blur-sm w-full z-40 h-full rounded-md left-1/2 -translate-x-1/2">
-                            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-fit p-5 rounded-md"><Loader />
+                        <ModalLayout clas={`w-11/12 mx-auto`}>
+                            <div className="w-full flex-col h-fit flex items-center justify-center">
+                                <Loader />
+                                <div>...submitting</div>
                             </div>
-                        </div>
-                       </ModalLayout>
+                        </ModalLayout>
                     }
-                    <div className="md:flex md:items-baseline gap-5 w-full ">
+                    <div className="md:flex md:items-baseline gap-5 w-full">
                         <div className="md:w-1/2">
                             <div className="flex flex-col w-full mt-5  ">
                                 <h1 className={`${text}`} onClick={checkdob}>Date of Birth</h1>
@@ -132,8 +117,6 @@ const UserKYC = ({ }) => {
                                 <h1 className={`${text}`}> Address:</h1>
                                 <input name='address' value={forms.address} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' placeholder='enter your address' />
                             </div>
-
-
                         </div>
                         <div className="md:w-1/2  h-full">
                             <div className="flex flex-col w-full  ">
@@ -148,52 +131,50 @@ const UserKYC = ({ }) => {
                                 <h1 className={`${text} capitalize`}>{forms.id_type && forms.id_type} ID Number:</h1>
                                 <input name='id_number' value={forms.id_number} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' />
                             </div>
-
-
                         </div>
 
                     </div>
-                    <div className="flex flex-col lg:flex-row w-full items-center gap-3 lg:gap-20">
-                        <div className="mt-5 w-full lg:w-1/2 ">
+                    <div className="grid md:grid-cols-2 grid-cols-1 w-full items-center gap-4 lg:gap-20 mt-5">
+                        <div className="w-full">
                             <h1 className={`${text} text-center text-lg font-bold`}>Upload Front ID Image</h1>
-
-                            <div className="md:h-60 h-48  w-11/12 mx-auto relative">
-                                <label className={`${frontimg.img ? '' : 'border-2 border-black'} mt-5 w-full  h-full border-dashed flex cursor-pointer items-center justify-center `}>
-                                    {frontimg.img ? <div className="">
-                                        <div onChange={changeImagefront} className="absolute top-0 right-3 main font-bold ">
-                                            <FaEdit className='text-2xl' />
+                            <div className="md:h-64 h-48 w-full mt-5">
+                                <label className={`${frontimg.img ? '' : 'border-2 border-black'} w-full  h-full border-dashed flex cursor-pointer items-center justify-center `}>
+                                    {frontimg.img ?
+                                        <div className="relative w-full h-full">
+                                            <div className="absolute top-2 right-3 main font-bold">
+                                                <FaEdit className='text-2xl' />
+                                            </div>
+                                            <img src={frontimg.img} className='w-full h-full' />
                                         </div>
-                                        <img src={frontimg.img} className='w-full h-48' />
-                                    </div> : <FaPlus className='text-2xl' />}
+                                        : <FaPlus className='text-2xl' />
+                                    }
                                     <input type="file" onChange={handleImageFront} hidden ref={frontRef} />
                                 </label>
                             </div>
                         </div>
-                        <div className="mt-5 w-full lg:w-1/2 ">
+                        <div className="w-full">
                             <h1 className={`${text} text-center text-lg font-bold`}>Upload Back ID Image</h1>
-
-                            <div className="md:h-60 h-48 w-11/12 mx-auto relative ">
-                                <label className={`${backimg.img ? '' : 'border-2 border-black border-dashed'} mt-5 w-full h-full  flex cursor-pointer items-center justify-center `}>
-                                    {backimg.img ? <div className="">
-                                        <div r onChange={changeImageback} className="absolute top-0 right-3 main font-bold ">
-                                            <FaEdit className='text-2xl' />
+                            <div className="md:h-64 h-48 w-full mt-5">
+                                <label className={`${backimg.img ? '' : 'border-2 border-black border-dashed'} w-full h-full flex cursor-pointer items-center justify-center `}>
+                                    {backimg.img ?
+                                        <div className="relative w-full h-full">
+                                            <div className="absolute top-2 right-3 main font-bold">
+                                                <FaEdit className='text-2xl' />
+                                            </div>
+                                            <img src={backimg.img} className='w-full h-full' />
                                         </div>
-                                        <img src={backimg.img} className='w-full h-48' />
-                                    </div> : <FaPlus className='text-2xl' />}
+                                        : <FaPlus className='text-2xl' />
+                                    }
                                     <input type="file" onChange={handleImageBack} hidden ref={backRef} />
                                 </label>
                             </div>
                         </div>
                     </div>
-                   <div className="mt-5 w-full flex items-center justify-center">
-                   <button className='w-3/4 md:w-1/2 mx-auto bg-ash py-3 hover:bg-ash/90 rounded-md'>Submit</button>
-                   </div>
-
+                    <div className="mt-10 w-full flex items-center justify-center">
+                        <button className='w-3/4 md:w-1/2 mx-auto bg-ash py-3 hover:bg-ash/90 rounded-md'>Submit</button>
+                    </div>
                 </form>
-
             </div >
-
-
         </AuthPageLayout>
     )
 }

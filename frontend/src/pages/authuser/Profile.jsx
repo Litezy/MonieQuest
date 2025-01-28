@@ -98,16 +98,16 @@ const Profile = () => {
                 </div>
               </div>
             </div>
+            <Link
+              to={`/user/profile/kyc`}
+              className='bg-primary w-fit h-fit py-1.5 px-5 rounded-lg md:text-base text-sm text-lightgreen font-medium flex gap-1 items-center mt-4 cursor-pointer hover:bg-[#2f2f47]' >
+              <FaRegIdCard />
+              <span>Apply for KYC Verification</span>
+            </Link>
             <div className='bg-primary w-fit h-fit py-1.5 px-5 rounded-lg md:text-base text-sm text-red-600 font-medium flex gap-1 items-center mt-4 cursor-pointer hover:bg-[#2f2f47]' onClick={logoutAccount}>
               <IoLogOut />
               <span>Log out</span>
             </div>
-            <Link 
-            to={`/user/profile/kyc`}
-            className='bg-primary w-fit h-fit py-1.5 px-5 rounded-lg md:text-base text-sm text-lightgreen font-medium flex gap-1 items-center mt-4 cursor-pointer hover:bg-[#2f2f47]' >
-              <FaRegIdCard />
-              <span>Apply for KYC Verification</span>
-            </Link>
           </div>
           <form className='flex flex-col gap-8 mt-16'>
             <div className='flex flex-col gap-5'>
