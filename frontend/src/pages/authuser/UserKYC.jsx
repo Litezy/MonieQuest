@@ -1,23 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import { FaEdit } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
-import Loading from '../../GeneralComponents/Loading';
 import Loader from '../../GeneralComponents/Loader';
 import ModalLayout from '../../utils/ModalLayout';
 import { ErrorAlert } from '../../utils/pageUtils';
+import { TfiTimer } from 'react-icons/tfi';
 
 
 const UserKYC = () => {
     const [loading, setLoading] = useState(false)
-    const [load, setLoad] = useState(false)
-    const [data, setData] = useState({})
-    const [confirm, setConfirm] = useState(false)
-
+    const [screen, setScreen] = useState(1)
     const frontRef = useRef()
-    const navigate = useNavigate()
     const backRef = useRef()
     const [forms, setForms] = useState({
         address: '',
@@ -34,20 +29,16 @@ const UserKYC = () => {
         image: null
     })
 
-
     const handleChange = (e) => {
         setForms({
             ...forms,
             [e.target.name]: e.target.value
         })
     }
-    const checkdob = () => {
-        console.log(
-            forms.dob
-        )
-    }
 
-    const handleImageFront = (e) => {
+
+    const handleImageUpload = (e, val) => {
+        console.log(val)
         const file = e.target.files[0]
         if (!file.type.startsWith(`image/`)) {
             frontRef.current.value = null
@@ -64,32 +55,39 @@ const UserKYC = () => {
             backRef.current.value = null
             return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
         }
-        setbackImg({
-            img: URL.createObjectURL(file),
-            image: file
-        })
+
     }
 
     const submit = (e) => {
         e.preventDefault()
+        if (!forms.dob) return ErrorAlert('Date of birth is required')
+        if (!forms.id_type) return ErrorAlert('ID type field is required')
+        if (!forms.address) return ErrorAlert('Address field is required')
+        if (!forms.id_number) return ErrorAlert('ID number field is required')
+        if (!frontimg.image) return ErrorAlert('ID front image is missing')
+        if (!backimg.image) return ErrorAlert('ID back image is missing')
         setLoading(true)
+        setForms({address: '',dob: '',id_type: '',id_number: '',})
+        setfrontImg({image:null, img:null})
+        setbackImg({image:null, img:null})
         return setTimeout(() => {
             setLoading(false)
         }, 5000)
-    }
 
+    }
+    
     const text = 'text-lightgreen'
     return (
 
         <AuthPageLayout>
-            <div className=' w-11/12 mx-auto '>
-                <div className="w-full  ">
+            <div className=' w-11/12 mx-auto   '>
+                {screen === 1 && <div className="w-full hidden lg:block">
                     <Link to={'/user/profile'} className="w-fit  rounded-md px-5 py-1 bg-ash  text-white mr-auto cursor-pointer ">
                         back to profile
                     </Link>
-                </div>
 
-                <form onSubmit={submit} className=" h-fit relative   rounded-md text-sm  pt-3 ">
+                </div>}
+                {screen === 1 && <form onSubmit={submit} className=" h-fit relative   rounded-md text-sm  md:pt-3 ">
 
                     {loading &&
                         <ModalLayout clas={`w-11/12 mx-auto`}>
@@ -102,7 +100,7 @@ const UserKYC = () => {
                     <div className="md:flex md:items-baseline gap-5 w-full">
                         <div className="md:w-1/2">
                             <div className="flex flex-col w-full mt-5  ">
-                                <h1 className={`${text}`} onClick={checkdob}>Date of Birth</h1>
+                                <h1 className={`${text}`} >Date of Birth</h1>
                                 <div class="relative max-w-sm w-1/2">
                                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -170,10 +168,31 @@ const UserKYC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-10 w-full flex items-center justify-center">
+                    <div className="mt-5 w-full flex items-center justify-center">
                         <button className='w-3/4 md:w-1/2 mx-auto bg-ash py-3 hover:bg-ash/90 rounded-md'>Submit</button>
                     </div>
-                </form>
+
+                </form>}
+                {screen === 2 &&
+                    <div className="">
+                        <div className="w-11/12 lg:w-1/2 mx-auto min-h-[70dvh] flex items-center justify-center">
+
+                            <div className="w-full flex items-center  flex-col">
+                                <div className="rounded-full h-20 w-20 flex items-center justify-center border border-lightgreen">
+                                    <TfiTimer className='text-2xl text-lightgreen' />
+                                </div>
+                                <div className="mt-10 flex flex-col items-center gap-2">
+                                    <div className="poppins">Your KYC has been uploaded, please note review takes upto 48hrs. Look out for an email from our team regarding the results of your submission. Thanks
+                                    </div>
+                                    <Link to={`/user/profile`} className={`bg-green-500  mt-10 hover:bg-lightgreen text-white hover:text-ash py-2 text-center rounded-md w-full`}>
+                                        Go back to profile
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
             </div >
         </AuthPageLayout>
     )
