@@ -93,10 +93,10 @@ const CreateTools = () => {
     <ProfitToolsLayout>
       <div className='w-11/12 mx-auto'>
         {loading &&
-          <ModalLayout>
-            <div className="flex gap-5 flex-col mx-auto">
-              <Loading />
-              <div className="mt-20 text-white">...Submitting</div>
+          <ModalLayout clas={`w-11/12 mx-auto`}>
+            <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
+              <Loader />
+              <div>...submitting</div>
             </div>
           </ModalLayout>
         }

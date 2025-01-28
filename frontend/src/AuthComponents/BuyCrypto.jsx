@@ -118,7 +118,7 @@ const BuyCrypto = () => {
         <div className='w-full'>
             {loading &&
                 <ModalLayout clas={`w-11/12 mx-auto`}>
-                    <div className="w-full flex-col h-fit flex items-center justify-center">
+                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
                         <Loader />
                         <div>...submitting</div>
                     </div>
