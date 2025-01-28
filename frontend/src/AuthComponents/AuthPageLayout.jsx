@@ -13,13 +13,6 @@ const AuthPageLayout = ({ children }) => {
   const active = 'text-lightgreen rounded-sm bg-[#1e333c]'
   const nonactive = 'hover:bg-primary rounded-sm text-[#9696b5]'
 
-<<<<<<< HEAD
-  const {user,profile,kyc} = useParams()
-  console.log(user,profile,kyc)
-
-
-=======
->>>>>>> c3ce2fb8701fbd32dd4d0b942448f133bbb7b0fe
   return (
     <div className='w-full'>
       <div className="flex w-full bg-[#1d1e30]">

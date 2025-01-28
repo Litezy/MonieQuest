@@ -37,7 +37,7 @@ const UserKYC = () => {
     }
 
 
-    const handleImageUpload = (e, val) => {
+    const handleImageFront = (e, val) => {
         console.log(val)
         const file = e.target.files[0]
         if (!file.type.startsWith(`image/`)) {
