@@ -11,8 +11,11 @@ import PasswordInputField from '../../utils/PasswordInputField';
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import FormButton from '../../utils/FormButton';
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout';
+import ModalLayout from '../../utils/ModalLayout';
+import Loader from '../../GeneralComponents/Loader';
 
 const AdminProfile = () => {
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         first_name: '',
         surname: '',
@@ -60,11 +63,21 @@ const AdminProfile = () => {
         })
     }
 
-
+    const Submit = (e) => {
+        e.preventDefault()
+    }
 
     return (
         <AdminPageLayout>
             <div>
+                {loading &&
+                    <ModalLayout clas={`w-11/12 mx-auto`}>
+                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
+                            <Loader />
+                            <div>...submitting</div>
+                        </div>
+                    </ModalLayout>
+                }
                 <div className='h-36 w-full -mt-10 py-8 bg-gradient-to-br from-ash to-primary'>
                     <div className='w-11/12 mx-auto flex gap-2 justify-end items-center text-2xl font-bold uppercase mt-14'>
                         <span>profile</span>
@@ -86,7 +99,7 @@ const AdminProfile = () => {
                             <div className='text-2xl font-bold capitalize'>micheal victor</div>
                             <div className='flex gap-1 items-center text-sm'>
                                 <div className='capitalize'>admin / moderator</div>
-                                <MdOutlineAdminPanelSettings className='text-lightgreen text-lg'/>
+                                <MdOutlineAdminPanelSettings className='text-lightgreen text-lg' />
                             </div>
                         </div>
                         <div className='bg-primary w-fit h-fit py-1.5 px-5 rounded-lg md:text-base text-sm text-red-600 font-medium flex gap-1 items-center mt-4 cursor-pointer hover:bg-[#2f2f47]' onClick={logoutAccount}>
@@ -94,25 +107,25 @@ const AdminProfile = () => {
                             <span>Log out</span>
                         </div>
                     </div>
-                    <form className='flex flex-col gap-8 mt-16'>
+                    <form className='flex flex-col gap-8 mt-16' onSubmit={Submit}>
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>personal details</div>
                             <div className='grid md:grid-cols-2 grid-cols-1 gap-6'>
                                 <div className='relative'>
                                     <FormInput label='First name' placeholder='Your first name' name='first_name' value={form.first_name} onChange={formHandler} className='!pl-4 !pr-10' />
-                                    <HiUser className='absolute top-10 right-3 text-xl text-gray-400' />
+                                    <HiUser className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
                                 </div>
                                 <div className='relative'>
                                     <FormInput label='Surname' placeholder='Your surname' name='surname' value={form.surname} onChange={formHandler} className='!pl-4 !pr-10' />
-                                    <HiUser className='absolute top-10 right-3 text-xl text-gray-400' />
+                                    <HiUser className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
                                 </div>
                                 <div className='relative'>
                                     <FormInput label='Email address' placeholder='example@gmail.com' name='email' value={form.email} onChange={formHandler} type='email' className='!pl-4 !pr-10' />
-                                    <MdEmail className='absolute top-10 right-3 text-xl text-gray-400' />
+                                    <MdEmail className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
                                 </div>
                                 <div className='relative'>
                                     <FormInput label='Phone number' placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} className='!pl-4 !pr-10' />
-                                    <BiSolidPhoneCall className='absolute top-10 right-3 text-xl text-gray-400' />
+                                    <BiSolidPhoneCall className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
                                 </div>
                             </div>
                         </div>

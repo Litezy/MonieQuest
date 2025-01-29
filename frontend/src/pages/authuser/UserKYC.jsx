@@ -84,8 +84,8 @@ const UserKYC = () => {
 
         <AuthPageLayout>
             <div className=' w-11/12 mx-auto'>
-                {screen === 1 && <div className="w-full hidden lg:block">
-                    <Link to={'/user/profile'} className="w-fit  rounded-md px-5 py-1 bg-ash  text-white mr-auto cursor-pointer ">
+                {screen === 1 && <div className="w-full">
+                    <Link to={'/user/profile'} className="w-fit  rounded-md px-5 py-1 bg-ash text-white mr-auto cursor-pointer ">
                         back to profile
                     </Link>
                 </div>}

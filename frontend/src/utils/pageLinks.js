@@ -38,6 +38,8 @@ import AdminProfile from "../pages/authadmin/AdminProfile";
 import AdminNotification from "../pages/authadmin/AdminNotification";
 import AdminLeaderboards from "../pages/authadmin/AdminLeaderboards";
 import AdminSettings from "../pages/authadmin/AdminSettings";
+import AdminDashboard from "../pages/authadmin/AdminDashboard";
+import AdminAllUsers from "../pages/authadmin/AdminAllUsers";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -69,15 +71,17 @@ export const AuthPagesLinks = [
     { path: '/user/exchange', component: Exchange },
     { path: '/user/profit_tools/create', component: CreateTools },
     { path: '/user/profit_tools/all_tools', component: ProfitTools },
-    { path: '/user/profile', component: Profile},
-    { path: '/user/transactions_history', component: TransHistory},
-    { path: '/user/notifications', component: Notification},
-    { path: '/user/leaderboard', component: Leaderboards},
-    { path: '/user/bank_withdrawal', component: BankWithdrawal},
+    { path: '/user/profile', component: Profile },
+    { path: '/user/transactions_history', component: TransHistory },
+    { path: '/user/notifications', component: Notification },
+    { path: '/user/leaderboard', component: Leaderboards },
+    { path: '/user/bank_withdrawal', component: BankWithdrawal },
     { path: '/user/profile/kyc', component: UserKYC },
 ]
 
 export const AdminPagesLinks = [
+    { path: '/admin/dashboard', component: AdminDashboard },
+    { path: '/admin/all_users', component: AdminAllUsers },
     { path: '/admin/exchange', component: AdminExchange },
     { path: '/admin/giftcards', component: AdminGiftCards },
     { path: '/admin/profit_tools', component: AdminTools },

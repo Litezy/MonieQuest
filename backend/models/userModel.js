@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         email: { type: DataTypes.STRING },
         phone_number: { type: DataTypes.STRING },
         password: { type: DataTypes.STRING },
-        email_verified: { type: DataTypes.STRING,defaultValue:false },
+        email_verified: { type: DataTypes.STRING, defaultValue: 'false' },
+        kyc_verified: { type: DataTypes.STRING, defaultValue: 'false' },
     })
 }

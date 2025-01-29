@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout';
 import { ErrorAlert } from '../../utils/pageUtils';
 import ModalLayout from '../../utils/ModalLayout';
-import Loading from '../../GeneralComponents/Loading';
+import Loader from '../../GeneralComponents/Loader';
 
 const aiTools = [
   "Test-to-Image", "Test-to-Text", "code generators", "AI assistants"

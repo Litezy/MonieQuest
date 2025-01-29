@@ -1,28 +1,27 @@
 import { MdCurrencyExchange } from "react-icons/md";
-import { BsGiftFill } from "react-icons/bs";
+import { HiGift } from "react-icons/hi2";
 import { MdDashboard, MdLeaderboard } from "react-icons/md";
 import { CgToolbox } from "react-icons/cg";
 import { GoHistory } from "react-icons/go";
-import { FaUser } from "react-icons/fa";
+import { RiUser3Fill } from 'react-icons/ri'
 import { IoNotificationsSharp } from "react-icons/io5";
-import { MdManageSearch } from "react-icons/md";
 import { BiMoneyWithdraw } from "react-icons/bi";
 
 
 
 export const coins = [
     `Solana (SOL)`,
-        `Bitcoin (BTC)`,
-        `Ethereum (ETH)`,
-        `Litecoin (LTC)`,
-        `Tron (TRX)`,
-        `USDT (BEP20)`,
-        `USDT (TRC20)`,
-        `TON`,
-        `Sui`,
-        `Dogecoin (DOGE)`,
-        `USDC`,
-        `BNB Smart Chain (BNB)`,
+    `Bitcoin (BTC)`,
+    `Ethereum (ETH)`,
+    `Litecoin (LTC)`,
+    `Tron (TRX)`,
+    `USDT (BEP20)`,
+    `USDT (TRC20)`,
+    `TON`,
+    `Sui`,
+    `Dogecoin (DOGE)`,
+    `USDC`,
+    `BNB Smart Chain (BNB)`,
 ]
 export const currencies = [
     { name: 'USD', symbol: '$' },
@@ -32,11 +31,11 @@ export const currencies = [
 export const links = [
     { label: 'dashboard', url: '/user/dashboard', icon: MdDashboard, last: false },
     { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange, last: false },
-    { label: 'gift cards', url: '/user/giftcards', icon: BsGiftFill, last: false },
-    { label: 'profit tools', main: 'user/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox, last: false },
+    { label: 'gift cards', url: '/user/giftcards', icon: HiGift, last: false },
+    { label: 'profit tools', main: '/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox, last: false },
     { label: 'bank withdrawal', url: '/user/bank_withdrawal', icon: BiMoneyWithdraw, last: false },
     { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory, last: false },
-    { label: 'profile', url: '/user/profile', icon: FaUser, last: false },
+    { label: 'profile', main: '/profile', url: '/user/profile', icon: RiUser3Fill, last: false },
     { label: 'notifications', url: '/user/notifications', icon: IoNotificationsSharp, last: true },
     { label: 'leaderboard', url: '/user/leaderboard', icon: MdLeaderboard, last: false },
 ]

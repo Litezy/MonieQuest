@@ -13,20 +13,19 @@ const AdminNotification = () => {
             title: 'new order made',
             content: 'Lorem, ipsum dolor  sit amet consectetur adipisicing elit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit.',
             read: 'true',
-            url: '/user/profit_tools/create',
+            url: '/admin/profit_tools',
         },
         {
-            title: 'transaction failed',
+            title: 'withdrawal submitted',
             content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit. Ratione soluta porro cumque dolore incidunt opton.',
             read: 'false',
-            url: '/user/exchange',
-            status: 'failed'
+            url: '/admin/bank_withdrawals',
         },
         {
-            title: 'crypto buy completed',
+            title: 'new user alert',
             content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit. Ratione soluta porro cumque dolore incidunt opton.',
             read: 'false',
-            url: '/user/transactions_history',
+            url: '/admin/dashboard',
         }
     ])
     const [dataLoading, setDataLoading] = useState(true)
@@ -43,9 +42,9 @@ const AdminNotification = () => {
                     <div className='text-3xl font-bold'>Notifications</div>
                     <div className='text-sm capitalize cursor-pointer hover:text-lightgreen'>mark all as read</div>
                 </div>
-                <div className='mt-8 '>
+                <div className='mt-8'>
                     {dataLoading ?
-                        <div className='w-full  md:h-32 h-40 rounded-md bg-slate-500 animate-pulse'>
+                        <div className='w-full md:h-32 h-40 rounded-md bg-slate-500 animate-pulse'>
                         </div>
                         :
                         <>

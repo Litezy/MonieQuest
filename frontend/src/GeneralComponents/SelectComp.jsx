@@ -4,23 +4,27 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const SelectComp = ({ title, options, style, handleChange }) => {
+const SelectComp = ({ title, options, style, value, handleChange, width = 120, size = true }) => {
 
   return (
     <div>
-      <FormControl variant='filled' sx={{ m: 1, minWidth: 120, bgcolor: style?.bg, borderRadius: style?.rounded }} size='small'>
+      <FormControl variant='filled'
+        sx={{ m: 1, minWidth: width, bgcolor: style?.bg, borderRadius: style?.rounded }}
+        size={size ? 'small' : 'medium'} 
+      >
         <InputLabel>{title}</InputLabel>
         <Select
+          value={value}
           defaultValue={title ? '' : options[0]}
           onChange={handleChange}
           sx={{ color: style?.color, fontSize: style?.font }}
           hiddenLabel={title ? false : true}
         >
-        {options.map((ele, i) => (
-          <MenuItem value={ele} key={i}>{ele}</MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+          {options.map((ele, i) => (
+            <MenuItem value={ele} key={i}>{ele}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </div >
   )
 }

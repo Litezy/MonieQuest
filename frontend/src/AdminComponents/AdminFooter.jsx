@@ -1,15 +1,26 @@
 import React, { useState } from 'react'
-import { MdCurrencyExchange, MdLeaderboard } from "react-icons/md";
-import { BsGiftFill } from "react-icons/bs";
+import { MdCurrencyExchange, MdLeaderboard, MdDashboard } from "react-icons/md";
+import { HiGift } from "react-icons/hi2";
 import { CgToolbox } from "react-icons/cg";
 import { Link, useLocation } from 'react-router-dom';
-import { FaUser } from "react-icons/fa";
-import { RiSettings5Fill } from 'react-icons/ri'
+import { FaUsers } from "react-icons/fa";
+import { RiSettings5Fill, RiUser3Fill } from 'react-icons/ri'
+import { BiMoneyWithdraw } from "react-icons/bi";
 import { MoveToTop } from '../utils/pageUtils';
 import { IoNotificationsSharp } from 'react-icons/io5';
 import { CiMenuKebab } from 'react-icons/ci';
 
 const mainIcons = [
+    {
+        name: 'dashboard',
+        symbol: MdDashboard,
+        url: '/admin/dashboard'
+    },
+    {
+        name: 'users',
+        symbol: FaUsers,
+        url: '/admin/all_users'
+    },
     {
         name: 'crypto exchange',
         symbol: MdCurrencyExchange,
@@ -17,13 +28,21 @@ const mainIcons = [
     },
     {
         name: 'gift cards',
-        symbol: BsGiftFill,
+        symbol: HiGift,
         url: '/admin/giftcards'
     },
     {
         name: 'profit tools',
         symbol: CgToolbox,
         url: '/admin/profit_tools'
+    },
+]
+
+const extraIcons = [
+    {
+        name: 'bank withdrawals',
+        symbol: BiMoneyWithdraw,
+        url: '/admin/bank_withdrawals'
     },
     {
         name: 'settings',
@@ -32,12 +51,9 @@ const mainIcons = [
     },
     {
         name: 'profile',
-        symbol: FaUser,
+        symbol: RiUser3Fill,
         url: '/admin/profile'
     },
-]
-
-const extraIcons = [
     {
         name: 'notifications',
         symbol: IoNotificationsSharp,
@@ -51,7 +67,7 @@ const extraIcons = [
 ]
 
 const extraArray = [
-    '/admin/notifications', '/admin/leaderboard'
+    '/admin/bank_withdrawals', '/admin/settings', '/admin/profile', '/admin/notifications', '/admin/leaderboard'
 ]
 
 
@@ -64,9 +80,9 @@ const AdminFooter = () => {
 
 
     return (
-        <div className='w-full fixed bottom-0 z-50'>
+        <div className='w-full fixed bottom-1 z-50'>
             <div className='w-11/12 mx-auto relative'>
-                <div className="px-5 flex relative items-center bg-[#212134] border border-secondary rounded-full justify-around gap-2">
+                <div className="w-full px-5 relative bg-[#212134] border border-secondary rounded-full flex items-center justify-around gap-2">
                     {mainIcons.map((item, i) => {
                         return (
                             <div key={i} className="flex items-center py-4 relative" >
@@ -90,7 +106,7 @@ const AdminFooter = () => {
                     </div>
                 </div>
                 {view &&
-                    <div className='absolute -top-12 right-0 bg-secondary px-4 flex items-center justify-around gap-2 rounded-full'>
+                    <div className='absolute -top-12 right-0 bg-secondary border border-primary px-4 flex items-center justify-around gap-2 rounded-full'>
                         {extraIcons.map((item, i) => (
                             <div key={i} className='flex items-center py-4 relative'>
                                 {pathName === item.url &&

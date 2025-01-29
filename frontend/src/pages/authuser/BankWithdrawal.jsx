@@ -8,13 +8,11 @@ import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import Lottie from 'react-lottie'
 import animationData from '../../utils/lottie.json'
-import WithdrawComp from '../../GeneralComponents/WithdrawComp'
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout'
+import SelectComp from '../../GeneralComponents/SelectComp'
 
 
 const formsal = () => {
-
-    const [value, setValue] = useState('')
     const bal = Number(10500)
     const thresh = Number(10000)
     const [loading, setLoading] = useState(false)
@@ -31,21 +29,12 @@ const formsal = () => {
         },
     };
     const [showModal, setShowModal] = useState(false)
-    const handleBankName = (value) => {
-        setValue(value)
-        setForms({
-            ...forms,
-            bank: value
-        })
-    }
-    const [prefillAcc, setPrefillAcc] = useState({ status: false, value: '' })
 
     const handleChange = (e) => {
         setForms({ ...forms, [e.target.name]: e.target.value })
     }
 
     const prefillBank = () => {
-        setPrefillAcc({ ...prefillAcc, status: true, value: bankacc.bank })
         setForms({
             ...forms,
             bank: bankacc.bank, accountNumber: bankacc.account_number, accountName: bankacc.account_name
@@ -89,6 +78,7 @@ const formsal = () => {
         setPrefillAcc({ status: false, value: '' })
         return setTimeout(() => { afterSub() }, 4000)
     }
+
     return (
         <AuthPageLayout>
             <div className='w-full'>
@@ -139,52 +129,42 @@ const formsal = () => {
                                 <div className="text-sm text-red-600">minimum of {currencies[1].symbol}10,000 to initiate withdrawal</div>
                             </div>
                             <div onClick={prefillBank} className="mb-5 w-fit px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
-                            <div className="flex items-start flex-col lg:flex-row w-full gap-5 lg:gap-10 mb-5">
-                                <div className="w-full lg:w-1/2 flex items-start flex-col gap-4 ">
-                                    <div className="flex w-full flex-col items-start gap-">
-                                        <div className="text-lightgreen">Account Name</div>
-                                        <div className="w-full">
-                                            <FormInput placeholder={`account name`} name={`accountName`} value={forms.accountName} onChange={handleChange} />
-                                        </div>
+                            <div className="grid md:grid-cols-2 grid-cols-1 gap-5 lg:gap-10 mb-5">
+                                <div className="flex w-full flex-col items-start gap-">
+                                    <div className="text-lightgreen">Account Name</div>
+                                    <div className="w-full">
+                                        <FormInput placeholder={`account name`} name={`accountName`} value={forms.accountName} onChange={handleChange} />
                                     </div>
-                                    <div className="flex w-full flex-col items-start gap-">
-                                        <div className="text-lightgreen">Amount ({currencies[1].symbol})</div>
-                                        <div className="w-full">
-                                            <FormInput placeholder={`amount`} name={`amounnt`} value={forms.amount} onChange={handleAmount} />
-                                        </div>
-                                    </div>
-
                                 </div>
-                                <div className="w-full lg:w-1/2 flex items-start flex-col gap-4">
-                                    <div className="flex w-full flex-col items-start gap-">
-                                        <div className="text-lightgreen">Account Number</div>
-                                        <div className="w-full">
-                                            <FormInput placeholder={`account number`} name={`accountNumber`} value={forms.accountNumber} onChange={handleChange} />
-                                        </div>
+                                <div className="flex w-full flex-col items-start gap-">
+                                    <div className="text-lightgreen">Amount ({currencies[1].symbol})</div>
+                                    <div className="w-full">
+                                        <FormInput placeholder={`amount`} name={`amounnt`} value={forms.amount} onChange={handleAmount} />
                                     </div>
-                                    <div className="">
-                                        <div className="text-lightgreen">Bank Name</div>
-                                        <div className="w-full">
-                                            <WithdrawComp
-                                                options={banksArr}
-                                                prefillVal={prefillAcc.status}
-                                                preVal={prefillAcc.value}
-                                                onChange={handleBankName}
-                                                min={false} max={450} size={false} style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem', rounded: '5%' }} />
-
-                                        </div>
+                                </div>
+                                <div className="flex w-full flex-col items-start gap-">
+                                    <div className="text-lightgreen">Account Number</div>
+                                    <div className="w-full">
+                                        <FormInput placeholder={`account number`} name={`accountNumber`} value={forms.accountNumber} onChange={handleChange} />
                                     </div>
+                                </div>
+                                <div className="">
+                                    <div className="text-lightgreen">Bank Name</div>
+                                    <div className="w-full">
+                                        <SelectComp
+                                            value={forms.bank}
+                                            options={banksArr}
+                                            width={450} size={false}
+                                            style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem' }} handleChange={(e) => setForms({ ...forms, bank: e.target.value })} />
 
+                                    </div>
                                 </div>
                             </div>
-
                             <div className="w-full lg:w-1/2 mx-auto mb-10">
                                 <FormButton disabled={bal < thresh ? true : false} title={`Request Withdrawal`} />
                             </div>
 
                         </form>
-
-
 
                         <div className="text-xl w-11/12 mx-auto mt-5  lg:text-3xl font-bold text-gray-300 ">Latest Bank Transactions</div>
                         <div className="mt-5 w-11/12 mx-auto">

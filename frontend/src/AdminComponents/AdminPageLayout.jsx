@@ -21,14 +21,11 @@ const AdminPageLayout = ({ children }) => {
                     <div>
                         <img src={logo} alt='moniequest-logo' className='h-14 w-auto mx-auto'></img>
                     </div>
-                    <div className='flex flex-col gap-2'>
-                        <div className='flex gap-2 items-center justify-center pt-6'>
-                            <img src={user1} alt='user_profile' className='size-14 object-cover rounded-full border-2 border-ash'></img>
-                            <div className='text-xl font-bold capitalize text-gray-200'>micheal victor</div>
-                        </div>
-                        <div className='text-gray-300 text-center capitalize text-sm font-semibold'>admin / moderator</div>
+                    <div className='flex gap-2 items-center justify-center mt-6 bg-primary p-4 rounded-lg w-11/12 h-fit mx-auto'>
+                        <img src={user1} alt='user_profile' className='size-14 object-cover rounded-full border-2 border-ash'></img>
+                        <div className='text-xl text-center font-bold capitalize text-gray-200'>admin micheal</div>
                     </div>
-                    <div className="flex mt-10 pb-10 flex-col items-start px-5 gap-4 h-[60vh] overflow-y-auto scroll">
+                    <div className="flex mt-10 pb-10 flex-col items-start px-5 gap-4 h-[65vh] overflow-y-auto scroll">
                         {pagelinks.map((link, i) => {
                             return (
                                 <Link onClick={MoveToTop} to={link.url}
@@ -37,13 +34,13 @@ const AdminPageLayout = ({ children }) => {
                                         {link.last && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}
                                         <link.icon className="transform group-hover:rotate-180 text-xl duration-300" />
                                     </div>
-                                    <div className={``}>{link.label}</div>
+                                    <div>{link.label}</div>
                                 </Link>
                             )
                         })}
                     </div>
                 </div>
-                <div className='lg:w-[80%] w-full h-screen bg-[#141523] pt-10 pb-20 lg:pb-10 h-sc overflow-y-auto overflow-x-hidden text-white'>
+                <div className='lg:w-[80%] w-full h-screen bg-[#141523] pt-10 pb-24 lg:pb-10 overflow-y-auto overflow-x-hidden text-white'>
                     {children}
                 </div>
             </div>
