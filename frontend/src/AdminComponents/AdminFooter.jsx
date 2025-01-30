@@ -25,7 +25,8 @@ const mainIcons = [
     {
         name: 'crypto exchange',
         symbol: MdCurrencyExchange,
-        url: '/admin/exchange'
+        url: '/admin/exchange/buy_orders',
+        main:'/admin/exchange'
     },
     {
         name: 'gift cards',

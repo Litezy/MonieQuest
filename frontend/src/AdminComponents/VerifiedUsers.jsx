@@ -119,14 +119,14 @@ const VerifiedUsers = ({setActive}) => {
                                         {item?.data?.userkycs?.firstname} {item?.data?.userkycs?.lastname}
                                     </td>
                                     <td className="px-3 truncate py-3">
-                                        {moment(item?.data?.createdAt).format(`DD-MM-YYYY hh:mm A`)}
+                                        {moment(item?.data?.createdAt).format(`DD-MM-YYYY `)}
                                     </td>
                                     <td className="px-3 truncate py-3">
-                                        {moment(item?.data?.updatedAt).format(`DD-MM-YYYY hh:mm A`)}
+                                        {moment(item?.data?.updatedAt).format(`DD-MM-YYYY `)}
                                     </td>
                                     <td className="px-3 py-3">
                                         <button onClick={() => filterSelect(item)}
-                                            className="bg-gradient-to-tr from-primary to-sec text-white px-5 rounded-lg py-2">view details</button>
+                                            className="bg-primary truncate text-white px-5 rounded-lg py-2">view details</button>
                                     </td>
                                 </tr>
                             )) :

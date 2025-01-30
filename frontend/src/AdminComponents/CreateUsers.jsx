@@ -45,20 +45,20 @@ const CreateUsers = ({ setActive }) => {
                         <div className="flex items-start gap-1 flex-col w-full ">
                             <div className="">First Name:</div>
                             <div className="w-full">
-                            <FormInput name={`firstname`} value={forms.firstname} onchange={handleChange} />
+                            <FormInput name={`firstname`} value={forms.firstname} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="flex items-start gap-1 flex-col w-full">
                             <div className="">Last Name:</div>
                             <div className="w-full">
-                            <FormInput name={`lastname`} value={forms.lastname} onchange={handleChange} />
+                            <FormInput name={`lastname`} value={forms.lastname} onChange={handleChange} />
                             </div>
                         </div>
 
                         <div className="flex items-start gap-1 flex-col w-full">
                             <div className="">Phone No:</div>
                             <div className="w-full">
-                            <FormInput type='phone' name={`phone`} value={forms.phone} onchange={handleChange} />
+                            <FormInput type='phone' name={`phone`} value={forms.phone} onChange={handleChange} />
                             </div>
                         </div>
 
@@ -69,19 +69,19 @@ const CreateUsers = ({ setActive }) => {
                         <div className="flex items-start gap-1 flex-col w-full ">
                             <div className="">Email Address:</div>
                             <div className="w-full">
-                            <FormInput type='email' name={`email`} value={forms.email} onchange={handleChange} />
+                            <FormInput type='email' name={`email`} value={forms.email} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="flex items-start gap-1 flex-col w-full">
                             <div className="">Password:</div>
                             <div className="w-full">
-                            <FormInput type='password' name={`password`} value={forms.password} onchange={handleChange} />
+                            <FormInput type='password' name={`password`} value={forms.password} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="flex items-start gap-1 flex-col w-full">
                             <div className="">Confirm Password:</div>
                             <div className="w-full">
-                            <FormInput className={`w-full`}  formtype='password' name={`confirm_password`} value={forms.confirm_password} onchange={handleChange} />
+                            <FormInput className={`w-full`}  formtype='password' name={`confirm_password`} value={forms.confirm_password} onChange={handleChange} />
                             </div>
                         </div>
                     </div>
