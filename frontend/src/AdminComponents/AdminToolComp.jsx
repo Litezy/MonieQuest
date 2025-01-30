@@ -1,6 +1,7 @@
 import moment from 'moment'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { MoveToTop } from '../utils/pageUtils'
 
 const AdminToolComp = ({ item }) => {
     return (
@@ -9,7 +10,7 @@ const AdminToolComp = ({ item }) => {
                 <div>{moment(item.createdAt).format('DD-MM-yyyy')} / {moment(item.createdAt).format('h:mm')}</div>
                 <div className='flex gap-3 items-center'>
                     <div>ID: {item.gen_id}</div>
-                    <Link to={`/admin/profit_tools/${item.id}/${item.title}`}>
+                    <Link to={`/admin/profit_tools/${item.id}/${item.title}`} onClick={MoveToTop} >
                         <button className='outline-none w-fit h-fit bg-ash py-2 px-4 text-xs rounded-md text-white font-medium'>View</button>
                     </Link>
                 </div>
