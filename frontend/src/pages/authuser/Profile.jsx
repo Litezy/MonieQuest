@@ -9,15 +9,20 @@ import { IoLogOut } from "react-icons/io5";
 import moment from 'moment';
 import FormInput from '../../utils/FormInput';
 import PasswordInputField from '../../utils/PasswordInputField';
-import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import { CookieName, ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import FormButton from '../../utils/FormButton';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 import { FaRegIdCard } from "react-icons/fa";
 import Loader from '../../GeneralComponents/Loader';
 import ModalLayout from '../../utils/ModalLayout';
+import Loading from '../../GeneralComponents/Loading';
+import Cookies from 'js-cookie'
 
 const Profile = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState({
+    main: false,
+    sub: false,
+  })
   const [form, setForm] = useState({
     first_name: '',
     surname: '',
@@ -69,12 +74,15 @@ const Profile = () => {
     e.preventDefault()
   }
 
+  const AddBankAccount = () => {
+    if (!form.account_number || !form.account_name || !form.bank) return ErrorAlert('Enter all fields')
+  }
 
 
   return (
     <AuthPageLayout>
       <div>
-        {loading &&
+        {loading.main &&
           <ModalLayout clas={`w-11/12 mx-auto`}>
             <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
               <Loader />
@@ -130,19 +138,19 @@ const Profile = () => {
               <div className='grid md:grid-cols-2 grid-cols-1 gap-6'>
                 <div className='relative'>
                   <FormInput label='First name' placeholder='Your first name' name='first_name' value={form.first_name} onChange={formHandler} className='!pl-4 !pr-10' />
-                  <HiUser className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
+                  <HiUser className='absolute top-11 right-3 text-xl text-gray-400' />
                 </div>
                 <div className='relative'>
                   <FormInput label='Surname' placeholder='Your surname' name='surname' value={form.surname} onChange={formHandler} className='!pl-4 !pr-10' />
-                  <HiUser className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
+                  <HiUser className='absolute top-11 right-3 text-xl text-gray-400' />
                 </div>
                 <div className='relative'>
                   <FormInput label='Email address' placeholder='example@gmail.com' name='email' value={form.email} onChange={formHandler} type='email' className='!pl-4 !pr-10' />
-                  <MdEmail className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
+                  <MdEmail className='absolute top-11 right-3 text-xl text-gray-400' />
                 </div>
                 <div className='relative'>
                   <FormInput label='Phone number' placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} className='!pl-4 !pr-10' />
-                  <BiSolidPhoneCall className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
+                  <BiSolidPhoneCall className='absolute top-11 right-3 text-xl text-gray-400' />
                 </div>
               </div>
             </div>
@@ -159,10 +167,11 @@ const Profile = () => {
             <div className='flex flex-col gap-5'>
               <div className='text-xl capitalize font-medium text-lightgreen'>add a bank account</div>
               <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1'>
-                <FormInput placeholder='Bank name' name='bank' value={form.bank} onChange={formHandler} className='!bg-secondary !w-60' border={false} />
-                <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={formHandler} className='!bg-secondary !w-60' border={false} />
-                <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!bg-secondary !w-60' border={false} />
-                <FormButton title='Save' className='!py-3 !text-base mt-2' type='button' />
+                {loading.sub && <Loading />}
+                <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                <FormInput placeholder='Bank name' name='bank' value={form.bank} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                <FormButton title='Save' className='!py-3 !text-base mt-2' type='button' onClick={AddBankAccount} />
               </div>
             </div>
           </form>

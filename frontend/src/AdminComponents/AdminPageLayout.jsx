@@ -29,7 +29,7 @@ const AdminPageLayout = ({ children }) => {
                         {pagelinks.map((link, i) => {
                             return (
                                 <Link onClick={MoveToTop} to={link.url}
-                                    className={` py-2 group text-base flex items-center gap-2 px-5 w-full capitalize ${pathName === link.url || pathName.includes(link.label) ? active : nonactive} `} key={i}>
+                                    className={` py-2 group text-base flex items-center gap-2 px-5 w-full capitalize ${pathName === link.url || pathName.includes(link.main) ? active : nonactive} `} key={i}>
                                     <div className="relative">
                                         {link.last && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}
                                         <link.icon className="transform group-hover:rotate-180 text-xl duration-300" />

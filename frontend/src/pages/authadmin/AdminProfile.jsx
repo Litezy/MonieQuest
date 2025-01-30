@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import user from '../../assets/images/customer2.jpg'
 import { MdEmail, MdOutlineAdminPanelSettings } from "react-icons/md";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -8,14 +8,20 @@ import { BiSolidEditAlt, BiSolidPhoneCall } from "react-icons/bi";
 import { IoLogOut } from "react-icons/io5";
 import FormInput from '../../utils/FormInput';
 import PasswordInputField from '../../utils/PasswordInputField';
-import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import { CookieName, ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import FormButton from '../../utils/FormButton';
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
+import Loading from '../../GeneralComponents/Loading';
+import Cookies from 'js-cookie'
 
 const AdminProfile = () => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState({
+        main: false,
+        sub1: false,
+        sub2: false
+    })
     const [form, setForm] = useState({
         first_name: '',
         surname: '',
@@ -26,7 +32,9 @@ const AdminProfile = () => {
         new_password: '',
         bank: '',
         account_number: '',
-        account_name: ''
+        account_name: '',
+        exchange_rate: '',
+        giftcard_rate: ''
     })
     const [profile, setProfile] = useState({
         img: user,
@@ -67,10 +75,19 @@ const AdminProfile = () => {
         e.preventDefault()
     }
 
+    const AddBankAccount = () => {
+        if (!form.account_number || !form.account_name || !form.bank) return ErrorAlert('Enter all fields')
+    }
+
+    const UpdateSettings = () => {
+        if (!form.exchange_rate || !form.giftcard_rate) return ErrorAlert('Enter all fields')
+    }
+
+
     return (
         <AdminPageLayout>
             <div>
-                {loading &&
+                {loading.main &&
                     <ModalLayout clas={`w-11/12 mx-auto`}>
                         <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
                             <Loader />
@@ -113,19 +130,19 @@ const AdminProfile = () => {
                             <div className='grid md:grid-cols-2 grid-cols-1 gap-6'>
                                 <div className='relative'>
                                     <FormInput label='First name' placeholder='Your first name' name='first_name' value={form.first_name} onChange={formHandler} className='!pl-4 !pr-10' />
-                                    <HiUser className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
+                                    <HiUser className='absolute top-11 right-3 text-xl text-gray-400' />
                                 </div>
                                 <div className='relative'>
                                     <FormInput label='Surname' placeholder='Your surname' name='surname' value={form.surname} onChange={formHandler} className='!pl-4 !pr-10' />
-                                    <HiUser className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
+                                    <HiUser className='absolute top-11 right-3 text-xl text-gray-400' />
                                 </div>
                                 <div className='relative'>
                                     <FormInput label='Email address' placeholder='example@gmail.com' name='email' value={form.email} onChange={formHandler} type='email' className='!pl-4 !pr-10' />
-                                    <MdEmail className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
+                                    <MdEmail className='absolute top-11 right-3 text-xl text-gray-400' />
                                 </div>
                                 <div className='relative'>
                                     <FormInput label='Phone number' placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} className='!pl-4 !pr-10' />
-                                    <BiSolidPhoneCall className='absolute lg:top-10 top-12 right-3 text-xl text-gray-400' />
+                                    <BiSolidPhoneCall className='absolute top-11 right-3 text-xl text-gray-400' />
                                 </div>
                             </div>
                         </div>
@@ -141,11 +158,29 @@ const AdminProfile = () => {
                         </div>
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>add a bank account</div>
-                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1'>
-                                <FormInput placeholder='Bank name' name='bank' value={form.bank} onChange={formHandler} className='!bg-secondary !w-60' border={false} />
-                                <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={formHandler} className='!bg-secondary !w-60' border={false} />
-                                <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!bg-secondary !w-60' border={false} />
-                                <FormButton title='Save' className='!py-3 !text-base mt-2' type='button' />
+                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1 relative'>
+                                {loading.sub1 && <Loading />}
+                                <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                <FormInput placeholder='Bank name' name='bank' value={form.bank} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                <FormButton title='Save' className='!py-3 !text-base mt-2' type='button' onClick={AddBankAccount} />
+                            </div>
+                        </div>
+                        <div className='flex flex-col gap-5'>
+                            <div className='text-xl capitalize font-medium text-lightgreen'>update settings</div>
+                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1 relative'>
+                                {loading.sub2 && <Loading />}
+                                <div className='flex flex-col gap-3'>
+                                    <div className='flex flex-col'>
+                                        <div className='font-medium text-gray-200'>Exchange rate:</div>
+                                        <FormInput placeholder='Enter rate amount' name='exchange_rate' value={form.exchange_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className='font-medium text-gray-200'>Giftcard rate:</div>
+                                        <FormInput placeholder='Enter rate amount' name='giftcard_rate' value={form.giftcard_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                </div>
+                                <FormButton title='Save' className='!py-3 !text-base mt-2' type='button' onClick={UpdateSettings} />
                             </div>
                         </div>
                     </form>

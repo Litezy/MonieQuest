@@ -8,6 +8,7 @@ import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout';
 import { ErrorAlert } from '../../utils/pageUtils';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
+import { bankacc } from '../../AuthComponents/AuthUtils';
 
 const aiTools = [
   "Test-to-Image", "Test-to-Text", "code generators", "AI assistants"
@@ -81,6 +82,15 @@ const CreateTools = () => {
     setToolImage({
       img: URL.createObjectURL(file),
       image: file
+    })
+  }
+
+  const PrefillBank = () => {
+    setForm({
+      ...form,
+      bank: bankacc.bank,
+      account_name: bankacc.account_name,
+      account_number: bankacc.account_number
     })
   }
 
@@ -162,7 +172,7 @@ const CreateTools = () => {
           <form onSubmit={Submit} className='flex flex-col gap-12'>
             <div className='flex flex-col gap-6'>
               <div className='flex flex-col gap-2'>
-                <div className='flex gap-3 font-bold text-lg'>
+                <div className='flex gap-3 font-bold text-lg text-lightgreen'>
                   <span>1.</span>
                   <span>Pick the Type of Tool or eBook
                   </span>
@@ -319,9 +329,9 @@ const CreateTools = () => {
               </div>
             </div>
             <div className='flex gap-2'>
-              <div className='font-bold text-lg'>2.</div>
+              <div className='font-bold text-lg text-lightgreen'>2.</div>
               <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg'>Pricing</div>
+                <div className='font-bold text-lg text-lightgreen'>Pricing</div>
                 <div className='text-sm'>Enter the price you want to sell your tool or eBook for.</div>
                 <div className='flex'>
                   <div className='w-fit h-fit p-4 border border-white uppercase text-xs'>ngn</div>
@@ -330,9 +340,9 @@ const CreateTools = () => {
               </div>
             </div>
             <div className='flex gap-2'>
-              <div className='font-bold text-lg'>3.</div>
+              <div className='font-bold text-lg text-lightgreen'>3.</div>
               <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg'>Tool Details</div>
+                <div className='font-bold text-lg text-lightgreen'>Tool Details</div>
                 <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Enter Title' name='title' value={form.title} onChange={formHandler}></input>
                 <textarea className='outline-none border border-white lg:text-sm text-base w-72 h-28 bg-transparent resize-none' placeholder='What is this tool about?' name='about_tool' value={form.about_tool} onChange={formHandler}></textarea>
                 <input className='outline-none border border-white w-72 h-fit p-3 bg-transparent iptt' placeholder='Key Feature1' name='feature1' value={form.feature1} onChange={formHandler}></input>
@@ -356,25 +366,26 @@ const CreateTools = () => {
               </div>
             </div>
             <div className='flex gap-2'>
-              <div className='font-bold text-lg'>4.</div>
+              <div className='font-bold text-lg text-lightgreen'>4.</div>
               <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg'>Payment Details</div>
+                <div className='font-bold text-lg text-lightgreen'>Payment Details</div>
                 <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Select Bank' name='bank' value={form.bank} onChange={formHandler}></input>
-                <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Account Details' name='account_number' value={form.account_number} onChange={formHandler}></input>
+                <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Account Number' name='account_number' value={form.account_number} onChange={formHandler}></input>
                 <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Account Name' name='account_name' value={form.account_name} onChange={formHandler}></input>
+                <div onClick={PrefillBank} className="mb-5 w-fit px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
               </div>
             </div>
             <div className='flex gap-2'>
-              <div className='font-bold text-lg'>5.</div>
+              <div className='font-bold text-lg text-lightgreen'>5.</div>
               <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg'>Video Link</div>
+                <div className='font-bold text-lg text-lightgreen'>Video Link</div>
                 <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Insert URL to the tool or eBook Demo' name='video_url' value={form.video_url} onChange={formHandler}></input>
               </div>
             </div>
             <div className='flex gap-2'>
-              <div className='font-bold text-lg'>6.</div>
+              <div className='font-bold text-lg text-lightgreen'>6.</div>
               <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg'>Contact Details</div>
+                <div className='font-bold text-lg text-lightgreen'>Contact Details</div>
                 <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='WhatsApp or Phone Number' name='phone' value={form.phone} onChange={formHandler}></input>
               </div>
             </div>

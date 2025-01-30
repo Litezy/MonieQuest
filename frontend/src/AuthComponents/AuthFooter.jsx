@@ -78,7 +78,7 @@ const AuthFooter = () => {
 
 
     return (
-        <div className='w-full fixed bottom-1 z-50'>
+        <div className='w-full fixed bottom-1 z-30'>
             <div className='w-11/12 mx-auto relative'>
                 <div className="w-full px-5 relative bg-[#212134] border border-secondary rounded-full flex items-center justify-around gap-2">
                     {mainIcons.map((item, i) => {

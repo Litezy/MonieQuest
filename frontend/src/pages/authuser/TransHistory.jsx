@@ -105,7 +105,7 @@ const TransHistory = () => {
               }
             </>
             :
-            <div className="w-full text-gray-400 text-center">No results found...</div>
+            <div className="w-full text-gray-400 text-center">No record found...</div>
           }
         </div>
       </div>

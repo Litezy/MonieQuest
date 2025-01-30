@@ -7,7 +7,7 @@ const records = [
     {
         gen_id: '123456789',
         title: 'acrobat',
-        catgory: 'AI assistant',
+        category: 'AI assistant',
         price: 100,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
@@ -16,7 +16,7 @@ const records = [
     {
         gen_id: '123456789',
         title: 'playwrite',
-        catgory: 'font',
+        category: 'font',
         price: 20,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
@@ -25,7 +25,7 @@ const records = [
     {
         gen_id: '123456789',
         title: 'the grinch mas',
-        catgory: 'graphics',
+        category: 'graphics',
         price: 50,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
@@ -122,7 +122,7 @@ const ProfitTools = () => {
                                     </div>
                                 </>
                                 :
-                                <div className="w-full text-gray-400 text-center">No results found...</div>
+                                <div className="w-full text-gray-400 text-center">No record found...</div>
                             }
                         </>
                     }

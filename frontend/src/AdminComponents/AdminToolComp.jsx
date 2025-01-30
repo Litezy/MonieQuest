@@ -1,12 +1,18 @@
 import moment from 'moment'
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const ToolComp = ({item}) => {
+const AdminToolComp = ({ item }) => {
     return (
         <div className='w-full h-fit relative text-semi-white rounded-lg shadow_auth'>
-            <div className='p-4 bg-secondary text-sm text-lightgreen rounded-t-lg flex justify-between gap-4'>
+            <div className='px-4 py-3 bg-secondary text-sm rounded-t-lg flex justify-between gap-4 items-center text-lightgreen'>
                 <div>{moment(item.createdAt).format('DD-MM-yyyy')} / {moment(item.createdAt).format('h:mm')}</div>
-                <div>ID: {item.gen_id}</div>
+                <div className='flex gap-3 items-center'>
+                    <div>ID: {item.gen_id}</div>
+                    <Link to={`/admin/profit_tools/${item.id}/${item.title}`}>
+                        <button className='outline-none w-fit h-fit bg-ash py-2 px-4 text-xs rounded-md text-white font-medium'>View</button>
+                    </Link>
+                </div>
             </div>
             <div className='bg-primary grid md:grid-cols-2 grid-cols-1 md:gap-0 gap-2 text-xs rounded-b-lg capitalize md:p-0 p-4'>
                 <div className='flex flex-col gap-2 md:p-4 overflow-hidden'>
@@ -42,4 +48,4 @@ const ToolComp = ({item}) => {
     )
 }
 
-export default ToolComp
+export default AdminToolComp

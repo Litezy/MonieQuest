@@ -3,12 +3,13 @@ import { MdCurrencyExchange, MdLeaderboard, MdDashboard } from "react-icons/md";
 import { HiGift } from "react-icons/hi2";
 import { CgToolbox } from "react-icons/cg";
 import { Link, useLocation } from 'react-router-dom';
-import { FaUsers } from "react-icons/fa";
-import { RiSettings5Fill, RiUser3Fill } from 'react-icons/ri'
+import { FaUsers, FaBloggerB } from "react-icons/fa";
+import { RiUser3Fill } from 'react-icons/ri'
 import { BiMoneyWithdraw } from "react-icons/bi";
 import { MoveToTop } from '../utils/pageUtils';
 import { IoNotificationsSharp } from 'react-icons/io5';
 import { CiMenuKebab } from 'react-icons/ci';
+import { AiFillDollarCircle } from "react-icons/ai";
 
 const mainIcons = [
     {
@@ -32,22 +33,30 @@ const mainIcons = [
         url: '/admin/giftcards'
     },
     {
-        name: 'profit tools',
-        symbol: CgToolbox,
-        url: '/admin/profit_tools'
+        name: 'bank withdrawals',
+        symbol: BiMoneyWithdraw,
+        url: '/admin/bank_withdrawals'
     },
 ]
 
 const extraIcons = [
     {
-        name: 'bank withdrawals',
-        symbol: BiMoneyWithdraw,
-        url: '/admin/bank_withdrawals'
+        name: 'profit tools',
+        symbol: CgToolbox,
+        url: '/admin/profit_tools',
+        main: '/profit_tools'
     },
     {
-        name: 'settings',
-        symbol: RiSettings5Fill,
-        url: '/admin/settings'
+        name: 'airdrops',
+        symbol: AiFillDollarCircle,
+        url: '/admin/airdrops/create',
+        main: '/airdrops'
+    },
+    {
+        name: 'blogs',
+        symbol: FaBloggerB,
+        url: '/admin/blogs/create',
+        main: '/blogs'
     },
     {
         name: 'profile',
@@ -66,10 +75,9 @@ const extraIcons = [
     },
 ]
 
-const extraArray = [
-    '/admin/bank_withdrawals', '/admin/settings', '/admin/profile', '/admin/notifications', '/admin/leaderboard'
+const mainArray = [
+    '/admin/dashboard', '/admin/all_users', '/admin/exchange', '/admin/giftcards', '/admin/bank_withdrawals',
 ]
-
 
 const AdminFooter = () => {
     const [view, setView] = useState(false)
@@ -80,27 +88,29 @@ const AdminFooter = () => {
 
 
     return (
-        <div className='w-full fixed bottom-1 z-50'>
+        <div className='w-full fixed bottom-1 z-30'>
             <div className='w-11/12 mx-auto relative'>
                 <div className="w-full px-5 relative bg-[#212134] border border-secondary rounded-full flex items-center justify-around gap-2">
                     {mainIcons.map((item, i) => {
                         return (
                             <div key={i} className="flex items-center py-4 relative" >
-                                {pathName === item.url &&
+                                {pathName === item.url || pathName.includes(item.main) ?
                                     <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full "></div>
+                                    :
+                                    <></>
                                 }
                                 <Link to={item.url} onClick={MoveToTop}
-                                    className={` group-hover:text-lightgreen px-2  ${pathName === item.url ? active : nonactive} cursor-pointer flex flex-col gap-1 items-center`}>
+                                    className={` group-hover:text-lightgreen px-2  ${pathName === item.url || pathName.includes(item.main) ? active : nonactive} cursor-pointer flex flex-col gap-1 items-center`}>
                                     <div className="text-[1.5rem]">{<item.symbol />}</div>
                                 </Link>
                             </div>
                         )
                     })}
                     <div className='flex items-center py-4 relative'>
-                        {extraArray.includes(pathName) &&
-                            <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full "></div>
+                        {!mainArray.includes(pathName) &&
+                            <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full"></div>
                         }
-                        <div className={`group-hover:text-lightgreen px-2 cursor-pointer text-[1.5rem] ${extraArray.includes(pathName) ? active : nonactive}`} onClick={() => setView(!view)}>
+                        <div className={`group-hover:text-lightgreen px-2 cursor-pointer text-[1.5rem] ${!mainArray.includes(pathName) ? active : nonactive}`} onClick={() => setView(!view)}>
                             <CiMenuKebab />
                         </div>
                     </div>
@@ -109,11 +119,12 @@ const AdminFooter = () => {
                     <div className='absolute -top-12 right-0 bg-secondary border border-primary px-4 flex items-center justify-around gap-2 rounded-full'>
                         {extraIcons.map((item, i) => (
                             <div key={i} className='flex items-center py-4 relative'>
-                                {pathName === item.url &&
+                                {pathName === item.url || pathName.includes(item.main) ?
                                     <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full"></div>
+                                    :<></>
                                 }
                                 <Link to={item.url} onClick={MoveToTop}
-                                    className={` group-hover:text-lightgreen px-2  ${pathName === item.url ? active : nonactive} cursor-pointer flex flex-col gap-1 items-center`}>
+                                    className={` group-hover:text-lightgreen px-2  ${pathName === item.url || pathName.includes(item.main) ? active : nonactive} cursor-pointer flex flex-col gap-1 items-center`}>
                                     <div className="text-[1.5rem]">{<item.symbol />}</div>
                                 </Link>
                             </div>

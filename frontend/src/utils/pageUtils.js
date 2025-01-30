@@ -34,6 +34,10 @@ export const MoveToTop = () => {
     })
 }
 
+export const currencySign = [
+    '$','₦'
+]
+
 export const HomeTestimonials = [
     {
         user: 'henry calvin',

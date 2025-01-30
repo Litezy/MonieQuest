@@ -15,7 +15,6 @@ const SelectComp = ({ title, options, style, value, handleChange, width = 120, s
         <InputLabel>{title}</InputLabel>
         <Select
           value={value}
-          defaultValue={title ? '' : options[0]}
           onChange={handleChange}
           sx={{ color: style?.color, fontSize: style?.font }}
           hiddenLabel={title ? false : true}

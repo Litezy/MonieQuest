@@ -37,9 +37,14 @@ import AdminTools from "../pages/authadmin/AdminTools";
 import AdminProfile from "../pages/authadmin/AdminProfile";
 import AdminNotification from "../pages/authadmin/AdminNotification";
 import AdminLeaderboards from "../pages/authadmin/AdminLeaderboards";
-import AdminSettings from "../pages/authadmin/AdminSettings";
 import AdminDashboard from "../pages/authadmin/AdminDashboard";
 import AdminAllUsers from "../pages/authadmin/AdminAllUsers";
+import AdminSingleTool from "../pages/authadmin/AdminSingleTool";
+import AdminAllAirdrops from "../pages/authadmin/AdminAllAirdrops";
+import AdminCreateAirdrops from "../pages/authadmin/AdminCreateAirdrops";
+import AdminAllBlogs from "../pages/authadmin/AdminAllBlogs";
+import AdminCreateBlogs from "../pages/authadmin/AdminCreateBlogs";
+import AdminSingleAirdrop from "../pages/authadmin/AdminSingleAirdrop";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -85,9 +90,14 @@ export const AdminPagesLinks = [
     { path: '/admin/exchange', component: AdminExchange },
     { path: '/admin/giftcards', component: AdminGiftCards },
     { path: '/admin/profit_tools', component: AdminTools },
+    { path: '/admin/profit_tools/:id/:slug', component: AdminSingleTool },
     { path: '/admin/bank_withdrawals', component: AdminBankWithdrawals },
-    { path: '/admin/settings', component: AdminSettings },
     { path: '/admin/profile', component: AdminProfile },
     { path: '/admin/notifications', component: AdminNotification },
     { path: '/admin/leaderboard', component: AdminLeaderboards },
+    { path: '/admin/airdrops/all', component: AdminAllAirdrops },
+    { path: '/admin/airdrops/create', component: AdminCreateAirdrops },
+    { path: '/admin/airdrops/:id/:slug', component: AdminSingleAirdrop },
+    { path: '/admin/blogs/all', component: AdminAllBlogs },
+    { path: '/admin/blogs/create', component: AdminCreateBlogs },
 ]
