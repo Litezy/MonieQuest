@@ -15,7 +15,7 @@ const AdminAirdropComp = ({ item }) => {
                     </Link>
                 </div>
             </div>
-            <div className='bg-primary grid md:grid-cols-2 grid-cols-1 md:gap-0 gap-2 text-xs rounded-b-lg capitalize md:p-0 p-4'>
+            <div className='bg-primary grid md:grid-cols-2 grid-cols-1 md:gap-0 gap-2 text-sm rounded-b-lg capitalize md:p-0 p-4'>
                 <div className='flex flex-col gap-2 md:p-4 overflow-hidden'>
                     <div className='flex justify-between gap-4'>
                         <span>title:</span>

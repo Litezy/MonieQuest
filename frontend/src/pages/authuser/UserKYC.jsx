@@ -10,6 +10,7 @@ import { TfiTimer } from 'react-icons/tfi';
 
 
 const UserKYC = () => {
+    const [kyc, setKyc] = useState({})
     const [loading, setLoading] = useState(false)
     const [screen, setScreen] = useState(1)
     const frontRef = useRef()
@@ -100,6 +101,10 @@ const UserKYC = () => {
                                 </div>
                             </ModalLayout>
                         }
+                        <div className='text-center text-lg bg-ash flex justify-between px-4 mt-4'>
+                            <span>KYC status:</span>
+                            <div className={`italic ${kyc?.status === 'verified' ? 'text-green-400' : kyc?.status === 'unverified' ? 'text-red-500' : 'text-yellow-300'}`}>processing</div>
+                        </div>
                         <div className="md:flex md:items-baseline gap-5 w-full">
                             <div className="md:w-1/2">
                                 <div className="flex flex-col w-full mt-5  ">
@@ -142,7 +147,7 @@ const UserKYC = () => {
                                     <label className={`${frontimg.img ? '' : 'border-2 border-black'} w-full  h-full border-dashed flex cursor-pointer items-center justify-center `}>
                                         {frontimg.img ?
                                             <div className="relative w-full h-full">
-                                                <div className="absolute top-2 right-3 main font-bold">
+                                                <div className="absolute top-0 -right-3 main font-bold">
                                                     <FaEdit className='text-2xl' />
                                                 </div>
                                                 <img src={frontimg.img} className='w-full h-full' />
@@ -159,7 +164,7 @@ const UserKYC = () => {
                                     <label className={`${backimg.img ? '' : 'border-2 border-black border-dashed'} w-full h-full flex cursor-pointer items-center justify-center `}>
                                         {backimg.img ?
                                             <div className="relative w-full h-full">
-                                                <div className="absolute top-2 right-3 main font-bold">
+                                                <div className="absolute top-0 -right-3 main font-bold">
                                                     <FaEdit className='text-2xl' />
                                                 </div>
                                                 <img src={backimg.img} className='w-full h-full' />

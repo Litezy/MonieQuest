@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
-import AdminPageLayout from '../../AdminComponents/AdminPageLayout';
 import AdminToolComp from '../../AdminComponents/AdminToolComp';
+import AdminToolsLayout from '../../AdminComponents/AdminToolsLayout';
 
 const records = [
     {
@@ -10,7 +10,8 @@ const records = [
         gen_id: '123456789',
         title: 'acrobat',
         category: 'AI assistant',
-        price: 100,
+        price: 2000,
+        discount: 10,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'approved'
@@ -20,7 +21,8 @@ const records = [
         gen_id: '123456789',
         title: 'playwrite',
         category: 'font',
-        price: 20,
+        price: 11000,
+        discount: 0,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'declined'
@@ -30,7 +32,8 @@ const records = [
         gen_id: '123456789',
         title: 'the grinch mas',
         category: 'graphics',
-        price: 50,
+        price: 5000,
+        discount: 30,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'pending'
@@ -63,7 +66,7 @@ const AdminTools = () => {
     }
 
     return (
-        <AdminPageLayout>
+        <AdminToolsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
                     <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={filterTools} />
@@ -132,7 +135,7 @@ const AdminTools = () => {
                     }
                 </div>
             </div>
-        </AdminPageLayout>
+        </AdminToolsLayout>
     )
 }
 

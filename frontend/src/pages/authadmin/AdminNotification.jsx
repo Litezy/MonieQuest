@@ -13,7 +13,7 @@ const AdminNotification = () => {
             title: 'new order made',
             content: 'Lorem, ipsum dolor  sit amet consectetur adipisicing elit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit.',
             read: 'true',
-            url: '/admin/profit_tools',
+            url: '/admin/profit_tools/orders',
         },
         {
             title: 'withdrawal submitted',
@@ -25,7 +25,7 @@ const AdminNotification = () => {
             title: 'new user alert',
             content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione soluta porro cumque dolore incidunt optio molestiae adipisci debitis similique odit. Ratione soluta porro cumque dolore incidunt opton.',
             read: 'false',
-            url: '/admin/dashboard',
+            url: '/admin/all_users',
         }
     ])
     const [dataLoading, setDataLoading] = useState(true)

@@ -8,7 +8,7 @@ const records = [
         gen_id: '123456789',
         title: 'acrobat',
         category: 'AI assistant',
-        price: 100,
+        price: 1000,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'approved'
@@ -17,7 +17,7 @@ const records = [
         gen_id: '123456789',
         title: 'playwrite',
         category: 'font',
-        price: 20,
+        price: 3000,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'declined'
@@ -26,7 +26,7 @@ const records = [
         gen_id: '123456789',
         title: 'the grinch mas',
         category: 'graphics',
-        price: 50,
+        price: 12000,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'pending'

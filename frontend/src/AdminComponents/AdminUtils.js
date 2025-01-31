@@ -13,7 +13,7 @@ export const pagelinks = [
     { label: 'users', url: '/admin/all_users', icon: FaUsers, last: false },
     { label: 'crypto exchange', url: '/admin/exchange', icon: MdCurrencyExchange, last: false },
     { label: 'gift cards', url: '/admin/giftcards', icon: HiGift, last: false },
-    { label: 'profit tools', main: '/profit_tools', url: '/admin/profit_tools', icon: CgToolbox, last: false },
+    { label: 'profit tools', main: '/profit_tools', url: '/admin/profit_tools/orders', icon: CgToolbox, last: false },
     { label: 'airdrops', main: '/airdrops', url: '/admin/airdrops/create', icon: AiFillDollarCircle, last: false },
     { label: 'blogs', main: '/blogs', url: '/admin/blogs/create', icon: FaBloggerB, last: false },
     { label: 'bank withdrawals', url: '/admin/bank_withdrawals', icon: BiMoneyWithdraw, last: false },

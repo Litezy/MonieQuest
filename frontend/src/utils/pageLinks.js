@@ -45,6 +45,7 @@ import AdminCreateAirdrops from "../pages/authadmin/AdminCreateAirdrops";
 import AdminAllBlogs from "../pages/authadmin/AdminAllBlogs";
 import AdminCreateBlogs from "../pages/authadmin/AdminCreateBlogs";
 import AdminSingleAirdrop from "../pages/authadmin/AdminSingleAirdrop";
+import AdminToolsOrders from "../pages/authadmin/AdminToolsOrders";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -89,7 +90,8 @@ export const AdminPagesLinks = [
     { path: '/admin/all_users', component: AdminAllUsers },
     { path: '/admin/exchange', component: AdminExchange },
     { path: '/admin/giftcards', component: AdminGiftCards },
-    { path: '/admin/profit_tools', component: AdminTools },
+    { path: '/admin/profit_tools/orders', component: AdminToolsOrders },
+    { path: '/admin/profit_tools/all_tools', component: AdminTools },
     { path: '/admin/profit_tools/:id/:slug', component: AdminSingleTool },
     { path: '/admin/bank_withdrawals', component: AdminBankWithdrawals },
     { path: '/admin/profile', component: AdminProfile },

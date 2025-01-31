@@ -1,0 +1,76 @@
+import React from 'react'
+import { currencySign } from '../utils/pageUtils'
+import moment from 'moment'
+
+const ToolsOrdersModal = ({ selected }) => {
+    return (
+        <div className="flex w-full gap-8 flex-col">
+            <div className='flex flex-col gap-5'>
+                <div className="text-center text-lightgreen">Transaction Details</div>
+                <div className='flex flex-col gap-2'>
+                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                        <div>Transaction Type</div>
+                        <div className="capitalize ">profit tools purchase</div>
+                    </div>
+                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                        <div className="">Transaction Date</div>
+                        <div className="capitalize ">{moment(selected.createdAt).format('Do MMMM YYYY')} / {moment(selected.createdAt).format('h:mm')}</div>
+                    </div>
+                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                        <div>Transaction ID</div>
+                        <div>{selected?.gen_id}</div>
+                    </div>
+                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                        <div>Total Product(s) Price</div>
+                        <div>{currencySign[1]}{selected?.total_price.toLocaleString()}</div>
+                    </div>
+                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                        <div>Total Discounted Price</div>
+                        <div>{currencySign[1]}{selected?.total_discounted_price.toLocaleString()}</div>
+                    </div>
+                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                        <div>Amount Paid</div>
+                        <div>{currencySign[1]}{selected?.amount_paid.toLocaleString()}</div>
+                    </div>
+                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                        <div className="">Transaction Status</div>
+                        <div className="">{selected?.status}</div>
+                    </div>
+                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                        <div className="">Email Address</div>
+                        <div className="">{selected?.customer_email}</div>
+                    </div>
+                </div>
+            </div>
+            <div className='flex flex-col gap-5'>
+                <div className="text-center text-lightgreen">Products Purchased ({selected.products.length})</div>
+                {selected.products.map((item, i) => (
+                    <div key={i} className='flex flex-col gap-2 border border-zinc-600 p-4'>
+                        <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                            <div>Products ID</div>
+                            <div>{item?.gen_id}</div>
+                        </div>
+                        <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                            <div>Title</div>
+                            <div className='capitalize'>{item?.title}</div>
+                        </div>
+                        <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                            <div>Category</div>
+                            <div className='capitalize'>{item?.category}</div>
+                        </div>
+                        <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                            <div>Price</div>
+                            <div>{currencySign[1]}{item?.price.toLocaleString()}</div>
+                        </div>
+                        <div className="flex items-center w-full justify-between gap-4">
+                            <div>Discount</div>
+                            <div>{item?.discount}%</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+export default ToolsOrdersModal

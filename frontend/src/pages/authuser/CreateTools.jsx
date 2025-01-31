@@ -9,6 +9,8 @@ import { ErrorAlert } from '../../utils/pageUtils';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import { bankacc } from '../../AuthComponents/AuthUtils';
+import { FaEdit } from 'react-icons/fa';
+import FormInput from '../../utils/FormInput';
 
 const aiTools = [
   "Test-to-Image", "Test-to-Text", "code generators", "AI assistants"
@@ -41,10 +43,10 @@ const eBooks = [
 
 const CreateTools = () => {
   const [screen, setScreen] = useState(1)
-  const [select, setSelect] = useState('')
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
-    textField: '',
+    category: '',
+    sub_category: '',
     price: '',
     title: '',
     about_tool: '',
@@ -169,8 +171,8 @@ const CreateTools = () => {
           </div>
         }
         {screen === 2 &&
-          <form onSubmit={Submit} className='flex flex-col gap-12'>
-            <div className='flex flex-col gap-6'>
+          <form onSubmit={Submit}>
+            <div className='flex flex-col gap-6 mt-10'>
               <div className='flex flex-col gap-2'>
                 <div className='flex gap-3 font-bold text-lg text-lightgreen'>
                   <span>1.</span>
@@ -179,221 +181,227 @@ const CreateTools = () => {
                 </div>
                 <div className='text-sm'>(Choose the category that best describes your submission)</div>
               </div>
-              <div className='grid md:grid-cols-2 grid-cols-1 gap-12 items-start'>
-                <div className='flex gap-3 items-baseline'>
+              <div className='grid md:grid-cols-2 grid-cols-1 gap-12'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>AI Tools
                     </div>
                     {aiTools.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
-                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                         </div>
                         <div className='text-sm capitalize'>{item} {item === 'AI assistants' && <span>(<span className='lowercase'>e.g.,</span> chatbots, writing tools)</span>}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className='flex gap-3 items-baseline'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>Creative Tools
                     </div>
                     {creativeTools.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
-                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                         </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className='flex gap-3 items-baseline'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>Productivity Tools
                     </div>
                     {productivityTools.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
-                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                         </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className='flex gap-3 items-baseline'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>Business Resources
                     </div>
                     {businessResources.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
-                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                         </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className='flex gap-3 items-baseline'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>Learning and Skill Development
                     </div>
                     {learningDevelopment.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
-                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                         </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className='flex gap-3 items-baseline'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>Media Generators
                     </div>
                     {mediaGenerators.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
-                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                         </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className='flex gap-3 items-baseline'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>Automation and Utility Tools
                     </div>
                     {automationTools.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
-                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                         </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className='flex gap-3 items-baseline'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>Tech and Software Solutions
                     </div>
                     {techSolutions.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
-                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                         </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className='flex gap-3 items-baseline'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>eBooks and Written Guides
                     </div>
                     {eBooks.map((item, i) => (
                       <div className='flex gap-3' key={i}>
-                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setSelect(item)}>
-                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${select === item && 'bg-lightgreen'}`}></div>
+                        <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
+                          <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                         </div>
                         <div className='text-sm capitalize'>{item}</div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className='flex gap-3 items-baseline'>
+                <div className='flex gap-3 items-baseline col-span-1'>
                   <GiCheckMark className='text-sm' />
                   <div className='flex flex-col gap-3'>
                     <div className='font-bold'>other
                     </div>
                     <div className='flex flex-col gap-2'>
                       <div className='text-sm'>Specify Your Tool or eBook Category</div>
-                      <textarea className='outline-none border border-white lg:text-sm text-base w-72 h-24 bg-transparent resize-none' placeholder='Explain what your tool can do here...' name='textField' value={form.textField} onChange={formHandler}></textarea>
+                      <FormInput formtype='textarea' placeholder='Explain what your tool can do here...' name='sub_category' value={form.sub_category} onChange={formHandler} className='!w-72 !h-24 !rounded-none' />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className='flex gap-2'>
-              <div className='font-bold text-lg text-lightgreen'>2.</div>
-              <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg text-lightgreen'>Pricing</div>
-                <div className='text-sm'>Enter the price you want to sell your tool or eBook for.</div>
-                <div className='flex'>
-                  <div className='w-fit h-fit p-4 border border-white uppercase text-xs'>ngn</div>
-                  <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Amount' name='price' value={form.price} onChange={formHandler}></input>
-                </div>
-              </div>
-            </div>
-            <div className='flex gap-2'>
-              <div className='font-bold text-lg text-lightgreen'>3.</div>
-              <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg text-lightgreen'>Tool Details</div>
-                <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Enter Title' name='title' value={form.title} onChange={formHandler}></input>
-                <textarea className='outline-none border border-white lg:text-sm text-base w-72 h-28 bg-transparent resize-none' placeholder='What is this tool about?' name='about_tool' value={form.about_tool} onChange={formHandler}></textarea>
-                <input className='outline-none border border-white w-72 h-fit p-3 bg-transparent iptt' placeholder='Key Feature1' name='feature1' value={form.feature1} onChange={formHandler}></input>
-                <input className='outline-none border border-white w-72 h-fit p-3 bg-transparent iptt' placeholder='Key Feature2' name='feature2' value={form.feature2} onChange={formHandler}></input>
-                <label className='cursor-pointer'>
-                  {toolImage.img ?
-                    <div className='flex items-center gap-1'>
-                      <img src={toolImage.img} className='h-44 w-72 object-cover'></img>
-                      <div className='text-sm bg-primary rounded-lg p-2 sha'>
-                        <MdOutlineEdit />
+            <div className='grid md:grid-cols-5 grid-cols-1'>
+              <div className='flex flex-col gap-10 mt-10 col-span-2'>
+                <div className='flex gap-2'>
+                  <div className='font-bold text-lg text-lightgreen'>2.</div>
+                  <div className='flex flex-col gap-2 w-full'>
+                    <div className='font-bold text-lg text-lightgreen'>Pricing</div>
+                    <div className='text-sm'>Enter the price you want to sell your tool or eBook for.</div>
+                    <div className='grid grid-cols-6 w-full h-fit items-center'>
+                      <div className='col-span-1 h-full flex items-center justify-center border border-gray-400 uppercase text-xs'>ngn</div>
+                      <div className='col-span-5'>
+                        <FormInput placeholder='Amount' name='price' value={form.price} onChange={formHandler} className='!rounded-none !-mt-2' />
                       </div>
                     </div>
-                    :
-                    <div className='w-72 h-44 border rounded-lg flex flex-col gap-2 items-center justify-center'>
-                      <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
-                      <span className='text-sm'>click to add image</span>
-                    </div>
-                  }
-                  <input ref={imgref} type="file" onChange={handleUpload} hidden />
-                </label>
-              </div>
-            </div>
-            <div className='flex gap-2'>
-              <div className='font-bold text-lg text-lightgreen'>4.</div>
-              <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg text-lightgreen'>Payment Details</div>
-                <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Select Bank' name='bank' value={form.bank} onChange={formHandler}></input>
-                <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Account Number' name='account_number' value={form.account_number} onChange={formHandler}></input>
-                <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Account Name' name='account_name' value={form.account_name} onChange={formHandler}></input>
-                <div onClick={PrefillBank} className="mb-5 w-fit px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
-              </div>
-            </div>
-            <div className='flex gap-2'>
-              <div className='font-bold text-lg text-lightgreen'>5.</div>
-              <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg text-lightgreen'>Video Link</div>
-                <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='Insert URL to the tool or eBook Demo' name='video_url' value={form.video_url} onChange={formHandler}></input>
-              </div>
-            </div>
-            <div className='flex gap-2'>
-              <div className='font-bold text-lg text-lightgreen'>6.</div>
-              <div className='flex flex-col gap-2'>
-                <div className='font-bold text-lg text-lightgreen'>Contact Details</div>
-                <input className='outline-none border border-white text-base w-72 h-fit p-3 bg-transparent iptt' placeholder='WhatsApp or Phone Number' name='phone' value={form.phone} onChange={formHandler}></input>
-              </div>
-            </div>
-            <div className='md:w-2/5 w-full'>
-              <div className='flex flex-col gap-4 items-center'>
-                <div className=''>We Accept: AI tools, eBooks, Productive tools, Creative resources and lots
-                  More! All submissions are manually reviewed by our staff.</div>
-                <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-24 rounded-lg outline-none uppercase font-bold' onClick={() => setScreen(2)}>submit</button>
+                  </div>
+                </div>
+                <div className='flex gap-2'>
+                  <div className='font-bold text-lg text-lightgreen'>3.</div>
+                  <div className='flex flex-col w-full'>
+                    <div className='font-bold text-lg text-lightgreen'>Tool Details</div>
+                    <FormInput placeholder='Enter Title' name='title' value={form.title} onChange={formHandler} className='!rounded-none' />
+                    <FormInput formtype='textarea' placeholder='What is this tool about?' name='about_tool' value={form.about_tool} onChange={formHandler} className='!rounded-none' />
+                    <FormInput formtype='textarea' placeholder='Key Feature1' name='feature1' value={form.feature1} onChange={formHandler} className='!rounded-none !h-16' />
+                    <FormInput formtype='textarea' placeholder='Key Feature2' name='feature2' value={form.feature2} onChange={formHandler} className='!rounded-none !h-16' />
+                    <label className='cursor-pointer mt-2'>
+                      {toolImage.img ?
+                        <div className='relative'>
+                          <img src={toolImage.img} className='h-56 w-full object-cover'></img>
+                          <div className="absolute top-0 -right-3 main font-bold">
+                            <FaEdit className='text-2xl text-lightgreen' />
+                          </div>
+                        </div>
+                        :
+                        <div className='w-full h-56 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
+                          <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
+                          <span>click to add image</span>
+                        </div>
+                      }
+                      <input ref={imgref} type="file" onChange={handleUpload} hidden />
+                    </label>
+                  </div>
+                </div>
+                <div className='flex gap-2'>
+                  <div className='font-bold text-lg text-lightgreen'>4.</div>
+                  <div className='flex flex-col w-full'>
+                    <div className='font-bold text-lg text-lightgreen'>Payment Details</div>
+                    <FormInput placeholder='Account Number' name='account_number' value={form.account_number} onChange={formHandler} className='!rounded-none' />
+                    <FormInput placeholder='Account Name' name='account_name' value={form.account_name} onChange={formHandler} className='!rounded-none' />
+                    <FormInput placeholder='Enter Bank' name='bank' value={form.bank} onChange={formHandler} className='!rounded-none' />
+                    <div onClick={PrefillBank} className="w-fit mt-2 px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
+                  </div>
+                </div>
+                <div className='flex gap-2'>
+                  <div className='font-bold text-lg text-lightgreen'>5.</div>
+                  <div className='flex flex-col w-full'>
+                    <div className='font-bold text-lg text-lightgreen'>Video Link</div>
+                    <FormInput placeholder='Insert URL to the tool or eBook Demo' name='video_url' value={form.video_url} onChange={formHandler} className='!rounded-none' />
+                  </div>
+                </div>
+                <div className='flex gap-2'>
+                  <div className='font-bold text-lg text-lightgreen'>6.</div>
+                  <div className='flex flex-col w-full'>
+                    <div className='font-bold text-lg text-lightgreen'>Contact Details</div>
+                    <FormInput placeholder='WhatsApp or Phone Number' name='phone' value={form.phone} onChange={formHandler} className='!rounded-none' />
+                  </div>
+                </div>
+                <div className='w-full'>
+                  <div className='flex flex-col gap-4 items-center'>
+                    <div className=''>We Accept: AI tools, eBooks, Productive tools, Creative resources and lots
+                      More! All submissions are manually reviewed by our staff.</div>
+                    <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-24 rounded-lg outline-none uppercase font-bold' onClick={() => setScreen(2)}>submit</button>
+                  </div>
+                </div>
               </div>
             </div>
           </form>

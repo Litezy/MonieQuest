@@ -6,23 +6,30 @@ import { MdContentCopy } from "react-icons/md";
 import { SlClock } from "react-icons/sl";
 import Loading from './Loading';
 
+const bankacc = {
+    bank: 'Zenith Bank',
+    account_name: 'Basit MoneyQuest',
+    account_number: '1234567890',
+}
+
 const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     const localName = 'products'
     const activeScreen = JSON.parse(localStorage.getItem('screen'))
+    const [bankAccount, setBankAccount] = useState(bankacc)
     const [email, setEmail] = useState('')
     const [screen, setScreen] = useState(activeScreen || 1)
     const [loading, setLoading] = useState(false)
+    const rate = 1650
 
-
-    let oldTotalPrice = 0
-    let newTotalPrice = 0
+    let totalPrice = 0
+    let totalDiscountPrice = 0
     cartItems.map((ele) => (
-        oldTotalPrice += ele.old_price,
-        newTotalPrice += ele.new_price
+        totalPrice += ele.price,
+        totalDiscountPrice += (100 - ele.discount) / 100 * ele.price
     ))
 
-    const copyFunction = () => {
-        navigator.clipboard.writeText('8260456789')
+    const copyFunction = (content) => {
+        navigator.clipboard.writeText(content)
         SuccessAlert('Account number copied successfully')
     }
 
@@ -77,20 +84,26 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                             <div className='flex flex-col gap-5 mt-8'>
                                 {cartItems.map((item, i) => (
                                     <div className='w-full h-fit bg-primary flex md:p-0 p-3 rounded-[3px] overflow-hidden' key={i}>
-                                        <div className='md:w-[25%] w-[30%]'>
-                                            <img src={item.image} alt={item.image} className='w-full md:h-28 h-20 object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
+                                        <div className='md:w-[25%] w-[40%]'>
+                                            <img src={item.image} alt={item.image} className='w-full md:h-28 h-[5.5rem] object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
                                         </div>
-                                        <div className='md:w-[75%] w-[70%] px-4 md:pt-3 flex flex-col'>
+                                        <div className='md:w-[75%] w-[70%] px-4 md:py-3 flex flex-col'>
                                             <div className='flex md:flex-row flex-col md:justify-between gap-1'>
                                                 <div className='capitalize font-bold md:text-base text-sm'>{item.title}</div>
-                                                <div className='flex items-center md:flex-col flex-row gap-1.5'>
-                                                    <div className='font-semibold'>${item.new_price.toFixed(2)}</div>
-                                                    <div className='text-xs font-semibold line-through'>${item.old_price.toFixed(2)}</div>
+                                                <div className='flex items-center md:flex-col flex-row gap-1.5 font-semibold'>
+                                                    {item.discount > 0 ?
+                                                        <>
+                                                            <div>${((100 - item.discount) / 100 * item.price).toFixed(2)}</div>
+                                                            <div className='text-xs line-through'>${item.price.toFixed(2)}</div>
+                                                        </>
+                                                        :
+                                                        <div>${item.price.toFixed(2)}</div>
+                                                    }
                                                 </div>
                                             </div>
-                                            <div className='flex md:flex-row flex-col md:justify-between md:items-center text-xs mt-3'>
-                                                <button className='outline-none w-fit h-fit bg-secondary rounded-md py-2 px-3 capitalize hover:text-lightgreen' onClick={() => RemoveCart(item)}>remove tool</button>
-                                                <div className='text-lightgreen md:block hidden'>You are saving {(item.old_price - item.new_price) / item.old_price * 100}%</div>
+                                            <div className='flex justify-between items-center mt-auto text-xs'>
+                                                <button className='outline-none w-fit h-fit bg-secondary rounded-md py-2 px-3 hover:text-lightgreen' onClick={() => RemoveCart(item)}>Remove tool</button>
+                                                {item.discount > 0 && <div className='text-lightgreen md:block hidden'>You are saving {item.discount}%</div>}
                                             </div>
                                         </div>
                                     </div>
@@ -107,14 +120,14 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                         <div className='flex flex-col gap-4'>
                                             <div className='flex justify-between'>
                                                 <div className='capitalize'>cart subtotal</div>
-                                                <div className='font-bold'>${newTotalPrice.toFixed(2)}</div>
+                                                <div className='font-bold'>${totalDiscountPrice.toFixed(2)}</div>
                                             </div>
-                                            <div className='text-lightgreen border-b border-zinc-500 pb-4'>You are saving ${oldTotalPrice - newTotalPrice}</div>
+                                            <div className='text-lightgreen border-b border-zinc-500 pb-4'>You are saving ${totalPrice - totalDiscountPrice}</div>
                                         </div>
                                         <div className='flex flex-col gap-6'>
                                             <div className='flex justify-between font-bold uppercase'>
                                                 <div>Total</div>
-                                                <div className='text-xl'>${newTotalPrice.toFixed(2)}</div>
+                                                <div className='text-xl'>${totalDiscountPrice.toFixed(2)}</div>
                                             </div>
                                             <div className='-mt-2'>
                                                 <FormInput placeholder='Enter Email Address' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -127,27 +140,27 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                 {screen === 2 &&
                                     <div className='flex flex-col gap-4 items-center'>
                                         <div className='flex flex-col gap-1'>
-                                            <span className='text-3xl font-bold text-lightgreen'>₦35,015</span>
+                                            <span className='text-3xl font-bold text-lightgreen'>₦{(totalDiscountPrice * rate).toLocaleString()}</span>
                                             <span className='text-xs capitalize text-gray-300 text-center'>bank transfer</span>
                                         </div>
                                         <div className='text-center'>Kindly pay the above exact amount to the payment details below</div>
                                         <div className='bg-secondary rounded-md w-full h-fit p-4 flex flex-col gap-4'>
                                             <div className='flex justify-between gap-4'>
                                                 <span>Bank name</span>
-                                                <span className='capitalize'>moniepoint</span>
+                                                <span className='capitalize'>{bankAccount.bank}</span>
                                             </div>
                                             <div className='flex justify-between gap-4'>
                                                 <span>Account number</span>
                                                 <div className='flex gap-2 items-center'>
-                                                    <span>8260456789</span>
-                                                    <div className='cursor-pointer' onClick={copyFunction}>
+                                                    <span>{bankAccount.account_number}</span>
+                                                    <div className='cursor-pointer text-lightgreen' onClick={() => copyFunction(bankAccount.account_number)}>
                                                         <MdContentCopy />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className='flex justify-between gap-4'>
                                                 <span>Account name</span>
-                                                <span className='uppercase'>velox dawan</span>
+                                                <span className='uppercase'>{bankAccount.account_name}</span>
                                             </div>
                                         </div>
                                         <button className='bg-lightgreen text-ash font-extrabold w-full h-fit py-3 rounded-[4px]' onClick={MakePayment}>I have made my payment</button>

@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
 import testimg from "../../assets/images/pdt.jpg";
 import { currencySign, ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
-import { FaCopy } from 'react-icons/fa';
+import { FaCopy, FaEdit } from 'react-icons/fa';
 import { RiDiscountPercentFill } from "react-icons/ri";
 import SelectComp from '../../GeneralComponents/SelectComp';
 import FormButton from '../../utils/FormButton';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
+import { FiUploadCloud } from 'react-icons/fi';
 
 const fetchedData = {
     id: 1,
@@ -17,7 +18,7 @@ const fetchedData = {
     image: testimg,
     title: 'acrobat',
     category: 'AI assistant',
-    price: 100,
+    price: 1000,
     about: 'Playwrite is a lovely signature font that boasts sophisticated charm with its delicate curves and flowing lines. Ideal for enhancing the elegance of wedding invites, crafts design, logotype, print design, social media graphics, or branding materials.',
     feature1: 'Generates visually stunning AI-powered graphics, layouts, and designs tailored to your specifications.',
     feature2: 'Produces AI-enhanced documents and presentations, streamlining workflows for writers, marketers, and designers.',
@@ -27,8 +28,8 @@ const fetchedData = {
     link: 'https://app.gradient.network',
     contact_details: '09011234567',
     status: 'pending',
-    discount: '',
-    discount_duration: '',
+    discount: 0,
+    discount_duration: 0,
     duration_type: ''
 }
 
@@ -56,6 +57,11 @@ const AdminSingleTool = () => {
         discount_duration: singleTool?.discount_duration,
         duration_type: singleTool?.duration_type ? singleTool?.duration_type : durationTypes[0],
     })
+    const [toolImage, setToolImage] = useState({
+        img: singleTool?.image,
+        image: null
+    })
+    const imgRef = useRef()
 
     const formHandler = (event) => {
         setForm({
@@ -67,6 +73,18 @@ const AdminSingleTool = () => {
     setTimeout(() => {
         setDataLoading(false)
     }, 2000)
+
+    const handleUpload = (event) => {
+        const file = event.target.files[0]
+        if (!file.type.startsWith('image/')) {
+            imgRef.current.value = null
+            return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
+        }
+        setToolImage({
+            img: URL.createObjectURL(file),
+            image: file
+        })
+    }
 
     const copyFunction = (content) => {
         navigator.clipboard.writeText(content)
@@ -91,11 +109,11 @@ const AdminSingleTool = () => {
                         </div>
                     </ModalLayout>
                 }
-                <Link to='/admin/profit_tools' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
+                <Link to='/admin/profit_tools/all_tools' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
                     back to all tools
                 </Link>
                 {dataLoading ?
-                    <div className='mt-10 grid md:grid-cols-2 grid-cols-1 gap-6'>
+                    <div className='mt-10 grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-6'>
                         <div className='w-full h-64 bg-slate-400 animate-pulse'></div>
                         <div className='flex flex-col gap-6'>
                             {new Array(3).fill(0).map((_, i) => (
@@ -107,11 +125,24 @@ const AdminSingleTool = () => {
                         </div>
                     </div>
                     :
-                    <form className='mt-10 flex flex-col gap-12' onSubmit={Submit}>
-                        <div className='grid md:grid-cols-2 grid-cols-1 gap-6'>
-                            <div>
-                                <img src={singleTool.image} alt={singleTool.image} className='w-full h-auto'></img>
-                            </div>
+                    <form className='mt-10 flex flex-col gap-10' onSubmit={Submit}>
+                        <div className='grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-6'>
+                            <label className='cursor-pointer w-full'>
+                                {toolImage.img ?
+                                    <div className='relative'>
+                                        <img src={toolImage.img} className='w-full h-auto object-cover'></img>
+                                        <div className="absolute top-0 -right-3 main font-bold">
+                                            <FaEdit className='text-2xl text-lightgreen' />
+                                        </div>
+                                    </div>
+                                    :
+                                    <div className='w-full h-72 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
+                                        <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
+                                        <span>click to add image</span>
+                                    </div>
+                                }
+                                <input ref={imgRef} type="file" onChange={handleUpload} hidden />
+                            </label>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>title:</div>
@@ -190,8 +221,8 @@ const AdminSingleTool = () => {
                                         <div className='flex flex-col'>
                                             <div className='text-lightgreen capitalize font-medium'>duration:</div>
                                             <div className='flex items-center'>
-                                                <FormInput name='discount_duration' value={form.discount_duration} onChange={formHandler} className='!w-14 !p-2 !rounded-md -mt-2' />
-                                                <SelectComp options={durationTypes} width={150} style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem' }} value={form.duration_type} handleChange={(e) => setForm({ ...form, duration_type: e.target.value })} />
+                                                <FormInput name='discount_duration' value={form.discount_duration} onChange={formHandler} className='!w-14 !py-2 !px-4 !rounded-md -mt-2' />
+                                                <SelectComp options={durationTypes} width={150} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.duration_type} handleChange={(e) => setForm({ ...form, duration_type: e.target.value })} />
                                             </div>
                                         </div>
                                     </div>
