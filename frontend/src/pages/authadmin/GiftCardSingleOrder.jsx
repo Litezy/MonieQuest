@@ -5,11 +5,10 @@ import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import { currencies } from '../../AuthComponents/AuthUtils'
 import SelectComp from '../../GeneralComponents/SelectComp'
-import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
+import { defaultOptions, ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import Loader from '../../GeneralComponents/Loader'
 import ModalLayout from '../../utils/ModalLayout'
 import Lottie from 'react-lottie'
-import animationData from '../../utils/lottie.json'
 
 const GiftCardSingleOrder = () => {
     const [forms, setForms] = useState({
@@ -35,14 +34,6 @@ const GiftCardSingleOrder = () => {
         setForms({ ...forms, amount: formatVal })
     }
 
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice',
-        },
-    };
     const applyamount = () => {
         setApplyAmt(true)
         handleChange()
@@ -150,7 +141,7 @@ const GiftCardSingleOrder = () => {
                 {screen === 1 &&
                     <>
                         <div className="">
-                            <Link to={`/admin/exchange/buy_orders`} className="w-fit px-4 py-1.5 rounded-md bg-ash">back to orders</Link>
+                            <Link to={`/admin/giftcards/orders`} className="w-fit px-4 py-1.5 rounded-md bg-ash">back to orders</Link>
                         </div>
                         <div className="mt-5 md:mt-10 mont">
 

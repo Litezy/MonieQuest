@@ -42,7 +42,7 @@ const records = [
         status: 'finished'
     },
     {
-        id: 3,
+        id: 4,
         gen_id: '123456789',
         title: 'paws voucher',
         category: 'nft',
@@ -54,7 +54,7 @@ const records = [
         status: 'finished'
     },
     {
-        id: 3,
+        id: 5,
         gen_id: '123456789',
         title: 'litas',
         category: 'others',
@@ -72,9 +72,11 @@ const AdminAllAirdrops = () => {
     const [active, setActive] = useState(tags[0])
     const [search, setSearch] = useState('')
     const [dataLoading, setDataLoading] = useState(true)
+    const [staticData, setStaticData] = useState([])
     const [airdrops, setAirdrops] = useState([])
 
     useEffect(() => {
+        setStaticData(records)
         setAirdrops(records);
     }, []);
 
@@ -82,8 +84,8 @@ const AdminAllAirdrops = () => {
         setDataLoading(false)
     }, 2000)
 
-    const filterTools = () => {
-        const mainData = records
+    const filterAirdrop = () => {
+        const mainData = staticData
         if (search.length > 1) {
             const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
             setAirdrops(filtered)
@@ -96,7 +98,7 @@ const AdminAllAirdrops = () => {
         <AirdropsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
-                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={filterTools} />
+                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={filterAirdrop} />
                     <div className="absolute top-5 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>

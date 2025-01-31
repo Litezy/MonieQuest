@@ -15,7 +15,16 @@ db.sequelize = sequelize
 db.Sequelize = Sequelize
 
 db.users = require('./userModel')(sequelize, DataTypes)
+db.wallets = require('./walletModel')(sequelize, DataTypes)
+db.notifications = require('./notificationModel')(sequelize, DataTypes)
+db.profitTools = require('./profitToolsModel')(sequelize, DataTypes)
+db.airdrops = require('./airdropModel')(sequelize, DataTypes)
+db.transactions = require('./transactionModel')(sequelize, DataTypes)
+db.blogs = require('./blogModel')(sequelize, DataTypes)
+db.toolsOrders = require('./toolOrderModel')(sequelize, DataTypes)
+db.banks = require('./bankModel')(sequelize, DataTypes)
+db.utils = require('./utilsModel')(sequelize, DataTypes)
 
 db.sequelize.sync({ force: false }).then(() => console.log('Tables synced'))
-.catch((error) => console.log(error))
+    .catch((error) => console.log(error))
 module.exports = db

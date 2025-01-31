@@ -3,11 +3,10 @@ import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
 import { FaRegCopy } from 'react-icons/fa'
-import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
+import { defaultOptions, ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import FormButton from '../../utils/FormButton'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import Lottie from 'react-lottie'
-import animationData from '../../utils/lottie.json'
 import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 
@@ -26,14 +25,6 @@ const AdminSingleWithdrawal = () => {
     const { id } = useParams()
     const handleChange = (e) => { setForms({ ...forms, [e.target.name]: e.target.value }) }
     const options = [`Yes`, 'No']
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice',
-        },
-    };
     const submitOrder = (e) => {
         e.preventDefault()
         if (forms.sent_money === 'No' || !forms.sent_money) return ErrorAlert(`Please confirm money have been paid`)

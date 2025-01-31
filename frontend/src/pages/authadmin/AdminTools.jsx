@@ -45,9 +45,11 @@ const AdminTools = () => {
     const [active, setActive] = useState(tags[0])
     const [search, setSearch] = useState('')
     const [dataLoading, setDataLoading] = useState(true)
+    const [staticData, setStaticData] = useState([])
     const [allTools, setAllTools] = useState([])
 
     useEffect(() => {
+        setStaticData(records)
         setAllTools(records);
     }, []);
 
@@ -56,7 +58,7 @@ const AdminTools = () => {
     }, 2000)
 
     const filterTools = () => {
-        const mainData = records
+        const mainData = staticData
         if (search.length > 1) {
             const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
             setAllTools(filtered)

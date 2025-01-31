@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import banner from '../../assets/images/testimg.webp'
 import airdropLogo from '../../assets/images/testimage.jfif'
 import { FaEdit } from 'react-icons/fa'
@@ -33,7 +33,12 @@ const statuses = [
     "active", "finished"
 ]
 
+const categories = [
+    "featured", "deFi", "new", "NFT", "others"
+]
+
 const AdminSingleAirdrop = () => {
+    const { id } = useParams()
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
     const [singleAirdrop, setSingleAirdrop] = useState(fetchedData)
@@ -98,7 +103,8 @@ const AdminSingleAirdrop = () => {
     const Submit = (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.category || !form.about || !form.blockchain || !form.video_guide_link || !form.referral_link || !form.twitter_link || !form.telegram_link || !form.website_link) return ErrorAlert('Enter all fields')
+        if (!form.title || !form.category || !form.about || !form.blockchain || !form.video_guide_link || !form.referral_link) return ErrorAlert('Enter all required fields')
+        if (!logo.image || !banner.image) return ErrorAlert('Upload airdrop logo and banner images')
     }
 
     return (
@@ -124,7 +130,7 @@ const AdminSingleAirdrop = () => {
                             </div>
                             <div className='flex flex-col gap-3'>
                                 <div className='w-24 h-2 rounded-full bg-slate-400 animate-pulse'></div>
-                                <div className='w-full md:h-64 h-52 bg-slate-400 animate-pulse'></div>
+                                <div className='w-full h-72 bg-slate-400 animate-pulse'></div>
                             </div>
                         </div>
                         <div className='flex flex-col gap-6'>
@@ -141,7 +147,7 @@ const AdminSingleAirdrop = () => {
                         <div className='grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-6'>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex justify-between gap-4 items-center'>
-                                    <div className='text-lightgreen capitalize font-medium'>logo:</div>
+                                    <div className='text-lightgreen capitalize font-medium'>*logo:</div>
                                     <label className='cursor-pointer'>
                                         {logo.img ?
                                             <div className='relative w-fit'>
@@ -159,11 +165,11 @@ const AdminSingleAirdrop = () => {
                                     </label>
                                 </div>
                                 <div className='flex flex-col gap-2 w-full'>
-                                    <div className='text-lightgreen capitalize font-medium'>banner:</div>
+                                    <div className='text-lightgreen capitalize font-medium'>*banner:</div>
                                     <label className='cursor-pointer w-full'>
                                         {banner.img ?
                                             <div className='relative'>
-                                                <img src={banner.img} className='w-full h-auto object-cover'></img>
+                                                <img src={banner.img} className='w-full h-72 object-cover object-center'></img>
                                                 <div className="absolute top-0 -right-3 main font-bold">
                                                     <FaEdit className='text-2xl text-lightgreen' />
                                                 </div>
@@ -180,29 +186,29 @@ const AdminSingleAirdrop = () => {
                             </div>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>title:</div>
+                                    <div className='text-lightgreen capitalize font-medium'>*title:</div>
                                     <FormInput placeholder='Title' name='title' value={form.title} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>category:</div>
-                                    <FormInput placeholder='Category' name='category' value={form.category} onChange={formHandler} />
+                                    <div className='text-lightgreen capitalize font-medium'>*category:</div>
+                                    <SelectComp options={categories} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.category} handleChange={(e) => setForm({ ...form, category: e.target.value })} />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>blockchain:</div>
+                                    <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
                                     <FormInput placeholder='Blockchain' name='blockchain' value={form.blockchain} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>referral link:</div>
+                                    <div className='text-lightgreen capitalize font-medium'>*referral link:</div>
                                     <FormInput placeholder='Referral link' name='referral_link' value={form.referral_link} onChange={formHandler} />
                                 </div>
                             </div>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>about:</div>
+                                    <div className='text-lightgreen capitalize font-medium'>*about:</div>
                                     <FormInput formtype='textarea' placeholder='About airdrop' name='about' value={form.about} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>video guide link:</div>
+                                    <div className='text-lightgreen capitalize font-medium'>*video guide link:</div>
                                     <FormInput placeholder='Video guide link' name='video_guide_link' value={form.video_guide_link} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>

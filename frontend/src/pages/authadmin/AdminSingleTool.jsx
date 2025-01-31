@@ -28,6 +28,7 @@ const fetchedData = {
     link: 'https://app.gradient.network',
     contact_details: '09011234567',
     status: 'pending',
+    listed: 'unlisted',
     discount: 0,
     discount_duration: 0,
     duration_type: ''
@@ -38,6 +39,9 @@ const statuses = [
 ]
 const durationTypes = [
     "days", "weeks", "months"
+]
+const listOptions = [
+    "listed", "unlisted"
 ]
 
 const AdminSingleTool = () => {
@@ -53,6 +57,7 @@ const AdminSingleTool = () => {
         feature1: singleTool?.feature1,
         feature2: singleTool?.feature2,
         status: singleTool?.status,
+        listed: singleTool?.listed,
         discount: singleTool?.discount,
         discount_duration: singleTool?.discount_duration,
         duration_type: singleTool?.duration_type ? singleTool?.duration_type : durationTypes[0],
@@ -114,10 +119,10 @@ const AdminSingleTool = () => {
                 </Link>
                 {dataLoading ?
                     <div className='mt-10 grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-6'>
-                        <div className='w-full h-64 bg-slate-400 animate-pulse'></div>
+                        <div className='w-full h-72 bg-slate-400 animate-pulse'></div>
                         <div className='flex flex-col gap-6'>
                             {new Array(3).fill(0).map((_, i) => (
-                                <div key={i} className='flex flex-col gap-2'>
+                                <div key={i} className='flex flex-col gap-3'>
                                     <div className='w-28 h-2 rounded-full bg-slate-400 animate-pulse'></div>
                                     <div className='w-full h-12 bg-slate-400 animate-pulse rounded-xl'></div>
                                 </div>
@@ -130,7 +135,7 @@ const AdminSingleTool = () => {
                             <label className='cursor-pointer w-full'>
                                 {toolImage.img ?
                                     <div className='relative'>
-                                        <img src={toolImage.img} className='w-full h-auto object-cover'></img>
+                                        <img src={toolImage.img} className='w-full h-72 object-cover object-center'></img>
                                         <div className="absolute top-0 -right-3 main font-bold">
                                             <FaEdit className='text-2xl text-lightgreen' />
                                         </div>
@@ -171,7 +176,7 @@ const AdminSingleTool = () => {
                                     <FormInput formtype='textarea' placeholder='Enter tool feature' name='feature2' value={form.feature2} onChange={formHandler} className='!h-16' />
                                 </div>
                             </div>
-                            <div className="w-full px-5 text-dark py-5 bg-[#fafafa] rounded-md flex items-center justify-between flex-col gap-4">
+                            <div className="w-full h-fit px-5 text-dark py-5 bg-[#fafafa] rounded-md flex items-center justify-between flex-col gap-4">
                                 <div className='flex flex-col gap-1 w-full'>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Bank Name:</div>
@@ -206,7 +211,11 @@ const AdminSingleTool = () => {
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>status:</div>
-                                    <SelectComp options={statuses} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem' }} value={form.status} handleChange={(e) => setForm({ ...form, status: e.target.value })} />
+                                    <SelectComp options={statuses} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.status} handleChange={(e) => setForm({ ...form, status: e.target.value })} />
+                                </div>
+                                <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>list product for purchase:</div>
+                                    <SelectComp options={listOptions} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.listed} handleChange={(e) => setForm({ ...form, listed: e.target.value })} />
                                 </div>
                                 <div className='flex flex-col gap-2'>
                                     <div className='flex gap-1 items-center text-lightgreen '>

@@ -4,10 +4,9 @@ import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
 import { currencies } from '../../AuthComponents/AuthUtils'
-import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import { defaultOptions, ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import SelectComp from '../../GeneralComponents/SelectComp';
 import FormButton from '../../utils/FormButton';
-import animationData from '../../utils/lottie.json'
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import Lottie from 'react-lottie';
@@ -30,14 +29,6 @@ const SingleSellOrder = () => {
         amount: ''
     })
 
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice',
-        },
-    };
     const [applyAmt, setApplyAmt] = useState(false)
     const statuses = ["Yes", "No"]
     const [screen, setScreen] = useState(1)

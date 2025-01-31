@@ -10,6 +10,7 @@ import { MoveToTop } from '../utils/pageUtils';
 import { IoNotificationsSharp } from 'react-icons/io5';
 import { CiMenuKebab } from 'react-icons/ci';
 import { AiFillDollarCircle } from "react-icons/ai";
+import { GoHistory } from 'react-icons/go';
 
 const mainIcons = [
     {
@@ -33,7 +34,7 @@ const mainIcons = [
     {
         name: 'gift cards',
         symbol: HiGift,
-        url: '/admin/giftcards',
+        url: '/admin/giftcards/orders',
         main: '/giftcards'
     },
     {
@@ -62,6 +63,11 @@ const extraIcons = [
         symbol: BiMoneyWithdraw,
         url: '/admin/bank_withdrawals',
         main: '/bank_withdrawals'
+    },
+    {
+        name: 'transaction history',
+        symbol: GoHistory,
+        url: '/admin/transactions_history'
     },
     {
         name: 'profile',

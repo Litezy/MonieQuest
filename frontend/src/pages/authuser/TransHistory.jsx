@@ -7,22 +7,22 @@ import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 const TransHistory = () => {
   const tags = ['All', 'Crypto', 'GiftCards', 'Withdrawal']
   const [active, setActive] = useState(tags[0])
-
-
   const [searchValue, setSearchValue] = useState('')
-  const [records, setRecords] = useState([])
+  const [staticData, setStaticData] = useState([])
+  const [transactions, setTransactions] = useState([])
 
   useEffect(() => {
-    setRecords(alltransactions);
+    setStaticData(alltransactions)
+    setTransactions(alltransactions);
   }, []);
 
   const filterTrans = () => {
-    const mainData = alltransactions
+    const mainData = staticData
     if (searchValue.length > 1) {
       const filtered = mainData.filter(trans => String(trans.tag).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.type).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.trans_id).toLowerCase().startsWith(searchValue.toLocaleLowerCase()))
-      setRecords(filtered)
+      setTransactions(filtered)
     } else {
-      setRecords(mainData)
+      setTransactions(mainData)
     }
   }
 
@@ -65,11 +65,11 @@ const TransHistory = () => {
           <div className="text-zinc-400 mt-5">{active ? active === 'Withdrawal' ? 'Bank Withdrawal' : active : 'All'} Transactions</div>
         </div>
         <div className="w-full mt-5">
-          {records.length > 0 ?
+          {transactions.length > 0 ?
             <>
               {active === tags[0] &&
                 <>
-                  {records.length > 0 && records.map((trans, i) => {
+                  {transactions.length > 0 && transactions.map((trans, i) => {
                     return (
                       <TransComp key={i} trans={trans} />
                     )
@@ -78,7 +78,7 @@ const TransHistory = () => {
               }
               {active === tags[1] &&
                 <>
-                  {records.filter((trx) => trx.tag === 'crypto').map((trans, i) => {
+                  {transactions.filter((trx) => trx.tag === 'crypto').map((trans, i) => {
                     return (
                       <TransComp key={i} trans={trans} />
                     )
@@ -87,7 +87,7 @@ const TransHistory = () => {
               }
               {active === tags[2] &&
                 <>
-                  {records.filter((trx) => trx.tag === 'giftcard').map((trans, i) => {
+                  {transactions.filter((trx) => trx.tag === 'giftcard').map((trans, i) => {
                     return (
                       <TransComp key={i} trans={trans} />
                     )
@@ -96,7 +96,7 @@ const TransHistory = () => {
               }
               {active === tags[3] &&
                 <>
-                  {records.filter((trx) => trx.tag === 'bank withdrawal').map((trans, i) => {
+                  {transactions.filter((trx) => trx.tag === 'bank withdrawal').map((trans, i) => {
                     return (
                       <TransComp key={i} trans={trans} />
                     )

@@ -3,11 +3,10 @@ import { alltransactions, bankacc, banksArr, currencies } from '../../AuthCompon
 import TransComp from '../../AuthComponents/TransComp'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
-import { ErrorAlert } from '../../utils/pageUtils'
+import { defaultOptions, ErrorAlert } from '../../utils/pageUtils'
 import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import Lottie from 'react-lottie'
-import animationData from '../../utils/lottie.json'
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout'
 import SelectComp from '../../GeneralComponents/SelectComp'
 
@@ -19,15 +18,6 @@ const formsal = () => {
     const [forms, setForms] = useState({
         bank: '', amount: '', accountNumber: '', accountName: '',
     })
-
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice',
-        },
-    };
     const [showModal, setShowModal] = useState(false)
 
     const handleChange = (e) => {

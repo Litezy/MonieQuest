@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 import customer1 from '../assets/images/customer1.jfif'
+import animationData from '../utils/lottie.json'
 
 export const CookieName = 'moniequestweb001'
 export const UserRoles = [
@@ -35,8 +36,17 @@ export const MoveToTop = () => {
 }
 
 export const currencySign = [
-    '$','₦'
+    '$', '₦'
 ]
+
+export const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice',
+    },
+};
 
 export const HomeTestimonials = [
     {

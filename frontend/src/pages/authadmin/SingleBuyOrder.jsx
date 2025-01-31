@@ -4,14 +4,13 @@ import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
 import { currencies } from '../../AuthComponents/AuthUtils'
-import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import { defaultOptions, ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import SelectComp from '../../GeneralComponents/SelectComp';
 import FormButton from '../../utils/FormButton';
 import { TfiTimer } from 'react-icons/tfi';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import Lottie from 'react-lottie';
-import animationData from '../../utils/lottie.json'
 
 
 
@@ -20,14 +19,6 @@ const SingleBuyOrder = () => {
     const { id } = useParams()
     const green = 'text-lightgreen'
 
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice',
-        },
-    };
     const handleCopy = (type, val) => {
         navigator.clipboard.writeText(type)
             .then(() => { SuccessAlert(`${val} copied successfully'`) })
