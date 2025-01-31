@@ -15,38 +15,36 @@ const mainIcons = [
     {
         name: 'dashboard',
         symbol: MdDashboard,
-        url: '/admin/dashboard'
+        url: '/admin/dashboard',
+        main: '/dashboard'
     },
     {
         name: 'users',
         symbol: FaUsers,
-        url: '/admin/all_users'
+        url: '/admin/all_users',
+        main: '/all_users'
     },
     {
         name: 'crypto exchange',
         symbol: MdCurrencyExchange,
         url: '/admin/exchange/buy_orders',
-        main:'/admin/exchange'
+        main: '/exchange'
     },
     {
         name: 'gift cards',
         symbol: HiGift,
-        url: '/admin/giftcards'
+        url: '/admin/giftcards',
+        main: '/giftcards'
     },
-    {
-        name: 'bank withdrawals',
-        symbol: BiMoneyWithdraw,
-        url: '/admin/bank_withdrawals'
-    },
-]
-
-const extraIcons = [
     {
         name: 'profit tools',
         symbol: CgToolbox,
         url: '/admin/profit_tools/orders',
         main: '/profit_tools'
     },
+]
+
+const extraIcons = [
     {
         name: 'airdrops',
         symbol: AiFillDollarCircle,
@@ -60,9 +58,16 @@ const extraIcons = [
         main: '/blogs'
     },
     {
+        name: 'bank withdrawals',
+        symbol: BiMoneyWithdraw,
+        url: '/admin/bank_withdrawals',
+        main: '/bank_withdrawals'
+    },
+    {
         name: 'profile',
         symbol: RiUser3Fill,
-        url: '/admin/profile'
+        url: '/admin/profile',
+        main: '/profile'
     },
     {
         name: 'notifications',
@@ -76,16 +81,13 @@ const extraIcons = [
     },
 ]
 
-const mainArray = [
-    '/admin/dashboard', '/admin/all_users', '/admin/exchange/buy_orders', '/admin/exchange/sell_orders', '/admin/giftcards', '/admin/bank_withdrawals',
-]
-
 const AdminFooter = () => {
     const [view, setView] = useState(false)
     const location = useLocation()
     const pathName = location.pathname
     const active = 'text-lightgreen'
     const nonactive = 'text-white/60 hover:text-lightgreen'
+    const mainLinks = mainIcons.some(ele => pathName.includes(ele.main))
 
 
     return (
@@ -108,10 +110,10 @@ const AdminFooter = () => {
                         )
                     })}
                     <div className='flex items-center py-4 relative'>
-                        {!mainArray.includes(pathName) &&
+                        {!mainLinks &&
                             <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full"></div>
                         }
-                        <div className={`group-hover:text-lightgreen px-2 cursor-pointer text-[1.5rem] ${!mainArray.includes(pathName) ? active : nonactive}`} onClick={() => setView(!view)}>
+                        <div className={`group-hover:text-lightgreen px-2 cursor-pointer text-[1.5rem] ${!mainLinks ? active : nonactive}`} onClick={() => setView(!view)}>
                             <CiMenuKebab />
                         </div>
                     </div>
@@ -122,7 +124,7 @@ const AdminFooter = () => {
                             <div key={i} className='flex items-center py-4 relative'>
                                 {pathName === item.url || pathName.includes(item.main) ?
                                     <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full"></div>
-                                    :<></>
+                                    : <></>
                                 }
                                 <Link to={item.url} onClick={MoveToTop}
                                     className={` group-hover:text-lightgreen px-2  ${pathName === item.url || pathName.includes(item.main) ? active : nonactive} cursor-pointer flex flex-col gap-1 items-center`}>
