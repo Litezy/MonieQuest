@@ -30,7 +30,7 @@ import SingleFeatureBlog from "../pages/general/SingleFeatureBlog";
 import Hiring from "../pages/general/Hiring";
 import SingleComment from "../pages/general/SingleComment";
 import UserKYC from "../pages/authuser/UserKYC";
-import AdminExchange from "../pages/authadmin/AdminExchange";
+import AdminExchange from "../AdminComponents/AdminExchangeLayout";
 import AdminBankWithdrawals from "../pages/authadmin/AdminBankWithdrawals";
 import AdminGiftCards from "../pages/authadmin/AdminGiftCards";
 import AdminTools from "../pages/authadmin/AdminTools";
@@ -45,10 +45,10 @@ import AdminCreateAirdrops from "../pages/authadmin/AdminCreateAirdrops";
 import AdminAllBlogs from "../pages/authadmin/AdminAllBlogs";
 import AdminCreateBlogs from "../pages/authadmin/AdminCreateBlogs";
 import AdminSingleAirdrop from "../pages/authadmin/AdminSingleAirdrop";
-import AdminCryptoBuyOrders from "../AdminComponents/AdminCryptoBuyOrders";
-import AdminCryptoSellOrders from "../AdminComponents/AdminCryptoSellOrders";
-import SingleBuyOrder from "../AdminComponents/SIngleBuyOrder";
-import SingleSellOrder from "../AdminComponents/SingleSellOrder";
+import AdminCryptoBuyOrders from "../pages/authadmin/AdminCryptoBuyOrders";
+import AdminCryptoSellOrders from "../pages/authadmin/AdminCryptoSellOrders";
+import SingleBuyOrder from "../pages/authadmin/SingleBuyOrder";
+import SingleSellOrder from "../pages/authadmin/SingleSellOrder";
 import AdminToolsOrders from "../pages/authadmin/AdminToolsOrders";
 
 export const GeneralPagesLinks = [

@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { FaRegCopy } from "react-icons/fa";
-import AdminPageLayout from './AdminPageLayout'
+import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
-import FormInput from '../utils/FormInput'
-import { currencies } from '../AuthComponents/AuthUtils'
-import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
-import SelectComp from '../GeneralComponents/SelectComp';
-import FormButton from '../utils/FormButton';
+import FormInput from '../../utils/FormInput'
+import { currencies } from '../../AuthComponents/AuthUtils'
+import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import SelectComp from '../../GeneralComponents/SelectComp';
+import FormButton from '../../utils/FormButton';
 import { TfiTimer } from 'react-icons/tfi';
-import ModalLayout from '../utils/ModalLayout';
-import Loader from '../GeneralComponents/Loader';
+import ModalLayout from '../../utils/ModalLayout';
+import Loader from '../../GeneralComponents/Loader';
 
 
 

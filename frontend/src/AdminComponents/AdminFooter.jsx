@@ -77,7 +77,7 @@ const extraIcons = [
 ]
 
 const mainArray = [
-    '/admin/dashboard', '/admin/all_users', '/admin/exchange', '/admin/giftcards', '/admin/bank_withdrawals',
+    '/admin/dashboard', '/admin/all_users', '/admin/exchange/buy_orders', '/admin/exchange/sell_orders', '/admin/giftcards', '/admin/bank_withdrawals',
 ]
 
 const AdminFooter = () => {
@@ -94,7 +94,7 @@ const AdminFooter = () => {
                 <div className="w-full px-5 relative bg-[#212134] border border-secondary rounded-full flex items-center justify-around gap-2">
                     {mainIcons.map((item, i) => {
                         return (
-                            <div key={i} className="flex items-center py-4 relative" >
+                            <div key={i} className="flex items-center py-4 relative">
                                 {pathName === item.url || pathName.includes(item.main) ?
                                     <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full "></div>
                                     :

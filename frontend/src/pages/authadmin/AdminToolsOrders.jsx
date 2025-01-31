@@ -10,7 +10,7 @@ const records = [
     {
         gen_id: '4fg567789ry',
         total_price: 7000,
-        total_discounted_price: 5300,
+        total_discount: 1700,
         amount_paid: 5300,
         status: 'paid',
         customer_email: 'gid@gmail.com',
@@ -38,7 +38,7 @@ const records = [
     {
         gen_id: '4ee234kl09',
         total_price: 16000,
-        total_discounted_price: 12850,
+        total_discount: 3150,
         amount_paid: 12850,
         status: 'paid',
         customer_email: 'victor11@gmail.com',

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
+import AdminPageLayout from './AdminPageLayout'
 import { Link, useLocation } from 'react-router-dom'
 
-const AdminExchange = ({ children }) => {
+const AdminExchangeLayout = ({ children }) => {
 
     const tags = [
         { path: 'buy orders', url: '/admin/exchange/buy_orders',main:'buy_orders/' },
@@ -23,4 +23,4 @@ const AdminExchange = ({ children }) => {
     )
 }
 
-export default AdminExchange
+export default AdminExchangeLayout

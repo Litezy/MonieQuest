@@ -25,8 +25,8 @@ const ToolsOrdersModal = ({ selected }) => {
                         <div>{currencySign[1]}{selected?.total_price.toLocaleString()}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
-                        <div>Total Discounted Price</div>
-                        <div>{currencySign[1]}{selected?.total_discounted_price.toLocaleString()}</div>
+                        <div>Total Discount</div>
+                        <div>{currencySign[1]}{selected?.total_discount.toLocaleString()}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                         <div>Amount Paid</div>

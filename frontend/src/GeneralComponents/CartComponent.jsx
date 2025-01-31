@@ -22,11 +22,12 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     const rate = 1650
 
     let totalPrice = 0
-    let totalDiscountPrice = 0
+    let priceAfterDiscount = 0
     cartItems.map((ele) => (
         totalPrice += ele.price,
-        totalDiscountPrice += (100 - ele.discount) / 100 * ele.price
+        priceAfterDiscount += (100 - ele.discount) / 100 * ele.price
     ))
+    let totalDiscount = totalPrice - priceAfterDiscount
 
     const copyFunction = (content) => {
         navigator.clipboard.writeText(content)
@@ -120,14 +121,14 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                         <div className='flex flex-col gap-4'>
                                             <div className='flex justify-between'>
                                                 <div className='capitalize'>cart subtotal</div>
-                                                <div className='font-bold'>${totalDiscountPrice.toFixed(2)}</div>
+                                                <div className='font-bold'>${priceAfterDiscount.toFixed(2)}</div>
                                             </div>
-                                            <div className='text-lightgreen border-b border-zinc-500 pb-4'>You are saving ${totalPrice - totalDiscountPrice}</div>
+                                            <div className='text-lightgreen border-b border-zinc-500 pb-4'>You are saving ${totalDiscount}</div>
                                         </div>
                                         <div className='flex flex-col gap-6'>
                                             <div className='flex justify-between font-bold uppercase'>
                                                 <div>Total</div>
-                                                <div className='text-xl'>${totalDiscountPrice.toFixed(2)}</div>
+                                                <div className='text-xl'>${priceAfterDiscount.toFixed(2)}</div>
                                             </div>
                                             <div className='-mt-2'>
                                                 <FormInput placeholder='Enter Email Address' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -140,7 +141,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                 {screen === 2 &&
                                     <div className='flex flex-col gap-4 items-center'>
                                         <div className='flex flex-col gap-1'>
-                                            <span className='text-3xl font-bold text-lightgreen'>₦{(totalDiscountPrice * rate).toLocaleString()}</span>
+                                            <span className='text-3xl font-bold text-lightgreen'>₦{(priceAfterDiscount * rate).toLocaleString()}</span>
                                             <span className='text-xs capitalize text-gray-300 text-center'>bank transfer</span>
                                         </div>
                                         <div className='text-center'>Kindly pay the above exact amount to the payment details below</div>
