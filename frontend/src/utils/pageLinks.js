@@ -49,6 +49,7 @@ import AdminCryptoBuyOrders from "../AdminComponents/AdminCryptoBuyOrders";
 import AdminCryptoSellOrders from "../AdminComponents/AdminCryptoSellOrders";
 import SingleBuyOrder from "../AdminComponents/SIngleBuyOrder";
 import SingleSellOrder from "../AdminComponents/SingleSellOrder";
+import GiftCardSingleOrder from "../AdminComponents/GiftCardSingleOrder";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -95,7 +96,8 @@ export const AdminPagesLinks = [
     { path: '/admin/exchange/sell_orders/:id', component: SingleSellOrder },
     { path: '/admin/exchange/buy_orders', component: AdminCryptoBuyOrders },
     { path: '/admin/exchange/sell_orders', component: AdminCryptoSellOrders },
-    { path: '/admin/giftcards', component: AdminGiftCards },
+    { path: '/admin/giftcards/orders', component: AdminGiftCards },
+    { path: '/admin/giftcards/orders/:id', component: GiftCardSingleOrder },
     { path: '/admin/profit_tools', component: AdminTools },
     { path: '/admin/profit_tools/:id/:slug', component: AdminSingleTool },
     { path: '/admin/bank_withdrawals', component: AdminBankWithdrawals },

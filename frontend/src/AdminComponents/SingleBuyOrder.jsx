@@ -45,17 +45,17 @@ const SingleBuyOrder = () => {
         }, 5000)
 
     }
-    
+
     return (
         <AdminPageLayout>
 
             {loading &&
-           <ModalLayout clas={`w-11/12 mx-auto`}>
-           <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-               <Loader />
-               <div>...closing order</div>
-           </div>
-       </ModalLayout>
+                <ModalLayout clas={`w-11/12 mx-auto`}>
+                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
+                        <Loader />
+                        <div>...closing order</div>
+                    </div>
+                </ModalLayout>
             }
             {screen === 1 &&
                 <>
@@ -68,35 +68,59 @@ const SingleBuyOrder = () => {
 
                         <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md md:w-5/6 mx-auto mt-5 md:mt-10 mb-5">
                             <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
-                                <div className="flex flex-col gap-1 w-full">
-                                    <div className="">Customer ID:</div>
-                                    <FormInput value={id} className={`${green}`} />
-                                    <div className="">Amount:</div>
-                                    <FormInput value={`${currencies[1].symbol}1000`} className={`${green}`} />
-                                    <div className="">Crypto Coin:</div>
-                                    <FormInput value={`USDT`} className={`${green}`} />
-                                    <div className="">Status:</div>
+                                <div className="flex flex-col gap-3 w-full">
+                                    <div className="flex flex-col items-start">
+                                        <div className="text-sm">Customer ID:</div>
+                                        <div className="w-full">
+                                            <FormInput value={id} className={`${green}`} />
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                        <div className="text-sm">Amount:</div>
+                                        <div className="w-full">
+                                            <FormInput value={`${currencies[1].symbol}1000`} className={`${green}`} />
+
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                        <div className="text-sm">Crypto Coin:</div>
+                                        <div className="w-full">
+                                            <FormInput value={`USDT`} className={`${green}`} />
+
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                    <div className="text-sm">Status:</div>
                                     <FormInput value={`paid`} className={`${green}`} />
+                                    </div>
 
                                 </div>
-                                <div className=" flex flex-col gap-1 w-full">
-                                    <div className="">FullName:</div>
+                                <div className=" flex flex-col gap-3 w-full">
+                                    <div className="">
+                                    <div className="text-sm">FullName:</div>
                                     <FormInput value={`Basit Money`} className={`${green}`} />
-                                    <div className="">Network:</div>
+                                    </div>
+                                    <div className="">
+                                    <div className="text-sm">Network:</div>
                                     <FormInput value={`TRC-20`} className={`${green}`} />
-                                    <div className="">Wallet:</div>
+                                    </div>
+                                    <div className="w-full">
+                                    <div className="text-sm">Wallet:</div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-full">
                                             <FormInput value={`0x958847473888383`} className={`${green}`} />
                                         </div>
                                         <FaRegCopy onClick={() => handleCopy(`88t9389fncjjefj`, 'wallet address')} className={`${green} cursor-pointer`} />
                                     </div>
-                                    <div className="">Transaction Hash:</div>
+                                    </div>
+                                    <div className="">
+                                    <div className="text-sm">Transaction Hash:</div>
                                     <div className="flex items-center w-full gap-2">
                                         <div className="w-full">
                                             <FormInput value={`hdhd0x958847473888383hjkjnk`} className={`${green}`} />
                                         </div>
                                         <FaRegCopy onClick={() => handleCopy(`jmkmkdmkkfk`, 'trans hash')} className={`${green} cursor-pointer`} />
+                                    </div>
                                     </div>
                                 </div>
 

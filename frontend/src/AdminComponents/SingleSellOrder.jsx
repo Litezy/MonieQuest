@@ -43,7 +43,7 @@ const SingleSellOrder = () => {
     }
     const submitOrder = (e) => {
         e.preventDefault()
-        if(!credited) return ErrorAlert('Please credit customer before closing the order')
+        if (!credited) return ErrorAlert('Please credit customer before closing the order')
         setLoading(true)
         return setTimeout(() => {
             afterLoad()
@@ -101,27 +101,39 @@ const SingleSellOrder = () => {
 
                         <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md md:w-5/6 mx-auto mt-5 md:mt-10 mb-5">
                             <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
-                                <div className="flex flex-col gap-1 w-full">
-                                    <div className="">Customer ID:</div>
-                                    <FormInput value={id} className={`${green}`} />
-                                    <div className="">FullName:</div>
-                                    <FormInput value={`Basit Money`} className={`${green}`} />
-                                    <div className="">Amount:</div>
-                                    <FormInput value={`1,500`} className={`${green}`} />
-                                </div>
-                                <div className=" flex flex-col gap-1 w-full">
-
-                                    <div className="">Network Sent Via:</div>
-                                    <FormInput value={`TRC-20`} className={`${green}`} />
-                                    <div className="">Your Receiving Wallet Address :</div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-full">
-                                            <FormInput value={`0x958847473888383`} className={`${green}`} />
-                                        </div>
-                                        <FaRegCopy onClick={() => handleCopy(`88t9389fncjjefj`, 'wallet address')} className={`${green} cursor-pointer`} />
+                                <div className="flex flex-col gap-3 w-full">
+                                    <div className="w-full">
+                                        <div className="text-sm">Customer ID:</div>
+                                        <FormInput value={id} className={`${green}`} />
                                     </div>
-                                    <div className="">Status:</div>
-                                    <FormInput value={`sent`} className={`${green}`} />
+                                    <div className="w-full">
+                                        <div className="text-sm">FullName:</div>
+                                        <FormInput value={`Basit Money`} className={`${green}`} />
+                                    </div>
+                                    <div className="w-full">
+                                        <div className="text-sm">Amount:</div>
+                                        <FormInput value={`1,500`} className={`${green}`} />
+                                    </div>
+                                </div>
+                                <div className=" flex flex-col gap-3 w-full">
+
+                                    <div className="">
+                                        <div className="text-sm">Network Sent Via:</div>
+                                        <FormInput value={`TRC-20`} className={`${green}`} />
+                                    </div>
+                                    <div className="">
+                                        <div className="text-sm">Your Receiving Wallet Address :</div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-full">
+                                                <FormInput value={`0x958847473888383`} className={`${green}`} />
+                                            </div>
+                                            <FaRegCopy onClick={() => handleCopy(`88t9389fncjjefj`, 'wallet address')} className={`${green} cursor-pointer`} />
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                        <div className="text-sm">Status:</div>
+                                        <FormInput value={`sent`} className={`${green}`} />
+                                    </div>
 
                                 </div>
 
