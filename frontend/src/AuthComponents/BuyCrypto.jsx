@@ -237,33 +237,6 @@ const BuyCrypto = () => {
                             <div className="flex w-full items-start gap-2 flex-col  ">
                                 <div className="font-bold text-lg">Does this wallet expire?</div>
                                 <div className="w-full ">
-                                    {/* <Select
-                                        options={options}
-                                        value={selectedOption}
-                                        onChange={handleOption}
-                                        styles={{
-                                            control: (base, state) => ({
-                                                ...base,
-                                                backgroundColor: 'white', // Custom control background color
-                                                color: 'white',
-                                                boxShadow: state.isFocused ? 'none' : base.boxShadow, 
-                                                borderColor: state.isFocused ? '#10b981' : base.borderColor,
-                                                outline: 'none',
-                                                '&:hover': {
-                                                    borderColor: '#10b981', 
-                                                },
-                                            }),
-                                            menu: (base) => ({
-                                                ...base,
-                                                backgroundColor: '#141523'// Custom menu background
-                                            }),
-                                            option: (base, state) => ({
-                                                ...base,
-                                                backgroundColor: state.isFocused ? '#141523' : '#171828',
-                                                color: 'white',
-                                            }),
-                                        }}
-                                    /> */}
                                     <select onChange={(e) => setForms({ ...forms, isExpired: e.target.value })} className=" border-gray-300 bg-dark   
                                     w-full text-white border   rounded-md py-2 px-4">
                                         <option value={`no`} className="outline-none">No</option>

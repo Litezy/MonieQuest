@@ -120,7 +120,7 @@ const UserKycApplications = ({setActive}) => {
                                     {item?.data?.userkycs?.firstname} {item?.data?.userkycs?.lastname}
                                 </td>
                                 <td className="px-3 truncate py-3">
-                                    {moment(item?.createdAt).format(`DD-MM-YYYY hh:mm A`)}
+                                    {moment(item?.createdAt).format(`DD-MM-YYYY `)}
                                 </td>
                                 <td className="px-3 py-3">
                                     <button onClick={() => filterSelect(item)}

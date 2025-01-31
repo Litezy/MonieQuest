@@ -28,7 +28,7 @@ const UserDetails = ({ setActive }) => {
 
             <div className="relative overflow-x-auto rounded-md mt-10">
                 <table className="w-full text-sm text-left rtl:text-right">
-                    <thead className=" bg-primary text-base poppins ">
+                    <thead className=" bg-primary text-sm poppins ">
                         <tr>
                             <th scope="col" className="px-3 py-3">
                                 ID
@@ -45,7 +45,7 @@ const UserDetails = ({ setActive }) => {
                             <th scope="col" className="px-3 py-3">
                                 Balance
                             </th>
-                            <th scope="col" className="px-3 py-3">
+                            <th scope="col" className="px-3 py-3 truncate">
                                 Date Joined
                             </th>
 
@@ -71,7 +71,7 @@ const UserDetails = ({ setActive }) => {
                                     {currencies[1].symbol}{item.bal.toLocaleString()}
                                 </td>
                                 <td className="px-3 py-3">
-                                    {moment(!item.createdAt && item.date).format(`DD-MM-YYYY hh:mm A`)}
+                                    {moment(!item.createdAt && item.date).format(`DD-MM-YYYY`)}
                                 </td>
                             </tr>
                         )) :

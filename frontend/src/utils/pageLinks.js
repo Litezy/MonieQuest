@@ -45,6 +45,10 @@ import AdminCreateAirdrops from "../pages/authadmin/AdminCreateAirdrops";
 import AdminAllBlogs from "../pages/authadmin/AdminAllBlogs";
 import AdminCreateBlogs from "../pages/authadmin/AdminCreateBlogs";
 import AdminSingleAirdrop from "../pages/authadmin/AdminSingleAirdrop";
+import AdminCryptoBuyOrders from "../AdminComponents/AdminCryptoBuyOrders";
+import AdminCryptoSellOrders from "../AdminComponents/AdminCryptoSellOrders";
+import SingleBuyOrder from "../AdminComponents/SIngleBuyOrder";
+import SingleSellOrder from "../AdminComponents/SingleSellOrder";
 import AdminToolsOrders from "../pages/authadmin/AdminToolsOrders";
 
 export const GeneralPagesLinks = [
@@ -88,7 +92,10 @@ export const AuthPagesLinks = [
 export const AdminPagesLinks = [
     { path: '/admin/dashboard', component: AdminDashboard },
     { path: '/admin/all_users', component: AdminAllUsers },
-    { path: '/admin/exchange', component: AdminExchange },
+    { path: '/admin/exchange/buy_orders/:id', component: SingleBuyOrder },
+    { path: '/admin/exchange/sell_orders/:id', component: SingleSellOrder },
+    { path: '/admin/exchange/buy_orders', component: AdminCryptoBuyOrders },
+    { path: '/admin/exchange/sell_orders', component: AdminCryptoSellOrders },
     { path: '/admin/giftcards', component: AdminGiftCards },
     { path: '/admin/profit_tools/orders', component: AdminToolsOrders },
     { path: '/admin/profit_tools/all_tools', component: AdminTools },

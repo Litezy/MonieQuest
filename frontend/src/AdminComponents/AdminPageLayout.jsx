@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import logo from '../assets/images/logo.png'
 import user1 from '../assets/images/customer2.jpg'
 import { MoveToTop } from '../utils/pageUtils'
@@ -12,6 +12,9 @@ const AdminPageLayout = ({ children }) => {
     const pathName = location.pathname
     const active = 'text-lightgreen rounded-sm bg-[#1e333c]'
     const nonactive = 'hover:bg-primary rounded-sm text-[#9696b5]'
+    const pathSegments = location.pathname.split('/').filter(Boolean);
+    console.log(pathSegments)
+    
 
     return (
         <div className='w-full'>

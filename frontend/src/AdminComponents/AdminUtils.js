@@ -11,7 +11,7 @@ import { RiUserFill } from 'react-icons/ri'
 export const pagelinks = [
     { label: 'dashboard', url: '/admin/dashboard', icon: MdDashboard, last: false },
     { label: 'users', url: '/admin/all_users', icon: FaUsers, last: false },
-    { label: 'crypto exchange', url: '/admin/exchange', icon: MdCurrencyExchange, last: false },
+    { label: 'crypto exchange',main:'/admin/exchange', url: '/admin/exchange/buy_orders', icon: MdCurrencyExchange, last: false },
     { label: 'gift cards', url: '/admin/giftcards', icon: HiGift, last: false },
     { label: 'profit tools', main: '/profit_tools', url: '/admin/profit_tools/orders', icon: CgToolbox, last: false },
     { label: 'airdrops', main: '/airdrops', url: '/admin/airdrops/create', icon: AiFillDollarCircle, last: false },
