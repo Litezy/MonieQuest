@@ -14,7 +14,7 @@ const FormInput = ({ formtype = 'text', border = true, label, type = 'text', val
 
       {formtype === 'number' && <input className={`outline-none border border-gray-40 bg-transparent w-full  py-2 px-2 lg:text-base text-[1.2rem]  rounded-xl ${className}`} name={name} value={value} placeholder={placeholder} onChange={onChange} type={'number'} onKeyUp={onKeyUp} ></input>}
 
-      {formtype === 'textarea' && <textarea type={type} autoComplete={name} name={name} value={value} onChange={onChange} className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 focus:border border border-gray-400 bg-transparent lg:text-sm text-base w-full h-32 rounded-xl py-3 px-4 resize-none scrollHide ${className}`} placeholder={placeholder} ></textarea>}
+      {formtype === 'textarea' && <textarea type={`text`} autoComplete={name} name={name} value={value} onChange={onChange} className={`outline-none focus-within:outline-none  focus:outline-none focus:ring-0 focus:border-gray-400 focus:border border border-gray-400 bg-transparent  text-base w-full h-32 rounded-xl py-3 px-4 resize-none scrollHide ${className}`} placeholder={placeholder} ></textarea>}
     </div>
   )
 }

@@ -30,7 +30,6 @@ import SingleFeatureBlog from "../pages/general/SingleFeatureBlog";
 import Hiring from "../pages/general/Hiring";
 import SingleComment from "../pages/general/SingleComment";
 import UserKYC from "../pages/authuser/UserKYC";
-import AdminExchange from "../pages/authadmin/AdminExchange";
 import AdminBankWithdrawals from "../pages/authadmin/AdminBankWithdrawals";
 import AdminGiftCards from "../pages/authadmin/AdminGiftCards";
 import AdminTools from "../pages/authadmin/AdminTools";
@@ -45,11 +44,14 @@ import AdminCreateAirdrops from "../pages/authadmin/AdminCreateAirdrops";
 import AdminAllBlogs from "../pages/authadmin/AdminAllBlogs";
 import AdminCreateBlogs from "../pages/authadmin/AdminCreateBlogs";
 import AdminSingleAirdrop from "../pages/authadmin/AdminSingleAirdrop";
-import AdminCryptoBuyOrders from "../AdminComponents/AdminCryptoBuyOrders";
-import AdminCryptoSellOrders from "../AdminComponents/AdminCryptoSellOrders";
-import SingleBuyOrder from "../AdminComponents/SIngleBuyOrder";
-import SingleSellOrder from "../AdminComponents/SingleSellOrder";
-import GiftCardSingleOrder from "../AdminComponents/GiftCardSingleOrder";
+import AdminCryptoBuyOrders from "../pages/authadmin/AdminCryptoBuyOrders";
+import AdminCryptoSellOrders from "../pages/authadmin/AdminCryptoSellOrders";
+import SingleBuyOrder from "../pages/authadmin/SingleBuyOrder";
+import SingleSellOrder from "../pages/authadmin/SingleSellOrder";
+import AdminToolsOrders from "../pages/authadmin/AdminToolsOrders";
+import GiftCardSingleOrder from "../pages/authadmin/GiftCardSingleOrder";
+import AdminTransHistory from "../pages/authadmin/AdminTransHistory";
+import AdminSingleWithdrawal from "../pages/authadmin/AdminSingleWithdrawal";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -98,9 +100,11 @@ export const AdminPagesLinks = [
     { path: '/admin/exchange/sell_orders', component: AdminCryptoSellOrders },
     { path: '/admin/giftcards/orders', component: AdminGiftCards },
     { path: '/admin/giftcards/orders/:id', component: GiftCardSingleOrder },
-    { path: '/admin/profit_tools', component: AdminTools },
+    { path: '/admin/profit_tools/orders', component: AdminToolsOrders },
+    { path: '/admin/profit_tools/all_tools', component: AdminTools },
     { path: '/admin/profit_tools/:id/:slug', component: AdminSingleTool },
     { path: '/admin/bank_withdrawals', component: AdminBankWithdrawals },
+    { path: '/admin/bank_withdrawals/:id', component: AdminSingleWithdrawal },
     { path: '/admin/profile', component: AdminProfile },
     { path: '/admin/notifications', component: AdminNotification },
     { path: '/admin/leaderboard', component: AdminLeaderboards },
@@ -109,4 +113,5 @@ export const AdminPagesLinks = [
     { path: '/admin/airdrops/:id/:slug', component: AdminSingleAirdrop },
     { path: '/admin/blogs/all', component: AdminAllBlogs },
     { path: '/admin/blogs/create', component: AdminCreateBlogs },
+    { path: '/admin/transactions_history', component: AdminTransHistory },
 ]

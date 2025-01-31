@@ -15,17 +15,20 @@ const mainIcons = [
     {
         name: 'dashboard',
         symbol: MdDashboard,
-        url: '/user/dashboard'
+        url: '/user/dashboard',
+        main: '/dashboard'
     },
     {
         name: 'crypto exchange',
         symbol: MdCurrencyExchange,
-        url: '/user/exchange'
+        url: '/user/exchange',
+        main: '/exchange'
     },
     {
         name: 'gift cards',
         symbol: HiGift,
-        url: '/user/giftcards'
+        url: '/user/giftcards',
+        main: '/giftcards'
     },
     {
         name: 'profit tools',
@@ -36,7 +39,8 @@ const mainIcons = [
     {
         name: 'bank withdrawal',
         symbol: BiMoneyWithdraw,
-        url: '/user/bank_withdrawal'
+        url: '/user/bank_withdrawal',
+        main: '/bank_withdrawal'
     },
 ]
 
@@ -64,10 +68,6 @@ const extraIcons = [
     },
 ]
 
-const extraArray = [
-    '/user/transactions_history', '/user/profile', '/user/profile/kyc', '/user/notifications', 'user/leaderboard'
-]
-
 
 const AuthFooter = () => {
     const [view, setView] = useState(false)
@@ -75,6 +75,7 @@ const AuthFooter = () => {
     const pathName = location.pathname
     const active = 'text-lightgreen'
     const nonactive = 'text-white/60 hover:text-lightgreen'
+    const mainLinks = mainIcons.some(ele => pathName.includes(ele.main))
 
 
     return (
@@ -96,10 +97,10 @@ const AuthFooter = () => {
                         )
                     })}
                     <div className='flex items-center py-4 relative'>
-                        {extraArray.includes(pathName) &&
+                        {!mainLinks &&
                             <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full"></div>
                         }
-                        <div className={`group-hover:text-lightgreen px-2 cursor-pointer text-[1.5rem] ${extraArray.includes(pathName) ? active : nonactive}`} onClick={() => setView(!view)}>
+                        <div className={`group-hover:text-lightgreen px-2 cursor-pointer text-[1.5rem] ${!mainLinks ? active : nonactive}`} onClick={() => setView(!view)}>
                             <CiMenuKebab />
                         </div>
                     </div>

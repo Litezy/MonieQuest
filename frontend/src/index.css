@@ -19,14 +19,15 @@ body {
   margin: 0;
   font-family: "Nunito Sans", "Nunito";
 }
+
 .poppins {
   font-family: "Poppins", serif;
 }
 
-
 .mont {
   font-family: "Montserrat", serif;
 }
+
 .input-off {
   -webkit-appearance: none;
   -webkit-border-radius: 0px;
@@ -42,9 +43,6 @@ input[type=number]:focus {
 }
 .ipt::placeholder {
   text-align: center;
-}
-.iptt::placeholder {
-  font-size: 0.85rem;
 }
 
 .scroll::-webkit-scrollbar {

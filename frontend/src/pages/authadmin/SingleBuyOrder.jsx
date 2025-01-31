@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import { FaRegCopy } from "react-icons/fa";
-import AdminPageLayout from './AdminPageLayout'
+import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
-import FormInput from '../utils/FormInput'
-import { currencies } from '../AuthComponents/AuthUtils'
-import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
-import SelectComp from '../GeneralComponents/SelectComp';
-import FormButton from '../utils/FormButton';
+import FormInput from '../../utils/FormInput'
+import { currencies } from '../../AuthComponents/AuthUtils'
+import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import SelectComp from '../../GeneralComponents/SelectComp';
+import FormButton from '../../utils/FormButton';
 import { TfiTimer } from 'react-icons/tfi';
-import ModalLayout from '../utils/ModalLayout';
-import Loader from '../GeneralComponents/Loader';
+import ModalLayout from '../../utils/ModalLayout';
+import Loader from '../../GeneralComponents/Loader';
+import Lottie from 'react-lottie';
+import animationData from '../../utils/lottie.json'
 
 
 
@@ -18,6 +20,14 @@ const SingleBuyOrder = () => {
     const { id } = useParams()
     const green = 'text-lightgreen'
 
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        },
+    };
     const handleCopy = (type, val) => {
         navigator.clipboard.writeText(type)
             .then(() => { SuccessAlert(`${val} copied successfully'`) })
@@ -62,11 +72,11 @@ const SingleBuyOrder = () => {
                     <div className="w-11/12 mx-auto mt-2">
                         <Link to={`/admin/exchange/buy_orders`} className="w-fit px-4 py-1.5 rounded-md bg-ash">back to orders</Link>
                     </div>
-                    <div className="mt-5 md:mt-10 w-11/12 mx-auto mont">
+                    <div className="mt-5 md:mt-10  mont">
 
                         <div className="w-full text-center capitalize font-bold poppins">Review Order Number <span className={`${green}`}>GY8343</span></div>
 
-                        <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md md:w-5/6 mx-auto mt-5 md:mt-10 mb-5">
+                        <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md w-11/12 mx-auto mt-5 md:mt-10 mb-5">
                             <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
                                 <div className="flex flex-col gap-3 w-full">
                                     <div className="flex flex-col items-start">
@@ -156,9 +166,7 @@ const SingleBuyOrder = () => {
                 <div className="w-11/12 mx-auto min-h-[70dvh] flex items-center justify-center">
 
                     <div className="w-full flex items-center  flex-col">
-                        <div className="rounded-full h-20 w-20 flex items-center justify-center border border-lightgreen">
-                            <TfiTimer className='text-2xl text-lightgreen' />
-                        </div>
+                    <Lottie options={defaultOptions} height={250} width={300} />
                         <div className="mt-10 flex flex-col items-center ">
                             <div className="capitalize">Thank You for confirming this order.
                             </div>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
-import AdminPageLayout from '../../AdminComponents/AdminPageLayout';
 import AdminToolComp from '../../AdminComponents/AdminToolComp';
+import AdminToolsLayout from '../../AdminComponents/AdminToolsLayout';
 
 const records = [
     {
@@ -10,7 +10,8 @@ const records = [
         gen_id: '123456789',
         title: 'acrobat',
         category: 'AI assistant',
-        price: 100,
+        price: 2000,
+        discount: 10,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'approved'
@@ -20,7 +21,8 @@ const records = [
         gen_id: '123456789',
         title: 'playwrite',
         category: 'font',
-        price: 20,
+        price: 11000,
+        discount: 0,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'declined'
@@ -30,7 +32,8 @@ const records = [
         gen_id: '123456789',
         title: 'the grinch mas',
         category: 'graphics',
-        price: 50,
+        price: 5000,
+        discount: 30,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'pending'
@@ -63,7 +66,7 @@ const AdminTools = () => {
     }
 
     return (
-        <AdminPageLayout>
+        <AdminToolsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
                     <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={filterTools} />
@@ -75,9 +78,9 @@ const AdminTools = () => {
                     <div className="text-zinc-300 font-semibold capitalize text-sm lg:text-base col-span-1">Sort tools by:</div>
                     <div className='md:col-span-5 col-span-1'>
                         <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 items-center lg:w-11/12 w-full mx-auto">
-                            {tags.map((tag) => {
+                            {tags.map((tag, i) => {
                                 return (
-                                    <div onClick={() => setActive(tag)}
+                                    <div key={i} onClick={() => setActive(tag)}
                                         className={`w-full h-fit py-1 text-sm md:text-base flex items-center justify-center text-center rounded-md capitalize ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'} cursor-pointer`}>{tag}</div>
                                 )
                             })}
@@ -132,7 +135,7 @@ const AdminTools = () => {
                     }
                 </div>
             </div>
-        </AdminPageLayout>
+        </AdminToolsLayout>
     )
 }
 

@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import { FaRegCopy } from "react-icons/fa";
-import AdminPageLayout from './AdminPageLayout'
+import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
-import FormInput from '../utils/FormInput'
-import { currencies } from '../AuthComponents/AuthUtils'
-import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
-import SelectComp from '../GeneralComponents/SelectComp';
-import FormButton from '../utils/FormButton';
-import { TfiTimer } from 'react-icons/tfi';
-import ModalLayout from '../utils/ModalLayout';
-import Loader from '../GeneralComponents/Loader';
+import FormInput from '../../utils/FormInput'
+import { currencies } from '../../AuthComponents/AuthUtils'
+import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import SelectComp from '../../GeneralComponents/SelectComp';
+import FormButton from '../../utils/FormButton';
+import animationData from '../../utils/lottie.json'
+import ModalLayout from '../../utils/ModalLayout';
+import Loader from '../../GeneralComponents/Loader';
+import Lottie from 'react-lottie';
 
 
 
@@ -29,6 +30,14 @@ const SingleSellOrder = () => {
         amount: ''
     })
 
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        },
+    };
     const [applyAmt, setApplyAmt] = useState(false)
     const statuses = ["Yes", "No"]
     const [screen, setScreen] = useState(1)
@@ -99,7 +108,7 @@ const SingleSellOrder = () => {
 
                         <div className="w-full text-center capitalize font-bold poppins">Review Order Number <span className={`${green}`}>GY8343</span></div>
 
-                        <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md md:w-5/6 mx-auto mt-5 md:mt-10 mb-5">
+                        <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md  mx-auto mt-5 md:mt-10 mb-5">
                             <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
                                 <div className="flex flex-col gap-3 w-full">
                                     <div className="w-full">
@@ -168,9 +177,7 @@ const SingleSellOrder = () => {
                 <div className="w-11/12 mx-auto min-h-[70dvh] flex items-center justify-center">
 
                     <div className="w-full flex items-center  flex-col">
-                        <div className="rounded-full h-20 w-20 flex items-center justify-center border border-lightgreen">
-                            <TfiTimer className='text-2xl text-lightgreen' />
-                        </div>
+                        <Lottie options={defaultOptions} height={250} width={300} />
                         <div className="mt-10 flex flex-col items-center ">
                             <div className="capitalize">Thank You for confirming this order.
                             </div>

@@ -8,7 +8,7 @@ const records = [
         gen_id: '123456789',
         title: 'acrobat',
         category: 'AI assistant',
-        price: 100,
+        price: 1000,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'approved'
@@ -17,7 +17,7 @@ const records = [
         gen_id: '123456789',
         title: 'playwrite',
         category: 'font',
-        price: 20,
+        price: 3000,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'declined'
@@ -26,7 +26,7 @@ const records = [
         gen_id: '123456789',
         title: 'the grinch mas',
         category: 'graphics',
-        price: 50,
+        price: 12000,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
         status: 'pending'
@@ -71,9 +71,9 @@ const ProfitTools = () => {
                     <div className="text-zinc-300 font-semibold capitalize text-sm lg:text-base col-span-1">Sort tools by:</div>
                     <div className='md:col-span-5 col-span-1'>
                         <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 items-center lg:w-11/12 w-full mx-auto">
-                            {tags.map((tag) => {
+                            {tags.map((tag, i) => {
                                 return (
-                                    <div onClick={() => setActive(tag)}
+                                    <div key={i} onClick={() => setActive(tag)}
                                         className={`w-full h-fit py-1 text-sm md:text-base flex items-center justify-center text-center rounded-md capitalize ${active === tag ? 'bg-ash' : 'bg-primary hover:bg-primary/50'} cursor-pointer`}>{tag}</div>
                                 )
                             })}

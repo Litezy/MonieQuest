@@ -43,7 +43,7 @@ const AdminPageLayout = ({ children }) => {
                         })}
                     </div>
                 </div>
-                <div className='lg:w-[80%] w-full h-screen bg-[#141523] pt-5 pb-16 lg:pb-10 overflow-y-auto overflow-x-hidden text-white'>
+                <div className='lg:w-[80%] w-full h-screen bg-[#141523] pt-10 pb-20 lg:pb-10 overflow-y-auto overflow-x-hidden text-white'>
                     {children}
                 </div>
             </div>

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { FaXTwitter } from 'react-icons/fa6'
 import { SiTelegram } from 'react-icons/si'
 import { LuArrowRightLeft } from 'react-icons/lu'
+import { RxExternalLink } from "react-icons/rx";
 import testimg from '../../assets/images/testimg.webp'
 import airdropLogo from '../../assets/images/testimage.jfif'
 
@@ -64,7 +65,7 @@ const SingleAirdropPage = () => {
                     ))}
                   </div>
                 </div>
-                <div className='lg:col-span-4 col-span-1 w-full h-96 bg-slate-400 animate-pulse rounded-md'></div>
+                <div className='lg:col-span-4 col-span-1 w-full h-64 bg-slate-400 animate-pulse rounded-md'></div>
               </div>
               <div className='w-full h-32 bg-slate-400 animate-pulse rounded-md'></div>
             </div>
@@ -73,7 +74,7 @@ const SingleAirdropPage = () => {
               <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
                 <div className='flex items-center gap-2'>
                   <div>
-                    <img alt={singleAirdrop.logo} src={airdropLogo} className='w-14 h-14 rounded-full object-cover'></img>
+                    <img alt={singleAirdrop.logo} src={airdropLogo} className='size-14 rounded-full object-cover'></img>
                   </div>
                   <div className='capitalize md:text-4xl text-3xl font-bold'>ape express</div>
                 </div>
@@ -119,23 +120,19 @@ const SingleAirdropPage = () => {
                 </div>
                 <div className='lg:col-span-4 col-span-1'>
                   <div className='w-full h-fit border border-ash bg-secondary rounded-md py-10 px-4'>
-                    <div className='text-xl font-bold'>Step by step guide on <span className='capitalize'>ape express</span> Airdrop</div>
-                    <div className='flex flex-col gap-4 mt-8'>
-                      <div className='flex md:gap-8 gap-4 items-center md:px-8 px-4 py-3 hover:bg-primary hover:rounded-md'>
-                        <span className='text-lg font-bold'>1</span>
-                        <span className='text-sm'>Launch the <a href='' className='text-lightgreen capitalize'>ape express</a> GameBot on Telegram and click “Play Ape.</span>
-                      </div>
-                      <div className='flex md:gap-8 gap-4 items-center md:px-8 px-4 py-3 hover:bg-primary hover:rounded-md'>
-                        <span className='text-lg font-bold'>2</span>
-                        <span className='text-sm'>Go to the Ape Express Airdrop page, paste your BSC address, and click “Confirm”.</span>
-                      </div>
-                      <div className='flex md:gap-8 gap-4 items-center md:px-8 px-4 py-3 hover:bg-primary hover:rounded-md'>
-                        <span className='text-lg font-bold'>3</span>
-                        <span className='text-sm'>Complete tasks like following <a href='' className='text-lightgreen'>@APE__WEB3</a> on X, logging in daily, and engaging in Team Blessings via the “Room” page to maximize your rewards.</span>
-                      </div>
+                    <div className='flex flex-col gap-4'>
+                      <div className='text-xl font-bold'>Step by step video guide on <span className='capitalize'>ape express</span> Airdrop</div>
+                      <a href='https://youtube.com/ape_guide' className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
+                        <div className='text-lightgreen'>https://youtube.com/ape_guide</div>
+                        <RxExternalLink className='text-lg'/>
+                      </a>
                     </div>
-                    <div className='pt-10 text-sm'>
-                      <span className='capitalize'>referral link: </span><a href='https://app.gradient.network/signup?code=DXD99K' className='text-lightgreen'>https://app.gradient.network/signup?code=DXD99K</a>
+                    <div className='flex flex-col gap-4 mt-8'>
+                      <div className='text-xl font-bold'>Referral link to earn</div>
+                      <a href='https://app.gradient.network/signup?code=DXD99K' className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
+                        <div className='text-lightgreen'>href='https://app.gradient.network/signup?code=DXD99K'</div>
+                        <RxExternalLink className='text-lg'/>
+                      </a>
                     </div>
                   </div>
                 </div>

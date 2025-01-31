@@ -1,7 +1,7 @@
 import React from 'react'
-import AdminExchange from '../pages/authadmin/AdminExchange'
-import { currencies } from '../AuthComponents/AuthUtils'
+import { currencies } from '../../AuthComponents/AuthUtils'
 import { Link } from 'react-router-dom'
+import AdminExchangeLayout from '../../AdminComponents/AdminExchangeLayout'
 
 const AdminCryptoSellOrders = () => {
     const Topheaders = [`ID`, 'FullName', 'Crypto', 'Network', 'Amount', 'Details']
@@ -23,7 +23,7 @@ const AdminCryptoSellOrders = () => {
         },
     ]
     return (
-        <AdminExchange>
+        <AdminExchangeLayout>
             <div className='w-11/12 mx-auto'>
                 <div className=" text-lg font-bold w-full text-center capitalize">See Latest Sell Orders below</div>
                 <div className="relative overflow-x-auto rounded-md mt-10">
@@ -71,7 +71,7 @@ const AdminCryptoSellOrders = () => {
 
                 </div>
             </div>
-        </AdminExchange>
+        </AdminExchangeLayout>
     )
 }
 

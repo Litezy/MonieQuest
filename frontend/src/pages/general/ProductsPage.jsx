@@ -16,16 +16,16 @@ const products = [
     image: testimg,
     title: "playwrite",
     category: "fonts",
-    old_price: 6,
-    new_price: 3,
+    price: 6,
+    discount: 50,
   },
   {
     id: 2,
     image: testimg2,
     title: "the grinch mas",
     category: "graphics",
-    old_price: 120,
-    new_price: 12,
+    price: 120,
+    discount: 0,
   },
 ]
 
@@ -109,12 +109,14 @@ const ProductsPage = () => {
                       key={index}
                       className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
                     >
-                      <>
-                        <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
-                          {(item.old_price - item.new_price) / item.old_price * 100}% off
-                        </div>
-                        <div className="edge"></div>
-                      </>
+                      {item.discount > 0 &&
+                        <>
+                          <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
+                            {item.discount}% off
+                          </div>
+                          <div className="edge"></div>
+                        </>
+                      }
                       <Link to={`/products/${index}/${item.title}`} onClick={MoveToTop}>
                         <img
                           src={item.image}
@@ -134,12 +136,18 @@ const ProductsPage = () => {
                             in <span className="text-lightgreen">{item.category}</span>
                           </div>
                           <div className="flex gap-2 items-center text-sm font-extrabold">
-                            <div className="text-[#B2212F] underline">
-                              ${item.new_price.toFixed(2)}
-                            </div>
-                            <div className="line-through">
-                              ${item.old_price.toFixed(2)}
-                            </div>
+                            {item.discount > 0 ?
+                              <>
+                                <div className="text-[#B2212F] underline">
+                                  ${((100 - item.discount) / 100 * item.price).toFixed(2)}
+                                </div>
+                                <div className="line-through">
+                                  ${item.price.toFixed(2)}
+                                </div>
+                              </>
+                              :
+                              <div>${item.price.toFixed(2)}</div>
+                            }
                           </div>
                         </div>
                         <button
