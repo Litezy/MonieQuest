@@ -13,6 +13,7 @@ import Loader from '../GeneralComponents/Loader';
 
 const BuyCrypto = () => {
     const [screen, setScreen] = useState(1)
+    const [check, setCheck] = useState(false)
     const [loading, setLoading] = useState(false)
     const [modal, setModal] = useState(false)
     const rate = 1715
@@ -84,7 +85,7 @@ const BuyCrypto = () => {
         }
         if (selectedCurr.name === 'USD' && selectedCurr.symbol === '$') {
             const amt = forms.amount.replace(/,/g, '')
-            console.log(`newamt: ${amt},currency : ${selectedCurr.symbol}`)
+            // console.log(`newamt: ${amt},currency : ${selectedCurr.symbol}`)
             if (amt > limit) return ErrorAlert(`Sorry, you can't buy above $2,000`)
         }
 
@@ -114,6 +115,11 @@ const BuyCrypto = () => {
     }
 
     const navigate = useNavigate()
+
+    const confirmAndBuy = () => {
+        if (!check) return ErrorAlert(`Please agree to the intructions below to proceed`)
+        setScreen(3)
+    }
     return (
         <div className='w-full'>
             {loading &&
@@ -153,8 +159,8 @@ const BuyCrypto = () => {
                             </div>
                             <div className="flex item-center justify-between w-full">
                                 <div className="text-sm">Amount in Naira</div>
-                                <div onClick={changeCurrency} className="flex items-center gap-1 cursor-pointer">
-                                    <div className="text-sm">set by {selectedCurr.name === 'USD' ? 'naira' : 'usd'}</div>
+                                <div  className="flex items-center gap-1 cursor-pointer">
+                                    <div className="text-sm">{inNaira}</div>
                                     <TbSwitch2 className='text-lightgreen ' />
                                 </div>
                             </div>
@@ -188,10 +194,10 @@ const BuyCrypto = () => {
                                             })}
                                         </div>
                                         <div className="flex items-start gap-3">
-                                            <input type="checkbox" />
+                                            <input checked={check} type="checkbox" onChange={(e) => setCheck(e.target.checked)} />
                                             <p>I agree to the instructions above and want to proceed to the payment window.</p>
                                         </div>
-                                        <button onClick={() => setScreen(3)} className='mt-10 w-full rounded-md bg-ash hover:bg-lightgreen text-white py-3'>Confirm</button>
+                                        <button onClick={confirmAndBuy} className='mt-10 w-full rounded-md bg-ash hover:bg-lightgreen text-white py-3'>Confirm</button>
                                     </div>
                                 </ModalLayout>
                             }
@@ -245,7 +251,7 @@ const BuyCrypto = () => {
                                 </div>
                             </div>
                             <div className="flex items-center justify-between w-full gap-10">
-                                <button onClick={() => setScreen(1)} className='w-1/2 bg-dark text-lg rounded-xl py-3'>back</button>
+                                <button onClick={() => setScreen(1)} className='w-1/2 bg-primary text-lg rounded-xl py-3'>back</button>
                                 <button onClick={() => setModal(true)} className={`bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-1/2 h-fit py-3 text-lg rounded-xl`}>Confirm</button>
                             </div>
 

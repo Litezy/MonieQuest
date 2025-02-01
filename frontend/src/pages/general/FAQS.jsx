@@ -15,50 +15,88 @@ const FAQS = () => {
                 </div>
 
                 <div className="w-11/12 mx-auto text-lg">
-                    <div className="flex items-start gap-10 py-10 flex-col">
+                    <div className="flex items-start gap-16 py-10 flex-col">
                         <div className="flex items-start gap-3 flex-col">
                             <div className="text-3xl font-bold text-lightgreen">General Questions</div>
-                            <div className="">{generalfaqs.map((que,i)=>{
-                                return (
-                                    <div key={i} className="flex items-start gap-1 mb-5 flex-col ">
-                                        <div className="text-lightgreen/80">{que.title}</div>
-                                        <div className="">{que.desc}</div>
-                                    </div>
-                                )
-                            })}</div>
+
+                            <div className='flex flex-col gap-4'>
+                                <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
+                                    {generalfaqs.map((que, i) => {
+                                        return (
+                                            <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+
+                                                <div key={i} className="flex items-start gap-1 mb-5 flex-col ">
+                                                    <div className="text-lightgreen">{que.title}</div>
+                                                    <div className="text-base">{que.desc}</div>
+                                                </div>
+                                            </div>
+
+                                        )
+                                    })}
+
+                                </div>
+                            </div>
+                            <div className=""></div>
                         </div>
                         <div className="flex items-start gap-3 flex-col">
                             <div className="text-3xl font-bold text-lightgreen">Airdrop Questions</div>
-                            <div className="">{airdropsfaqs.map((que,i)=>{
-                                return (
-                                    <div key={i} className="flex items-start gap-1 mb-5 flex-col py-2 ">
-                                        <div className="text-lightgreen/80">{que.title}</div>
-                                        <div className="">{que.desc}</div>
-                                    </div>
-                                )
-                            })}</div>
+                            <div className='flex flex-col gap-4'>
+                                <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
+                                    {airdropsfaqs.map((que, i) => {
+                                        return (
+                                            <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+
+                                                <div key={i} className="flex items-start gap-1 mb-5 flex-col ">
+                                                    <div className="text-lightgreen">{que.title}</div>
+                                                    <div className="text-base">{que.desc}</div>
+                                                </div>
+                                            </div>
+
+                                        )
+                                    })}
+
+                                </div>
+                            </div>
                         </div>
                         <div className="flex items-start gap-3 flex-col">
                             <div className="text-3xl font-bold text-lightgreen">Exchange Questions</div>
-                            <div className="">{exchangefaqs.map((que,i)=>{
-                                return (
-                                    <div key={i} className="flex items-start gap-1 mb-5 flex-col py-2 ">
-                                        <div className="text-lightgreen/80">{que.title}</div>
-                                        <div className="">{que.desc}</div>
-                                    </div>
-                                )
-                            })}</div>
+                            <div className='flex flex-col gap-4'>
+                                <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
+                                    {exchangefaqs.map((que, i) => {
+                                        return (
+                                            <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+
+                                                <div key={i} className="flex items-start gap-1 mb-5 flex-col ">
+                                                    <div className="text-lightgreen">{que.title}</div>
+                                                    <div className="text-base">{que.desc}</div>
+                                                </div>
+                                            </div>
+
+                                        )
+                                    })}
+
+                                </div>
+                            </div>
                         </div>
                         <div className="flex items-start gap-3 flex-col">
                             <div className="text-3xl font-bold text-lightgreen">Profit Tools Questions</div>
-                            <div className="">{profitfaqs.map((que,i)=>{
-                                return (
-                                    <div key={i} className="flex items-start gap-1 mb-5 flex-col py-2 ">
-                                        <div className="text-lightgreen/80">{que.title}</div>
-                                        <div className="">{que.desc}</div>
-                                    </div>
-                                )
-                            })}</div>
+                            <div className='flex flex-col gap-4'>
+                                <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
+                                    {profitfaqs.map((que, i) => {
+                                        return (
+                                            <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+
+                                                <div key={i} className="flex items-start gap-1 mb-5 flex-col ">
+                                                    <div className="text-lightgreen">{que.title}</div>
+                                                    <div className="text-base">{que.desc}</div>
+                                                </div>
+                                            </div>
+
+                                        )
+                                    })}
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

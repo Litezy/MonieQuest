@@ -136,13 +136,13 @@ const ProductsPage = () => {
                             in <span className="text-lightgreen">{item.category}</span>
                           </div>
                           <div className="flex gap-2 items-center text-sm font-extrabold">
-                            {item.discount > 0 ?
+                            {item.discount > 0  ?
                               <>
                                 <div className="text-[#B2212F] underline">
-                                  ${((100 - item.discount) / 100 * item.price).toFixed(2)}
+                                  ${((100 - item.discount) / 100 * item.price)}
                                 </div>
                                 <div className="line-through">
-                                  ${item.price.toFixed(2)}
+                                  ${(item.price || 0).toFixed(2)}
                                 </div>
                               </>
                               :

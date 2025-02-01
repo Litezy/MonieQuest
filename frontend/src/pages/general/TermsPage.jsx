@@ -18,120 +18,174 @@ const TermsPage = () => {
 
           <div className="flex text-gray-300 items-start gap-3 flex-col mt-10">
             <div className="w-full flex flex-col">
-              <div className="flex text-white mb-2 items-start flex-col gap-3">
-                <div className="text-lightgreen">1. Acceptance of terms</div>
-                <div className="">By using MonieQuest, you agree to these <span className='text-lightgreen'>Terms and Conditions</span> and our <span onClick={() => navigate('/privacy_policy')} className='text-lightgreen cursor-pointer'>Privacy Policy</span>.</div>
-              </div>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <div className="w-full">
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">1. Acceptance of terms</div>
+                    <div className="text-base">By using MonieQuest, you agree to these <span className='text-lightgreen'>Terms and Conditions</span> and our <span onClick={() => navigate('/privacy_policy')} className='text-lightgreen cursor-pointer'>Privacy Policy</span>.</div>
 
-              <div className="flex items-start flex-col gap-2">
-                <div className="text-lightgreen">2. Account Registration</div>
-                <div className="w-full">
-                  {services.slice(0, 2).map((item, i) => {
-                    return (
-                      <ul key={i} className='mb-2 ml-10 text-gray-300 flex flex-col lg:flex-row gap-1  items-start'>
-                        <li className='list-disc '>{item}</li>
-                      </ul>
-                    )
-                  })}
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start flex-col gap-2">
-                <div className="text-lightgreen">2. Earning Tasks and Rewards</div>
                 <div className="w-full">
-                  {services.slice(2, 4).map((item, i) => {
-                    return (
-                      <ul key={i} className='mb-2 ml-10 text-gray-300 flex flex-col lg:flex-row gap-1  items-start'>
-                        <li className='list-disc '>{item}</li>
-                      </ul>
-                    )
-                  })}
-                </div>
-              </div>
-              <div className="flex items-start flex-col gap-2">
-                <div className="text-lightgreen">4. MonieQuest Exchange</div>
-                <div className="w-full">
-                  {services.slice(4, 6).map((item, i) => {
-                    return (
-                      <ul key={i} className='mb-2 ml-10 text-gray-300 flex flex-col lg:flex-row gap-1  items-start'>
-                        <li className='list-disc '>{item}</li>
-                      </ul>
-                    )
-                  })}
-                </div>
-              </div>
-              <div className="flex items-start flex-col gap-2">
-                <div className="text-lightgreen">5. User-Contributed Tools</div>
-                <div className="w-full">
-                  {services.slice(6, 7).map((item, i) => {
-                    return (
-                      <ul key={i} className='mb-2 ml-10 text-gray-300 flex flex-col lg:flex-row gap-1  items-start'>
-                        <li className='list-disc '>{item}</li>
-                      </ul>
-                    )
-                  })}
-                </div>
-              </div>
-              <div className="flex items-start flex-col gap-2">
-                <div className="text-lightgreen">6. Liability Limitations</div>
-                <div className="w-full">
-                  {services.slice(7, 9).map((item, i) => {
-                    return (
-                      <ul key={i} className='mb-2 ml-10 text-gray-300 flex flex-col lg:flex-row gap-1  items-start'>
-                        <li className='list-disc '>{item}</li>
-                      </ul>
-                    )
-                  })}
-                </div>
-              </div>
-              <div className="flex items-start flex-col gap-2">
-                <div className="text-lightgreen">7. Governing Law</div>
-                <div className="w-full">
-                  {services.slice(9, 10).map((item, i) => {
-                    return (
-                      <ul key={i} className='mb-2 text-gray-300 flex flex-col lg:flex-row gap-1  items-start'>
-                        <li className=''>{item}</li>
-                      </ul>
-                    )
-                  })}
-                </div>
-              </div>
-              <div className="flex items-start flex-col gap-2">
-                <div className="text-lightgreen">8. Termination</div>
-                <div className="w-full">
-                  {services.slice(10, 11).map((item, i) => {
-                    return (
-                      <ul key={i} className='mb-2 text-gray-300 flex flex-col lg:flex-row gap-1  items-start'>
-                        <li className=''>{item}</li>
-                      </ul>
-                    )
-                  })}
-                </div>
-              </div>
-              <div className="flex items-start flex-col gap-2">
-                <div className="text-lightgreen">9. Fees</div>
-                <div className="w-full">
-                  {services.slice(11, 12).map((item, i) => {
-                    return (
-                      <ul key={i} className='mb-2 text-gray-300 flex flex-col lg:flex-row gap-1  items-start'>
-                        <li className=''>{item}</li>
-                      </ul>
-                    )
-                  })}
-                </div>
-              </div>
-              <div className="flex items-start flex-col gap-2">
-                <div className="text-lightgreen">10. Modifications to Terms</div>
-                <div className="w-full">
-                  {services.slice(12, 13).map((item, i) => {
-                    return (
-                      <ul key={i} className='mb-2 text-gray-300 flex flex-col lg:flex-row gap-1  items-start'>
-                        <li className=''>{item}</li>
-                      </ul>
-                    )
-                  })}
-                </div>
-              </div>
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">2. Account Registration</div>
+                    {services.slice(0, 2).map((que, i) => {
+                      return (
+                        <div className=''>
+                          <ul key={i} className="flex items-start gap-1 mb-1 list-disc flex-col ">
+                            <div className="text-base">{que}</div>
+                          </ul>
+                        </div>
 
+                      )
+                    })}
+
+                  </div>
+                </div>
+                <div className="w-full">
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">3. Earning Tasks and Rewards</div>
+                    {services.slice(2, 4).map((que, i) => {
+                      return (
+                        <div className=''>
+                          <ul key={i} className="flex items-start gap-1 mb-1 list-disc flex-col ">
+                            <div className="text-base">{que}</div>
+                          </ul>
+                        </div>
+
+                      )
+                    })}
+
+                  </div>
+                </div>
+
+
+                
+                <div className="w-full">
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">4. MonieQuest Exchange</div>
+                    {services.slice(4, 6).map((que, i) => {
+                      return (
+                        <div className=''>
+                          <ul key={i} className="flex items-start gap-1 mb-1 list-disc flex-col ">
+                            <div className="text-base">{que}</div>
+                          </ul>
+                        </div>
+
+                      )
+                    })}
+
+                  </div>
+                </div>
+
+
+                <div className="w-full">
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">5. User-Contributed Tools</div>
+                    {services.slice(6, 7).map((que, i) => {
+                      return (
+                        <div className=''>
+                          <ul key={i} className="flex items-start gap-1 mb-1 list-disc flex-col ">
+                            <div className="text-base">{que}</div>
+                          </ul>
+                        </div>
+
+                      )
+                    })}
+
+                  </div>
+                </div>
+
+
+                <div className="w-full">
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">6. Liability Limitations</div>
+                    {services.slice(7, 9).map((que, i) => {
+                      return (
+                        <div className=''>
+                          <ul key={i} className="flex items-start gap-1 mb-1 list-disc flex-col ">
+                            <div className="text-base">{que}</div>
+                          </ul>
+                        </div>
+
+                      )
+                    })}
+
+                  </div>
+                </div>
+
+
+                <div className="w-full">
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">7. Governing Law</div>
+                    {services.slice(9,10).map((que, i) => {
+                      return (
+                        <div className=''>
+                          <ul key={i} className="flex items-start gap-1 mb-1 list-disc flex-col ">
+                            <div className="text-base">{que}</div>
+                          </ul>
+                        </div>
+
+                      )
+                    })}
+
+                  </div>
+                </div>
+
+
+                <div className="w-full">
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">8. Termination</div>
+                    {services.slice(10,11).map((que, i) => {
+                      return (
+                        <div className=''>
+                          <ul key={i} className="flex items-start gap-1 mb-1 list-disc flex-col ">
+                            <div className="text-base">{que}</div>
+                          </ul>
+                        </div>
+
+                      )
+                    })}
+
+                  </div>
+                </div>
+                <div className="w-full">
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">9. Fees</div>
+                    {services.slice(11,12).map((que, i) => {
+                      return (
+                        <div className=''>
+                          <ul key={i} className="flex items-start gap-1 mb-1 list-disc flex-col ">
+                            <div className="text-base">{que}</div>
+                          </ul>
+                        </div>
+
+                      )
+                    })}
+
+                  </div>
+                </div>
+                <div className="w-full">
+                  <div className='border-2 border-[#2f2f47] flex items-start flex-col gap-2 p-4 rounded-3xl w-full h-fit'>
+                    <div className="text-lightgreen">10. Modifications to Terms</div>
+                    {services.slice(12,13).map((que, i) => {
+                      return (
+                        <div className=''>
+                          <ul key={i} className="flex items-start gap-1 mb-1 list-disc flex-col ">
+                            <div className="text-base">{que}</div>
+                          </ul>
+                        </div>
+
+                      )
+                    })}
+
+                  </div>
+                </div>
+
+
+
+
+              </div>
             </div>
 
           </div>
