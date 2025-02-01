@@ -1,4 +1,5 @@
 exports.webName = 'MonieQuest'
+exports.webShort = 'MQ'
 exports.webURL = 'https://moniequest.vercel.app/'
 
 exports.Socials = {

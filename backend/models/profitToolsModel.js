@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     return sequelize.define('profit_tool', {
         user: { type: DataTypes.INTEGER },
         gen_id: {type: DataTypes.STRING},
+        slug: {type: DataTypes.STRING},
         title: { type: DataTypes.STRING },
         category: { type: DataTypes.STRING },
         price: { type: DataTypes.FLOAT },

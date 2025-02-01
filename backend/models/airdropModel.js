@@ -1,6 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('airdrop', {
         gen_id: {type: DataTypes.STRING},
+        slug: {type: DataTypes.STRING},
         logo: { type: DataTypes.STRING },
         banner: { type: DataTypes.STRING },
         title: { type: DataTypes.STRING },

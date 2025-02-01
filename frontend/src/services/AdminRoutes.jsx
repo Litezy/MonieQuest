@@ -8,7 +8,7 @@ import { PROFILE } from './store'
 import { Apis, AuthGetApi } from './API'
 
 
-const AuthRoutes = ({ children }) => {
+const AdminRoutes = ({ children }) => {
     const [, setProfile] = useAtom(PROFILE)
     const [login, setLogin] = useState(false)
     const navigate = useNavigate()
@@ -25,7 +25,7 @@ const AuthRoutes = ({ children }) => {
                     return navigate('/login')
                 }
                 const unauthorized = decodeToken(token)
-                if (unauthorized.role !== 'user') {
+                if (unauthorized.role !== 'admin') {
                     return navigate('/login')
                 }
                 const response = await AuthGetApi(Apis.user.profile)
@@ -45,4 +45,4 @@ const AuthRoutes = ({ children }) => {
     if (login) return children
 }
 
-export default AuthRoutes
+export default AdminRoutes

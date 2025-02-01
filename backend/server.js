@@ -16,5 +16,6 @@ app.use(fileUpload())
 app.use(express.static('public'))
 
 app.use('/api/user', require('./routes/userRoute'))
+app.use('/api/notification', require('./routes/notificationRoute'))
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`))
