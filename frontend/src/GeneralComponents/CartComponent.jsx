@@ -91,13 +91,13 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                             <div className='flex md:flex-row flex-col md:justify-between gap-1'>
                                                 <div className='capitalize font-bold md:text-base text-sm'>{item.title}</div>
                                                 <div className='flex items-center md:flex-col flex-row gap-1.5 font-semibold'>
-                                                    {item.discount > 0 ?
+                                                    {item.discount > 0 && item.price !== undefined?
                                                         <>
                                                             <div>₦{((100 - item.discount) / 100 * item.price).toLocaleString()}</div>
                                                             <div className='text-xs line-through'>${item.price.toLocaleString()}</div>
                                                         </>
                                                         :
-                                                        <div>₦{item.price.toLocaleString()}</div>
+                                                        <div>₦{(item.price || 0).toLocaleString()}</div>
                                                     }
                                                 </div>
                                             </div>

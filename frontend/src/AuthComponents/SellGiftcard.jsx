@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { TbSwitch2 } from 'react-icons/tb'
 import FormInput from '../utils/FormInput'
-import { currencies, giftCardValidations } from './AuthUtils'
+import { currencies } from './AuthUtils'
 import { ErrorAlert, SuccessAlert } from '../utils/pageUtils'
 import ModalLayout from '../utils/ModalLayout'
 import { SlClock } from 'react-icons/sl'
 import { Link } from 'react-router-dom'
 import Loader from '../GeneralComponents/Loader'
+import { CardsArray } from './GiftcardsArray'
+import { MdRateReview } from "react-icons/md";
+
 
 const SellGiftcard = ({ screen, setScreen }) => {
 
     //defining states
+    const [selectBrand, setSelectBrand] = useState(false)
     const [cards, setCards] = useState({
-        type: '',
+        brand: `--Select Brand--`,
         amount: '',
         code: '',
         pin: '',
@@ -32,27 +36,22 @@ const SellGiftcard = ({ screen, setScreen }) => {
         name: currencies[0].name,
         symbol: currencies[0].symbol
     })
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState({ status: false, param: "" })
 
 
     //defining functions
 
-
-    const handleType = (e) => {
-        setCards({ ...cards, code: '', type: e.target.value, amount: '' })
-        setProceed(false)
-    }
     useEffect(() => {
         const findcard = () => {
-            if (cards.type) {
-                const findBrand = giftCardValidations.filter((b) => b.brand === cards.type)
+            if (cards.brand) {
+                const findBrand = CardsArray.filter((b) => b.brand === cards.brand)
                 setSelectedCard(findBrand[0])
-                // console.log(findBrand)
+                console.log(findBrand)
             }
         }
 
         findcard()
-    }, [cards.type])
+    }, [cards.brand])
 
     const handleAmount = (e) => {
         const rawValue = e.target.value.replace(/,/g, '');
@@ -96,7 +95,7 @@ const SellGiftcard = ({ screen, setScreen }) => {
             return ErrorAlert(`Please enter a valid ${selectedCard.brand} code or re-enter last digits of your code.`);
         }
         if (!cards.amount) return ErrorAlert('Please input a valid amount')
-        const selectedBrand = giftCardValidations.find(item => item.brand === selectedCard.brand)
+        const selectedBrand = CardsArray.find(item => item.brand === selectedCard.brand)
         if (!selectedBrand) return ErrorAlert("Invalid brand selected");
         if (parseInt(selectedCard.codelength) !== selectedBrand.length) {
             setCarderror({ status: true, msg: 'code too short', color: 'red-600' });
@@ -149,16 +148,16 @@ const SellGiftcard = ({ screen, setScreen }) => {
     }
     const sellCard = (e) => {
         e.preventDefault()
-        if (!cards.type) return ErrorAlert('giftcard brand is required')
+        if (!cards.brand) return ErrorAlert('giftcard brand is required')
         if (!cards.amount) return ErrorAlert('giftcard amount is required')
         if (!cards.code) return ErrorAlert('giftcard code is missing, try again')
         if (cards.has_pin === 'yes' && cards.pin === '') return ErrorAlert('giftcard pin is missing, try again')
-        setLoading(true)
+        setLoading({ status: true, param: 'check' })
         setCards({ ...cards, type: '', amount: '', code: '', pin: '', has_pin: 'no' })
         return setTimeout(() => {
-            setLoading(false)
+            setLoading({ status: false, param: '' })
             setScreen(2)
-        }, 4000)
+        }, 3000)
 
     }
 
@@ -168,31 +167,68 @@ const SellGiftcard = ({ screen, setScreen }) => {
             [e.target.name]: e.target.value
         })
     }
+
+    const selectABrand = (val) => {
+        setCards({ ...cards, brand: val })
+        setSelectBrand(false)
+    }
+
+    const [inNaira, setInNaira] = useState('')
+    useEffect(() => {
+        if (cards.amount) {
+            const naira = parseInt(cards.amount.replace(/,/g, '')) * rate
+            setInNaira(naira.toLocaleString())
+        }
+    }, [cards.amount, rate])
+
+    const confirmSend = () => {
+        setLoading({ status: true, param: 'confirmed' })
+        return setTimeout(() => {
+            setLoading({ status: false, param: '' })
+            setScreen(3)
+        }, 5000)
+    }
     return (
         <div className='w-full mt-5 lg:mt-10'>
-            {loading &&
+            {loading.status && loading.param === 'check' &&
                 <ModalLayout clas={`w-11/12 mx-auto`}>
                     <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
                         <Loader />
-                        <div>...submitting</div>
+                        <div>...processing</div>
                     </div>
                 </ModalLayout>
             }
-            {screen === 1 ?
+            {loading.status && loading.param === 'confirmed' &&
+                <ModalLayout clas={`w-11/12 mx-auto`}>
+                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
+                        <Loader />
+                        <div>...submitting order</div>
+                    </div>
+                </ModalLayout>
+            }
+            {screen === 1 &&
                 <div className="w-full flex items-start flex-col gap-4">
                     <div className="flex items-start gap-2 flex-col w-full">
                         <div className="">Giftcard Brand</div>
 
-                        <select onChange={handleType} value={cards.type} name={`type`} className='w-full bg-secondary' id="">
-                            {giftCardValidations.map((gift, i) => {
-                                return (
-                                    <option key={i} value={gift.brand}>{gift.brand}</option>
-                                )
-                            })}
-                        </select>
-
-                        <div className="text-xs text-red-500">Please Note: you can only buy a minimum of $5 and maximum of $2000 and
-                            an additional fee of $2 (₦3400) is added</div>
+                        <div className='w-full relative bg-secondary  rounded-md cursor-pointer' id="">
+                            <input onClick={() => setSelectBrand(true)} className='outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 focus:border cursor-pointer  bg-transparent w-full h-fit py-3 text-lightgreen px-4 lg:text-sm text-base rounded-md'
+                                type="text" name="brand" value={cards.brand} onChange={handleChange} />
+                            {selectBrand &&
+                                <div className="absolute h-96 w-full border rounded-md border-gray-600 px-10 top-1 overflow-y-auto scroll z-50 bg-dark">
+                                    {CardsArray.map((gift, i) => {
+                                        return (
+                                            <div onClick={() => selectABrand(gift.brand)} key={i} className="flex w-full py-2 border-b-gray-600 border-b  items-center justify-between ">
+                                                <div className='w-2/3 text-base text-lightgreen' >{gift.brand}</div>
+                                                <div className="w-2/3 ">
+                                                    <img src={gift.image} className='h-16 w-fit bg-cover ' alt={`${gift.brand} image`} />
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            }
+                        </div>
                     </div>
                     <div className="flex w-full items-start gap-2 flex-col  ">
                         <div className="font-bold text-lg">Amount:</div>
@@ -252,21 +288,50 @@ const SellGiftcard = ({ screen, setScreen }) => {
                         </div>
                     }
                     <div className="mt-5 w-full">
-                        <button onClick={proceed ? sellCard : checkCode} className={`w-full ${proceed ? 'bg-red-600' : 'bg-ash'}  py-3 font-bold rounded-md`}>{proceed ? 'Sell' : 'Check Code'}</button>
-                    </div>
-                </div>
-                :
-                <div className="w-full">
-                    <div className='flex flex-col gap-7 items-center max-w-md mx-auto mt-20'>
-                        <SlClock className='text-8xl' />
-                        <div className='text-center'>Thank you for choosing us! Please relax and keep an eye on your dashboard as we process your payment.</div>
-                        <Link to="/user/dashboard">
-                            <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-16 rounded-lg outline-none uppercase font-bold'>go to dashboard</button>
-                        </Link>
-                        <button onClick={() => setScreen(1)} className='text-sm text-white px-4 py-2 rounded-md bg-red-600'>Sell another card</button>
+                        <button onClick={proceed ? sellCard : checkCode} className={`w-full bg-ash  py-3 font-bold rounded-md`}>{proceed ? 'Proceed' : 'Check Code'}</button>
                     </div>
                 </div>
             }
+            {screen === 2 &&
+                <div className="w-full">
+                    <div className='flex flex-col gap-7 items-center max-w-md mx-auto mt-20'>
+                        <MdRateReview className='text-8xl' />
+                        <div className='text-center mont font-bold text-2xl'>Review Your Order</div>
+                        <div className="w-11/12 mx-auto  border border-gray-500 rounded-md p-5">
+                            <div className="w-full flex-col gap-3 flex items-center justify-between">
+                                <div className="flex items-center justify-between w-full">
+                                    <div className="text-base">GiftCard Brand</div>
+                                    <div className="text- font-bold text-lightgreen">{cards.brand}</div>
+                                </div>
+                                <div className="flex items-center justify-between w-full">
+                                    <div className="text-base">Buying Rate</div>
+                                    <div className="text- font-bold text-lightgreen">{currencies[1].symbol}{rate}</div>
+                                </div>
+                                <div className="flex items-center justify-between w-full">
+                                    <div className="text-base">Amount in (USD)</div>
+                                    <div className="text- font-bold text-lightgreen">
+                                        {currencies[0].symbol}{parseInt(inNaira.replace(/,/g, '')) / rate}</div>
+                                </div>
+                                <div className="flex items-center justify-between w-full">
+                                    <div className="text-base">Amount in (NGN)</div>
+                                    <div className="text- font-bold text-lightgreen">{currencies[1].symbol}{inNaira}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type='button' onClick={confirmSend} className='w-full py-2 rounded-md bg-ash'>Confirm & Sell</button>
+                    </div>
+                </div>}
+            {screen === 3 && <div className="w-full">
+                <div className='flex flex-col gap-7 items-center max-w-md mx-auto mt-20'>
+                    <SlClock className='text-8xl' />
+                    <div className='text-center'>Thank you for choosing us! Please relax and keep an eye on your dashboard as we process your payment.</div>
+                    <Link to="/user/dashboard">
+                        <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-16 rounded-lg outline-none uppercase font-bold'>go to dashboard</button>
+                    </Link>
+                    <button onClick={() => setScreen(1)} className='text-sm text-white px-4 py-2 rounded-md bg-red-600'>Sell another card</button>
+                </div>
+            </div>}
+
         </div>
     )
 }

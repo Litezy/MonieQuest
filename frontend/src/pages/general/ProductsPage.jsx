@@ -136,13 +136,13 @@ const ProductsPage = () => {
                             in <span className="text-lightgreen">{item.category}</span>
                           </div>
                           <div className="flex gap-2 items-center text-sm font-extrabold">
-                            {item.discount > 0 ?
+                            {item.discount > 0  ?
                               <>
                                 <div className="text-[#B2212F] underline">
                                   ₦{((100 - item.discount) / 100 * item.price).toLocaleString()}
                                 </div>
                                 <div className="line-through">
-                                  ₦{item.price.toLocaleString()}
+                                  ₦{(item.price || 0).toLocaleString()}
                                 </div>
                               </>
                               :

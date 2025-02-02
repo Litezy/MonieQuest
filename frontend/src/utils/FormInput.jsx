@@ -4,7 +4,7 @@ const FormInput = ({ formtype = 'text', border = true, label, type = 'text', val
   return (
     <div className='flex flex-col gap-2'>
       <div className='text-base font-medium'>{label}</div>
-      {formtype === 'text' && <input className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 focus:border ${border ? 'border border-gray-400' : 'border-none'} bg-transparent w-full h-fit py-3 px-4 lg:text-sm text-base rounded-xl ${className}`} name={name} value={value} placeholder={placeholder} autoComplete={name} onChange={onChange} type={type} onKeyUp={onKeyUp} ></input>}
+      {formtype === 'text' && <input className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 focus:border ${border ? 'border border-gray-400' : 'border-none'} bg-transparent w-full h-fit py-3 px-4 lg:text-sm text-base rounded-md ${className}`} name={name} value={value} placeholder={placeholder} autoComplete={name} onChange={onChange} type={type} onKeyUp={onKeyUp} ></input>}
 
 
       {formtype === 'email' && <input className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 focus:border ${border ? 'border border-gray-400' : 'border-none'} bg-transparent w-full h-fit py-3 px-4 lg:text-sm text-base rounded-xl ${className}`} name={name} value={value} placeholder={placeholder} autoComplete={name} onChange={onChange} type={'email'} onKeyUp={onKeyUp} ></input>}

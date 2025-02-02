@@ -13,6 +13,7 @@ import Loader from '../GeneralComponents/Loader';
 
 const SellCrypto = () => {
     const [screen, setScreen] = useState(1)
+    const [check, setCheck] = useState(false)
     const tags = ['BUY', 'SELL']
     const [modal, setModal] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -84,14 +85,14 @@ const SellCrypto = () => {
             if (amt > limit) return ErrorAlert(`Sorry, you can't sell above ${currencies[0].symbol}${limit.toLocaleString()}`)
         }
 
-        setScreen(2)
+        setModal(true)
     }
 
 
     const [inNaira, setInNaira] = useState('')
     useEffect(() => {
         if (forms.amount) {
-            const naira = parseInt(forms.amount) * rate
+            const naira = parseInt(forms.amount.replace(/,/g, '')) * rate
             setInNaira(naira.toLocaleString())
         }
     }, [forms.amount, rate])
@@ -110,8 +111,17 @@ const SellCrypto = () => {
     }
 
     const navigate = useNavigate()
-    const sellDetails = {
-
+    const confirmAndSell = () => {
+        if (!check) return ErrorAlert(`Please accept the intructions below to proceed`)
+        setModal(false)
+        setScreen(2)
+    }
+    const confirmOrder = () => {
+        setLoading(true)
+        return setTimeout(() => {
+            setLoading(false)
+            setScreen(3)
+        }, 5000)
     }
     return (
         <div className='w-full'>
@@ -119,7 +129,32 @@ const SellCrypto = () => {
                 <ModalLayout clas={`w-11/12 mx-auto`}>
                     <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
                         <Loader />
-                        <div>...submitting</div>
+                        <div>...processing</div>
+                    </div>
+                </ModalLayout>
+            }
+            {modal &&
+
+                <ModalLayout setModal={setModal} clas={`w-11/12 lg:w-1/2 mx-auto`}>
+                    <div className="w-full flex flex-col items-center gap-5 bg-white text-dark py-10 rounded-md px-10  ">
+                        <div className="w-full flex flex-col items-center justify-center">
+                            <BsInfoCircleFill className='text-2xl lg:text-3xl ' />
+                            <div className="text-xl font-bold">Please read the instructions below</div>
+                        </div>
+                        <div className="flex flex-col items-start gap-2 mt-2">
+                            {sellInstruction.map((inst, i) => {
+                                return (
+                                    <ul key={i} className=" list-disc text-sm">
+                                        <li>{inst}</li>
+                                    </ul>
+                                )
+                            })}
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <input type="checkbox" checked={check} onChange={(e) => setCheck(e.target.checked)} />
+                            <p>I agree to the instructions above and want to proceed to the payment window.</p>
+                        </div>
+                        <button onClick={confirmAndSell} className='mt-10 w-full rounded-md bg-ash hover:bg-lightgreen text-white py-3'>Confirm</button>
                     </div>
                 </ModalLayout>
             }
@@ -152,8 +187,8 @@ const SellCrypto = () => {
                             </div>
                             <div className="flex item-center justify-between w-full">
                                 <div className="text-sm">Amount in Naira</div>
-                                <div onClick={changeCurrency} className="flex items-center gap-1 cursor-pointer">
-                                    <div className="text-sm">set by {selectedCurr.name === 'USD' ? 'naira' : 'usd'}</div>
+                                <div  className="flex items-center gap-1 cursor-pointer">
+                                    <div className="text-sm">{inNaira}</div>
                                     <TbSwitch2 className='text-lightgreen ' />
                                 </div>
                             </div>
@@ -169,31 +204,7 @@ const SellCrypto = () => {
                 {screen === 2 &&
                     <div className="w-full  flex items-center justify-center">
                         <div className="flex w-11/12 lg:w-2/3  mx-auto mt-5 items-start gap-5 flex-col">
-                            {modal &&
 
-                                <ModalLayout setModal={setModal} clas={`w-11/12 lg:w-1/2 mx-auto`}>
-                                    <div className="w-full flex flex-col items-center gap-5 bg-white text-dark py-10 rounded-md px-10  ">
-                                        <div className="w-full flex flex-col items-center justify-center">
-                                            <BsInfoCircleFill className='text-2xl lg:text-3xl ' />
-                                            <div className="text-xl font-bold">Please read the instructions below</div>
-                                        </div>
-                                        <div className="flex flex-col items-start gap-2 mt-2">
-                                            {sellInstruction.map((inst, i) => {
-                                                return (
-                                                    <ul key={i} className=" list-disc text-sm">
-                                                        <li>{inst}</li>
-                                                    </ul>
-                                                )
-                                            })}
-                                        </div>
-                                        <div className="flex items-start gap-3">
-                                            <input type="checkbox" />
-                                            <p>I agree to the instructions above and want to proceed to the payment window.</p>
-                                        </div>
-                                        <button onClick={() => setScreen(3)} className='mt-10 w-full rounded-md bg-ash hover:bg-lightgreen text-white py-3'>Confirm</button>
-                                    </div>
-                                </ModalLayout>
-                            }
                             <div className="flex items-start gap-2 flex-col w-full">
                                 <div className="text-center  w-full text-2xl">Selling <span className='text-red-500 font-bold'>{currencies[0].symbol}{forms.amount}</span> worth of {forms.type} at <br /> <span className='text-red-500 font-bold'>{currencies[1].symbol}{inNaira}</span></div>
                             </div>
@@ -219,8 +230,8 @@ const SellCrypto = () => {
                             </div>
 
                             <div className="flex items-center justify-between w-full gap-10">
-                                <button onClick={() => setScreen(1)} className='w-1/2 bg-dark text-lg rounded-xl py-3'>back</button>
-                                <button onClick={() => setModal(true)} className={`bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-1/2 h-fit py-3 text-lg rounded-xl`}>Confirm</button>
+                                <button onClick={() => setScreen(1)} className='w-1/2 bg-primary text-lg rounded-xl py-3'>back</button>
+                                <button onClick={confirmOrder} className={`bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-1/2 h-fit py-3 text-lg rounded-xl`}>I have sent crypto</button>
                             </div>
 
                         </div>

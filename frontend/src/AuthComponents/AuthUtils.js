@@ -9,6 +9,8 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 
 
 
+
+  
 export const coins = [
     `Solana (SOL)`,
     `Bitcoin (BTC)`,
