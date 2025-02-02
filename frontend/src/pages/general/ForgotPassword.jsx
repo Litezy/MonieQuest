@@ -10,6 +10,7 @@ import PasswordInputField from '../../utils/PasswordInputField'
 import { Link } from 'react-router-dom'
 import SuccessCheck from '../../utils/SuccessCheck'
 import logo from '../../assets/images/logo.png'
+import { Apis, PostApi } from '../../services/API';
 
 const ForgotPassword = () => {
   const [screen, setScreen] = useState(1)
@@ -29,27 +30,75 @@ const ForgotPassword = () => {
     })
   }
 
-  const SendOTP = (e) => {
+  const SendOTP = async (e) => {
     e.preventDefault()
 
     if (!form.email) return ErrorAlert('Enter email address')
-    setScreen(2)
+    setLoading(true)
+    try {
+      const response = await PostApi(Apis.user.send_otp, { email: form.email })
+      if (response.status === 200) {
+        setScreen(2)
+      } else {
+        ErrorAlert(response.msg)
+      }
+    } catch (error) {
+      ErrorAlert(`${error.message}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const VerifyOTP = (e) => {
+  const VerifyOTP = async (e) => {
     e.preventDefault()
 
     if (checkPins.length < 6) return ErrorAlert('Enter code sent to email')
-    setScreen(3)
+    const formbody = {
+      email: form.email,
+      code: checkPins
+    }
+
+    setLoading(true)
+    try {
+      const response = await PostApi(Apis.user.verify_otp, formbody)
+      if (response.status === 200) {
+        setScreen(3)
+      } else {
+        ErrorAlert(response.msg)
+      }
+    } catch (error) {
+      ErrorAlert(`${error.message}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const ChangePassword = (e) => {
+  const ChangePassword = async (e) => {
     e.preventDefault()
 
     if (!form.password) return ErrorAlert('Create new password')
     if (!form.confirm_password) return ErrorAlert('Confirm password')
     if (form.password !== form.confirm_password) return ErrorAlert('Password(s) mismatch')
-    setScreen(4)
+
+    const formbody = {
+      email: form.email,
+      password: form.password,
+      confirm_password: form.confirm_password
+    }
+
+    setLoading(true)
+    try {
+      const response = await PostApi(Apis.user.change_password, formbody)
+      if (response.status === 200) {
+        setScreen(4)
+      } else {
+        ErrorAlert(response.msg)
+      }
+    } catch (error) {
+      ErrorAlert(`${error.message}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
 
@@ -72,7 +121,7 @@ const ForgotPassword = () => {
                   <div className='font-bold text-zinc-300'>Trouble signing in?</div>
                   <div className='text-left text-sm text-lightgreen'>Enter your email address to find your account and reset password</div>
                 </div>
-                <div className='flex flex-col gap-5 mt-10 text-white'>
+                <div className='flex flex-col gap-5 mt-8 text-white'>
                   <FormInput label='Email address' type='email' placeholder='E.g: john14@gmail.com' name='email' value={form.email} onChange={formHandler} />
                   <FormButton title='Find account' />
                 </div>
@@ -87,7 +136,7 @@ const ForgotPassword = () => {
                   <div className='font-bold text-zinc-300'>Verify your email address</div>
                   <div className='text-left text-sm text-lightgreen'>A verification code was sent to your email address, enter the code below</div>
                 </div>
-                <div className='flex flex-col gap-5 items-center mt-10'>
+                <div className='flex flex-col gap-5 items-center mt-8'>
                   <PinForm
                     pins={pins}
                     setPins={setPins}
@@ -105,7 +154,7 @@ const ForgotPassword = () => {
                   <div className='font-bold text-zinc-300'>Password re-set</div>
                   <div className='text-left text-lightgreen text-sm'>Set a new password for your account by filling the password fields below</div>
                 </div>
-                <div className='flex flex-col gap-5 mt-10 text-zinc-300'>
+                <div className='flex flex-col gap-5 mt-8 text-zinc-300'>
                   <PasswordInputField label='Password' placeholder='Create new password' name='password' value={form.password} onChange={formHandler} />
                   <PasswordInputField label='Confirm password' placeholder='Confirm password' name='confirm_password' value={form.confirm_password} onChange={formHandler} />
                   <FormButton title='Change password' />
@@ -113,8 +162,8 @@ const ForgotPassword = () => {
               </form>
             }
             {screen === 4 &&
-              <div className='flex flex-col gap-6'>
-                <div className='flex flex-col gap-4  items-center justify-center mt-6'>
+              <div className='flex flex-col gap-6 mt-10'>
+                <div className='flex flex-col gap-4 items-center justify-center'>
                   <SuccessCheck />
                   <div className='text-3xl font-bold text-center text-lightgreen'>Password Reset <br></br>Succcessful</div>
                   <div className='text-left text-zinc-300 text-sm'>Password change successful, you can now sign in with new password created</div>

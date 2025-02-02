@@ -1,20 +1,54 @@
-import React from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import logo from '../assets/images/logo.png'
-import user1 from '../assets/images/customer2.jpg'
+import avatar from '../assets/images/avatar.svg'
 import { MoveToTop } from '../utils/pageUtils'
 import AdminFooter from './AdminFooter'
 import { pagelinks } from './AdminUtils'
+import { Apis, AuthGetApi, imageurl } from '../services/API'
+import { useAtom } from 'jotai'
+import { BANK, PROFILE, UTILS } from '../services/store'
 
 
 const AdminPageLayout = ({ children }) => {
+    const [user] = useAtom(PROFILE)
+    const [, setBank] = useAtom(BANK)
+    const [, setUtils] = useAtom(UTILS)
     const location = useLocation()
     const pathName = location.pathname
     const active = 'text-lightgreen rounded-sm bg-[#1e333c]'
     const nonactive = 'hover:bg-primary rounded-sm text-[#9696b5]'
-    const pathSegments = location.pathname.split('/').filter(Boolean);
-    console.log(pathSegments)
-    
+
+    useEffect(() => {
+        const FetchBank = async () => {
+            try {
+                const response = await AuthGetApi(Apis.user.get_bank_account)
+                if (response.status === 200) {
+                    setBank(response.msg)
+                }
+
+            } catch (error) {
+                //
+            }
+        }
+        FetchBank()
+    }, [])
+
+    useEffect(() => {
+        const FetchUtils = async () => {
+            try {
+                const response = await AuthGetApi(Apis.user.get_utils)
+                if (response.status === 200) {
+                    setUtils(response.msg)
+                }
+
+            } catch (error) {
+                //
+            }
+        }
+        FetchUtils()
+    }, [])
+
 
     return (
         <div className='w-full'>
@@ -25,8 +59,8 @@ const AdminPageLayout = ({ children }) => {
                         <img src={logo} alt='moniequest-logo' className='h-14 w-auto mx-auto'></img>
                     </div>
                     <div className='flex gap-2 items-center justify-center mt-6 bg-primary p-4 rounded-lg w-11/12 h-fit mx-auto'>
-                        <img src={user1} alt='user_profile' className='size-14 object-cover rounded-full border-2 border-ash'></img>
-                        <div className='text-xl text-center font-bold capitalize text-gray-200'>admin micheal</div>
+                        <img src={user.image ? `${imageurl}/profiles/${user.image}` : avatar} alt='user_profile' className='size-14 object-cover rounded-full border-2 border-ash'></img>
+                        <div className='text-xl text-center font-bold capitalize text-gray-200'>{user?.first_name} {user?.surname}</div>
                     </div>
                     <div className="flex mt-10 pb-10 flex-col items-start px-5 gap-4 h-[65vh] overflow-y-auto scroll">
                         {pagelinks.map((link, i) => {
@@ -34,7 +68,7 @@ const AdminPageLayout = ({ children }) => {
                                 <Link onClick={MoveToTop} to={link.url}
                                     className={` py-2 group text-base flex items-center gap-2 px-5 w-full capitalize ${pathName === link.url || pathName.includes(link.main) ? active : nonactive} `} key={i}>
                                     <div className="relative">
-                                        {link.last && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}
+                                        {link.label === 'notifications' && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}
                                         <link.icon className="transform group-hover:rotate-180 text-xl duration-300" />
                                     </div>
                                     <div>{link.label}</div>

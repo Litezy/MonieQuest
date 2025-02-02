@@ -6,6 +6,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Loading from '../../GeneralComponents/Loading';
 import SuccessCheck from '../../utils/SuccessCheck';
 import logo from '../../assets/images/logo.png'
+import { Apis, PostApi } from '../../services/API';
 
 
 const VerifyAccount = () => {
@@ -16,11 +17,28 @@ const VerifyAccount = () => {
     const [pins, setPins] = useState(['', '', '', '', '', '']);
     const checkPins = pins.join('')
 
-    const VerifyEmail = (e) => {
+    const VerifyEmail = async (e) => {
         e.preventDefault()
         if (checkPins.length < 6) return ErrorAlert('Enter code sent to email')
-        // console.log(checkPins)
-        setScreen(2)
+
+        const formbody = {
+            email: userEmail,
+            code: checkPins
+        }
+        
+        setLoading(true)
+        try {
+            const response = await PostApi(Apis.user.verify_email, formbody)
+            if (response.status === 200) {
+                setScreen(2)
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (

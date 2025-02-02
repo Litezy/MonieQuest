@@ -14,7 +14,7 @@ router.post('/contacts', Contacts)
 router.put('/update-profile', AllMiddleware, UpdateProfile)
 router.get('/get-wallet', UserMiddleware, GetUserWallet)
 router.post('/create-update-bank', AllMiddleware, CreateUpdateBankAccount)
-router.get('/get-bank-account', UserMiddleware, GetUserBankAccount)
+router.get('/get-bank-account', AllMiddleware, GetUserBankAccount)
 router.put('/update-utils', AdminMiddleware, UpdateUtils)
 router.get('/get-utils', AdminMiddleware, GetUtils)
 

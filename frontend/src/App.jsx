@@ -4,6 +4,8 @@ import { AdminPagesLinks, GeneralPagesLinks } from './utils/pageLinks'
 import { AuthPagesLinks } from './utils/pageLinks'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import AuthRoutes from './services/AuthRoutes'
+import AdminRoutes from './services/AdminRoutes'
 
 const App = () => {
   useEffect(() => {
@@ -21,10 +23,10 @@ const App = () => {
           <Route key={index} path={`${item.path}`} element={<item.component />} />
         ))}
         {AuthPagesLinks.map((item, index) => (
-          <Route key={index} path={`${item.path}`} element={<item.component />} />
+          <Route key={index} path={`${item.path}`} element={<AuthRoutes><item.component /></AuthRoutes>} />
         ))}
         {AdminPagesLinks.map((item, index) => (
-          <Route key={index} path={`${item.path}`} element={<item.component />} />
+          <Route key={index} path={`${item.path}`} element={<AdminRoutes><item.component /></AdminRoutes>} />
         ))}
       </Routes>
     </BrowserRouter>

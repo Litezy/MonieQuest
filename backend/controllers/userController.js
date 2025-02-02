@@ -90,7 +90,7 @@ exports.CreateAccount = async (req, res) => {
             })
         }
 
-        const otp = otpGenerator.generate(6, { specialChars: false })
+        const otp = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
 
         Mailing({
             subject: 'Email Verification Code',
@@ -175,7 +175,7 @@ exports.SendOTP = async (req, res) => {
         const findAccount = await User.findOne({ where: { email: email } })
         if (!findAccount) return res.json({ status: 404, msg: `No account belongs to this email` })
 
-        const otp = otpGenerator.generate(6, { specialChars: false })
+        const otp = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
 
         Mailing({
             subject: 'Email Verification Code',
@@ -351,7 +351,7 @@ exports.CreateUpdateBankAccount = async (req, res) => {
 
         if (!bank) {
             if (!bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
-                
+
             await Bank.create({
                 user: req.user,
                 bank_name,
@@ -409,7 +409,7 @@ exports.UpdateUtils = async (req, res) => {
 
         await utils.save()
 
-        return res.json({ status: 200, msg: 'Rates updated successfully', rates: utils })
+        return res.json({ status: 200, msg: 'Rate(s) updated successfully', utils: utils })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }

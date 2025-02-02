@@ -8,26 +8,28 @@ export default function PinForm ({pins, setPins}) {
   const handleInputChange = (index, value) => {
     const newPins = [...pins];
     newPins[index] = value;
-
+  
     if (index < 5 && value !== '') {
       inputRefs.current[index + 1].focus();
     }
-
+  
     setPins(newPins);
   };
-
+  
   const handleInputBackspace = (index, event) => {
     if (event.key === 'Backspace' && index > 0 && pins[index] === '') {
       inputRefs.current[index - 1].focus();
     }
   };
-
+  
   const handlePaste = (event) => {
     event.preventDefault();
     const pastedText = event.clipboardData.getData('text/plain').slice(0, 6);
-    const newPins = pastedText.split('').concat(['', '', '', '', '', '']).slice(0, 6);
+    const sanitizedPins = pastedText.replace(/\D/g, ''); // remove non-digit characters
+    const newPins = sanitizedPins.split('').concat(['', '', '', '', '', '']).slice(0, 6);
+    
     setPins(newPins);
-
+  
     for (let i = 0; i < newPins.length; i++) {
       if (newPins[i]) {
         inputRefs.current[i].value = newPins[i];
@@ -37,7 +39,6 @@ export default function PinForm ({pins, setPins}) {
       }
     }
   };
-
 
 
   return (

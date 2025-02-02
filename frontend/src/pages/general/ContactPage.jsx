@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import contactImg from '../../assets/images/contact_photo.jpg'
-import { ErrorAlert } from '../../utils/pageUtils'
+import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import { FaStarOfLife } from "react-icons/fa";
 import Loading from '../../GeneralComponents/Loading';
+import { Apis, PostApi } from '../../services/API';
 
 const ContactPage = () => {
   const [loading, setLoading] = useState(false)
@@ -19,11 +20,34 @@ const ContactPage = () => {
     })
   }
 
-  const SubmitForm = (e) => {
+  const SubmitForm = async (e) => {
     e.preventDefault()
 
     if (!form.email || !form.message) return ErrorAlert('Enter the required fields')
+    const formbody = {
+      full_name: form.full_name,
+      email: form.email,
+      message: form.message
+    }
+
     setLoading(true)
+    try {
+      const response = await PostApi(Apis.user.contact, formbody)
+      if (response.status === 200) {
+        SuccessAlert(response.msg)
+        setForm({
+          full_name: '',
+          email: '',
+          message: ''
+        })
+      } else {
+        ErrorAlert(response.msg)
+      }
+    } catch (error) {
+      ErrorAlert(`${error.message}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
 

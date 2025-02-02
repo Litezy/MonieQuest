@@ -6,7 +6,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { IoCart } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { MoveToTop } from "../../utils/pageUtils";
+import { currencySign, MoveToTop } from "../../utils/pageUtils";
 import CartComponent from "../../GeneralComponents/CartComponent";
 import FormInput from "../../utils/FormInput";
 
@@ -16,7 +16,7 @@ const products = [
     image: testimg,
     title: "playwrite",
     category: "fonts",
-    price: 6,
+    price: 6000,
     discount: 50,
   },
   {
@@ -24,7 +24,7 @@ const products = [
     image: testimg2,
     title: "the grinch mas",
     category: "graphics",
-    price: 120,
+    price: 12000,
     discount: 0,
   },
 ]
@@ -139,14 +139,14 @@ const ProductsPage = () => {
                             {item.discount > 0 ?
                               <>
                                 <div className="text-[#B2212F] underline">
-                                  ${((100 - item.discount) / 100 * item.price).toFixed(2)}
+                                  ₦{((100 - item.discount) / 100 * item.price).toLocaleString()}
                                 </div>
                                 <div className="line-through">
-                                  ${item.price.toFixed(2)}
+                                  ₦{item.price.toLocaleString()}
                                 </div>
                               </>
                               :
-                              <div>${item.price.toFixed(2)}</div>
+                              <div>₦{item.price.toLocaleString()}</div>
                             }
                           </div>
                         </div>

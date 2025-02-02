@@ -2,10 +2,10 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 import { isExpired, decodeToken } from 'react-jwt'
 import { useAtom } from 'jotai'
-import { CookieName, ErrorAlert } from '../utils/utils'
 import { useNavigate } from 'react-router-dom'
 import { PROFILE } from './store'
 import { Apis, AuthGetApi } from './API'
+import { CookieName, ErrorAlert } from '../utils/pageUtils'
 
 
 const AuthRoutes = ({ children }) => {

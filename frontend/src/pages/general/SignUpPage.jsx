@@ -6,6 +6,7 @@ import FormButton from '../../utils/FormButton'
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Loading from '../../GeneralComponents/Loading'
 import logo from '../../assets/images/logo.png'
+import { Apis, PostApi } from '../../services/API'
 
 const SignUpPage = () => {
   const [check, setCheck] = useState(false)
@@ -27,19 +28,36 @@ const SignUpPage = () => {
     })
   }
 
-  const CreateAccount = (e) => {
+  const CreateAccount = async (e) => {
     e.preventDefault()
 
-    if (!form.first_name) return ErrorAlert('Enter first name')
-    if (!form.surname) return ErrorAlert('Enter surname')
-    if (!form.email) return ErrorAlert('Enter email address')
-    if (!form.phone) return ErrorAlert('Enter phone number')
-    if (!form.password) return ErrorAlert('Create a password')
+    if (!form.first_name || !form.surname || !form.email|| !form.phone || !form.password) return ErrorAlert('Enter all fields')
     if (!form.confirm_password) return ErrorAlert('Confirm passsword')
     if (form.password !== form.confirm_password) return ErrorAlert('Password(s) mismatch')
     if (!check) return ErrorAlert('Must agree with terms and privacy policy')
-    navigate(`/verify-account?v=${form.email}`)
-    MoveToTop()
+
+    const formbody = {
+      first_name: form.first_name,
+      surname: form.surname,
+      email: form.email,
+      phone_number: form.phone,
+      password: form.password,
+      confirm_password: form.confirm_password
+    }
+    
+    setLoading(true)
+    try {
+      const response = await PostApi(Apis.user.signup, formbody)
+      if (response.status === 200) {
+        navigate(`/verify-account?v=${form.email}`)
+      } else {
+        ErrorAlert(response.msg)
+      }
+    } catch (error) {
+      ErrorAlert(`${error.message}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
 

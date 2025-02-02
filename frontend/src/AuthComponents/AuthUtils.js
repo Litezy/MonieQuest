@@ -29,15 +29,15 @@ export const currencies = [
 ]
 
 export const links = [
-    { label: 'dashboard', url: '/user/dashboard', icon: MdDashboard, last: false },
-    { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange, last: false },
-    { label: 'gift cards', url: '/user/giftcards', icon: HiGift, last: false },
-    { label: 'profit tools', main: '/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox, last: false },
-    { label: 'bank withdrawal', url: '/user/bank_withdrawal', icon: BiMoneyWithdraw, last: false },
-    { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory, last: false },
-    { label: 'profile', main: '/profile', url: '/user/profile', icon: RiUser3Fill, last: false },
-    { label: 'notifications', url: '/user/notifications', icon: IoNotificationsSharp, last: true },
-    { label: 'leaderboard', url: '/user/leaderboard', icon: MdLeaderboard, last: false },
+    { label: 'dashboard', url: '/user/dashboard', icon: MdDashboard },
+    { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange },
+    { label: 'gift cards', url: '/user/giftcards', icon: HiGift },
+    { label: 'profit tools', main: '/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox },
+    { label: 'bank withdrawal', url: '/user/bank_withdrawal', icon: BiMoneyWithdraw },
+    { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory },
+    { label: 'profile', main: '/profile', url: '/user/profile', icon: RiUser3Fill },
+    { label: 'notifications', url: '/user/notifications', icon: IoNotificationsSharp },
+    { label: 'leaderboard', url: '/user/leaderboard', icon: MdLeaderboard },
 ]
 export const blockchainNetworks = [
     { value: "bitcoin", label: "Bitcoin (BTC)" },

@@ -19,7 +19,6 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     const [email, setEmail] = useState('')
     const [screen, setScreen] = useState(activeScreen || 1)
     const [loading, setLoading] = useState(false)
-    const rate = 1650
 
     let totalPrice = 0
     let priceAfterDiscount = 0
@@ -88,17 +87,17 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                         <div className='md:w-[25%] w-[40%]'>
                                             <img src={item.image} alt={item.image} className='w-full md:h-28 h-[5.5rem] object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
                                         </div>
-                                        <div className='md:w-[75%] w-[70%] px-4 md:py-3 flex flex-col'>
+                                        <div className='md:w-[75%] w-[60%] px-4 md:py-3 flex flex-col'>
                                             <div className='flex md:flex-row flex-col md:justify-between gap-1'>
                                                 <div className='capitalize font-bold md:text-base text-sm'>{item.title}</div>
                                                 <div className='flex items-center md:flex-col flex-row gap-1.5 font-semibold'>
                                                     {item.discount > 0 ?
                                                         <>
-                                                            <div>${((100 - item.discount) / 100 * item.price).toFixed(2)}</div>
-                                                            <div className='text-xs line-through'>${item.price.toFixed(2)}</div>
+                                                            <div>₦{((100 - item.discount) / 100 * item.price).toLocaleString()}</div>
+                                                            <div className='text-xs line-through'>${item.price.toLocaleString()}</div>
                                                         </>
                                                         :
-                                                        <div>${item.price.toFixed(2)}</div>
+                                                        <div>₦{item.price.toLocaleString()}</div>
                                                     }
                                                 </div>
                                             </div>
@@ -121,14 +120,14 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                         <div className='flex flex-col gap-4'>
                                             <div className='flex justify-between'>
                                                 <div className='capitalize'>cart subtotal</div>
-                                                <div className='font-bold'>${priceAfterDiscount.toFixed(2)}</div>
+                                                <div className='font-bold'>₦{priceAfterDiscount.toLocaleString()}</div>
                                             </div>
-                                            <div className='text-lightgreen border-b border-zinc-500 pb-4'>You are saving ${totalDiscount}</div>
+                                            <div className='text-lightgreen border-b border-zinc-500 pb-4'>You are saving ₦{totalDiscount.toLocaleString()}</div>
                                         </div>
                                         <div className='flex flex-col gap-6'>
                                             <div className='flex justify-between font-bold uppercase'>
                                                 <div>Total</div>
-                                                <div className='text-xl'>${priceAfterDiscount.toFixed(2)}</div>
+                                                <div className='text-xl'>₦{priceAfterDiscount.toLocaleString()}</div>
                                             </div>
                                             <div className='-mt-2'>
                                                 <FormInput placeholder='Enter Email Address' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -141,7 +140,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                 {screen === 2 &&
                                     <div className='flex flex-col gap-4 items-center'>
                                         <div className='flex flex-col gap-1'>
-                                            <span className='text-3xl font-bold text-lightgreen'>₦{(priceAfterDiscount * rate).toLocaleString()}</span>
+                                            <span className='text-3xl font-bold text-lightgreen'>₦{priceAfterDiscount.toLocaleString()}</span>
                                             <span className='text-xs capitalize text-gray-300 text-center'>bank transfer</span>
                                         </div>
                                         <div className='text-center'>Kindly pay the above exact amount to the payment details below</div>

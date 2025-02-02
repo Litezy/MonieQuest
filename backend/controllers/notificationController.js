@@ -13,18 +13,6 @@ exports.GetAllNotifications = async (req, res) => {
     }
 }
 
-// exports.UnreadNotifications = async (req, res) => {
-//     try {
-//         const notifications = await Notification.findAll({
-//             where: { user: req.user, read: 'false' },
-//         })
-
-//         return res.json({ status: 200, msg: notifications })
-//     } catch (error) {
-//         res.json({ status: 500, msg: error.message })
-//     }
-// }
-
 exports.UpdateAllNotifications = async (req, res) => {
 
     try {
