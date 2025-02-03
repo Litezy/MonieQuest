@@ -30,11 +30,11 @@ const Profile = () => {
     sub: false,
   })
   const [form, setForm] = useState({
-    first_name: user?.first_name,
-    surname: user?.surname,
-    email: user?.email,
-    username: user?.username,
-    phone_number: user?.phone_number,
+    first_name: user?.first_name || '',
+    surname: user?.surname || '',
+    email: user?.email || '',
+    username: user?.username || '',
+    phone_number: user?.phone_number || '',
     old_password: '',
     new_password: '',
     bank_name: '',
@@ -63,9 +63,9 @@ const Profile = () => {
   useEffect(() => {
     setForm({
       ...form,
-      bank_name: bank?.bank_name,
-      account_name: bank?.account_name,
-      account_number: bank?.account_number
+      bank_name: bank?.bank_name || '',
+      account_name: bank?.account_name || '',
+      account_number: bank?.account_number || ''
     })
   }, [bank])
 

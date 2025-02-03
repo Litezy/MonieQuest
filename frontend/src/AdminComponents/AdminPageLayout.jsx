@@ -37,7 +37,7 @@ const AdminPageLayout = ({ children }) => {
     useEffect(() => {
         const FetchUtils = async () => {
             try {
-                const response = await AuthGetApi(Apis.user.get_utils)
+                const response = await AuthGetApi(Apis.admin.get_utils)
                 if (response.status === 200) {
                     setUtils(response.msg)
                 }

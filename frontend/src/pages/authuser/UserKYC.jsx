@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FaPlus } from "react-icons/fa6";
 import { FaEdit } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 import Loader from '../../GeneralComponents/Loader';
 import ModalLayout from '../../utils/ModalLayout';
@@ -13,6 +13,7 @@ import { Apis, AuthGetApi, AuthPostApi, imageurl } from '../../services/API';
 const UserKYC = () => {
     const [kyc, setKyc] = useState({})
     const [loading, setLoading] = useState(false)
+    const [dataLoading, setDataLoading] = useState(true)
     const [screen, setScreen] = useState(1)
     const frontRef = useRef()
     const backRef = useRef()
@@ -39,6 +40,7 @@ const UserKYC = () => {
     }
 
     const FetchKYC = useCallback(async () => {
+        setDataLoading(true)
         try {
             const response = await AuthGetApi(Apis.user.user_kyc)
             if (response.status === 200) {
@@ -60,6 +62,8 @@ const UserKYC = () => {
             }
         } catch (error) {
             //
+        } finally {
+            setDataLoading(false)
         }
     }, [])
 
@@ -100,6 +104,8 @@ const UserKYC = () => {
             if (!frontimg.image) return ErrorAlert('ID front image is missing')
             if (!backimg.image) return ErrorAlert('ID back image is missing')
         }
+        if (kyc?.status === 'processing') return ErrorAlert(`You can't re-upload while KYC details is still processing`)
+        if (kyc?.status === 'verified') return ErrorAlert('KYC details is verified')
 
         const formbody = new FormData()
         formbody.append('front_image', frontimg.image)
@@ -125,7 +131,6 @@ const UserKYC = () => {
         }
     }
 
-    const text = 'text-lightgreen'
     return (
 
         <AuthPageLayout>
@@ -136,7 +141,7 @@ const UserKYC = () => {
                     </Link>
                 </div>}
                 {screen === 1 &&
-                    <form onSubmit={Submit} className=" h-fit relative   rounded-md text-sm  md:pt-3 ">
+                    <form onSubmit={Submit} className="h-fit relative rounded-md text-sm  md:pt-3 ">
 
                         {loading &&
                             <ModalLayout clas={`w-11/12 mx-auto`}>
@@ -146,53 +151,48 @@ const UserKYC = () => {
                                 </div>
                             </ModalLayout>
                         }
-                        <div className='text-center text-lg bg-ash flex justify-between px-4 mt-4'>
+                        <div className='text-center text-lg bg-ash flex justify-between items-center px-4 mt-5'>
                             <span>KYC status:</span>
-                            {Object.values(kyc).length === 0 ?
+                            {dataLoading ?
                                 <div className='w-24 h-2 rounded-full bg-slate-400 animate-pulse'></div>
                                 :
-                                <div className={`italic ${kyc?.status === 'verified' ? 'text-green-400' : kyc?.status === 'processing' ? 'text-yellow-300' : 'text-red-500'}`}>{kyc?.status}</div>
+                                <div className={`italic ${kyc?.status === 'verified' ? 'text-green-400' : kyc?.status === 'processing' ? 'text-yellow-300' : 'text-red-500'}`}>{kyc?.status ? kyc.status : 'unverified'}</div>
                             }
                         </div>
-                        <div className="md:flex md:items-baseline gap-5 w-full">
-                            <div className="md:w-1/2">
-                                <div className="flex flex-col w-full mt-5  ">
-                                    <h1 className={`${text}`} >Date of Birth</h1>
-                                    <div class="relative max-w-sm w-1/2">
-                                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                            </svg>
-                                        </div>
-                                        <input name='date_of_birth' value={forms.date_of_birth} onChange={handleChange} datepicker datepicker-buttons datepicker-autoselect-today type="date" class="bg-white mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Select date" />
+                        <div className="grid md:grid-cols-2 grid-cols-1 md:items-baseline gap-5 mt-6 w-full">
+                            <div className="flex flex-col w-full gap-2">
+                                <h1 className='text-lightgreen'>Date of Birth</h1>
+                                <div className="relative max-w-sm w-1/2">
+                                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                        </svg>
                                     </div>
-                                </div>
-                                <div className="flex flex-col w-full mt-3  ">
-                                    <h1 className={`${text}`}> Address:</h1>
-                                    <input name='address' value={forms.address} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' placeholder='enter your address' />
+                                    <input name='date_of_birth' value={forms.date_of_birth} onChange={handleChange} datepicker="true" datepicker-buttons="true" datepicker-autoselect-today="true" type="date" className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Select date" />
                                 </div>
                             </div>
-                            <div className="md:w-1/2  h-full">
-                                <div className="flex flex-col w-full  ">
-                                    <h1 className={`${text}`}>Government Issued ID:</h1>
-                                    <select name="id_type" onChange={handleChange} value={forms.id_type} className='border-b bg-dark w-full outline-none mt-3'>
-                                        <option >--select--</option>
-                                        <option value="driver's license">Driver's License/State ID</option>
-                                        <option value="Nin">NIN</option>
-                                    </select>
-                                </div>
-                                <div className="flex flex-col w-full mt-3  ">
-                                    <h1 className={`${text} capitalize`}>{forms.id_type && forms.id_type} ID Number:</h1>
-                                    <input name='id_number' value={forms.id_number} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' />
-                                </div>
+                            <div className="flex flex-col w-full gap-2">
+                                <h1 className='text-lightgreen'> Address:</h1>
+                                <input name='address' value={forms.address} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' placeholder='enter your address' />
                             </div>
-
+                            <div className="flex flex-col w-full gap-2">
+                                <h1 className='text-lightgreen'>Government Issued ID:</h1>
+                                <select name="id_type" onChange={handleChange} value={forms.id_type} className='border-b bg-dark w-full outline-none'>
+                                    <option >--select--</option>
+                                    <option value="driver's license">Driver's License/State ID</option>
+                                    <option value="Nin">NIN</option>
+                                </select>
+                            </div>
+                            <div className="flex flex-col w-full gap-2">
+                                <h1 className='text-lightgreen capitalize'>{forms.id_type && forms.id_type} ID Number:</h1>
+                                <input name='id_number' value={forms.id_number} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' />
+                            </div>
                         </div>
-                        <div className="grid md:grid-cols-2 grid-cols-1 w-full items-center gap-4 lg:gap-20 mt-5">
+                        <div className="grid md:grid-cols-2 grid-cols-1 w-full items-center gap-5 lg:gap-20 mt-5">
                             <div className="w-full">
-                                <h1 className={`${text} text-center text-lg font-bold`}>Upload Front ID Image</h1>
-                                <div className="md:h-64 h-48 w-full mt-5">
+                                <h1 className='text-lightgreen text-center text-lg font-bold'>Upload Front ID Image</h1>
+                                <div className="md:h-64 h-48 w-full mt-4">
                                     <label className={`${frontimg.img ? '' : 'border-2 border-black'} w-full  h-full border-dashed flex cursor-pointer items-center justify-center `}>
                                         {frontimg.img ?
                                             <div className="relative w-full h-full">
@@ -208,8 +208,8 @@ const UserKYC = () => {
                                 </div>
                             </div>
                             <div className="w-full">
-                                <h1 className={`${text} text-center text-lg font-bold`}>Upload Back ID Image</h1>
-                                <div className="md:h-64 h-48 w-full mt-5">
+                                <h1 className='text-lightgreen text-center text-lg font-bold'>Upload Back ID Image</h1>
+                                <div className="md:h-64 h-48 w-full mt-4">
                                     <label className={`${backimg.img ? '' : 'border-2 border-black border-dashed'} w-full h-full flex cursor-pointer items-center justify-center `}>
                                         {backimg.img ?
                                             <div className="relative w-full h-full">

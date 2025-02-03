@@ -53,8 +53,6 @@ const AuthPageLayout = ({ children }) => {
     <div className='w-full'>
       <div className="flex w-full bg-[#1d1e30]">
         <div
-          // data-aos="zoom-in"
-          // data-aos-delay="100"
           className="h-screen z-30 hidden lg:block lg:w-[20%] pt-10 overflow-hidden">
           <div>
             <img src={logo} alt='moniequest-logo' className='h-14 w-auto mx-auto'></img>

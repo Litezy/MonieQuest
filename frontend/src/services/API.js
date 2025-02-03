@@ -20,8 +20,6 @@ const user_urls = {
     get_wallet: user + 'get-wallet',
     create_update_bank: user + 'create-update-bank',
     get_bank_account: user + 'get-bank-account',
-    update_utils: user + 'update-utils',
-    get_utils: user + 'get-utils',
     create_update_kyc: user + 'create-update-kyc',
     user_kyc: user + 'user-kyc',
 }
@@ -34,9 +32,17 @@ const notification_urls = {
     delete_notis: notification + 'delete-notis',
 }
 
+const admin = 'api/admin/'
+const admin_urls = {
+    update_utils: admin + 'update-utils',
+    get_utils: admin + 'get-utils',
+    create_airdrop: admin + 'create-airdrop'
+}
+
 export const Apis = {
     user: user_urls,
-    notification: notification_urls
+    notification: notification_urls,
+    admin: admin_urls
 }
 
 

@@ -9,7 +9,7 @@ const AdminAirdropComp = ({ item }) => {
             <div className='px-4 py-3 bg-secondary text-sm rounded-t-lg flex justify-between gap-4 items-center text-lightgreen'>
                 <div>{moment(item.createdAt).format('DD-MM-yyyy')} / {moment(item.createdAt).format('h:mm')}</div>
                 <div className='flex gap-3 items-center'>
-                    <div>ID: {item.gen_id}</div>
+                    <div>ID: {item?.gen_id}</div>
                     <Link to={`/admin/airdrops/${item.id}/${item.title}`} onClick={MoveToTop}>
                         <button className='outline-none w-fit h-fit bg-ash py-2 px-4 text-xs rounded-md text-white font-medium'>View</button>
                     </Link>
@@ -19,25 +19,29 @@ const AdminAirdropComp = ({ item }) => {
                 <div className='flex flex-col gap-2 md:p-4 overflow-hidden'>
                     <div className='flex justify-between gap-4'>
                         <span>title:</span>
-                        <span>{item.title}</span>
+                        <span>{item?.title}</span>
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>category:</span>
-                        <span>{item.category}</span>
+                        <span>{item?.category}</span>
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>blockchain:</span>
-                        <span>{item.blockchain}</span>
+                        <span>{item?.blockchain}</span>
                     </div>
                 </div>
                 <div className='flex flex-col gap-2 md:p-4 md:border-l border-gray-800 overflow-hidden'>
                     <div className='flex justify-between gap-4'>
+                        <span>type:</span>
+                        <span>{item?.type}</span>
+                    </div>
+                    <div className='flex justify-between gap-4'>
                         <span>referral link:</span>
-                        <span>{item.referral_link}</span>
+                        <span>{item?.referral_link}</span>
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>status:</span>
-                        <span className={`${item.status === 'active' ? 'text-green-400' : 'text-red-500'}`}>{item.status}</span>
+                        <span className={`${item?.status === 'active' ? 'text-green-400' : 'text-red-500'}`}>{item?.status}</span>
                     </div>
                 </div>
             </div>

@@ -29,11 +29,11 @@ const AdminProfile = () => {
         sub2: false
     })
     const [form, setForm] = useState({
-        first_name: user?.first_name,
-        surname: user?.surname,
-        email: user?.email,
-        username: user?.username,
-        phone_number: user?.phone_number,
+        first_name: user?.first_name || '',
+        surname: user?.surname || '',
+        email: user?.email || '',
+        username: user?.username || '',
+        phone_number: user?.phone_number || '',
         old_password: '',
         new_password: '',
         bank_name: '',
@@ -64,17 +64,17 @@ const AdminProfile = () => {
     useEffect(() => {
         setForm({
             ...form,
-            bank_name: bank?.bank_name,
-            account_name: bank?.account_name,
-            account_number: bank?.account_number
+            bank_name: bank?.bank_name || '',
+            account_name: bank?.account_name || '',
+            account_number: bank?.account_number || ''
         })
     }, [bank])
 
     useEffect(() => {
         setForm({
             ...form,
-            exchange_rate: utils?.exchange_rate,
-            giftcard_rate: utils?.giftcard_rate,
+            exchange_rate: utils?.exchange_rate || '',
+            giftcard_rate: utils?.giftcard_rate || '',
         })
     }, [utils])
 
@@ -159,8 +159,7 @@ const AdminProfile = () => {
         }
     }
 
-
-    const UpdateSettings = async () => {
+    const UpdateUtils = async () => {
         if (!form.exchange_rate || !form.giftcard_rate) return ErrorAlert('Enter all fields')
         if(isNaN(form.exchange_rate) || isNaN(form.giftcard_rate)) return ErrorAlert('Enter valid numbers')
 
@@ -173,7 +172,7 @@ const AdminProfile = () => {
             sub2: true
         })
         try {
-            const response = await AuthPutApi(Apis.user.update_utils, formbody)
+            const response = await AuthPutApi(Apis.admin.update_utils, formbody)
             if (response.status === 200) {
                 SuccessAlert(response.msg)
                 setUtils(response.utils)
@@ -286,7 +285,7 @@ const AdminProfile = () => {
                                         <FormInput placeholder='Enter rate amount' name='giftcard_rate' value={form.giftcard_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                 </div>
-                                <FormButton title='Update' className='!py-3 !text-base mt-2' type='button' onClick={UpdateSettings} />
+                                <FormButton title='Update' className='!py-3 !text-base mt-2' type='button' onClick={UpdateUtils} />
                             </div>
                         </div>
                     </form>

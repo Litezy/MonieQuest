@@ -10,6 +10,7 @@ import FormButton from '../../utils/FormButton'
 import AirdropsLayout from '../../AdminComponents/AirdropsLayout'
 import Lottie from 'react-lottie'
 import { Link } from 'react-router-dom'
+import { Apis, AuthPostApi } from '../../services/API'
 
 const categories = [
     "featured", "deFi", "new", "NFT", "others"
@@ -22,6 +23,7 @@ const AdminCreateAirdrops = () => {
         title: '',
         category: categories[0],
         blockchain: '',
+        type: '',
         about: '',
         video_guide_link: '',
         referral_link: '',
@@ -71,16 +73,38 @@ const AdminCreateAirdrops = () => {
         })
     }
 
-    const Submit = (e) => {
+    const Submit = async (e) => {
         e.preventDefault()
 
         if (!form.title || !form.category || !form.about || !form.blockchain || !form.video_guide_link || !form.referral_link) return ErrorAlert('Enter all required fields')
         if (!logo.image || !banner.image) return ErrorAlert('Upload airdrop logo and banner images')
+
+        const formbody = new FormData()
+        formbody.append('logo_image', logo.image)
+        formbody.append('banner_image', banner.image)
+        formbody.append('title', form.title)
+        formbody.append('category', form.category)
+        formbody.append('about', form.about)
+        formbody.append('blockchain', form.blockchain)
+        formbody.append('video_guide_link', form.video_guide_link)
+        formbody.append('referral_link', form.referral_link)
+        formbody.append('telegram_link', form.telegram_link)
+        formbody.append('twitter_link', form.twitter_link)
+        formbody.append('website_link', form.website_link)
+
         setLoading(true)
-        setTimeout(() => {
+        try {
+            const response = await AuthPostApi(Apis.admin.create_airdrop, formbody)
+            if (response.status === 200) {
+                setScreen(2)
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
             setLoading(false)
-            setScreen(2)
-        }, 2000)
+        }
     }
 
     return (
@@ -153,6 +177,10 @@ const AdminCreateAirdrops = () => {
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
                                         <FormInput placeholder='Blockchain' name='blockchain' value={form.blockchain} onChange={formHandler} />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className='text-lightgreen capitalize font-medium'>*type <span className='lowercase'>(gaming, bot, meme, e.t.c.):</span></div>
+                                        <FormInput placeholder='Airdrop type' name='type' value={form.type} onChange={formHandler} />
                                     </div>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*referral link:</div>

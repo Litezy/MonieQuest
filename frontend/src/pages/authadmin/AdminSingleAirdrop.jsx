@@ -26,6 +26,7 @@ const fetchedData = {
     website_link: 'https://app.gradient.network',
     video_guide_link: 'https://youtube.com/guide',
     blockchain: 'binance',
+    type: 'gaming',
     status: 'active'
 }
 
@@ -46,6 +47,7 @@ const AdminSingleAirdrop = () => {
         title: singleAirdrop?.title,
         category: singleAirdrop?.category,
         blockchain: singleAirdrop?.blockchain,
+        type: singleAirdrop?.type,
         about: singleAirdrop?.about,
         video_guide_link: singleAirdrop?.video_guide_link,
         referral_link: singleAirdrop?.referral_link,
@@ -134,7 +136,7 @@ const AdminSingleAirdrop = () => {
                             </div>
                         </div>
                         <div className='flex flex-col gap-6'>
-                            {new Array(4).fill(0).map((_, i) => (
+                            {new Array(5).fill(0).map((_, i) => (
                                 <div key={i} className='flex flex-col gap-3'>
                                     <div className='w-28 h-2 rounded-full bg-slate-400 animate-pulse'></div>
                                     <div className='w-full h-12 bg-slate-400 animate-pulse rounded-xl'></div>
@@ -196,6 +198,10 @@ const AdminSingleAirdrop = () => {
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
                                     <FormInput placeholder='Blockchain' name='blockchain' value={form.blockchain} onChange={formHandler} />
+                                </div>
+                                <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>*type</div>
+                                    <FormInput placeholder='Airdrop type' name='type' value={form.type} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*referral link:</div>

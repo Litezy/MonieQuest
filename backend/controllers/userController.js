@@ -23,6 +23,8 @@ exports.CreateAccount = async (req, res) => {
         const findEmail = await User.findOne({ where: { email: email } })
         if (findEmail) return res.json({ status: 404, msg: `Email address already exists` })
 
+        const slugData = slug(first_name, '-')
+        const date = new Date()
         const profileImage = req?.files?.image
         const filePath = './public/profiles'
         if (!fs.existsSync(filePath)) {
@@ -32,7 +34,7 @@ exports.CreateAccount = async (req, res) => {
         if (profileImage) {
             if (profileImage.size >= 1000000) return res.json({ status: 404, msg: `Image size too large, file must not exceed 1mb` })
             if (!profileImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            imageName = `${slug(first_name, '-')}.jpg`
+            imageName = `${slugData}-${date.getTime()}.jpg`
             await profileImage.mv(`${filePath}/${imageName}`)
         }
 
@@ -74,8 +76,8 @@ exports.CreateAccount = async (req, res) => {
 
                 await Notification.create({
                     user: ele.id,
-                    title: `${user.first_name} joins ${webShort}`,
-                    content: `Hello Admin, you have a new user as ${user.first_name} joins the platform.`,
+                    title: `${user.first_name} ${user.surname} joins ${webShort}`,
+                    content: `Hello Admin, you have a new user as ${user.first_name} ${user.surname} joins the platform.`,
                     url: '/admin/all_users',
                 })
 
@@ -83,7 +85,7 @@ exports.CreateAccount = async (req, res) => {
                     subject: 'New User Alert',
                     eTitle: `New user joins ${webShort}`,
                     eBody: `
-                     <div>Hello admin, you have a new user as ${user.first_name} joins ${webName} today ${moment(user.createdAt).format('DD-MM-yyyy')} / ${moment(user.createdAt).format('h:mm')}.</div> 
+                     <div>Hello admin, you have a new user as ${user.first_name} ${user.surname} joins ${webName} today; ${moment(user.createdAt).format('DD-MM-yyyy')} / ${moment(user.createdAt).format('h:mm')}.</div> 
                     `,
                     account: ele,
                 })
@@ -301,14 +303,16 @@ exports.UpdateProfile = async (req, res) => {
             user.phone_number = phone_number
         }
 
-        const image = req?.files?.image
+        const slugData = slug(first_name ? first_name : user.first_name, '-')
+        const date = new Date()
+        const profileImage = req?.files?.image
         let imageName;
         const filePath = './public/profiles'
         const currentImagePath = `${filePath}/${user.image}`
 
-        if (image) {
-            if (image.size >= 1000000) res.json({ status: 404, msg: `Image size too large, file must not exceed 1mb` })
-            if (!image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+        if (profileImage) {
+            if (profileImage.size >= 1000000) res.json({ status: 404, msg: `Image size too large, file must not exceed 1mb` })
+            if (!profileImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
 
             if (fs.existsSync(currentImagePath)) {
                 fs.unlinkSync(currentImagePath)
@@ -316,13 +320,8 @@ exports.UpdateProfile = async (req, res) => {
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath)
             }
-            if (first_name) {
-                imageName = `${slug(first_name, '-')}.jpg`
-            } else {
-                imageName = `${slug(user.first_name, '-')}.jpg`
-            }
-
-            await image.mv(`${filePath}/${imageName}`)
+            imageName = `${slugData}-${date.getTime()}.jpg`
+            await profileImage.mv(`${filePath}/${imageName}`)
             user.image = imageName
         }
 
@@ -392,41 +391,6 @@ exports.GetUserBankAccount = async (req, res) => {
     }
 }
 
-exports.UpdateUtils = async (req, res) => {
-    try {
-        const { exchange_rate, giftcard_rate } = req.body
-        const utils = await Util.findOne({})
-        if (!utils) return res.json({ status: 404, msg: 'Utils not found' })
-
-        if (exchange_rate) {
-            if (isNaN(exchange_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
-            utils.exchange_rate = exchange_rate
-        }
-
-        if (giftcard_rate) {
-            if (isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
-            utils.giftcard_rate = giftcard_rate
-        }
-
-        await utils.save()
-
-        return res.json({ status: 200, msg: 'Rate(s) updated successfully', utils: utils })
-    } catch (error) {
-        return res.json({ status: 500, msg: error.message })
-    }
-}
-
-exports.GetUtils = async (req, res) => {
-    try {
-        const utils = await Util.findOne({})
-        if (!utils) return res.json({ status: 404, msg: 'Utils not found' })
-
-        return res.json({ status: 200, msg: utils })
-    } catch (error) {
-        return res.json({ status: 500, msg: error.message })
-    }
-}
-
 exports.CreateUpdateKYC = async (req, res) => {
     try {
         const { id_type, id_number, date_of_birth, address } = req.body
@@ -479,7 +443,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                     await Notification.create({
                         user: ele.id,
                         title: `KYC submission alert`,
-                        content: `Hello Admin, ${user.first_name} just submitted KYC details, verify authenticity.`,
+                        content: `Hello Admin, ${user.first_name} ${user.surname} just submitted KYC details, verify authenticity.`,
                         url: '/admin/all_users',
                     })
 
@@ -487,7 +451,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                         subject: `KYC Submission Alert`,
                         eTitle: `New KYC uploaded`,
                         eBody: `
-                          <div>Hello Admin, ${user.first_name} just submitted KYC details today ${moment(kyc.createdAt).format('DD-MM-yyyy')} / ${moment(kyc.createdAt).format('h:mm')} verify authenticity <a href='${webURL}/admin/all_users' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello Admin, ${user.first_name} ${user.surname} just submitted KYC details today ${moment(kyc.createdAt).format('DD-MM-yyyy')} / ${moment(kyc.createdAt).format('h:mm')} verify authenticity <a href='${webURL}/admin/all_users' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: ele
                     })
@@ -496,7 +460,7 @@ exports.CreateUpdateKYC = async (req, res) => {
         }
         else {
             if (kyc.status === 'processing') return res.json({ status: 404, msg: `You can't re-upload while KYC details is still processing` })
-            if (kyc.status === 'verified') return res.json({ status: 404, msg: 'KYC is verified' })
+            if (kyc.status === 'verified') return res.json({ status: 404, msg: 'KYC details is verified' })
 
             const front_image = req?.files?.front_image
             const back_image = req?.files?.back_image
@@ -548,7 +512,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                     await Notification.create({
                         user: ele.id,
                         title: `KYC re-upload alert`,
-                        content: `Hello Admin, ${user.first_name} re-uploaded KYC details, verify authenticity.`,
+                        content: `Hello Admin, ${user.first_name} ${user.surname} re-uploaded KYC details, verify authenticity.`,
                         url: '/admin/all_users',
                     })
 
@@ -556,7 +520,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                         subject: `KYC Re-upload Alert`,
                         eTitle: `KYC re-uploaded`,
                         eBody: `
-                          <div>Hello Admin, ${user.first_name} re-uploaded KYC details today ${moment(kyc.updatedAt).format('DD-MM-yyyy')} / ${moment(kyc.updatedAt).format('h:mm')}  verify authenticity <a href='${webURL}/admin-controls/users' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello Admin, ${user.first_name} ${user.surname} re-uploaded KYC details today ${moment(kyc.updatedAt).format('DD-MM-yyyy')} / ${moment(kyc.updatedAt).format('h:mm')}  verify authenticity <a href='${webURL}/admin-controls/users' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: ele
                     })
