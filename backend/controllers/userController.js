@@ -3,6 +3,7 @@ const Wallet = require('../models').wallets
 const Notification = require('../models').notifications
 const Util = require('../models').utils
 const Bank = require('../models').banks
+const Kyc = require('../models').kyc
 const moment = require('moment')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
@@ -128,7 +129,7 @@ exports.VerifyEmail = async (req, res) => {
             subject: `Welcome To ${webName}`,
             eTitle: `Welcome ${findAccount.first_name}`,
             eBody: `
-             <div>Welcome to ${webName} family, Welcome to ${webName} family, get ready for some amazing deals and updates with us right <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #E96E28">here</a>.</div>
+             <div>Welcome to ${webName} family, Welcome to ${webName} family, get ready for some amazing deals and updates with us right <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">here</a>.</div>
             `,
             account: findAccount,
         })
@@ -423,5 +424,159 @@ exports.GetUtils = async (req, res) => {
         return res.json({ status: 200, msg: utils })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.CreateUpdateKYC = async (req, res) => {
+    try {
+        const { id_type, id_number, date_of_birth, address } = req.body
+        if (!id_type || !id_number || !date_of_birth || !address) return res.json({ status: 404, msg: `Incomplete request found` })
+
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 404, msg: 'User not found' })
+
+        const filePath = './public/identities'
+        const date = new Date()
+        let frontImageName;
+        let backImageName;
+
+        const kyc = await Kyc.findOne({ where: { user: req.user } })
+        if (!kyc) {
+
+            if (!req.files || !req.files.front_image || !req.files.back_image) return res.json({ status: 404, msg: `Attach both front and back of valid ID` })
+            const front_image = req.files.front_image
+            const back_image = req.files.back_image
+            if (!front_image.mimetype.startsWith('image/') || !back_image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath)
+            }
+            frontImageName = `${date.getTime()}.jpg`
+            await front_image.mv(`${filePath}/${frontImageName}`)
+            backImageName = `${date.getTime() + 1}.jpg`
+            await back_image.mv(`${filePath}/${backImageName}`)
+
+            const kyc = await Kyc.create({
+                user: req.user,
+                front_image: frontImageName,
+                back_image: backImageName,
+                id_type,
+                id_number,
+                address,
+                date_of_birth,
+            })
+
+            await Notification.create({
+                user: req.user,
+                title: `KYC submitted`,
+                content: `Your kyc details received and processing for verification.`,
+                url: '/user/profile/kyc',
+            })
+
+            const admins = await User.findAll({ where: { role: 'admin' } })
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `KYC submission alert`,
+                        content: `Hello Admin, ${user.first_name} just submitted KYC details, verify authenticity.`,
+                        url: '/admin/all_users',
+                    })
+
+                    await Mailing({
+                        subject: `KYC Submission Alert`,
+                        eTitle: `New KYC uploaded`,
+                        eBody: `
+                          <div>Hello Admin, ${user.first_name} just submitted KYC details today ${moment(kyc.createdAt).format('DD-MM-yyyy')} / ${moment(kyc.createdAt).format('h:mm')} verify authenticity <a href='${webURL}/admin/all_users' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                        `,
+                        account: ele
+                    })
+                })
+            }
+        }
+        else {
+            if (kyc.status === 'processing') return res.json({ status: 404, msg: `You can't re-upload while KYC details is still processing` })
+            if (kyc.status === 'verified') return res.json({ status: 404, msg: 'KYC is verified' })
+
+            const front_image = req?.files?.front_image
+            const back_image = req?.files?.back_image
+            if (front_image) {
+                if (!front_image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+                const currentImagePath = `${filePath}/${kyc.front_image}`
+                if (fs.existsSync(currentImagePath)) {
+                    fs.unlinkSync(currentImagePath)
+                }
+                if (!fs.existsSync(filePath)) {
+                    fs.mkdirSync(filePath)
+                }
+                frontImageName = `${date.getTime()}.jpg`
+                await front_image.mv(`${filePath}/${frontImageName}`)
+                kyc.front_image = frontImageName
+            }
+            if (back_image) {
+                if (!back_image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+                const currentImagePath = `${filePath}/${kyc.back_image}`
+                if (fs.existsSync(currentImagePath)) {
+                    fs.unlinkSync(currentImagePath)
+                }
+                if (!fs.existsSync(filePath)) {
+                    fs.mkdirSync(filePath)
+                }
+                backImageName = `${date.getTime() + 1}.jpg`
+                await back_image.mv(`${filePath}/${backImageName}`)
+                kyc.back_image = backImageName
+            }
+
+            kyc.id_type = id_type
+            kyc.id_number = id_number
+            kyc.date_of_birth = date_of_birth
+            kyc.address = address
+            kyc.status = 'processing'
+            await kyc.save()
+
+            await Notification.create({
+                user: req.user,
+                title: `KYC re-uploaded`,
+                content: `Your updated kyc details received and processing for verification.`,
+                url: '/user/profile/kyc',
+            })
+
+            const admins = await User.findAll({ where: { role: 'admin' } })
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `KYC re-upload alert`,
+                        content: `Hello Admin, ${user.first_name} re-uploaded KYC details, verify authenticity.`,
+                        url: '/admin/all_users',
+                    })
+
+                    await Mailing({
+                        subject: `KYC Re-upload Alert`,
+                        eTitle: `KYC re-uploaded`,
+                        eBody: `
+                          <div>Hello Admin, ${user.first_name} re-uploaded KYC details today ${moment(kyc.updatedAt).format('DD-MM-yyyy')} / ${moment(kyc.updatedAt).format('h:mm')}  verify authenticity <a href='${webURL}/admin-controls/users' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                        `,
+                        account: ele
+                    })
+                })
+            }
+        }
+
+        return res.json({ status: 200, msg: 'Details submitted' })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.UserKYC = async (req, res) => {
+    try {
+        const kyc = await Kyc.findOne({ where: { user: req.user } })
+        if (!kyc) return res.json({ status: 400, msg: 'User kyc not found' })
+
+        return res.json({ status: 200, msg: kyc })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
     }
 }

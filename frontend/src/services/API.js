@@ -21,7 +21,9 @@ const user_urls = {
     create_update_bank: user + 'create-update-bank',
     get_bank_account: user + 'get-bank-account',
     update_utils: user + 'update-utils',
-    get_utils: user + 'get-utils'
+    get_utils: user + 'get-utils',
+    create_update_kyc: user + 'create-update-kyc',
+    user_kyc: user + 'user-kyc',
 }
 
 const notification = 'api/notification/'

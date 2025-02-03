@@ -7,6 +7,6 @@ module.exports = (sequelize, DataTypes) => {
         id_number: { type: DataTypes.STRING },
         address: { type: DataTypes.STRING },
         date_of_birth: { type: DataTypes.STRING },
-        status: { type: DataTypes.STRING, defaultValue: 'pending' },
+        status: { type: DataTypes.STRING, defaultValue: 'processing' },
     })
 }

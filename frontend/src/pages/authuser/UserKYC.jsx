@@ -7,6 +7,7 @@ import Loader from '../../GeneralComponents/Loader';
 import ModalLayout from '../../utils/ModalLayout';
 import { ErrorAlert } from '../../utils/pageUtils';
 import { TfiTimer } from 'react-icons/tfi';
+import { Apis, AuthGetApi, AuthPostApi, imageurl } from '../../services/API';
 
 
 const UserKYC = () => {
@@ -17,7 +18,7 @@ const UserKYC = () => {
     const backRef = useRef()
     const [forms, setForms] = useState({
         address: '',
-        dob: '',
+        date_of_birth: '',
         id_type: '',
         id_number: '',
     })
@@ -37,6 +38,34 @@ const UserKYC = () => {
         })
     }
 
+    const FetchKYC = useCallback(async () => {
+        try {
+            const response = await AuthGetApi(Apis.user.user_kyc)
+            if (response.status === 200) {
+                setKyc(response.msg)
+                setForms({
+                    address: response.msg.address,
+                    date_of_birth: response.msg.date_of_birth,
+                    id_type: response.msg.id_type,
+                    id_number: response.msg.id_number,
+                })
+                setfrontImg({
+                    ...frontimg,
+                    img: `${imageurl}/identities/${response.msg.front_image}`
+                })
+                setbackImg({
+                    ...backimg,
+                    img: `${imageurl}/identities/${response.msg.back_image}`
+                })
+            }
+        } catch (error) {
+            //
+        }
+    }, [])
+
+    useEffect(() => {
+        FetchKYC()
+    }, [FetchKYC])
 
     const handleImageFront = (e) => {
         const file = e.target.files[0]
@@ -61,23 +90,39 @@ const UserKYC = () => {
         })
     }
 
-    const submit = (e) => {
+    const Submit = async (e) => {
         e.preventDefault()
-        if (!forms.dob) return ErrorAlert('Date of birth is required')
+        if (!forms.date_of_birth) return ErrorAlert('Date of birth is required')
         if (!forms.id_type) return ErrorAlert('ID type field is required')
         if (!forms.address) return ErrorAlert('Address field is required')
         if (!forms.id_number) return ErrorAlert('ID number field is required')
-        if (!frontimg.image) return ErrorAlert('ID front image is missing')
-        if (!backimg.image) return ErrorAlert('ID back image is missing')
-        setLoading(true)
-        setForms({ address: '', dob: '', id_type: '', id_number: '', })
-        setfrontImg({ image: null, img: null })
-        setbackImg({ image: null, img: null })
-        return setTimeout(() => {
-            setScreen(2)
-            setLoading(false)
-        }, 5000)
+        if (Object.values(kyc).length === 0) {
+            if (!frontimg.image) return ErrorAlert('ID front image is missing')
+            if (!backimg.image) return ErrorAlert('ID back image is missing')
+        }
 
+        const formbody = new FormData()
+        formbody.append('front_image', frontimg.image)
+        formbody.append('back_image', backimg.image)
+        formbody.append('date_of_birth', forms.date_of_birth)
+        formbody.append('address', forms.address)
+        formbody.append('id_type', forms.id_type)
+        formbody.append('id_number', forms.id_number)
+
+        setLoading(true)
+        try {
+            const response = await AuthPostApi(Apis.user.create_update_kyc, formbody)
+            if (response.status === 200) {
+                FetchKYC()
+                setScreen(2)
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const text = 'text-lightgreen'
@@ -91,7 +136,7 @@ const UserKYC = () => {
                     </Link>
                 </div>}
                 {screen === 1 &&
-                    <form onSubmit={submit} className=" h-fit relative   rounded-md text-sm  md:pt-3 ">
+                    <form onSubmit={Submit} className=" h-fit relative   rounded-md text-sm  md:pt-3 ">
 
                         {loading &&
                             <ModalLayout clas={`w-11/12 mx-auto`}>
@@ -103,7 +148,11 @@ const UserKYC = () => {
                         }
                         <div className='text-center text-lg bg-ash flex justify-between px-4 mt-4'>
                             <span>KYC status:</span>
-                            <div className={`italic ${kyc?.status === 'verified' ? 'text-green-400' : kyc?.status === 'unverified' ? 'text-red-500' : 'text-yellow-300'}`}>processing</div>
+                            {Object.values(kyc).length === 0 ?
+                                <div className='w-24 h-2 rounded-full bg-slate-400 animate-pulse'></div>
+                                :
+                                <div className={`italic ${kyc?.status === 'verified' ? 'text-green-400' : kyc?.status === 'processing' ? 'text-yellow-300' : 'text-red-500'}`}>{kyc?.status}</div>
+                            }
                         </div>
                         <div className="md:flex md:items-baseline gap-5 w-full">
                             <div className="md:w-1/2">
@@ -115,7 +164,7 @@ const UserKYC = () => {
                                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                             </svg>
                                         </div>
-                                        <input name='dob' value={forms.dob} onChange={handleChange} datepicker datepicker-buttons datepicker-autoselect-today type="date" class="bg-white mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        <input name='date_of_birth' value={forms.date_of_birth} onChange={handleChange} datepicker datepicker-buttons datepicker-autoselect-today type="date" class="bg-white mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="Select date" />
                                     </div>
                                 </div>
