@@ -37,21 +37,21 @@ const Dashboard = () => {
             <div className='grid grid-cols-3 gap-4 items-center'>
               <div className='flex flex-col gap-3 col-span-2'>
                 <div className='text-lightgreen capitalize'>current balance</div>
-                <div className='md:text-5xl text-4xl font-bold'>{currencies[1].symbol}{Object.values(wallet).length !== 0 ? <span>{wallet.balance.toLocaleString()}</span> : <span>0</span>}</div>
+                <div className='md:text-5xl text-4xl font-bold'>{currencies[1].symbol}{Object.values(wallet).length !== 0 ? <span>{wallet.balance.toFixed(2).toLocaleString()}</span> : <span>0.00</span>}</div>
                 <div className='flex md:gap-10 gap-6 items-center mt-2'>
                   <div className='flex flex-col gap-1'>
                     <div className='flex gap-1 items-center'>
                       <div className='md:size-3.5 size-3 bg-lightgreen rounded-full'></div>
                       <div className='md:text-sm text-xs capitalize font-medium'>total deposit</div>
                     </div>
-                    <div className='font-bold'>{currencies[1].symbol}{Object.values(wallet).length !== 0 ? <span>{wallet.total_deposit.toLocaleString()}</span> : <span>0</span>}</div>
+                    <div className='font-bold'>{currencies[1].symbol}{Object.values(wallet).length !== 0 ? <span>{wallet.total_deposit.toFixed(2).toLocaleString()}</span> : <span>0.00</span>}</div>
                   </div>
                   <div className='flex flex-col gap-1 border-l-2 md:pl-10 pl-6'>
                     <div className='flex gap-1 items-center'>
                       <div className='md:size-3.5 size-3 bg-red-600 rounded-full'></div>
                       <div className='md:text-sm text-xs capitalize font-medium'>total outflow</div>
                     </div>
-                    <div className='font-bold'>{currencies[1].symbol}{Object.values(wallet).length !== 0 ? <span>{wallet.total_outflow.toLocaleString()}</span> : <span>0</span>}</div>
+                    <div className='font-bold'>{currencies[1].symbol}{Object.values(wallet).length !== 0 ? <span>{wallet.total_outflow.toFixed(2).toLocaleString()}</span> : <span>0.00</span>}</div>
                   </div>
                 </div>
               </div>
