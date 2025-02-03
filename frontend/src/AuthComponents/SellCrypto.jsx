@@ -9,6 +9,7 @@ import { FaCopy } from 'react-icons/fa';
 import { TfiTimer } from "react-icons/tfi";
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../GeneralComponents/Loader';
+import Exchange from '../pages/authuser/Exchange';
 
 
 const SellCrypto = () => {
@@ -124,7 +125,8 @@ const SellCrypto = () => {
         }, 5000)
     }
     return (
-        <div className='w-full'>
+        <Exchange>
+            <div className='w-full'>
             {loading &&
                 <ModalLayout clas={`w-11/12 mx-auto`}>
                     <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
@@ -297,6 +299,7 @@ const SellCrypto = () => {
             </div>
 
         </div>
+        </Exchange>
     )
 }
 

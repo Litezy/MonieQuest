@@ -3,6 +3,7 @@ import { GoArrowDownLeft, GoArrowDownRight, GoArrowRight, GoArrowUpLeft, GoArrow
 import { currencies } from './AuthUtils'
 import ModalLayout from '../utils/ModalLayout'
 import TransModal from './TransModal'
+import moment from 'moment'
 
 const TransComp = ({ trans }) => {
     const [modal, setModal] = useState(false)
@@ -30,14 +31,14 @@ const TransComp = ({ trans }) => {
                     </div>
                     <div className="flex items-start flex-col lg:gap-1">
                         <div className="flex items-center gap-3">
-                            <div className={`text-zinc-200 capitalize`}>{trans.tag}</div>
+                            <div className={`text-zinc-200 capitalize`}>{trans.tag ? trans.tag :'Crypto'}</div>
                             {trans.type && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
                             {trans.type && <div className={` ${trans.type === 'buy' ? "text-lightgreen" : 'text-red-600'} capitalize`}> {trans.type}</div>}
                         </div>
                         <div className="flex items-center gap-1 lg:text-base text-sm">
                             <div className="">{trans.date}</div>
                             <div className="w-1 h-1 bg-lightgreen rounded-full"></div>
-                            <div className="">Sun</div>
+                            <div className="">{moment(trans.createdAt).format('ddd')}</div>
                         </div>
                     </div>
                 </div>

@@ -146,7 +146,7 @@ exports.LoginAccount = async (req, res) => {
         if (!email || !password) return res.json({ status: 404, msg: `Incomplete request` })
 
         const findEmail = await User.findOne({ where: {email } })
-        if (!findEmail) return res.json({ status: 400, msg: `No account belongs to the email` })
+        if (!findEmail) return res.json({ status: 400, msg: `Email not found` })
         if (password !== findEmail.password) return res.json({ status: 404, msg: `Incorrect password entered` })
 
         const token = jwt.sign({ id: findEmail.id, role: findEmail.role }, process.env.JWT_SECRET, { expiresIn: '10h' })

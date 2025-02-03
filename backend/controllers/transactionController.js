@@ -1,0 +1,289 @@
+const { ServerError } = require('../utils/utils')
+const User = require('../models').users
+const CryptoBuyModel = require(`../models`).exchangeBuys
+const CryptoSellModel = require(`../models`).exchangeSells
+const Notify = require(`../models`).notifications
+const TransHistory = require(`../models`).transactions
+const { customAlphabet } = require('nanoid');
+const otp = require('otp-generator')
+const Mailing = require('../config/emailDesign')
+const blockAndNum = 'abcdefghijklmnopqrstuvwxyz0123456789'
+const momemt = require('moment')
+const GiftCardSell = require('../models').giftCards
+
+
+
+
+
+exports.BuyCrypto = async (req, res) => {
+    try {
+        const { crypto_currency, type, amount, wallet_address, network, wallet_exp } = req.body
+        if (!crypto_currency || !type || !amount || !wallet_address || !network) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
+        const findUser = await User.findOne({ where: { id: req.user } })
+        if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
+        const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
+        const newbuy = await CryptoBuyModel.create({
+            crypto_currency,
+            type,
+            amount,
+            network,
+            wallet_address,
+            wallet_exp,
+            userid: req.user,
+            order_no: orderId
+        })
+        const nanoid = customAlphabet(blockAndNum, 15);
+        const id = nanoid();
+        await TransHistory.create({
+            user: req.user, tag: 'crypto', type: 'buy', amount, wallet_address, network, trans_id: `0x0${id}`
+        })
+        await Notify.create({
+            user: req.user, title: 'crypto buy order', content: `Your crypto buy order of ${orderId} has been created, kindly proceed with making payments to the bank details made available on the order.  `, url: `/user/transactions_history`
+        })
+        await Mailing({
+            subject: 'Crypto Buy Order',
+            eTitle: `Order ID: ${orderId} Created`,
+            eBody: `
+             <div style="font-size: 2rem">Hi ${findUser.first_name},</div>
+             <div style="margin-top: 1.5rem">Your crypto buy order with the ID: ${orderId} has been created, kindly proceed with making payments to the bank details made available on the order. Thank you for choosing us.</div>
+            `,
+            account: findUser,
+        })
+        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        if (findAdmins.length > 0) {
+            findAdmins.map(async admin => {
+
+                await Notify.create({
+                    user: admin.id,
+                    title: `'New Crypto Buy Order`,
+                    content: `Hi Admin, You have a crypto buy order with the ID: ${orderId}. pending payments`,
+                    url: '/admin/exchange/buy_orders',
+                })
+                await Mailing({
+                    subject: 'New Crypto Buy Order',
+                    eTitle: `From User ${findUser.first_name}`,
+                    eBody: `
+                     <div>Hi Admin, You have a crypto buy order with the ID: ${orderId}, from user ${findUser.first_name} pending payments from user. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                    `,
+                    account: admin,
+                })
+            })
+
+        }
+        return res.json({ status: 201, msg: 'Buy Order created successfully', data: newbuy })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+exports.SellCrypto = async (req, res) => {
+    try {
+        const { crypto_currency, type, amount, trans_hash, } = req.body
+        if (!crypto_currency || !type || !amount || !trans_hash) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
+        const findUser = await User.findOne({ where: { id: req.user } })
+        if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
+        const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
+        const newsell = await CryptoSellModel.create({
+            crypto_currency,
+            type,
+            amount,
+            trans_hash,
+            userid: req.user,
+            order_no: orderId
+        })
+        const nanoid = customAlphabet(blockAndNum, 15);
+        const id = nanoid();
+        await TransHistory.create({
+            user: req.user, tag: 'crypto', type: 'sell', amount, trans_hash, trans_id: `0x1${id}`
+        })
+        await Notify.create({
+            user: req.user, title: 'crypto sell order', content: `Your crypto sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.  `, url: `/user/transactions_history`
+        })
+        await Mailing({
+            subject: 'Crypto Sell Order',
+            eTitle: `Order ID: ${orderId} Processing`,
+            eBody: `
+             <div style="font-size: 2rem">Hi ${findUser.first_name},</div>
+             <div style="margin-top: 1.5rem">Your crypto sell order with the ID: ${orderId} is currently being processed. Once the transaction is confirmed, your account balance will be updated accordingly. Thank you for choosing us.</div>
+            `,
+            account: findUser,
+        })
+        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        if (findAdmins.length > 0) {
+            findAdmins.map(async admin => {
+
+                await Notify.create({
+                    user: admin.id,
+                    title: `'New Crypto Sell Order`,
+                    content: `Hi Admin, You have a crypto sell order with the ID: ${orderId}.`,
+                    url: '/admin/exchange/sell_orders',
+                })
+                await Mailing({
+                    subject: 'New Crypto Sell Order',
+                    eTitle: `From User ${findUser.first_name}`,
+                    eBody: `
+                     <div>Hi Admin, You have a crypto sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                    `,
+                    account: admin,
+                })
+            })
+
+        }
+        return res.json({ status: 201, msg: 'Sell Order created successfully' })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.SellGiftcard = async (req, res) => {
+    try {
+
+        const { brand, amount, code, pin } = req.body
+        if (!brand || !amount || !code) return res.json({ status: 400, msg: "Incomplete request, fill all required fileds." })
+        const findUser = await User.findOne({ where: { id: req.user } })
+        if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
+        const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
+        const newsell = await GiftCardSell.create({
+            brand, amount, code, pin, userid: req.user, order_no: orderId
+        })
+        const nanoid = customAlphabet(blockAndNum, 15);
+        const id = nanoid();
+        await TransHistory.create({
+            user: req.user, tag: 'giftcard', type: 'sell', gift_brand: brand, amount, trans_id: `0x2${id}`
+        })
+        await Notify.create({
+            user: req.user, title: 'giftcard sell order', content: `Your giftcard sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.  `, url: `/user/transactions_history`
+        })
+        await Mailing({
+            subject: 'Giftcard Sell Order',
+            eTitle: `Order ID: ${orderId} Processing`,
+            eBody: `
+             <div style="font-size: 2rem">Hi ${findUser.first_name},</div>
+             <div style="margin-top: 1.5rem">Your giftcard sell order with the ID: ${orderId} is currently being processed. Once the transaction is confirmed, your account balance will be updated accordingly. Thank you for trading with us.</div>
+            `,
+            account: findUser,
+        })
+        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        if (findAdmins.length > 0) {
+            findAdmins.map(async admin => {
+
+                await Notify.create({
+                    user: admin.id,
+                    title: `'New Giftcard Sell Order`,
+                    content: `Hi Admin, You have a giftcard sell order with the ID: ${orderId}.`,
+                    url: '/admin/giftcards/orders',
+                })
+                await Mailing({
+                    subject: 'New Crypto Buy Order',
+                    eTitle: `From User ${findUser.first_name}`,
+                    eBody: `
+                     <div>Hi Admin, You have a crypto sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                    `,
+                    account: admin,
+                })
+            })
+
+        }
+        return res.json({ status: 201, msg: 'Giftcard sell order created successfully', data: newsell, user: findUser })
+
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getAllTransactions = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
+        const alltrans = await TransHistory.findAll({ where: { user: user ? user.id : req.user } })
+        if (!alltrans) return res.json({ status: 404, msg: 'No transaction history found' })
+        return res.json({ status: 200, msg: "fetch success", data: alltrans })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getUserCryptoOrderHistory = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
+        const buytrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user, status: [`unpaid`, `paid`] } })
+        const selltrans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user, status: 'pending' } })
+        if (!buytrans && !selltrans) return res.json({ status: 404, msg: 'No crypt oder history found' })
+        const alltrans = [...buytrans, ...selltrans]
+        const sortedTransactions = alltrans.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        return res.json({ status: 200, msg: "fetch success", data: sortedTransactions })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+exports.getSingleOrderHistory = async (req, res) => {
+    try {
+        const { id, tag } = req.params
+        if (!id || !tag) return res.json({ status: 400, msg: 'Incomplete request' })
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
+        if (tag) {
+            if (tag === 'buy') {
+                const trans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user, id } })
+                if (!trans) return res.json({ status: 404, msg: "Transaction record not found" })
+                return res.json({ status: 200, msg: "fetch success", data: trans })
+            } else if (tag === 'sell') {
+                const trans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user, id } })
+                if (!trans) return res.json({ status: 404, msg: "Transaction record not found" })
+                return res.json({ status: 200, msg: "fetch success", data: trans })
+            }
+        }
+        return res.json({ status: 404, msg: 'Invalid Tag or ID' })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+exports.completeABuyPayment = async (req, res) => {
+    try {
+        const { id } = req.body
+        if (!id) return res.json({ status: 400, msg: `ID missing, try again` })
+        const findBuyId = await CryptoBuyModel.findOne({ where: { id } })
+        if (!findBuyId) return res.json({ status: 404, msg: "ID not found" })
+        const findUser = await User.findOne({ where: { id: findBuyId.userid } })
+        if (!findUser) return res.json({ status: 404, msg: 'Account owner not found' })
+        findBuyId.status = 'paid'
+        await findBuyId.save()
+        await Notify.create({
+            user: req.user, title: 'Buy order marked paid', content: `Your crypto buy order of ${findBuyId.order_no} has been marked paid. Please keep an eye on your dashboard and email as we confirm and update your balance.  `, url: `/user/exchange/orders`
+        })
+        await Mailing({
+            subject: 'Crypto Buy Order Updated',
+            eTitle: `Order ID: ${findBuyId.order_no} Marked as Paid`,
+            eBody: `
+             <div style="font-size: 2rem">Hi ${findUser.first_name},</div>
+             <div style="margin-top: 1.5rem">Your crypto buy order with the ID: ${findBuyId.order_no} is currently marked paid. Once the transaction is confirmed, your account balance will be updated accordingly. Thank you for trading with us.</div>
+            `,
+            account: findUser,
+        })
+        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        if (findAdmins.length > 0) {
+            findAdmins.map(async admin => {
+
+                await Notify.create({
+                    user: admin.id,
+                    title: `'crypto buy Order marked paid`,
+                    content: `Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been marked paid, kindly confirm from your bank and release crypto for user ${findUser.first_name}.`,
+                    url: '/admin/exchange/buy_orders',
+                })
+                await Mailing({
+                    subject: 'Crypto Buy Order Marked as Paid',
+                    eTitle: `From User ${findUser.first_name}`,
+                    eBody: `
+                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been marked paid, kindly confirm from your bank and release crypto for user ${findUser.first_name}. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                    `,
+                    account: admin,
+                })
+            })
+        }
+
+
+        return res.json({ status: 200, msg: "payment status updated successfully" })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}

@@ -33,10 +33,21 @@ const notification_urls = {
     update_single_notis: notification + 'update-single-notis',
     delete_notis: notification + 'delete-notis',
 }
+const transaction = 'api/transactions/'
 
+const trans_url = {
+    buy_crypto: transaction + `buy_crypto`,
+    sell_crypto: transaction + `sell_crypto`,
+    sell_giftcard: transaction + `sell_giftcard`,
+    all_user_transactions: transaction + 'get_alltrans',
+    crypto_order_history: transaction + 'get_order_history',
+    single_history: transaction +'single_order_history',
+    complete_payment: transaction +'single_paid_order'
+}
 export const Apis = {
     user: user_urls,
-    notification: notification_urls
+    notification: notification_urls,
+    transaction: trans_url,
 }
 
 

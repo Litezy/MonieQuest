@@ -8,3 +8,7 @@ exports.Socials = {
     x: 'https://',
     tg: 'https://'
 }
+
+exports.ServerError = (res,error)=>{
+    res.status(500).json({error: error.message,stack:'`sorry something went wrong on our end'})
+}

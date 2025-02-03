@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         amount: { type: DataTypes.FLOAT },
         gift_brand: { type: DataTypes.STRING },
         network: { type: DataTypes.STRING },
+        trans_hash: { type: DataTypes.STRING },
         wallet_address: { type: DataTypes.STRING },
         status: { type: DataTypes.STRING, defaultValue: 'pending' },
     })

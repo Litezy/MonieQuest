@@ -9,9 +9,12 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 
 
 
+export const  delay =(ms)=> {
+    new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-  
 export const coins = [
+    `--select--`,
     `Solana (SOL)`,
     `Bitcoin (BTC)`,
     `Ethereum (ETH)`,
@@ -32,8 +35,8 @@ export const currencies = [
 
 export const links = [
     { label: 'dashboard', url: '/user/dashboard', icon: MdDashboard },
-    { label: 'crypto exchange', url: '/user/exchange', icon: MdCurrencyExchange },
-    { label: 'gift cards', url: '/user/giftcards', icon: HiGift },
+    { label: 'crypto exchange', main: '/exchange', url: '/user/exchange/buy', icon: MdCurrencyExchange },
+    { label: 'gift cards', main: '/giftcard', url: '/user/giftcards', icon: HiGift },
     { label: 'profit tools', main: '/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox },
     { label: 'bank withdrawal', url: '/user/bank_withdrawal', icon: BiMoneyWithdraw },
     { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory },
@@ -42,6 +45,7 @@ export const links = [
     { label: 'leaderboard', url: '/user/leaderboard', icon: MdLeaderboard },
 ]
 export const blockchainNetworks = [
+    { value: "", label: "--select--" },
     { value: "bitcoin", label: "Bitcoin (BTC)" },
     { value: "ethereum", label: "Ethereum (ETH)" },
     { value: "binance-smart-chain", label: "Binance Smart Chain (BSC)" },
