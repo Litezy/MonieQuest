@@ -26,6 +26,6 @@ db.toolsOrders = require('./toolOrderModel')(sequelize, DataTypes)
 db.banks = require('./bankModel')(sequelize, DataTypes)
 db.utils = require('./utilsModel')(sequelize, DataTypes)
 
-db.sequelize.sync({ force: false }).then(() => console.log('Tables synced'))
+db.sequelize.sync({ force: true }).then(() => console.log('Tables synced'))
     .catch((error) => console.log(error))
 module.exports = db

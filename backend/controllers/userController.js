@@ -19,7 +19,7 @@ exports.CreateAccount = async (req, res) => {
         if (password.length < 6) return res.json({ status: 404, msg: `Password must be at least 6 characters long` })
         if (confirm_password !== password) return res.json({ status: 404, msg: `Passwords mismatch` })
 
-        const findEmail = await User.findOne({ where: { email: email } })
+        const findEmail = await User.findOne({ where: {email } })
         if (findEmail) return res.json({ status: 404, msg: `Email address already exists` })
 
         const profileImage = req?.files?.image
@@ -116,7 +116,7 @@ exports.VerifyEmail = async (req, res) => {
         const { email, code } = req.body
         if (!email || !code) return res.json({ status: 404, msg: 'Incomplete request found' })
 
-        const findAccount = await User.findOne({ where: { email: email } })
+        const findAccount = await User.findOne({ where: {email } })
         if (!findAccount) return res.json({ status: 404, msg: `No account belongs to this email` })
         if (code !== findAccount.resetcode) return res.json({ status: 404, msg: 'Invalid code entered' })
 
@@ -144,7 +144,7 @@ exports.LoginAccount = async (req, res) => {
         const { email, password } = req.body
         if (!email || !password) return res.json({ status: 404, msg: `Incomplete request` })
 
-        const findEmail = await User.findOne({ where: { email: email } })
+        const findEmail = await User.findOne({ where: {email } })
         if (!findEmail) return res.json({ status: 400, msg: `No account belongs to the email` })
         if (password !== findEmail.password) return res.json({ status: 404, msg: `Incorrect password entered` })
 
@@ -172,7 +172,7 @@ exports.SendOTP = async (req, res) => {
         const { email } = req.body
         if (!email) return res.json({ status: 404, msg: `Provide your email address` })
 
-        const findAccount = await User.findOne({ where: { email: email } })
+        const findAccount = await User.findOne({ where: {email } })
         if (!findAccount) return res.json({ status: 404, msg: `No account belongs to this email` })
 
         const otp = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
@@ -201,7 +201,7 @@ exports.VerifyOtp = async (req, res) => {
         const { email, code } = req.body
         if (!email || !code) return res.json({ status: 404, msg: 'Incomplete request found' })
 
-        const findAccount = await User.findOne({ where: { email: email } })
+        const findAccount = await User.findOne({ where: {email } })
         if (!findAccount) return res.json({ status: 404, msg: `Account does not exists with us` })
         if (code !== findAccount.resetcode) return res.json({ status: 404, msg: 'Invalid code entered' })
 
@@ -223,7 +223,7 @@ exports.ChangePasswordOnRequest = async (req, res) => {
         if (confirm_password !== password) return res.json({ status: 400, msg: 'Passwords mismatch' })
         if (password.length < 6) return res.json({ status: 404, msg: `New Password must be at least six characters long` })
 
-        const findAccount = await User.findOne({ where: { email: email } })
+        const findAccount = await User.findOne({ where: {email } })
         if (!findAccount) return res.json({ status: 404, msg: `Account does not exists with us` })
 
         findAccount.password = password
@@ -273,7 +273,7 @@ exports.UpdateProfile = async (req, res) => {
 
         if (email) {
             if (email !== user.email) {
-                const matchedSomeoneElse = await User.findOne({ where: { email: email } })
+                const matchedSomeoneElse = await User.findOne({ where: {email } })
                 if (matchedSomeoneElse) return res.json({ status: 404, msg: 'Email entered already exists' })
                 user.email = email
             }
