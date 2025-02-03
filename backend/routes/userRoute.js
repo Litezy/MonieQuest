@@ -1,4 +1,4 @@
-const { CreateAccount, LoginAccount, GetProfile, SendOTP, VerifyOtp, ChangePasswordOnRequest, Contacts, UpdateProfile, GetUserWallet, GetUserBankAccount, UpdateUtils, GetUtils, VerifyEmail, CreateUpdateBankAccount } = require('../controllers/userController')
+const { CreateAccount, LoginAccount, GetProfile, SendOTP, VerifyOtp, ChangePasswordOnRequest, Contacts, UpdateProfile, GetUserWallet, GetUserBankAccount, UpdateUtils, GetUtils, VerifyEmail, CreateUpdateBankAccount, CreateUpdateKYC, UserKYC } = require('../controllers/userController')
 const { AllMiddleware, UserMiddleware, AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -17,5 +17,7 @@ router.post('/create-update-bank', AllMiddleware, CreateUpdateBankAccount)
 router.get('/get-bank-account', AllMiddleware, GetUserBankAccount)
 router.put('/update-utils', AdminMiddleware, UpdateUtils)
 router.get('/get-utils', AdminMiddleware, GetUtils)
+router.post('/create-update-kyc', UserMiddleware, CreateUpdateKYC)
+router.get('/user-kyc', UserMiddleware, UserKYC)
 
 module.exports = router
