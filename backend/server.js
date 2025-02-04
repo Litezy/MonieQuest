@@ -17,6 +17,7 @@ app.use(express.static('public'))
 
 app.use('/api/user', require('./routes/userRoute'))
 app.use('/api/notification', require('./routes/notificationRoute'))
+app.use('/api/transactions', require('./routes/transactionRoutes'))
 app.use('/api/admin', require('./routes/adminRoute'))
 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`))

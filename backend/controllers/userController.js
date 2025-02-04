@@ -20,7 +20,7 @@ exports.CreateAccount = async (req, res) => {
         if (password.length < 6) return res.json({ status: 404, msg: `Password must be at least 6 characters long` })
         if (confirm_password !== password) return res.json({ status: 404, msg: `Passwords mismatch` })
 
-        const findEmail = await User.findOne({ where: { email: email } })
+        const findEmail = await User.findOne({ where: { email } })
         if (findEmail) return res.json({ status: 404, msg: `Email address already exists` })
 
         const slugData = slug(first_name, '-')
@@ -119,7 +119,7 @@ exports.VerifyEmail = async (req, res) => {
         const { email, code } = req.body
         if (!email || !code) return res.json({ status: 404, msg: 'Incomplete request found' })
 
-        const findAccount = await User.findOne({ where: { email: email } })
+        const findAccount = await User.findOne({ where: { email } })
         if (!findAccount) return res.json({ status: 404, msg: `No account belongs to this email` })
         if (code !== findAccount.resetcode) return res.json({ status: 404, msg: 'Invalid code entered' })
 
@@ -147,8 +147,8 @@ exports.LoginAccount = async (req, res) => {
         const { email, password } = req.body
         if (!email || !password) return res.json({ status: 404, msg: `Incomplete request` })
 
-        const findEmail = await User.findOne({ where: { email: email } })
-        if (!findEmail) return res.json({ status: 400, msg: `No account belongs to the email` })
+        const findEmail = await User.findOne({ where: { email } })
+        if (!findEmail) return res.json({ status: 400, msg: `Email not found` })
         if (password !== findEmail.password) return res.json({ status: 404, msg: `Incorrect password entered` })
 
         const token = jwt.sign({ id: findEmail.id, role: findEmail.role }, process.env.JWT_SECRET, { expiresIn: '10h' })
@@ -175,7 +175,7 @@ exports.SendOTP = async (req, res) => {
         const { email } = req.body
         if (!email) return res.json({ status: 404, msg: `Provide your email address` })
 
-        const findAccount = await User.findOne({ where: { email: email } })
+        const findAccount = await User.findOne({ where: { email } })
         if (!findAccount) return res.json({ status: 404, msg: `No account belongs to this email` })
 
         const otp = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
@@ -204,7 +204,7 @@ exports.VerifyOtp = async (req, res) => {
         const { email, code } = req.body
         if (!email || !code) return res.json({ status: 404, msg: 'Incomplete request found' })
 
-        const findAccount = await User.findOne({ where: { email: email } })
+        const findAccount = await User.findOne({ where: { email } })
         if (!findAccount) return res.json({ status: 404, msg: `Account does not exists with us` })
         if (code !== findAccount.resetcode) return res.json({ status: 404, msg: 'Invalid code entered' })
 
@@ -226,7 +226,7 @@ exports.ChangePasswordOnRequest = async (req, res) => {
         if (confirm_password !== password) return res.json({ status: 400, msg: 'Passwords mismatch' })
         if (password.length < 6) return res.json({ status: 404, msg: `New Password must be at least six characters long` })
 
-        const findAccount = await User.findOne({ where: { email: email } })
+        const findAccount = await User.findOne({ where: { email } })
         if (!findAccount) return res.json({ status: 404, msg: `Account does not exists with us` })
 
         findAccount.password = password
@@ -276,7 +276,7 @@ exports.UpdateProfile = async (req, res) => {
 
         if (email) {
             if (email !== user.email) {
-                const matchedSomeoneElse = await User.findOne({ where: { email: email } })
+                const matchedSomeoneElse = await User.findOne({ where: { email } })
                 if (matchedSomeoneElse) return res.json({ status: 404, msg: 'Email entered already exists' })
                 user.email = email
             }
@@ -399,8 +399,9 @@ exports.CreateUpdateKYC = async (req, res) => {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 404, msg: 'User not found' })
 
-        const filePath = './public/identities'
+        const slugData = slug(user.first_name, '-')
         const date = new Date()
+        const filePath = './public/identities'
         let frontImageName;
         let backImageName;
 
@@ -408,16 +409,16 @@ exports.CreateUpdateKYC = async (req, res) => {
         if (!kyc) {
 
             if (!req.files || !req.files.front_image || !req.files.back_image) return res.json({ status: 404, msg: `Attach both front and back of valid ID` })
-            const front_image = req.files.front_image
-            const back_image = req.files.back_image
-            if (!front_image.mimetype.startsWith('image/') || !back_image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
+            const frontImage = req.files.front_image
+            const backImage = req.files.back_image
+            if (!frontImage.mimetype.startsWith('image/') || !backImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath)
             }
-            frontImageName = `${date.getTime()}.jpg`
-            await front_image.mv(`${filePath}/${frontImageName}`)
-            backImageName = `${date.getTime() + 1}.jpg`
-            await back_image.mv(`${filePath}/${backImageName}`)
+            frontImageName = `${slugData + 'frontid'}-${date.getTime()}.jpg`
+            await frontImage.mv(`${filePath}/${frontImageName}`)
+            backImageName = `${slugData + 'backid'}-${date.getTime()}.jpg`
+            await backImage.mv(`${filePath}/${backImageName}`)
 
             const kyc = await Kyc.create({
                 user: req.user,
@@ -462,10 +463,10 @@ exports.CreateUpdateKYC = async (req, res) => {
             if (kyc.status === 'processing') return res.json({ status: 404, msg: `You can't re-upload while KYC details is still processing` })
             if (kyc.status === 'verified') return res.json({ status: 404, msg: 'KYC details is verified' })
 
-            const front_image = req?.files?.front_image
-            const back_image = req?.files?.back_image
-            if (front_image) {
-                if (!front_image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+            const frontImage = req?.files?.front_image
+            const backImage = req?.files?.back_image
+            if (frontImage) {
+                if (!frontImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
                 const currentImagePath = `${filePath}/${kyc.front_image}`
                 if (fs.existsSync(currentImagePath)) {
                     fs.unlinkSync(currentImagePath)
@@ -473,12 +474,12 @@ exports.CreateUpdateKYC = async (req, res) => {
                 if (!fs.existsSync(filePath)) {
                     fs.mkdirSync(filePath)
                 }
-                frontImageName = `${date.getTime()}.jpg`
-                await front_image.mv(`${filePath}/${frontImageName}`)
+                frontImageName = `${slugData + 'frontid'}-${date.getTime()}.jpg`
+                await frontImage.mv(`${filePath}/${frontImageName}`)
                 kyc.front_image = frontImageName
             }
-            if (back_image) {
-                if (!back_image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+            if (backImage) {
+                if (!backImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
                 const currentImagePath = `${filePath}/${kyc.back_image}`
                 if (fs.existsSync(currentImagePath)) {
                     fs.unlinkSync(currentImagePath)
@@ -486,8 +487,8 @@ exports.CreateUpdateKYC = async (req, res) => {
                 if (!fs.existsSync(filePath)) {
                     fs.mkdirSync(filePath)
                 }
-                backImageName = `${date.getTime() + 1}.jpg`
-                await back_image.mv(`${filePath}/${backImageName}`)
+                backImageName = `${slugData + 'backid'}-${date.getTime()}.jpg`
+                await backImage.mv(`${filePath}/${backImageName}`)
                 kyc.back_image = backImageName
             }
 

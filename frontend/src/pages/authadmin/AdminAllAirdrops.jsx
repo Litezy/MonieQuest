@@ -3,69 +3,8 @@ import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
 import AirdropsLayout from '../../AdminComponents/AirdropsLayout';
 import AdminAirdropComp from '../../AdminComponents/AdminAirdropComp';
+import { Apis, AuthGetApi } from '../../services/API';
 
-const records = [
-    {
-        id: 1,
-        gen_id: '123456789',
-        title: 'ape express',
-        category: 'featured',
-        referral_link: 'https://app.gradient.network',
-        twiter_link: 'https://x.com/i/flow/login?lang=en&mx=2',
-        telegram_link: 'https://web.telegram.org/a/',
-        website_link: 'https://app.gradient.network',
-        blockchain: 'binance',
-        status: 'active'
-    },
-    {
-        id: 2,
-        gen_id: '123456789',
-        title: 'blum',
-        category: 'deFi',
-        referral_link: 'https://app.gradient.network',
-        twiter_link: 'https://x.com/i/flow/login?lang=en&mx=2',
-        telegram_link: 'https://web.telegram.org/a/',
-        website_link: 'https://app.gradient.network',
-        blockchain: 'ton',
-        status: 'active'
-    },
-    {
-        id: 3,
-        gen_id: '123456789',
-        title: 'gradient',
-        category: 'new',
-        referral_link: 'https://app.gradient.network',
-        twiter_link: 'https://x.com/i/flow/login?lang=en&mx=2',
-        telegram_link: 'https://web.telegram.org/a/',
-        website_link: 'https://app.gradient.network',
-        blockchain: 'solana',
-        status: 'finished'
-    },
-    {
-        id: 4,
-        gen_id: '123456789',
-        title: 'paws voucher',
-        category: 'nft',
-        referral_link: 'https://app.gradient.network',
-        twiter_link: 'https://x.com/i/flow/login?lang=en&mx=2',
-        telegram_link: 'https://web.telegram.org/a/',
-        website_link: 'https://app.gradient.network',
-        blockchain: 'solana',
-        status: 'finished'
-    },
-    {
-        id: 5,
-        gen_id: '123456789',
-        title: 'litas',
-        category: 'others',
-        referral_link: 'https://app.gradient.network',
-        twiter_link: 'https://x.com/i/flow/login?lang=en&mx=2',
-        telegram_link: 'https://web.telegram.org/a/',
-        website_link: 'https://app.gradient.network',
-        blockchain: 'eth',
-        status: 'active'
-    }
-]
 
 const AdminAllAirdrops = () => {
     const tags = ['all', 'featured', 'deFi', 'new', 'NFTs', 'others']
@@ -76,13 +15,22 @@ const AdminAllAirdrops = () => {
     const [airdrops, setAirdrops] = useState([])
 
     useEffect(() => {
-        setStaticData(records)
-        setAirdrops(records);
-    }, []);
+        const FetchAllAirdrops = async () => {
+            try {
+                const response = await AuthGetApi(Apis.admin.all_airdrops)
+                if (response.status === 200) {
+                    setStaticData(response.msg)
+                    setAirdrops(response.msg)
+                }
 
-    setTimeout(() => {
-        setDataLoading(false)
-    }, 2000)
+            } catch (error) {
+                //
+            } finally {
+                setDataLoading(false)
+            }
+        }
+        FetchAllAirdrops()
+    }, [])
 
     const filterAirdrop = () => {
         const mainData = staticData

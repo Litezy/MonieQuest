@@ -53,6 +53,10 @@ import GiftCardSingleOrder from "../pages/authadmin/GiftCardSingleOrder";
 import AdminTransHistory from "../pages/authadmin/AdminTransHistory";
 import AdminSingleWithdrawal from "../pages/authadmin/AdminSingleWithdrawal";
 import AdminSingleBlog from "../pages/authadmin/AdminSingleBlog";
+import BuyCrypto from "../AuthComponents/BuyCrypto";
+import SellCrypto from "../AuthComponents/SellCrypto";
+import BuyOrdersHistory from "../pages/authuser/OrdersHistory";
+import OrderPage from "../pages/authuser/OrderPage";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -81,7 +85,10 @@ export const GeneralPagesLinks = [
 export const AuthPagesLinks = [
     { path: '/user/dashboard', component: Dashboard },
     { path: '/user/giftcards', component: Giftcards },
-    { path: '/user/exchange', component: Exchange },
+    { path: '/user/exchange/buy', component: BuyCrypto },
+    { path: '/user/exchange/orders', component: BuyOrdersHistory },
+    { path: '/user/exchange/orders/:id/:tag', component: OrderPage },
+    { path: '/user/exchange/sell', component: SellCrypto },
     { path: '/user/profit_tools/create', component: CreateTools },
     { path: '/user/profit_tools/all_tools', component: ProfitTools },
     { path: '/user/profile', component: Profile },

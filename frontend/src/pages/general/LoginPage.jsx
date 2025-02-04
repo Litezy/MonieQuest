@@ -9,6 +9,8 @@ import { decodeToken } from 'react-jwt'
 import Loading from '../../GeneralComponents/Loading'
 import logo from '../../assets/images/logo.png'
 import { Apis, PostApi } from '../../services/API'
+import Loader from '../../GeneralComponents/Loader'
+import ModalLayout from '../../utils/ModalLayout'
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false)
@@ -54,9 +56,15 @@ const LoginPage = () => {
 
   return (
     <div className="w-full bg-dark h-[110dvh]">
+      {loading &&
+        <ModalLayout>
+          <div className="w-full p-5 flex items-center justify-center">
+            <Loader />
+          </div>
+        </ModalLayout>
+      }
       <div className='w-11/12 mx-auto pt-20 pb-10 '>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
-          {loading && <Loading />}
           <div className='w-full h-full flex flex-col text-white'>
             <div className="flex items-center justify-center w-full">
               <img src={logo} className='w-52' alt="logo alt" />

@@ -7,6 +7,8 @@ import Loading from '../../GeneralComponents/Loading';
 import SuccessCheck from '../../utils/SuccessCheck';
 import logo from '../../assets/images/logo.png'
 import { Apis, PostApi } from '../../services/API';
+import ModalLayout from '../../utils/ModalLayout';
+import Loader from '../../GeneralComponents/Loader';
 
 
 const VerifyAccount = () => {
@@ -25,7 +27,7 @@ const VerifyAccount = () => {
             email: userEmail,
             code: checkPins
         }
-        
+
         setLoading(true)
         try {
             const response = await PostApi(Apis.user.verify_email, formbody)
@@ -43,9 +45,15 @@ const VerifyAccount = () => {
 
     return (
         <div className='bg-dark h-[110dvh] w-full'>
+            {loading &&
+                <ModalLayout>
+                    <div className="w-full p-5 flex items-center justify-center">
+                        <Loader />
+                    </div>
+                </ModalLayout>
+            }
             <div className='w-11/12 mx-auto pt-40 pb-20'>
                 <div className='flex items-center justify-center max-w-md mx-auto relative'>
-                    {loading && <Loading />}
                     <div className='w-full h-full flex flex-col'>
                         <div className="flex items-center justify-center w-full ">
                             <img src={logo} className='w-52' alt="logo alt" />

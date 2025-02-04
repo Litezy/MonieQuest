@@ -32,16 +32,31 @@ const notification_urls = {
     delete_notis: notification + 'delete-notis',
 }
 
+const transaction = 'api/transactions/'
+const trans_url = {
+    buy_crypto: transaction + `buy_crypto`,
+    sell_crypto: transaction + `sell_crypto`,
+    sell_giftcard: transaction + `sell_giftcard`,
+    all_user_transactions: transaction + 'get_alltrans',
+    crypto_order_history: transaction + 'get_order_history',
+    single_history: transaction +'single_order_history',
+    complete_payment: transaction +'single_paid_order'
+}
+
 const admin = 'api/admin/'
 const admin_urls = {
     update_utils: admin + 'update-utils',
     get_utils: admin + 'get-utils',
-    create_airdrop: admin + 'create-airdrop'
+    create_airdrop: admin + 'create-airdrop',
+    all_airdrops: admin + 'all-airdrops',
+    single_airdrop: admin + 'single-airdrop',
+    update_airdrop: admin + 'update-airdrop',
 }
 
 export const Apis = {
     user: user_urls,
     notification: notification_urls,
+    transaction: trans_url,
     admin: admin_urls
 }
 

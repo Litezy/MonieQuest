@@ -10,7 +10,7 @@ const AdminAirdropComp = ({ item }) => {
                 <div>{moment(item.createdAt).format('DD-MM-yyyy')} / {moment(item.createdAt).format('h:mm')}</div>
                 <div className='flex gap-3 items-center'>
                     <div>ID: {item?.gen_id}</div>
-                    <Link to={`/admin/airdrops/${item.id}/${item.title}`} onClick={MoveToTop}>
+                    <Link to={`/admin/airdrops/${item.id}/${item.slug}`} onClick={MoveToTop}>
                         <button className='outline-none w-fit h-fit bg-ash py-2 px-4 text-xs rounded-md text-white font-medium'>View</button>
                     </Link>
                 </div>
@@ -36,8 +36,8 @@ const AdminAirdropComp = ({ item }) => {
                         <span>{item?.type}</span>
                     </div>
                     <div className='flex justify-between gap-4'>
-                        <span>referral link:</span>
-                        <span>{item?.referral_link}</span>
+                        <span>kyc:</span>
+                        <span>{item?.kyc}</span>
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>status:</span>

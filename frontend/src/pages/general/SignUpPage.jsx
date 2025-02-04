@@ -7,6 +7,8 @@ import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Loading from '../../GeneralComponents/Loading'
 import logo from '../../assets/images/logo.png'
 import { Apis, PostApi } from '../../services/API'
+import ModalLayout from '../../utils/ModalLayout'
+import Loader from '../../GeneralComponents/Loader'
 
 const SignUpPage = () => {
   const [check, setCheck] = useState(false)
@@ -31,7 +33,7 @@ const SignUpPage = () => {
   const CreateAccount = async (e) => {
     e.preventDefault()
 
-    if (!form.first_name || !form.surname || !form.email|| !form.phone || !form.password) return ErrorAlert('Enter all fields')
+    if (!form.first_name || !form.surname || !form.email || !form.phone || !form.password) return ErrorAlert('Enter all fields')
     if (!form.confirm_password) return ErrorAlert('Confirm passsword')
     if (form.password !== form.confirm_password) return ErrorAlert('Password(s) mismatch')
     if (!check) return ErrorAlert('Must agree with terms and privacy policy')
@@ -44,7 +46,7 @@ const SignUpPage = () => {
       password: form.password,
       confirm_password: form.confirm_password
     }
-    
+
     setLoading(true)
     try {
       const response = await PostApi(Apis.user.signup, formbody)
@@ -63,9 +65,15 @@ const SignUpPage = () => {
 
   return (
     <div className="w-full h-[100dvh] overflow-y-auto bg-dark">
+      {loading &&
+        <ModalLayout>
+          <div className="w-full p-5 flex items-center justify-center">
+            <Loader />
+          </div>
+        </ModalLayout>
+      }
       <div className='w-11/12 mx-auto py-10'>
         <div className='flex items-center justify-center max-w-xl mx-auto relative'>
-          {loading && <Loading />}
           <div className='w-full h-full flex flex-col text-zinc-300'>
             <div className="flex items-center justify-center w-full">
               <img src={logo} className='w-52' alt="logo alt" />

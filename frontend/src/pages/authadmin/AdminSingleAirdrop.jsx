@@ -1,34 +1,15 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import { Link, useParams } from 'react-router-dom'
-import banner from '../../assets/images/testimg.webp'
-import airdropLogo from '../../assets/images/testimage.jfif'
 import { FaEdit } from 'react-icons/fa'
 import { FiUploadCloud } from 'react-icons/fi'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import FormInput from '../../utils/FormInput'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import FormButton from '../../utils/FormButton'
-
-const fetchedData = {
-    id: 1,
-    gen_id: '123456789',
-    logo: airdropLogo,
-    banner: banner,
-    title: 'ape express',
-    category: 'featured',
-    about: 'Ape express blends ancient traditions with cutting-edge blockchain technology, creating a seamless platform of trust and innovation. With AI-driven insights and decentralized solutions, it transforms spiritual guidance into an advanced digital experience.',
-    referral_link: 'https://app.gradient.network',
-    twitter_link: 'https://x.com/i/flow/login?lang=en&mx=2',
-    telegram_link: 'https://web.telegram.org/a/',
-    website_link: 'https://app.gradient.network',
-    video_guide_link: 'https://youtube.com/guide',
-    blockchain: 'binance',
-    type: 'gaming',
-    status: 'active'
-}
+import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
 
 const statuses = [
     "active", "finished"
@@ -38,30 +19,35 @@ const categories = [
     "featured", "deFi", "new", "NFT", "others"
 ]
 
+const kyces = [
+    "true", "false"
+]
+
 const AdminSingleAirdrop = () => {
     const { id } = useParams()
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
-    const [singleAirdrop, setSingleAirdrop] = useState(fetchedData)
+    const [singleAirdrop, setSingleAirdrop] = useState({})
     const [form, setForm] = useState({
-        title: singleAirdrop?.title,
-        category: singleAirdrop?.category,
-        blockchain: singleAirdrop?.blockchain,
-        type: singleAirdrop?.type,
-        about: singleAirdrop?.about,
-        video_guide_link: singleAirdrop?.video_guide_link,
-        referral_link: singleAirdrop?.referral_link,
-        twitter_link: singleAirdrop?.twitter_link,
-        telegram_link: singleAirdrop?.telegram_link,
-        website_link: singleAirdrop?.website_link,
-        status: singleAirdrop?.status,
+        title: '',
+        category: '',
+        blockchain: '',
+        kyc: '',
+        type: '',
+        about: '',
+        video_guide_link: '',
+        referral_link: '',
+        twitter_link: '',
+        telegram_link: '',
+        website_link: '',
+        status: '',
     })
     const [banner, setBanner] = useState({
-        img: singleAirdrop?.banner,
+        img: null,
         image: null
     })
     const [logo, setLogo] = useState({
-        img: singleAirdrop?.logo,
+        img: null,
         image: null
     })
     const bannerRef = useRef()
@@ -74,9 +60,44 @@ const AdminSingleAirdrop = () => {
         })
     }
 
-    setTimeout(() => {
-        setDataLoading(false)
-    }, 2000)
+    const FetchSingleAirdrop = useCallback(async () => {
+        try {
+            const response = await AuthGetApi(`${Apis.admin.single_airdrop}/${id}`)
+            if (response.status === 200) {
+                setSingleAirdrop(response.msg)
+                setForm({
+                    title: response.msg.title,
+                    category: response.msg.category,
+                    blockchain: response.msg.blockchain,
+                    kyc: response.msg.kyc,
+                    type: response.msg.type,
+                    about: response.msg.about,
+                    status: response.msg.status,
+                    referral_link: response.msg.referral_link,
+                    video_guide_link: response.msg.video_guide_link,
+                    twitter_link: response.msg.twitter_link || '',
+                    telegram_link: response.msg.telegram_link || '',
+                    website_link: response.msg.website_link || '',
+                })
+                setLogo({
+                    ...logo,
+                    img: `${imageurl}/airdrops/${response.msg.logo_image}`
+                })
+                setBanner({
+                    ...banner,
+                    img: `${imageurl}/airdrops/${response.msg.banner_image}`
+                })
+            }
+        } catch (error) {
+            //
+        } finally {
+            setDataLoading(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        FetchSingleAirdrop()
+    }, [FetchSingleAirdrop])
 
     const handleUpload = (event) => {
         const file = event.target.files[0]
@@ -102,11 +123,42 @@ const AdminSingleAirdrop = () => {
         })
     }
 
-    const Submit = (e) => {
+    const Submit = async (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.category || !form.about || !form.blockchain || !form.video_guide_link || !form.referral_link) return ErrorAlert('Enter all required fields')
-        if (!logo.image || !banner.image) return ErrorAlert('Upload airdrop logo and banner images')
+        if (!form.title || !form.category || !form.about || !form.blockchain || !form.type || !form.video_guide_link || !form.referral_link) return ErrorAlert('Enter all required fields')
+
+        const formbody = new FormData()
+        formbody.append('airdrop_id', singleAirdrop.id)
+        formbody.append('logo_image', logo.image)
+        formbody.append('banner_image', banner.image)
+        formbody.append('title', form.title)
+        formbody.append('category', form.category)
+        formbody.append('about', form.about)
+        formbody.append('blockchain', form.blockchain)
+        formbody.append('kyc', form.kyc)
+        formbody.append('type', form.type)
+        formbody.append('video_guide_link', form.video_guide_link)
+        formbody.append('referral_link', form.referral_link)
+        formbody.append('status', form.status)
+        formbody.append('telegram_link', form.telegram_link)
+        formbody.append('twitter_link', form.twitter_link)
+        formbody.append('website_link', form.website_link)
+
+        setLoading(true)
+        try {
+            const response = await AuthPutApi(Apis.admin.update_airdrop, formbody)
+            if (response.status === 200) {
+                SuccessAlert(response.msg)
+                FetchSingleAirdrop()
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -196,6 +248,10 @@ const AdminSingleAirdrop = () => {
                                     <SelectComp options={categories} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.category} handleChange={(e) => setForm({ ...form, category: e.target.value })} />
                                 </div>
                                 <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>*KYC:</div>
+                                    <SelectComp options={kyces} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.kyc} handleChange={(e) => setForm({ ...form, kyc: e.target.value })} />
+                                </div>
+                                <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
                                     <FormInput placeholder='Blockchain' name='blockchain' value={form.blockchain} onChange={formHandler} />
                                 </div>
@@ -203,12 +259,12 @@ const AdminSingleAirdrop = () => {
                                     <div className='text-lightgreen capitalize font-medium'>*type</div>
                                     <FormInput placeholder='Airdrop type' name='type' value={form.type} onChange={formHandler} />
                                 </div>
+                            </div>
+                            <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*referral link:</div>
                                     <FormInput placeholder='Referral link' name='referral_link' value={form.referral_link} onChange={formHandler} />
                                 </div>
-                            </div>
-                            <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*about:</div>
                                     <FormInput formtype='textarea' placeholder='About airdrop' name='about' value={form.about} onChange={formHandler} />

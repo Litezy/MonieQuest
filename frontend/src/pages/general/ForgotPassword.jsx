@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom'
 import SuccessCheck from '../../utils/SuccessCheck'
 import logo from '../../assets/images/logo.png'
 import { Apis, PostApi } from '../../services/API';
+import ModalLayout from '../../utils/ModalLayout';
+import Loader from '../../GeneralComponents/Loader';
 
 const ForgotPassword = () => {
   const [screen, setScreen] = useState(1)
@@ -104,9 +106,15 @@ const ForgotPassword = () => {
 
   return (
     <div className='w-full bg-dark h-[110dvh]'>
+      {loading &&
+        <ModalLayout>
+          <div className="w-full p-5 flex items-center justify-center">
+            <Loader />
+          </div>
+        </ModalLayout>
+      }
       <div className='w-11/12 mx-auto py-20'>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
-          {loading && <Loading />}
           <div className='w-full h-full flex flex-col'>
             <div className="flex items-center justify-center w-full ">
               <img src={logo} className='w-52' alt="logo alt" />

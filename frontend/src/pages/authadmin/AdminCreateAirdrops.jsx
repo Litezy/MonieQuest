@@ -16,12 +16,17 @@ const categories = [
     "featured", "deFi", "new", "NFT", "others"
 ]
 
+const kyces = [
+    "true", "false"
+]
+
 const AdminCreateAirdrops = () => {
     const [screen, setScreen] = useState(1)
     const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         title: '',
         category: categories[0],
+        kyc: kyces[0],
         blockchain: '',
         type: '',
         about: '',
@@ -76,7 +81,7 @@ const AdminCreateAirdrops = () => {
     const Submit = async (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.category || !form.about || !form.blockchain || !form.video_guide_link || !form.referral_link) return ErrorAlert('Enter all required fields')
+        if (!form.title || !form.category || !form.about || !form.blockchain || !form.type || !form.video_guide_link || !form.referral_link) return ErrorAlert('Enter all required fields')
         if (!logo.image || !banner.image) return ErrorAlert('Upload airdrop logo and banner images')
 
         const formbody = new FormData()
@@ -86,6 +91,8 @@ const AdminCreateAirdrops = () => {
         formbody.append('category', form.category)
         formbody.append('about', form.about)
         formbody.append('blockchain', form.blockchain)
+        formbody.append('kyc', form.kyc)
+        formbody.append('type', form.type)
         formbody.append('video_guide_link', form.video_guide_link)
         formbody.append('referral_link', form.referral_link)
         formbody.append('telegram_link', form.telegram_link)
@@ -175,6 +182,10 @@ const AdminCreateAirdrops = () => {
                                         <SelectComp options={categories} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.category} handleChange={(e) => setForm({ ...form, category: e.target.value })} />
                                     </div>
                                     <div className='flex flex-col'>
+                                        <div className='text-lightgreen font-medium'>*KYC:</div>
+                                        <SelectComp options={kyces} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.kyc} handleChange={(e) => setForm({ ...form, kyc: e.target.value })} />
+                                    </div>
+                                    <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
                                         <FormInput placeholder='Blockchain' name='blockchain' value={form.blockchain} onChange={formHandler} />
                                     </div>
@@ -182,12 +193,12 @@ const AdminCreateAirdrops = () => {
                                         <div className='text-lightgreen capitalize font-medium'>*type <span className='lowercase'>(gaming, bot, meme, e.t.c.):</span></div>
                                         <FormInput placeholder='Airdrop type' name='type' value={form.type} onChange={formHandler} />
                                     </div>
+                                </div>
+                                <div className='flex flex-col gap-6'>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*referral link:</div>
                                         <FormInput placeholder='Referral link' name='referral_link' value={form.referral_link} onChange={formHandler} />
                                     </div>
-                                </div>
-                                <div className='flex flex-col gap-6'>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*about:</div>
                                         <FormInput formtype='textarea' placeholder='About airdrop' name='about' value={form.about} onChange={formHandler} />

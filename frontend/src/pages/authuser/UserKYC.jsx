@@ -43,23 +43,22 @@ const UserKYC = () => {
         setDataLoading(true)
         try {
             const response = await AuthGetApi(Apis.user.user_kyc)
-            if (response.status === 200) {
-                setKyc(response.msg)
-                setForms({
-                    address: response.msg.address,
-                    date_of_birth: response.msg.date_of_birth,
-                    id_type: response.msg.id_type,
-                    id_number: response.msg.id_number,
-                })
-                setfrontImg({
-                    ...frontimg,
-                    img: `${imageurl}/identities/${response.msg.front_image}`
-                })
-                setbackImg({
-                    ...backimg,
-                    img: `${imageurl}/identities/${response.msg.back_image}`
-                })
-            }
+            if (response.status !== 200) return;
+            setKyc(response.msg)
+            setForms({
+                address: response.msg.address,
+                date_of_birth: response.msg.date_of_birth,
+                id_type: response.msg.id_type,
+                id_number: response.msg.id_number,
+            })
+            setfrontImg({
+                ...frontimg,
+                img: `${imageurl}/identities/${response.msg.front_image}`
+            })
+            setbackImg({
+                ...backimg,
+                img: `${imageurl}/identities/${response.msg.back_image}`
+            })
         } catch (error) {
             //
         } finally {

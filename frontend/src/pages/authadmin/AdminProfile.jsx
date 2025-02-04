@@ -39,7 +39,8 @@ const AdminProfile = () => {
         bank_name: '',
         account_number: '',
         account_name: '',
-        exchange_rate: '',
+        exchange_buy_rate: '',
+        exchange_sell_rate: '',
         giftcard_rate: ''
     })
     const [profile, setProfile] = useState({
@@ -73,7 +74,8 @@ const AdminProfile = () => {
     useEffect(() => {
         setForm({
             ...form,
-            exchange_rate: utils?.exchange_rate || '',
+            exchange_buy_rate: utils?.exchange_buy_rate || '',
+            exchange_sell_rate: utils?.exchange_sell_rate || '',
             giftcard_rate: utils?.giftcard_rate || '',
         })
     }, [utils])
@@ -160,11 +162,12 @@ const AdminProfile = () => {
     }
 
     const UpdateUtils = async () => {
-        if (!form.exchange_rate || !form.giftcard_rate) return ErrorAlert('Enter all fields')
-        if(isNaN(form.exchange_rate) || isNaN(form.giftcard_rate)) return ErrorAlert('Enter valid numbers')
+        if (!form.exchange_buy_rate || !form.giftcard_rate) return ErrorAlert('Enter all fields')
+        if (isNaN(form.exchange_buy_rate) || isNaN(form.giftcard_rate)) return ErrorAlert('Enter valid numbers')
 
         const formbody = {
-            exchange_rate: parseFloat(form.exchange_rate),
+            exchange_buy_rate: parseFloat(form.exchange_buy_rate),
+            exchange_sell_rate: parseFloat(form.exchange_sell_rate),
             giftcard_rate: parseFloat(form.giftcard_rate)
         }
 
@@ -277,8 +280,12 @@ const AdminProfile = () => {
                                 {loading.sub2 && <Loading />}
                                 <div className='flex flex-col gap-3'>
                                     <div className='flex flex-col'>
-                                        <div className='font-medium text-gray-200 ml-2'>Exchange rate:</div>
-                                        <FormInput placeholder='Enter rate amount' name='exchange_rate' value={form.exchange_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                        <div className='font-medium text-gray-200 ml-2'>Exchange buy rate:</div>
+                                        <FormInput placeholder='Enter rate amount' name='exchange_buy_rate' value={form.exchange_buy_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className='font-medium text-gray-200 ml-2'>Exchange sell rate:</div>
+                                        <FormInput placeholder='Enter rate amount' name='exchange_sell_rate' value={form.exchange_sell_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                     <div className='flex flex-col'>
                                         <div className='font-medium text-gray-200 ml-2'>Giftcard rate:</div>

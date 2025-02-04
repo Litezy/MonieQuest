@@ -25,6 +25,19 @@ db.kyc = require('./kycModel')(sequelize, DataTypes)
 db.toolsOrders = require('./toolOrderModel')(sequelize, DataTypes)
 db.banks = require('./bankModel')(sequelize, DataTypes)
 db.utils = require('./utilsModel')(sequelize, DataTypes)
+db.exchangeBuys = require(`./exchangeBuyModel`)(sequelize, DataTypes) 
+db.exchangeSells = require(`./exchangeSellModel`)(sequelize, DataTypes)
+db.giftCards = require(`./giftCardModel`)(sequelize, DataTypes)
+
+//One to Many relationships
+db.users.hasMany(db.exchangeBuys, { foreignKey: 'userid', as: "crypto_buyers" })
+db.users.hasMany(db.exchangeSells, { foreignKey: 'userid', as: "crypto_sellers" })
+db.users.hasMany(db.giftCards, { foreignKey: 'userid', as: "gift_sellers" })
+
+// One to One relationships
+db.exchangeBuys.belongsTo(db.users, { foreignKey: 'userid', as: "crypto_buyer" })
+db.exchangeSells.belongsTo(db.users, { foreignKey: 'userid', as: "crypto_seller" })
+db.giftCards.belongsTo(db.users, { foreignKey: 'userid', as: "gift_seller" })
 
 db.sequelize.sync({ force: false }).then(() => console.log('Tables synced'))
     .catch((error) => console.log(error))
