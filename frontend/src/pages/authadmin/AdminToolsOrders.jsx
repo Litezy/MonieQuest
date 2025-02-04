@@ -74,13 +74,17 @@ const AdminToolsOrders = () => {
         <AdminToolsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className='flex flex-col gap-5'>
+                    <div className='w-72 h-5 rounded-full bg-slate-400'></div>
+                    <div></div>
+                </div>
+                <div className='flex flex-col gap-5'>
                     <div className="text-xl lg:text-3xl font-bold text-gray-300 capitalize">latest tools purchases</div>
                     <div className='flex flex-col gap-5'>
                         {allToolsOrders.map((item, i) => (
                             <div key={i}>
                                 {modal &&
                                     <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2`} setModal={setModal}>
-                                        <div className="w-full h-[70vh] overflow-y-auto scroll p-5 lg:p-10 bg-primary rounded-md ">
+                                        <div className="w-full h-[70vh] overflow-y-auto scroll p-5 lg:p-10 bg-primary rounded-md">
                                             <div className="flex items-center justify-between">
                                                 <ToolsOrdersModal selected={selected} />
                                             </div>

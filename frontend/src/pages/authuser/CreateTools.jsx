@@ -190,7 +190,7 @@ const CreateTools = () => {
                       <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
                         <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
                       </div>
-                      <div className='text-sm capitalize'>{item} {item === 'AI assistants' && <span>(<span className='lowercase'>e.g.,</span> chatbots, writing tools)</span>}</div>
+                      <div className='text-sm'>{item}</div>
                     </div>
                   ))}
                   <div className='flex flex-col mt-2'>

@@ -41,7 +41,7 @@ const AdminAirdropComp = ({ item }) => {
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>status:</span>
-                        <span className={`${item?.status === 'active' ? 'text-green-400' : 'text-red-500'}`}>{item?.status}</span>
+                        <span className={`${item?.status === 'ongoing' ? 'text-green-400' : 'text-red-500'}`}>{item?.status}</span>
                     </div>
                 </div>
             </div>
