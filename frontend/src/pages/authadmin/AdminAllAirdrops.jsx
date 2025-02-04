@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
 import AirdropsLayout from '../../AdminComponents/AirdropsLayout';
@@ -31,6 +31,22 @@ const AdminAllAirdrops = () => {
         }
         FetchAllAirdrops()
     }, [])
+
+    const featuredAirdrops = useMemo(() => {
+        return airdrops.filter((ele) => ele.category === 'featured');
+    }, [airdrops])
+    const newAirdrops = useMemo(() => {
+        return airdrops.filter((ele) => ele.category === 'new');
+    }, [airdrops])
+    const NFTAirdrops = useMemo(() => {
+        return airdrops.filter((ele) => ele.category === 'nft');
+    }, [airdrops])
+    const deFiAirdrops = useMemo(() => {
+        return airdrops.filter((ele) => ele.category === 'deFi');
+    }, [airdrops])
+    const otherAirdrops = useMemo(() => {
+        return airdrops.filter((ele) => ele.category === 'others');
+    }, [airdrops])
 
     const filterAirdrop = () => {
         const mainData = staticData
@@ -84,43 +100,73 @@ const AdminAllAirdrops = () => {
                                         }
                                         {active === 'featured' &&
                                             <>
-                                                {airdrops.filter((ele) => ele.category === 'featured').map((item, i) => (
-                                                    <AdminAirdropComp key={i} item={item} />
-                                                ))}
+                                                {featuredAirdrops.length > 0 ?
+                                                    <>
+                                                        {featuredAirdrops.map((item, i) => (
+                                                            <AdminAirdropComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'deFi' &&
                                             <>
-                                                {airdrops.filter((ele) => ele.category === 'deFi').map((item, i) => (
-                                                    <AdminAirdropComp key={i} item={item} />
-                                                ))}
+                                                {deFiAirdrops.length > 0 ?
+                                                    <>
+                                                        {deFiAirdrops.map((item, i) => (
+                                                            <AdminAirdropComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'new' &&
                                             <>
-                                                {airdrops.filter((ele) => ele.category === 'new').map((item, i) => (
-                                                    <AdminAirdropComp key={i} item={item} />
-                                                ))}
+                                                {newAirdrops.length > 0 ?
+                                                    <>
+                                                        {newAirdrops.map((item, i) => (
+                                                            <AdminAirdropComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'NFTs' &&
                                             <>
-                                                {airdrops.filter((ele) => ele.category === 'nft').map((item, i) => (
-                                                    <AdminAirdropComp key={i} item={item} />
-                                                ))}
+                                                {NFTAirdrops.length > 0 ?
+                                                    <>
+                                                        {NFTAirdrops.map((item, i) => (
+                                                            <AdminAirdropComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'others' &&
                                             <>
-                                                {airdrops.filter((ele) => ele.category === 'others').map((item, i) => (
-                                                    <AdminAirdropComp key={i} item={item} />
-                                                ))}
+                                                {otherAirdrops.length > 0 ?
+                                                    <>
+                                                        {otherAirdrops.map((item, i) => (
+                                                            <AdminAirdropComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                     </div>
                                 </>
                                 :
-                                <div className="w-full text-gray-400 text-center">No record found...</div>
+                                <div className="text-gray-400 text-center">No record found...</div>
                             }
                         </>
                     }

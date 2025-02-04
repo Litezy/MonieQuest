@@ -12,7 +12,7 @@ import FormButton from '../../utils/FormButton'
 import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
 
 const statuses = [
-    "active", "finished"
+    "ongoing", "finished"
 ]
 
 const categories = [

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout'
 import ToolComp from '../../AuthComponents/ToolComp';
 import { CiSearch } from 'react-icons/ci';
@@ -49,6 +49,16 @@ const ProfitTools = () => {
     setTimeout(() => {
         setDataLoading(false)
     }, 2000)
+
+    const pendingTools = useMemo(() => {
+        return allTools.filter((ele) => ele.status === 'pending');
+    }, [allTools])
+    const approvedTools = useMemo(() => {
+        return allTools.filter((ele) => ele.status === 'approved');
+    }, [allTools])
+    const declinedTools = useMemo(() => {
+        return allTools.filter((ele) => ele.status === 'declined');
+    }, [allTools])
 
     const filterTools = () => {
         const mainData = staticData
@@ -102,23 +112,41 @@ const ProfitTools = () => {
                                         }
                                         {active === 'pending' &&
                                             <>
-                                                {allTools.filter((ele) => ele.status === 'pending').map((item, i) => (
-                                                    <ToolComp key={i} item={item} />
-                                                ))}
+                                                {pendingTools.length > 0 ?
+                                                    <>
+                                                        {pendingTools.map((item, i) => (
+                                                            <ToolComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'approved' &&
                                             <>
-                                                {allTools.filter((ele) => ele.status === 'approved').map((item, i) => (
-                                                    <ToolComp key={i} item={item} />
-                                                ))}
+                                                {approvedTools.length > 0 ?
+                                                    <>
+                                                        {approvedTools.map((item, i) => (
+                                                            <ToolComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'declined' &&
                                             <>
-                                                {allTools.filter((ele) => ele.status === 'declined').map((item, i) => (
-                                                    <ToolComp key={i} item={item} />
-                                                ))}
+                                                {declinedTools.length > 0 ?
+                                                    <>
+                                                        {declinedTools.map((item, i) => (
+                                                            <ToolComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                     </div>

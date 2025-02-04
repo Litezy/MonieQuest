@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import AirdropDiv from '../../GeneralComponents/AirdropDiv';
 import FormButton from '../../utils/FormButton';
@@ -6,15 +6,47 @@ import { Link } from 'react-router-dom';
 import { examplefaqs, MoveToTop } from '../../utils/pageUtils';
 import { FiPlus, FiMinus } from "react-icons/fi";
 import Testimonials from '../../GeneralComponents/Testimonials';
+import { Apis, GetApi } from '../../services/API';
 
 
 const HomePage = () => {
+  const [airdrops, setAirdrops] = useState([])
   const [faq, setFaq] = useState('')
   const [dataLoading, setDataLoading] = useState(true)
 
-  setTimeout(() => {
-    setDataLoading(false)
-  }, 2000)
+  useEffect(() => {
+    const FetchAllAirdrops = async () => {
+      try {
+        const response = await GetApi(Apis.admin.all_airdrops)
+        if (response.status === 200) {
+          setAirdrops(response.msg)
+        }
+
+      } catch (error) {
+        //
+      } finally {
+        setDataLoading(false)
+      }
+    }
+    FetchAllAirdrops()
+  }, [])
+
+  const featuredAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'featured');
+  }, [airdrops])
+  const newAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'new');
+  }, [airdrops])
+  const NFTAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'nft');
+  }, [airdrops])
+  const deFiAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'deFi');
+  }, [airdrops])
+  const otherAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'others');
+  }, [airdrops])
+
 
   const handleQuestions = i => {
     if (i !== faq) {
@@ -72,56 +104,66 @@ const HomePage = () => {
                   </Link>
                 </div>
                 <div className='flex flex-wrap gap-14 justify-center text-gray-200'>
-                  <div className='flex flex-col gap-2'>
-                    <div className='flex flex-col gap-4'>
-                      {new Array(2).fill(0).map((item, i) => (
-                        <AirdropDiv key={i} item={item} />
-                      ))}
+                  {featuredAirdrops.length > 0 &&
+                    <div className='flex flex-col gap-2'>
+                      <div className='flex flex-col gap-4'>
+                        {featuredAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} />
+                        ))}
+                      </div>
+                      <Link to='/airdrops/featured' onClick={MoveToTop}>
+                        <FormButton title='show more featured airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                      </Link>
                     </div>
-                    <Link to='/airdrops/featured' onClick={MoveToTop}>
-                      <FormButton title='show more featured airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
-                    </Link>
-                  </div>
-                  <div className='flex flex-col gap-2'>
-                    <div className='flex flex-col gap-4'>
-                      {new Array(2).fill(0).map((item, i) => (
-                        <AirdropDiv key={i} item={item} />
-                      ))}
+                  }
+                  {NFTAirdrops.length > 0 &&
+                    <div className='flex flex-col gap-2'>
+                      <div className='flex flex-col gap-4'>
+                        {NFTAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} />
+                        ))}
+                      </div>
+                      <Link to='/airdrops/NFT' onClick={MoveToTop}>
+                        <FormButton title='show more NFT airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                      </Link>
                     </div>
-                    <Link to='/airdrops/NFT' onClick={MoveToTop}>
-                      <FormButton title='show more NFT airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
-                    </Link>
-                  </div>
-                  <div className='flex flex-col gap-2'>
-                    <div className='flex flex-col gap-4'>
-                      {new Array(2).fill(0).map((item, i) => (
-                        <AirdropDiv key={i} item={item} />
-                      ))}
+                  }
+                  {newAirdrops.length > 0 &&
+                    <div className='flex flex-col gap-2'>
+                      <div className='flex flex-col gap-4'>
+                        {newAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} />
+                        ))}
+                      </div>
+                      <Link to='/airdrops/new' onClick={MoveToTop}>
+                        <FormButton title='show more new airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                      </Link>
                     </div>
-                    <Link to='/airdrops/new' onClick={MoveToTop}>
-                      <FormButton title='show more new airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
-                    </Link>
-                  </div>
-                  <div className='flex flex-col gap-2'>
-                    <div className='flex flex-col gap-4'>
-                      {new Array(2).fill(0).map((item, i) => (
-                        <AirdropDiv key={i} item={item} />
-                      ))}
+                  }
+                  {deFiAirdrops.length > 0 &&
+                    <div className='flex flex-col gap-2'>
+                      <div className='flex flex-col gap-4'>
+                        {deFiAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} />
+                        ))}
+                      </div>
+                      <Link to='/airdrops/deFi' onClick={MoveToTop}>
+                        <FormButton title='show more deFi airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                      </Link>
                     </div>
-                    <Link to='/airdrops/deFi' onClick={MoveToTop}>
-                      <FormButton title='show more deFi airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
-                    </Link>
-                  </div>
-                  <div className='flex flex-col gap-2'>
-                    <div className='flex flex-col gap-4'>
-                      {new Array(2).fill(0).map((item, i) => (
-                        <AirdropDiv key={i} item={item} />
-                      ))}
+                  }
+                  {otherAirdrops.length > 0 &&
+                    <div className='flex flex-col gap-2'>
+                      <div className='flex flex-col gap-4'>
+                        {otherAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} />
+                        ))}
+                      </div>
+                      <Link to='/airdrops/others' onClick={MoveToTop}>
+                        <FormButton title='show more ways to earn crypto' className='!text-sm !capitalize !rounded-md !py-4' />
+                      </Link>
                     </div>
-                    <Link to='/airdrops/others' onClick={MoveToTop}>
-                      <FormButton title='show more ways to earn crypto' className='!text-sm !capitalize !rounded-md !py-4' />
-                    </Link>
-                  </div>
+                  }
                   <div className='max-w-xs h-fit bg-primary p-4'>
                     <div className='text-lg font-bold text-center'>How it works for Airdrop Farmers</div>
                     <div className='flex flex-col gap-4 mt-8 pb-4'>

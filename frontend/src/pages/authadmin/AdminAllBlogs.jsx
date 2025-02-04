@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
 import BlogsLayout from '../../AdminComponents/BlogsLayout';
@@ -9,7 +9,7 @@ const records = [
         id: 1,
         gen_id: '123456789',
         title: 'blum launches memepad for memecoin trading',
-        feature: 'airdrop',
+        feature: 'trading',
         main_header: '',
         first_paragraph: '',
         second_paragraph: '',
@@ -56,6 +56,16 @@ const AdminAllBlogs = () => {
     setTimeout(() => {
         setDataLoading(false)
     }, 2000)
+
+    const airdropBlogs = useMemo(() => {
+        return blogs.filter((ele) => ele.feature === 'airdrop');
+    }, [blogs])
+    const tradingBlogs = useMemo(() => {
+        return blogs.filter((ele) => ele.feature === 'trading');
+    }, [blogs])
+    const financeBlogs = useMemo(() => {
+        return blogs.filter((ele) => ele.feature === 'personal finance');
+    }, [blogs])
 
     const filterBlogs = () => {
         const mainData = staticData
@@ -109,23 +119,41 @@ const AdminAllBlogs = () => {
                                         }
                                         {active === 'airdrop' &&
                                             <>
-                                                {blogs.filter((ele) => ele.feature === 'airdrop').map((item, i) => (
-                                                    <BlogComp key={i} item={item} />
-                                                ))}
+                                                {airdropBlogs.length > 0 ?
+                                                    <>
+                                                        {airdropBlogs.map((item, i) => (
+                                                            <BlogComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'trading' &&
                                             <>
-                                                {blogs.filter((ele) => ele.feature === 'trading').map((item, i) => (
-                                                    <BlogComp key={i} item={item} />
-                                                ))}
+                                                {tradingBlogs.length > 0 ?
+                                                    <>
+                                                        {tradingBlogs.map((item, i) => (
+                                                            <BlogComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'personal finance' &&
                                             <>
-                                                {blogs.filter((ele) => ele.feature === 'personal finance').map((item, i) => (
-                                                    <BlogComp key={i} item={item} />
-                                                ))}
+                                                {financeBlogs.length > 0 ?
+                                                    <>
+                                                        {financeBlogs.map((item, i) => (
+                                                            <BlogComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                     </div>

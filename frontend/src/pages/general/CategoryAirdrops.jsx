@@ -1,16 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import AirdropDiv from '../../GeneralComponents/AirdropDiv'
+import { Apis, GetApi } from '../../services/API'
 
 const CategoryAirdropsPage = () => {
     const { category } = useParams()
     const [categoryAirdrops, setCategoryAirdrops] = useState([])
     const [dataLoading, setDataLoading] = useState(true)
 
-    setTimeout(() => {
-        setDataLoading(false)
-    }, 2000)
+    useEffect(() => {
+        const FetchCategoryAirdrops = async () => {
+            try {
+                const response = await GetApi(`${Apis.admin.category_airdrops}/${category}`)
+                if (response.status === 200) {
+                    setCategoryAirdrops(response.msg)
+                }
+
+            } catch (error) {
+                //
+            } finally {
+                setDataLoading(false)
+            }
+        }
+        FetchCategoryAirdrops()
+    }, [])
 
 
     return (
@@ -29,11 +43,15 @@ const CategoryAirdropsPage = () => {
                         :
                         <div className='flex flex-col gap-6'>
                             <div className='text-2xl font-bold capitalize'>{category === 'others' ? 'More ways to earn crypto' : `All ${category} airdrops`}</div>
-                            <div className='flex flex-wrap gap-4'>
-                                {new Array(12).fill(0).map((item, i) => (
-                                    <AirdropDiv key={i} item={item} />
-                                ))}
-                            </div>
+                            {categoryAirdrops.length > 0 ?
+                                <div className='flex flex-wrap gap-4'>
+                                    {categoryAirdrops.map((item, i) => (
+                                        <AirdropDiv key={i} item={item} />
+                                    ))}
+                                </div>
+                                :
+                                <div>No results found...</div>
+                            }
                         </div>
                     }
                 </div>

@@ -206,3 +206,19 @@ exports.UpdateAirdrop = async (req, res) => {
         return res.json({ status: 400, msg: error.message })
     }
 }
+
+exports.CategoryAirdrops = async (req, res) => {
+    try {
+        const { category } = req.params
+        if (!category) return res.json({ status: 404, msg: `Airdrops category is required` })
+
+        const airdrop = await Airdrop.findAll({
+            where: { category },
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: airdrop })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}

@@ -1,21 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import { useParams } from 'react-router-dom'
 import { FaXTwitter } from 'react-icons/fa6'
 import { SiTelegram } from 'react-icons/si'
 import { LuArrowRightLeft } from 'react-icons/lu'
 import { RxExternalLink } from "react-icons/rx";
-import testimg from '../../assets/images/testimg.webp'
-import airdropLogo from '../../assets/images/testimage.jfif'
+import { Apis, GetApi, imageurl } from '../../services/API'
 
 const SingleAirdropPage = () => {
   const { id } = useParams()
   const [singleAirdrop, setSingleAirdrop] = useState({})
   const [dataLoading, setDataLoading] = useState(true)
 
-  setTimeout(() => {
-    setDataLoading(false)
-  }, 2000)
+  useEffect(() => {
+    const FetchSingleAirdrop = async () => {
+      try {
+        const response = await GetApi(`${Apis.admin.single_airdrop}/${id}`)
+        if (response.status === 200) {
+          setSingleAirdrop(response.msg)
+        }
+
+      } catch (error) {
+        //
+      } finally {
+        setDataLoading(false)
+      }
+    }
+    FetchSingleAirdrop()
+  }, [])
 
 
   return (
@@ -74,46 +86,51 @@ const SingleAirdropPage = () => {
               <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
                 <div className='flex items-center gap-2'>
                   <div>
-                    <img alt={singleAirdrop.logo} src={airdropLogo} className='size-14 rounded-full object-cover'></img>
+                    <img alt={singleAirdrop?.logo_image} src={`${imageurl}/airdrops/${singleAirdrop?.logo_image}`} className='size-14 rounded-full object-cover'></img>
                   </div>
-                  <div className='capitalize md:text-4xl text-3xl font-bold'>ape express</div>
+                  <div className='capitalize md:text-4xl text-3xl font-bold'>{singleAirdrop?.title}</div>
                 </div>
                 <div className='flex lg:flex-row lg:gap-40 flex-col gap-8 ml-auto'>
                   <div className='flex items-center gap-2 justify-end'>
-                    <a href='' className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
-                      <FaXTwitter />
-                    </a>
-                    <a href='' className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
-                      <SiTelegram />
-                    </a>
-                    <a href='' className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
-                      <LuArrowRightLeft />
-                    </a>
+                    {singleAirdrop.twitter_link &&
+                      <a href={singleAirdrop.twitter_link} className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
+                        <FaXTwitter />
+                      </a>
+                    }
+                    {singleAirdrop.telegram_link &&
+                      <a href={singleAirdrop.telegram_link} className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
+                        <SiTelegram />
+                      </a>
+                    }
+                    {singleAirdrop.website_link &&
+                      <a href={singleAirdrop.website_link} className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
+                        <LuArrowRightLeft />
+                      </a>
+                    }
                   </div>
                   <div className='flex gap-3 items-center'>
-                    <button className='outline-none bg-primary rounded-[4px] py-2 px-6 text-sm text-lightgreen font-semibold capitalize cursor-default'>featured</button>
-                    <button className='outline-none bg-lightgreen rounded-[4px] py-2 px-6 text-sm text-primary font-bold capitalize cursor-default'>active</button>
+                    <button className='outline-none bg-primary rounded-[4px] py-2 px-6 text-sm text-lightgreen font-semibold capitalize cursor-default'>{singleAirdrop?.category}</button>
+                    <button className='outline-none bg-lightgreen rounded-[4px] py-2 px-6 text-sm text-primary font-bold capitalize cursor-default'>{singleAirdrop?.status}</button>
                   </div>
                 </div>
               </div>
               <div className='grid lg:grid-cols-5 grid-cols-1 gap-8'>
                 <div className='lg:col-span-3 col-span-1'>
-                  <p>Ape express blends ancient traditions with cutting-edge blockchain technology, creating a seamless platform of trust and innovation. With AI-driven insights and decentralized solutions, it transforms spiritual guidance into an advanced digital experience.</p>
-                  <p className='pt-4'>Ape express uses blockchain and advanced AI to bring transparency and personalization to metaphysical consulting. It modernizes practices like Feng Shui and astrology, bridging ancient wisdom with cutting-edge technology for a secure and transformative experience.</p>
+                  <p>{singleAirdrop?.about}</p>
                 </div>
                 <div className='lg:col-span-2 col-span-1'>
-                  <img alt={singleAirdrop.image} src={testimg} className='w-full h-auto'></img>
+                  <img lt={singleAirdrop?.banner_image} src={`${imageurl}/airdrops/${singleAirdrop?.banner_image}`} className='w-full h-auto'></img>
                 </div>
               </div>
               <div className='grid lg:grid-cols-6 grid-cols-1 gap-8'>
                 <div className='lg:col-span-2 col-span-1'>
                   <div className='grid grid-cols-2 gap-4'>
                     <div className='border border-ash bg-secondary w-full h-24 rounded-md flex flex-col gap-2 justify-center items-center overflow-hidden p-4'>
-                      <span className='md:text-lg text-sm font-bold text-center capitalize'>binance</span>
+                      <span className='md:text-lg text-sm font-bold text-center capitalize'>{singleAirdrop?.blockchain}</span>
                       <span className='text-gray-400 md:text-base text-xs text-center'>Blockchain</span>
                     </div>
                     <div className='border border-ash bg-secondary w-full h-24 rounded-md flex flex-col gap-2 justify-center items-center overflow-hidden p-4'>
-                      <span className='md:text-lg text-sm font-bold text-center capitalize'>active</span>
+                      <span className='md:text-lg text-sm font-bold text-center capitalize'>{singleAirdrop?.status}</span>
                       <span className='text-gray-400 md:text-base text-xs text-center'>Mining</span>
                     </div>
                   </div>
@@ -122,16 +139,16 @@ const SingleAirdropPage = () => {
                   <div className='w-full h-fit border border-ash bg-secondary rounded-md py-10 px-4'>
                     <div className='flex flex-col gap-4'>
                       <div className='text-xl font-bold'>Step by step video guide on <span className='capitalize'>ape express</span> Airdrop</div>
-                      <a href='https://youtube.com/ape_guide' className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
-                        <div className='text-lightgreen'>https://youtube.com/ape_guide</div>
-                        <RxExternalLink className='text-lg'/>
+                      <a href={singleAirdrop.video_guide_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
+                        <div className='text-lightgreen'>{singleAirdrop.video_guide_link}</div>
+                        <RxExternalLink className='text-lg' />
                       </a>
                     </div>
                     <div className='flex flex-col gap-4 mt-8'>
                       <div className='text-xl font-bold'>Referral link to earn</div>
-                      <a href='https://app.gradient.network/signup?code=DXD99K' className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
-                        <div className='text-lightgreen'>href='https://app.gradient.network/signup?code=DXD99K'</div>
-                        <RxExternalLink className='text-lg'/>
+                      <a href={singleAirdrop.referral_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
+                        <div className='text-lightgreen'>{singleAirdrop.referral_link}</div>
+                        <RxExternalLink className='text-lg' />
                       </a>
                     </div>
                   </div>

@@ -51,6 +51,7 @@ const admin_urls = {
     all_airdrops: admin + 'all-airdrops',
     single_airdrop: admin + 'single-airdrop',
     update_airdrop: admin + 'update-airdrop',
+    category_airdrops: admin + 'category-airdrops'
 }
 
 export const Apis = {

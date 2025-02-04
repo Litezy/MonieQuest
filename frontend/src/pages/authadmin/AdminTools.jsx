@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
 import AdminToolComp from '../../AdminComponents/AdminToolComp';
@@ -25,7 +25,7 @@ const records = [
         discount: 0,
         link: 'https://app.gradient.network',
         contact_details: '09011234567',
-        status: 'declined'
+        status: 'pending'
     },
     {
         id: 3,
@@ -56,6 +56,16 @@ const AdminTools = () => {
     setTimeout(() => {
         setDataLoading(false)
     }, 2000)
+
+    const pendingTools = useMemo(() => {
+        return allTools.filter((ele) => ele.status === 'pending');
+    }, [allTools])
+    const approvedTools = useMemo(() => {
+        return allTools.filter((ele) => ele.status === 'approved');
+    }, [allTools])
+    const declinedTools = useMemo(() => {
+        return allTools.filter((ele) => ele.status === 'declined');
+    }, [allTools])
 
     const filterTools = () => {
         const mainData = staticData
@@ -109,29 +119,47 @@ const AdminTools = () => {
                                         }
                                         {active === 'pending' &&
                                             <>
-                                                {allTools.filter((ele) => ele.status === 'pending').map((item, i) => (
-                                                    <AdminToolComp key={i} item={item} />
-                                                ))}
+                                                {pendingTools.length > 0 ?
+                                                    <>
+                                                        {pendingTools.map((item, i) => (
+                                                            <AdminToolComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'approved' &&
                                             <>
-                                                {allTools.filter((ele) => ele.status === 'approved').map((item, i) => (
-                                                    <AdminToolComp key={i} item={item} />
-                                                ))}
+                                                {approvedTools.length > 0 ?
+                                                    <>
+                                                        {approvedTools.map((item, i) => (
+                                                            <AdminToolComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                         {active === 'declined' &&
                                             <>
-                                                {allTools.filter((ele) => ele.status === 'declined').map((item, i) => (
-                                                    <AdminToolComp key={i} item={item} />
-                                                ))}
+                                                {declinedTools.length > 0 ?
+                                                    <>
+                                                        {declinedTools.map((item, i) => (
+                                                            <AdminToolComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
                                             </>
                                         }
                                     </div>
                                 </>
                                 :
-                                <div className="w-full text-gray-400 text-center">No record found...</div>
+                                <div className="text-gray-400 text-center">No record found...</div>
                             }
                         </>
                     }
