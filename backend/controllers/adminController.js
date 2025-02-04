@@ -12,7 +12,7 @@ const blockAndNum = 'abcdefghijklmnopqrstuvwxyz0123456789'
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, exchange_sell_rate, giftcard_rate } = req.body
+        const { exchange_buy_rate, buy_min,buy_max,sell_min,sell_max, exchange_sell_rate, giftcard_rate } = req.body
         const utils = await Util.findOne({})
         if (!utils) return res.json({ status: 404, msg: 'Utils not found' })
 
@@ -29,6 +29,22 @@ exports.UpdateUtils = async (req, res) => {
         if (giftcard_rate) {
             if (isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
             utils.giftcard_rate = giftcard_rate
+        }
+        if (buy_min) {
+            if (isNaN(buy_min)) return res.json({ status: 404, msg: `Enter a valid number` })
+            utils.buy_min = buy_min
+        }
+        if (buy_max) {
+            if (isNaN(buy_max)) return res.json({ status: 404, msg: `Enter a valid number` })
+            utils.buy_max = buy_max
+        }
+        if (sell_max) {
+            if (isNaN(sell_max)) return res.json({ status: 404, msg: `Enter a valid number` })
+            utils.sell_max = sell_max
+        }
+        if (sell_min) {
+            if (isNaN(sell_min)) return res.json({ status: 404, msg: `Enter a valid number` })
+            utils.sell_min = sell_min
         }
 
         await utils.save()

@@ -32,11 +32,6 @@ exports.BuyCrypto = async (req, res) => {
             userid: req.user,
             order_no: orderId
         })
-        const nanoid = customAlphabet(blockAndNum, 15);
-        const id = nanoid();
-        await TransHistory.create({
-            user: req.user, tag: 'crypto', type: 'buy', amount, wallet_address, network, trans_id: `0x0${id}`
-        })
         await Notify.create({
             user: req.user, title: 'crypto buy order', content: `Your crypto buy order of ${orderId} has been created, kindly proceed with making payments to the bank details made available on the order.  `, url: `/user/transactions_history`
         })
@@ -91,11 +86,6 @@ exports.SellCrypto = async (req, res) => {
             userid: req.user,
             order_no: orderId
         })
-        const nanoid = customAlphabet(blockAndNum, 15);
-        const id = nanoid();
-        await TransHistory.create({
-            user: req.user, tag: 'crypto', type: 'sell', amount, trans_hash, trans_id: `0x1${id}`
-        })
         await Notify.create({
             user: req.user, title: 'crypto sell order', content: `Your crypto sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.  `, url: `/user/transactions_history`
         })
@@ -135,21 +125,16 @@ exports.SellCrypto = async (req, res) => {
     }
 }
 
-exports.SellGiftcard = async (req, res) => {
+exports.SellGift = async (req, res) => {
     try {
 
         const { brand, amount, code, pin } = req.body
-        if (!brand || !amount || !code) return res.json({ status: 400, msg: "Incomplete request, fill all required fileds." })
+        if (!brand || !amount || !code) return res.json({ status: 400, msg: "Incomplete request, fill all required fields." })
         const findUser = await User.findOne({ where: { id: req.user } })
         if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
         const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
         const newsell = await GiftCardSell.create({
             brand, amount, code, pin, userid: req.user, order_no: orderId
-        })
-        const nanoid = customAlphabet(blockAndNum, 15);
-        const id = nanoid();
-        await TransHistory.create({
-            user: req.user, tag: 'giftcard', type: 'sell', gift_brand: brand, amount, trans_id: `0x2${id}`
         })
         await Notify.create({
             user: req.user, title: 'giftcard sell order', content: `Your giftcard sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.  `, url: `/user/transactions_history`
@@ -195,8 +180,19 @@ exports.getAllTransactions = async (req, res) => {
     try {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
-        const alltrans = await TransHistory.findAll({ where: { user: user ? user.id : req.user } })
+        const alltrans = await TransHistory.findAll({ where: { user: user ? user.id : req.user, status: ['completed', 'canceled'] } })
         if (!alltrans) return res.json({ status: 404, msg: 'No transaction history found' })
+        return res.json({ status: 200, msg: "fetch success", data: alltrans })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+exports.getGiftCardTransactions = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
+        const alltrans = await GiftCardSell.findAll({ where: { userid: user ? user.id : req.user, status: 'pending' } })
+        if (!alltrans) return res.json({ status: 404, msg: 'No order history found' })
         return res.json({ status: 200, msg: "fetch success", data: alltrans })
     } catch (error) {
         ServerError(res, error)
@@ -236,6 +232,19 @@ exports.getSingleOrderHistory = async (req, res) => {
             }
         }
         return res.json({ status: 404, msg: 'Invalid Tag or ID' })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+exports.getSingleGiftcardOrderHistory = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 400, msg: 'Incomplete request' })
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
+        const trans = await GiftCardSell.findAll({ where: { userid: user ? user.id : req.user, id } })
+        if (!trans) return res.json({ status: 404, msg: "Transaction record not found" })
+        return res.json({ status: 200, msg: "fetch success", data: trans })
     } catch (error) {
         ServerError(res, error)
     }
@@ -290,3 +299,59 @@ exports.completeABuyPayment = async (req, res) => {
         ServerError(res, error)
     }
 }
+exports.cancelOrder = async (req, res) => {
+    try {
+        const { id } = req.body
+        if (!id) return res.json({ status: 400, msg: `ID missing, try again` })
+        const findBuyId = await CryptoBuyModel.findOne({ where: { id } })
+        if (!findBuyId) return res.json({ status: 404, msg: "ID not found" })
+        const findUser = await User.findOne({ where: { id: findBuyId.userid } })
+        if (!findUser) return res.json({ status: 404, msg: 'Account owner not found' })
+        findBuyId.status = 'canceled'
+        await findBuyId.save()
+        await Notify.create({
+            user: req.user, title: 'Buy order canceled', content: `Your crypto buy order of ${findBuyId.order_no} has been canceled.  `, url: `/user/transactions_history`
+        })
+        await Mailing({
+            subject: 'Crypto Buy Order canceled',
+            eTitle: `Order ID: ${findBuyId.order_no} Marked as Paid`,
+            eBody: `
+             <div style="font-size: 2rem">Hi ${findUser.first_name},</div>
+             <div style="margin-top: 1.5rem">Your crypto buy order with the ID: ${findBuyId.order_no} has been canceled. If you feel this was done by a mistake, kindly place another order as we are here to serve you better. Thank you for trading with us.</div>
+            `,
+            account: findUser,
+        })
+        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        if (findAdmins.length > 0) {
+            findAdmins.map(async admin => {
+
+                await Notify.create({
+                    user: admin.id,
+                    title: `'crypto buy Order canceled`,
+                    content: `Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by the user ${findUser.first_name}.`,
+                    url: '/admin/exchange/buy_orders',
+                })
+                await Mailing({
+                    subject: 'Crypto Buy Order canceled',
+                    eTitle: `From User ${findUser.first_name}`,
+                    eBody: `
+                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by user. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                    `,
+                    account: admin,
+                })
+            })
+        }
+
+
+        return res.json({ status: 200, msg: "Order successfully canceled" })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+
+// const nanoid = customAlphabet(blockAndNum, 15);
+// const id = nanoid();
+// await TransHistory.create({
+//     user: req.user, tag: 'giftcard', type: 'sell', gift_brand: brand, amount, trans_id: `0x2${id}`
+// })

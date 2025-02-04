@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
 import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
 import FormInput from '../utils/FormInput';
@@ -8,13 +8,14 @@ import { BsInfoCircleFill } from "react-icons/bs";
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../GeneralComponents/Loader';
 import Exchange from '../pages/authuser/Exchange';
-import { Apis, AuthPostApi } from '../services/API';
+import { Apis, AuthGetApi, AuthPostApi } from '../services/API';
 
 
 const BuyCrypto = () => {
     const [screen, setScreen] = useState(1)
     const [check, setCheck] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [isPageLoading, setIsPageLoading] = useState(!navigator.onLine);
     const [modal, setModal] = useState(false)
     const rate = 1715
     const [forms, setForms] = useState({
@@ -48,8 +49,6 @@ const BuyCrypto = () => {
         name: currencies[0].name,
         symbol: currencies[0].symbol
     })
-
-
     const limit = 2000
     const nairaLimit = limit * rate
     const minimum = 10
@@ -86,44 +85,33 @@ const BuyCrypto = () => {
     }, [forms.amount, rate])
 
 
-    const submitToBuy = (e) => {
-        e.preventDefault()
-        console.log(forms, selectedOption)
-
-    }
-
-    const copyToClip = () => {
-        navigator.clipboard.writeText(BankAcc.accountNumber)
-            .then(() => { SuccessAlert('account number copied successfully') })
-            .catch(() => { console.log(`failed to copy account number`) })
-    }
-
     const navigate = useNavigate()
-
+    const fetchOrders = useCallback(async () => {
+        const res = await AuthGetApi(Apis.transaction.crypto_order_history)
+        if (res.status !== 200) {
+            console.log(res.msg)
+            return;
+        }
+    }, [])
     const confirmAndBuy = async (e) => {
         e.preventDefault()
+        setModal(false)
+        setLoading(true)
         const formdata = {
             crypto_currency: forms.type, type: 'buy', wallet_address: forms.wallet_add, network: forms.network,
             amount: forms.amount, wallet_exp: forms.isExpired
         }
-        setModal(false)
-        setLoading(true)
         try {
             const response = await AuthPostApi(Apis.transaction.buy_crypto, formdata)
-            if (response.status !== 200){
+            if (response.status !== 201) {
                 setLoading(false)
                 ErrorAlert(response.msg)
-            } 
+            }
+            fetchOrders()
+            setForms({ amount: '', type: coins[0], network: '', wallet_add: '', isExpired: 'No' })
+            await new Promise((resolve) => setTimeout(resolve, 3000));
             SuccessAlert(response.msg)
             navigate(`/user/exchange/orders`)
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-            setForms({
-                amount: '',
-                type: coins[0],
-                network: '',
-                wallet_add: '',
-                isExpired: 'No'
-            })
         } catch (error) {
             ErrorAlert(error.message)
         } finally {
@@ -131,6 +119,23 @@ const BuyCrypto = () => {
         }
 
     }
+
+
+    useEffect(() => {
+        const handleOnline = () => {
+            setIsPageLoading(false);
+        };
+        const handleOffline = () => {
+            setIsPageLoading(true);
+        };
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+        return () => {
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
+        };
+    }, []);
+
     return (
         <Exchange>
             <div className='w-full'>
@@ -142,7 +147,22 @@ const BuyCrypto = () => {
                         </div>
                     </ModalLayout>
                 }
-                <div className="w-11/12 mx-auto lg:w-full">
+
+                {isPageLoading &&
+                    <div className="mt-10 w-11/12  lg:w-2/3 mx-auto">
+                        {new Array(4).fill(0).map((_,i) => {
+                            return (
+                                <div key={i} className="flex animate-pulse mb-5 items-start gap-1 flex-col">
+                                    <div className="w-32 h-8 rounded-sm bg-gray-500"></div>
+                                    <div className="w-full h-10 bg-gray-500 rounded-sm"></div>
+                                </div>
+                            )
+                        })}
+                    </div>
+
+                }
+
+                {!isPageLoading && <div className="w-11/12 mx-auto lg:w-full">
                     {screen === 1 &&
                         <div className="w-full  lg:w-2/3 mx-auto flex items-center justify-center">
                             <div className="flex w-full  mx-auto mt-5 items-start gap-5 flex-col">
@@ -272,7 +292,7 @@ const BuyCrypto = () => {
                     }
 
 
-                </div>
+                </div>}
 
             </div>
         </Exchange>

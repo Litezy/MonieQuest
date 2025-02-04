@@ -10,6 +10,7 @@ import { TfiTimer } from "react-icons/tfi";
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../GeneralComponents/Loader';
 import Exchange from '../pages/authuser/Exchange';
+import { Apis, AuthPostApi } from '../services/API';
 
 
 const SellCrypto = () => {
@@ -17,22 +18,19 @@ const SellCrypto = () => {
     const [check, setCheck] = useState(false)
     const tags = ['BUY', 'SELL']
     const [modal, setModal] = useState(false)
+    const [isPageLoading, setIsPageLoading] = useState(!navigator.onLine)
     const [loading, setLoading] = useState(false)
     const rate = 1690
     const [forms, setForms] = useState({
         amount: '',
+        trans_hash: '',
         type: coins[0],
         network: 'BTC',
         wallet_add: 'addre4783718jfbfbivnia848882993-20939484883'
     })
 
     const [active, setActive] = useState(tags[0])
-    const handleChange = (e) => {
-        setForms({
-            ...forms,
-            [e.target.name]: e.target.value
-        })
-    }
+    const [confirm, setConfirm] = useState(false)
     const handleAmount = (e) => {
         const rawValue = e.target.value.replace(/,/g, '');
         if (!isNaN(rawValue)) {
@@ -44,30 +42,16 @@ const SellCrypto = () => {
         }
     }
 
+    const handleChange = (e) => {
+        setForms({
+            ...forms, [e.target.name]: e.target.value
+        })
+    }
     const [selectedCurr, setSelectedCurr] = useState({
         name: currencies[0].name,
         symbol: currencies[0].symbol
     })
 
-    const changeCurrency = () => {
-        if (selectedCurr.name === 'USD' && selectedCurr.symbol === '$') {
-            setSelectedCurr({
-                name: currencies[1].name,
-                symbol: currencies[1].symbol
-            })
-            const amt = forms.amount.replace(/,/g, '')
-            const newAmnt = amt * rate
-            setForms({ ...forms, amount: newAmnt.toLocaleString() })
-        } else {
-            setSelectedCurr({
-                name: currencies[0].name,
-                symbol: currencies[0].symbol
-            })
-            const amt = forms.amount.replace(/,/g, '')
-            const newAmnt = amt / rate
-            setForms({ ...forms, amount: newAmnt.toLocaleString() })
-        }
-    }
     const limit = 2500
     const nairaLimit = limit * rate
     const minimum = 10
@@ -99,12 +83,6 @@ const SellCrypto = () => {
     }, [forms.amount, rate])
 
 
-    const submitToBuy = (e) => {
-        e.preventDefault()
-        console.log(forms, selectedOption)
-
-    }
-
     const copyToClip = () => {
         navigator.clipboard.writeText(forms.wallet_add)
             .then(() => { SuccessAlert('wallet address copied successfully') })
@@ -117,188 +95,222 @@ const SellCrypto = () => {
         setModal(false)
         setScreen(2)
     }
-    const confirmOrder = () => {
+    const confirmOrder = async () => {
+        if (!forms.trans_hash) return ErrorAlert(`Please input your transaction hash as proof of transfer`)
+        if (forms.trans_hash.length < 64) return ErrorAlert(`Please input a valid transaction hash.`)
+        setConfirm(false)
         setLoading(true)
-        return setTimeout(() => {
+        const formdata = {
+            amount: forms.amount,
+            crypto_currency: forms.type,
+            type: 'sell',
+            trans_hash: forms.trans_hash
+        }
+        try {
+            const res = await AuthPostApi(Apis.transaction.sell_crypto, formdata)
+            if (res.status !== 201) return ErrorAlert(res.msg)
+            SuccessAlert(res.msg);
+            setForms({ amount: '', type: coins[0], trans_hash: '' });
+            setScreen(1);
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+            navigate('/user/exchange/orders');
+            setLoading(false);
+
+        } catch (error) {
+            ErrorAlert(error.message)
+        } finally {
             setLoading(false)
-            setScreen(3)
-        }, 5000)
+        }
+
     }
+
+
+    useEffect(() => {
+        const handleOnline = () => {
+            setIsPageLoading(false);
+        };
+        const handleOffline = () => {
+            setIsPageLoading(true);
+        };
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+        return () => {
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
+        };
+    }, []);
     return (
         <Exchange>
             <div className='w-full'>
-            {loading &&
-                <ModalLayout clas={`w-11/12 mx-auto`}>
-                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                        <Loader />
-                        <div>...processing</div>
-                    </div>
-                </ModalLayout>
-            }
-            {modal &&
-
-                <ModalLayout setModal={setModal} clas={`w-11/12 lg:w-1/2 mx-auto`}>
-                    <div className="w-full flex flex-col items-center gap-5 bg-white text-dark py-10 rounded-md px-10  ">
-                        <div className="w-full flex flex-col items-center justify-center">
-                            <BsInfoCircleFill className='text-2xl lg:text-3xl ' />
-                            <div className="text-xl font-bold">Please read the instructions below</div>
+                {loading &&
+                    <ModalLayout clas={`w-11/12 mx-auto`}>
+                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
+                            <Loader />
+                            <div>...processing</div>
                         </div>
-                        <div className="flex flex-col items-start gap-2 mt-2">
-                            {sellInstruction.map((inst, i) => {
-                                return (
-                                    <ul key={i} className=" list-disc text-sm">
-                                        <li>{inst}</li>
-                                    </ul>
-                                )
-                            })}
-                        </div>
-                        <div className="flex items-start gap-3">
-                            <input type="checkbox" checked={check} onChange={(e) => setCheck(e.target.checked)} />
-                            <p>I agree to the instructions above and want to proceed to the payment window.</p>
-                        </div>
-                        <button onClick={confirmAndSell} className='mt-10 w-full rounded-md bg-ash hover:bg-lightgreen text-white py-3'>Confirm</button>
-                    </div>
-                </ModalLayout>
-            }
-            <div className="w-11/12 mx-auto lg:w-full ">
-                {screen === 1 && active === 'BUY' &&
-                    <div className="w-full  lg:w-2/3 mx-auto flex items-center justify-center">
-                        <div className="flex w-full  mx-auto mt-5 items-start gap-5 flex-col">
-                            {/* <div className="text-center font-bold text-red-500 w-full">Sell Crypto</div> */}
-                            <div className="flex items-start gap-2 flex-col w-full">
-                                <div className="font-bold text-lg">Coin Type:</div>
-                                <select onChange={(e) => setForms({ ...forms, type: e.target.value })} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
-                                    {coins.map((coin, i) => {
-                                        return (
-                                            <option value={coin} key={i} className="outline-none">{coin}</option>
-                                        )
-                                    })}
-                                </select>
-                                <div className="w- text-red-500 text-sm">Please Note: you can only sell a minimum of $10 a nd maximum of $2,500 and an additional
-                                    fee of $2 (₦3,400) is added</div>
-                            </div>
-                            <div className="flex w-full items-start gap-2 flex-col  ">
-                                <div className="font-bold text-lg">Amount:</div>
-                                <div className="w-full items-center flex px-2 gap-2 border border-gray-400 rounded-lg">
-                                    <div className="w-full">
-                                        <FormInput name={`amount`} border={false} value={forms.amount} onChange={handleAmount} placeholder={selectedCurr.symbol} />
-                                    </div>
-                                    <div className="">{selectedCurr.name}</div>
-                                </div>
-
-                            </div>
-                            <div className="flex item-center justify-between w-full">
-                                <div className="text-sm">Amount in Naira</div>
-                                <div  className="flex items-center gap-1 cursor-pointer">
-                                    <div className="text-sm">{inNaira}</div>
-                                    <TbSwitch2 className='text-lightgreen ' />
-                                </div>
-                            </div>
-                            <div className="flex w-full item-center text-base lg:text-sm justify-between">
-                                <div className="text-sm">Selling rate</div>
-                                <div className="">{rate}/$</div>
-                            </div>
-                            <button onClick={submit} className={`bg-red-600 hover:bg-lightgreen text-white hover:text-ash w-full h-fit py-3.5 text-lg rounded-xl`}>Sell Crypto</button>
-
-                        </div>
-                    </div>
+                    </ModalLayout>
                 }
-                {screen === 2 &&
-                    <div className="w-full  flex items-center justify-center">
-                        <div className="flex w-11/12 lg:w-2/3  mx-auto mt-5 items-start gap-5 flex-col">
-
-                            <div className="flex items-start gap-2 flex-col w-full">
-                                <div className="text-center  w-full text-2xl">Selling <span className='text-red-500 font-bold'>{currencies[0].symbol}{forms.amount}</span> worth of {forms.type} at <br /> <span className='text-red-500 font-bold'>{currencies[1].symbol}{inNaira}</span></div>
-                            </div>
-                            <div className="text-sm text-center w-full">kindly send tokens to the wallet address below</div>
-
-                            <div className="flex w-full items-start gap-2 flex-col  ">
-                                <div className="font-bold text-lg">Network</div>
-                                <div className="w-full ">
-                                    <input readOnly type="text" value={forms.network}
-                                        className='w-full bg-dark focus:border-zinc-300 focus-ring-0 outline-none '
-                                    />
+                {confirm &&
+                    <ModalLayout setModal={setConfirm} clas={`w-11/12 mx-auto lg::w-1/2`}>
+                        <div className="w-full p-5 bg-white text-dark rounded-md flex items-center flex-col justify-center">
+                            <div className="flex flex-col gap-4 w-full">
+                                <div className="font-semibold text-center">To confirm you've sent crypto asset, input the transaction hash below</div>
+                                <div className="text-xs text-green-500">NB: this transaction hash can be found on the blockchain, kindly go through the history of wallet used to get it. </div>
+                                <FormInput formtype='text' value={forms.trans_hash.trim()} name={`trans_hash`} onChange={handleChange} />
+                                <div className="flex w-full items-center justify-between ">
+                                    <button onClick={() => setConfirm(false)} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
+                                    <button onClick={confirmOrder} className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm</button>
                                 </div>
                             </div>
-                            <div className="flex w-full items-start gap-2 flex-col  ">
-                                <div className="font-bold text-lg">Wallet Address</div>
-                                <div className="w-full flex items-center gap-1 border rounded-md  px-2">
-                                    <div className="w-full">
-                                        <FormInput border={false} value={forms.wallet_add} />
-                                    </div>
-                                    <FaCopy onClick={copyToClip} className='text-white text-xl cursor-pointer' />
-
-                                </div>
-                            </div>
-
-                            <div className="flex items-center justify-between w-full gap-10">
-                                <button onClick={() => setScreen(1)} className='w-1/2 bg-primary text-lg rounded-xl py-3'>back</button>
-                                <button onClick={confirmOrder} className={`bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-1/2 h-fit py-3 text-lg rounded-xl`}>I have sent crypto</button>
-                            </div>
-
                         </div>
-                    </div>
+                    </ModalLayout>
+
                 }
 
-                {/* {screen === 5 &&
-                    <div className="w-full min-h-[70dvh] flex items-center justify-center">
-                        <div className="w-full flex items-center gap-5 flex-col">
-                            <div className="flex flex-col items-center gap-2">
-                                <div className="flex items-center text-lightgreen font-bold text-2xl">
-                                    <div className="">{currencies[1].symbol}</div>
-                                    <div className="">{inNaira.toLocaleString()}</div>
-                                </div>
-                                <div className="text-sm text-lightgreen">bank transfer</div>
-                            </div>
+                {modal &&
 
-                            <div className="">Kindly confirm your bank payment details below</div>
-                            <div className="w-11/12 px-5 text-dark py-5 bg-[#fafafa] rounded-md lg:w-2/3 mx-auto flex items-center justify-between flex-col ">
-                                <div className="flex items-center justify-between w-full">
-                                    <div className="">Bank Name</div>
-                                    <div className="">{BankAcc.name}</div>
-                                </div>
-                                <div className="flex items-center justify-between w-full">
-                                    <div className="">Account number</div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="">{BankAcc.accountNumber}</div>
-                                        <FaCopy onClick={copyToClip} className='text-ash text-xs cursor-pointer' />
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between w-full">
-                                    <div className="">Account name</div>
-                                    <div className="">{BankAcc.accountName}</div>
-                                </div>
+                    <ModalLayout setModal={setModal} clas={`w-11/12 lg:w-1/2 mx-auto`}>
+                        <div className="w-full flex flex-col items-center gap-5 bg-white text-dark py-10 rounded-md px-10  ">
+                            <div className="w-full flex flex-col items-center justify-center">
+                                <BsInfoCircleFill className='text-2xl lg:text-3xl ' />
+                                <div className="text-xl font-bold">Please read the instructions below</div>
                             </div>
-                            <button onClick={() => setScreen(4)}
-                                className={`bg-green-500 mt-10 hover:bg-lightgreen text-white 
-                            hover:text-ash lg:w-2/3 py-3 w-11/12 mx-auto text-lg rounded-xl`}>I confirm my details</button>
+                            <div className="flex flex-col items-start gap-2 mt-2">
+                                {sellInstruction.map((inst, i) => {
+                                    return (
+                                        <ul key={i} className=" list-disc text-sm">
+                                            <li>{inst}</li>
+                                        </ul>
+                                    )
+                                })}
+                            </div>
+                            <div className="flex items-start gap-3">
+                                <input type="checkbox" checked={check} onChange={(e) => setCheck(e.target.checked)} />
+                                <p>I agree to the instructions above and want to proceed to the payment window.</p>
+                            </div>
+                            <button onClick={confirmAndSell} className='mt-10 w-full rounded-md bg-ash hover:bg-lightgreen text-white py-3'>Confirm</button>
                         </div>
-                    </div>
-                } */}
-
-                {screen === 3 &&
-                    <div className="">
-                        <div className="w-11/12 mx-auto min-h-[70dvh] flex items-center justify-center">
-
-                            <div className="w-full flex items-center  flex-col">
-                                <div className="rounded-full h-20 w-20 flex items-center justify-center border border-lightgreen">
-                                    <TfiTimer className='text-2xl text-lightgreen' />
-                                </div>
-                                <div className="mt-10 flex flex-col items-center gap-2">
-                                    <div className="">Your transaction is being processed, keep an eye on your dashboard.
-                                    </div>
-                                    <button onClick={() => navigate('/user/dashboard')} className={`bg-green-500  mt-10 hover:bg-lightgreen text-white hover:text-ash py-2 text-center rounded-md w-full`}>
-                                        Go back to dashboard
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </ModalLayout>
                 }
+
+                {isPageLoading &&
+                    <div className="mt-10 w-11/12  lg:w-2/3 mx-auto">
+                        {new Array(4).fill(0).map((_, i) => {
+                            return (
+                                <div key={i} className="flex animate-pulse mb-5 items-start gap-1 flex-col">
+                                    <div className="w-32 h-8 rounded-sm bg-gray-500"></div>
+                                    <div className="w-full h-10 bg-gray-500 rounded-sm"></div>
+                                </div>
+                            )
+                        })}
+                    </div>
+
+                }
+
+                {!isPageLoading && <div className="w-11/12 mx-auto lg:w-full ">
+                    {screen === 1 && active === 'BUY' &&
+                        <div className="w-full  lg:w-2/3 mx-auto flex items-center justify-center">
+                            <div className="flex w-full  mx-auto mt-5 items-start gap-5 flex-col">
+                                {/* <div className="text-center font-bold text-red-500 w-full">Sell Crypto</div> */}
+                                <div className="flex items-start gap-2 flex-col w-full">
+                                    <div className="font-bold text-lg">Cryto Currency:</div>
+                                    <select onChange={(e) => setForms({ ...forms, type: e.target.value })} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
+                                        {coins.map((coin, i) => {
+                                            return (
+                                                <option value={coin} key={i} className="outline-none">{coin}</option>
+                                            )
+                                        })}
+                                    </select>
+                                    <div className="w- text-red-600 text-sm">Please Note: you can only sell a minimum of $10 a nd maximum of $2,500 and an additional
+                                        fee of $2 (₦3,400) is added</div>
+                                </div>
+                                <div className="flex w-full items-start gap-2 flex-col  ">
+                                    <div className="font-bold text-lg">Amount:</div>
+                                    <div className="w-full items-center flex px-2 gap-2 border border-gray-400 rounded-lg">
+                                        <div className="w-full">
+                                            <FormInput name={`amount`} border={false} value={forms.amount} onChange={handleAmount} placeholder={selectedCurr.symbol} />
+                                        </div>
+                                        <div className="">{selectedCurr.name}</div>
+                                    </div>
+
+                                </div>
+                                <div className="flex item-center justify-between w-full">
+                                    <div className="text-sm">Amount in Naira</div>
+                                    <div className="flex items-center gap-1 cursor-pointer">
+                                        <div className="text-sm">{inNaira}</div>
+                                        <TbSwitch2 className='text-lightgreen ' />
+                                    </div>
+                                </div>
+                                <div className="flex w-full item-center text-base lg:text-sm justify-between">
+                                    <div className="text-sm">Selling rate</div>
+                                    <div className="">{rate}/$</div>
+                                </div>
+                                <button onClick={submit} className={`bg-red-600 hover:bg-lightgreen text-white hover:text-ash w-full h-fit py-3.5 text-lg rounded-xl`}>Sell Crypto</button>
+
+                            </div>
+                        </div>
+                    }
+                    {screen === 2 &&
+                        <div className="w-full  flex items-center justify-center">
+                            <div className="flex w-11/12 lg:w-2/3  mx-auto mt-5 items-start gap-5 flex-col">
+
+                                <div className="flex items-start gap-2 flex-col w-full">
+                                    <div className="text-center  w-full text-2xl">Selling <span className='text-red-600 font-bold'>{currencies[0].symbol}{forms.amount}</span> worth of {forms.type} at <br /> <span className='text-red-600 font-bold'>{currencies[1].symbol}{inNaira}</span></div>
+                                </div>
+                                <div className="text-sm text-center w-full">kindly send tokens to the wallet address below</div>
+
+                                <div className="flex w-full items-start gap-2 flex-col  ">
+                                    <div className="font-bold text-lg">Network</div>
+                                    <div className="w-full ">
+                                        <input readOnly type="text" value={forms.network}
+                                            className='w-full bg-dark focus:border-zinc-300 focus-ring-0 outline-none '
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex w-full items-start gap-2 flex-col  ">
+                                    <div className="font-bold text-lg">Wallet Address</div>
+                                    <div className="w-full flex items-center gap-1 border rounded-md  px-2">
+                                        <div className="w-full">
+                                            <FormInput border={false} value={forms.wallet_add} />
+                                        </div>
+                                        <FaCopy onClick={copyToClip} className='text-white text-xl cursor-pointer' />
+
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between w-full gap-10">
+                                    <button onClick={() => setScreen(1)} className='w-1/2 bg-primary text-lg rounded-xl py-3'>back</button>
+                                    <button onClick={() => setConfirm(true)} className={`bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-1/2 h-fit py-3 text-lg rounded-xl`}>I have sent crypto</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+
+                    {screen === 3 &&
+                        <div className="">
+                            <div className="w-11/12 mx-auto min-h-[70dvh] flex items-center justify-center">
+
+                                <div className="w-full flex items-center  flex-col">
+                                    <div className="rounded-full h-20 w-20 flex items-center justify-center border border-lightgreen">
+                                        <TfiTimer className='text-2xl text-lightgreen' />
+                                    </div>
+                                    <div className="mt-10 flex flex-col items-center gap-2">
+                                        <div className="">Your transaction is being processed, keep an eye on your dashboard.
+                                        </div>
+                                        <button onClick={() => navigate('/user/dashboard')} className={`bg-green-500  mt-10 hover:bg-lightgreen text-white hover:text-ash py-2 text-center rounded-md w-full`}>
+                                            Go back to dashboard
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>}
 
             </div>
-
-        </div>
         </Exchange>
     )
 }

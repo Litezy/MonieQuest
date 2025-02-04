@@ -1,6 +1,4 @@
 import Dashboard from "../pages/authuser/Dashboard";
-import Exchange from "../pages/authuser/Exchange";
-import Giftcards from "../pages/authuser/Giftcards";
 import Profile from "../pages/authuser/Profile";
 import AboutPage from "../pages/general/AboutPage";
 import TransHistory from "../pages/authuser/TransHistory";
@@ -57,6 +55,9 @@ import BuyCrypto from "../AuthComponents/BuyCrypto";
 import SellCrypto from "../AuthComponents/SellCrypto";
 import BuyOrdersHistory from "../pages/authuser/OrdersHistory";
 import OrderPage from "../pages/authuser/OrderPage";
+import GiftCardOrders from "../pages/authuser/GiftCardOrders";
+import SellGiftcard from "../pages/authuser/SellGiftcard";
+import OneGiftcardOrder from "../pages/authuser/OneGiftcardOrder";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -84,7 +85,9 @@ export const GeneralPagesLinks = [
 
 export const AuthPagesLinks = [
     { path: '/user/dashboard', component: Dashboard },
-    { path: '/user/giftcards', component: Giftcards },
+    { path: '/user/giftcards/sell', component: SellGiftcard },
+    { path: '/user/giftcards/orders', component: GiftCardOrders },
+    { path: '/user/giftcards/orders/:id', component: OneGiftcardOrder},
     { path: '/user/exchange/buy', component: BuyCrypto },
     { path: '/user/exchange/orders', component: BuyOrdersHistory },
     { path: '/user/exchange/orders/:id/:tag', component: OrderPage },
