@@ -8,6 +8,9 @@ import { MoveToTop } from '../../utils/pageUtils'
 import Rating from '@mui/material/Rating';
 import testimg from '../../assets/images/pdt.jpg'
 
+const categories = [
+    "AI assistant", "eBook", "graphics"
+]
 
 
 const SingleProductPage = () => {
@@ -54,10 +57,10 @@ const SingleProductPage = () => {
                             <div className='flex md:flex-row md:justify-between flex-col gap-6 md:items-end'>
                                 <div className='flex flex-col gap-4'>
                                     <div className='w-48 h-4 rounded-full bg-slate-400 animate-pulse'></div>
-                                    <div className='flex gap-2 items-center'>
-                                        <div className='w-16 h-2 rounded-full bg-slate-400 animate-pulse'></div>
-                                        <div className='text-slate-400'>/</div>
-                                        <div className='w-16 h-2 rounded-full bg-slate-400 animate-pulse'></div>
+                                    <div className='flex gap-2'>
+                                        {new Array(3).fill(0).map((_, i) => (
+                                            <div key={i} className='w-16 h-2 rounded-full bg-slate-400 animate-pulse'></div>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-4'>
@@ -87,9 +90,13 @@ const SingleProductPage = () => {
                         :
                         <div className='flex flex-col gap-6'>
                             <div className='flex md:flex-row md:justify-between flex-col gap-6 md:items-end'>
-                                <div className='flex flex-col gap-4'>
+                                <div className='flex flex-col gap-2'>
                                     <div className='capitalize text-3xl font-extrabold'>playwrite</div>
-                                    <div className='capitalize text-sm flex gap-2'><span>fonts</span> <span>/</span><span>playwrite font</span></div>
+                                    <div className='flex gap-1'>
+                                        {categories.map((item, i) => (
+                                            <div key={i} className=''>{item}{i === categories.length - 1 ? '.' : ','}</div>
+                                        ))}
+                                    </div>
                                 </div>
                                 <div className='flex flex-col gap-2'>
                                     <Rating

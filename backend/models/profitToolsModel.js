@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         gen_id: {type: DataTypes.STRING},
         slug: {type: DataTypes.STRING},
         title: { type: DataTypes.STRING },
-        category: { type: DataTypes.STRING },
+        category: { type: DataTypes.JSON, defaultValue:[] },
         price: { type: DataTypes.FLOAT },
         about: { type: DataTypes.STRING },
         feature1: { type: DataTypes.STRING },

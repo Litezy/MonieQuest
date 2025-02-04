@@ -29,13 +29,13 @@ const TransComp = ({ trans }) => {
                         {trans.tag === 'bank withdrawal' && <GoArrowDownRight className='text-blue-600' />}
                         {trans.tag === 'profit tools' && <GoArrowRight className='text-white' />}
                     </div>
-                    <div className="flex items-start flex-col lg:gap-1">
+                    <div className="flex items-start flex-col gap-1">
                         <div className="flex items-center gap-3">
                             <div className={`text-zinc-200 capitalize`}>{trans.tag ? trans.tag :'Crypto'}</div>
                             {trans.type && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
                             {trans.type && <div className={` ${trans.type === 'buy' ? "text-lightgreen" : 'text-red-600'} capitalize`}> {trans.type}</div>}
                         </div>
-                        <div className="flex items-center gap-1 lg:text-base text-sm">
+                        <div className="flex items-center gap-1 md:text-sm text-xs">
                             <div className="">{trans.date}</div>
                             <div className="w-1 h-1 bg-lightgreen rounded-full"></div>
                             <div className="">{moment(trans.createdAt).format('ddd')}</div>

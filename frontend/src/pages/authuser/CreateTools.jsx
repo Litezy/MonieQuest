@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { SlClock } from "react-icons/sl";
 import { FiUploadCloud } from 'react-icons/fi'
 import { Link } from 'react-router-dom';
@@ -6,9 +6,10 @@ import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout';
 import { ErrorAlert } from '../../utils/pageUtils';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
-import { bankacc } from '../../AuthComponents/AuthUtils';
 import { FaEdit } from 'react-icons/fa';
 import FormInput from '../../utils/FormInput';
+import { useAtom } from 'jotai';
+import { BANK } from '../../services/store';
 
 // const aiTools = [
 //   "Test-to-Image", "Test-to-Text", "code generators", "AI assistants"
@@ -39,11 +40,12 @@ import FormInput from '../../utils/FormInput';
 // ]
 
 const allCategories = [
-  "AI Tools", "Creative Tools", "Productivity Tools", "Business Resources", "Learning and Skill Development", "Media Generators", "Automation and Utility Tools", "Tech and Software Solutions", "eBooks and Written Guides"
+  "AI Tool", "Creative Tool", "Productivity Tool", "Business Resource", "Learning and Skill Development", "Media Generator", "Automation and Utility Tool", "Tech and Software Solution", "eBooks and Written Guide"
 ]
 
 
 const CreateTools = () => {
+  const [bank] = useAtom(BANK)
   const [screen, setScreen] = useState(1)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
@@ -54,7 +56,7 @@ const CreateTools = () => {
     about_tool: '',
     feature1: '',
     feature2: '',
-    bank: '',
+    bank_name: '',
     account_number: '',
     account_name: '',
     video_url: '',
@@ -92,9 +94,9 @@ const CreateTools = () => {
   const PrefillBank = () => {
     setForm({
       ...form,
-      bank: bankacc.bank,
-      account_name: bankacc.account_name,
-      account_number: bankacc.account_number
+      bank_name: bank.bank_name,
+      account_name: bank.account_name,
+      account_number: bank.account_number
     })
   }
 
@@ -103,15 +105,15 @@ const CreateTools = () => {
     setScreen(3)
   }
 
-  const addCategory = (val)=>{
-    setForm((prev) =>{
-      const {category} = prev
-      if(category.includes(val)){
+  const addCategory = (val) => {
+    setForm((prev) => {
+      const { category } = prev
+      if (category.includes(val)) {
         return {
           ...prev,
           category: category.filter(item => item !== val)
         }
-      }else{
+      } else {
         return {
           ...prev,
           category: [...category, val]
@@ -120,9 +122,6 @@ const CreateTools = () => {
     })
   }
 
-  useEffect(()=>{
-    console.log(form.category)
-  },[addCategory])
   return (
     <ProfitToolsLayout>
       <div className='w-11/12 mx-auto'>
@@ -206,7 +205,7 @@ const CreateTools = () => {
                 </div>
                 <div className='flex flex-col gap-3'>
                   {allCategories.map((item, i) => (
-                    <div onClick={()=>addCategory(item)} className='flex gap-3 cursor-pointer' key={i}>
+                    <div onClick={() => addCategory(item)} className='flex gap-3 cursor-pointer' key={i}>
                       <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' >
                         <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category.includes(item) && 'bg-lightgreen'}`}></div>
                       </div>
@@ -264,7 +263,7 @@ const CreateTools = () => {
                   <div className='font-bold text-lg text-lightgreen'>Payment Details</div>
                   <FormInput placeholder='Account Number' name='account_number' value={form.account_number} onChange={formHandler} className='!rounded-none' />
                   <FormInput placeholder='Account Name' name='account_name' value={form.account_name} onChange={formHandler} className='!rounded-none' />
-                  <FormInput placeholder='Enter Bank' name='bank' value={form.bank} onChange={formHandler} className='!rounded-none' />
+                  <FormInput placeholder='Enter Bank' name='bank_name' value={form.bank_name} onChange={formHandler} className='!rounded-none' />
                   <div onClick={PrefillBank} className="w-fit mt-2 px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
                 </div>
               </div>

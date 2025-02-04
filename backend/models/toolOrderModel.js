@@ -6,6 +6,6 @@ module.exports = (sequelize, DataTypes) => {
         total_discount: { type: DataTypes.FLOAT },
         amount_paid: { type: DataTypes.FLOAT },
         status: { type: DataTypes.STRING },
-        products: { type: DataTypes.JSON,defaultValue:[] },
+        products: { type: DataTypes.JSON, defaultValue:[] },
     })
 }

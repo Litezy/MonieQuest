@@ -6,13 +6,11 @@ const { webName, webShort, webURL } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const slug = require('slug')
 const fs = require('fs')
-const { customAlphabet } = require('nanoid');
-const blockAndNum = 'abcdefghijklmnopqrstuvwxyz0123456789'
 
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, buy_min,buy_max,sell_min,sell_max, exchange_sell_rate, giftcard_rate } = req.body
+        const { exchange_buy_rate, buy_min, buy_max, sell_min, sell_max, exchange_sell_rate, giftcard_rate } = req.body
         const utils = await Util.findOne({})
         if (!utils) return res.json({ status: 404, msg: 'Utils not found' })
 
@@ -71,8 +69,7 @@ exports.CreateAirdrop = async (req, res) => {
         const { title, category, kyc, blockchain, type, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
         if (!title || !category || !blockchain || !type || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
 
-        const nanoid = customAlphabet(blockAndNum, 8)
-        const id = nanoid()
+        const gen_id = otpGenerator.generate(10, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
         const filePath = './public/airdrops'
         const date = new Date()
@@ -94,7 +91,7 @@ exports.CreateAirdrop = async (req, res) => {
         await Airdrop.create({
             user: req.user,
             slug: slugData,
-            gen_id: `0x0${id}`,
+            gen_id: gen_id,
             logo_image: logoImageName,
             banner_image: bannerImageName,
             title,

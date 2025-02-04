@@ -11,13 +11,14 @@ import FormButton from '../../utils/FormButton';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import { FiUploadCloud } from 'react-icons/fi';
+import { FaXmark } from 'react-icons/fa6';
 
 const fetchedData = {
     id: 1,
     gen_id: '123456789',
     image: testimg,
     title: 'acrobat',
-    category: 'AI assistant',
+    category: ['AI tool', 'eBook', 'bot', 'media generator'],
     price: 1000,
     about: 'Playwrite is a lovely signature font that boasts sophisticated charm with its delicate curves and flowing lines. Ideal for enhancing the elegance of wedding invites, crafts design, logotype, print design, social media graphics, or branding materials.',
     feature1: 'Generates visually stunning AI-powered graphics, layouts, and designs tailored to your specifications.',
@@ -91,6 +92,14 @@ const AdminSingleTool = () => {
         })
     }
 
+    const removeCategory = (ele) => {
+        const newCategory = form.category.filter(item => item !== ele)
+        setForm({
+            ...form,
+            category: newCategory
+        })
+    }
+
     const copyFunction = (content) => {
         navigator.clipboard.writeText(content)
         SuccessAlert('Text copied successfully')
@@ -99,7 +108,8 @@ const AdminSingleTool = () => {
     const Submit = (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.category || !form.price || !form.about || !form.feature1 || !form.feature2) return ErrorAlert('Enter all required fields')
+        if (form.category.length === 0) return ErrorAlert('Add a category')
+        if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2) return ErrorAlert('Enter all required fields')
         if (isNaN(form.price) || isNaN(form.discount) || isNaN(form.discount_duration)) return ErrorAlert('Price, discount and discount duration must be valid numbers')
     }
 
@@ -153,9 +163,18 @@ const AdminSingleTool = () => {
                                     <div className='text-lightgreen capitalize font-medium'>title:</div>
                                     <FormInput placeholder='Title' name='title' value={form.title} onChange={formHandler} />
                                 </div>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>category:</div>
-                                    <FormInput placeholder='Category' name='category' value={form.category} onChange={formHandler} />
+                                    <div className='flex flex-wrap gap-2'>
+                                        {form.category.map((item, i) => (
+                                            <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl flex gap-2 items-center'>
+                                                <div>{item}</div>
+                                                <div className='text-black hover:text-red-600 text-xs p-1 cursor-pointer rounded-full bg-gray-600' onClick={() => removeCategory(item)}>
+                                                    <FaXmark />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>price ({currencySign[1]}):</div>
