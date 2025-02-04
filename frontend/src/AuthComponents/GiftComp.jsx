@@ -1,24 +1,21 @@
 import React from 'react'
 import { GoArrowDownLeft, GoArrowUpRight } from 'react-icons/go'
+import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { currencies } from './AuthUtils'
-import { Link } from 'react-router-dom'
 
-const OrderComp = ({trans}) => {
-
-    
+const GiftComp = ({trans}) => {
     return (
         <div className='w-full mb-5'>
-           
-            <Link to={`/user/exchange/orders/${trans.id}/${trans.type}`} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2 ">
+
+            <Link to={`/user/giftcards/orders/${trans.id}`} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2 ">
                 <div className="flex items-start gap-2 lg:gap-5 w-fit lg:w-full ">
                     <div className="w-fit px-4 py-4 rounded-full bg-primary">
-                        {trans.type === 'buy' && <GoArrowDownLeft className='text-lightgreen' />}
-                        {trans.type === 'sell' && <GoArrowUpRight className='text-red-600' />}
+                     <GoArrowUpRight className='text-red-600' />
                     </div>
                     <div className="flex items-start flex-col lg:gap-1">
                         <div className="flex items-center gap-3">
-                            <div className={`text-zinc-200 capitalize`}>{trans.tag ? trans.tag : 'Crypto'}</div>
+                            <div className={`text-zinc-200 capitalize`}>{trans.brand}</div>
                             {trans.type && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
                             {trans.type && <div className={` ${trans.type === 'buy' ? "text-lightgreen" : 'text-red-600'} capitalize`}> {trans.type}</div>}
                         </div>
@@ -44,4 +41,4 @@ const OrderComp = ({trans}) => {
     )
 }
 
-export default OrderComp
+export default GiftComp

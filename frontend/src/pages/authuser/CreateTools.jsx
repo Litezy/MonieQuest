@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { SlClock } from "react-icons/sl";
 import { FiUploadCloud } from 'react-icons/fi'
 import { Link } from 'react-router-dom';
@@ -47,7 +47,7 @@ const CreateTools = () => {
   const [screen, setScreen] = useState(1)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
-    category: '',
+    category: [],
     other_category: '',
     price: '',
     title: '',
@@ -103,6 +103,26 @@ const CreateTools = () => {
     setScreen(3)
   }
 
+  const addCategory = (val)=>{
+    setForm((prev) =>{
+      const {category} = prev
+      if(category.includes(val)){
+        return {
+          ...prev,
+          category: category.filter(item => item !== val)
+        }
+      }else{
+        return {
+          ...prev,
+          category: [...category, val]
+        }
+      }
+    })
+  }
+
+  useEffect(()=>{
+    console.log(form.category)
+  },[addCategory])
   return (
     <ProfitToolsLayout>
       <div className='w-11/12 mx-auto'>
@@ -186,9 +206,9 @@ const CreateTools = () => {
                 </div>
                 <div className='flex flex-col gap-3'>
                   {allCategories.map((item, i) => (
-                    <div className='flex gap-3' key={i}>
-                      <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' onClick={() => setForm({ ...form, category: item })}>
-                        <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category === item && 'bg-lightgreen'}`}></div>
+                    <div onClick={()=>addCategory(item)} className='flex gap-3 cursor-pointer' key={i}>
+                      <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' >
+                        <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category.includes(item) && 'bg-lightgreen'}`}></div>
                       </div>
                       <div className='text-sm capitalize'>{item} {item === 'AI assistants' && <span>(<span className='lowercase'>e.g.,</span> chatbots, writing tools)</span>}</div>
                     </div>

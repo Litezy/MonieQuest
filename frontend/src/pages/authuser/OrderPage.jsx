@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Exchange from './Exchange'
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -18,7 +18,8 @@ const OrderPage = () => {
     const [data, setData] = useState({})
     const { id, tag } = useParams()
     const [screen, setScreen] = useState(1)
-    const fetchSingleHistory = async () => {
+
+    const fetchSingleHistory = useCallback(async () => {
         setLoading(true)
         try {
             const res = await AuthGetApi(`${Apis.transaction.single_history}/${id}/${tag}`)
@@ -30,8 +31,16 @@ const OrderPage = () => {
         } finally {
             setLoading(false)
         }
-    }
+    }, [id, tag])
 
+    const fetchOrders = useCallback(async () => {
+        const res = await AuthGetApi(Apis.transaction.crypto_order_history)
+        if (res.status !== 200) {
+            console.log(res.msg)
+            return;
+        }
+    },[])
+   
     const rate = 1750
     useEffect(() => {
         fetchSingleHistory()
@@ -39,6 +48,7 @@ const OrderPage = () => {
 
     const naviagate = useNavigate()
     const [confirm, setConfirm] = useState(false)
+    const [cancel, setCancel] = useState(false)
     const [naira, setNaira] = useState('')
     useEffect(() => {
         if (data?.amount && data.amount.length > 3) {
@@ -62,6 +72,7 @@ const OrderPage = () => {
 
 
     const confirmAndPay = async () => {
+        setConfirm(false)
         setLoad(true)
         const data = { id }
         try {
@@ -70,7 +81,8 @@ const OrderPage = () => {
                 setLoad(false)
                 ErrorAlert(res.msg)
             }
-            delay(3000)
+            fetchOrders()
+            await new Promise((resolve) => setTimeout(resolve, 3000));
             SuccessAlert(res.msg)
             naviagate(`/user/exchange/orders`)
         } catch (error) {
@@ -80,10 +92,31 @@ const OrderPage = () => {
             setLoading(false)
         }
     }
+
+    const cancelOrder = async () => {
+        setCancel(false)
+        setLoad(true)
+        const data = { id }
+        try {
+            const res = await AuthPostApi(Apis.transaction.cancel_order, data)
+            if (res.status !== 200) {
+                setLoad(false)
+                ErrorAlert(res.msg)
+            }
+            fetchOrders()
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+            SuccessAlert(res.msg)
+            naviagate(`/user/exchange/orders`)
+        } catch (error) {
+            ErrorAlert(error.message)
+        } finally {
+            setLoad(false)
+        }
+    }
     return (
         <AuthPageLayout>
             <div className="w-11/12 mx-auto">
-                <Link to={`/user/exchange/orders`} className='w-fit px-4 py-1.5 rounded-md bg-ash'>back to orders </Link>
+                <Link to={`/user/exchange/orders`} className='w-fit px-4 py-1.5 rounded-md bg-primary'>back to orders </Link>
             </div>
             {load &&
                 <ModalLayout setModal={setLoad} clas={`w-11/12 mx-auto md:w-1/2`}>
@@ -110,10 +143,27 @@ const OrderPage = () => {
                 }
                 <div className="w-full text-center capitalize font-bold poppins">Order Number  <span className={`${green}`}> {data.order_no}</span></div>
 
-                {!loading && screen === 1 &&
+                {!loading && screen === 1 && tag === 'buy' &&
 
                     <div className="">
+                        {cancel &&
+                            <ModalLayout setModal={setCancel} clas={`w-11/12 mx-auto md:w-1/2`}>
+                                <div className="w-full p-5 bg-white text-dark rounded-md flex items-center flex-col justify-center">
+                                    <div className="flex flex-col gap-4 w-full">
+                                        <div className="font-semibold text-center">Are you sure you want to cancel this order?</div>
+                                        <div className="flex w-full items-center justify-between ">
+                                            <button onClick={() => setCancel(false)} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
+                                            <button onClick={cancelOrder} className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ModalLayout>
+
+                        }
                         <div className="bg-primary p-10 rounded-md w-11/12 mx-auto mt-5 md:mt-10 mb-5">
+                            {data?.status !== 'paid' && <div className="w-full ml-auto text-end ">
+                                <button onClick={() => setCancel(true)} className='w-fit px-4 py-1.5 rounded-md bg-red-600 '>cancel order</button>
+                            </div>}
                             <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
                                 <div className="flex flex-col gap-3 w-full">
                                     <div className="flex flex-col items-start">
@@ -162,22 +212,86 @@ const OrderPage = () => {
 
                             </div>
 
-                           {data?.status === 'unpaid' ? <div className="w-11/12 mt-5 mx-auto md:w-5/6">
+                            {data?.status === 'unpaid' ? <div className="w-11/12 mt-5 mx-auto md:w-5/6">
                                 <FormButton type='button' onClick={() => setScreen(2)} title={`Proceed to make payment`} />
-                            </div>:
+                            </div> :
 
-                            <>
-                            <div className="mt-5 w-full text-center text-base">Payment made, awaiting crypto release</div>
-                            <div className="mt-5 w-full flex items-center justify-center">
-                            <Link to={`/user/dashboard`} className=' w-1/2 py-2 rounded-md bg-lightgreen text-dark mx-auto text-center text-base bg-'>Go to dashboard</Link>
-                            </div>
-                            </>
-                            
-                        }
+                                <>
+                                    <div className="mt-5 w-full text-center text-base">Payment made, awaiting crypto release</div>
+                                    <div className="mt-5 w-full flex items-center justify-center">
+                                        <Link to={`/user/dashboard`} className=' w-1/2 py-2 rounded-md bg-lightgreen text-dark mx-auto text-center text-base bg-'>Go to dashboard</Link>
+                                    </div>
+                                </>
+
+                            }
                         </div>
                     </div>
                 }
-                {!loading && screen === 2 &&
+                {!loading && screen === 1 && tag ==='sell' &&
+
+                    <div className="">
+                        
+                        <div className="bg-primary p-10 rounded-md w-11/12 mx-auto mt-5 md:mt-10 mb-5">
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
+                                <div className="flex flex-col gap-3 w-full">
+                                    <div className="flex flex-col items-start">
+                                        <div className="text-sm">Crypto Currency:</div>
+                                        <div className="w-full">
+                                            <FormInput value={data.crypto_currency} className={`${green} capitalize`} />
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                        <div className="text-sm">Amount paid in USD:</div>
+                                        <div className="w-full">
+                                            <FormInput value={`${currencies[0].symbol}${data.amount}`} className={`${green}`} />
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                        <div className="text-sm">Amount to receive in NGN:</div>
+                                        <div className="w-full">
+                                            <FormInput value={`${currencies[1].symbol}${naira}`} className={`${green}`} />
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <div className=" flex flex-col gap-3 w-full">
+                                    <div className="w-full">
+                                        <div className="text-sm">Transaction ID/Hash:</div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-full">
+                                                <FormInput value={data?.trans_hash} className={`${green} text-sm`} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-full">
+                                        <div className="text-sm">Status:</div>
+                                        <FormInput value={data?.status} className={`${data?.status === 'paid' ? green : 'text-yellow-300'}`} />
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            {data?.status === 'unpaid' ? <div className="w-11/12 mt-5 mx-auto md:w-5/6">
+                                <FormButton type='button' onClick={() => setScreen(2)} title={`Proceed to make payment`} />
+                            </div> :
+
+                                <>
+                                    <div className="mt-5 w-full text-center text-base">Crypto asset sent, awaiting funds release</div>
+                                    <div className="mt-5 w-full flex items-center justify-center">
+                                        <Link to={`/user/dashboard`} className=' w-1/2 py-2 rounded-md bg-lightgreen text-dark mx-auto text-center text-base bg-'>Go to dashboard</Link>
+                                    </div>
+                                </>
+
+                            }
+                        </div>
+                    </div>
+                }
+                {!loading && screen === 2  && tag === 'buy' &&
 
                     <div className="w-full min-h-[70dvh] flex items-center justify-center">
 
@@ -187,7 +301,7 @@ const OrderPage = () => {
                                     <div className="flex flex-col gap-4 w-full">
                                         <div className="font-semibold text-center">Confirm payment made</div>
                                         <div className="flex w-full items-center justify-between ">
-                                            <button onClick={()=> setConfirm(false)} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
+                                            <button onClick={() => setConfirm(false)} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
                                             <button onClick={confirmAndPay} className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm</button>
                                         </div>
                                     </div>
@@ -224,14 +338,14 @@ const OrderPage = () => {
                             </div>
                             <div className="flex w-11/12 md:w-8/12 items-center gap-5 justify-between">
                                 <button onClick={() => setScreen(1)} className="w-1/2 rounded-md hover:bg-ash/80 py-2.5 bg-ash mx-auto text-center">back</button>
-                                <button onClick={()=>setConfirm(true)} className="w-1/2 hover:bg-lightgreen/90 text-center py-2.5 rounded-md bg-lightgreen text-primary">I have made payment</button>
+                                <button onClick={() => setConfirm(true)} className="w-1/2 hover:bg-lightgreen/90 text-center py-2.5 rounded-md bg-lightgreen text-primary">I have made payment</button>
                             </div>
                         </div>
                     </div>
 
                 }
 
-                {!loading && screen === 3 &&
+                {!loading && screen === 3  && tag === 'buy' &&
                     <div className="">
                         <div className="w-11/12 mx-auto min-h-[80dvh] flex items-center justify-center">
 

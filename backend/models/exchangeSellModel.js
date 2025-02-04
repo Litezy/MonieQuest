@@ -6,6 +6,6 @@ module.exports = (sequelize,DataTypes) =>{
         amount:{type: DataTypes.STRING, allowNull:false},
         order_no:{type: DataTypes.STRING, allowNull:false},
         userid:{type: DataTypes.INTEGER},
-        status:{type: DataTypes.TEXT,defaultValue:'unpaid'}
+        status:{type: DataTypes.TEXT,defaultValue:'pending'}
     })
 }

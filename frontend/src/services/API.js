@@ -40,7 +40,10 @@ const trans_url = {
     all_user_transactions: transaction + 'get_alltrans',
     crypto_order_history: transaction + 'get_order_history',
     single_history: transaction +'single_order_history',
-    complete_payment: transaction +'single_paid_order'
+    complete_payment: transaction +'single_paid_order',
+    cancel_order: transaction +'cancel_order',
+    giftcard_orders: transaction + 'giftcard_order_history',
+    single_giftcard_order: transaction + '/single_giftcard_history'
 }
 
 const admin = 'api/admin/'
