@@ -18,7 +18,7 @@ const fetchedData = {
     gen_id: '123456789',
     image: testimg,
     title: 'acrobat',
-    category: ['AI tool', 'eBook', 'bot', 'media generator'],
+    category: ['AI Tool', 'Creative Tool', 'Media Generator'],
     price: 1000,
     about: 'Playwrite is a lovely signature font that boasts sophisticated charm with its delicate curves and flowing lines. Ideal for enhancing the elegance of wedding invites, crafts design, logotype, print design, social media graphics, or branding materials.',
     feature1: 'Generates visually stunning AI-powered graphics, layouts, and designs tailored to your specifications.',
@@ -34,6 +34,10 @@ const fetchedData = {
     discount_duration: 0,
     duration_type: ''
 }
+
+const allCategories = [
+    "AI Tool", "Creative Tool", "Productivity Tool", "Business Resource", "Learning and Skill Development", "Media Generator", "Automation and Utility Tool", "Tech and Software Solution", "eBooks and Written Guide"
+]
 
 const statuses = [
     "pending", "approved", "declined"
@@ -92,13 +96,24 @@ const AdminSingleTool = () => {
         })
     }
 
-    const removeCategory = (ele) => {
-        const newCategory = form.category.filter(item => item !== ele)
-        setForm({
-            ...form,
-            category: newCategory
+    const addRemoveCategory = (val) => {
+        setForm((prev) => {
+            const { category } = prev
+            if (category.includes(val)) {
+                return {
+                    ...prev,
+                    category: category.filter(item => item !== val)
+                }
+            } else {
+                return {
+                    ...prev,
+                    category: [...category, val]
+                }
+            }
         })
     }
+
+    console.log(form.category)
 
     const copyFunction = (content) => {
         navigator.clipboard.writeText(content)
@@ -167,23 +182,32 @@ const AdminSingleTool = () => {
                                     <div className='text-lightgreen capitalize font-medium'>category:</div>
                                     <div className='flex flex-wrap gap-2'>
                                         {form.category.map((item, i) => (
-                                            <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl flex gap-2 items-center'>
-                                                <div>{item}</div>
-                                                <div className='text-black hover:text-red-600 text-xs p-1 cursor-pointer rounded-full bg-gray-600' onClick={() => removeCategory(item)}>
-                                                    <FaXmark />
+                                            <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl'>
+                                                {item}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className='flex flex-wrap gap-4 mt-2'>
+                                        {allCategories.map((item, i) => (
+                                            <div className='flex gap-2 cursor-pointer' key={i}>
+                                                <div className='w-5 h-5 border border-gray-200 rounded-full flex justify-center items-center' onClick={() => addRemoveCategory(item)}>
+                                                    <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category.includes(item) && 'bg-lightgreen'}`}></div>
                                                 </div>
+                                                <div className='text-sm'>{item}</div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
+                            </div>
+                            <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>price ({currencySign[1]}):</div>
                                     <FormInput placeholder='Price' name='price' value={form.price} onChange={formHandler} />
                                 </div>
-                            </div>
-                            <div className='flex flex-col'>
-                                <div className='text-lightgreen capitalize font-medium'>about:</div>
-                                <FormInput formtype='textarea' placeholder='About tool' name='about' value={form.about} onChange={formHandler} />
+                                <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>about:</div>
+                                    <FormInput formtype='textarea' placeholder='About tool' name='about' value={form.about} onChange={formHandler} />
+                                </div>
                             </div>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>

@@ -50,7 +50,7 @@ const CreateTools = () => {
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     category: [],
-    other_category: '',
+    alt_category: '',
     price: '',
     title: '',
     about_tool: '',
@@ -206,7 +206,7 @@ const CreateTools = () => {
                 <div className='flex flex-col gap-3'>
                   {allCategories.map((item, i) => (
                     <div onClick={() => addCategory(item)} className='flex gap-3 cursor-pointer' key={i}>
-                      <div className='w-5 h-5 border border-white rounded-full flex justify-center items-center' >
+                      <div className='w-5 h-5 border border-gray-200 rounded-full flex justify-center items-center' >
                         <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category.includes(item) && 'bg-lightgreen'}`}></div>
                       </div>
                       <div className='text-sm'>{item}</div>
@@ -214,7 +214,7 @@ const CreateTools = () => {
                   ))}
                   <div className='flex flex-col mt-2'>
                     <div className='text-sm text-lightgreen'>Other? Specify Your Tool or eBook Category:</div>
-                    <FormInput formtype='textarea' placeholder='Explain what your tool can do here...' name='other_category' value={form.other_category} onChange={formHandler} className='!w-72 !h-24 !rounded-none' />
+                    <FormInput formtype='textarea' placeholder='Explain what your tool can do here...' name='alt_category' value={form.alt_category} onChange={formHandler} className='!w-72 !h-24 !rounded-none' />
                   </div>
                 </div>
               </div>

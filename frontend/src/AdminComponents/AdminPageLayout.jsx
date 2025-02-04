@@ -40,6 +40,9 @@ const AdminPageLayout = ({ children }) => {
                 const response = await AuthGetApi(Apis.admin.get_utils)
                 if (response.status === 200) {
                     setUtils(response.msg)
+                
+                }else {
+                    console.log(response.msg)
                 }
 
             } catch (error) {
