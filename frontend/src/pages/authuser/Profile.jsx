@@ -248,7 +248,7 @@ const Profile = () => {
             </div>
             <div className='flex flex-col gap-5'>
               <div className='text-xl capitalize font-medium text-lightgreen'>add a bank account</div>
-              <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1'>
+              <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1 relative'>
                 {loading.sub && <Loading />}
                 <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                 <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!bg-secondary !w-64' border={false} />

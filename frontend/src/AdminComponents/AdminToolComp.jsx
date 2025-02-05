@@ -15,31 +15,36 @@ const AdminToolComp = ({ item }) => {
                     </Link>
                 </div>
             </div>
-            <div className='bg-primary grid md:grid-cols-2 grid-cols-1 md:gap-0 gap-2 text-sm rounded-b-lg capitalize md:p-0 p-4'>
+            <div className='bg-primary grid md:grid-cols-2 grid-cols-1 md:gap-0 gap-2 text-sm rounded-b-lg md:p-0 p-4'>
                 <div className='flex flex-col gap-2 md:p-4 overflow-hidden'>
-                    <div className='flex justify-between gap-4'>
+                    <div className='flex justify-between gap-4 capitalize'>
                         <span>title:</span>
                         <span>{item.title}</span>
                     </div>
                     <div className='flex justify-between gap-4'>
-                        <span>category:</span>
-                        <span>{item.category}</span>
+                        <div>category:</div>
+                        <div className='flex gap-1'>
+                            {JSON.parse(item.category).slice(0, 2).map((ele, i) => (
+                                <div key={i}>{ele}{i !== item.category.length - 1 && ','}</div>
+                            ))}
+                            {item.category.length > 2 && <div>...</div>}
+                        </div>
                     </div>
-                    <div className='flex justify-between gap-4'>
+                    <div className='flex justify-between gap-4 capitalize'>
                         <span>price:</span>
                         <span>{currencySign[1]}{item.price.toLocaleString()}</span>
                     </div>
                 </div>
                 <div className='flex flex-col gap-2 md:p-4 md:border-l border-gray-800 overflow-hidden'>
-                    <div className='flex justify-between gap-4'>
+                    <div className='flex justify-between gap-4 capitalize'>
                         <span>discount:</span>
                         <span>{item.discount > 0 ? <span>{item.discount}%</span> : 'n/a'}</span>
                     </div>
-                    <div className='flex justify-between gap-4'>
+                    <div className='flex justify-between gap-4 capitalize'>
                         <span>link:</span>
                         <a href={item.link}>{item.link}</a>
                     </div>
-                    <div className='flex justify-between gap-4'>
+                    <div className='flex justify-between gap-4 capitalize'>
                         <span>status:</span>
                         <span className={`${item.status === 'approved' ? 'text-green-400' : item.status === 'declined' ? 'text-red-500' : 'text-yellow-300'}`}>{item.status}</span>
                     </div>

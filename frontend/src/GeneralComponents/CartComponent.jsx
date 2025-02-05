@@ -19,12 +19,12 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     const [email, setEmail] = useState('')
     const [screen, setScreen] = useState(activeScreen || 1)
     const [loading, setLoading] = useState(false)
-
+    
     let totalPrice = 0
     let priceAfterDiscount = 0
     cartItems.map((ele) => (
         totalPrice += ele.price,
-        priceAfterDiscount += (100 - ele.discount) / 100 * ele.price
+        priceAfterDiscount += (100 - ele.discount_percentage) / 100 * ele.price
     ))
     let totalDiscount = totalPrice - priceAfterDiscount
 
@@ -91,9 +91,9 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                             <div className='flex md:flex-row flex-col md:justify-between gap-1'>
                                                 <div className='capitalize font-bold md:text-base text-sm'>{item.title}</div>
                                                 <div className='flex items-center md:flex-col flex-row gap-1.5 font-semibold'>
-                                                    {item.discount > 0 && item.price !== undefined?
+                                                    {item.discount_percentage && item.price !== undefined ?
                                                         <>
-                                                            <div>₦{((100 - item.discount) / 100 * item.price).toLocaleString()}</div>
+                                                            <div>₦{((100 - item.discount_percentage) / 100 * item.price).toLocaleString()}</div>
                                                             <div className='text-xs line-through'>${item.price.toLocaleString()}</div>
                                                         </>
                                                         :
@@ -103,7 +103,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                             </div>
                                             <div className='flex justify-between items-center mt-auto text-xs'>
                                                 <button className='outline-none w-fit h-fit bg-secondary rounded-md py-2 px-3 hover:text-lightgreen' onClick={() => RemoveCart(item)}>Remove tool</button>
-                                                {item.discount > 0 && <div className='text-lightgreen md:block hidden'>You are saving {item.discount}%</div>}
+                                                {item.discount_percentage && <div className='text-lightgreen md:block hidden'>You are saving {item.discount_percentage}%</div>}
                                             </div>
                                         </div>
                                     </div>

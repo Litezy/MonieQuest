@@ -57,11 +57,18 @@ const admin_urls = {
     category_airdrops: admin + 'category-airdrops'
 }
 
+const profitTools = 'api/profit_tools/'
+const profit_tools_urls = {
+    submit_tool: profitTools + 'submit-profit-tool',
+    user_tools: profitTools + 'user-profit-tools'
+}
+
 export const Apis = {
     user: user_urls,
     notification: notification_urls,
     transaction: trans_url,
-    admin: admin_urls
+    admin: admin_urls,
+    profitTools: profit_tools_urls
 }
 
 

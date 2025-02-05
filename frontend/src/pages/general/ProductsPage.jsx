@@ -6,7 +6,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
 import { IoCart } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { currencySign, MoveToTop } from "../../utils/pageUtils";
+import { MoveToTop } from "../../utils/pageUtils";
 import CartComponent from "../../GeneralComponents/CartComponent";
 import FormInput from "../../utils/FormInput";
 
@@ -15,17 +15,17 @@ const products = [
     id: 1,
     image: testimg,
     title: "playwrite",
-    category: "fonts",
+    category: ["Fonts", "AI Tool", "Tech & Solution"],
     price: 6000,
-    discount: 50,
+    discount_percentage: 50,
   },
   {
     id: 2,
     image: testimg2,
     title: "the grinch mas",
-    category: "graphics",
+    category: ["Graphics", "Creative Tool"],
     price: 12000,
-    discount: 0,
+    discount_percentage: null,
   },
 ]
 
@@ -109,10 +109,10 @@ const ProductsPage = () => {
                       key={index}
                       className="bg-primary h-fit w-72 rounded-[4px] relative z-10"
                     >
-                      {item.discount > 0 &&
+                      {item.discount_percentage &&
                         <>
                           <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
-                            {item.discount}% off
+                            {item.discount_percentage}% off
                           </div>
                           <div className="edge"></div>
                         </>
@@ -131,22 +131,25 @@ const ProductsPage = () => {
                           </div>
                           <FaCheckCircle className="text-lightgreen text-xl" />
                         </div>
-                        <div className="flex justify-between">
-                          <div className="text-xs capitalize">
-                            in <span className="text-lightgreen">{item.category}</span>
+                        <div className="flex justify-between items-center">
+                          <div className='flex gap-1 text-xs text-lightgreen'>
+                            {item.category.slice(0, 2).map((ele, i) => (
+                              <div key={i} className=''>{ele}{i !== item.category.length - 1 && ','}</div>
+                            ))}
+                            {item.category.length > 2 && <div>...</div>}
                           </div>
                           <div className="flex gap-2 items-center text-sm font-extrabold">
-                            {item.discount > 0  ?
+                            {item.discount_percentage && item.price !== undefined ?
                               <>
                                 <div className="text-[#B2212F] underline">
-                                  ₦{((100 - item.discount) / 100 * item.price).toLocaleString()}
+                                  ₦{((100 - item.discount_percentage) / 100 * item.price).toLocaleString()}
                                 </div>
                                 <div className="line-through">
-                                  ₦{(item.price || 0).toLocaleString()}
+                                  ₦{item.price.toLocaleString()}
                                 </div>
                               </>
                               :
-                              <div>₦{item.price.toLocaleString()}</div>
+                              <div>₦{(item.price || 0).toLocaleString()}</div>
                             }
                           </div>
                         </div>

@@ -6,10 +6,10 @@ module.exports = (sequelize, DataTypes) => {
         image: { type: DataTypes.STRING },
         title: { type: DataTypes.STRING },
         feature: { type: DataTypes.STRING },
-        main_header: { type: DataTypes.STRING },
-        first_paragraph: { type: DataTypes.STRING },
-        second_paragraph: { type: DataTypes.STRING, defaultValue: 'active' },
-        extras: { type: DataTypes.STRING, allowNull: true  },
-        conclusion: { type: DataTypes.STRING, allowNull: true  },
+        main_header: { type: DataTypes.TEXT },
+        first_paragraph: { type: DataTypes.TEXT },
+        second_paragraph: { type: DataTypes.TEXT },
+        extras: { type: DataTypes.TEXT, allowNull: true  },
+        conclusion: { type: DataTypes.TEXT, allowNull: true  },
     })
 }

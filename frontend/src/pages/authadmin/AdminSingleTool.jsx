@@ -17,7 +17,7 @@ const fetchedData = {
     gen_id: '123456789',
     image: testimg,
     title: 'acrobat',
-    category: 'AI assistant',
+    category: ['AI Tool', 'Creative Tool', 'Media Generator'],
     price: 1000,
     about: 'Playwrite is a lovely signature font that boasts sophisticated charm with its delicate curves and flowing lines. Ideal for enhancing the elegance of wedding invites, crafts design, logotype, print design, social media graphics, or branding materials.',
     feature1: 'Generates visually stunning AI-powered graphics, layouts, and designs tailored to your specifications.',
@@ -28,17 +28,20 @@ const fetchedData = {
     link: 'https://app.gradient.network',
     contact_details: '09011234567',
     status: 'pending',
-    listed: 'unlisted',
-    discount: 0,
+    listing: 'unlisted',
+    discount_percentage: 0,
     discount_duration: 0,
     duration_type: ''
 }
 
+const allCategories = [
+    "AI Tool", "Creative Tool", "Productivity Tool", "Business Resource", "Learning and Skill Development", "Media Generator", "Automation and Utility Tool", "Tech and Software Solution", "eBooks and Written Guide"
+]
 const statuses = [
     "pending", "approved", "declined"
 ]
 const durationTypes = [
-    "days", "weeks", "months"
+    "days", "weeks", "months", "years"
 ]
 const listOptions = [
     "listed", "unlisted"
@@ -57,8 +60,8 @@ const AdminSingleTool = () => {
         feature1: singleTool?.feature1,
         feature2: singleTool?.feature2,
         status: singleTool?.status,
-        listed: singleTool?.listed,
-        discount: singleTool?.discount,
+        listing: singleTool?.listing,
+        discount_percentage: singleTool?.discount_percentage,
         discount_duration: singleTool?.discount_duration,
         duration_type: singleTool?.duration_type ? singleTool?.duration_type : durationTypes[0],
     })
@@ -91,6 +94,23 @@ const AdminSingleTool = () => {
         })
     }
 
+    const addRemoveCategory = (val) => {
+        setForm((prev) => {
+            const { category } = prev
+            if (category.includes(val)) {
+                return {
+                    ...prev,
+                    category: category.filter(item => item !== val)
+                }
+            } else {
+                return {
+                    ...prev,
+                    category: [...category, val]
+                }
+            }
+        })
+    }
+
     const copyFunction = (content) => {
         navigator.clipboard.writeText(content)
         SuccessAlert('Text copied successfully')
@@ -99,7 +119,8 @@ const AdminSingleTool = () => {
     const Submit = (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.category || !form.price || !form.about || !form.feature1 || !form.feature2) return ErrorAlert('Enter all required fields')
+        if (form.category.length === 0) return ErrorAlert('Add a category')
+        if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2) return ErrorAlert('Enter all required fields')
         if (isNaN(form.price) || isNaN(form.discount) || isNaN(form.discount_duration)) return ErrorAlert('Price, discount and discount duration must be valid numbers')
     }
 
@@ -153,18 +174,36 @@ const AdminSingleTool = () => {
                                     <div className='text-lightgreen capitalize font-medium'>title:</div>
                                     <FormInput placeholder='Title' name='title' value={form.title} onChange={formHandler} />
                                 </div>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>category:</div>
-                                    <FormInput placeholder='Category' name='category' value={form.category} onChange={formHandler} />
+                                    <div className='flex flex-wrap gap-2'>
+                                        {form.category.map((item, i) => (
+                                            <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl'>
+                                                {item}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className='flex flex-wrap gap-4 mt-2'>
+                                        {allCategories.map((item, i) => (
+                                            <div className='flex gap-2' key={i}>
+                                                <div className='w-5 h-5 border border-gray-200 rounded-full flex justify-center items-center cursor-pointer' onClick={() => addRemoveCategory(item)}>
+                                                    <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category.includes(item) && 'bg-lightgreen'}`}></div>
+                                                </div>
+                                                <div className='text-sm'>{item}</div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
+                            </div>
+                            <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>price ({currencySign[1]}):</div>
                                     <FormInput placeholder='Price' name='price' value={form.price} onChange={formHandler} />
                                 </div>
-                            </div>
-                            <div className='flex flex-col'>
-                                <div className='text-lightgreen capitalize font-medium'>about:</div>
-                                <FormInput formtype='textarea' placeholder='About tool' name='about' value={form.about} onChange={formHandler} />
+                                <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>about:</div>
+                                    <FormInput formtype='textarea' placeholder='About tool' name='about' value={form.about} onChange={formHandler} />
+                                </div>
                             </div>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
@@ -215,7 +254,7 @@ const AdminSingleTool = () => {
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>list product for purchase:</div>
-                                    <SelectComp options={listOptions} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.listed} handleChange={(e) => setForm({ ...form, listed: e.target.value })} />
+                                    <SelectComp options={listOptions} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.listing} handleChange={(e) => setForm({ ...form, listing: e.target.value })} />
                                 </div>
                                 <div className='flex flex-col gap-2'>
                                     <div className='flex gap-1 items-center text-lightgreen '>
@@ -224,8 +263,8 @@ const AdminSingleTool = () => {
                                     </div>
                                     <div className='grid md:grid-cols-2 grid-cols-1 gap-4 items-center'>
                                         <div className='flex flex-col'>
-                                            <div className='text-lightgreen capitalize font-medium'>discount (%):</div>
-                                            <FormInput placeholder='Discount' name='discount' value={form.discount} onChange={formHandler} />
+                                            <div className='text-lightgreen capitalize font-medium'>discount percentage (%):</div>
+                                            <FormInput placeholder='Discount' name='discount_percentage' value={form.discount_percentage} onChange={formHandler} />
                                         </div>
                                         <div className='flex flex-col'>
                                             <div className='text-lightgreen capitalize font-medium'>duration:</div>

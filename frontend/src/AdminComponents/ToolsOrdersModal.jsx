@@ -45,7 +45,7 @@ const ToolsOrdersModal = ({ selected }) => {
             <div className='flex flex-col gap-5'>
                 <div className="text-center text-lightgreen">Products Purchased ({selected.products.length})</div>
                 {selected.products.map((item, i) => (
-                    <div key={i} className='flex flex-col gap-2 border border-zinc-600 p-4'>
+                    <div key={i} className='flex flex-col gap-2 border border-zinc-600 p-4 overflow-x-hidden'>
                         <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                             <div>Products ID</div>
                             <div>{item?.gen_id}</div>
@@ -56,7 +56,11 @@ const ToolsOrdersModal = ({ selected }) => {
                         </div>
                         <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                             <div>Category</div>
-                            <div className='capitalize'>{item?.category}</div>
+                            <div className='flex flex-col gap-1'>
+                                {item.category.map((ele, i) => (
+                                    <div key={i}>{ele}</div>
+                                ))}
+                            </div>
                         </div>
                         <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                             <div>Price</div>

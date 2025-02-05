@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { alltransactions, bankacc, banksArr, currencies } from '../../AuthComponents/AuthUtils'
+import { alltransactions, banksArr, currencies } from '../../AuthComponents/AuthUtils'
 import TransComp from '../../AuthComponents/TransComp'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
@@ -14,6 +14,7 @@ import { BANK } from '../../services/store'
 
 
 const formsal = () => {
+    const [bank] = useAtom(BANK)
     const bal = Number(10500)
     const thresh = Number(10000)
     const [bankAcc, setBankAcc] = useAtom(BANK)
@@ -165,7 +166,7 @@ const formsal = () => {
 
                         </form>
 
-                        <div className="text-xl w-11/12 mx-auto mt-5  lg:text-3xl font-bold text-gray-300 ">Latest Bank Transactions</div>
+                        <div className="text-xl w-11/12 mx-auto mt-5 md:text-3xl font-bold text-gray-300 ">Latest Bank Transactions</div>
                         <div className="mt-5 w-11/12 mx-auto">
                             {alltransactions.filter((trnx) => trnx.tag === 'bank withdrawal').map((trans, i) => {
                                 return (

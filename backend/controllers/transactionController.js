@@ -189,6 +189,7 @@ exports.getAllTransactions = async (req, res) => {
         ServerError(res, error)
     }
 }
+
 exports.getGiftCardTransactions = async (req, res) => {
     try {
         const user = await User.findOne({ where: { id: req.user } })
@@ -241,6 +242,7 @@ exports.getSingleOrderHistory = async (req, res) => {
         ServerError(res, error)
     }
 }
+
 exports.getSingleGiftcardOrderHistory = async (req, res) => {
     try {
         const { id } = req.params
@@ -304,6 +306,7 @@ exports.completeABuyPayment = async (req, res) => {
         ServerError(res, error)
     }
 }
+
 exports.cancelOrder = async (req, res) => {
     try {
         const { id } = req.body
