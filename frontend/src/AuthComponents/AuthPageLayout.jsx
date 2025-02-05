@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import AuthFooter from './AuthFooter'
 import { links } from './AuthUtils'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../assets/images/logo.png'
 import avatar from '../assets/images/avatar.svg'
 import { MoveToTop } from '../utils/pageUtils'
@@ -49,6 +49,7 @@ const AuthPageLayout = ({ children }) => {
     FetchBank()
   }, [])
 
+  const navigate = useNavigate()
   return (
     <div className='w-full'>
       <div className="flex w-full bg-[#1d1e30]">
@@ -57,7 +58,7 @@ const AuthPageLayout = ({ children }) => {
           <div>
             <img src={logo} alt='moniequest-logo' className='h-14 w-auto mx-auto'></img>
           </div>
-          <div className='flex gap-2 items-center justify-center mt-6 bg-primary p-4 rounded-lg w-11/12 h-fit mx-auto'>
+          <div onClick={()=> navigate(`/user/profile`)} className='flex cursor-pointer gap-2 items-center justify-center mt-6 bg-primary p-4 rounded-lg w-11/12 h-fit mx-auto'>
             <img src={user.image ? `${imageurl}/profiles/${user.image}` : avatar} alt='user_profile' className='size-14 object-cover rounded-full border-2 border-ash'></img>
             <div className='text-xl text-center font-bold capitalize text-gray-200'>{user?.first_name} {user?.surname}</div>
           </div>

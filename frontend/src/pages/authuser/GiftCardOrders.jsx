@@ -23,7 +23,7 @@ const GiftCardOrders = () => {
             <div className="w-11/12 mx-auto">
                 <div className="my-5 text-2xl font-bold lg:text-center ">Recent Orders</div>
                 <div className="mt-10">
-                    <div className="mb-5 text-sm ">NB: Completed Orders are found in the <Link to={`/user/transactions_history`} className='text-sky-300 '>Transactions history</Link></div>
+                    <div className="mb-5 text-sm ">NB: Completed Orders are found in the <Link to={`/user/transactions_history`} className='text-indigo-500'>Transactions history</Link></div>
                     {data.map((trans, i) => {
                         return (
                             <GiftComp key={i} trans={trans} />

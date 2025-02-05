@@ -9,25 +9,29 @@ import Loader from '../../GeneralComponents/Loader'
 import Lottie from 'react-lottie'
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout'
 import SelectComp from '../../GeneralComponents/SelectComp'
+import { useAtom } from 'jotai'
+import { BANK } from '../../services/store'
 
 
 const formsal = () => {
     const bal = Number(10500)
     const thresh = Number(10000)
+    const [bankAcc, setBankAcc] = useAtom(BANK)
     const [loading, setLoading] = useState(false)
     const [forms, setForms] = useState({
         bank: '', amount: '', accountNumber: '', accountName: '',
     })
+    const [show,setShow] = useState(false)
     const [showModal, setShowModal] = useState(false)
-
     const handleChange = (e) => {
         setForms({ ...forms, [e.target.name]: e.target.value })
     }
 
     const prefillBank = () => {
+        setShow(true)
         setForms({
             ...forms,
-            bank: bankacc.bank, accountNumber: bankacc.account_number, accountName: bankacc.account_name
+            bank: bankAcc.account_name, accountNumber: bankAcc.account_number, accountName: bankAcc.bank_name
         })
     }
 
@@ -140,14 +144,19 @@ const formsal = () => {
                                 </div>
                                 <div className="">
                                     <div className="text-lightgreen">Bank Name</div>
-                                    <div className="w-full">
-                                        <SelectComp
-                                            value={forms.bank}
-                                            options={banksArr}
-                                            width={450} size={false}
-                                            style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem' }} handleChange={(e) => setForms({ ...forms, bank: e.target.value })} />
+                                    {show ?
+                                        <div className="w-full">
+                                            <FormInput value={bankAcc.account_name}/>
+                                        </div> :
+                                        <div className="w-full">
+                                            <SelectComp
+                                                value={forms.bank}
+                                                options={banksArr}
+                                                width={450} size={false}
+                                                style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem' }} handleChange={(e) => setForms({ ...forms, bank: e.target.value })} />
 
-                                    </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <div className="w-full lg:w-1/2 mx-auto mb-10">

@@ -41,7 +41,11 @@ const AdminProfile = () => {
         account_name: '',
         exchange_buy_rate: '',
         exchange_sell_rate: '',
-        giftcard_rate: ''
+        giftcard_rate: '',
+        buy_min: '',
+        buy_max: '',
+        sell_min: '',
+        sell_max: '',
     })
     const [profile, setProfile] = useState({
         img: user.image ? `${imageurl}/profiles/${user.image}` : avatar,
@@ -162,20 +166,26 @@ const AdminProfile = () => {
     }
 
     const UpdateUtils = async () => {
-        if (!form.exchange_buy_rate || !form.giftcard_rate) return ErrorAlert('Enter all fields')
-        if (isNaN(form.exchange_buy_rate) || isNaN(form.giftcard_rate)) return ErrorAlert('Enter valid numbers')
+        if (!form.exchange_buy_rate || !form.giftcard_rate || !form.sell_max || !form.sell_min || !form.buy_max || !form.buy_min) return ErrorAlert('Enter all fields')
+        if ((isNaN(form.exchange_buy_rate) || isNaN(form.giftcard_rate)) ||isNaN(form.giftcard_rate) || isNaN(form.buy_max) || isNaN(form.buy_min) || isNaN(form.sell_max) || isNaN(form.sell_min)) return ErrorAlert('Enter valid numbers')
 
         const formbody = {
             exchange_buy_rate: parseFloat(form.exchange_buy_rate),
             exchange_sell_rate: parseFloat(form.exchange_sell_rate),
-            giftcard_rate: parseFloat(form.giftcard_rate)
+            giftcard_rate: parseFloat(form.giftcard_rate),
+            buy_max: parseFloat(form.buy_max),
+            buy_min: parseFloat(form.buy_min),
+            sell_min: parseFloat(form.sell_min),
+            sell_max: parseFloat(form.sell_max)
         }
 
         setLoading({
             sub2: true
         })
+        // return console.log(formbody)
         try {
             const response = await AuthPutApi(Apis.admin.update_utils, formbody)
+            console.log(response)
             if (response.status === 200) {
                 SuccessAlert(response.msg)
                 setUtils(response.utils)
@@ -276,19 +286,35 @@ const AdminProfile = () => {
                         </div>
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>update settings</div>
-                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1 relative'>
+                            <div className='w-full h-fit bg-primary rounded-2xl  p-4 flex flex-col gap-1 relative'>
                                 {loading.sub2 && <Loading />}
-                                <div className='flex flex-col gap-3'>
+                                <div className='grid grid-cols-1 md:grid-cols-3 gap-5'>
                                     <div className='flex flex-col'>
-                                        <div className='font-medium text-gray-200 ml-2'>Exchange buy rate:</div>
+                                        <div className='font-medium text-gray-200 ml-2'>Exchange buy rate(NGN):</div>
                                         <FormInput placeholder='Enter rate amount' name='exchange_buy_rate' value={form.exchange_buy_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                     <div className='flex flex-col'>
-                                        <div className='font-medium text-gray-200 ml-2'>Exchange sell rate:</div>
+                                        <div className='font-medium text-gray-200 ml-2'>Exchange sell rate(NGN):</div>
                                         <FormInput placeholder='Enter rate amount' name='exchange_sell_rate' value={form.exchange_sell_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                     <div className='flex flex-col'>
-                                        <div className='font-medium text-gray-200 ml-2'>Giftcard rate:</div>
+                                        <div className='font-medium text-gray-200 ml-2'>Exchange Buy Maximum(USD):</div>
+                                        <FormInput placeholder='Enter rate amount' name='buy_max' value={form.buy_max} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className='font-medium text-gray-200 ml-2'>Exchange Buy Minimum(USD):</div>
+                                        <FormInput placeholder='Enter rate amount' name='buy_min' value={form.buy_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className='font-medium text-gray-200 ml-2'>Exchange Sell Maximum(USD):</div>
+                                        <FormInput placeholder='Enter rate amount' name='sell_max' value={form.sell_max} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className='font-medium text-gray-200 ml-2'>Exchange Sell Minimum(USD):</div>
+                                        <FormInput placeholder='Enter rate amount' name='sell_min' value={form.sell_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className='font-medium text-gray-200 ml-2'>Giftcard rate(in NGN):</div>
                                         <FormInput placeholder='Enter rate amount' name='giftcard_rate' value={form.giftcard_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                 </div>

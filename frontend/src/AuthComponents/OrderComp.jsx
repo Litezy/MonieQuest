@@ -25,7 +25,7 @@ const OrderComp = ({trans}) => {
                         <div className="flex items-center gap-1 lg:text-base text-sm">
                             <div className="text-xs">{moment(trans.createdAt).format(`hh:mm a`)}</div>
                             <div className="w-1 h-1 bg-lightgreen rounded-full"></div>
-                            <div className="">{moment(trans.createdAt).format('ddd')}</div>
+                            <div className="mont text-sm text-indigo-500">{moment(trans.createdAt).format('ddd')}</div>
                         </div>
                     </div>
                 </div>

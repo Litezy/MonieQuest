@@ -4,11 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Apis, AuthGetApi } from '../../services/API'
 
 const Exchange = ({ children }) => {
-  const links = [
-    { path: 'buy', url: '/user/exchange/buy' },
-    { path: 'sell', url: '/user/exchange/sell' },
-    { path: 'orders', url: '/user/exchange/orders', order: true },
-  ]
+ 
   const [ordersNotify, setOrdersNotify] = useState([])
   const fetchOrders = useCallback(async () => {
     const res = await AuthGetApi(Apis.transaction.crypto_order_history)
@@ -29,6 +25,11 @@ const Exchange = ({ children }) => {
     }
   }, [location.pathname]);
   
+  const links = [
+    { path: 'buy', url: '/user/exchange/buy' },
+    { path: 'sell', url: '/user/exchange/sell' },
+    { path: 'orders', url: '/user/exchange/orders', order: ordersNotify && ordersNotify.length > 0 ? true : false },
+  ]
 
   return (
     <AuthPageLayout>

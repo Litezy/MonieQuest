@@ -10,6 +10,8 @@ const Mailing = require('../config/emailDesign')
 const blockAndNum = 'abcdefghijklmnopqrstuvwxyz0123456789'
 const momemt = require('moment')
 const GiftCardSell = require('../models').giftCards
+const BankWithdrawal = require('../models').withdrawals
+const Wallet = require('../models').wallets
 
 
 
@@ -191,7 +193,10 @@ exports.getGiftCardTransactions = async (req, res) => {
     try {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
-        const alltrans = await GiftCardSell.findAll({ where: { userid: user ? user.id : req.user, status: 'pending' } })
+        const alltrans = await GiftCardSell.findAll({
+            where: { userid: user ? user.id : req.user, status: 'pending' },
+            order: [['createdAt', 'DESC']]
+        })
         if (!alltrans) return res.json({ status: 404, msg: 'No order history found' })
         return res.json({ status: 200, msg: "fetch success", data: alltrans })
     } catch (error) {
@@ -350,8 +355,51 @@ exports.cancelOrder = async (req, res) => {
 }
 
 
-// const nanoid = customAlphabet(blockAndNum, 15);
-// const id = nanoid();
-// await TransHistory.create({
-//     user: req.user, tag: 'giftcard', type: 'sell', gift_brand: brand, amount, trans_id: `0x2${id}`
-// })
+
+exports.requestWithdrawal = async (req, res) => {
+    try {
+        const { bank_name, account_number, bank_user, amount } = req.body
+        if (!bank_name || !account_number || !bank_user || !amount) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
+        const findUserBalance = await Wallet.findOne({ where: { user: user ? user.id : req.user } })
+        if (!findUserBalance) return res.json({ status: 404, msg: `failed to fetch user's balance` })
+        if (amount > findUserBalance.balance) return res.json({ status: 400, msg: `Insufficient funds` })
+        const withdrawal = await BankWithdrawal.create({ bank_name, account_number, bank_user, amount })
+
+        await Notify.create({
+            user: req.user, title: 'Withdrawal Request', content: `Your crypto buy order of ${findBuyId.order_no} has been canceled.  `, url: `/user/bank_withdrawal`
+        })
+        await Mailing({
+            subject: 'Crypto Buy Order canceled',
+            eTitle: `Order ID: ${findBuyId.order_no} Marked as Paid`,
+            eBody: `
+             <div style="font-size: 2rem">Hi ${findUser.first_name},</div>
+             <div style="margin-top: 1.5rem">Your crypto buy order with the ID: ${findBuyId.order_no} has been canceled. If you feel this was done by a mistake, kindly place another order as we are here to serve you better. Thank you for trading with us.</div>
+            `,
+            account: findUser,
+        })
+        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        if (findAdmins.length > 0) {
+            findAdmins.map(async admin => {
+
+                await Notify.create({
+                    user: admin.id,
+                    title: `'crypto buy Order canceled`,
+                    content: `Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by the user ${findUser.first_name}.`,
+                    url: '/admin/exchange/buy_orders',
+                })
+                await Mailing({
+                    subject: 'Crypto Buy Order canceled',
+                    eTitle: `From User ${findUser.first_name}`,
+                    eBody: `
+                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by user. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                    `,
+                    account: admin,
+                })
+            })
+        }
+    } catch (error) {
+        ServerError(res, error)
+    }
+}

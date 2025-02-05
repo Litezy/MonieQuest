@@ -28,6 +28,8 @@ db.utils = require('./utilsModel')(sequelize, DataTypes)
 db.exchangeBuys = require(`./exchangeBuyModel`)(sequelize, DataTypes) 
 db.exchangeSells = require(`./exchangeSellModel`)(sequelize, DataTypes)
 db.giftCards = require(`./giftCardModel`)(sequelize, DataTypes)
+db.withdrawals = require(`./withdrawalModel`)(sequelize, DataTypes)
+
 
 //One to Many relationships
 db.users.hasMany(db.exchangeBuys, { foreignKey: 'userid', as: "crypto_buyers" })
