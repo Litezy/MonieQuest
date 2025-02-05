@@ -1,4 +1,4 @@
-const { ServerError } = require('../utils/utils')
+const { ServerError, nairaSign } = require('../utils/utils')
 const User = require('../models').users
 const CryptoBuyModel = require(`../models`).exchangeBuys
 const CryptoSellModel = require(`../models`).exchangeSells
@@ -114,7 +114,7 @@ exports.SellCrypto = async (req, res) => {
                     subject: 'New Crypto Sell Order',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                     <div>Hi Admin, You have a crypto sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, You have a crypto sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newsell.createdAt).format('DD-MM-yyyy')} / ${moment(newsell.createdAt).format('h:mm')}.</div> 
                     `,
                     account: admin,
                 })
@@ -164,7 +164,7 @@ exports.SellGift = async (req, res) => {
                     subject: 'New Crypto Buy Order',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                     <div>Hi Admin, You have a crypto sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, You have a crypto sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newsell.createdAt).format('DD-MM-yyyy')} / ${moment(newsell.createdAt).format('h:mm')}.</div> 
                     `,
                     account: admin,
                 })
@@ -293,7 +293,7 @@ exports.completeABuyPayment = async (req, res) => {
                     subject: 'Crypto Buy Order Marked as Paid',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been marked paid, kindly confirm from your bank and release crypto for user ${findUser.first_name}. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been marked paid, kindly confirm from your bank and release crypto for user ${findUser.first_name}. ${moment(findBuyId.createdAt).format('DD-MM-yyyy')} / ${moment(findBuyId.createdAt).format('h:mm')}.</div> 
                     `,
                     account: admin,
                 })
@@ -335,7 +335,7 @@ exports.cancelOrder = async (req, res) => {
 
                 await Notify.create({
                     user: admin.id,
-                    title: `'crypto buy Order canceled`,
+                    title: `Crypto buy Order canceled`,
                     content: `Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by the user ${findUser.first_name}.`,
                     url: '/admin/exchange/buy_orders',
                 })
@@ -343,7 +343,7 @@ exports.cancelOrder = async (req, res) => {
                     subject: 'Crypto Buy Order canceled',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by user. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by user. ${moment(findBuyId.createdAt).format('DD-MM-yyyy')} / ${moment(findBuyId.createdAt).format('h:mm')}.</div> 
                     `,
                     account: admin,
                 })
@@ -365,22 +365,39 @@ exports.requestWithdrawal = async (req, res) => {
         if (!bank_name || !account_number || !bank_user || !amount) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
-        const findUserBalance = await Wallet.findOne({ where: { user: user ? user.id : req.user } })
-        if (!findUserBalance) return res.json({ status: 404, msg: `failed to fetch user's balance` })
-        if (amount > findUserBalance.balance) return res.json({ status: 400, msg: `Insufficient funds` })
-        const withdrawal = await BankWithdrawal.create({ bank_name, account_number, bank_user, amount })
-
+        const findUserWallet = await Wallet.findOne({ where: { user: user ? user.id : req.user } })
+       if (!findUserWallet) {
+            await Wallet.create({
+                user: req.user
+            })
+        }
+        if (amount > findUserWallet.balance) return res.json({ status: 400, msg: `Insufficient funds` })
+        if (isNaN(amount)) return res.json({ status: 400, msg: 'Please input a valid number' })       
+        const newamt = parseFloat(findUserWallet.balance - amount)
+        findUserWallet.balance = newamt
+        await findUserWallet.save()
+        const withdrawal = await BankWithdrawal.create({ bank_name, userid: req.user, account_number, bank_user, amount })
+      
+        const formattedAmt = amount.toLocaleString()
+        const nanoid = customAlphabet(blockAndNum, 15)
+        const transId = nanoid()
+        await TransHistory.create({
+            user: user.id,
+            tag: 'Bank withdrawal',
+            bank_name, account_number, account_name: bank_user, amount, trans_id: transId
+        })
         await Notify.create({
-            user: req.user, title: 'Withdrawal Request', content: `Your crypto buy order of ${findBuyId.order_no} has been canceled.  `, url: `/user/bank_withdrawal`
+            user: req.user, title: 'Withdrawal Request', content: `You placed a bank withdrawal of ${nairaSign}${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `, url: `/user/bank_withdrawal`
         })
         await Mailing({
-            subject: 'Crypto Buy Order canceled',
-            eTitle: `Order ID: ${findBuyId.order_no} Marked as Paid`,
+            subject: 'Bank Withdrawal ',
+            eTitle: `Withdrawal of ${nairaSign}${formattedAmt} processing`,
             eBody: `
-             <div style="font-size: 2rem">Hi ${findUser.first_name},</div>
-             <div style="margin-top: 1.5rem">Your crypto buy order with the ID: ${findBuyId.order_no} has been canceled. If you feel this was done by a mistake, kindly place another order as we are here to serve you better. Thank you for trading with us.</div>
+             <div style="font-size: 2rem">Hi ${user.first_name},</div>
+             <div style="margin-top: 1.5rem">We have received your withdrawal request submitted  for the amount of ${nairaSign}${formattedAmt} to be transferred to your account ending in ******${account_number.slice(-4)}. Our team is currently reviewing your request and will process it within a short period.</div>
+             <div style="margin-top: 1.5rem; color: #ffff">Thank you for choosing our services.</div>
             `,
-            account: findUser,
+            account: user,
         })
         const findAdmins = User.findAll({ where: { role: 'admin' } })
         if (findAdmins.length > 0) {
@@ -388,20 +405,21 @@ exports.requestWithdrawal = async (req, res) => {
 
                 await Notify.create({
                     user: admin.id,
-                    title: `'crypto buy Order canceled`,
-                    content: `Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by the user ${findUser.first_name}.`,
+                    title: `Bank withdrawal Request`,
+                    content: `Hi Admin, A bank withdrawal request with the transaction ID of: ${transId} has been made, kindly review and credit customer ${user.first_name}.`,
                     url: '/admin/exchange/buy_orders',
                 })
                 await Mailing({
-                    subject: 'Crypto Buy Order canceled',
-                    eTitle: `From User ${findUser.first_name}`,
+                    subject: 'Bank Withdrawal Request',
+                    eTitle: `From User ${user.first_name}`,
                     eBody: `
-                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by user. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, A bank withdrawal request with the transaction ID of: ${transId} has been made, kindly review and credit customer ${user.first_name}. ${moment(withdrawal.createdAt).format('DD-MM-yyyy')} / ${moment(withdrawal.createdAt).format('h:mm')}.</div> 
                     `,
                     account: admin,
                 })
             })
         }
+        return res.json({ status: 200, msg: "Withdrawal placed successfully" })
     } catch (error) {
         ServerError(res, error)
     }

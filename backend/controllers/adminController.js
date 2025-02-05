@@ -10,44 +10,56 @@ const fs = require('fs')
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, buy_min, buy_max, sell_min, sell_max, exchange_sell_rate, giftcard_rate } = req.body
+        const { exchange_buy_rate, buy_min,bank_withdraw_min, buy_max, sell_min, sell_max, exchange_sell_rate, giftcard_rate } = req.body
         const utils = await Util.findOne({})
-        if (!utils) return res.json({ status: 404, msg: 'Utils not found' })
-
-        if (exchange_buy_rate) {
-            if (isNaN(exchange_buy_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
-            utils.exchange_buy_rate = exchange_buy_rate
+        if (!utils){
+            const newUtils = await Util.create({
+                exchange_buy_rate,exchange_sell_rate,buy_max,buy_min,sell_max,sell_min,giftcard_rate
+            })
+            return res.json({ status: 200, msg: 'Rate(s) created successfully', utils: newUtils })
+        }
+        else if (utils){
+            if (exchange_buy_rate) {
+                if (isNaN(exchange_buy_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
+                utils.exchange_buy_rate = exchange_buy_rate
+            }
+    
+            if (exchange_sell_rate) {
+                if (isNaN(exchange_sell_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
+                utils.exchange_sell_rate = exchange_sell_rate
+            }
+            if (bank_withdraw_min) {
+                if (isNaN(bank_withdraw_min)) return res.json({ status: 404, msg: `Enter a valid number` })
+                utils.bank_withdraw_min = bank_withdraw_min
+            }
+    
+            if (giftcard_rate) {
+                if (isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
+                utils.giftcard_rate = giftcard_rate
+            }
+            if (buy_min) {
+                if (isNaN(buy_min)) return res.json({ status: 404, msg: `Enter a valid number` })
+                utils.buy_min = buy_min
+            }
+            if (buy_max) {
+                if (isNaN(buy_max)) return res.json({ status: 404, msg: `Enter a valid number` })
+                utils.buy_max = buy_max
+            }
+            if (sell_max) {
+                if (isNaN(sell_max)) return res.json({ status: 404, msg: `Enter a valid number` })
+                utils.sell_max = sell_max
+            }
+            if (sell_min) {
+                if (isNaN(sell_min)) return res.json({ status: 404, msg: `Enter a valid number` })
+                utils.sell_min = sell_min
+            }
+    
+            await utils.save()
+    
+            return res.json({ status: 200, msg: 'Rate(s) updated successfully', utils: utils })
         }
 
-        if (exchange_sell_rate) {
-            if (isNaN(exchange_sell_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
-            utils.exchange_sell_rate = exchange_sell_rate
-        }
-
-        if (giftcard_rate) {
-            if (isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
-            utils.giftcard_rate = giftcard_rate
-        }
-        if (buy_min) {
-            if (isNaN(buy_min)) return res.json({ status: 404, msg: `Enter a valid number` })
-            utils.buy_min = buy_min
-        }
-        if (buy_max) {
-            if (isNaN(buy_max)) return res.json({ status: 404, msg: `Enter a valid number` })
-            utils.buy_max = buy_max
-        }
-        if (sell_max) {
-            if (isNaN(sell_max)) return res.json({ status: 404, msg: `Enter a valid number` })
-            utils.sell_max = sell_max
-        }
-        if (sell_min) {
-            if (isNaN(sell_min)) return res.json({ status: 404, msg: `Enter a valid number` })
-            utils.sell_min = sell_min
-        }
-
-        await utils.save()
-
-        return res.json({ status: 200, msg: 'Rate(s) updated successfully', utils: utils })
+       
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }

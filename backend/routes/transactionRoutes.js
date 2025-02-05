@@ -1,4 +1,4 @@
-const { BuyCrypto, SellCrypto, SellGift, getAllTransactions, getUserCryptoOrderHistory, getSingleOrderHistory, completeABuyPayment, cancelOrder, getGiftCardTransactions, getSingleGiftcardOrderHistory, } = require('../controllers/transactionController')
+const { BuyCrypto, SellCrypto, SellGift, getAllTransactions, getUserCryptoOrderHistory, getSingleOrderHistory, completeABuyPayment, cancelOrder, getGiftCardTransactions, getSingleGiftcardOrderHistory, requestWithdrawal, } = require('../controllers/transactionController')
 const { UserMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -13,4 +13,5 @@ router.post('/single_paid_order', UserMiddleware,completeABuyPayment)
 router.post('/cancel_order', UserMiddleware,cancelOrder)
 router.get('/giftcard_order_history',UserMiddleware, getGiftCardTransactions)
 router.get('/single_giftcard_history/:id', UserMiddleware,getSingleGiftcardOrderHistory)
+router.post('/request_withdrawal', UserMiddleware,requestWithdrawal)
 module.exports = router

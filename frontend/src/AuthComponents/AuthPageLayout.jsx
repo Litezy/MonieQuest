@@ -7,47 +7,36 @@ import avatar from '../assets/images/avatar.svg'
 import { MoveToTop } from '../utils/pageUtils'
 import { Apis, AuthGetApi, imageurl } from '../services/API'
 import { useAtom } from 'jotai'
-import { BANK, PROFILE, WALLET } from '../services/store'
+import { BANK, PROFILE, UTILS, WALLET } from '../services/store'
 
 
 const AuthPageLayout = ({ children }) => {
   const [user] = useAtom(PROFILE)
   const [, setWallet] = useAtom(WALLET)
   const [, setBank] = useAtom(BANK)
+  const [, setUtils] = useAtom(UTILS)
   const location = useLocation()
   const pathName = location.pathname
   const active = 'text-lightgreen rounded-sm bg-[#1e333c]'
   const nonactive = 'hover:bg-primary rounded-sm text-[#9696b5]'
 
   useEffect(() => {
-    const FetchWallet = async () => {
+    const FetchUtils = async () => {
       try {
-        const response = await AuthGetApi(Apis.user.get_wallet)
+        const response = await AuthGetApi(Apis.user.get_user_utils)
         if (response.status === 200) {
-          setWallet(response.msg)
+          const data = response.data
+          setBank(data.bank)
+          setWallet(data.wallet)
+          setUtils(data.utils)
         }
-
       } catch (error) {
         //
       }
     }
-    FetchWallet()
+   FetchUtils()
   }, [])
 
-  useEffect(() => {
-    const FetchBank = async () => {
-      try {
-        const response = await AuthGetApi(Apis.user.get_bank_account)
-        if (response.status === 200) {
-          setBank(response.msg)
-        }
-
-      } catch (error) {
-        //
-      }
-    }
-    FetchBank()
-  }, [])
 
   const navigate = useNavigate()
   return (

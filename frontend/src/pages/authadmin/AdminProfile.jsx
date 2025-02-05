@@ -45,7 +45,8 @@ const AdminProfile = () => {
         buy_min: '',
         buy_max: '',
         sell_min: '',
-        sell_max: ''
+        sell_max: '',
+        bank_min:''
     })
     const [profile, setProfile] = useState({
         img: user.image ? `${imageurl}/profiles/${user.image}` : avatar,
@@ -85,6 +86,7 @@ const AdminProfile = () => {
             buy_max: utils?.buy_max || '',
             sell_min: utils?.sell_min || '',
             sell_max: utils?.sell_max || '',
+            bank_min: utils?.bank_withdraw_min || '',
         })
     }, [utils])
 
@@ -177,7 +179,8 @@ const AdminProfile = () => {
             buy_min: parseFloat(form.buy_min),
             buy_max: parseFloat(form.buy_max),
             sell_min: parseFloat(form.sell_min),
-            sell_max: parseFloat(form.sell_max)
+            sell_max: parseFloat(form.sell_max),
+            bank_withdraw_min: parseFloat(form.bank_min)
         }
 
         setLoading({
@@ -317,6 +320,10 @@ const AdminProfile = () => {
                                     <div className='flex flex-col'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Sell max (USD)</div>
                                         <FormInput placeholder='Enter maximum buy amount' name='sell_max' value={form.sell_max} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className='font-medium text-gray-200 text-sm ml-2'>Bank Withdrawal Min (NGN)</div>
+                                        <FormInput placeholder='Enter maximum buy amount' name='bank_min' value={form.bank_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                     <FormButton title='Update' className='!py-3 !text-base mt-5' type='button' onClick={UpdateUtils} />
                                 </div>

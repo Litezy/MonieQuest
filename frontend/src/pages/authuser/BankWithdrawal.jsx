@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { alltransactions, banksArr, currencies } from '../../AuthComponents/AuthUtils'
 import TransComp from '../../AuthComponents/TransComp'
 import FormInput from '../../utils/FormInput'
@@ -10,19 +10,34 @@ import Lottie from 'react-lottie'
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import { useAtom } from 'jotai'
-import { BANK } from '../../services/store'
+import { BANK, UTILS, WALLET } from '../../services/store'
+import { Apis, AuthGetApi, AuthPostApi } from '../../services/API'
 
 
 const formsal = () => {
     const [bank] = useAtom(BANK)
-    const bal = Number(10500)
-    const thresh = Number(10000)
-    const [bankAcc, setBankAcc] = useAtom(BANK)
+    const [wallet,setWallet] = useAtom(WALLET)
+    const [utils] = useAtom(UTILS)
+    const [bankAcc] = useAtom(BANK)
     const [loading, setLoading] = useState(false)
     const [forms, setForms] = useState({
         bank: '', amount: '', accountNumber: '', accountName: '',
     })
-    const [show,setShow] = useState(false)
+
+        const FetchUtils = async () => {
+          try {
+            const response = await AuthGetApi(Apis.user.get_user_utils)
+            if (response.status === 200) {
+              const data = response.data
+              setWallet(data.wallet)
+            }
+          } catch (error) {
+            console.log(error)
+          }
+        }
+       
+    
+    const [show, setShow] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const handleChange = (e) => {
         setForms({ ...forms, [e.target.name]: e.target.value })
@@ -58,22 +73,40 @@ const formsal = () => {
         }
     };
 
-    const afterSub = () => {
-        setShowModal(true)
-        setLoading(false)
-    }
 
-    const submitRequest = (e) => {
+    const submitRequest = async (e) => {
         e.preventDefault()
         const convertAmt = forms.amount.replace(/,/g, '')
-        if (convertAmt < thresh) return ErrorAlert(`minimum of ${currencies[1].symbol}${bal.toLocaleString()} is required to withdraw`)
-        if (convertAmt > bal) return ErrorAlert('Insufficient balance')
+        if (convertAmt < utils.bank_withdraw_min) return ErrorAlert(`minimum of ${currencies[1].symbol}${utils.bank_withdraw_min?.toLocaleString()} is required to withdraw`)
+        if (convertAmt > wallet.balance) return ErrorAlert('Insufficient balance')
+        const formdata = {
+            bank_name: forms.bank,
+            account_number: forms.accountNumber,
+            bank_user: forms.accountName,
+            amount: convertAmt
+        }
         setLoading(true)
-        setForms({ accountName: "", accountNumber: '', amount: '', bank: "" })
-        setPrefillAcc({ status: false, value: '' })
-        return setTimeout(() => { afterSub() }, 4000)
+        try {
+            const res = await AuthPostApi(Apis.transaction.request_withdrawal, formdata)
+            if (res.status !== 200) {
+                console.log(res)
+                return ErrorAlert(res.msg)
+            }
+            setForms({ accountName: "", accountNumber: '', amount: '', bank: "" })
+            FetchUtils()
+            await new Promise((resolve) => setTimeout(resolve, 3000));
+            setShowModal(true)
+            setLoading(false)
+        } catch (error) {
+            ErrorAlert(`failed to place withdrawal, try again!`)
+            console.log(error.message)
+        }finally{
+            setLoading(false)
+        }
+
     }
 
+    // console.log(utils)
     return (
         <AuthPageLayout>
             <div className='w-full'>
@@ -89,7 +122,7 @@ const formsal = () => {
                     <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 min-h-20`}>
                         <div className="w-full flex-col h-fit flex items-center justify-center">
                             <Lottie options={defaultOptions} height={250} width={300} />
-                            <div className="text-base">Your withdrawal is successful</div>
+                            <div className="text-base">Your withdrawal request is successful</div>
                             <button onClick={() => setShowModal(false)} className="mt-10 w-fit px-8 py-2 rounded-md bg-red-600">close</button>
                         </div>
                     </ModalLayout>
@@ -97,21 +130,22 @@ const formsal = () => {
                 {!showModal && <><div className=' w-11/12 mx-auto flex items-center justify-center'>
                     <div className='rounded-xl bg-primary flex-col gap-3 p-5 flex items-center w-full lg:w-[75%]'>
                         <div className='text-lightgreen capitalize'>available balance</div>
-                        <div className='md:text-5xl text-4xl font-bold'>{currencies[1].symbol}{bal.toLocaleString()}</div>
+                        <div className='md:text-5xl text-4xl font-bold'>{currencies[1].symbol}{wallet.balance?.toLocaleString()}</div>
                         <div className='flex md:gap-10 gap-6 items-center mt-2'>
                             <div className='flex flex-col gap-1'>
                                 <div className='flex gap-1 items-center'>
                                     <div className='md:size-3.5 size-3 bg-lightgreen rounded-full'></div>
                                     <div className='md:text-sm text-xs capitalize font-medium'>total deposit</div>
                                 </div>
-                                <div className='font-bold'>{currencies[1].symbol}238,224.60</div>
+                                <div className='font-bold'>{currencies[1].symbol}{Object.values(wallet).length !== 0 ? <span>{wallet.total_deposit.toFixed(2).toLocaleString()} </span> : <span>0.00</span>}</div>
                             </div>
                             <div className='flex flex-col gap-1 border-l-2 md:pl-10 pl-6'>
                                 <div className='flex gap-1 items-center'>
                                     <div className='md:size-3.5 size-3 bg-red-600 rounded-full'></div>
                                     <div className='md:text-sm text-xs capitalize font-medium'>outflow</div>
                                 </div>
-                                <div className='font-bold'>{currencies[1].symbol}160,000.01</div>
+                                <div className='font-bold'>{currencies[1].symbol}
+                                    {Object.values(wallet).length !== 0 ? <span>{wallet.total_outflow.toFixed(2).toLocaleString()} </span> : <span>0.00</span>}</div>
                             </div>
                         </div>
                     </div>
@@ -121,7 +155,7 @@ const formsal = () => {
                         <form onSubmit={submitRequest} className="w-full bg-primary p-5">
                             <div className="flex items-center flex-col lg:flex-row w-full justify-between  mb-5">
                                 <div className="text-xl lg:text-3xl font-bold text-gray-300  ">Request Withdrawal</div>
-                                <div className="text-sm text-red-600">minimum of {currencies[1].symbol}10,000 to initiate withdrawal</div>
+                                <div className="text-sm text-red-600">minimum of {currencies[1].symbol}{utils.bank_withdraw_min} to initiate withdrawal</div>
                             </div>
                             <div onClick={prefillBank} className="mb-5 w-fit px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
                             <div className="grid md:grid-cols-2 grid-cols-1 gap-5 lg:gap-10 mb-5">
@@ -147,7 +181,7 @@ const formsal = () => {
                                     <div className="text-lightgreen">Bank Name</div>
                                     {show ?
                                         <div className="w-full">
-                                            <FormInput value={bankAcc.account_name}/>
+                                            <FormInput value={bankAcc.account_name} />
                                         </div> :
                                         <div className="w-full">
                                             <SelectComp
@@ -161,7 +195,7 @@ const formsal = () => {
                                 </div>
                             </div>
                             <div className="w-full lg:w-1/2 mx-auto mb-10">
-                                <FormButton disabled={bal < thresh ? true : false} title={`Request Withdrawal`} />
+                                <FormButton disabled={wallet.balance < utils.bank_withdraw_min ? true : false} title={`Request Withdrawal`} />
                             </div>
 
                         </form>

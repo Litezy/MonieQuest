@@ -25,7 +25,7 @@ const Mailing = async ({ eTitle, eBody, account, subject }) => {
                  <div>
                  <img src='https://res.cloudinary.com/dnz3cbnxr/image/upload/v1725463522/qjtwmzzj6orqraedef04.png'  style="width: 0.75rem; height: fit;  padding-right: 0.2rem" />
                   </div>
-                 <div>${webName} 2024, All rights reserved.</div>
+                 <div>${webName} 2025, All rights reserved.</div>
                  </div>
               </div>
           </div>
