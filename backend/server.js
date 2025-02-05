@@ -19,5 +19,6 @@ app.use('/api/user', require('./routes/userRoute'))
 app.use('/api/notification', require('./routes/notificationRoute'))
 app.use('/api/transactions', require('./routes/transactionRoutes'))
 app.use('/api/admin', require('./routes/adminRoute'))
+app.use('/api/profit_tools', require('./routes/profitToolRoute'))
 
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`))
+server.listen(port, () => console.log(`Server running on http://localhost:${port}`))

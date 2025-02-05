@@ -24,7 +24,7 @@ const AdminToolComp = ({ item }) => {
                     <div className='flex justify-between gap-4'>
                         <div>category:</div>
                         <div className='flex gap-1'>
-                            {item.category.slice(0, 2).map((ele, i) => (
+                            {JSON.parse(item.category).slice(0, 2).map((ele, i) => (
                                 <div key={i}>{ele}{i !== item.category.length - 1 && ','}</div>
                             ))}
                             {item.category.length > 2 && <div>...</div>}

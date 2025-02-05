@@ -1,5 +1,5 @@
 const User = require('../models').users
-const otp = require('otp-generator')
+const otpGenerator = require('otp-generator')
 const Util = require('../models').utils
 const Airdrop = require('../models').airdrops
 const { webName, webShort, webURL } = require('../utils/utils')

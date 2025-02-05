@@ -93,8 +93,8 @@ const SingleProductPage = () => {
                                 <div className='flex flex-col gap-2'>
                                     <div className='capitalize text-3xl font-extrabold'>playwrite</div>
                                     <div className='flex gap-1'>
-                                        {categories.map((item, i) => (
-                                            <div key={i} className=''>{item}{i === categories.length - 1 ? '.' : ','}</div>
+                                        {categories.map((ele, i) => (
+                                            <div key={i} className=''>{ele}{i === categories.length - 1 ? '.' : ','}</div>
                                         ))}
                                     </div>
                                 </div>

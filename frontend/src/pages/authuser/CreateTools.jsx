@@ -10,39 +10,11 @@ import { FaEdit } from 'react-icons/fa';
 import FormInput from '../../utils/FormInput';
 import { useAtom } from 'jotai';
 import { BANK } from '../../services/store';
-
-// const aiTools = [
-//   "Test-to-Image", "Test-to-Text", "code generators", "AI assistants"
-// ]
-// const creativeTools = [
-//   "graphics design resources", "image editors", "video editors", "animation and 3d modelling tools"
-// ]
-// const productivityTools = [
-//   "workflow optimizers", "task and time management tools", "collaboration platforms"
-// ]
-// const businessResources = [
-//   "marketing strategies", "sales funnels", "financial planning and investment guides"
-// ]
-// const learningDevelopment = [
-//   "tutorials and guides", "eBooks on personal growth", "online course resources"
-// ]
-// const mediaGenerators = [
-//   "video creation tools", "meme and content generators", "audio and music creation tools"
-// ]
-// const automationTools = [
-//   "data management systems", "task automation platforms", "software integration tools"
-// ]
-// const techSolutions = [
-//   "upscaling tools", "bug tracking and debugging tools", "cloud management tools"
-// ]
-// const eBooks = [
-//   "how to guides", "industry insights", "case studies and white papers"
-// ]
+import { Apis, AuthPostApi } from '../../services/API';
 
 const allCategories = [
-  "AI Tool", "Creative Tool", "Productivity Tool", "Business Resource", "Learning and Skill Development", "Media Generator", "Automation and Utility Tool", "Tech and Software Solution", "eBooks and Written Guide"
+  'AI Tool', 'Creative Tool', 'Productivity Tool', 'Business Resource', 'Learning and Skill Development', 'Media Generator', 'Automation and Utility Tool', 'Tech and Software Solution', 'eBooks and Written Guide'
 ]
-
 
 const CreateTools = () => {
   const [bank] = useAtom(BANK)
@@ -50,17 +22,16 @@ const CreateTools = () => {
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     category: [],
-    alt_category: '',
     price: '',
     title: '',
-    about_tool: '',
+    about: '',
     feature1: '',
     feature2: '',
     bank_name: '',
     account_number: '',
     account_name: '',
-    video_url: '',
-    phone: ''
+    video_link: '',
+    contact_detail: ''
   })
   const [toolImage, setToolImage] = useState({
     img: null,
@@ -77,10 +48,6 @@ const CreateTools = () => {
 
   const handleUpload = (event) => {
     const file = event.target.files[0]
-    if (file.size >= 1000000) {
-      imgref.current.value = null
-      return ErrorAlert('Image size too large, file must not exceed 1mb')
-    }
     if (!file.type.startsWith('image/')) {
       imgref.current.value = null
       return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
@@ -100,9 +67,44 @@ const CreateTools = () => {
     })
   }
 
-  const Submit = (e) => {
+  const Submit = async (e) => {
     e.preventDefault()
-    setScreen(3)
+
+    // if (form.category.length < 1) return ErrorAlert('Choose a category')
+    // if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2 || !form.video_link || !form.contact_detail || !form.bank_name || !form.account_name || !form.account_number) return ErrorAlert('Enter all fields')
+    // if (isNaN(form.price)) return ErrorAlert('Price amount must be numbers')
+    // if (!toolImage.image) return ErrorAlert('Upload profit tool image')
+
+    const formbody = new FormData()
+    formbody.append('image', toolImage.image)
+    formbody.append('title', form.title)
+    // form.category.forEach(item => {
+    //   formbody.append('category', item);
+    // });
+    formbody.append('category', JSON.stringify(form.category));
+    formbody.append('price', form.price)
+    formbody.append('about', form.about)
+    formbody.append('feature1', form.feature1)
+    formbody.append('feature2', form.feature2)
+    formbody.append('video_link', form.video_link)
+    formbody.append('contact_detail', form.contact_detail)
+    formbody.append('bank_name', form.bank_name)
+    formbody.append('account_number', form.account_number)
+    formbody.append('account_name', form.account_name)
+
+    setLoading(true)
+    try {
+      const response = await AuthPostApi(Apis.profitTools.submit_tool, formbody)
+      if (response.status === 200) {
+        setScreen(3)
+      } else {
+        ErrorAlert(response.msg)
+      }
+    } catch (error) {
+      ErrorAlert(`${error.message}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const addCategory = (val) => {
@@ -201,21 +203,21 @@ const CreateTools = () => {
                     <span>Pick the Type of Tool or eBook
                     </span>
                   </div>
-                  <div className='text-sm'>(Choose the category that best describes your submission)</div>
+                  <div className='text-sm'>(Choose the categories that best describes your submission)</div>
                 </div>
                 <div className='flex flex-col gap-3'>
                   {allCategories.map((item, i) => (
-                    <div onClick={() => addCategory(item)} className='flex gap-3 cursor-pointer' key={i}>
-                      <div className='w-5 h-5 border border-gray-200 rounded-full flex justify-center items-center' >
+                    <div className='flex gap-3' key={i}>
+                      <div className='w-5 h-5 border border-gray-200 rounded-full flex justify-center items-center cursor-pointer' onClick={() => addCategory(item)}>
                         <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category.includes(item) && 'bg-lightgreen'}`}></div>
                       </div>
                       <div className='text-sm'>{item}</div>
                     </div>
                   ))}
-                  <div className='flex flex-col mt-2'>
+                  {/* <div className='flex flex-col mt-2'>
                     <div className='text-sm text-lightgreen'>Other? Specify Your Tool or eBook Category:</div>
                     <FormInput formtype='textarea' placeholder='Explain what your tool can do here...' name='alt_category' value={form.alt_category} onChange={formHandler} className='!w-72 !h-24 !rounded-none' />
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className='flex gap-2'>
@@ -235,10 +237,10 @@ const CreateTools = () => {
                 <div className='font-bold text-lg text-lightgreen'>3.</div>
                 <div className='flex flex-col w-full'>
                   <div className='font-bold text-lg text-lightgreen'>Tool Details</div>
-                  <FormInput placeholder='Enter Title' name='title' value={form.title} onChange={formHandler} className='!rounded-none' />
-                  <FormInput formtype='textarea' placeholder='What is this tool about?' name='about_tool' value={form.about_tool} onChange={formHandler} className='!rounded-none' />
-                  <FormInput formtype='textarea' placeholder='Key Feature1' name='feature1' value={form.feature1} onChange={formHandler} className='!rounded-none !h-16' />
-                  <FormInput formtype='textarea' placeholder='Key Feature2' name='feature2' value={form.feature2} onChange={formHandler} className='!rounded-none !h-16' />
+                  <FormInput placeholder='Enter title' name='title' value={form.title} onChange={formHandler} className='!rounded-none' />
+                  <FormInput formtype='textarea' placeholder='What is this tool about?' name='about' value={form.about} onChange={formHandler} className='!rounded-none' />
+                  <FormInput formtype='textarea' placeholder='Enter a key feature' name='feature1' value={form.feature1} onChange={formHandler} className='!rounded-none !h-16' />
+                  <FormInput formtype='textarea' placeholder='Enter key feature2' name='feature2' value={form.feature2} onChange={formHandler} className='!rounded-none !h-16' />
                   <label className='cursor-pointer mt-2'>
                     {toolImage.img ?
                       <div className='relative'>
@@ -261,9 +263,9 @@ const CreateTools = () => {
                 <div className='font-bold text-lg text-lightgreen'>4.</div>
                 <div className='flex flex-col w-full'>
                   <div className='font-bold text-lg text-lightgreen'>Payment Details</div>
-                  <FormInput placeholder='Account Number' name='account_number' value={form.account_number} onChange={formHandler} className='!rounded-none' />
-                  <FormInput placeholder='Account Name' name='account_name' value={form.account_name} onChange={formHandler} className='!rounded-none' />
-                  <FormInput placeholder='Enter Bank' name='bank_name' value={form.bank_name} onChange={formHandler} className='!rounded-none' />
+                  <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={formHandler} className='!rounded-none' />
+                  <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!rounded-none' />
+                  <FormInput placeholder='Bank name' name='bank_name' value={form.bank_name} onChange={formHandler} className='!rounded-none' />
                   <div onClick={PrefillBank} className="w-fit mt-2 px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
                 </div>
               </div>
@@ -271,14 +273,14 @@ const CreateTools = () => {
                 <div className='font-bold text-lg text-lightgreen'>5.</div>
                 <div className='flex flex-col w-full'>
                   <div className='font-bold text-lg text-lightgreen'>Video Link</div>
-                  <FormInput placeholder='Insert URL to the tool or eBook Demo' name='video_url' value={form.video_url} onChange={formHandler} className='!rounded-none' />
+                  <FormInput placeholder='Insert URL to the tool or eBook Demo' name='video_link' value={form.video_link} onChange={formHandler} className='!rounded-none' />
                 </div>
               </div>
               <div className='flex gap-2'>
                 <div className='font-bold text-lg text-lightgreen'>6.</div>
                 <div className='flex flex-col w-full'>
                   <div className='font-bold text-lg text-lightgreen'>Contact Details</div>
-                  <FormInput placeholder='WhatsApp or Phone Number' name='phone' value={form.phone} onChange={formHandler} className='!rounded-none' />
+                  <FormInput placeholder='WhatsApp or phone number' name='contact_detail' value={form.contact_detail} onChange={formHandler} className='!rounded-none' />
                 </div>
               </div>
               <div className='w-full'>
@@ -295,8 +297,8 @@ const CreateTools = () => {
           <div className='flex flex-col gap-7 items-center max-w-md mx-auto mt-20'>
             <SlClock className='text-8xl' />
             <div className='text-center'>Thank you for your submission! Our team is currently reviewing your demo video. Please allow up to 2 days for us to assess it. We’ll reach out to you via WhatsApp or phone with our feedback soon.</div>
-            <Link to="/user/dashboard">
-              <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-16 rounded-lg outline-none uppercase font-bold'>go to dashboard</button>
+            <Link to="/user/profit_tools/all_tools">
+              <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-16 rounded-lg outline-none uppercase font-bold'>go to all tools</button>
             </Link>
           </div>
         }

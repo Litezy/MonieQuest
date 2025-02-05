@@ -11,7 +11,6 @@ import FormButton from '../../utils/FormButton';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import { FiUploadCloud } from 'react-icons/fi';
-import { FaXmark } from 'react-icons/fa6';
 
 const fetchedData = {
     id: 1,
@@ -29,8 +28,8 @@ const fetchedData = {
     link: 'https://app.gradient.network',
     contact_details: '09011234567',
     status: 'pending',
-    listed: 'unlisted',
-    discount: 0,
+    listing: 'unlisted',
+    discount_percentage: 0,
     discount_duration: 0,
     duration_type: ''
 }
@@ -38,12 +37,11 @@ const fetchedData = {
 const allCategories = [
     "AI Tool", "Creative Tool", "Productivity Tool", "Business Resource", "Learning and Skill Development", "Media Generator", "Automation and Utility Tool", "Tech and Software Solution", "eBooks and Written Guide"
 ]
-
 const statuses = [
     "pending", "approved", "declined"
 ]
 const durationTypes = [
-    "days", "weeks", "months"
+    "days", "weeks", "months", "years"
 ]
 const listOptions = [
     "listed", "unlisted"
@@ -62,8 +60,8 @@ const AdminSingleTool = () => {
         feature1: singleTool?.feature1,
         feature2: singleTool?.feature2,
         status: singleTool?.status,
-        listed: singleTool?.listed,
-        discount: singleTool?.discount,
+        listing: singleTool?.listing,
+        discount_percentage: singleTool?.discount_percentage,
         discount_duration: singleTool?.discount_duration,
         duration_type: singleTool?.duration_type ? singleTool?.duration_type : durationTypes[0],
     })
@@ -112,8 +110,6 @@ const AdminSingleTool = () => {
             }
         })
     }
-
-    console.log(form.category)
 
     const copyFunction = (content) => {
         navigator.clipboard.writeText(content)
@@ -189,8 +185,8 @@ const AdminSingleTool = () => {
                                     </div>
                                     <div className='flex flex-wrap gap-4 mt-2'>
                                         {allCategories.map((item, i) => (
-                                            <div className='flex gap-2 cursor-pointer' key={i}>
-                                                <div className='w-5 h-5 border border-gray-200 rounded-full flex justify-center items-center' onClick={() => addRemoveCategory(item)}>
+                                            <div className='flex gap-2' key={i}>
+                                                <div className='w-5 h-5 border border-gray-200 rounded-full flex justify-center items-center cursor-pointer' onClick={() => addRemoveCategory(item)}>
                                                     <div className={`w-3.5 h-3.5 rounded-full cursor-pointer ${form.category.includes(item) && 'bg-lightgreen'}`}></div>
                                                 </div>
                                                 <div className='text-sm'>{item}</div>
@@ -258,7 +254,7 @@ const AdminSingleTool = () => {
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>list product for purchase:</div>
-                                    <SelectComp options={listOptions} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.listed} handleChange={(e) => setForm({ ...form, listed: e.target.value })} />
+                                    <SelectComp options={listOptions} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.listing} handleChange={(e) => setForm({ ...form, listing: e.target.value })} />
                                 </div>
                                 <div className='flex flex-col gap-2'>
                                     <div className='flex gap-1 items-center text-lightgreen '>
@@ -267,8 +263,8 @@ const AdminSingleTool = () => {
                                     </div>
                                     <div className='grid md:grid-cols-2 grid-cols-1 gap-4 items-center'>
                                         <div className='flex flex-col'>
-                                            <div className='text-lightgreen capitalize font-medium'>discount (%):</div>
-                                            <FormInput placeholder='Discount' name='discount' value={form.discount} onChange={formHandler} />
+                                            <div className='text-lightgreen capitalize font-medium'>discount percentage (%):</div>
+                                            <FormInput placeholder='Discount' name='discount_percentage' value={form.discount_percentage} onChange={formHandler} />
                                         </div>
                                         <div className='flex flex-col'>
                                             <div className='text-lightgreen capitalize font-medium'>duration:</div>

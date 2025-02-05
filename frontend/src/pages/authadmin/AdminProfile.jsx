@@ -230,7 +230,7 @@ const AdminProfile = () => {
                                     <input ref={imgref} type="file" onChange={handleProfileUpload} hidden />
                                 </label>
                             </div>
-                            <div className='text-2xl font-bold capitalize'>{user?.first_name} {user?.surname}</div>
+                            <div className='text-2xl font-bold capitalize'>{user?.surname} {user?.first_name}</div>
                             <div className='flex gap-1 items-center text-sm'>
                                 <div className='capitalize'>admin / moderator</div>
                                 <MdOutlineAdminPanelSettings className='text-lightgreen text-lg' />
@@ -285,7 +285,7 @@ const AdminProfile = () => {
                         </div>
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>update settings</div>
-                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1 relative'>
+                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 relative'>
                                 {loading.sub2 && <Loading />}
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col'>
@@ -316,8 +316,8 @@ const AdminProfile = () => {
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Sell max (USD)</div>
                                         <FormInput placeholder='Enter maximum buy amount' name='sell_max' value={form.sell_max} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
+                                    <FormButton title='Update' className='!py-3 !text-base mt-5' type='button' onClick={UpdateUtils} />
                                 </div>
-                                <FormButton title='Update' className='!py-3 !text-base mt-2 !w-1/2 mx-auto' type='button' onClick={UpdateUtils} />
                             </div>
                         </div>
                     </form>

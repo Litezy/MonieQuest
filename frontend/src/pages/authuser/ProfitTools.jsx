@@ -3,52 +3,35 @@ import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout'
 import ToolComp from '../../AuthComponents/ToolComp';
 import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
-const records = [
-    {
-        gen_id: '123456789',
-        title: 'acrobat',
-        category: 'AI assistant',
-        price: 1000,
-        link: 'https://app.gradient.network',
-        contact_details: '09011234567',
-        status: 'approved'
-    },
-    {
-        gen_id: '123456789',
-        title: 'playwrite',
-        category: 'font',
-        price: 3000,
-        link: 'https://app.gradient.network',
-        contact_details: '09011234567',
-        status: 'declined'
-    },
-    {
-        gen_id: '123456789',
-        title: 'the grinch mas',
-        category: 'graphics',
-        price: 12000,
-        link: 'https://app.gradient.network',
-        contact_details: '09011234567',
-        status: 'pending'
-    }
-]
+import { Apis, AuthGetApi } from '../../services/API';
+
 
 const ProfitTools = () => {
     const tags = ['all', 'pending', 'approved', 'declined']
     const [active, setActive] = useState(tags[0])
     const [search, setSearch] = useState('')
     const [staticData, setStaticData] = useState([])
-    const [dataLoading, setDataLoading] = useState(true)
     const [allTools, setAllTools] = useState([])
+    const [dataLoading, setDataLoading] = useState(true)
 
     useEffect(() => {
-        setStaticData(records)
-        setAllTools(records);
-    }, []);
+        const FetchUserTools = async () => {
+            try {
+                const response = await AuthGetApi(Apis.profitTools.user_tools)
+                if (response.status === 200) {
+                    setStaticData(response.msg)
+                    setAllTools(response.msg)
+                    console.log(response.msg)
+                }
 
-    setTimeout(() => {
-        setDataLoading(false)
-    }, 2000)
+            } catch (error) {
+                //
+            } finally {
+                setDataLoading(false)
+            }
+        }
+        FetchUserTools()
+    }, [])
 
     const pendingTools = useMemo(() => {
         return allTools.filter((ele) => ele.status === 'pending');
