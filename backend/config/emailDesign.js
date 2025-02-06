@@ -20,7 +20,7 @@ const Mailing = async ({ eTitle, eBody, account, subject }) => {
                  <a href=${Socials.tg} style="padding-left: 1rem"><img src='https://res.cloudinary.com/dnz3cbnxr/image/upload/v1725461793/myfolder/sea7fie6r1mndax4ent8.png' style="width: 1rem; height: 1rem" /></a>
              </div>
              <div style="margin-top: 1rem; color:#e1e1e1; font-size: 0.85rem">If you have any questions or suggestions, please feel free to contact us via our 24/7 online help or email: ${process.env.MAIL_USER}</div>
-             <div style="margin: 2rem auto 0rem ;  width: 70%; height: fit-content; background-color: #ffff; color: black; font-size: 0.85rem; padding: 0.75rem 2rem">
+             <div style="margin: 2rem auto 0rem ;  width: 70%; height: fit-content; background-color: #ffff; color: black; font-size: 0.85rem; padding: 0.75rem 2.5rem">
                  <div style="width: 100%; display: flex ; align-items: center; gap: 0.5rem; justify-content:center ">
                  <div>
                  <img src='https://res.cloudinary.com/dnz3cbnxr/image/upload/v1725463522/qjtwmzzj6orqraedef04.png'  style="width: 0.75rem; height: fit;  padding-right: 0.2rem" />

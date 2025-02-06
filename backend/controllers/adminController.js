@@ -300,38 +300,42 @@ exports.UpdateProfitTool = async (req, res) => {
             profitTool.feature2 = feature2
         }
         if (status) {
-            if (status === 'approved') {
-                await Notification.create({
-                    user: profitTool.user,
-                    title: `Profit tool approved`,
-                    content: `After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been approved, you'll be contacted soon for payment.`,
-                    url: '/user/profit_tools/all_tools',
-                })
-                await Mailing({
-                    subject: `Profit Tool Approved`,
-                    eTitle: `Profit tool approved`,
-                    eBody: `
-                      <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/profit_tools/all_tools' style="text-decoration: underline; color: #00fe5e">here</a></div>
-                    `,
-                    account: user
-                })
+            if (profitTool.status !== 'approved') {
+                if (status === 'approved') {
+                    await Notification.create({
+                        user: profitTool.user,
+                        title: `Profit tool approved`,
+                        content: `After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been approved, you'll be contacted soon for payment.`,
+                        url: '/user/profit_tools/all_tools',
+                    })
+                    await Mailing({
+                        subject: `Profit Tool Approved`,
+                        eTitle: `Profit tool approved`,
+                        eBody: `
+                          <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/profit_tools/all_tools' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                        `,
+                        account: user
+                    })
+                }
             }
-            if (status === 'declined') {
-                await Notification.create({
-                    user: profitTool.user,
-                    title: `Profit tool declined`,
-                    content: `After review by our admins, your profit tool submitted with the id (#${profitTool.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
-                    url: '/user/profit_tools/all_tools',
-                    status: 'failed'
-                })
-                await Mailing({
-                    subject: `Profit Tool Declined`,
-                    eTitle: `Profit tool declined`,
-                    eBody: `
-                      <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/profit_tools/all_tools' style="text-decoration: underline; color: #00fe5e">here</a></div>
-                    `,
-                    account: user
-                })
+            if (profitTool.status !== 'declined') {
+                if (status === 'declined') {
+                    await Notification.create({
+                        user: profitTool.user,
+                        title: `Profit tool declined`,
+                        content: `After review by our admins, your profit tool submitted with the id (#${profitTool.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
+                        url: '/user/profit_tools/all_tools',
+                        status: 'failed'
+                    })
+                    await Mailing({
+                        subject: `Profit Tool Declined`,
+                        eTitle: `Profit tool declined`,
+                        eBody: `
+                          <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/profit_tools/all_tools' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                        `,
+                        account: user
+                    })
+                }
             }
             profitTool.status = status
         }
