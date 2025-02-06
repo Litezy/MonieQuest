@@ -238,8 +238,8 @@ const CreateTools = () => {
                   <div className='font-bold text-lg text-lightgreen'>Tool Details</div>
                   <FormInput placeholder='Enter title' name='title' value={form.title} onChange={formHandler} className='!rounded-none' />
                   <FormInput formtype='textarea' placeholder='What is this tool about?' name='about' value={form.about} onChange={formHandler} className='!rounded-none' />
-                  <FormInput formtype='textarea' placeholder='Enter a key feature' name='feature1' value={form.feature1} onChange={formHandler} className='!rounded-none !h-16' />
-                  <FormInput formtype='textarea' placeholder='Enter key feature2' name='feature2' value={form.feature2} onChange={formHandler} className='!rounded-none !h-16' />
+                  <FormInput formtype='textarea' placeholder='Enter a key feature' name='feature1' value={form.feature1} onChange={formHandler} className='!rounded-none !h-20' />
+                  <FormInput formtype='textarea' placeholder='Enter key feature2' name='feature2' value={form.feature2} onChange={formHandler} className='!rounded-none !h-20' />
                   <label className='cursor-pointer mt-2'>
                     {toolImage.img ?
                       <div className='relative'>

@@ -167,7 +167,7 @@ const SingleProductPage = () => {
                                             }
                                         }}
                                     />
-                                    <div>Score of {singleProduct.total_ratings > 0 ? (singleProduct.total_ratings / singleProduct.total_rate_persons).toFixed(1) : 0} based on {singleProduct?.total_rate_persons || 0} reviews</div>
+                                    <div>Score of {singleProduct.total_ratings > 0 ? (singleProduct.total_ratings / singleProduct.total_rate_persons).toFixed(1) : 0} based on {singleProduct?.total_rate_persons || 0} review{singleProduct?.total_rate_persons > 1 && 's'}</div>
                                 </div>
                             </div>
                             <div className='grid lg:grid-cols-2 grid-cols-1 gap-6'>

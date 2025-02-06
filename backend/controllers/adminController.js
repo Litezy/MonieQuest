@@ -85,7 +85,7 @@ exports.CreateAirdrop = async (req, res) => {
         const { title, category, kyc, blockchain, type, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
         if (!title || !category || !blockchain || !type || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
 
-        const gen_id = otpGenerator.generate(10, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
+        const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
         const filePath = './public/airdrops'
         const date = new Date()
@@ -258,6 +258,8 @@ exports.UpdateProfitTool = async (req, res) => {
 
         const profitTool = await ProfitTool.findOne({ where: { id: tool_id } })
         if (!profitTool) return res.json({ status: 404, msg: 'Profit tool not found' })
+        const user = await User.findOne({ where: { id: profitTool.user } })
+        if (!user) return res.json({ status: 404, msg: 'User not found' })
 
         const slugData = slug(title ? title : profitTool.title, '-')
         const filePath = './public/tools'
@@ -298,15 +300,40 @@ exports.UpdateProfitTool = async (req, res) => {
             profitTool.feature2 = feature2
         }
         if (status) {
-            profitTool.status = status
             if (status === 'approved') {
                 await Notification.create({
                     user: profitTool.user,
                     title: `Profit tool approved`,
-                    content: `Your profit tool with the id (#${profitTool.gen_id}) has been successfully approved by an admin, you'll be contacted soon for payment.`,
+                    content: `After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been approved, you'll be contacted soon for payment.`,
                     url: '/user/profit_tools/all_tools',
                 })
+                await Mailing({
+                    subject: `Profit Tool Approved`,
+                    eTitle: `Profit tool approved`,
+                    eBody: `
+                      <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/profit_tools/all_tools' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                    `,
+                    account: user
+                })
             }
+            if (status === 'declined') {
+                await Notification.create({
+                    user: profitTool.user,
+                    title: `Profit tool declined`,
+                    content: `After review by our admins, your profit tool submitted with the id (#${profitTool.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
+                    url: '/user/profit_tools/all_tools',
+                    status: 'failed'
+                })
+                await Mailing({
+                    subject: `Profit Tool Declined`,
+                    eTitle: `Profit tool declined`,
+                    eBody: `
+                      <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/profit_tools/all_tools' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                    `,
+                    account: user
+                })
+            }
+            profitTool.status = status
         }
         if (listing) {
             profitTool.listing = listing
@@ -340,6 +367,19 @@ exports.UpdateProfitTool = async (req, res) => {
 exports.AllProfitTools = async (req, res) => {
     try {
         const allProfitTools = await ProfitTool.findAll({
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: allProfitTools })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.AllListedProfitTools = async (req, res) => {
+    try {
+        const allProfitTools = await ProfitTool.findAll({
+            where: { listing: 'listed' },
             order: [['createdAt', 'DESC']]
         })
 

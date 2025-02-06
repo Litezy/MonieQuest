@@ -22,7 +22,7 @@ const ProductsPage = () => {
   useEffect(() => {
     const FetchAllProducts = async () => {
       try {
-        const response = await GetApi(Apis.admin.all_tools)
+        const response = await GetApi(Apis.admin.listed_tools)
         if (response.status === 200) {
           setStaticData(response.msg)
           setProducts(response.msg)

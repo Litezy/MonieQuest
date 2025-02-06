@@ -58,6 +58,7 @@ const admin_urls = {
     all_tools: admin + 'all-profit_tools',
     single_tool: admin + 'single-profit_tool',
     update_tool: admin + 'update-profit_tool',
+    listed_tools: admin + 'listed-profit_tools'
 }
 
 const profitTools = 'api/profit_tools/'

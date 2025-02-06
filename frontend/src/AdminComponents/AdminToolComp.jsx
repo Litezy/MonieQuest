@@ -25,7 +25,7 @@ const AdminToolComp = ({ item }) => {
                         <span>title:</span>
                         <span>{item?.title}</span>
                     </div>
-                    <div className='flex justify-between gap-4 capitalize'>
+                    <div className='flex justify-between gap-6 capitalize'>
                         <div>category:</div>
                         <div className='flex gap-1 truncate'>
                             {categories.slice(0, 2).map((ele, i) => (
