@@ -7,10 +7,8 @@ const fs = require('fs')
 exports.SubmitProfitTool = async (req, res) => {
     try {
         const { title, category, price, about, feature1, feature2, video_link, contact_detail, bank_name, account_number, account_name } = req.body
-        const categoryArray = JSON.parse(category)
-        console.log(categoryArray)
 
-        if (!title || categoryArray.length < 1 || !price || !about || !feature1 || !feature2 || !video_link || !contact_detail | !bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
+        if (!title || category.length < 1 || !price || !about || !feature1 || !feature2 || !video_link || !contact_detail | !bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
         if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
 
         const gen_id = otpGenerator.generate(10, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
@@ -34,7 +32,7 @@ exports.SubmitProfitTool = async (req, res) => {
             gen_id: gen_id,
             image: imageName,
             title,
-            category: categoryArray,
+            category: category,
             price,
             about,
             feature1,
@@ -54,13 +52,37 @@ exports.SubmitProfitTool = async (req, res) => {
 
 exports.AllUserProfitTools = async (req, res) => {
     try {
-        const profitTools = await ProfitTool.findAll({
+        const userProfitTools = await ProfitTool.findAll({
             where: { user: req.user },
             order: [['createdAt', 'DESC']]
         })
 
-        return res.json({ status: 200, msg: profitTools })
+        return res.json({ status: 200, msg: userProfitTools })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.AddRating = async (req, res) => {
+    try {
+        const { tool_id, rating } = req.body
+        if (!tool_id, !rating) return res.json({ status: 404, msg: 'Incomplete request found' })
+
+        const profitTool = await ProfitTool.findOne({ where: { id: tool_id } })
+        if (!profitTool) return res.json({ status: 404, msg: 'Profit tool not found' })
+
+        profitTool.total_ratings += parseFloat(rating)
+        profitTool.total_rate_persons += 1
+
+        await profitTool.save()
+
+        const form = {
+            rating: rating,
+            submit: true
+        }
+
+        return res.json({ status: 200, msg: 'Ratings updated successfully', form: form })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
     }
 }

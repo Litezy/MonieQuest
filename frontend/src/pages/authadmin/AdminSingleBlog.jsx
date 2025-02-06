@@ -118,7 +118,7 @@ const AdminSingleBlog = () => {
                             <label className='cursor-pointer w-full'>
                                 {blogImage.img ?
                                     <div className='relative'>
-                                        <img src={blogImage.img} className='w-full h-72 object-cover object-center'></img>
+                                        <img src={blogImage.img} alt={blogImage.img} className='w-full h-72 object-cover object-center'></img>
                                         <div className="absolute top-0 -right-3 main font-bold">
                                             <FaEdit className='text-2xl text-lightgreen' />
                                         </div>

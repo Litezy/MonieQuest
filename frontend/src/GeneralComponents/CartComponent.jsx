@@ -5,6 +5,7 @@ import { ErrorAlert, SuccessAlert } from '../utils/pageUtils'
 import { MdContentCopy } from "react-icons/md";
 import { SlClock } from "react-icons/sl";
 import Loading from './Loading';
+import { imageurl } from '../services/API';
 
 const bankacc = {
     bank: 'Zenith Bank',
@@ -15,11 +16,11 @@ const bankacc = {
 const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     const localName = 'products'
     const activeScreen = JSON.parse(localStorage.getItem('screen'))
-    const [bankAccount, setBankAccount] = useState(bankacc)
+    const [adminBank, setAdminBank] = useState(bankacc)
     const [email, setEmail] = useState('')
     const [screen, setScreen] = useState(activeScreen || 1)
     const [loading, setLoading] = useState(false)
-    
+
     let totalPrice = 0
     let priceAfterDiscount = 0
     cartItems.map((ele) => (
@@ -85,7 +86,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                 {cartItems.map((item, i) => (
                                     <div className='w-full h-fit bg-primary flex md:p-0 p-3 rounded-[3px] overflow-hidden' key={i}>
                                         <div className='md:w-[25%] w-[40%]'>
-                                            <img src={item.image} alt={item.image} className='w-full md:h-28 h-[5.5rem] object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
+                                            <img src={`${imageurl}/tools/${item.image}`} alt={item.image} className='w-full md:h-28 h-[5.5rem] object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
                                         </div>
                                         <div className='md:w-[75%] w-[60%] px-4 md:py-3 flex flex-col'>
                                             <div className='flex md:flex-row flex-col md:justify-between gap-1'>
@@ -147,20 +148,20 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                         <div className='bg-secondary rounded-md w-full h-fit p-4 flex flex-col gap-4'>
                                             <div className='flex justify-between gap-4'>
                                                 <span>Bank name</span>
-                                                <span className='capitalize'>{bankAccount.bank}</span>
+                                                <span className='capitalize'>{adminBank.bank}</span>
                                             </div>
                                             <div className='flex justify-between gap-4'>
                                                 <span>Account number</span>
                                                 <div className='flex gap-2 items-center'>
-                                                    <span>{bankAccount.account_number}</span>
-                                                    <div className='cursor-pointer text-lightgreen' onClick={() => copyFunction(bankAccount.account_number)}>
+                                                    <span>{adminBank.account_number}</span>
+                                                    <div className='cursor-pointer text-lightgreen' onClick={() => copyFunction(adminBank.account_number)}>
                                                         <MdContentCopy />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className='flex justify-between gap-4'>
                                                 <span>Account name</span>
-                                                <span className='uppercase'>{bankAccount.account_name}</span>
+                                                <span className='uppercase'>{adminBank.account_name}</span>
                                             </div>
                                         </div>
                                         <button className='bg-lightgreen text-ash font-extrabold w-full h-fit py-3 rounded-[4px]' onClick={MakePayment}>I have made my payment</button>

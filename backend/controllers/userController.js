@@ -333,8 +333,6 @@ exports.UpdateProfile = async (req, res) => {
     }
 }
 
-
-
 exports.CreateUpdateBankAccount = async (req, res) => {
     try {
         const { bank_name, account_number, account_name } = req.body
@@ -371,29 +369,26 @@ exports.CreateUpdateBankAccount = async (req, res) => {
     }
 }
 
-exports.GetUserUtilities = async (req, res) => {
+exports.GetUserWalletAndBank = async (req, res) => {
     try {
-        const bank = await Bank.findOne({ where: { user: req.user } })
-        if (!bank) return res.json({ status: 404, msg: 'User bank account not found' })
+        let userwallet = {}
+        let userbank = {}
+
         const wallet = await Wallet.findOne({ where: { user: req.user } })
-        if (!wallet) return res.json({ status: 404, msg: 'User wallet not found' })
-        const utils = await Util.findOne({})
-        return res.json({ status: 200, msg: 'fetch success' ,data:{
-            bank,wallet,utils
-        } })
+        if (wallet) {
+            userwallet = wallet
+        }
+        const bank = await Bank.findOne({ where: { user: req.user } })
+        if (bank) {
+            userbank = bank
+        }
+
+        return res.json({ status: 200, wallet: userwallet, bank: userbank })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }
 }
-exports.GetUserWallet = async (req, res) => {
-    try {
 
-
-        return res.json({ status: 200, msg: wallet })
-    } catch (error) {
-        return res.json({ status: 500, msg: error.message })
-    }
-}
 exports.CreateUpdateKYC = async (req, res) => {
     try {
         const { id_type, id_number, date_of_birth, address } = req.body

@@ -69,7 +69,7 @@ const Notification = () => {
         </div>
         <div className='mt-8'>
           {dataLoading ?
-            <div className='w-full  md:h-32 h-40 rounded-md bg-slate-500 animate-pulse'>
+            <div className='w-full h-32 rounded-md bg-slate-500 animate-pulse'>
             </div>
             :
             <>

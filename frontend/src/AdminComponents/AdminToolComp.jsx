@@ -7,10 +7,10 @@ const AdminToolComp = ({ item }) => {
     return (
         <div className='w-full h-fit relative text-semi-white rounded-lg shadow_auth'>
             <div className='px-4 py-3 bg-secondary text-sm rounded-t-lg flex justify-between gap-4 items-center text-lightgreen'>
-                <div>{moment(item.createdAt).format('DD-MM-yyyy')} / {moment(item.createdAt).format('h:mm')}</div>
+                <div>{moment(item?.createdAt).format('DD-MM-yyyy')} / {moment(item?.createdAt).format('h:mm')}</div>
                 <div className='flex gap-3 items-center'>
-                    <div>ID: {item.gen_id}</div>
-                    <Link to={`/admin/profit_tools/${item.id}/${item.title}`} onClick={MoveToTop} >
+                    <div>ID: {item?.gen_id}</div>
+                    <Link to={`/admin/profit_tools/${item.id}/${item.slug}`} onClick={MoveToTop} >
                         <button className='outline-none w-fit h-fit bg-ash py-2 px-4 text-xs rounded-md text-white font-medium'>View</button>
                     </Link>
                 </div>
@@ -19,15 +19,14 @@ const AdminToolComp = ({ item }) => {
                 <div className='flex flex-col gap-2 md:p-4 overflow-hidden'>
                     <div className='flex justify-between gap-4 capitalize'>
                         <span>title:</span>
-                        <span>{item.title}</span>
+                        <span>{item?.title}</span>
                     </div>
-                    <div className='flex justify-between gap-4'>
+                    <div className='flex justify-between gap-4 capitalize'>
                         <div>category:</div>
-                        <div className='flex gap-1'>
+                        <div className='flex gap-1 truncate'>
                             {JSON.parse(item.category).slice(0, 2).map((ele, i) => (
                                 <div key={i}>{ele}{i !== item.category.length - 1 && ','}</div>
                             ))}
-                            {item.category.length > 2 && <div>...</div>}
                         </div>
                     </div>
                     <div className='flex justify-between gap-4 capitalize'>
@@ -36,17 +35,17 @@ const AdminToolComp = ({ item }) => {
                     </div>
                 </div>
                 <div className='flex flex-col gap-2 md:p-4 md:border-l border-gray-800 overflow-hidden'>
-                    <div className='flex justify-between gap-4 capitalize'>
-                        <span>discount:</span>
-                        <span>{item.discount > 0 ? <span>{item.discount}%</span> : 'n/a'}</span>
+                    <div className='flex justify-between gap-4'>
+                        <span>Discount:</span>
+                        <span>{item?.discount > 0 ? <span>{item?.discount}%</span> : 'n/a'}</span>
                     </div>
-                    <div className='flex justify-between gap-4 capitalize'>
-                        <span>link:</span>
-                        <a href={item.link}>{item.link}</a>
+                    <div className='flex justify-between gap-4'>
+                        <span>Link:</span>
+                        <a href={item?.video_link} className='hover:text-lightgreen'>{item?.video_link}</a>
                     </div>
                     <div className='flex justify-between gap-4 capitalize'>
                         <span>status:</span>
-                        <span className={`${item.status === 'approved' ? 'text-green-400' : item.status === 'declined' ? 'text-red-500' : 'text-yellow-300'}`}>{item.status}</span>
+                        <span className={`${item?.status === 'approved' ? 'text-green-400' : item?.status === 'declined' ? 'text-red-500' : 'text-yellow-300'}`}>{item?.status}</span>
                     </div>
                 </div>
             </div>

@@ -205,7 +205,7 @@ const AdminSingleAirdrop = () => {
                                     <label className='cursor-pointer'>
                                         {logo.img ?
                                             <div className='relative w-fit'>
-                                                <img src={logo.img} className='md:size-20 size-16 rounded-full object-cover'></img>
+                                                <img src={logo.img} alt={logo.img} className='md:size-20 size-16 rounded-full object-cover'></img>
                                                 <div className="absolute top-0 -right-2 main font-bold">
                                                     <FaEdit className='text-xl text-lightgreen' />
                                                 </div>
@@ -223,7 +223,7 @@ const AdminSingleAirdrop = () => {
                                     <label className='cursor-pointer w-full'>
                                         {banner.img ?
                                             <div className='relative'>
-                                                <img src={banner.img} className='w-full h-72 object-cover object-center'></img>
+                                                <img src={banner.img} alt={banner.img} className='w-full h-72 object-cover object-center'></img>
                                                 <div className="absolute top-0 -right-3 main font-bold">
                                                     <FaEdit className='text-2xl text-lightgreen' />
                                                 </div>

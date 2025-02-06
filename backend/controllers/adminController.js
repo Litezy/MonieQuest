@@ -1,29 +1,34 @@
 const User = require('../models').users
-const otpGenerator = require('otp-generator')
 const Util = require('../models').utils
 const Airdrop = require('../models').airdrops
+const ProfitTool = require('../models').profitTools
+const Notification = require('../models').notifications
 const { webName, webShort, webURL } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
+const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
 
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, buy_min,bank_withdraw_min, buy_max, sell_min, sell_max, exchange_sell_rate, giftcard_rate } = req.body
+        const { exchange_buy_rate, buy_min, bank_withdraw_min, buy_max, sell_min, sell_max, exchange_sell_rate, giftcard_rate } = req.body
         const utils = await Util.findOne({})
-        if (!utils){
+        if (!utils) {
+            if (isNaN(exchange_buy_rate) || isNaN(buy_min) || isNaN(bank_withdraw_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(exchange_sell_rate) || isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter valid numbers` })
+
             const newUtils = await Util.create({
-                exchange_buy_rate,exchange_sell_rate,buy_max,buy_min,sell_max,sell_min,giftcard_rate
+                exchange_buy_rate, exchange_sell_rate, buy_max, buy_min, sell_max, sell_min, giftcard_rate
             })
+
             return res.json({ status: 200, msg: 'Rate(s) created successfully', utils: newUtils })
         }
-        else if (utils){
+        else if (utils) {
             if (exchange_buy_rate) {
                 if (isNaN(exchange_buy_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.exchange_buy_rate = exchange_buy_rate
             }
-    
+
             if (exchange_sell_rate) {
                 if (isNaN(exchange_sell_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.exchange_sell_rate = exchange_sell_rate
@@ -32,7 +37,7 @@ exports.UpdateUtils = async (req, res) => {
                 if (isNaN(bank_withdraw_min)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.bank_withdraw_min = bank_withdraw_min
             }
-    
+
             if (giftcard_rate) {
                 if (isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.giftcard_rate = giftcard_rate
@@ -53,13 +58,12 @@ exports.UpdateUtils = async (req, res) => {
                 if (isNaN(sell_min)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.sell_min = sell_min
             }
-    
+
             await utils.save()
-    
+
             return res.json({ status: 200, msg: 'Rate(s) updated successfully', utils: utils })
         }
 
-       
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }
@@ -159,7 +163,7 @@ exports.UpdateAirdrop = async (req, res) => {
         const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
 
-        const slugData = slug(title, '-')
+        const slugData = slug(title ? title : airdrop.title, '-')
         const filePath = './public/airdrops'
         const date = new Date()
         let logoImageName;
@@ -243,6 +247,111 @@ exports.CategoryAirdrops = async (req, res) => {
         })
 
         return res.json({ status: 200, msg: airdrop })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.UpdateProfitTool = async (req, res) => {
+    try {
+        const { tool_id, title, category, price, about, feature1, feature2, status, listing, discount_percentage, discount_duration, discount_duration_type } = req.body
+
+        const profitTool = await ProfitTool.findOne({ where: { id: tool_id } })
+        if (!profitTool) return res.json({ status: 404, msg: 'Profit tool not found' })
+
+        const slugData = slug(title ? title : profitTool.title, '-')
+        const filePath = './public/tools'
+        const date = new Date()
+        let imageName;
+        const toolImage = req?.files?.image
+
+        if (toolImage) {
+            if (!toolImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+            const currentImagePath = `${filePath}/${profitTool.image}`
+            if (fs.existsSync(currentImagePath)) {
+                fs.unlinkSync(currentImagePath)
+            }
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath)
+            }
+            imageName = `${slugData}-${date.getTime()}.jpg`
+            await toolImage.mv(`${filePath}/${imageName}`)
+            profitTool.image = imageName
+        }
+        if (title) {
+            profitTool.title = title
+        }
+        if (category) {
+            profitTool.category = category
+        }
+        if (price) {
+            if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
+            profitTool.price = price
+        }
+        if (about) {
+            profitTool.about = about
+        }
+        if (feature1) {
+            profitTool.feature1 = feature1
+        }
+        if (feature2) {
+            profitTool.feature2 = feature2
+        }
+        if (status) {
+            profitTool.status = status
+            if (status === 'approved') {
+                await Notification.create({
+                    user: profitTool.user,
+                    title: `Profit tool approved`,
+                    content: `Your profit tool with the id (#${profitTool.gen_id}) has been successfully approved by an admin, you'll be contacted soon for payment.`,
+                    url: '/user/profit_tools/all_tools',
+                })
+            }
+        }
+        if (listing) {
+            profitTool.listing = listing
+        }
+        if (discount_percentage) {
+            if (isNaN(discount_percentage)) return res.json({ status: 404, msg: `Discount percentage must be a number` })
+            profitTool.discount_percentage = discount_percentage
+        }
+        if (discount_duration) {
+            if (isNaN(discount_duration)) return res.json({ status: 404, msg: `Discount duration must be a number` })
+            profitTool.discount_duration = discount_duration
+        }
+        if (discount_duration_type) {
+            profitTool.discount_duration_type = discount_duration_type
+        }
+
+        await profitTool.save()
+
+        return res.json({ status: 200, msg: 'Profit tool updated successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.AllProfitTools = async (req, res) => {
+    try {
+        const allProfitTools = await ProfitTool.findAll({
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: allProfitTools })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.SingleProfitTool = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 404, msg: `Profit tool id is required` })
+
+        const profitTool = await ProfitTool.findOne({ where: { id } })
+        if (!profitTool) return res.json({ status: 404, msg: 'Profit tool not found' })
+
+        return res.json({ status: 200, msg: profitTool })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
     }

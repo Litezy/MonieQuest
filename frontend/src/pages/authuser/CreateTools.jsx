@@ -70,19 +70,18 @@ const CreateTools = () => {
   const Submit = async (e) => {
     e.preventDefault()
 
-    // if (form.category.length < 1) return ErrorAlert('Choose a category')
-    // if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2 || !form.video_link || !form.contact_detail || !form.bank_name || !form.account_name || !form.account_number) return ErrorAlert('Enter all fields')
-    // if (isNaN(form.price)) return ErrorAlert('Price amount must be numbers')
-    // if (!toolImage.image) return ErrorAlert('Upload profit tool image')
+    if (form.category.length < 1) return ErrorAlert('Choose a category')
+    if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2 || !form.video_link || !form.contact_detail || !form.bank_name || !form.account_name || !form.account_number) return ErrorAlert('Enter all fields')
+    if (isNaN(form.price)) return ErrorAlert('Price amount must be a number')
+    if (!toolImage.image) return ErrorAlert('Upload profit tool image')
 
     const formbody = new FormData()
     formbody.append('image', toolImage.image)
     formbody.append('title', form.title)
-    // form.category.forEach(item => {
-    //   formbody.append('category', item);
-    // });
-    formbody.append('category', JSON.stringify(form.category));
-    formbody.append('price', form.price)
+    form.category.forEach(ele => {
+      formbody.append('category', ele)
+    })
+    formbody.append('price', parseFloat(form.price))
     formbody.append('about', form.about)
     formbody.append('feature1', form.feature1)
     formbody.append('feature2', form.feature2)
@@ -244,7 +243,7 @@ const CreateTools = () => {
                   <label className='cursor-pointer mt-2'>
                     {toolImage.img ?
                       <div className='relative'>
-                        <img src={toolImage.img} className='h-56 w-full object-cover object-center'></img>
+                        <img src={toolImage.img} alt={toolImage.img} className='h-56 w-full object-cover object-center'></img>
                         <div className="absolute top-0 -right-3 main font-bold">
                           <FaEdit className='text-2xl text-lightgreen' />
                         </div>
