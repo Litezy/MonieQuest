@@ -3,6 +3,11 @@ import React from 'react'
 import { currencySign } from '../utils/pageUtils'
 
 const ToolComp = ({ item }) => {
+    let categories = []
+    if (Object.values(item).length !== 0) {
+        categories = JSON.parse(item.category)
+    }
+
     return (
         <div className='w-full h-fit relative text-semi-white rounded-lg shadow_auth'>
             <div className='p-4 bg-secondary text-sm text-lightgreen rounded-t-lg flex justify-between gap-4'>
@@ -18,8 +23,8 @@ const ToolComp = ({ item }) => {
                     <div className='flex justify-between gap-4 capitalize'>
                         <div>category:</div>
                         <div className='flex gap-1 truncate'>
-                            {JSON.parse(item.category).slice(0, 2).map((ele, i) => (
-                                <div key={i}>{ele}{i !== item.category.length - 1 && ','}</div>
+                            {categories.slice(0, 2).map((ele, i) => (
+                                <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
                             ))}
                         </div>
                     </div>

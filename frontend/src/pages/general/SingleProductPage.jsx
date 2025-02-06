@@ -24,6 +24,10 @@ const SingleProductPage = () => {
     })
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
+    let categories = []
+    if(Object.values(singleProduct).length !== 0){
+        categories = JSON.parse(singleProduct.category)
+    }
 
     useEffect(() => {
         if (!ratingData) {
@@ -147,8 +151,8 @@ const SingleProductPage = () => {
                                 <div className='flex flex-col gap-2'>
                                     <div className='capitalize text-3xl font-extrabold'>{singleProduct?.title}</div>
                                     <div className='flex md:flex-row flex-col gap-1 text-sm'>
-                                        {JSON.parse(singleProduct.category).map((ele, i) => (
-                                            <div key={i} className=''>{ele}{i === singleProduct.category.length - 1 ? '.' : ','}</div>
+                                        {categories.map((ele, i) => (
+                                            <div key={i} className=''>{ele}{i === categories.length - 1 ? '.' : ','}</div>
                                         ))}
                                     </div>
                                 </div>
