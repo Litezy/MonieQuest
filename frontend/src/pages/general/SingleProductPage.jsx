@@ -84,7 +84,6 @@ const SingleProductPage = () => {
 
     const submitRating = async () => {
         if (!form.submit) {
-            setForm({ ...form, submit: true })
             const formbody = {
                 tool_id: singleProduct.id,
                 rating: form.rating
@@ -93,6 +92,7 @@ const SingleProductPage = () => {
             try {
                 const response = await PutApi(Apis.profitTools.add_rating, formbody)
                 if (response.status === 200) {
+                    setForm({ ...form, submit: true })
                     const currentData = JSON.parse(localStorage.getItem('ratingData'))
                     currentData.push(response.msg)
                     localStorage.setItem('ratingData', JSON.stringify(currentData))
@@ -146,7 +146,7 @@ const SingleProductPage = () => {
                             <div className='flex md:flex-row md:justify-between flex-col gap-6 md:items-end'>
                                 <div className='flex flex-col gap-2'>
                                     <div className='capitalize text-3xl font-extrabold'>{singleProduct?.title}</div>
-                                    <div className='flex gap-1'>
+                                    <div className='flex md:flex-row flex-col gap-1 text-sm'>
                                         {JSON.parse(singleProduct.category).map((ele, i) => (
                                             <div key={i} className=''>{ele}{i === singleProduct.category.length - 1 ? '.' : ','}</div>
                                         ))}
