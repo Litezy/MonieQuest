@@ -77,11 +77,12 @@ exports.AddRating = async (req, res) => {
         await profitTool.save()
 
         const form = {
+            id: tool_id,
             rating: rating,
             submit: true
         }
 
-        return res.json({ status: 200, msg: 'Ratings updated successfully', form: form })
+        return res.json({ status: 200, msg: form })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }

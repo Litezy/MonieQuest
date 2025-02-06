@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import { Link, useParams } from 'react-router-dom'
 import { IoCart } from 'react-icons/io5'
@@ -19,28 +19,46 @@ const SingleProductPage = () => {
     const [cartItems, setCartItems] = useState(localData || []);
     const [singleProduct, setSingleProduct] = useState({})
     const [form, setForm] = useState({
-        rating: ratingData?.rating || 1,
-        submit: ratingData?.submit || false
+        rating: 1,
+        submit: false
     })
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        const FetchSingleProduct = async () => {
-            try {
-                const response = await GetApi(`${Apis.admin.single_tool}/${id}`)
-                if (response.status === 200) {
-                    setSingleProduct(response.msg)
-                }
-
-            } catch (error) {
-                //
-            } finally {
-                setDataLoading(false)
-            }
+        if (!ratingData) {
+            localStorage.setItem('ratingData', JSON.stringify([]))
         }
-        FetchSingleProduct()
+        else if (ratingData.length > 0) {
+            ratingData.map((ele) => {
+                if (ele.id === parseFloat(id)) {
+                    setForm({
+                        rating: ele.rating,
+                        submit: ele.submit
+                    })
+                }
+            })
+        }
     }, [])
+
+    const FetchSingleProduct = useCallback(async () => {
+        try {
+            const response = await GetApi(`${Apis.admin.single_tool}/${id}`)
+            if (response.status === 200) {
+                setSingleProduct(response.msg)
+            }
+
+        } catch (error) {
+            //
+        } finally {
+            setDataLoading(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        FetchSingleProduct()
+    }, [FetchSingleProduct])
+
 
     const AddToCart = () => {
         const findIfCartExist = cartItems.find((ele) => ele.id === singleProduct.id);
@@ -75,7 +93,10 @@ const SingleProductPage = () => {
             try {
                 const response = await PutApi(Apis.profitTools.add_rating, formbody)
                 if (response.status === 200) {
-                    localStorage.setItem('ratingData', JSON.stringify(response.form))
+                    const currentData = JSON.parse(localStorage.getItem('ratingData'))
+                    currentData.push(response.msg)
+                    localStorage.setItem('ratingData', JSON.stringify(currentData))
+                    FetchSingleProduct()
                 } else {
                     console.log(response.msg)
                 }
@@ -137,7 +158,11 @@ const SingleProductPage = () => {
                                         precision={0.25}
                                         value={singleProduct.total_ratings > 0 ? singleProduct.total_ratings / singleProduct.total_rate_persons : 0}
                                         readOnly
-                                        sx={{ color: 'white'}}
+                                        sx={{
+                                            '& .MuiRating-iconEmpty': {
+                                                color: 'gray'
+                                            }
+                                        }}
                                     />
                                     <div>Score of {singleProduct.total_ratings > 0 ? (singleProduct.total_ratings / singleProduct.total_rate_persons).toFixed(1) : 0} based on {singleProduct?.total_rate_persons} reviews</div>
                                 </div>
@@ -194,6 +219,11 @@ const SingleProductPage = () => {
                                                     value={form.rating}
                                                     onChange={(event, newValue) => {
                                                         setForm({ ...form, rating: newValue })
+                                                    }}
+                                                    sx={{
+                                                        '& .MuiRating-iconEmpty': {
+                                                            color: 'gray'
+                                                        }
                                                     }}
                                                 />
                                             </div>
