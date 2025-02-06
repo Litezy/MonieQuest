@@ -70,7 +70,7 @@ const ProductsPage = () => {
       const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
       setProducts(filtered)
     } else {
-      setProducts(mainData)
+      setProducts(staticData)
     }
   }
 
@@ -103,7 +103,9 @@ const ProductsPage = () => {
             {dataLoading ?
               <>
                 {new Array(4).fill(0).map((_, i) => (
-                  <div key={i} className='w-72 h-80 rounded-[4px] bg-slate-400 animate-pulse'></div>
+                  <div key={i} className='w-72 h-80 rounded-[4px] bg-slate-400 animate-pulse p-1'>
+                    <div className="w-full h-48 bg-slate-500 rounded-t-[4px]"></div>
+                  </div>
                 ))}
               </>
               :
@@ -121,7 +123,7 @@ const ProductsPage = () => {
                     <Link to={`/products/${item.id}/${item.slug}`} onClick={MoveToTop}>
                       <img
                         src={`${imageurl}/tools/${item.image}`}
-                        alt={item.image}
+                        alt='product image'
                         className="w-full h-48 rounded-t-[4px] object-cover object-center"
                       />
                     </Link>
@@ -135,7 +137,7 @@ const ProductsPage = () => {
                       <div className="flex justify-between gap-4 items-center">
                         <div className='flex gap-1 text-xs text-lightgreen truncate'>
                           {JSON.parse(item.category).slice(0, 2).map((ele, i) => (
-                            <div key={i} className=''>{ele}{i !== item.category.length - 1 && ','}</div>
+                            <div key={i}>{ele},</div>
                           ))}
                         </div>
                         <div className="flex gap-2 items-center text-sm font-extrabold">

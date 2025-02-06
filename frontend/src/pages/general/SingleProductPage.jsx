@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { IoCart } from 'react-icons/io5'
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import { GiCheckMark } from "react-icons/gi";
-import { MoveToTop } from '../../utils/pageUtils'
+import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Rating from '@mui/material/Rating';
 import { Apis, GetApi, imageurl, PutApi } from '../../services/API';
 import moment from 'moment'
@@ -13,8 +13,7 @@ import Loading from '../../GeneralComponents/Loading';
 
 const SingleProductPage = () => {
     const { id } = useParams()
-    const localName = 'products'
-    const localData = JSON.parse(localStorage.getItem(localName))
+    const localData = JSON.parse(localStorage.getItem('products'))
     const ratingData = JSON.parse(localStorage.getItem('ratingData'))
     const [cartItems, setCartItems] = useState(localData || []);
     const [singleProduct, setSingleProduct] = useState({})
@@ -25,7 +24,7 @@ const SingleProductPage = () => {
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
     let categories = []
-    if(Object.values(singleProduct).length !== 0){
+    if (Object.values(singleProduct).length !== 0) {
         categories = JSON.parse(singleProduct.category)
     }
 
@@ -68,9 +67,9 @@ const SingleProductPage = () => {
         const findIfCartExist = cartItems.find((ele) => ele.id === singleProduct.id);
         if (!findIfCartExist) {
             setCartItems([...cartItems, singleProduct])
-            const currentData = JSON.parse(localStorage.getItem(localName))
+            const currentData = JSON.parse(localStorage.getItem('products'))
             currentData.push(singleProduct)
-            localStorage.setItem(localName, JSON.stringify(currentData))
+            localStorage.setItem('products', JSON.stringify(currentData))
         }
     }
 
@@ -102,7 +101,7 @@ const SingleProductPage = () => {
                     localStorage.setItem('ratingData', JSON.stringify(currentData))
                     FetchSingleProduct()
                 } else {
-                    console.log(response.msg)
+                    ErrorAlert(response.msg)
                 }
             } catch (error) {
                 //
@@ -168,12 +167,12 @@ const SingleProductPage = () => {
                                             }
                                         }}
                                     />
-                                    <div>Score of {singleProduct.total_ratings > 0 ? (singleProduct.total_ratings / singleProduct.total_rate_persons).toFixed(1) : 0} based on {singleProduct?.total_rate_persons} reviews</div>
+                                    <div>Score of {singleProduct.total_ratings > 0 ? (singleProduct.total_ratings / singleProduct.total_rate_persons).toFixed(1) : 0} based on {singleProduct?.total_rate_persons || 0} reviews</div>
                                 </div>
                             </div>
                             <div className='grid lg:grid-cols-2 grid-cols-1 gap-6'>
                                 <div className='w-full md:h-96 h-60'>
-                                    <img src={`${imageurl}/tools/${singleProduct?.image}`} alt={singleProduct.image} className='w-full h-full object-cover' />
+                                    <img src={`${imageurl}/tools/${singleProduct?.image}`} alt='product image' className='w-full h-full object-cover' />
                                 </div>
                                 <div>
                                     <div className='bg-primary border border-ash w-full h-fit p-5 flex flex-col gap-4'>

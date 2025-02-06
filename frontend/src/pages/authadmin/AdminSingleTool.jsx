@@ -278,7 +278,7 @@ const AdminSingleTool = () => {
                                 <div className='flex flex-col gap-1 w-full border-t pt-2'>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Video link:</div>
-                                        <a href={singleTool?.video_link} className="text-ash hover:text-lightgreen cursor-pointer">{singleTool?.video_link}</a>
+                                        <a href={singleTool?.video_link} className="underline">{singleTool?.video_link}</a>
                                     </div>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Contact Details:</div>

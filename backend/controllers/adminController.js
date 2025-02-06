@@ -314,13 +314,19 @@ exports.UpdateProfitTool = async (req, res) => {
         if (discount_percentage) {
             if (isNaN(discount_percentage)) return res.json({ status: 404, msg: `Discount percentage must be a number` })
             profitTool.discount_percentage = discount_percentage
+        } else {
+            profitTool.discount_percentage = null
         }
         if (discount_duration) {
             if (isNaN(discount_duration)) return res.json({ status: 404, msg: `Discount duration must be a number` })
             profitTool.discount_duration = discount_duration
+        } else {
+            profitTool.discount_duration = null
         }
         if (discount_duration_type) {
             profitTool.discount_duration_type = discount_duration_type
+        } else {
+            profitTool.discount_duration_type = null
         }
 
         await profitTool.save()

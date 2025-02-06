@@ -119,7 +119,7 @@ const SingleAirdropPage = () => {
                   <p>{singleAirdrop?.about}</p>
                 </div>
                 <div className='lg:col-span-2 col-span-1'>
-                  <img lt={singleAirdrop?.banner_image} src={`${imageurl}/airdrops/${singleAirdrop?.banner_image}`} className='w-full h-auto'></img>
+                  <img alt={singleAirdrop?.banner_image} src={`${imageurl}/airdrops/${singleAirdrop?.banner_image}`} className='w-full h-auto'></img>
                 </div>
               </div>
               <div className='grid lg:grid-cols-6 grid-cols-1 gap-8'>
@@ -140,14 +140,14 @@ const SingleAirdropPage = () => {
                     <div className='flex flex-col gap-4'>
                       <div className='text-xl font-bold'>Step by step video guide on <span className='capitalize'>ape express</span> Airdrop</div>
                       <a href={singleAirdrop.video_guide_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
-                        <div className='text-lightgreen'>{singleAirdrop.video_guide_link}</div>
+                        <div className='text-lightgreen underline'>{singleAirdrop.video_guide_link}</div>
                         <RxExternalLink className='text-lg' />
                       </a>
                     </div>
                     <div className='flex flex-col gap-4 mt-8'>
                       <div className='text-xl font-bold'>Referral link to earn</div>
                       <a href={singleAirdrop.referral_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
-                        <div className='text-lightgreen'>{singleAirdrop.referral_link}</div>
+                        <div className='text-lightgreen underline'>{singleAirdrop.referral_link}</div>
                         <RxExternalLink className='text-lg' />
                       </a>
                     </div>

@@ -26,6 +26,7 @@ const ToolComp = ({ item }) => {
                             {categories.slice(0, 2).map((ele, i) => (
                                 <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
                             ))}
+                            {categories.length > 2 && '...'}
                         </div>
                     </div>
                     <div className='flex justify-between gap-4 capitalize'>
@@ -36,7 +37,7 @@ const ToolComp = ({ item }) => {
                 <div className='flex flex-col gap-2 md:p-4 md:border-l border-gray-800 overflow-hidden'>
                     <div className='flex justify-between gap-4'>
                         <span>Link:</span>
-                        <a href={item?.video_link} className='hover:text-lightgreen'>{item?.video_link}</a>
+                        <a href={item?.video_link} className='underline'>{item?.video_link}</a>
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>Contact details:</span>

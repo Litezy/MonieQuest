@@ -44,8 +44,8 @@ const Hiring = () => {
                             </div>
                         </div>
                         <div className='flex flex-col gap-4'>
-                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>collaborations</div>
                                         <div className='flex flex-col gap-4 text-sm'>
@@ -59,7 +59,7 @@ const Hiring = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>hardcore</div>
                                         <div className='flex flex-col gap-4 text-sm'>
@@ -76,8 +76,8 @@ const Hiring = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>humility</div>
                                         <div className='flex flex-col gap-4 text-sm'>
@@ -93,7 +93,7 @@ const Hiring = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>freedom</div>
                                         <div className='flex flex-col gap-4 text-sm'>
@@ -112,8 +112,8 @@ const Hiring = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>user-Focused</div>
                                         <div className='flex flex-col gap-4 text-sm'>
@@ -130,7 +130,7 @@ const Hiring = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full md:h-full h-fit'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>who thrives at monieQuest</div>
                                         <div className='flex flex-col gap-4 text-sm'>

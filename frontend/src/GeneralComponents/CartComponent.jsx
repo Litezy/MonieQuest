@@ -14,7 +14,6 @@ const bankacc = {
 }
 
 const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
-    const localName = 'products'
     const activeScreen = JSON.parse(localStorage.getItem('screen'))
     const [adminBank, setAdminBank] = useState(bankacc)
     const [email, setEmail] = useState('')
@@ -35,9 +34,9 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     }
 
     const RemoveCart = (item) => {
-        const localData = JSON.parse(localStorage.getItem(localName))
+        const localData = JSON.parse(localStorage.getItem('products'))
         const filteredData = localData.filter(ele => ele.id !== item.id)
-        localStorage.setItem(localName, JSON.stringify(filteredData))
+        localStorage.setItem('products', JSON.stringify(filteredData))
         setCartItems(filteredData)
     }
 
@@ -54,8 +53,8 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
 
     const EmptyCart = () => {
         setCartItems([])
-        localStorage.setItem(localName, JSON.stringify([]))
         setScreen(1)
+        localStorage.setItem('products', JSON.stringify([]))
         localStorage.setItem('screen', JSON.stringify(1))
     }
 

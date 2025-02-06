@@ -31,6 +31,7 @@ const AdminToolComp = ({ item }) => {
                             {categories.slice(0, 2).map((ele, i) => (
                                 <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
                             ))}
+                            {categories.length > 2 && '...'}
                         </div>
                     </div>
                     <div className='flex justify-between gap-4 capitalize'>
@@ -41,11 +42,11 @@ const AdminToolComp = ({ item }) => {
                 <div className='flex flex-col gap-2 md:p-4 md:border-l border-gray-800 overflow-hidden'>
                     <div className='flex justify-between gap-4'>
                         <span>Discount:</span>
-                        <span>{item?.discount > 0 ? <span>{item?.discount}%</span> : 'n/a'}</span>
+                        <span>{item?.discount_percentage ? <span>{item?.discount_percentage}%</span> : 'n/a'}</span>
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>Link:</span>
-                        <a href={item?.video_link} className='hover:text-lightgreen'>{item?.video_link}</a>
+                        <a href={item?.video_link} className='underline'>{item?.video_link}</a>
                     </div>
                     <div className='flex justify-between gap-4 capitalize'>
                         <span>status:</span>
