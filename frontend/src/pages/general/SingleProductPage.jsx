@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import { Link, useParams } from 'react-router-dom'
 import { IoCart } from 'react-icons/io5'

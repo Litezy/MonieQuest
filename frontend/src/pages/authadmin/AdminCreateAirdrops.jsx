@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 import { Apis, AuthPostApi } from '../../services/API'
 
 const categories = [
-    "featured", "deFi", "new", "NFT", "others"
+    "featured", "deFi", "new", "NFT", "other"
 ]
 
 const kyces = [

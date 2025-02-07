@@ -16,7 +16,7 @@ const statuses = [
 ]
 
 const categories = [
-    "featured", "deFi", "new", "NFT", "others"
+    "featured", "deFi", "new", "NFT", "other"
 ]
 
 const kyces = [

@@ -39,13 +39,13 @@ const AdminAllAirdrops = () => {
         return airdrops.filter((ele) => ele.category === 'new');
     }, [airdrops])
     const NFTAirdrops = useMemo(() => {
-        return airdrops.filter((ele) => ele.category === 'nft');
+        return airdrops.filter((ele) => ele.category === 'NFT');
     }, [airdrops])
     const deFiAirdrops = useMemo(() => {
         return airdrops.filter((ele) => ele.category === 'deFi');
     }, [airdrops])
     const otherAirdrops = useMemo(() => {
-        return airdrops.filter((ele) => ele.category === 'others');
+        return airdrops.filter((ele) => ele.category === 'other');
     }, [airdrops])
 
     const filterAirdrop = () => {

@@ -84,6 +84,10 @@ exports.CreateAirdrop = async (req, res) => {
     try {
         const { title, category, kyc, blockchain, type, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
         if (!title || !category || !blockchain || !type || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
+        const categoryArray = ["featured", "deFi", "new", "NFT", "other"]
+        if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
+        const kycArray = ['false', "true"]
+        if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid kyc value provided` })
 
         const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
@@ -201,9 +205,13 @@ exports.UpdateAirdrop = async (req, res) => {
             airdrop.title = title
         }
         if (category) {
+            const categoryArray = ["featured", "deFi", "new", "NFT", "other"]
+            if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
             airdrop.category = category
         }
         if (kyc) {
+            const kycArray = ['false', "true"]
+            if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid kyc value provided` })
             airdrop.kyc = kyc
         }
         if (blockchain) {
@@ -222,6 +230,8 @@ exports.UpdateAirdrop = async (req, res) => {
             airdrop.video_guide_link = video_guide_link
         }
         if (status) {
+            const statusArray = ["active", "finished"]
+            if (!statusArray.includes(status)) return res.json({ status: 404, msg: `Invalid status provided` })
             airdrop.status = status
         }
         airdrop.twitter_link = twitter_link ? twitter_link : null
@@ -255,6 +265,7 @@ exports.CategoryAirdrops = async (req, res) => {
 exports.UpdateProfitTool = async (req, res) => {
     try {
         const { tool_id, title, category, price, about, feature1, feature2, status, listing, discount_percentage, discount_duration, discount_duration_type } = req.body
+        if (!tool_id) return res.json({ status: 404, msg: `Profit tool id is required` })
 
         const profitTool = await ProfitTool.findOne({ where: { id: tool_id } })
         if (!profitTool) return res.json({ status: 404, msg: 'Profit tool not found' })
@@ -300,6 +311,9 @@ exports.UpdateProfitTool = async (req, res) => {
             profitTool.feature2 = feature2
         }
         if (status) {
+            const statusArray = ["processing", "approved", "declined"]
+            if (!statusArray.includes(status)) return res.json({ status: 404, msg: `Invalid status provided` })
+
             if (profitTool.status !== 'approved') {
                 if (status === 'approved') {
                     await Notification.create({
@@ -340,6 +354,8 @@ exports.UpdateProfitTool = async (req, res) => {
             profitTool.status = status
         }
         if (listing) {
+            const listingArray = ["listed", "unlisted"]
+            if (!listingArray.includes(listing)) return res.json({ status: 404, msg: `Invalid listing value provided` })
             profitTool.listing = listing
         }
         if (discount_percentage) {
