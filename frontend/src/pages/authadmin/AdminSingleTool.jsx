@@ -19,7 +19,7 @@ const statuses = [
     "pending", "approved", "declined"
 ]
 const durationTypes = [
-    "days", "weeks", "months", "years"
+    "days", "weeks", "months"
 ]
 const listOptions = [
     "listed", "unlisted"

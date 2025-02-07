@@ -135,10 +135,14 @@ const ProductsPage = () => {
                         <FaCheckCircle className="text-lightgreen text-xl" />
                       </div>
                       <div className="flex justify-between gap-4 items-center">
-                        <div className='flex gap-1 text-xs text-lightgreen truncate'>
-                          {JSON.parse(item.category).slice(0, 2).map((ele, i) => (
-                            <div key={i}>{ele},</div>
-                          ))}
+                        <div className="w-full overflow-x-auto scrollsdown cursor-all-scroll">
+                          <div className="w-fit">
+                            <div className='flex gap-1 text-xs text-lightgreen truncate'>
+                              {JSON.parse(item.category).slice(0, 2).map((ele, i) => (
+                                <div key={i}>{ele},</div>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                         <div className="flex gap-2 items-center text-sm font-extrabold">
                           {item.discount_percentage && item.price !== undefined ?

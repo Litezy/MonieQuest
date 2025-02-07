@@ -94,7 +94,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                                     {item.discount_percentage && item.price !== undefined ?
                                                         <>
                                                             <div>₦{((100 - item.discount_percentage) / 100 * item.price).toLocaleString()}</div>
-                                                            <div className='text-xs line-through'>${item.price.toLocaleString()}</div>
+                                                            <div className='text-xs line-through'>₦{item.price.toLocaleString()}</div>
                                                         </>
                                                         :
                                                         <div>₦{(item.price || 0).toLocaleString()}</div>

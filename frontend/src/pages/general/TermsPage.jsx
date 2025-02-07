@@ -14,7 +14,7 @@ const TermsPage = () => {
           </div>
         </div>
         <div className='w-11/12 mx-auto text-lg pt-5 pb-10'>
-          <div className='text-white text-xl'>Welcome to MonieQuest! By accessing our platform, you agree to the terms below.</div>
+          <div className='text-white md:text-xl text-lg'>Welcome to MonieQuest! By accessing our platform, you agree to the terms below.</div>
           <div className="flex text-gray-300 items-start gap-3 flex-col mt-10">
             <div className="w-full flex flex-col">
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 h-fit'>

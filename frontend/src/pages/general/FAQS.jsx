@@ -16,7 +16,7 @@ const FAQS = () => {
                 <div className="w-11/12 mx-auto text-lg">
                     <div className="flex items-start gap-16 py-10 flex-col">
                         <div className="flex items-start gap-4 flex-col">
-                            <div className="text-3xl font-bold text-lightgreen">General Questions</div>
+                            <div className="md:text-3xl text-2xl font-bold text-lightgreen">General Questions</div>
                             <div className='flex flex-col gap-4'>
                                 <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
                                     {generalfaqs.map((que, i) => {
@@ -34,7 +34,7 @@ const FAQS = () => {
                             </div>
                         </div>
                         <div className="flex items-start gap-4 flex-col">
-                            <div className="text-3xl font-bold text-lightgreen">Airdrop Questions</div>
+                            <div className="md:text-3xl text-2xl font-bold text-lightgreen">Airdrop Questions</div>
                             <div className='flex flex-col gap-4'>
                                 <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
                                     {airdropsfaqs.map((que, i) => {
@@ -53,7 +53,7 @@ const FAQS = () => {
                             </div>
                         </div>
                         <div className="flex items-start gap-3 flex-col">
-                            <div className="text-3xl font-bold text-lightgreen">Exchange Questions</div>
+                            <div className="md:text-3xl text-2xl font-bold text-lightgreen">Exchange Questions</div>
                             <div className='flex flex-col gap-4'>
                                 <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
                                     {exchangefaqs.map((que, i) => {
@@ -72,7 +72,7 @@ const FAQS = () => {
                             </div>
                         </div>
                         <div className="flex items-start gap-4 flex-col">
-                            <div className="text-3xl font-bold text-lightgreen">Profit Tools Questions</div>
+                            <div className="md:text-3xl text-2xl font-bold text-lightgreen">Profit Tools Questions</div>
                             <div className='flex flex-col gap-4'>
                                 <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
                                     {profitfaqs.map((que, i) => {

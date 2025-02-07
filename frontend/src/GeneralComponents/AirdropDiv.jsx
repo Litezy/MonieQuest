@@ -33,7 +33,7 @@ const AirdropDiv = ({ item }) => {
                 </div>
                 <div className='flex flex-col gap-2 items-center capitalize text-[0.8rem]'>
                     <div className='font-bold'>{item?.type}</div>
-                    <div className='text-xs'>{item?.blockhain} blockchain</div>
+                    <div className='text-xs'>{item?.blockchain} blockchain</div>
                 </div>
             </div>
         </Link>
