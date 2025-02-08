@@ -2,12 +2,14 @@ const User = require('../models').users
 const Util = require('../models').utils
 const Airdrop = require('../models').airdrops
 const ProfitTool = require('../models').profitTools
+const ToolOrder = require('../models').toolsOrders
 const Notification = require('../models').notifications
 const { webName, webShort, webURL } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
+const moment = require('moment')
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -28,7 +30,6 @@ exports.UpdateUtils = async (req, res) => {
                 if (isNaN(exchange_buy_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.exchange_buy_rate = exchange_buy_rate
             }
-
             if (exchange_sell_rate) {
                 if (isNaN(exchange_sell_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.exchange_sell_rate = exchange_sell_rate
@@ -37,7 +38,6 @@ exports.UpdateUtils = async (req, res) => {
                 if (isNaN(bank_withdraw_min)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.bank_withdraw_min = bank_withdraw_min
             }
-
             if (giftcard_rate) {
                 if (isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.giftcard_rate = giftcard_rate
@@ -211,7 +211,7 @@ exports.UpdateAirdrop = async (req, res) => {
         }
         if (kyc) {
             const kycArray = ['false', "true"]
-            if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid kyc value provided` })
+            if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid KYC value provided` })
             airdrop.kyc = kyc
         }
         if (blockchain) {
@@ -311,7 +311,7 @@ exports.UpdateProfitTool = async (req, res) => {
             profitTool.feature2 = feature2
         }
         if (status) {
-            const statusArray = ["processing", "approved", "declined"]
+            const statusArray = ["pending", "approved", "declined"]
             if (!statusArray.includes(status)) return res.json({ status: 404, msg: `Invalid status provided` })
 
             if (profitTool.status !== 'approved') {
@@ -364,16 +364,16 @@ exports.UpdateProfitTool = async (req, res) => {
         } else {
             profitTool.discount_percentage = null
         }
-        if (discount_duration) {
+        if (discount_duration && discount_duration_type) {
             if (isNaN(discount_duration)) return res.json({ status: 404, msg: `Discount duration must be a number` })
+            const endDate = moment().add(parseFloat(discount_duration), `${discount_duration_type}`)
             profitTool.discount_duration = discount_duration
+            profitTool.discount_duration_type = discount_duration_type
+            profitTool.discount_endDate = `${endDate}`
         } else {
             profitTool.discount_duration = null
-        }
-        if (discount_duration_type) {
-            profitTool.discount_duration_type = discount_duration_type
-        } else {
             profitTool.discount_duration_type = null
+            profitTool.discount_endDate = null
         }
 
         await profitTool.save()
@@ -418,6 +418,18 @@ exports.SingleProfitTool = async (req, res) => {
         if (!profitTool) return res.json({ status: 404, msg: 'Profit tool not found' })
 
         return res.json({ status: 200, msg: profitTool })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.AllProfitToolsOrders = async (req, res) => {
+    try {
+        const allToolOrders = await ToolOrder.findAll({
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: allToolOrders })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
     }

@@ -1,7 +1,16 @@
 const ProfitTool = require('../models').profitTools
+const User = require('../models').users
+const Notification = require('../models').notifications
+const Bank = require('../models').banks
+const ToolOrder = require('../models').toolsOrders
+const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
+const { webURL } = require('../utils/utils')
+const moment = require('moment')
+const blockAndNum = 'abcdefghijklmnopqrstuvwxyz0123456789'
+const { customAlphabet } = require('nanoid')
 
 
 exports.SubmitProfitTool = async (req, res) => {
@@ -10,6 +19,8 @@ exports.SubmitProfitTool = async (req, res) => {
 
         if (!title || category.length < 1 || !price || !about || !feature1 || !feature2 || !video_link || !contact_detail | !bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
         if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 404, msg: 'User not found' })
 
         const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
@@ -26,7 +37,7 @@ exports.SubmitProfitTool = async (req, res) => {
         imageName = `${slugData}-${date.getTime()}.jpg`
         await toolImage.mv(`${filePath}/${imageName}`)
 
-        await ProfitTool.create({
+        const profitTool = await ProfitTool.create({
             user: req.user,
             slug: slugData,
             gen_id: gen_id,
@@ -43,6 +54,36 @@ exports.SubmitProfitTool = async (req, res) => {
             account_name,
             account_number
         })
+
+        await Notification.create({
+            user: req.user,
+            title: `Profit tool submitted`,
+            content: `Your profit tool created with the id (#${profitTool.gen_id}) has been successfully submiited. Our team will go through it and check if it meets our requirements, you'll get a response from us soon.`,
+            url: '/user/profit_tools/all_tools',
+        })
+
+        const admins = await User.findAll({ where: { role: 'admin' } })
+        if (admins) {
+            admins.map(async ele => {
+
+                await Notification.create({
+                    user: ele.id,
+                    title: `Profit tool submission alert`,
+                    content: `Hello Admin, ${user.first_name} ${user.surname} just submitted a profit tool with the id (#${profitTool.gen_id}), please confirm if it meets the requirements.`,
+                    url: '/admin/profit_tools/all_tools',
+                })
+
+                Mailing({
+                    subject: 'Profit Tool Submission Alert',
+                    eTitle: `New profit tool submitted`,
+                    eBody: `
+                     <div>Hello Admin, ${user.first_name} ${user.surname} just submitted a profit tool with the id (#${profitTool.gen_id}), today ${moment(profitTool.createdAt).format('DD-MM-yyyy')} / ${moment(profitTool.createdAt).format('h:mm')}. Confirm if it meets the requirements <a href='${webURL}/admin/profit_tools/all_tools' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                    `,
+                    account: ele
+                })
+
+            })
+        }
 
         return res.json({ status: 200, msg: 'Profit Tool created successfully' })
     } catch (error) {
@@ -83,6 +124,80 @@ exports.AddRating = async (req, res) => {
         }
 
         return res.json({ status: 200, msg: form })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.GetAdminBankAccount = async (req, res) => {
+    try {
+        const mainAdmin = await User.findOne({ where: { role: 'admin', id: 1 } })
+        if (!mainAdmin) return res.json({ status: 404, msg: 'Admin not found' })
+
+        const adminBankAccount = await Bank.findOne({ where: { user: mainAdmin.id } })
+        if (!adminBankAccount) return res.json({ status: 404, msg: 'Admin Bank account not found' })
+
+        return res.json({ status: 200, msg: adminBankAccount })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.OrderTools = async (req, res) => {
+    try {
+        const { email_address, total_price, total_discount, amount_paid, products } = req.body
+        if (!email_address || total_price.length || !total_discount || !amount_paid || products.length < 1) return res.json({ status: 404, msg: `Incomplete request found` })
+        if (isNaN(total_price) || isNaN(total_discount) || isNaN(amount_paid)) return res.json({ status: 404, msg: `Prices must be in numbers` })
+
+        const nanoid = customAlphabet(blockAndNum, 15)
+        const gen_id = nanoid()
+
+        const toolOrder = await ToolOrder.create({
+            gen_id: gen_id,
+            email_address,
+            total_price,
+            total_discount,
+            amount_paid,
+            products: products,
+            status: 'paid'
+        })
+
+        const buyer = {
+            email: toolOrder.email_address
+        }
+        Mailing({
+            subject: 'New Order Placed',
+            eTitle: `Order placed`,
+            eBody: `
+             <div>You have successfully placed an order with the id (#${toolOrder.gen_id}) for ${products.length} product(s) purchase and payment made via bank transfer, today ${moment(toolOrder.createdAt).format('DD-MM-yyyy')} / ${moment(toolOrder.createdAt).format('h:mm')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
+            `,
+            account: buyer
+        })
+
+        const admins = await User.findAll({ where: { role: 'admin' } })
+        if (admins) {
+            admins.map(async ele => {
+
+                await Notification.create({
+                    user: ele.id,
+                    title: `Profit tool order alert`,
+                    content: `Hello Admin, a new profit tool order with the id (${toolOrder.gen_id} has been placed for ${products.length} product(s) purchase and payment made via bank transfer, kindly confirm this transaction.`,
+                    url: '/admin/profit_tools/orders',
+                })
+
+                Mailing({
+                    subject: 'Profit Tool Order Alert',
+                    eTitle: `Profit tool order placed`,
+                    eBody: `
+                     <div>Hello Admin, a new profit tool order with the id (#${toolOrder.gen_id}) has been placed for ${products.length} product(s) purchase and payment made via bank transfer, today ${moment(toolOrder.createdAt).format('DD-MM-yyyy')} / ${moment(toolOrder.createdAt).format('h:mm')}. See more details of this transaction <a href='${webURL}/admin/profit_tools/orders' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                    `,
+                    account: ele
+                })
+
+            })
+        }
+
+        return res.json({ status: 200, msg: 'Your order has been placed' })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }

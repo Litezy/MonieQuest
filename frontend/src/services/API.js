@@ -58,14 +58,17 @@ const admin_urls = {
     all_tools: admin + 'all-profit_tools',
     single_tool: admin + 'single-profit_tool',
     update_tool: admin + 'update-profit_tool',
-    listed_tools: admin + 'listed-profit_tools'
+    listed_tools: admin + 'listed-profit_tools',
+    all_tools_orders: admin + 'all-tools_orders'
 }
 
 const profitTools = 'api/profit_tools/'
 const profit_tools_urls = {
     submit_tool: profitTools + 'submit-profit_tool',
     user_tools: profitTools + 'user-profit_tools',
-    add_rating: profitTools + 'add-rating'
+    add_rating: profitTools + 'add-rating',
+    get_admin_bank: profitTools + 'get-admin-bank',
+    place_tool_order: profitTools + 'place-tool-order'
 }
 
 export const Apis = {
@@ -91,7 +94,6 @@ export const PutApi = async (endpoint, data) => {
     const response = await axios.put(`${URL}/${endpoint}`, data)
     return response.data
 }
-
 
 export const AuthGetApi = async (endpoint) => {
     const token = Cookies.get(CookieName)

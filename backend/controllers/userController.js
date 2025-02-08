@@ -85,7 +85,7 @@ exports.CreateAccount = async (req, res) => {
                     subject: 'New User Alert',
                     eTitle: `New user joins ${webShort}`,
                     eBody: `
-                     <div>Hello admin, you have a new user as ${user.first_name} ${user.surname} joins ${webName} today; ${moment(user.createdAt).format('DD-MM-yyyy')} / ${moment(user.createdAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have a new user as ${user.first_name} ${user.surname} joins ${webName} today; ${moment(user.createdAt).format('DD-MM-yyyy')} / ${moment(user.createdAt).format('h:mm')}.</div> 
                     `,
                     account: ele,
                 })

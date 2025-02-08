@@ -178,15 +178,21 @@ const SingleProductPage = () => {
                                     <div className='bg-primary border border-ash w-full h-fit p-5 flex flex-col gap-4'>
                                         <div className='flex justify-between gap-4'>
                                             {Object.values(singleProduct).length !== 0 &&
-                                                <div className='flex gap-4 items-center'>
-                                                    {singleProduct.discount_percentage && <div className='text-sm text-red-600'>-{singleProduct.discount_percentage}%</div>}
-                                                    <div className='flex gap-2 items-end'>
+                                                <>
+                                                    {singleProduct?.discount_percentage ?
+                                                        <div className='flex gap-4 items-center'>
+                                                            <div className='text-sm text-red-600'>-{singleProduct.discount_percentage}%</div>
+                                                            <div className='flex gap-2 items-end'>
+                                                                {singleProduct.discount_percentage && <div className='text-3xl font-bold'>₦{((100 - singleProduct.discount_percentage) / 100 * singleProduct.price).toLocaleString()}</div>}
+                                                                <div className='line-through text-sm'>₦{singleProduct.price.toLocaleString()}</div>
+                                                            </div>
+                                                        </div>
+                                                        :
                                                         <div className='text-3xl font-bold'>₦{singleProduct.price.toLocaleString()}</div>
-                                                        {singleProduct.discount_percentage && <div className='line-through text-sm'>₦{((100 - singleProduct.discount_percentage) / 100 * singleProduct.price).toLocaleString()}</div>}
-                                                    </div>
-                                                </div>
+                                                    }
+                                                </>
                                             }
-                                            <div className='text-sm italic text-lightgreen'>Discount ends in {moment(singleProduct?.discount_endDate).format('Do MMMM')}</div>
+                                            {singleProduct?.discount_endDate && <div className='text-sm italic text-lightgreen'>Discount ends {moment(new Date(singleProduct?.discount_endDate)).format('Do MMMM')}.</div>}
                                         </div>
                                         <p className='text-sm'>{singleProduct?.about}</p>
                                         <div className='flex flex-col gap-2'>
