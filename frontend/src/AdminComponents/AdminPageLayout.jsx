@@ -21,12 +21,12 @@ const AdminPageLayout = ({ children }) => {
 
 
     useEffect(() => {
-        const FetchUserWalletAndBank = async () => {
+        const FetchBankAndUtils = async () => {
             try {
-                const response = await AuthGetApi(Apis.user.user_wallet_bank)
+                const response = await AuthGetApi(Apis.user.wallet_bank_utils)
                 if (response.status === 200) {
                     setBank(response.bank)
-                    // setWallet(response.wallet) //admin doesn't have wallet
+                    setUtils(response.utils)
                 } else {
                     console.log(response.msg)
                 }
@@ -34,26 +34,7 @@ const AdminPageLayout = ({ children }) => {
                 //
             }
         }
-        FetchUserWalletAndBank()
-    }, [])
-
-
-    useEffect(() => {
-        const FetchUtils = async () => {
-            try {
-                const response = await AuthGetApi(Apis.admin.get_utils)
-                if (response.status === 200) {
-                    setUtils(response.msg)
-
-                } else {
-                    console.log(response.msg)
-                }
-
-            } catch (error) {
-                //
-            }
-        }
-        FetchUtils()
+        FetchBankAndUtils()
     }, [])
 
 

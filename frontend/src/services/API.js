@@ -18,11 +18,10 @@ const user_urls = {
     contact: user + 'contacts',
     update_profile: user + 'update-profile',
     create_update_bank: user + 'create-update-bank',
-    user_wallet_bank: user + 'user-wallet-bank',
+    wallet_bank_utils: user + 'wallet-bank-utils',
     create_update_kyc: user + 'create-update-kyc',
     user_kyc: user + 'user-kyc',
-    get_utils:user + 'get_utils',
-    get_leaderboard:user +'get_leader'
+    get_leaderboard: user + 'get_leader'
 }
 
 const notification = 'api/notification/'
@@ -45,9 +44,9 @@ const trans_url = {
     cancel_order: transaction + 'cancel_order',
     giftcard_orders: transaction + 'giftcard_order_history',
     single_giftcard_order: transaction + 'single_giftcard_history',
-    request_withdrawal: transaction +'request_withdrawal',
-    latest_withdrawals: transaction +'latest_withdrawals',
-    all_trans: transaction +'get_alltrans'
+    request_withdrawal: transaction + 'request_withdrawal',
+    latest_withdrawals: transaction + 'latest_withdrawals',
+    all_trans: transaction + 'get_alltrans'
 }
 
 const admin = 'api/admin/'
