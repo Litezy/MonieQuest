@@ -6,8 +6,9 @@ import { currencySign, MoveToTop } from '../utils/pageUtils'
 const AdminToolComp = ({ item }) => {
     let categories = []
     if (Object.values(item).length !== 0) {
-        categories = JSON.parse(item.category)
+        categories = JSON.parse(item?.category)
     }
+
     return (
         <div className='w-full h-fit relative text-semi-white rounded-lg shadow_auth'>
             <div className='px-4 py-3 bg-secondary text-sm rounded-t-lg flex justify-between gap-4 items-center text-lightgreen'>
@@ -27,16 +28,18 @@ const AdminToolComp = ({ item }) => {
                     </div>
                     <div className='flex justify-between gap-6 capitalize'>
                         <div>category:</div>
-                        <div className='flex gap-1 truncate'>
-                            {categories.slice(0, 2).map((ele, i) => (
-                                <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
-                            ))}
-                            {categories.length > 2 && '...'}
-                        </div>
+                        {categories.length > 0 &&
+                            <div className='flex gap-1 truncate'>
+                                {categories.slice(0, 2).map((ele, i) => (
+                                    <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
+                                ))}
+                                {categories.length > 2 && '...'}
+                            </div>
+                        }
                     </div>
                     <div className='flex justify-between gap-4 capitalize'>
                         <span>price:</span>
-                        <span>{currencySign[1]}{item.price.toLocaleString()}</span>
+                        <span>{currencySign[1]}{item?.price && item.price.toLocaleString()}</span>
                     </div>
                 </div>
                 <div className='flex flex-col gap-2 md:p-4 md:border-l border-gray-800 overflow-hidden'>
@@ -54,7 +57,7 @@ const AdminToolComp = ({ item }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

@@ -77,15 +77,15 @@ const AdminToolsOrders = () => {
                                                 <div className="flex items-start flex-col gap-1">
                                                     <div className={`text-zinc-200 capitalize`}>tools purchase</div>
                                                     <div className="flex items-center gap-1 md:text-sm text-xs">
-                                                        <div>{moment(item.createdAt).format('Do MMMM YYYY')}</div>
+                                                        <div>{moment(item?.createdAt).format('Do MMMM YYYY')}</div>
                                                         <div className="w-1 h-1 bg-lightgreen rounded-full"></div>
-                                                        <div className="">{moment(item.createdAt).format('h:mm')}</div>
+                                                        <div className="">{moment(item?.createdAt).format('h:mm')}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className={`flex items-center text-sm justify-center lg:w-full rounded-md text-lightgreen/90`}>{item?.status}</div>
                                             <div className=" font-bold lg:w-full flex items-center justify-center text-lightgreen">
-                                                {currencySign[1]}{(item.amount_paid || 0).toLocaleString()}
+                                                {currencySign[1]}{item?.amount_paid && item.amount_paid.toLocaleString()}
                                             </div>
                                         </div>
                                     </div>
