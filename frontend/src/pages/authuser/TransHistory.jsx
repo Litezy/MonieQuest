@@ -1,25 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { alltransactions, currencies } from '../../AuthComponents/AuthUtils'
 import { CiSearch } from "react-icons/ci";
 import TransComp from '../../AuthComponents/TransComp';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
+import { Apis, AuthGetApi } from '../../services/API';
 
 const TransHistory = () => {
   const tags = ['All', 'Crypto', 'GiftCards', 'Withdrawal']
   const [active, setActive] = useState(tags[0])
   const [searchValue, setSearchValue] = useState('')
-  const [staticData, setStaticData] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [transData, setTransData] = useState([])
   const [transactions, setTransactions] = useState([])
 
+  const fetchTrans = useCallback(async () => {
+    const res = await AuthGetApi(Apis.transaction.all_trans)
+    if (res.status !== 200) {
+      setLoading(true)
+    };
+    const data = res.data
+    setTransData(data)
+  }, [loading])
+
   useEffect(() => {
-    setStaticData(alltransactions)
-    setTransactions(alltransactions);
+    fetchTrans()
   }, []);
 
+
+  useEffect(() => {
+    setTransactions(transData)
+  }, [transData])
   const filterTrans = () => {
-    const mainData = staticData
+    const mainData = transData
     if (searchValue.length > 1) {
-      const filtered = mainData.filter(trans => String(trans.tag).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.type).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.trans_id).toLowerCase().startsWith(searchValue.toLocaleLowerCase()))
+      const filtered = mainData.filter(trans => String(trans.amount).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.type).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.trans_id).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.order_no).toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase()))
       setTransactions(filtered)
     } else {
       setTransactions(mainData)
@@ -29,17 +43,30 @@ const TransHistory = () => {
 
   return (
     <AuthPageLayout>
-      <div className="w-11/12 mx-auto">
-        <div className="mb-3 w-1/2 py-2 mx-auto flex items-center justify-center lg:w-2/3 bg-ash rounded-xl">
-          <div className="flex text-white items-center justify-center flex-col w-full">
-            <div className=" font-bold">Account Balance:</div>
-            <div className=" text-2xl font-bold">{currencies[1].symbol}25,000</div>
-          </div>
+      {loading &&
+
+        <div className="flex w-11/12 mx-auto mt-20 items-start animate-pulse gap-3 flex-col">
+          {
+            new Array(5).fill(0).map((_,i) =>{
+              return (
+                <div key={i} className="w-full mb-3 flex items-center gap-2">
+                  <div className="w-14 rounded-full h-14 bg-gray-500"></div>
+                  <div className="bg-gray-500 w-3/4 h-14 rounded-md"></div>
+                </div>
+              )
+            })
+          }
+          
         </div>
+
+      }
+
+      {!loading && <div className="w-11/12 mx-auto">
+
         <div className="w-full my-2">
           <div className="w-full lg:w-2/3 flex gap-2 pr-2 mx-auto items-center border border-zinc-500 rounded-lg ">
             <input type="text" onChange={(e) => setSearchValue(e.target.value)} onKeyUp={filterTrans}
-              placeholder='Search by tag , type or ID '
+              placeholder='Search by amount, type, Transaction ID or Order ID '
               value={searchValue}
               className='outline-none focus-within:outline-none focus:outline-none focus:ring-0 bg-transparent border-none focus:border-none focus:border w-[95%]' />
             <div className="">
@@ -65,7 +92,7 @@ const TransHistory = () => {
           <div className="text-zinc-400 mt-5">{active ? active === 'Withdrawal' ? 'Bank Withdrawal' : active : 'All'} Transactions</div>
         </div>
         <div className="w-full mt-5">
-          {transactions.length > 0 ?
+          {transData.length > 0 ?
             <>
               {active === tags[0] &&
                 <>
@@ -96,7 +123,7 @@ const TransHistory = () => {
               }
               {active === tags[3] &&
                 <>
-                  {transactions.filter((trx) => trx.tag === 'bank withdrawal').map((trans, i) => {
+                  {transactions.filter((trx) => trx.tag === 'bank').map((trans, i) => {
                     return (
                       <TransComp key={i} trans={trans} />
                     )
@@ -108,7 +135,7 @@ const TransHistory = () => {
             <div className="w-full text-gray-400 text-center">No record found...</div>
           }
         </div>
-      </div>
+      </div>}
     </AuthPageLayout>
   )
 }

@@ -1,12 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { BiSolidToTop } from "react-icons/bi";
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
+import { Apis, AuthGetApi } from '../../services/API';
+import { currencySign } from '../../utils/pageUtils';
+import moment from 'moment'
 
 const Leaderboards = () => {
     const [loading, setLoading] = useState(true)
+    const [leaderboard, setLeaderboard] = useState([])
+
+    const fetchLeaderboard = async () => {
+        try {
+            const res = await AuthGetApi(Apis.user.get_leaderboard)
+            if (res.status !== 200) {
+                setLoading(true)
+            }
+            const data = res.data
+            setLeaderboard(data)
+        } catch (error) {
+
+        } finally {
+            setLoading(false)
+        }
+    }
     useEffect(() => {
-        setTimeout(() => { setLoading(false) }, 2000)
-    }, [])
+        fetchLeaderboard()
+    }, [loading])
 
     return (
         <AuthPageLayout>
@@ -25,7 +44,7 @@ const Leaderboards = () => {
                         <thead class="text-sm bg-primary lg:text-base">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
-                                    S/N
+                                    User ID
                                 </th>
 
                                 <th scope="col" class="px-6 py-3">
@@ -41,21 +60,21 @@ const Leaderboards = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {new Array(10).fill().map((item, i) => {
+                            {leaderboard.length > 0 ? leaderboard.map((item, i) => {
                                 return (
                                     (
                                         <tr key={i} class="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
                                             <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-                                                {i + 1}
+                                                {item.id}
                                             </th>
                                             <td class="px-6 py-4">
-                                                Basit Money Man
+                                                ****{item.first_name.slice(-4)}
                                             </td>
                                             <td class="px-6 py-4 text-lightgreen">
-                                                $52.5
+                                                {currencySign[0]}{item?.user_wallets?.total_deposit.toLocaleString()}
                                             </td>
                                             <td class="px-6 py-4">
-                                                22 Jan 2025
+                                                {moment(item.createdAt).format(`DD-MM-YYYY`)}
                                             </td>
 
 
@@ -63,7 +82,22 @@ const Leaderboards = () => {
 
                                     )
                                 )
-                            })}
+                            }) :
+                                <tr>
+                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                                        nil
+                                    </th>
+                                    <td class="px-6 py-4">
+                                       nil
+                                    </td>
+                                    <td class="px-6 py-4 text-lightgreen">
+                                       nil
+                                    </td>
+                                    <td class="px-6 py-4">
+                                       nil
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>}

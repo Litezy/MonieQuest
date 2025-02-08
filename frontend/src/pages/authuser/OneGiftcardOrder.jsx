@@ -5,12 +5,15 @@ import { ErrorAlert } from '../../utils/pageUtils'
 import { Apis, AuthGetApi } from '../../services/API'
 import FormInput from '../../utils/FormInput'
 import { currencies } from '../../AuthComponents/AuthUtils'
+import { useAtom } from 'jotai'
+import { UTILS } from '../../services/store'
 
 
 const OneGiftcardOrder = () => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState([])
     const { id } = useParams()
+    const [utils] = useAtom(UTILS)
 
     const fetchSingleOrder = useCallback(async () => {
         setLoading(true)
@@ -28,7 +31,7 @@ const OneGiftcardOrder = () => {
         fetchSingleOrder()
     }, [])
 
-    const rate = 1370
+    const rate = utils?.giftcard_rate
     const [naira, setNaira] = useState('')
     useEffect(() => {
         if (data?.amount && data.amount.length > 3) {
@@ -85,7 +88,7 @@ const OneGiftcardOrder = () => {
                                 <div className="w-full">
                                     <div className="text-sm">Giftcard Code:</div>
                                     <div className="w-full">
-                                        <FormInput value={data?.code} className={`${green}`} />
+                                        <FormInput value={data?.code} className={`${green} uppercase`} />
                                     </div>
                                 </div>
 

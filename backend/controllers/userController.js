@@ -8,7 +8,7 @@ const moment = require('moment')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const otpGenerator = require('otp-generator')
-const { webName, webShort, webURL } = require('../utils/utils')
+const { webName, webShort, webURL, ServerError } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const slug = require('slug')
 
@@ -22,6 +22,8 @@ exports.CreateAccount = async (req, res) => {
 
         const findEmail = await User.findOne({ where: { email } })
         if (findEmail) return res.json({ status: 404, msg: `Email address already exists` })
+        const findPhone = await User.findOne({ where: { phone_number } })
+        if (findPhone) return res.json({ status: 404, msg: `Phone number used, try a different one` })
 
         const slugData = slug(first_name, '-')
         const date = new Date()
@@ -540,6 +542,27 @@ exports.UserKYC = async (req, res) => {
 
         return res.json({ status: 200, msg: kyc })
     } catch (error) {
-        return res.json({ status: 400, msg: error.message })
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+exports.getUtils = async (req, res) => {
+    try {
+        const utils = await Util.findOne({})
+        return res.json({ status: 200, msg: "success", data: utils })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getLeaderboard = async (req, res) => {
+    try {
+        const all_users = await User.findAll({where: {role:'user'},
+            attributes:['id','first_name','createdAt'],
+            include: { model: Wallet , as:'user_wallets',attributes: ['total_deposit'], },
+            order: [[{ model: Wallet, as: 'user_wallets' }, 'total_deposit', 'DESC']]
+        })
+        return res.json({status:200, msg:'fetch success',data:all_users})
+    } catch (error) {
+        ServerError(res, error)
     }
 }

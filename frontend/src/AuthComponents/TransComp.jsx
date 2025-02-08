@@ -15,7 +15,7 @@ const TransComp = ({ trans }) => {
                     <div className="w-full p-5 lg:p-10  bg-primary rounded-md ">
                         <div className="text-center">More Details</div>
                         <div className="flex mt-5 items-center justify-between">
-                            <TransModal selected={trans} />
+                            <TransModal trans={trans} />
                         </div>
                         <button className='mt-5 w-full text-center bg-red-600 py-2 rounded-md' onClick={() => setModal(false)} >close</button>
                     </div>
@@ -26,31 +26,47 @@ const TransComp = ({ trans }) => {
                     <div className="w-fit px-4 py-4 rounded-full bg-primary">
                         {trans.type === 'buy' && <GoArrowDownLeft className='text-lightgreen' />}
                         {trans.type === 'sell' && <GoArrowUpRight className='text-red-600' />}
-                        {trans.tag === 'bank withdrawal' && <GoArrowDownRight className='text-blue-600' />}
-                        {trans.tag === 'profit tools' && <GoArrowRight className='text-white' />}
+                        {trans.bank_user && <GoArrowUpLeft className='text-blue-600' />}
+                        {trans.brand && <GoArrowUpRight className='text-white' />}
                     </div>
                     <div className="flex items-start flex-col gap-1">
                         <div className="flex items-center gap-3">
-                            <div className={`text-zinc-200 capitalize`}>{trans.tag ? trans.tag :'Crypto'}</div>
+                            {trans.crypto_currency && <div className={`text-zinc-200 capitalize font-bold`}>Crypto</div>}
+                            {trans.bank_user && <div className={`text-zinc-200 capitalize font-bold`}>Bank Withdrawal</div>}
+                            {trans.brand && <div className={`text-zinc-200 capitalize font-bold`}>Gift-Card</div>}
                             {trans.type && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
                             {trans.type && <div className={` ${trans.type === 'buy' ? "text-lightgreen" : 'text-red-600'} capitalize`}> {trans.type}</div>}
+                            {trans.brand && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
+                            {trans.brand && <div className={`text-red-600 capitalize`}>sell</div>}
                         </div>
-                        <div className="flex items-center gap-1 md:text-sm text-xs">
-                            <div className="">{trans.date}</div>
-                            <div className="w-1 h-1 bg-lightgreen rounded-full"></div>
-                            <div className="">{moment(trans.createdAt).format('ddd')}</div>
+                        <div className="flex items-center gap-1 text-xs md:text-base">
+                            <div className="text-blue-600">{moment(trans.createdAt).format('hh:mm a')}</div>
+                            <div className="w-1 h-1 bg-white rounded-full"></div>
+                            <div className="text-blue-600">{moment(trans.createdAt).format('ddd')}</div>
                         </div>
                     </div>
                 </div>
-                <div
-                    className={` flex items-center text-sm justify-center lg:w-full rounded-md ${trans.status === 'pending' ? "text-yellow-300" : trans.status === 'completed' ? 'text-lightgreen/90  ' : 'text-red-600'}`}>
-                    {trans.status}</div>
+                {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
+
+                {trans.bank_user &&
+                    <div className={`${trans.bank_user && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
+
+                {trans.brand && <div className={`${trans.brand && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
 
                 <div className=" gap-1 font-bold lg:w-full flex items-center justify-center">
-                    <div className={`${trans.type === 'buy' ? 'text-lightgreen' : trans.type === 'sell' ? 'text-red-600' : trans.tap === 'tools'?'text-white':'text-blue-600'}`}>{trans.type === 'buy'? '+': trans.type === 'sell'?"-":'-'}</div>
-                    <div
-                        className={`${trans.type === 'buy' ? 'text-lightgreen' : trans.tag === 'bank withdrawal' ? 'text-blue-500' : trans.tap === 'tools' ?'text-white':'text-red-600'} `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
-                    </div>
+                    {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'}`}>-</div>}
+                    {trans.brand && <div className={`text-white`}>-</div>}
+                    {trans.bank_user && <div className={`text-blue-600`}>-</div>}
+
+                    {trans.crypto_currency && <div
+                        className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'} `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                    </div>}
+                    {trans.bank_user && <div
+                        className={`text-blue-600 `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                    </div>}
+                    {trans.brand && <div
+                        className={` `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                    </div>}
                 </div>
             </div>
         </div>

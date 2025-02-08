@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { TbSwitch2 } from 'react-icons/tb'
 import FormInput from '../../utils/FormInput'
 import { currencies } from '../../AuthComponents/AuthUtils'
-import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
+import { currencySign, ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import ModalLayout from '../../utils/ModalLayout'
 import { SlClock } from 'react-icons/sl'
 import { Link, useNavigate } from 'react-router-dom'
@@ -11,6 +11,8 @@ import { CardsArray } from '../../AuthComponents/GiftcardsArray'
 import { MdRateReview } from "react-icons/md";
 import { Apis, AuthPostApi } from '../../services/API'
 import Giftcards from '../../AuthComponents/Giftcards'
+import { useAtom } from 'jotai'
+import { UTILS } from '../../services/store'
 
 
 const SellGiftcard = () => {
@@ -25,7 +27,9 @@ const SellGiftcard = () => {
         pin: '',
         has_pin: 'no'
     })
-    const rate = 1370
+    const [utils] = useAtom(UTILS)
+    const rate = utils?.giftcard_rate
+    // console.log(utils)
     const [carderror, setCarderror] = useState({
         status: false,
         msg: '',
@@ -259,7 +263,7 @@ const SellGiftcard = () => {
                 {!isPageLoading && screen === 1 &&
                     <div className="w-full flex items-start flex-col gap-4">
                         <div className="flex items-start gap-2 flex-col w-full">
-                            <div className="">Giftcard Brand</div>
+                            <div className="font-bold">Gift-Card Brand</div>
 
                             <div className='w-full relative bg-secondary  rounded-md cursor-pointer' id="">
                                 <input onClick={() => setSelectBrand(true)} className='outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 focus:border cursor-pointer  bg-transparent w-full h-fit py-3 text-lightgreen px-4 lg:text-sm text-base rounded-md'
@@ -281,7 +285,7 @@ const SellGiftcard = () => {
                             </div>
                         </div>
                         <div className="flex w-full items-start gap-2 flex-col  ">
-                            <div className="font-bold text-lg">Amount:</div>
+                            <div className="font-bold ">Amount ({currencySign[0]}):</div>
                             <div className="w-full items-center flex px-2 justify-center py-1 gap-2 border border-gray-400 rounded-lg">
                                 <div className="w-full ">
                                     <FormInput name={`amount`} border={false} value={cards.amount} onChange={handleAmount} placeholder={selectedCurr.symbol} />
@@ -291,18 +295,17 @@ const SellGiftcard = () => {
 
                         </div>
                         <div className="flex item-center justify-between w-full">
-                            <div className="text-sm">Amount in Naira</div>
-                            <div onClick={changeCurrency} className="flex items-center gap-1 cursor-pointer">
-                                <div className="text-sm">set by {selectedCurr.name === 'USD' ? 'naira' : 'usd'}</div>
-                                <TbSwitch2 className='text-lightgreen ' />
+                            <div className="font-bold">Amount in Naira</div>
+                            <div  className="flex items-center gap-1 cursor-pointer">
+                                <div className="text-sm">{inNaira}</div>
                             </div>
                         </div>
                         <div className="flex w-full item-center text-base lg:text-sm justify-between">
-                            <div className="text-sm">Buying rate</div>
+                            <div className="font-bold">Buying rate</div>
                             <div className="">{rate}/$</div>
                         </div>
                         <div className="flex items-start gap-2 w-full flex-col">
-                            <div className="">Giftcard Code</div>
+                            <div className="font-bold">Giftcard Code</div>
                             <div className="w-full">
                                 <input
                                     className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 uppercase focus:border ${carderror.status ? `border-2 border-${carderror.color}` : 'border border-gray-400'} bg-transparent w-full h-fit  px-4 lg:text-sm text-base rounded-md `}
@@ -368,7 +371,10 @@ const SellGiftcard = () => {
                                     </div>
                                 </div>
                             </div>
-                            <button type='button' onClick={confirmSend} className='w-full py-2 rounded-md bg-ash'>Confirm & Sell</button>
+                            <div onClick={()=>setScreen(1)} className="flex w-full items-center justify-between gap-4">
+                                <button className='w-1/2 bg-primary py-2 rounded-md'>back</button>
+                            <button type='button' onClick={confirmSend} className='w-1/2 py-2 rounded-md bg-ash'>Confirm & Sell</button>
+                            </div>
                         </div>
                     </div>}
                 {!isPageLoading && screen === 3 && <div className="w-full">

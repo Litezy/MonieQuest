@@ -178,17 +178,7 @@ exports.SellGift = async (req, res) => {
     }
 }
 
-exports.getAllTransactions = async (req, res) => {
-    try {
-        const user = await User.findOne({ where: { id: req.user } })
-        if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
-        const alltrans = await TransHistory.findAll({ where: { user: user ? user.id : req.user, status: ['completed', 'canceled'] } })
-        if (!alltrans) return res.json({ status: 404, msg: 'No transaction history found' })
-        return res.json({ status: 200, msg: "fetch success", data: alltrans })
-    } catch (error) {
-        ServerError(res, error)
-    }
-}
+
 
 exports.getGiftCardTransactions = async (req, res) => {
     try {
@@ -359,8 +349,8 @@ exports.cancelOrder = async (req, res) => {
 
 exports.requestWithdrawal = async (req, res) => {
     try {
-        const { bank_name, account_number, bank_user, amount } = req.body
-        if (!bank_name || !account_number || !bank_user || !amount) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
+        const { bank_name, account_number, bank_user, amount,trans_id } = req.body
+        if (!bank_name || !account_number || !bank_user || !amount || !trans_id) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const findUserWallet = await Wallet.findOne({ where: { user: user ? user.id : req.user } })
@@ -371,21 +361,17 @@ exports.requestWithdrawal = async (req, res) => {
         }
         if (amount > findUserWallet.balance) return res.json({ status: 400, msg: `Insufficient funds` })
         if (isNaN(amount)) return res.json({ status: 400, msg: 'Please input a valid number' })
-        const newamt = parseFloat(findUserWallet.balance - amount)
+        const newamt = parseFloat(findUserWallet.balance) - parseFloat(amount)
         const newtotal = parseFloat(findUserWallet.total_outflow) + parseFloat(amount)
         findUserWallet.total_outflow = newtotal
         findUserWallet.balance = newamt
         await findUserWallet.save()
-        const withdrawal = await BankWithdrawal.create({ bank_name, userid: req.user, account_number, bank_user, amount })
-
-        const formattedAmt = amount.toLocaleString()
         const nanoid = customAlphabet(blockAndNum, 15)
         const transId = nanoid()
-        await TransHistory.create({
-            user: user.id,
-            tag: 'Bank withdrawal',
-            bank_name, account_number, account_name: bank_user, amount, trans_id: transId
-        })
+        const withdrawal = await BankWithdrawal.create({ bank_name, trans_id:transId, userid: req.user, account_number, bank_user, amount })
+
+        const formattedAmt = amount.toLocaleString()
+        
         await Notify.create({
             user: req.user, title: 'Withdrawal Request', content: `You placed a bank withdrawal of ${nairaSign}${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `, url: `/user/bank_withdrawal`
         })
@@ -430,12 +416,29 @@ exports.getUserLatestWithdrawals = async (req, res) => {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const getWithdrawals = await BankWithdrawal.findAll({
-            where: { userid: user ? user.id : req.user },
+            where: { userid: user ? user.id : req.user, status: 'pending' },
             limit: 5,
             order: [['createdAt', 'DESC']]
         })
         if (!getWithdrawals) return res.json({ status: 404, msg: 'Transactions not found' })
         return res.json({ status: 200, msg: 'fetch success', data: getWithdrawals })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getAllTransactions = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
+        const giftcardsTrans = await GiftCardSell.findAll({ where: { userid: user ? user.id : req.user } })
+        const cryptobuysTrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user } })
+        const cryptosellsTrans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user } })
+        const bankWithdrawals = await BankWithdrawal.findAll({ where: { userid: user ? user.id : req.user } })
+        const alltrans = [...giftcardsTrans, ...cryptobuysTrans, ...cryptosellsTrans,...bankWithdrawals]
+        //sort by created At
+        const sortedArr = alltrans.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        return res.json({ status: 200, msg: "fetch success", data: sortedArr })
     } catch (error) {
         ServerError(res, error)
     }

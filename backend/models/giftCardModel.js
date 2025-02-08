@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         order_no: { type: DataTypes.TEXT, allowNull: false },
         pin: { type: DataTypes.TEXT, allowNull: true },
         userid: { type: DataTypes.INTEGER },
+        tag:{type: DataTypes.TEXT, allowNull:false,defaultValue:'giftcard'},
         status:{type: DataTypes.TEXT,defaultValue:'pending'}
     })
 }

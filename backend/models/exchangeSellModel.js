@@ -5,6 +5,7 @@ module.exports = (sequelize,DataTypes) =>{
         trans_hash:{type: DataTypes.STRING, allowNull:false},
         amount:{type: DataTypes.STRING, allowNull:false},
         order_no:{type: DataTypes.STRING, allowNull:false},
+        tag:{type: DataTypes.TEXT, allowNull:false,defaultValue:'crypto'},
         userid:{type: DataTypes.INTEGER},
         status:{type: DataTypes.TEXT,defaultValue:'pending'}
     })

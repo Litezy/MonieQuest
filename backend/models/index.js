@@ -36,12 +36,14 @@ db.users.hasMany(db.exchangeBuys, { foreignKey: 'userid', as: "crypto_buyers" })
 db.users.hasMany(db.exchangeSells, { foreignKey: 'userid', as: "crypto_sellers" })
 db.users.hasMany(db.giftCards, { foreignKey: 'userid', as: "gift_sellers" })
 db.users.hasMany(db.withdrawals, { foreignKey: 'userid', as: "user_withdrawals" })
+db.users.hasOne(db.wallets, { foreignKey: 'user', as: "user_wallets" })
 
 // One to One relationships
 db.exchangeBuys.belongsTo(db.users, { foreignKey: 'userid', as: "crypto_buyer" })
 db.exchangeSells.belongsTo(db.users, { foreignKey: 'userid', as: "crypto_seller" })
 db.giftCards.belongsTo(db.users, { foreignKey: 'userid', as: "gift_seller" })
 db.withdrawals.belongsTo(db.users, { foreignKey: 'userid', as: "user_withdrawal" })
+db.wallets.belongsTo(db.users, { foreignKey: 'user', as: "user_wallet" })
 
 db.sequelize.sync({ force: false }).then(() => console.log('Tables synced'))
     .catch((error) => console.log(error))

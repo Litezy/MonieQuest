@@ -21,6 +21,8 @@ const user_urls = {
     user_wallet_bank: user + 'user-wallet-bank',
     create_update_kyc: user + 'create-update-kyc',
     user_kyc: user + 'user-kyc',
+    get_utils:user + 'get_utils',
+    get_leaderboard:user +'get_leader'
 }
 
 const notification = 'api/notification/'
@@ -44,7 +46,8 @@ const trans_url = {
     giftcard_orders: transaction + 'giftcard_order_history',
     single_giftcard_order: transaction + 'single_giftcard_history',
     request_withdrawal: transaction +'request_withdrawal',
-    latest_withdrawals: transaction +'latest_withdrawals'
+    latest_withdrawals: transaction +'latest_withdrawals',
+    all_trans: transaction +'get_alltrans'
 }
 
 const admin = 'api/admin/'

@@ -1,50 +1,65 @@
 import React from 'react'
 import { currencies } from './AuthUtils'
+import moment from 'moment'
 
-const TransModal = ({ selected }) => {
+const TransModal = ({ trans }) => {
     
     return (
-        <div className="flex w-full items-start gap-2 flex-col ">
+        <div className="flex w-full items-start gap-2 flex-col poppins">
             <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Transaction</div>
-                <div className="capitalize ">{selected?.tag === 'withdrawal' ? 'Bank withdrawal' : selected?.tag}</div>
+                {trans.crypto_currency && <div className="capitalize ">Crypto Currency</div>}
+                {trans.bank_user && <div className="capitalize ">Bank Withdrawal</div>}
+                {trans.brand && <div className="capitalize ">Gift Card</div>}
             </div>
-            {selected?.type && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+            {trans?.type && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Transaction Type</div>
-                <div className="capitalize ">{selected?.type}</div>
+                <div className="capitalize ">{trans?.type}</div>
             </div>}
             <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Transaction Date</div>
-                <div className="capitalize ">{selected?.date}</div>
+                <div className="capitalize ">{moment(trans.createdAt).format(`DD/MM/YYYY hh:mm a`)}</div>
             </div>
             <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Transaction Amount</div>
-                <div className="capitalize ">{currencies[1].symbol}{selected?.amount}</div>
+                <div className="capitalize ">{currencies[1].symbol}{trans?.amount.toLocaleString()}</div>
             </div>
-            <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+            {trans.trans_id &&<div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Transaction ID</div>
-                <div className="capitalize ">{selected?.trans_id}</div>
-            </div>
-            {selected?.reference_id && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+                <div className="capitalize ">{trans?.trans_id}</div>
+            </div>}
+            {trans.order_no &&<div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+                <div className="">Order ID</div>
+                <div className="capitalize ">{trans?.order_no}</div>
+            </div>}
+            {trans?.bank_user && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Transaction Reference</div>
-                <div className="">{selected?.trans_id}</div>
+                <div className="">{trans?.reference_id ? trans?.reference_id : 'Not confirmed'}</div>
             </div>}
-            {selected?.bank_account && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
-                <div className="">Bank Name</div>
-                <div className="">{selected?.bank_account}</div>
+            {trans?.bank_name && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+                <div className="">Beneficiary</div>
+                <div className="">{trans?.bank_name}</div>
             </div>}
-            {selected?.account_number && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
-                <div className="">Withdrawal Account Number</div>
-                <div className="">{selected?.account_number}</div>
+            {trans?.account_number && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+                <div className="">Beneficiary Account</div>
+                <div className="">{trans?.account_number}</div>
             </div>}
 
-            {selected?.account_name && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
-                <div className="">Account Name</div>
-                <div className="">{selected?.account_name}</div>
+            {trans?.bank_user && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+                <div className="">Beneficiary Bank</div>
+                <div className="">{trans?.bank_user}</div>
+            </div>}
+            {trans?.code && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+                <div className="">Gift-Card Code</div>
+                <div className="">{trans?.code}</div>
+            </div>}
+            {trans?.brand && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+                <div className="">Gift-Card Pin</div>
+                <div className="">{trans?.pin ? trans?.pin : 'nil'}</div>
             </div>}
             <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Transaction Status</div>
-                <div className="">{selected?.status}</div>
+                <div className="">{trans?.status}</div>
             </div>
             
         </div>

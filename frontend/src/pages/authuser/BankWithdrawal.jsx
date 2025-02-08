@@ -27,7 +27,18 @@ const formsal = () => {
     const [forms, setForms] = useState({
         bank: '', amount: '', accountNumber: '', accountName: '',
     })
-
+    const FetchUserWallet = async () => {
+        try {
+            const response = await AuthGetApi(Apis.user.user_wallet_bank)
+            if (response.status === 200) {
+                setWallet(response.wallet)
+            } else {
+                console.log(response.msg)
+            }
+        } catch (error) {
+            //
+        }
+    }
     const FetchUtils = async () => {
         try {
             const response = await AuthGetApi(Apis.user.get_user_utils)
@@ -60,11 +71,16 @@ const formsal = () => {
     }
 
     const prefillBank = () => {
-        setShow(true)
-        setForms({
-            ...forms,
-            bank: bankAcc.account_name, accountNumber: bankAcc.account_number, accountName: bankAcc.bank_name
-        })
+        if (Object.keys(bankAcc).length > 0) {
+            setShow(true)
+            setForms({
+                ...forms,
+                bank: bankAcc.account_name, accountNumber: bankAcc.account_number, accountName: bankAcc.bank_name
+            })
+        } else {
+            return ErrorAlert('No bank account added')
+        }
+
     }
 
     const handleAmount = (e) => {
@@ -119,6 +135,7 @@ const formsal = () => {
             setForms({ accountName: "", accountNumber: '', amount: '', bank: "" })
             FetchUtils()
             FetchLatestTrans()
+            FetchUserWallet()
             await new Promise((resolve) => setTimeout(resolve, 3000));
             setShowModal(true)
             setLoading(false)
@@ -173,7 +190,7 @@ const formsal = () => {
                 {!showModal && <><div className=' w-11/12 mx-auto flex items-center justify-center'>
                     <div className='rounded-xl bg-primary flex-col gap-3 p-5 flex items-center w-full lg:w-[75%]'>
                         <div className='text-lightgreen capitalize'>available balance</div>
-                        <div className='md:text-5xl text-4xl font-bold'>{currencies[1].symbol}{wallet.balance?.toLocaleString()}</div>
+                        <div className='md:text-5xl text-4xl font-bold'>{currencies[1].symbol}{wallet.balance ? wallet.balance?.toLocaleString() : <span>0.00</span>}</div>
                         <div className='flex md:gap-10 gap-6 items-center mt-2'>
                             <div className='flex flex-col gap-1'>
                                 <div className='flex gap-1 items-center'>
