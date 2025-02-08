@@ -372,10 +372,11 @@ exports.CreateUpdateBankAccount = async (req, res) => {
     }
 }
 
-exports.GetUserWalletAndBank = async (req, res) => {
+exports.GetWalletBankAndUtils = async (req, res) => {
     try {
         let userwallet = {}
         let userbank = {}
+        let adminUtils = {}
 
         const wallet = await Wallet.findOne({ where: { user: req.user } })
         if (wallet) {
@@ -385,8 +386,12 @@ exports.GetUserWalletAndBank = async (req, res) => {
         if (bank) {
             userbank = bank
         }
+        const utils = await Util.findOne({})
+        if (utils) {
+            adminUtils = utils
+        }
 
-        return res.json({ status: 200, wallet: userwallet, bank: userbank })
+        return res.json({ status: 200, wallet: userwallet, bank: userbank, utils: adminUtils })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }
@@ -546,23 +551,16 @@ exports.UserKYC = async (req, res) => {
         return res.json({ status: 500, msg: error.message })
     }
 }
-exports.getUtils = async (req, res) => {
-    try {
-        const utils = await Util.findOne({})
-        return res.json({ status: 200, msg: "success", data: utils })
-    } catch (error) {
-        ServerError(res, error)
-    }
-}
 
 exports.getLeaderboard = async (req, res) => {
     try {
-        const all_users = await User.findAll({where: {role:'user'},
-            attributes:['id','first_name','createdAt'],
-            include: { model: Wallet , as:'user_wallets',attributes: ['total_deposit'], },
+        const all_users = await User.findAll({
+            where: { role: 'user' },
+            attributes: ['id', 'first_name', 'createdAt'],
+            include: { model: Wallet, as: 'user_wallets', attributes: ['total_deposit'], },
             order: [[{ model: Wallet, as: 'user_wallets' }, 'total_deposit', 'DESC']]
         })
-        return res.json({status:200, msg:'fetch success',data:all_users})
+        return res.json({ status: 200, msg: 'fetch success', data: all_users })
     } catch (error) {
         ServerError(res, error)
     }

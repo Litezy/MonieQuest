@@ -178,8 +178,6 @@ exports.SellGift = async (req, res) => {
     }
 }
 
-
-
 exports.getGiftCardTransactions = async (req, res) => {
     try {
         const user = await User.findOne({ where: { id: req.user } })
@@ -349,7 +347,7 @@ exports.cancelOrder = async (req, res) => {
 
 exports.requestWithdrawal = async (req, res) => {
     try {
-        const { bank_name, account_number, bank_user, amount,trans_id } = req.body
+        const { bank_name, account_number, bank_user, amount, trans_id } = req.body
         if (!bank_name || !account_number || !bank_user || !amount || !trans_id) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
@@ -368,10 +366,10 @@ exports.requestWithdrawal = async (req, res) => {
         await findUserWallet.save()
         const nanoid = customAlphabet(blockAndNum, 15)
         const transId = nanoid()
-        const withdrawal = await BankWithdrawal.create({ bank_name, trans_id:transId, userid: req.user, account_number, bank_user, amount })
+        const withdrawal = await BankWithdrawal.create({ bank_name, trans_id: transId, userid: req.user, account_number, bank_user, amount })
 
         const formattedAmt = amount.toLocaleString()
-        
+
         await Notify.create({
             user: req.user, title: 'Withdrawal Request', content: `You placed a bank withdrawal of ${nairaSign}${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `, url: `/user/bank_withdrawal`
         })
@@ -401,11 +399,14 @@ exports.requestWithdrawal = async (req, res) => {
                     eBody: `
                      <div>Hi Admin, A bank withdrawal request with the transaction ID of: ${transId} has been made, kindly review and credit customer ${user.first_name}. ${moment(withdrawal.createdAt).format('DD-MM-yyyy')} / ${moment(withdrawal.createdAt).format('h:mm')}.</div> 
                     `,
-                    account: admin,
+                    account: admin, 
                 })
             })
         }
-        return res.json({ status: 200, msg: "Withdrawal placed successfully" })
+
+        const updatedWallet = await Wallet.findOne({ where: { user: req.user } })
+
+        return res.json({ status: 200, msg: "Withdrawal placed successfully", wallet: updatedWallet })
     } catch (error) {
         ServerError(res, error)
     }
@@ -435,7 +436,7 @@ exports.getAllTransactions = async (req, res) => {
         const cryptobuysTrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user } })
         const cryptosellsTrans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user } })
         const bankWithdrawals = await BankWithdrawal.findAll({ where: { userid: user ? user.id : req.user } })
-        const alltrans = [...giftcardsTrans, ...cryptobuysTrans, ...cryptosellsTrans,...bankWithdrawals]
+        const alltrans = [...giftcardsTrans, ...cryptobuysTrans, ...cryptosellsTrans, ...bankWithdrawals]
         //sort by created At
         const sortedArr = alltrans.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         return res.json({ status: 200, msg: "fetch success", data: sortedArr })

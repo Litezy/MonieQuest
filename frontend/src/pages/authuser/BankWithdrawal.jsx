@@ -27,29 +27,7 @@ const formsal = () => {
     const [forms, setForms] = useState({
         bank: '', amount: '', accountNumber: '', accountName: '',
     })
-    const FetchUserWallet = async () => {
-        try {
-            const response = await AuthGetApi(Apis.user.user_wallet_bank)
-            if (response.status === 200) {
-                setWallet(response.wallet)
-            } else {
-                console.log(response.msg)
-            }
-        } catch (error) {
-            //
-        }
-    }
-    const FetchUtils = async () => {
-        try {
-            const response = await AuthGetApi(Apis.user.get_user_utils)
-            if (response.status === 200) {
-                const data = response.data
-                setWallet(data.wallet)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
+
     const FetchLatestTrans = async () => {
         try {
             const response = await AuthGetApi(Apis.transaction.latest_withdrawals)
@@ -62,6 +40,10 @@ const formsal = () => {
             console.log(error)
         }
     }
+    useEffect(() => {
+        FetchLatestTrans()
+    })
+    // console.log(records)
 
 
     const [show, setShow] = useState(false)
@@ -133,9 +115,9 @@ const formsal = () => {
                 return ErrorAlert(res.msg)
             }
             setForms({ accountName: "", accountNumber: '', amount: '', bank: "" })
+            setWallet(res.wallet)
             FetchLatestTrans()
-            FetchUserWallet()
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            await new Promise((resolve) => setTimeout(resolve, 3000));
             setShowModal(true)
             setLoading(false)
         } catch (error) {
@@ -144,12 +126,8 @@ const formsal = () => {
         } finally {
             setLoading(false)
         }
-
     }
-    useEffect(() => {
-        FetchLatestTrans()
-    })
-    // console.log(records)
+
     return (
         <AuthPageLayout>
             <div className='w-full'>

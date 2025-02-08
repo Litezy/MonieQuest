@@ -69,17 +69,6 @@ exports.UpdateUtils = async (req, res) => {
     }
 }
 
-exports.GetUtils = async (req, res) => {
-    try {
-        const utils = await Util.findOne({})
-        if (!utils) return res.json({ status: 404, msg: 'Utils not found' })
-
-        return res.json({ status: 200, msg: utils })
-    } catch (error) {
-        return res.json({ status: 500, msg: error.message })
-    }
-}
-
 exports.CreateAirdrop = async (req, res) => {
     try {
         const { title, category, kyc, blockchain, type, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
