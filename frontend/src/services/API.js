@@ -43,7 +43,8 @@ const trans_url = {
     cancel_order: transaction +'cancel_order',
     giftcard_orders: transaction + 'giftcard_order_history',
     single_giftcard_order: transaction + 'single_giftcard_history',
-    request_withdrawal: transaction +'request_withdrawal'
+    request_withdrawal: transaction +'request_withdrawal',
+    latest_withdrawals: transaction +'latest_withdrawals'
 }
 
 const admin = 'api/admin/'

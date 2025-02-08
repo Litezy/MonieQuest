@@ -12,31 +12,47 @@ import SelectComp from '../../GeneralComponents/SelectComp'
 import { useAtom } from 'jotai'
 import { BANK, UTILS, WALLET } from '../../services/store'
 import { Apis, AuthGetApi, AuthPostApi } from '../../services/API'
+import WithdrawComp from '../../AuthComponents/WIthdrawComp'
+import { Link } from 'react-router-dom'
 
 
 const formsal = () => {
     const [bank] = useAtom(BANK)
-    const [wallet,setWallet] = useAtom(WALLET)
+    const [wallet, setWallet] = useAtom(WALLET)
     const [utils] = useAtom(UTILS)
     const [bankAcc] = useAtom(BANK)
     const [loading, setLoading] = useState(false)
+    const [records, setRecords] = useState([])
+    const [confirm, setConfirm] = useState(false)
     const [forms, setForms] = useState({
         bank: '', amount: '', accountNumber: '', accountName: '',
     })
 
-        const FetchUtils = async () => {
-          try {
+    const FetchUtils = async () => {
+        try {
             const response = await AuthGetApi(Apis.user.get_user_utils)
             if (response.status === 200) {
-              const data = response.data
-              setWallet(data.wallet)
+                const data = response.data
+                setWallet(data.wallet)
             }
-          } catch (error) {
+        } catch (error) {
             console.log(error)
-          }
         }
-       
-    
+    }
+    const FetchLatestTrans = async () => {
+        try {
+            const response = await AuthGetApi(Apis.transaction.latest_withdrawals)
+            if (response.status === 200) {
+                const data = response.data
+                // console.log(data)
+                setRecords(data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     const [show, setShow] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const handleChange = (e) => {
@@ -73,12 +89,20 @@ const formsal = () => {
         }
     };
 
+    const confirmRequest = (e) => {
+        e.preventDefault()
+        if (!forms.amount || !forms.accountName || !forms.bank || !forms.accountNumber) return ErrorAlert(`Please fill out all fields`)
+        const convertAmt = forms.amount.replace(/,/g, '')
+        if (isNaN(convertAmt)) return ErrorAlert(`Please input a valid number`)
+        if (convertAmt < utils.bank_withdraw_min) return ErrorAlert(`minimum of ${currencies[1].symbol}${utils.bank_withdraw_min?.toLocaleString()} is required to withdraw`)
+        if (convertAmt > wallet.balance) return ErrorAlert('Insufficient balance')
+        setConfirm(true)
+    }
 
     const submitRequest = async (e) => {
         e.preventDefault()
+        setConfirm(false)
         const convertAmt = forms.amount.replace(/,/g, '')
-        if (convertAmt < utils.bank_withdraw_min) return ErrorAlert(`minimum of ${currencies[1].symbol}${utils.bank_withdraw_min?.toLocaleString()} is required to withdraw`)
-        if (convertAmt > wallet.balance) return ErrorAlert('Insufficient balance')
         const formdata = {
             bank_name: forms.bank,
             account_number: forms.accountNumber,
@@ -94,19 +118,22 @@ const formsal = () => {
             }
             setForms({ accountName: "", accountNumber: '', amount: '', bank: "" })
             FetchUtils()
+            FetchLatestTrans()
             await new Promise((resolve) => setTimeout(resolve, 3000));
             setShowModal(true)
             setLoading(false)
         } catch (error) {
             ErrorAlert(`failed to place withdrawal, try again!`)
             console.log(error.message)
-        }finally{
+        } finally {
             setLoading(false)
         }
 
     }
-
-    // console.log(utils)
+    useEffect(() => {
+        FetchLatestTrans()
+    })
+    // console.log(records)
     return (
         <AuthPageLayout>
             <div className='w-full'>
@@ -118,6 +145,22 @@ const formsal = () => {
                         </div>
                     </ModalLayout>
                 }
+
+                {confirm &&
+                    <ModalLayout setModal={setConfirm} clas={`w-11/12 mx-auto lg:w-1/2`}>
+                        <div className="w-full p-5 bg-white text-dark rounded-md flex items-center flex-col justify-center">
+                            <div className="flex flex-col gap-4 w-full">
+                                <div className="font-semibold text-center">Cofirm Withdrawal</div>
+                                <div className="flex w-full items-center justify-between ">
+                                    <button onClick={() => setConfirm(false)} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
+                                    <button onClick={submitRequest} className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </ModalLayout>
+
+                }
+
                 {showModal &&
                     <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 min-h-20`}>
                         <div className="w-full flex-col h-fit flex items-center justify-center">
@@ -142,7 +185,7 @@ const formsal = () => {
                             <div className='flex flex-col gap-1 border-l-2 md:pl-10 pl-6'>
                                 <div className='flex gap-1 items-center'>
                                     <div className='md:size-3.5 size-3 bg-red-600 rounded-full'></div>
-                                    <div className='md:text-sm text-xs capitalize font-medium'>outflow</div>
+                                    <div className='md:text-sm text-xs capitalize font-medium'>total outflow</div>
                                 </div>
                                 <div className='font-bold'>{currencies[1].symbol}
                                     {Object.values(wallet).length !== 0 ? <span>{wallet.total_outflow.toFixed(2).toLocaleString()} </span> : <span>0.00</span>}</div>
@@ -152,7 +195,7 @@ const formsal = () => {
 
                 </div>
                     <div className="w-full mt-10">
-                        <form onSubmit={submitRequest} className="w-full bg-primary p-5">
+                        <div className="w-full bg-primary p-5">
                             <div className="flex items-center flex-col lg:flex-row w-full justify-between  mb-5">
                                 <div className="text-xl lg:text-3xl font-bold text-gray-300  ">Request Withdrawal</div>
                                 <div className="text-sm text-red-600">minimum of {currencies[1].symbol}{utils.bank_withdraw_min} to initiate withdrawal</div>
@@ -195,18 +238,21 @@ const formsal = () => {
                                 </div>
                             </div>
                             <div className="w-full lg:w-1/2 mx-auto mb-10">
-                                <FormButton disabled={wallet.balance < utils.bank_withdraw_min ? true : false} title={`Request Withdrawal`} />
+                                <FormButton onClick={confirmRequest} disabled={wallet.balance < utils.bank_withdraw_min ? true : false} title={`Request Withdrawal`} />
                             </div>
 
-                        </form>
+                        </div>
 
-                        <div className="text-xl w-11/12 mx-auto mt-5 md:text-3xl font-bold text-gray-300 ">Latest Bank Transactions</div>
+                        <div className="text-xl w-11/12 mx-auto mt-5 md:text-2xl font-bold text-gray-300 ">Latest Bank Transactions <span className='text-yellow-300'>(On Hold)</span></div>
+                        <div className="w-11/12 mx-auto text-sm ">NB: successful transactions can be found in <Link to={`/user/transactions_history`} className='text-blue-600'>Transactions History</Link></div>
                         <div className="mt-5 w-11/12 mx-auto">
-                            {alltransactions.filter((trnx) => trnx.tag === 'bank withdrawal').map((trans, i) => {
+                            {records && records.length > 0 ? records.map((trans, i) => {
                                 return (
-                                    <TransComp key={i} trans={trans} />
+                                    <WithdrawComp key={i} trans={trans} />
                                 )
-                            })}
+                            }) :
+                                <div className="">No transations on hold!</div>
+                            }
                         </div>
                     </div></>}
             </div>

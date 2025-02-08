@@ -151,7 +151,7 @@ const SellCrypto = () => {
                     </ModalLayout>
                 }
                 {confirm &&
-                    <ModalLayout setModal={setConfirm} clas={`w-11/12 mx-auto lg::w-1/2`}>
+                    <ModalLayout setModal={setConfirm} clas={`w-11/12 mx-auto lg:w-1/2`}>
                         <div className="w-full p-5 bg-white text-dark rounded-md flex items-center flex-col justify-center">
                             <div className="flex flex-col gap-4 w-full">
                                 <div className="font-semibold text-center">To confirm you've sent crypto asset, input the transaction hash below</div>
