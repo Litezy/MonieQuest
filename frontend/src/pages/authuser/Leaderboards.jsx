@@ -83,7 +83,7 @@ const Leaderboards = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {leaderboard.length > 0 ? leaderboard.map((item, i) => {
+                            {leaderboard.length > 0 ? leaderboard.slice(0,20).map((item, i) => {
                                 return (
                                     (
                                         <tr key={i} class="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
