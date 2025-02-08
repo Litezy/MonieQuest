@@ -21,20 +21,20 @@ const mainIcons = [
     {
         name: 'crypto exchange',
         symbol: MdCurrencyExchange,
-        url: '/user/exchange',
+        url: '/user/exchange/buy',
         main: '/exchange'
     },
     {
         name: 'gift cards',
         symbol: HiGift,
-        url: '/user/giftcards',
+        url: '/user/giftcards/sell',
         main: '/giftcards'
     },
     {
         name: 'profit tools',
         symbol: CgToolbox,
-        main: '/profit_tools',
-        url: '/user/profit_tools/create'
+        url: '/user/profit_tools/create',
+        main: '/profit_tools'
     },
     {
         name: 'bank withdrawal',

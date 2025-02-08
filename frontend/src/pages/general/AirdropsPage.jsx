@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import AirdropDiv from '../../GeneralComponents/AirdropDiv'
-import { Form, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
 import { LuChevronRight, LuChevronLeft } from "react-icons/lu";
 import { GiArrowScope } from "react-icons/gi";
@@ -10,8 +10,8 @@ import { MoveToTop } from '../../utils/pageUtils'
 import { Apis, GetApi } from '../../services/API'
 import Loading from '../../GeneralComponents/Loading'
 
-const statuses = ["Ongoing", "Finished"]
-const categories = ["Featured", "New", "DeFi", "NFT", "Others"]
+const statuses = ["Active", "Finished"]
+const categories = ["Featured", "New", "DeFi", "NFT", "Other"]
 const blockchains = ["Ton", "BNB", "ETH", "Solana"]
 
 const AirdropsPage = () => {
@@ -52,13 +52,13 @@ const AirdropsPage = () => {
     return airdrops.filter((ele) => ele.category === 'new');
   }, [airdrops])
   const NFTAirdrops = useMemo(() => {
-    return airdrops.filter((ele) => ele.category === 'nft');
+    return airdrops.filter((ele) => ele.category === 'NFT');
   }, [airdrops])
   const deFiAirdrops = useMemo(() => {
     return airdrops.filter((ele) => ele.category === 'deFi');
   }, [airdrops])
   const otherAirdrops = useMemo(() => {
-    return airdrops.filter((ele) => ele.category === 'others');
+    return airdrops.filter((ele) => ele.category === 'other');
   }, [airdrops])
 
   const SubmitFilter = () => {
@@ -274,7 +274,7 @@ const AirdropsPage = () => {
                   </div>
                   :
                   <div className='text-center'>No airdrop found...</div>
-                  }
+                }
               </div>
             }
           </div>

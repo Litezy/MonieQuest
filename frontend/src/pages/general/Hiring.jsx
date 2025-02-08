@@ -32,7 +32,7 @@ const Hiring = () => {
                             <div className='md:col-span-4 col-span-1 border-2 border-[#2f2f47] p-4 rounded-3xl'>
                                 <div className='flex flex-col gap-2'>
                                     <div className='text-3xl capitalize font-bold text-lightgreen'>our values</div>
-                                    <div className='flex flex-col gap-4'>
+                                    <div className='flex flex-col gap-4 text-lg'>
                                         <div>We prioritize honesty and ethical practices in all operations. Everything we do is centered on providing exceptional value and service to our customers. We strive for the highest standards in every task we undertake. We celebrate diverse ideas and perspectives.</div>
                                         <div>By living these values, we create an organization that earns trust, fosters meaningful relationships, and ensures every team member is aligned on delivering exceptional results with authenticity and respect for all.
                                         </div>
@@ -44,11 +44,11 @@ const Hiring = () => {
                             </div>
                         </div>
                         <div className='flex flex-col gap-4'>
-                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>collaborations</div>
-                                        <div className='flex flex-col gap-4 text-sm'>
+                                        <div className='flex flex-col gap-4'>
                                             <div>Even in a remote setting. We use tools like Slack and Trello to stay connected.
                                                 We value open communication and encourage team members to share ideas freely.
                                                 Every achievement is a team effort, and we celebrate milestones together.
@@ -59,10 +59,10 @@ const Hiring = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>hardcore</div>
-                                        <div className='flex flex-col gap-4 text-sm'>
+                                        <div className='flex flex-col gap-4'>
                                             <div>We’re looking for people who are excited about what they do, willing to push
                                                 boundaries.
                                                 We expect team members to take initiative and deliver results without
@@ -76,11 +76,11 @@ const Hiring = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>humility</div>
-                                        <div className='flex flex-col gap-4 text-sm'>
+                                        <div className='flex flex-col gap-4'>
                                             <div>No one knows everything, and that’s okay. We value curiosity and a willingness to
                                                 learn over ego.
                                                 Success is a shared effort, and we celebrate the team, not individual accolades.
@@ -93,10 +93,10 @@ const Hiring = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>freedom</div>
-                                        <div className='flex flex-col gap-4 text-sm'>
+                                        <div className='flex flex-col gap-4'>
                                             <div>Work when and where you’re most productive—what matters is the result, not the
                                                 clock.
                                                 We trust our team members to take ownership of their tasks and make decisions
@@ -112,11 +112,11 @@ const Hiring = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4 h-fit'>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full h-fit'>
+                            <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>user-Focused</div>
-                                        <div className='flex flex-col gap-4 text-sm'>
+                                        <div className='flex flex-col gap-4'>
                                             <div>We put ourselves in the users' shoes to truly understand their needs and challenges.
                                                 Every decision we make revolves around enhancing the user experience. We’re always
                                                 listening and iterating based on feedback.
@@ -130,10 +130,10 @@ const Hiring = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full md:h-full h-fit'>
+                                <div className='border-2 border-[#2f2f47] p-4 rounded-3xl w-full'>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-xl capitalize font-bold text-lightgreen'>who thrives at monieQuest</div>
-                                        <div className='flex flex-col gap-4 text-sm'>
+                                        <div className='flex flex-col gap-4'>
                                             <div>We’re looking for individuals who exhibit:
                                                 Self-Starter Attitude: We value individuals who can take initiative and work
                                                 independently.
@@ -154,7 +154,7 @@ const Hiring = () => {
                     <div className='flex flex-col gap-10 mt-16' id='jobs'>
                         <div className='flex flex-col gap-2'>
                             <div className='capitalize font-bold text-3xl text-lightgreen'>choose your jobs</div>
-                            <div>Choose the position that best matches your interests and expertise.</div>
+                            <div className='text-lg'>Choose the position that best matches your interests and expertise.</div>
                         </div>
                         <div className='grid md:grid-cols-3 grid-cols-1 gap-6'>
                             {Jobs.map((item, i) => (
@@ -171,7 +171,7 @@ const Hiring = () => {
                     <div className='flex flex-col gap-10 mt-16'>
                         <div className='flex flex-col gap-2'>
                             <div className='capitalize font-bold text-3xl text-lightgreen'>how we hire</div>
-                            <div>The interview process typically spans 2 to 4 weeks and involves four separate interviews</div>
+                            <div className='text-lg'>The interview process typically spans 2 to 4 weeks and involves four separate interviews</div>
                         </div>
                         <div className='grid grid-cols-4'>
                             {Hire.map((item, i) => (

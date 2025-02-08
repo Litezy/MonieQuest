@@ -19,20 +19,24 @@ const AdminPageLayout = ({ children }) => {
     const active = 'text-lightgreen rounded-sm bg-[#1e333c]'
     const nonactive = 'hover:bg-primary rounded-sm text-[#9696b5]'
 
-    useEffect(() => {
-        const FetchBank = async () => {
-            try {
-                const response = await AuthGetApi(Apis.user.get_bank_account)
-                if (response.status === 200) {
-                    setBank(response.msg)
-                }
 
+    useEffect(() => {
+        const FetchUserWalletAndBank = async () => {
+            try {
+                const response = await AuthGetApi(Apis.user.user_wallet_bank)
+                if (response.status === 200) {
+                    setBank(response.bank)
+                    // setWallet(response.wallet) //admin doesn't have wallet
+                } else {
+                    console.log(response.msg)
+                }
             } catch (error) {
                 //
             }
         }
-        FetchBank()
+        FetchUserWalletAndBank()
     }, [])
+
 
     useEffect(() => {
         const FetchUtils = async () => {
@@ -40,8 +44,8 @@ const AdminPageLayout = ({ children }) => {
                 const response = await AuthGetApi(Apis.admin.get_utils)
                 if (response.status === 200) {
                     setUtils(response.msg)
-                
-                }else {
+
+                } else {
                     console.log(response.msg)
                 }
 

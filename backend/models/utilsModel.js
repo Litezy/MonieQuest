@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         buy_max: { type: DataTypes.FLOAT, defaultValue: 2000 }, // in USD
         sell_min: { type: DataTypes.FLOAT, defaultValue: 10 }, //in USD
         sell_max: { type: DataTypes.FLOAT, defaultValue: 2000 }, // in USD
-        bank_withdraw_min: { type: DataTypes.FLOAT, defaultValue: 10000 }, // in USD
+        bank_withdraw_min: { type: DataTypes.FLOAT, defaultValue: 10000 }, // in NGN
         giftcard_rate: { type: DataTypes.FLOAT, defaultValue: 1500 },
     })
 }

@@ -3,42 +3,8 @@ import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
 import AdminToolComp from '../../AdminComponents/AdminToolComp';
 import AdminToolsLayout from '../../AdminComponents/AdminToolsLayout';
+import { Apis, AuthGetApi } from '../../services/API';
 
-const records = [
-    {
-        id: 1,
-        gen_id: '123456789',
-        title: 'acrobat',
-        category: ['AI assistance', 'eBook', 'bot'],
-        price: 2000,
-        discount: 10,
-        link: 'https://app.gradient.network',
-        contact_details: '09011234567',
-        status: 'approved'
-    },
-    {
-        id: 2,
-        gen_id: '123456789',
-        title: 'playwrite',
-        category: ['creative tool', 'font'],
-        price: 11000,
-        discount: 0,
-        link: 'https://app.gradient.network',
-        contact_details: '09011234567',
-        status: 'pending'
-    },
-    {
-        id: 3,
-        gen_id: '123456789',
-        title: 'the grinch mas',
-        category: ['creative tool', 'graphics'],
-        price: 5000,
-        discount: 30,
-        link: 'https://app.gradient.network',
-        contact_details: '09011234567',
-        status: 'pending'
-    }
-]
 
 const AdminTools = () => {
     const tags = ['all', 'pending', 'approved', 'declined']
@@ -49,13 +15,23 @@ const AdminTools = () => {
     const [allTools, setAllTools] = useState([])
 
     useEffect(() => {
-        setStaticData(records)
-        setAllTools(records);
-    }, []);
+        const FetchAllTools = async () => {
+            try {
+                const response = await AuthGetApi(Apis.admin.all_tools)
+                if (response.status === 200) {
+                    setStaticData(response.msg)
+                    setAllTools(response.msg)
+                }
 
-    setTimeout(() => {
-        setDataLoading(false)
-    }, 2000)
+            } catch (error) {
+                //
+            } finally {
+                setDataLoading(false)
+            }
+        }
+        FetchAllTools()
+    }, [])
+
 
     const pendingTools = useMemo(() => {
         return allTools.filter((ele) => ele.status === 'pending');

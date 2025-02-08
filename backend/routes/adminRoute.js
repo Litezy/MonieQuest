@@ -1,4 +1,4 @@
-const { UpdateUtils, GetUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops } = require('../controllers/adminController')
+const { UpdateUtils, GetUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, AllProfitTools, SingleProfitTool, UpdateProfitTool, AllListedProfitTools, AllProfitToolsOrders } = require('../controllers/adminController')
 const { AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -10,5 +10,10 @@ router.get('/all-airdrops', AllAirdrops)
 router.get('/single-airdrop/:id', SingleAirdrop)
 router.put('/update-airdrop', AdminMiddleware, UpdateAirdrop)
 router.get('/category-airdrops/:category', CategoryAirdrops)
+router.get('/all-profit_tools', AdminMiddleware, AllProfitTools)
+router.put('/update-profit_tool', AdminMiddleware, UpdateProfitTool)
+router.get('/single-profit_tool/:id', SingleProfitTool)
+router.get('/listed-profit_tools', AllListedProfitTools)
+router.get('/all-tools_orders', AdminMiddleware, AllProfitToolsOrders)
 
 module.exports = router

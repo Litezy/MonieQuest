@@ -18,7 +18,7 @@ const user_urls = {
     contact: user + 'contacts',
     update_profile: user + 'update-profile',
     create_update_bank: user + 'create-update-bank',
-    get_user_utils: user + 'get-user_utils',
+    user_wallet_bank: user + 'user-wallet-bank',
     create_update_kyc: user + 'create-update-kyc',
     user_kyc: user + 'user-kyc',
 }
@@ -38,9 +38,9 @@ const trans_url = {
     sell_giftcard: transaction + `sell_giftcard`,
     all_user_transactions: transaction + 'get_alltrans',
     crypto_order_history: transaction + 'get_order_history',
-    single_history: transaction +'single_order_history',
-    complete_payment: transaction +'single_paid_order',
-    cancel_order: transaction +'cancel_order',
+    single_history: transaction + 'single_order_history',
+    complete_payment: transaction + 'single_paid_order',
+    cancel_order: transaction + 'cancel_order',
     giftcard_orders: transaction + 'giftcard_order_history',
     single_giftcard_order: transaction + 'single_giftcard_history',
     request_withdrawal: transaction +'request_withdrawal',
@@ -55,13 +55,21 @@ const admin_urls = {
     all_airdrops: admin + 'all-airdrops',
     single_airdrop: admin + 'single-airdrop',
     update_airdrop: admin + 'update-airdrop',
-    category_airdrops: admin + 'category-airdrops'
+    category_airdrops: admin + 'category-airdrops',
+    all_tools: admin + 'all-profit_tools',
+    single_tool: admin + 'single-profit_tool',
+    update_tool: admin + 'update-profit_tool',
+    listed_tools: admin + 'listed-profit_tools',
+    all_tools_orders: admin + 'all-tools_orders'
 }
 
 const profitTools = 'api/profit_tools/'
 const profit_tools_urls = {
-    submit_tool: profitTools + 'submit-profit-tool',
-    user_tools: profitTools + 'user-profit-tools'
+    submit_tool: profitTools + 'submit-profit_tool',
+    user_tools: profitTools + 'user-profit_tools',
+    add_rating: profitTools + 'add-rating',
+    get_admin_bank: profitTools + 'get-admin-bank',
+    place_tool_order: profitTools + 'place-tool-order'
 }
 
 export const Apis = {
@@ -80,6 +88,11 @@ export const GetApi = async (endpoint) => {
 
 export const PostApi = async (endpoint, data) => {
     const response = await axios.post(`${URL}/${endpoint}`, data)
+    return response.data
+}
+
+export const PutApi = async (endpoint, data) => {
+    const response = await axios.put(`${URL}/${endpoint}`, data)
     return response.data
 }
 

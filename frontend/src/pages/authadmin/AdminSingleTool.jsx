@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
-import testimg from "../../assets/images/pdt.jpg";
 import { currencySign, ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import { FaCopy, FaEdit } from 'react-icons/fa';
 import { RiDiscountPercentFill } from "react-icons/ri";
@@ -11,28 +10,7 @@ import FormButton from '../../utils/FormButton';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import { FiUploadCloud } from 'react-icons/fi';
-
-const fetchedData = {
-    id: 1,
-    gen_id: '123456789',
-    image: testimg,
-    title: 'acrobat',
-    category: ['AI Tool', 'Creative Tool', 'Media Generator'],
-    price: 1000,
-    about: 'Playwrite is a lovely signature font that boasts sophisticated charm with its delicate curves and flowing lines. Ideal for enhancing the elegance of wedding invites, crafts design, logotype, print design, social media graphics, or branding materials.',
-    feature1: 'Generates visually stunning AI-powered graphics, layouts, and designs tailored to your specifications.',
-    feature2: 'Produces AI-enhanced documents and presentations, streamlining workflows for writers, marketers, and designers.',
-    account_number: '1234567890',
-    account_name: 'Basit MoneyQuest',
-    bank: 'Zenith Bank',
-    link: 'https://app.gradient.network',
-    contact_details: '09011234567',
-    status: 'pending',
-    listing: 'unlisted',
-    discount_percentage: 0,
-    discount_duration: 0,
-    duration_type: ''
-}
+import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API';
 
 const allCategories = [
     "AI Tool", "Creative Tool", "Productivity Tool", "Business Resource", "Learning and Skill Development", "Media Generator", "Automation and Utility Tool", "Tech and Software Solution", "eBooks and Written Guide"
@@ -41,7 +19,7 @@ const statuses = [
     "pending", "approved", "declined"
 ]
 const durationTypes = [
-    "days", "weeks", "months", "years"
+    "days", "weeks", "months"
 ]
 const listOptions = [
     "listed", "unlisted"
@@ -49,21 +27,21 @@ const listOptions = [
 
 const AdminSingleTool = () => {
     const { id } = useParams()
+    const [singleTool, setSingleTool] = useState({})
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
-    const [singleTool, setSingleTool] = useState(fetchedData)
     const [form, setForm] = useState({
-        title: singleTool?.title,
-        category: singleTool?.category,
-        price: singleTool?.price,
-        about: singleTool?.about,
-        feature1: singleTool?.feature1,
-        feature2: singleTool?.feature2,
-        status: singleTool?.status,
-        listing: singleTool?.listing,
-        discount_percentage: singleTool?.discount_percentage,
-        discount_duration: singleTool?.discount_duration,
-        duration_type: singleTool?.duration_type ? singleTool?.duration_type : durationTypes[0],
+        title: '',
+        category: [],
+        price: '',
+        about: '',
+        feature1: '',
+        feature2: '',
+        status: '',
+        listing: '',
+        discount_percentage: '',
+        discount_duration: '',
+        discount_duration_type: '',
     })
     const [toolImage, setToolImage] = useState({
         img: singleTool?.image,
@@ -77,10 +55,41 @@ const AdminSingleTool = () => {
             [event.target.name]: event.target.value
         })
     }
+    const FetchSingleTool = useCallback(async () => {
+        try {
+            const response = await AuthGetApi(`${Apis.admin.single_tool}/${id}`)
+            if (response.status === 200) {
+                setSingleTool(response.msg)
+                setForm({
+                    ...form,
+                    title: response.msg.title,
+                    category: JSON.parse(response.msg.category),
+                    blockchain: response.msg.blockchain,
+                    price: response.msg.price,
+                    about: response.msg.about,
+                    feature1: response.msg.feature1,
+                    feature2: response.msg.feature2,
+                    status: response.msg.status,
+                    listing: response.msg.listing,
+                    discount_percentage: response.msg.discount_percentage || '',
+                    discount_duration: response.msg.discount_duration || '',
+                    discount_duration_type: response.msg.discount_duration_type || durationTypes[0]
+                })
+                setToolImage({
+                    ...toolImage,
+                    img: `${imageurl}/tools/${response.msg.image}`
+                })
+            }
+        } catch (error) {
+            //
+        } finally {
+            setDataLoading(false)
+        }
+    }, [])
 
-    setTimeout(() => {
-        setDataLoading(false)
-    }, 2000)
+    useEffect(() => {
+        FetchSingleTool()
+    }, [FetchSingleTool])
 
     const handleUpload = (event) => {
         const file = event.target.files[0]
@@ -116,12 +125,45 @@ const AdminSingleTool = () => {
         SuccessAlert('Text copied successfully')
     }
 
-    const Submit = (e) => {
+    const Submit = async (e) => {
         e.preventDefault()
 
-        if (form.category.length === 0) return ErrorAlert('Add a category')
+        if (form.category.length < 1) return ErrorAlert('Choose a category')
         if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2) return ErrorAlert('Enter all required fields')
-        if (isNaN(form.price) || isNaN(form.discount) || isNaN(form.discount_duration)) return ErrorAlert('Price, discount and discount duration must be valid numbers')
+        if (isNaN(form.price)) return ErrorAlert('Price, discount and discount duration must be valid numbers')
+
+        const formbody = new FormData()
+        formbody.append('tool_id', singleTool.id)
+        formbody.append('image', toolImage.image)
+        formbody.append('title', form.title)
+        form.category.forEach(ele => {
+            formbody.append('category', ele)
+        })
+        formbody.append('price', parseFloat(form.price))
+        formbody.append('about', form.about)
+        formbody.append('feature1', form.feature1)
+        formbody.append('feature2', form.feature2)
+        formbody.append('status', form.status)
+        formbody.append('listing', form.listing)
+        formbody.append('discount_percentage', form.discount_percentage && parseFloat(form.discount_percentage))
+        formbody.append('discount_duration', form.discount_duration && parseFloat(form.discount_duration))
+        formbody.append('discount_duration_type', form.discount_duration_type)
+
+        setLoading(true)
+        try {
+            const response = await AuthPutApi(Apis.admin.update_tool, formbody)
+            if (response.status === 200) {
+                SuccessAlert(response.msg)
+                FetchSingleTool()
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading(false)
+        }
+
     }
 
     return (
@@ -156,7 +198,7 @@ const AdminSingleTool = () => {
                             <label className='cursor-pointer w-full'>
                                 {toolImage.img ?
                                     <div className='relative'>
-                                        <img src={toolImage.img} className='w-full h-72 object-cover object-center'></img>
+                                        <img src={toolImage.img} alt={toolImage.img} className='w-full h-72 object-cover object-center'></img>
                                         <div className="absolute top-0 -right-3 main font-bold">
                                             <FaEdit className='text-2xl text-lightgreen' />
                                         </div>
@@ -178,7 +220,7 @@ const AdminSingleTool = () => {
                                     <div className='text-lightgreen capitalize font-medium'>category:</div>
                                     <div className='flex flex-wrap gap-2'>
                                         {form.category.map((item, i) => (
-                                            <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl'>
+                                            <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl text-sm'>
                                                 {item}
                                             </div>
                                         ))}
@@ -208,41 +250,41 @@ const AdminSingleTool = () => {
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>feature 1:</div>
-                                    <FormInput formtype='textarea' placeholder='Enter tool feature' name='feature1' value={form.feature1} onChange={formHandler} className='!h-16' />
+                                    <FormInput formtype='textarea' placeholder='Enter tool feature' name='feature1' value={form.feature1} onChange={formHandler} className='!h-20' />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>feature 2:</div>
-                                    <FormInput formtype='textarea' placeholder='Enter tool feature' name='feature2' value={form.feature2} onChange={formHandler} className='!h-16' />
+                                    <FormInput formtype='textarea' placeholder='Enter tool feature' name='feature2' value={form.feature2} onChange={formHandler} className='!h-20' />
                                 </div>
                             </div>
                             <div className="w-full h-fit px-5 text-dark py-5 bg-[#fafafa] rounded-md flex items-center justify-between flex-col gap-4">
                                 <div className='flex flex-col gap-1 w-full'>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Bank Name:</div>
-                                        <div className="">{singleTool.bank}</div>
+                                        <div className="">{singleTool?.bank_name}</div>
                                     </div>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Account number:</div>
                                         <div className="flex items-center gap-2">
-                                            <div className="">{singleTool.account_number}</div>
-                                            <FaCopy onClick={() => copyFunction(singleTool.account_number)} className='text-ash text-sm cursor-pointer' />
+                                            <div className="">{singleTool?.account_number}</div>
+                                            <FaCopy onClick={() => copyFunction(singleTool?.account_number)} className='text-ash text-sm cursor-pointer' />
                                         </div>
                                     </div>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Account name:</div>
-                                        <div className="">{singleTool.account_name}</div>
+                                        <div className="">{singleTool?.account_name}</div>
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-1 w-full border-t pt-2'>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Video link:</div>
-                                        <a href={singleTool.link} className="text-ash hover:text-lightgreen cursor-pointer">{singleTool.link}</a>
+                                        <a href={singleTool?.video_link} className="underline">{singleTool?.video_link}</a>
                                     </div>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Contact Details:</div>
                                         <div className="flex items-center gap-2">
-                                            <div className="">{singleTool.contact_details}</div>
-                                            <FaCopy onClick={() => copyFunction(singleTool.contact_details)} className='text-ash text-sm cursor-pointer' />
+                                            <div className="">{singleTool?.contact_detail}</div>
+                                            <FaCopy onClick={() => copyFunction(singleTool.contact_detail)} className='text-ash text-sm cursor-pointer' />
                                         </div>
                                     </div>
                                 </div>
@@ -270,7 +312,7 @@ const AdminSingleTool = () => {
                                             <div className='text-lightgreen capitalize font-medium'>duration:</div>
                                             <div className='flex items-center'>
                                                 <FormInput name='discount_duration' value={form.discount_duration} onChange={formHandler} className='!w-14 !py-2 !px-4 !rounded-md -mt-2' />
-                                                <SelectComp options={durationTypes} width={150} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.duration_type} handleChange={(e) => setForm({ ...form, duration_type: e.target.value })} />
+                                                <SelectComp options={durationTypes} width={150} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.discount_duration_type} handleChange={(e) => setForm({ ...form, discount_duration_type: e.target.value })} />
                                             </div>
                                         </div>
                                     </div>

@@ -20,5 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         discount_percentage: { type: DataTypes.FLOAT, allowNull: true },
         discount_duration: { type: DataTypes.FLOAT, allowNull: true },
         discount_duration_type: { type: DataTypes.STRING, allowNull: true },
+        discount_endDate: { type: DataTypes.STRING, allowNull: true },
+        total_ratings: { type: DataTypes.FLOAT, defaultValue: 0 },
+        total_rate_persons: { type: DataTypes.FLOAT, defaultValue: 0 },
     })
 }

@@ -196,7 +196,7 @@ const UserKYC = () => {
                                         {frontimg.img ?
                                             <div className="relative w-full h-full">
                                                 <div className="absolute top-0 -right-3 main font-bold">
-                                                    <FaEdit className='text-2xl' />
+                                                    <FaEdit className='text-2xl text-lightgreen' />
                                                 </div>
                                                 <img src={frontimg.img} className='w-full h-full' />
                                             </div>
@@ -213,7 +213,7 @@ const UserKYC = () => {
                                         {backimg.img ?
                                             <div className="relative w-full h-full">
                                                 <div className="absolute top-0 -right-3 main font-bold">
-                                                    <FaEdit className='text-2xl' />
+                                                    <FaEdit className='text-2xl text-lightgreen' />
                                                 </div>
                                                 <img src={backimg.img} className='w-full h-full' />
                                             </div>

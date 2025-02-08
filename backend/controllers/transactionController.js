@@ -357,8 +357,6 @@ exports.cancelOrder = async (req, res) => {
     }
 }
 
-
-
 exports.requestWithdrawal = async (req, res) => {
     try {
         const { bank_name, account_number, bank_user, amount } = req.body

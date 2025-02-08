@@ -46,7 +46,7 @@ const AdminProfile = () => {
         buy_max: '',
         sell_min: '',
         sell_max: '',
-        bank_min:''
+        bank_min: ''
     })
     const [profile, setProfile] = useState({
         img: user.image ? `${imageurl}/profiles/${user.image}` : avatar,
@@ -186,7 +186,6 @@ const AdminProfile = () => {
         setLoading({
             sub2: true
         })
-        // return console.log(formbody)
         try {
             const response = await AuthPutApi(Apis.admin.update_utils, formbody)
             console.log(response)
@@ -290,7 +289,7 @@ const AdminProfile = () => {
                         </div>
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>update settings</div>
-                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 relative'>
+                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-4 relative'>
                                 {loading.sub2 && <Loading />}
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col'>
@@ -322,11 +321,11 @@ const AdminProfile = () => {
                                         <FormInput placeholder='Enter maximum buy amount' name='sell_max' value={form.sell_max} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                     <div className='flex flex-col'>
-                                        <div className='font-medium text-gray-200 text-sm ml-2'>Bank Withdrawal Min (NGN)</div>
+                                        <div className='font-medium text-gray-200 text-sm ml-2'>Bank withdrawal min (NGN)</div>
                                         <FormInput placeholder='Enter maximum buy amount' name='bank_min' value={form.bank_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
-                                    <FormButton title='Update' className='!py-3 !text-base mt-5' type='button' onClick={UpdateUtils} />
                                 </div>
+                                <FormButton title='Update' className='!py-3 !text-base !w-1/2 mx-auto' type='button' onClick={UpdateUtils} />
                             </div>
                         </div>
                     </form>
