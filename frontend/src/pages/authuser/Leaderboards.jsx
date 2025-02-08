@@ -27,6 +27,29 @@ const Leaderboards = () => {
         fetchLeaderboard()
     }, [loading])
 
+    const [shortName, setShortName] = useState([])
+    // const calcName = (val) => {
+    //     const array = val
+    //     //get each name
+    //     const getEachName = array.map((item) =>  item.first_name )
+    //     //check lenght 
+    //     return console.log(getEachName  )
+    //     const nameLength = getEachName
+    //     //take out the first 4
+    //      console.log(nameLength)
+    //     const firstChar = String(nameLength[0]) 
+    //     const LastFour = nameLength.slice(-4)
+    //     const gapInBtw = nameLength(firstChar,LastFour)
+    //     const maskedFirst = `*`.repeat(gapInBtw)
+    //     const fullName = `${maskedFirst}${slicedLastName}`
+    //     console.log(fullName)
+    //     return setShortName(fullName)
+    // }
+
+    // useEffect(()=>{
+    //     calcName(leaderboard)
+    // },[])
+
     return (
         <AuthPageLayout>
             <div className='w-11/12 mx-auto'>
@@ -68,7 +91,7 @@ const Leaderboards = () => {
                                                 {item.id}
                                             </th>
                                             <td class="px-6 py-4">
-                                                ****{item.first_name.slice(-4)}
+                                                {item.first_name.slice(0,1)}*****{item.first_name.slice(-3)}
                                             </td>
                                             <td class="px-6 py-4 text-lightgreen">
                                                 {currencySign[0]}{item?.user_wallets?.total_deposit.toLocaleString()}
@@ -88,13 +111,13 @@ const Leaderboards = () => {
                                         nil
                                     </th>
                                     <td class="px-6 py-4">
-                                       nil
+                                        nil
                                     </td>
                                     <td class="px-6 py-4 text-lightgreen">
-                                       nil
+                                        nil
                                     </td>
                                     <td class="px-6 py-4">
-                                       nil
+                                        nil
                                     </td>
                                 </tr>
                             }

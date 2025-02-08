@@ -133,10 +133,9 @@ const formsal = () => {
                 return ErrorAlert(res.msg)
             }
             setForms({ accountName: "", accountNumber: '', amount: '', bank: "" })
-            FetchUtils()
             FetchLatestTrans()
             FetchUserWallet()
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             setShowModal(true)
             setLoading(false)
         } catch (error) {
