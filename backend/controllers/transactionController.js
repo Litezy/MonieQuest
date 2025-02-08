@@ -364,18 +364,20 @@ exports.requestWithdrawal = async (req, res) => {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const findUserWallet = await Wallet.findOne({ where: { user: user ? user.id : req.user } })
-       if (!findUserWallet) {
+        if (!findUserWallet) {
             await Wallet.create({
                 user: req.user
             })
         }
         if (amount > findUserWallet.balance) return res.json({ status: 400, msg: `Insufficient funds` })
-        if (isNaN(amount)) return res.json({ status: 400, msg: 'Please input a valid number' })       
+        if (isNaN(amount)) return res.json({ status: 400, msg: 'Please input a valid number' })
         const newamt = parseFloat(findUserWallet.balance - amount)
+        const newtotal = parseFloat(findUserWallet.total_outflow) + parseFloat(amount)
+        findUserWallet.total_outflow = newtotal
         findUserWallet.balance = newamt
         await findUserWallet.save()
         const withdrawal = await BankWithdrawal.create({ bank_name, userid: req.user, account_number, bank_user, amount })
-      
+
         const formattedAmt = amount.toLocaleString()
         const nanoid = customAlphabet(blockAndNum, 15)
         const transId = nanoid()
@@ -418,6 +420,22 @@ exports.requestWithdrawal = async (req, res) => {
             })
         }
         return res.json({ status: 200, msg: "Withdrawal placed successfully" })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getUserLatestWithdrawals = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
+        const getWithdrawals = await BankWithdrawal.findAll({
+            where: { userid: user ? user.id : req.user },
+            limit: 5,
+            order: [['createdAt', 'DESC']]
+        })
+        if (!getWithdrawals) return res.json({ status: 404, msg: 'Transactions not found' })
+        return res.json({ status: 200, msg: 'fetch success', data: getWithdrawals })
     } catch (error) {
         ServerError(res, error)
     }
