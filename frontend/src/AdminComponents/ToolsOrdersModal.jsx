@@ -7,6 +7,7 @@ const ToolsOrdersModal = ({ selected }) => {
     if (Object.values(selected).length !== 0) {
         products = JSON.parse(selected.products)
     }
+    
     return (
         <div className="flex w-full gap-8 flex-col">
             <div className='flex flex-col gap-5'>
@@ -26,15 +27,15 @@ const ToolsOrdersModal = ({ selected }) => {
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                         <div>Total Product(s) Price</div>
-                        <div>{currencySign[1]}{(selected.total_price || 0).toLocaleString()}</div>
+                        <div>{currencySign[1]}{selected?.total_price && selected.total_price.toLocaleString()}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                         <div>Total Discount</div>
-                        <div>{currencySign[1]}{(selected.total_discount || 0).toLocaleString()}</div>
+                        <div>{currencySign[1]}{selected?.total_discount && selected.total_discount.toLocaleString()}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                         <div>Amount Paid</div>
-                        <div>{currencySign[1]}{(selected.amount_paid || 0).toLocaleString()}</div>
+                        <div>{currencySign[1]}{selected?.amount_paid && selected.amount_paid.toLocaleString()}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                         <div className="">Transaction Status</div>
@@ -72,7 +73,7 @@ const ToolsOrdersModal = ({ selected }) => {
                                 </div>
                                 <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                                     <div>Price</div>
-                                    <div>{currencySign[1]}{(item.price || 0).toLocaleString()}</div>
+                                    <div>{currencySign[1]}{item?.price && item.price.toLocaleString()}</div>
                                 </div>
                                 <div className="flex items-center w-full justify-between gap-4">
                                     <div>Discount</div>

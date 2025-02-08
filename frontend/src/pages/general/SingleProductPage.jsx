@@ -15,7 +15,7 @@ const SingleProductPage = () => {
     const { id } = useParams()
     const localData = JSON.parse(localStorage.getItem('products'))
     const ratingData = JSON.parse(localStorage.getItem('ratingData'))
-    const [cartItems, setCartItems] = useState(localData || []);
+    const [cartItems, setCartItems] = useState(localData || [])
     const [singleProduct, setSingleProduct] = useState({})
     const [form, setForm] = useState({
         rating: 1,
@@ -50,7 +50,6 @@ const SingleProductPage = () => {
             if (response.status === 200) {
                 setSingleProduct(response.msg)
             }
-
         } catch (error) {
             //
         } finally {
@@ -82,7 +81,7 @@ const SingleProductPage = () => {
                 <IoCart className="text-lg" />
                 <span>Add to Cart</span>
             </>
-        );
+        )
     }
 
     const submitRating = async () => {
@@ -149,11 +148,13 @@ const SingleProductPage = () => {
                             <div className='flex md:flex-row md:justify-between flex-col gap-6 md:items-end'>
                                 <div className='flex flex-col gap-2'>
                                     <div className='capitalize text-3xl font-extrabold'>{singleProduct?.title}</div>
-                                    <div className='flex md:flex-row flex-col gap-1 text-sm'>
-                                        {categories.map((ele, i) => (
-                                            <div key={i} className=''>{ele}{i === categories.length - 1 ? '.' : ','}</div>
-                                        ))}
-                                    </div>
+                                    {categories.length > 0 &&
+                                        <div className='flex md:flex-row flex-col gap-1 text-sm'>
+                                            {categories.map((ele, i) => (
+                                                <div key={i} className=''>{ele}{i === categories.length - 1 ? '.' : ','}</div>
+                                            ))}
+                                        </div>
+                                    }
                                 </div>
                                 <div className='flex flex-col gap-2'>
                                     <Rating
@@ -167,7 +168,7 @@ const SingleProductPage = () => {
                                             }
                                         }}
                                     />
-                                    <div>Score of {singleProduct.total_ratings > 0 ? (singleProduct.total_ratings / singleProduct.total_rate_persons).toFixed(1) : 0} based on {singleProduct?.total_rate_persons || 0} review{singleProduct?.total_rate_persons > 1 && 's'}</div>
+                                    <div>Score of {singleProduct?.total_ratings > 0 ? (singleProduct.total_ratings / singleProduct.total_rate_persons).toFixed(1) : 0} based on {singleProduct?.total_rate_persons || 0} review{singleProduct?.total_rate_persons > 1 && 's'}</div>
                                 </div>
                             </div>
                             <div className='grid lg:grid-cols-2 grid-cols-1 gap-6'>
@@ -177,20 +178,16 @@ const SingleProductPage = () => {
                                 <div>
                                     <div className='bg-primary border border-ash w-full h-fit p-5 flex flex-col gap-4'>
                                         <div className='flex justify-between gap-4'>
-                                            {Object.values(singleProduct).length !== 0 &&
-                                                <>
-                                                    {singleProduct?.discount_percentage ?
-                                                        <div className='flex gap-4 items-center'>
-                                                            <div className='text-sm text-red-600'>-{singleProduct.discount_percentage}%</div>
-                                                            <div className='flex gap-2 items-end'>
-                                                                {singleProduct.discount_percentage && <div className='text-3xl font-bold'>₦{((100 - singleProduct.discount_percentage) / 100 * singleProduct.price).toLocaleString()}</div>}
-                                                                <div className='line-through text-sm'>₦{singleProduct.price.toLocaleString()}</div>
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        <div className='text-3xl font-bold'>₦{singleProduct.price.toLocaleString()}</div>
-                                                    }
-                                                </>
+                                            {singleProduct?.discount_percentage && singleProduct?.price ?
+                                                <div className='flex gap-4 items-center'>
+                                                    <div className='text-sm text-red-600'>-{singleProduct.discount_percentage}%</div>
+                                                    <div className='flex gap-2 items-end'>
+                                                        {singleProduct.discount_percentage && <div className='text-3xl font-bold'>₦{((100 - singleProduct.discount_percentage) / 100 * singleProduct.price).toLocaleString()}</div>}
+                                                        <div className='line-through text-sm'>₦{singleProduct.price.toLocaleString()}</div>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <div className='text-3xl font-bold'>₦{singleProduct?.price && singleProduct.price.toLocaleString()}</div>
                                             }
                                             {singleProduct?.discount_endDate && <div className='text-sm italic text-lightgreen'>Discount ends {moment(new Date(singleProduct?.discount_endDate)).format('Do MMMM')}.</div>}
                                         </div>
@@ -212,7 +209,7 @@ const SingleProductPage = () => {
                                         </div>
                                         <div className='flex justify-end mt-4'>
                                             <button className='outline-none w-fit h-fit flex gap-2 items-center justify-center py-3 px-14 bg-lightgreen uppercase text-sm font-extrabold rounded-[4px] text-ash tracking-wider' onClick={AddToCart}>
-                                                {CartButton(singleProduct.id)}
+                                                {CartButton(singleProduct?.id)}
                                             </button>
                                         </div>
                                     </div>

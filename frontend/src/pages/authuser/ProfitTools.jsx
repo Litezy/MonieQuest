@@ -21,7 +21,6 @@ const ProfitTools = () => {
                 if (response.status === 200) {
                     setStaticData(response.msg)
                     setAllTools(response.msg)
-                    console.log(response.msg)
                 }
 
             } catch (error) {

@@ -13,9 +13,9 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     const [screen, setScreen] = useState(1)
     const [loading, setLoading] = useState(false)
 
-    let totalPrice = 0
-    let totalPriceAfterDiscount = 0
-    let totalDiscountAmount = 0
+    let totalPrice = 0;
+    let totalPriceAfterDiscount = 0;
+    let totalDiscountAmount = 0;
     if (cartItems.length > 0) {
         cartItems.map((ele) => (
             totalPrice += ele.price,
@@ -25,7 +25,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     }
 
     useEffect(() => {
-        const FetchAllProducts = async () => {
+        const FetchAdminBankAccount = async () => {
             try {
                 const response = await GetApi(Apis.profitTools.get_admin_bank)
                 if (response.status === 200) {
@@ -37,7 +37,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                 //
             }
         }
-        FetchAllProducts()
+        FetchAdminBankAccount()
     }, [])
 
     const copyFunction = (content) => {
@@ -60,9 +60,9 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
     const ConfirmPaymentAndPlaceAnOrder = async () => {
         const formbody = {
             email_address: email,
-            total_price: totalPrice,
-            total_discount: totalDiscountAmount,
-            amount_paid: totalPriceAfterDiscount,
+            total_price: parseFloat(totalPrice),
+            total_discount: parseFloat(totalDiscountAmount),
+            amount_paid: parseFloat(totalPriceAfterDiscount),
             products: cartItems
         }
 
@@ -83,8 +83,8 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
 
     const EmptyCart = () => {
         setCartItems([])
-        setScreen(1)
         localStorage.setItem('products', JSON.stringify([]))
+        setScreen(1)
     }
 
     return (
@@ -104,12 +104,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                 <>
                     <div className='lg:col-span-2 col-span-1'>
                         <div className='uppercase font-bold border-b border-zinc-500 pb-2'>{cartItems.length > 0 ? <span>your shopping cart ({cartItems.length} item{cartItems.length > 1 && 's'})</span> : <span>your cart is still empty</span>}</div>
-                        {cartItems.length < 1 ?
-                            <div className='flex flex-col gap-8 mt-6'>
-                                <div className='text-sm'>Add a product here by clicking on the add to cart button.</div>
-                                <img alt='empty box' src={emptybox} className='md:w-52 w-40 h-auto'></img>
-                            </div>
-                            :
+                        {cartItems.length > 0 ?
                             <div className='flex flex-col gap-5 mt-8'>
                                 {cartItems.map((item, i) => (
                                     <div className='w-full h-fit bg-primary flex md:p-0 p-3 rounded-[3px] overflow-hidden' key={i}>
@@ -120,13 +115,13 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                             <div className='flex md:flex-row flex-col md:justify-between gap-1'>
                                                 <div className='capitalize font-bold md:text-base text-sm'>{item?.title}</div>
                                                 <div className='flex items-center md:flex-col flex-row gap-1.5 font-semibold'>
-                                                    {item.discount_percentage && item.price !== undefined ?
+                                                    {item.discount_percentage && item.price ?
                                                         <>
                                                             <div>₦{((100 - item.discount_percentage) / 100 * item.price).toLocaleString()}</div>
                                                             <div className='text-xs line-through'>₦{item.price.toLocaleString()}</div>
                                                         </>
                                                         :
-                                                        <div>₦{(item.price || 0).toLocaleString()}</div>
+                                                        <div>₦{item.price && item.price.toLocaleString()}</div>
                                                     }
                                                 </div>
                                             </div>
@@ -137,6 +132,11 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                            :
+                            <div className='flex flex-col gap-8 mt-6'>
+                                <div className='text-sm'>Add a product here by clicking on the add to cart button.</div>
+                                <img alt='empty cart box' src={emptybox} className='md:w-52 w-40 h-auto'></img>
                             </div>
                         }
                     </div>

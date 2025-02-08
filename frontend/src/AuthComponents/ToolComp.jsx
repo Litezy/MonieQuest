@@ -5,7 +5,7 @@ import { currencySign } from '../utils/pageUtils'
 const ToolComp = ({ item }) => {
     let categories = []
     if (Object.values(item).length !== 0) {
-        categories = JSON.parse(item.category)
+        categories = JSON.parse(item?.category)
     }
 
     return (
@@ -22,16 +22,18 @@ const ToolComp = ({ item }) => {
                     </div>
                     <div className='flex justify-between gap-6 capitalize'>
                         <div>category:</div>
-                        <div className='flex gap-1 truncate'>
-                            {categories.slice(0, 2).map((ele, i) => (
-                                <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
-                            ))}
-                            {categories.length > 2 && '...'}
-                        </div>
+                        {categories.length > 0 &&
+                            <div className='flex gap-1 truncate'>
+                                {categories.slice(0, 2).map((ele, i) => (
+                                    <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
+                                ))}
+                                {categories.length > 2 && '...'}
+                            </div>
+                        }
                     </div>
                     <div className='flex justify-between gap-4 capitalize'>
                         <span>price:</span>
-                        <span>{currencySign[1]}{item.price.toLocaleString()}</span>
+                        <span>{currencySign[1]}{item?.price && item.price.toLocaleString()}</span>
                     </div>
                 </div>
                 <div className='flex flex-col gap-2 md:p-4 md:border-l border-gray-800 overflow-hidden'>
@@ -45,7 +47,7 @@ const ToolComp = ({ item }) => {
                     </div>
                     <div className='flex justify-between gap-4 capitalize'>
                         <span>status:</span>
-                        <span className={`${item?.status === 'approved' ? 'text-green-400' : item.status === 'declined' ? 'text-red-500' : 'text-yellow-300'}`}>{item?.status}</span>
+                        <span className={`${item?.status === 'approved' ? 'text-green-400' : item?.status === 'declined' ? 'text-red-500' : 'text-yellow-300'}`}>{item?.status}</span>
                     </div>
                 </div>
             </div>

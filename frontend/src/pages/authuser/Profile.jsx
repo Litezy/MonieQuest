@@ -184,7 +184,7 @@ const Profile = () => {
               <div className='text-2xl font-bold capitalize'>{user?.surname} {user?.first_name}</div>
               <div className='flex items-center gap-2 capitalize text-sm'>
                 <div className='flex gap-1 items-center'>
-                  {user?.kyc_verified === 'true' ?
+                  {user?.kyc_verified === 'true' && user?.email_verified === 'true' ?
                     <>
                       <span>verified</span>
                       <MdVerified className='text-lightgreen' />

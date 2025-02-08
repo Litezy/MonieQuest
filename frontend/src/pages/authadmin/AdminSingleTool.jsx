@@ -44,7 +44,7 @@ const AdminSingleTool = () => {
         discount_duration_type: '',
     })
     const [toolImage, setToolImage] = useState({
-        img: singleTool?.image,
+        img: null,
         image: null
     })
     const imgRef = useRef()
@@ -63,14 +63,14 @@ const AdminSingleTool = () => {
                 setForm({
                     ...form,
                     title: response.msg.title,
-                    category: JSON.parse(response.msg.category),
-                    blockchain: response.msg.blockchain,
-                    price: response.msg.price,
-                    about: response.msg.about,
-                    feature1: response.msg.feature1,
-                    feature2: response.msg.feature2,
-                    status: response.msg.status,
-                    listing: response.msg.listing,
+                    category: JSON.parse(response.msg.category) || [],
+                    blockchain: response.msg.blockchain || '',
+                    price: response.msg.price || '',
+                    about: response.msg.about || '',
+                    feature1: response.msg.feature1 || '',
+                    feature2: response.msg.feature2 || '',
+                    status: response.msg.status || '',
+                    listing: response.msg.listing || '',
                     discount_percentage: response.msg.discount_percentage || '',
                     discount_duration: response.msg.discount_duration || '',
                     discount_duration_type: response.msg.discount_duration_type || durationTypes[0]
@@ -284,7 +284,7 @@ const AdminSingleTool = () => {
                                         <div className="">Contact Details:</div>
                                         <div className="flex items-center gap-2">
                                             <div className="">{singleTool?.contact_detail}</div>
-                                            <FaCopy onClick={() => copyFunction(singleTool.contact_detail)} className='text-ash text-sm cursor-pointer' />
+                                            <FaCopy onClick={() => copyFunction(singleTool?.contact_detail)} className='text-ash text-sm cursor-pointer' />
                                         </div>
                                     </div>
                                 </div>

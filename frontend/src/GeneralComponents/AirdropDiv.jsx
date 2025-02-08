@@ -14,13 +14,13 @@ const AirdropDiv = ({ item }) => {
                 <div className='flex flex-col gap-1'>
                     <div className='capitalize text-lg font-bold'>{item?.title}</div>
                     <div className='flex items-center gap-2'>
-                        {item.twitter_link && <div href='/' className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
+                        {item.twitter_link && <div className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
                             <FaXTwitter />
                         </div>}
-                        {item.telegram_link && <div href='' className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
+                        {item.telegram_link && <div className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
                             <SiTelegram />
                         </div>}
-                        {item.website_link && <div href='' className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
+                        {item.website_link && <div className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
                             <LuArrowRightLeft />
                         </div>}
                     </div>

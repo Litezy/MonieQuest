@@ -86,7 +86,7 @@ const SingleAirdropPage = () => {
               <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
                 <div className='flex items-center gap-2'>
                   <div>
-                    <img alt={singleAirdrop.logo_image} src={`${imageurl}/airdrops/${singleAirdrop.logo_image}`} className='size-14 rounded-full object-cover'></img>
+                    <img alt='airdrop logo image' src={`${imageurl}/airdrops/${singleAirdrop?.logo_image}`} className='size-14 rounded-full object-cover'></img>
                   </div>
                   <div className='capitalize md:text-4xl text-3xl font-bold'>{singleAirdrop?.title}</div>
                 </div>
@@ -119,7 +119,7 @@ const SingleAirdropPage = () => {
                   <p>{singleAirdrop?.about}</p>
                 </div>
                 <div className='lg:col-span-2 col-span-1'>
-                  <img alt={singleAirdrop?.banner_image} src={`${imageurl}/airdrops/${singleAirdrop?.banner_image}`} className='w-full h-auto'></img>
+                  <img alt='airdrop banner image' src={`${imageurl}/airdrops/${singleAirdrop?.banner_image}`} className='w-full h-auto'></img>
                 </div>
               </div>
               <div className='grid lg:grid-cols-6 grid-cols-1 gap-8'>
@@ -139,15 +139,15 @@ const SingleAirdropPage = () => {
                   <div className='w-full h-fit border border-ash bg-secondary rounded-md py-10 px-4'>
                     <div className='flex flex-col gap-4'>
                       <div className='text-xl font-bold'>Step by step video guide on <span className='capitalize'>ape express</span> Airdrop</div>
-                      <a href={singleAirdrop.video_guide_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
-                        <div className='text-lightgreen underline'>{singleAirdrop.video_guide_link}</div>
+                      <a href={singleAirdrop?.video_guide_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
+                        <div className='text-lightgreen underline'>{singleAirdrop?.video_guide_link}</div>
                         <RxExternalLink className='text-lg' />
                       </a>
                     </div>
                     <div className='flex flex-col gap-4 mt-8'>
                       <div className='text-xl font-bold'>Referral link to earn</div>
-                      <a href={singleAirdrop.referral_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
-                        <div className='text-lightgreen underline'>{singleAirdrop.referral_link}</div>
+                      <a href={singleAirdrop?.referral_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
+                        <div className='text-lightgreen underline'>{singleAirdrop?.referral_link}</div>
                         <RxExternalLink className='text-lg' />
                       </a>
                     </div>

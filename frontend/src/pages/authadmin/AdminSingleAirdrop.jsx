@@ -14,11 +14,9 @@ import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
 const statuses = [
     "active", "finished"
 ]
-
 const categories = [
     "featured", "deFi", "new", "NFT", "other"
 ]
-
 const kyces = [
     "true", "false"
 ]
@@ -66,15 +64,15 @@ const AdminSingleAirdrop = () => {
             if (response.status === 200) {
                 setSingleAirdrop(response.msg)
                 setForm({
-                    title: response.msg.title,
-                    category: response.msg.category,
-                    blockchain: response.msg.blockchain,
-                    kyc: response.msg.kyc,
-                    type: response.msg.type,
-                    about: response.msg.about,
-                    status: response.msg.status,
-                    referral_link: response.msg.referral_link,
-                    video_guide_link: response.msg.video_guide_link,
+                    title: response.msg.title || '',
+                    category: response.msg.category || '',
+                    blockchain: response.msg.blockchain || '',
+                    kyc: response.msg.kyc || '',
+                    type: response.msg.type || '',
+                    about: response.msg.about || '',
+                    status: response.msg.status || '',
+                    referral_link: response.msg.referral_link || '',
+                    video_guide_link: response.msg.video_guide_link || '',
                     twitter_link: response.msg.twitter_link || '',
                     telegram_link: response.msg.telegram_link || '',
                     website_link: response.msg.website_link || '',
