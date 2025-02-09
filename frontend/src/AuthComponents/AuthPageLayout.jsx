@@ -4,7 +4,7 @@ import { links } from './AuthUtils'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../assets/images/logo.png'
 import avatar from '../assets/images/avatar.svg'
-import { MoveToTop, SuccessAlert } from '../utils/pageUtils'
+import { ErrorAlert, MoveToTop, SuccessAlert } from '../utils/pageUtils'
 import { Apis, AuthGetApi, AuthPostApi, imageurl } from '../services/API'
 import { useAtom } from 'jotai'
 import { BANK, PROFILE, UTILS, WALLET } from '../services/store'
@@ -16,6 +16,7 @@ const AuthPageLayout = ({ children }) => {
   const [, setWallet] = useAtom(WALLET)
   const [, setBank] = useAtom(BANK)
   const [, setUtils] = useAtom(UTILS)
+  const navigate = useNavigate()
   const location = useLocation()
   const pathName = location.pathname
   const active = 'text-lightgreen rounded-sm bg-[#1e333c]'
@@ -39,23 +40,22 @@ const AuthPageLayout = ({ children }) => {
     FetchWalletBankAndUtils()
   }, [])
 
-  const navigate = useNavigate()
-  const sendMail = async () => {
-    const formbody = {
-      email: user?.email
-    }
+  const SendOTP = async () => {
     try {
-      const res = await AuthPostApi(Apis.user.send_otp, formbody)
-      if (res.status !== 200) return;
-      SuccessAlert(res.msg)
+      const res = await AuthPostApi(Apis.user.send_otp, { email: user.email })
+      if (res.status === 200) {
+        SuccessAlert(res.msg)
+      } else {
+        ErrorAlert(res.msg)
+      }
     } catch (error) {
-      console.log(error)
+      ErrorAlert(`${error.message}`)
     }
   }
   useEffect(() => {
     if (user.email_verified === 'false') {
-      sendMail()
-      navigate(`/verify-account?v=${user?.email}`);
+      SendOTP()
+      navigate(`/verify-account?v=${user?.email}`)
     }
   }, [user.email_verified, navigate])
 

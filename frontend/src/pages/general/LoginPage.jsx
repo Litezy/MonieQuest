@@ -54,7 +54,7 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="w-full bg-dark h-[110dvh]">
+    <div className="w-full bg-dark h-screen overflow-y-auto">
       {loading &&
         <ModalLayout>
           <div className="w-full p-5 flex items-center justify-center">
@@ -62,7 +62,7 @@ const LoginPage = () => {
           </div>
         </ModalLayout>
       }
-      <div className='w-11/12 mx-auto pt-20 pb-10 '>
+      <div className='w-11/12 mx-auto py-20'>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
           <div className='w-full h-full flex flex-col text-white'>
             <div className="flex items-center justify-center w-full">

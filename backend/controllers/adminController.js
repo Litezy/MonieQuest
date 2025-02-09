@@ -14,53 +14,45 @@ const moment = require('moment')
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate,kyc_threshold, buy_min, bank_withdraw_min, buy_max, sell_min, sell_max, exchange_sell_rate, giftcard_rate } = req.body
+        const { exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max } = req.body
         const utils = await Util.findOne({})
         if (!utils) {
-            if (isNaN(exchange_buy_rate) || isNaN(buy_min) || isNaN(bank_withdraw_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(exchange_sell_rate) || isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
 
             const newUtils = await Util.create({
-                exchange_buy_rate, exchange_sell_rate, buy_max, buy_min, sell_max, sell_min, giftcard_rate
+                exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max
             })
 
             return res.json({ status: 200, msg: 'Rate(s) created successfully', utils: newUtils })
         }
         else if (utils) {
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
             if (exchange_buy_rate) {
-                if (isNaN(exchange_buy_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.exchange_buy_rate = exchange_buy_rate
             }
-            if (kyc_threshold) {
-                if (isNaN(kyc_threshold)) return res.json({ status: 404, msg: `Enter a valid number` })
-                utils.kyc_threshold = kyc_threshold
-            }
             if (exchange_sell_rate) {
-                if (isNaN(exchange_sell_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.exchange_sell_rate = exchange_sell_rate
             }
+            if (kyc_threshold) {
+                utils.kyc_threshold = kyc_threshold
+            }
             if (bank_withdraw_min) {
-                if (isNaN(bank_withdraw_min)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.bank_withdraw_min = bank_withdraw_min
             }
             if (giftcard_rate) {
-                if (isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.giftcard_rate = giftcard_rate
             }
             if (buy_min) {
-                if (isNaN(buy_min)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.buy_min = buy_min
             }
             if (buy_max) {
-                if (isNaN(buy_max)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.buy_max = buy_max
             }
-            if (sell_max) {
-                if (isNaN(sell_max)) return res.json({ status: 404, msg: `Enter a valid number` })
-                utils.sell_max = sell_max
-            }
             if (sell_min) {
-                if (isNaN(sell_min)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.sell_min = sell_min
+            }
+            if (sell_max) {
+                utils.sell_max = sell_max
             }
 
             await utils.save()

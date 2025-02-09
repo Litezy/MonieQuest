@@ -47,7 +47,7 @@ const AdminProfile = () => {
         sell_min: '',
         sell_max: '',
         bank_min: '',
-        kyc_threshold:''
+        kyc_threshold: ''
     })
     const [profile, setProfile] = useState({
         img: user.image ? `${imageurl}/profiles/${user.image}` : avatar,
@@ -178,13 +178,13 @@ const AdminProfile = () => {
         const formbody = {
             exchange_buy_rate: parseFloat(form.exchange_buy_rate),
             exchange_sell_rate: parseFloat(form.exchange_sell_rate),
+            kyc_threshold: parseFloat(form.kyc_threshold),
+            bank_withdraw_min: parseFloat(form.bank_min),
             giftcard_rate: parseFloat(form.giftcard_rate),
             buy_min: parseFloat(form.buy_min),
             buy_max: parseFloat(form.buy_max),
             sell_min: parseFloat(form.sell_min),
             sell_max: parseFloat(form.sell_max),
-            bank_withdraw_min: parseFloat(form.bank_min),
-            kyc_threshold: parseFloat(form.kyc_threshold)
         }
 
         setLoading({
