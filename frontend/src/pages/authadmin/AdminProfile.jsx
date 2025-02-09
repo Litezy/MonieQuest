@@ -46,7 +46,8 @@ const AdminProfile = () => {
         buy_max: '',
         sell_min: '',
         sell_max: '',
-        bank_min: ''
+        bank_min: '',
+        kyc_threshold:''
     })
     const [profile, setProfile] = useState({
         img: user.image ? `${imageurl}/profiles/${user.image}` : avatar,
@@ -87,6 +88,7 @@ const AdminProfile = () => {
             sell_min: utils?.sell_min || '',
             sell_max: utils?.sell_max || '',
             bank_min: utils?.bank_withdraw_min || '',
+            kyc_threshold: utils?.kyc_threshold || '',
         })
     }, [utils])
 
@@ -180,7 +182,8 @@ const AdminProfile = () => {
             buy_max: parseFloat(form.buy_max),
             sell_min: parseFloat(form.sell_min),
             sell_max: parseFloat(form.sell_max),
-            bank_withdraw_min: parseFloat(form.bank_min)
+            bank_withdraw_min: parseFloat(form.bank_min),
+            kyc_threshold: parseFloat(form.kyc_threshold)
         }
 
         setLoading({
@@ -323,6 +326,10 @@ const AdminProfile = () => {
                                     <div className='flex flex-col'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Bank withdrawal min (NGN)</div>
                                         <FormInput placeholder='Enter maximum buy amount' name='bank_min' value={form.bank_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                    <div className='flex flex-col'>
+                                        <div className='font-medium text-gray-200 text-sm ml-2'>KYC Threshold (USD)</div>
+                                        <FormInput placeholder='Enter maximum buy/sell amount' name='kyc_threshold' value={form.kyc_threshold} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                 </div>
                                 <FormButton title='Update' className='!py-3 !text-base !w-1/2 mx-auto' type='button' onClick={UpdateUtils} />

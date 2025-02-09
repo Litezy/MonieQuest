@@ -3,14 +3,12 @@ import PinForm from '../../utils/PinForm';
 import FormButton from '../../utils/FormButton';
 import { ErrorAlert, MoveToTop, SuccessAlert } from '../../utils/pageUtils';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import Loading from '../../GeneralComponents/Loading';
 import SuccessCheck from '../../utils/SuccessCheck';
 import logo from '../../assets/images/logo.png'
 import { Apis, AuthPostApi, PostApi } from '../../services/API';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
-import { useAtom } from 'jotai';
-import { PROFILE } from '../../services/store';
+
 
 
 const VerifyAccount = () => {
@@ -23,7 +21,6 @@ const VerifyAccount = () => {
     const [screen, setScreen] = useState(1)
     const [pins, setPins] = useState(['', '', '', '', '', '']);
     const checkPins = pins.join('')
-    const [profile,] = useAtom(PROFILE)
 
     const VerifyEmail = async (e) => {
         e.preventDefault()
@@ -70,7 +67,7 @@ const VerifyAccount = () => {
     const resendPin = async (e) => {
         e.preventDefault()
         const formbody = {
-            email: userEmail !== null ? userEmail : profile?.email,
+            email: userEmail ,
         }
         setLoading({status:true, val:'resending'})
         try {

@@ -14,7 +14,7 @@ const moment = require('moment')
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, buy_min, bank_withdraw_min, buy_max, sell_min, sell_max, exchange_sell_rate, giftcard_rate } = req.body
+        const { exchange_buy_rate,kyc_threshold, buy_min, bank_withdraw_min, buy_max, sell_min, sell_max, exchange_sell_rate, giftcard_rate } = req.body
         const utils = await Util.findOne({})
         if (!utils) {
             if (isNaN(exchange_buy_rate) || isNaN(buy_min) || isNaN(bank_withdraw_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(exchange_sell_rate) || isNaN(giftcard_rate)) return res.json({ status: 404, msg: `Enter valid numbers` })
@@ -29,6 +29,10 @@ exports.UpdateUtils = async (req, res) => {
             if (exchange_buy_rate) {
                 if (isNaN(exchange_buy_rate)) return res.json({ status: 404, msg: `Enter a valid number` })
                 utils.exchange_buy_rate = exchange_buy_rate
+            }
+            if (kyc_threshold) {
+                if (isNaN(kyc_threshold)) return res.json({ status: 404, msg: `Enter a valid number` })
+                utils.kyc_threshold = kyc_threshold
             }
             if (exchange_sell_rate) {
                 if (isNaN(exchange_sell_rate)) return res.json({ status: 404, msg: `Enter a valid number` })

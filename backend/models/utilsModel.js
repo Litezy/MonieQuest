@@ -8,5 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         sell_max: { type: DataTypes.FLOAT, defaultValue: 2000 }, // in USD
         bank_withdraw_min: { type: DataTypes.FLOAT, defaultValue: 10000 }, // in NGN
         giftcard_rate: { type: DataTypes.FLOAT, defaultValue: 1500 },
+        kyc_threshold: { type: DataTypes.FLOAT, defaultValue: 5000 },
     })
 }

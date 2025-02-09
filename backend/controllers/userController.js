@@ -61,8 +61,7 @@ exports.CreateAccount = async (req, res) => {
                 url: '/user/dashboard',
             })
         } else {
-            await Util.create({
-            })
+            await Util.create({})
 
             await Notification.create({
                 user: user.id,

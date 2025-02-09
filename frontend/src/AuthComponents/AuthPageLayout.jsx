@@ -4,8 +4,8 @@ import { links } from './AuthUtils'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../assets/images/logo.png'
 import avatar from '../assets/images/avatar.svg'
-import { MoveToTop } from '../utils/pageUtils'
-import { Apis, AuthGetApi, imageurl } from '../services/API'
+import { MoveToTop, SuccessAlert } from '../utils/pageUtils'
+import { Apis, AuthGetApi, AuthPostApi, imageurl } from '../services/API'
 import { useAtom } from 'jotai'
 import { BANK, PROFILE, UTILS, WALLET } from '../services/store'
 
@@ -40,12 +40,25 @@ const AuthPageLayout = ({ children }) => {
   }, [])
 
   const navigate = useNavigate()
+  const sendMail = async () => {
+    const formbody = {
+      email: user?.email
+    }
+    try {
+      const res = await AuthPostApi(Apis.user.send_otp, formbody)
+      if (res.status !== 200) return;
+      SuccessAlert(res.msg)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
     if (user.email_verified === 'false') {
-      navigate('/verify-account');
+      sendMail()
+      navigate(`/verify-account?v=${user?.email}`);
     }
   }, [user.email_verified, navigate])
-  
+
   return (
     <div className='w-full'>
 
