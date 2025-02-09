@@ -6,26 +6,26 @@ import { currencySign } from '../../utils/pageUtils';
 import moment from 'moment'
 
 const Leaderboards = () => {
-    const [loading, setLoading] = useState(true)
+    const [dataLoading, setDataLoading] = useState(true)
     const [leaderboard, setLeaderboard] = useState([])
 
     const fetchLeaderboard = async () => {
         try {
             const res = await AuthGetApi(Apis.user.get_leaderboard)
             if (res.status !== 200) {
-                setLoading(true)
+                setDataLoading(true)
             }
             const data = res.data
             setLeaderboard(data)
         } catch (error) {
 
         } finally {
-            setLoading(false)
+            setDataLoading(false)
         }
     }
     useEffect(() => {
         fetchLeaderboard()
-    }, [loading])
+    }, [dataLoading])
 
     const [shortName, setShortName] = useState([])
     // const calcName = (val) => {
@@ -58,11 +58,11 @@ const Leaderboards = () => {
                     <div className="text-2xl font-bold ">Top Traders on MonieQuest</div>
                 </div>
 
-                {loading && new Array(3).fill().map((_, i) => (
-                    <div key={i} className="w-full mb-5 h-20 bg-gray-500 rounded-md animate-pulse"></div>
+                {dataLoading && new Array(3).fill().map((_, i) => (
+                    <div key={i} className="w-full mb-5 h-16 bg-gray-500 rounded-md animate-pulse"></div>
 
                 ))}
-                {!loading && <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                {!dataLoading && <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-11/12 mx-auto text-sm text-center rounded-e-md rounded-s-md truncate rtl:text-right text-gray-400 ">
                         <thead class="text-sm bg-primary lg:text-base">
                             <tr>
@@ -83,7 +83,7 @@ const Leaderboards = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {leaderboard.length > 0 ? leaderboard.slice(0,20).map((item, i) => {
+                            {leaderboard.length > 0 ? leaderboard.slice(0, 20).map((item, i) => {
                                 return (
                                     (
                                         <tr key={i} class="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
@@ -91,7 +91,7 @@ const Leaderboards = () => {
                                                 {item.id}
                                             </th>
                                             <td class="px-6 py-4">
-                                                {item.first_name.slice(0,1)}*****{item.first_name.slice(-3)}
+                                                {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}
                                             </td>
                                             <td class="px-6 py-4 text-lightgreen">
                                                 {currencySign[0]}{item?.user_wallets?.total_deposit.toLocaleString()}
@@ -106,18 +106,9 @@ const Leaderboards = () => {
                                     )
                                 )
                             }) :
-                                <tr>
-                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-                                        nil
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        nil
-                                    </td>
-                                    <td class="px-6 py-4 text-lightgreen">
-                                        nil
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        nil
+                                <tr className='bg-dark truncate text-white border-b'>
+                                    <td colSpan="4" className='py-2 italic text-center'>
+                                        No leaders available yet...
                                     </td>
                                 </tr>
                             }

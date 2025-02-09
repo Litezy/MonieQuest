@@ -130,7 +130,7 @@ const AdminSingleTool = () => {
 
         if (form.category.length < 1) return ErrorAlert('Choose a category')
         if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2) return ErrorAlert('Enter all required fields')
-        if (isNaN(form.price)) return ErrorAlert('Price, discount and discount duration must be valid numbers')
+        if (isNaN(form.price) || isNaN(form.discount_percentage) || isNaN(form.discount_duration)) return ErrorAlert('Price, discount percentage and discount duration must be valid numbers')
 
         const formbody = new FormData()
         formbody.append('tool_id', singleTool.id)

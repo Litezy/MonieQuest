@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import { IoLockClosedOutline, IoLockOpenOutline } from "react-icons/io5";
 import { MdVerified } from "react-icons/md";
-import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
+import { ErrorAlert, MoveToTop, SuccessAlert } from '../../utils/pageUtils'
 import PinForm from '../../utils/PinForm'
 import PasswordInputField from '../../utils/PasswordInputField'
 import { Link } from 'react-router-dom'
@@ -18,6 +18,8 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false)
   const [pins, setPins] = useState(['', '', '', '', '', '']);
   const checkPins = pins.join('')
+  const [resend, setResend] = useState(true)
+  const [countdown, setCountDown] = useState(40)
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -31,6 +33,24 @@ const ForgotPassword = () => {
     })
   }
 
+  useEffect(() => {
+    let timer;
+    if (resend) {
+      timer = setInterval(() => {
+        setCountDown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer)
+            setResend(false)
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000)
+    }
+
+    return () => clearInterval(timer)
+  }, [resend])
+
   const SendOTP = async (e) => {
     e.preventDefault()
 
@@ -39,6 +59,7 @@ const ForgotPassword = () => {
     try {
       const response = await PostApi(Apis.user.send_otp, { email: form.email })
       if (response.status === 200) {
+        SuccessAlert(response.msg)
         setScreen(2)
       } else {
         ErrorAlert(response.msg)
@@ -104,7 +125,7 @@ const ForgotPassword = () => {
 
 
   return (
-    <div className='w-full bg-dark h-[110dvh]'>
+    <div className='w-full bg-dark h-screen overflow-y-auto'>
       {loading &&
         <ModalLayout>
           <div className="w-full p-5 flex items-center justify-center">
@@ -112,7 +133,7 @@ const ForgotPassword = () => {
           </div>
         </ModalLayout>
       }
-      <div className='w-11/12 mx-auto py-20'>
+      <div className='w-11/12 mx-auto py-24'>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
           <div className='w-full h-full flex flex-col'>
             <div className="flex items-center justify-center w-full ">
@@ -120,7 +141,7 @@ const ForgotPassword = () => {
             </div>
             <div className='text-3xl font-bold text-center text-zinc-300'>Forgot password</div>
             {screen === 1 &&
-              <form onSubmit={SendOTP}>
+              <form onSubmit={SendOTP} className='pb-10'>
                 <div className='flex justify-center text-zinc-300 flex-col gap-2 items-center mt-6'>
                   <div className='w-12 h-12 border-2 border-lightgreen rounded-full flex items-center justify-center'>
                     <IoLockClosedOutline className='text-2xl text-lightgreen' />
@@ -143,11 +164,18 @@ const ForgotPassword = () => {
                   <div className='font-bold text-zinc-300'>Verify your email address</div>
                   <div className='text-left text-sm text-lightgreen'>A verification code was sent to your email address, enter the code below</div>
                 </div>
-                <div className='flex flex-col gap-5 items-center mt-8'>
+                <div className='flex flex-col gap-8 items-center mt-8'>
                   <PinForm
                     pins={pins}
                     setPins={setPins}
                   />
+                  {!resend ?
+                    <div className="w-fit ml-auto text-white flex gap-2">
+                      <div className="">didn't get code?</div>
+                      <div type='button' onClick={SendOTP} className='text-lightgreen cursor-pointer'>Resend code</div>
+                    </div> :
+                    <div className="w-fit ml-auto text-white">resend in <span className='text-lightgreen'>{countdown}s</span></div>
+                  }
                   <FormButton title='Verify email' className={`${checkPins.length < 6 ? '!bg-zinc-200 !hover:bg-none' : '!bg-ash hover:!bg-lightgreen'}`} />
                 </div>
               </form>
@@ -169,7 +197,7 @@ const ForgotPassword = () => {
               </form>
             }
             {screen === 4 &&
-              <div className='flex flex-col gap-6 mt-10'>
+              <div className='flex flex-col gap-6 py-10'>
                 <div className='flex flex-col gap-4 items-center justify-center'>
                   <SuccessCheck />
                   <div className='text-3xl font-bold text-center text-lightgreen'>Password Reset <br></br>Succcessful</div>

@@ -63,7 +63,7 @@ const SignUpPage = () => {
 
 
   return (
-    <div className="w-full h-[100dvh] overflow-y-auto bg-dark">
+    <div className="w-full bg-dark h-screen overflow-y-auto">
       {loading &&
         <ModalLayout>
           <div className="w-full p-5 flex items-center justify-center">
