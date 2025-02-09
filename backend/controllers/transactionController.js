@@ -3,7 +3,6 @@ const User = require('../models').users
 const CryptoBuyModel = require(`../models`).exchangeBuys
 const CryptoSellModel = require(`../models`).exchangeSells
 const Notify = require(`../models`).notifications
-const TransHistory = require(`../models`).transactions
 const { customAlphabet } = require('nanoid');
 const otp = require('otp-generator')
 const Mailing = require('../config/emailDesign')
@@ -199,7 +198,7 @@ exports.getUserCryptoOrderHistory = async (req, res) => {
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const buytrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user, status: [`unpaid`, `paid`] } })
         const selltrans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user, status: 'pending' } })
-        if (!buytrans && !selltrans) return res.json({ status: 404, msg: 'No crypt oder history found' })
+        if (!buytrans && !selltrans) return res.json({ status: 404, msg: 'No crypto oder history found' })
         const alltrans = [...buytrans, ...selltrans]
         const sortedTransactions = alltrans.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         return res.json({ status: 200, msg: "fetch success", data: sortedTransactions })
