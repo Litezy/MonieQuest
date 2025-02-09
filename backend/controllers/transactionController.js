@@ -417,7 +417,7 @@ exports.getUserLatestWithdrawals = async (req, res) => {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const getWithdrawals = await BankWithdrawal.findAll({
-            where: { userid: user ? user.id : req.user, status: 'pending' },
+            where: { userid:  req.user, status: 'pending' },
             limit: 5,
             order: [['createdAt', 'DESC']]
         })

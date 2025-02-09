@@ -172,7 +172,7 @@ const BuyCrypto = () => {
                                     <select onChange={(e) => setForms({ ...forms, type: e.target.value })} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
                                         {coins.map((coin, i) => {
                                             return (
-                                                <option value={coin} key={i} className="outline-none">{coin}</option>
+                                                <option value={coin.network} key={i} className="outline-none">{coin.network}</option>
                                             )
                                         })}
                                     </select>

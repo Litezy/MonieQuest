@@ -315,3 +315,4 @@ export const examplefaqs = [
         desc: `Profit Tools is a collection of eBooks, graphic and AI tools, and resources designed to enhance productivity and skill-building for our users.`
     }
 ]
+

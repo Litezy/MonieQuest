@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { alltransactions, banksArr, currencies } from '../../AuthComponents/AuthUtils'
 import TransComp from '../../AuthComponents/TransComp'
 import FormInput from '../../utils/FormInput'
@@ -28,22 +28,24 @@ const formsal = () => {
         bank: '', amount: '', accountNumber: '', accountName: '',
     })
 
-    const FetchLatestTrans = async () => {
+    const FetchLatestTrans = useCallback(async () => {
         try {
             const response = await AuthGetApi(Apis.transaction.latest_withdrawals)
-            if (response.status === 200) {
-                const data = response.data
-                // console.log(data)
-                setRecords(data)
+            if (response.status !== 200) {
+                return ErrorAlert(res.msg)
             }
+            const data = response.data
+            // console.log(data)
+            setRecords(data)
+
         } catch (error) {
             console.log(error)
         }
-    }
+    })
+  
     useEffect(() => {
         FetchLatestTrans()
-    })
-    // console.log(records)
+    },[])
 
 
     const [show, setShow] = useState(false)
@@ -128,6 +130,7 @@ const formsal = () => {
         }
     }
 
+   
     return (
         <AuthPageLayout>
             <div className='w-full'>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
 import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
 import FormInput from '../utils/FormInput';
-import { BankAcc, coins, currencies, sellInstruction } from './AuthUtils';
+import { coins, currencies, sellInstruction } from './AuthUtils';
 import ModalLayout from '../utils/ModalLayout';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCopy } from 'react-icons/fa';
@@ -24,12 +24,12 @@ const SellCrypto = () => {
     const [forms, setForms] = useState({
         amount: '',
         trans_hash: '',
-        type: coins[0],
-        network: 'BTC',
-        wallet_add: 'addre4783718jfbfbivnia848882993-20939484883'
+        network: coins[0].network,
+        wallet_add: ''
     })
 
     const [active, setActive] = useState(tags[0])
+    const [selectedCoin, setSelectedCoin] = useState({})
     const [confirm, setConfirm] = useState(false)
     const handleAmount = (e) => {
         const rawValue = e.target.value.replace(/,/g, '');
@@ -59,7 +59,7 @@ const SellCrypto = () => {
         e.preventDefault()
         if (!forms.amount) return ErrorAlert('amount is required')
         if (forms.amount < minimum) return ErrorAlert('amount is too small')
-        if (!forms.type) return ErrorAlert('coin type is required')
+        if (!forms.network) return ErrorAlert('coin network is required')
         if (selectedCurr.name !== 'USD' && selectedCurr.symbol !== '$') {
             const amt = forms.amount.replace(/,/g, '')
             const newamt = amt * rate
@@ -70,6 +70,7 @@ const SellCrypto = () => {
             if (amt > limit) return ErrorAlert(`Sorry, you can't sell above ${currencies[0].symbol}${limit.toLocaleString()}`)
         }
 
+        // return console.log(forms)
         setModal(true)
     }
 
@@ -139,6 +140,18 @@ const SellCrypto = () => {
             window.removeEventListener('offline', handleOffline);
         };
     }, []);
+
+
+    const handleCoins = (e) => {
+        const value = e.target.value
+        const findNetwork = coins.find((trx) => trx.network === String(value))
+        if (findNetwork) {
+            setForms({...forms, network: findNetwork.network, wallet_add: findNetwork.address });
+        }else{
+            setForms({...forms, network: '', wallet_add: '' });
+        }
+
+    }
     return (
         <Exchange>
             <div className='w-full'>
@@ -214,10 +227,10 @@ const SellCrypto = () => {
                                 {/* <div className="text-center font-bold text-red-500 w-full">Sell Crypto</div> */}
                                 <div className="flex items-start gap-2 flex-col w-full">
                                     <div className="font-bold text-lg">Cryto Currency:</div>
-                                    <select onChange={(e) => setForms({ ...forms, type: e.target.value })} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
+                                    <select onChange={handleCoins} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
                                         {coins.map((coin, i) => {
                                             return (
-                                                <option value={coin} key={i} className="outline-none">{coin}</option>
+                                                <option value={coin.network} key={i} className="outline-none">{coin.network}</option>
                                             )
                                         })}
                                     </select>
@@ -262,16 +275,18 @@ const SellCrypto = () => {
                                 <div className="flex w-full items-start gap-2 flex-col  ">
                                     <div className="font-bold text-lg">Network</div>
                                     <div className="w-full ">
-                                        <input readOnly type="text" value={forms.network}
+                                        <input readOnly={true} type="text" value={forms.network}
                                             className='w-full bg-dark focus:border-zinc-300 focus-ring-0 outline-none '
                                         />
                                     </div>
                                 </div>
                                 <div className="flex w-full items-start gap-2 flex-col  ">
                                     <div className="font-bold text-lg">Wallet Address</div>
-                                    <div className="w-full flex items-center gap-1 border rounded-md  px-2">
+                                    <div className="w-full flex items-center gap-1  rounded-md ">
                                         <div className="w-full">
-                                            <FormInput border={false} value={forms.wallet_add} />
+                                        <input readOnly={true} type="text" value={forms.wallet_add}
+                                            className='w-full bg-dark focus:border-zinc-300 focus-ring-0 outline-none '
+                                        />
                                         </div>
                                         <FaCopy onClick={copyToClip} className='text-white text-xl cursor-pointer' />
 
