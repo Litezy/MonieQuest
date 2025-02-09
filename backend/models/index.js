@@ -17,7 +17,6 @@ db.Sequelize = Sequelize
 db.users = require('./userModel')(sequelize, DataTypes)
 db.wallets = require('./walletModel')(sequelize, DataTypes)
 db.notifications = require('./notificationModel')(sequelize, DataTypes)
-db.transactions = require('./transactionModel')(sequelize, DataTypes)
 db.profitTools = require('./profitToolsModel')(sequelize, DataTypes)
 db.airdrops = require('./airdropModel')(sequelize, DataTypes)
 db.blogs = require('./blogModel')(sequelize, DataTypes)
