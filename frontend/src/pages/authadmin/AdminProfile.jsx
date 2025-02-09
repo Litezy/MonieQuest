@@ -67,18 +67,19 @@ const AdminProfile = () => {
         })
     }
 
+    const handleAccNum = (e) => {
+        let value = e.target.value
+        const formatVal = value.replace(/\D/g, '')
+        const numLenght = formatVal.substring(0, 10)
+        setForm({ ...form, account_number: numLenght })
+    }
+
     useEffect(() => {
         setForm({
             ...form,
             bank_name: bank?.bank_name || '',
             account_name: bank?.account_name || '',
-            account_number: bank?.account_number || ''
-        })
-    }, [bank])
-
-    useEffect(() => {
-        setForm({
-            ...form,
+            account_number: bank?.account_number || '',
             exchange_buy_rate: utils?.exchange_buy_rate || '',
             exchange_sell_rate: utils?.exchange_sell_rate || '',
             giftcard_rate: utils?.giftcard_rate || '',
@@ -88,7 +89,7 @@ const AdminProfile = () => {
             sell_max: utils?.sell_max || '',
             bank_min: utils?.bank_withdraw_min || '',
         })
-    }, [utils])
+    }, [utils, bank])
 
     const handleProfileUpload = (event) => {
         const file = event.target.files[0]
@@ -281,7 +282,7 @@ const AdminProfile = () => {
                             <div className='text-xl capitalize font-medium text-lightgreen'>add a bank account</div>
                             <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1 relative'>
                                 {loading.sub1 && <Loading />}
-                                <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={handleAccNum} className='!bg-secondary !w-64' border={false} />
                                 <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                 <FormInput placeholder='Bank name' name='bank_name' value={form.bank_name} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                 <FormButton title={Object.keys(bank).length !== 0 ? 'Update' : 'Save'} className='!py-3 !text-base mt-2' type='button' onClick={AddBankAccount} />

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Loading from '../../GeneralComponents/Loading'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import { IoLockClosedOutline, IoLockOpenOutline } from "react-icons/io5";
