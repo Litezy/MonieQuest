@@ -23,7 +23,7 @@ const VerifyAccount = () => {
 
     const VerifyEmail = async (e) => {
         e.preventDefault()
-        if (checkPins.length < 6) return ErrorAlert('Enter code sent to email')
+        if (checkPins.length < 6) return ErrorAlert('Enter verification code sent to email')
         const formbody = {
             email: userEmail,
             code: checkPins
@@ -96,7 +96,7 @@ const VerifyAccount = () => {
                     </div>
                 </ModalLayout>
             }
-            <div className='w-11/12 mx-auto py-32'>
+            <div className='w-11/12 mx-auto py-36'>
                 <div className='flex items-center justify-center max-w-md mx-auto relative'>
                     <div className='w-full h-full flex flex-col'>
                         <div className="flex items-center justify-center w-full ">
