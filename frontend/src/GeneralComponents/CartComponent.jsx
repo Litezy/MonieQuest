@@ -24,22 +24,6 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
         totalDiscountAmount = totalPrice - totalPriceAfterDiscount
     }
 
-    useEffect(() => {
-        const FetchAdminBankAccount = async () => {
-            try {
-                const response = await GetApi(Apis.profitTools.get_admin_bank)
-                if (response.status === 200) {
-                    setAdminBank(response.msg)
-                } else {
-                    ErrorAlert(response.msg)
-                }
-            } catch (error) {
-                //
-            }
-        }
-        FetchAdminBankAccount()
-    }, [])
-
     const copyFunction = (content) => {
         navigator.clipboard.writeText(content)
         SuccessAlert('Account number copied successfully')
@@ -52,13 +36,27 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
         setCartItems(filteredData)
     }
 
-    const CheckOut = async () => {
+    const CheckOutAndGetAdminBank = async () => {
         if (!email) return ErrorAlert('Enter your email address')
-        setScreen(2)
+        setLoading(true)
+        try {
+            const response = await GetApi(Apis.profitTools.get_admin_bank)
+            if (response.status === 200) {
+                setAdminBank(response.msg)
+                setScreen(2)
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            //
+        } finally {
+            setLoading(false)
+        }
     }
 
     const ConfirmPaymentAndPlaceAnOrder = async () => {
         const formbody = {
+            bank_id: adminBank.id,
             email_address: email,
             total_price: parseFloat(totalPrice),
             total_discount: parseFloat(totalDiscountAmount),
@@ -161,7 +159,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                             <div className='-mt-2'>
                                                 <FormInput placeholder='Enter Email Address' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
                                             </div>
-                                            <button className='bg-lightgreen text-ash uppercase font-extrabold w-full h-fit py-3 rounded-[4px]' onClick={CheckOut}>proceed to checkout</button>
+                                            <button className='bg-lightgreen text-ash uppercase font-extrabold w-full h-fit py-3 rounded-[4px]' onClick={CheckOutAndGetAdminBank}>proceed to checkout</button>
                                             <div className='capitalize text-xs text-center'>payment method: bank transfer only</div>
                                         </div>
                                     </div>

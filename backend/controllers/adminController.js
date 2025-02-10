@@ -4,12 +4,21 @@ const Airdrop = require('../models').airdrops
 const ProfitTool = require('../models').profitTools
 const ToolOrder = require('../models').toolsOrders
 const Notification = require('../models').notifications
+const Bank = require('../models').banks
+const Kyc = require('../models').kyc
+const CryptoBuy = require(`../models`).exchangeBuys
+const CryptoSell = require(`../models`).exchangeSells
+const GiftCard = require('../models').giftCards
+const BankWithdrawal = require('../models').withdrawals
+const Wallet = require('../models').wallets
+const Blog = require('../models').blogs
 const { webName, webShort, webURL } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
 const moment = require('moment')
+const { Sequelize } = require('sequelize')
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -417,5 +426,105 @@ exports.AllProfitToolsOrders = async (req, res) => {
         return res.json({ status: 200, msg: allToolOrders })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.GetDashboardTotals = async (req, res) => {
+    try {
+        const users = await User.findAll({
+            where: { id: { [Sequelize.Op.ne]: 1 } }
+        })
+        const crypto_sells = await CryptoSell.findAll({
+            where: { status: 'confirmed' }
+        })
+        const crypto_buys = await CryptoBuy.findAll({
+            where: { status: 'paid' }
+        })
+        const giftcards = await GiftCard.findAll({})
+        const product_orders = await ToolOrder.findAll({
+            where: { status: 'paid' }
+        })
+        const withdrawals = await BankWithdrawal.findAll({
+            where: { status: 'confirmed' }
+        })
+        const airdrops = await Airdrop.findAll({})
+        const blogs = await Blog.findAll({})
+
+        const totals = {
+            users: users.length,
+            crypto_sells: crypto_sells.length,
+            crypto_buys: crypto_buys.length,
+            giftcards: giftcards.length,
+            product_orders: product_orders.length,
+            airdrops: airdrops.length,
+            blogs: blogs.length,
+            withdrawals: withdrawals.length,
+        }
+
+        return res.json({ status: 200, msg: totals })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.UpdateKyc = async (req, res) => {
+    try {
+        const { kyc_id, status, message } = req.body
+        if (!kyc_id) return res.json({ status: 404, msg: 'KYC id is required' })
+        const kyc = await Kyc.findOne({ where: { id: kyc_id } })
+        if (!kyc) return res.json({ status: 404, msg: 'User KYC not found' })
+        const kycUser = await User.findOne({ where: { id: kyc.user } })
+        if (!kycUser) return res.json({ status: 404, msg: 'KYC user not found' })
+
+        if (status === 'verified') {
+            kycUser.kyc_verified = 'true'
+            await kycUser.save()
+
+            await Notification.create({
+                user: kyc.user,
+                title: `KYC verified`,
+                content: `Your KYC details submitted has been successfully verified after review.`,
+                url: '/user/profile/kyc',
+            })
+
+            await Mailing({
+                subject: `KYC Verification Success`,
+                eTitle: `KYC details verified`,
+                eBody: `
+                      <div>Hello ${kycUser.first_name} ${kycUser.surname} , Your KYC details submitted has been successfully verified after review.</div>
+                    `,
+                account: kycUser
+            })
+        }
+        if (status === 'failed') {
+
+            if (!message) return res.json({ status: 400, msg: 'Provide a reason for failed verification' })
+
+            await Notification.create({
+                user: kyc.user,
+                title: `KYC verification failed`,
+                content: message,
+                status: 'failed',
+                url: '/user/profile/kyc',
+            })
+
+            await Mailing({
+                subject: `KYC Verification Failed`,
+                eTitle: `KYC details rejected`,
+                eBody: `
+                      <div>${message}</div>
+                    `,
+                account: kycUser
+            })
+        }
+
+        if (status) {
+            kyc.status = status
+            await kyc.save()
+        }
+
+        return res.json({ status: 200, msg: 'KYC updated successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
     }
 }
