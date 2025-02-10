@@ -3,7 +3,6 @@ const User = require('../models').users
 const CryptoBuyModel = require(`../models`).exchangeBuys
 const CryptoSellModel = require(`../models`).exchangeSells
 const Notify = require(`../models`).notifications
-const TransHistory = require(`../models`).transactions
 const { customAlphabet } = require('nanoid');
 const otp = require('otp-generator')
 const Mailing = require('../config/emailDesign')

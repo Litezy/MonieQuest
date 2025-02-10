@@ -4,12 +4,19 @@ const Airdrop = require('../models').airdrops
 const ProfitTool = require('../models').profitTools
 const ToolOrder = require('../models').toolsOrders
 const Notification = require('../models').notifications
-const { webName, webShort, webURL } = require('../utils/utils')
+const Blogs = require('../models').blogs
+const BuyCrypto = require('../models').exchangeBuys
+const Wallet = require('../models').wallets
+const SellCrypto = require('../models').exchangeSells
+const GiftCard = require('../models').giftCards
+const Bank_Withdrawals = require('../models').withdrawals
+const { webName, webShort, webURL, ServerError } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
 const moment = require('moment')
+// const { sequelize } = require('../models')
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -417,5 +424,62 @@ exports.AllProfitToolsOrders = async (req, res) => {
         return res.json({ status: 200, msg: allToolOrders })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
+    }
+}
+
+
+
+exports.getDashboardInfos = async (req, res) => {
+  try {
+    const totalProfitTools = await ProfitTool.count();
+    const totalCryptobuys = await BuyCrypto.count();
+    const totalCryptosells = await SellCrypto.count();
+    const totalAirdrops = await Airdrop.count();
+    const totalBlogs = await Blogs.count();
+    const totalUsers = await User.count();
+    const totalGiftcardSells = await GiftCard.count();
+    const totalWithdrawals = await Bank_Withdrawals.count();
+    const totalCryptoBuysAmount = await BuyCrypto.sum('amount');
+    const totalCryptoSellsAmount = await SellCrypto.sum('amount');
+    const totalWithdrawalAmt = await Bank_Withdrawals.sum('amount');
+    const totalGiftcardsAmt = await GiftCard.sum('amount');
+    const totalToolsOrders = await ToolOrder.sum('amount_paid');
+    const data = [
+      { title: 'total Users', value: totalUsers, color: 'red' },
+      { title: 'total Airdrops', value: totalAirdrops, color: 'green' },
+      { title: 'total Crypto Buys', value: totalCryptobuys, color: 'yellow' },
+      { title: 'total Crypto Sells', value: totalCryptosells, color: 'blue' },
+      { title: 'total Crypto Buys Amount', value: totalCryptoBuysAmount, color: 'orange',cur:true },
+      { title: 'total Giftcards Sells Amount', value: totalGiftcardsAmt, color: 'purple',cur:true },
+      { title: 'total Crypto Sells Amount', value: totalCryptoSellsAmount, color: 'indigo',cur:true },
+      { title: 'total Giftcard Sells', value: totalGiftcardSells, color: 'orange' },
+      { title: 'total Withdrawals', value: totalWithdrawals, color: 'teal' },
+      { title: 'total Amount Withdrawn', value: totalWithdrawalAmt, color: 'amber',cur:true },
+      { title: 'total Blogs', value: totalBlogs, color: 'pink' },
+      { title: 'total Profit Tools', value: totalProfitTools, color: 'red' },
+      { title: 'total Profit Tools Orders', value: totalToolsOrders ? totalToolsOrders  : 0 , color: 'lime',cur:true },
+    ];
+
+    return res.json({ status: 200, msg: 'fetch success', data });
+  } catch (error) {
+    ServerError(res, error);
+  }
+};
+
+
+exports.getUserDetails = async (req,res) =>{
+    try {
+        const all_users = await User.findAll({ where:{role:'user'},
+            attributes:[`id`,`first_name`,'surname','email','createdAt'],
+            include:[
+                {
+                    model: Wallet,as :'user_wallets',
+                    attributes:[`balance`]
+                }
+            ]
+        })
+        return res.json({status:200, msg:'fetch success',data:all_users})
+    } catch (error) {
+        ServerError(res,error)
     }
 }
