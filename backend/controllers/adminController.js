@@ -444,7 +444,8 @@ exports.getDashboardInfos = async (req, res) => {
     const totalCryptoSellsAmount = await SellCrypto.sum('amount');
     const totalWithdrawalAmt = await Bank_Withdrawals.sum('amount');
     const totalGiftcardsAmt = await GiftCard.sum('amount');
-    const totalToolsOrders = await ToolOrder.sum('amount_paid');
+    const totalToolsOrders = await ToolOrder.count;
+    const totalProfitRevenue = await ToolOrder.sum('amount_paid');
     const data = [
       { title: 'total Users', value: totalUsers, color: 'red' },
       { title: 'total Airdrops', value: totalAirdrops, color: 'green' },
@@ -458,7 +459,8 @@ exports.getDashboardInfos = async (req, res) => {
       { title: 'total Amount Withdrawn', value: totalWithdrawalAmt, color: 'amber',cur:true },
       { title: 'total Blogs', value: totalBlogs, color: 'pink' },
       { title: 'total Profit Tools', value: totalProfitTools, color: 'red' },
-      { title: 'total Profit Tools Orders', value: totalToolsOrders ? totalToolsOrders  : 0 , color: 'lime',cur:true },
+      { title: 'total Profit Tools Orders', value: totalToolsOrders  , color: 'lime', },
+      { title: 'total Profit Tools Revenue', value: totalProfitRevenue ? totalProfitRevenue  : 0 , color: 'gray',naira:true },
     ];
 
     return res.json({ status: 200, msg: 'fetch success', data });
@@ -484,6 +486,8 @@ exports.getUserDetails = async (req,res) =>{
         ServerError(res,error)
     }
 }
+
+// exports
 
 
 exports.UpdateKyc = async (req, res) => {

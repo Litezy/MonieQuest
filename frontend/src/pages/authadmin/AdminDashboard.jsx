@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import AdminSummary from '../../AdminComponents/AdminSummary'
 import { Apis, AuthGetApi } from '../../services/API'
-import { Apis, AuthGetApi } from '../../services/API'
+
 
 const AdminDashboard = () => {
     const [data, setData] = useState([])
@@ -26,7 +26,7 @@ const AdminDashboard = () => {
         fetchDashboard()
     }, [])
 
-    
+
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>

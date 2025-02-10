@@ -1,4 +1,5 @@
 import React from 'react'
+import { currencySign } from '../utils/pageUtils';
 
 const AdminSummary = ({item}) => {
     const colorClasses = {
@@ -14,6 +15,7 @@ const AdminSummary = ({item}) => {
         cyan: 'bg-cyan-500',
         amber: 'bg-amber-500',
         lime: 'bg-lime-500',
+        gray:'bg-gray-500'
       };
       
     return (
@@ -21,7 +23,7 @@ const AdminSummary = ({item}) => {
             <div className={`w-full ${colorClasses[item?.color]} rounded-lg h-1/2  flex font-bold px-3  items-center justify-center`}>
                 <h1 className='text-base lg:text-lg capitalize'>{item?.title}</h1>
             </div>
-            <div className="h-1/2 flex items-center text-base lg:text-lg font-bold justify-center">{item?.value}</div>
+            <div className="h-1/2 flex items-center text-base lg:text-lg font-bold justify-center">{item?.cur && currencySign[0]}{item?.naira && currencySign[1]}{item?.value}</div>
          </div>
       )
 }
