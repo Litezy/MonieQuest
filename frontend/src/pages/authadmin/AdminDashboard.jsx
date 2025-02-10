@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import AdminSummary from '../../AdminComponents/AdminSummary'
 import { Apis, AuthGetApi } from '../../services/API'
+import { useAtom } from 'jotai'
+import { USERS } from '../../services/store'
 
 
 const AdminDashboard = () => {
     const [data, setData] = useState([])
-    const [dataLoading, setDataLoading] = useState(false)
+    const [, setUsers] = useAtom(USERS)
+    const [dataLoading, setDataLoading] = useState(true)
 
     const fetchDashboard = async () => {
         setDataLoading(true)
@@ -15,6 +18,7 @@ const AdminDashboard = () => {
             if (res.status !== 200) return;
             const data = res.data
             setData(data)
+            setUsers(data[0])
         } catch (error) {
             console.log(error)
         } finally {
@@ -32,7 +36,12 @@ const AdminDashboard = () => {
             <div className='w-11/12 mx-auto'>
 
                 <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {dataLoading ?
+                    {data.map((item, i) => {
+                        return (
+                            <AdminSummary key={i} item={item} loading={dataLoading} />
+                        )
+                    })}
+                    {/* {dataLoading ?
                         <>
                             {new Array(3).fill(0).map((_, i) => (
                                 <div key={i} className='h-32 w-full mb-5 bg-slate-400 animate-pulse rounded-e-xl rounded-tl-lg'>
@@ -42,13 +51,9 @@ const AdminDashboard = () => {
                         </>
                         :
                         <>
-                            {data.map((item, i) => {
-                                return (
-                                    <AdminSummary key={i} item={item} />
-                                )
-                            })}
+                            
                         </>
-                    }
+                    } */}
                 </div>
             </div>
         </AdminPageLayout>

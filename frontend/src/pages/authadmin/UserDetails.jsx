@@ -1,33 +1,29 @@
 import moment from 'moment'
 import React, { useState } from 'react'
 import { IoReturnUpBackOutline } from 'react-icons/io5'
-import { currencies } from '../AuthComponents/AuthUtils'
+import { currencies } from '../../AuthComponents/AuthUtils'
+import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
+import { Link } from 'react-router-dom'
+import { useAtom } from 'jotai'
+import { USERDETAILS } from '../../services/store'
 
-const UserDetails = ({ setActive }) => {
+const UserDetails = () => {
 
-    const [users, setUsers] = useState(
-        [
-            {
-                firstname: 'Bassy', lastname: 'Monie', id: 1, email: 'bassy@gmail.com', bal: '1000', date: '02 Dec 2024', password: '123'
-            },
-            {
-                fisrtname: 'Bassy', lastname: 'Monie', id: 1, email: 'bassy@gmail.com', bal: '1000', date: '02 Dec 2024', password: '123'
-            }
-        ]
-)
+    const [data] = useAtom(USERDETAILS)
 
     return (
-        <div className='w-full '>
+        <AdminPageLayout>
+            <div className='w-11/12 mx-auto '>
             <div className="w-full flex items-center text-white justify-between">
-                <div onClick={() => setActive(0)} className="w-fit cursor-pointer mr-auto bg-primary text-white px-3 py-1 rounded-md">
+                <Link to={`/admin/all_users`} className="w-fit cursor-pointer mr-auto bg-primary text-white px-3 py-1 rounded-md">
                     <IoReturnUpBackOutline className='text-2xl' />
-                </div>
+                </Link>
                 <div className="text-lg font-semibold">User Details</div>
             </div>
             <div className="my-5 text-xl font-bold text-center">Below are Users Details on MonieQuest</div>
 
             <div className="relative overflow-x-auto rounded-md mt-10">
-                <table className="w-full text-sm text-left rtl:text-right">
+                <table className="w-full text-sm text-center">
                     <thead className=" bg-primary text-sm poppins ">
                         <tr>
                             <th scope="col" className="px-3 py-3">
@@ -40,8 +36,12 @@ const UserDetails = ({ setActive }) => {
                                 Email
                             </th>
                             <th scope="col" className="px-3 py-3">
-                                Password
+                                Role
                             </th>
+                            <th scope="col" className="px-3 py-3">
+                                KYC Verified
+                            </th>
+                            
                             <th scope="col" className="px-3 py-3">
                                 Balance
                             </th>
@@ -52,26 +52,29 @@ const UserDetails = ({ setActive }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.isArray(users) ? users.map((item, i) => (
+                        {Array.isArray(data) ? data.map((item, i) => (
                             <tr className=" border-b " key={i}>
                                 <th scope="row" className="px-6 text-white py-4 font-medium  whitespace-nowrap ">
                                     {item.id}
                                 </th>
-                                <td className="px-3 py-3">
-                                    {item.firstname} {item.lastname}
+                                <td className="px-3 truncate capitalize text-lightgreen py-3">
+                                    {item?.first_name} {item?.surname}
                                 </td>
                                 <td className="px-3 py-3">
-                                    {item.email}
+                                    {item?.email}
                                 </td>
                                 <td className="px-3 py-3">
-                                    {item.password}
+                                    {item?.role}
+                                </td>
+                                <td className="px-3 py-3 truncate">
+                                    {item?.kyc_verified === 'false' ? 'Not Submitted' : item?.kyc_verified ==='processing' ? 'Submitted':'Verified'}
                                 </td>
 
                                 <td className="px-3 py-3">
-                                    {currencies[1].symbol}{item.bal.toLocaleString()}
+                                    {currencies[1].symbol}{item?.user_wallets?.balance.toLocaleString()}
                                 </td>
-                                <td className="px-3 py-3">
-                                    {moment(!item.createdAt && item.date).format(`DD-MM-YYYY`)}
+                                <td className="px-3 py-3 truncate">
+                                    {moment(item.createdAt).format(`DD-MM-YYYY hh:mm a`)}
                                 </td>
                             </tr>
                         )) :
@@ -84,6 +87,7 @@ const UserDetails = ({ setActive }) => {
 
             </div>
         </div>
+        </AdminPageLayout>
     )
 }
 

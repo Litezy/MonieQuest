@@ -36,6 +36,8 @@ db.users.hasMany(db.exchangeSells, { foreignKey: 'userid', as: "crypto_sellers" 
 db.users.hasMany(db.giftCards, { foreignKey: 'userid', as: "gift_sellers" })
 db.users.hasMany(db.withdrawals, { foreignKey: 'userid', as: "user_withdrawals" })
 db.users.hasOne(db.wallets, { foreignKey: 'user', as: "user_wallets" })
+db.users.hasOne(db.banks, { foreignKey: 'user', as: "user_banks" })
+db.users.hasOne(db.kyc, { foreignKey: 'user', as: "user_kycs" })
 db.users.hasMany(db.profitTools, { foreignKey: 'user', as: "user_tools" })
 
 // One to One relationships
@@ -44,6 +46,8 @@ db.exchangeSells.belongsTo(db.users, { foreignKey: 'userid', as: "crypto_seller"
 db.giftCards.belongsTo(db.users, { foreignKey: 'userid', as: "gift_seller" })
 db.withdrawals.belongsTo(db.users, { foreignKey: 'userid', as: "user_withdrawal" })
 db.wallets.belongsTo(db.users, { foreignKey: 'user', as: "user_wallet" })
+db.banks.belongsTo(db.users, { foreignKey: 'user', as: "user_bank" })
+db.kyc.belongsTo(db.users, { foreignKey: 'user', as: "user_kyc" })
 db.profitTools.belongsTo(db.users, { foreignKey: 'user', as: "tool_user" })
 
 db.sequelize.sync({ force: false }).then(() => console.log('Tables synced'))

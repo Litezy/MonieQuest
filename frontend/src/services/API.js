@@ -64,7 +64,9 @@ const admin_urls = {
     listed_tools: admin + 'listed-profit_tools',
     all_tools_orders: admin + 'all-tools_orders',
     get_dashboard: admin + 'dashboard',
-    update_kyc: admin + 'update-kyc'
+    update_kyc: admin + 'update-kyc',
+    user_details: admin+'get_users_details',
+    create_user: admin +'create_user'
 
 }
 

@@ -7,12 +7,16 @@ import AdminFooter from './AdminFooter'
 import { pagelinks } from './AdminUtils'
 import { Apis, AuthGetApi, imageurl } from '../services/API'
 import { useAtom } from 'jotai'
-import { BANK, PROFILE, UTILS } from '../services/store'
+import { BANK, PROFILE, USER_SUB_KYCS, USER_VER_KYCS, USERBANKS, USERDETAILS, UTILS } from '../services/store'
 
 
 const AdminPageLayout = ({ children }) => {
     const [user] = useAtom(PROFILE)
     const [, setBank] = useAtom(BANK)
+    const [, setUserDetails] = useAtom(USERDETAILS)
+    const [, setUserSubmittedKycs] = useAtom(USER_SUB_KYCS)
+    const [, setUserBanks] = useAtom(USERBANKS)
+    const [, setUserVerifiedKycs] = useAtom(USER_VER_KYCS)
     const [, setUtils] = useAtom(UTILS)
     const location = useLocation()
     const pathName = location.pathname
@@ -34,9 +38,26 @@ const AdminPageLayout = ({ children }) => {
                 //
             }
         }
+        const fetchAllUsers = async () => {
+            try {
+                const res = await AuthGetApi(Apis.admin.user_details)
+                if (res.status !== 200) return;
+                const data = await res.data
+                setUserDetails(data[0].data)
+                setUserBanks(data[1].data)
+                setUserSubmittedKycs(data[2].data)
+                setUserVerifiedKycs(data[3].data)
+            } catch (error) {
+               console.log(error)
+            }
+        }
         FetchBankAndUtils()
+        fetchAllUsers()
     }, [])
+    
 
+ 
+    
 
     return (
         <div className='w-full'>
