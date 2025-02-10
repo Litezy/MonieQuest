@@ -8,6 +8,7 @@ const Blogs = require('../models').blogs
 const BuyCrypto = require('../models').exchangeBuys
 const Wallet = require('../models').wallets
 const SellCrypto = require('../models').exchangeSells
+const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
 const { webName, webShort, webURL, ServerError } = require('../utils/utils')
