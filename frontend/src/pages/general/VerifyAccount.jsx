@@ -118,7 +118,7 @@ const VerifyAccount = () => {
                                         </div> :
                                         <div className="w-fit ml-auto text-white">resend in <span className='text-lightgreen'>{countdown}s</span></div>
                                     }
-                                    <FormButton title='Verify' className={`${checkPins.length < 6 ? '!bg-zinc-400 !hover:bg-none' : '!bg-ash hover:!bg-lightgreen'}`} />
+                                    <FormButton title='Verify' className={`${checkPins.length < 6 && '!bg-zinc-400 !hover:bg-none hover:!text-white'}`} disabled={checkPins < 5 ? true : false} />
                                 </form>
                             </>
                         }

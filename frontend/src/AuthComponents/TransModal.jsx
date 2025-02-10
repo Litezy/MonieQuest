@@ -3,7 +3,7 @@ import { currencies } from './AuthUtils'
 import moment from 'moment'
 
 const TransModal = ({ trans }) => {
-    
+
     return (
         <div className="flex w-full items-start gap-2 flex-col poppins">
             <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
@@ -22,13 +22,13 @@ const TransModal = ({ trans }) => {
             </div>
             <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Transaction Amount</div>
-                <div className="capitalize ">{currencies[1].symbol}{trans?.amount.toLocaleString()}</div>
+                <div className="capitalize ">{currencies[1].symbol}{trans.amount && trans.amount.toLocaleString()}</div>
             </div>
-            {trans.trans_id &&<div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+            {trans.trans_id && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Transaction ID</div>
                 <div className="capitalize ">{trans?.trans_id}</div>
             </div>}
-            {trans.order_no &&<div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+            {trans.order_no && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Order ID</div>
                 <div className="capitalize ">{trans?.order_no}</div>
             </div>}
@@ -61,7 +61,7 @@ const TransModal = ({ trans }) => {
                 <div className="">Transaction Status</div>
                 <div className="">{trans?.status}</div>
             </div>
-            
+
         </div>
     )
 }

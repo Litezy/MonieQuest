@@ -145,9 +145,13 @@ exports.GetAdminBankAccount = async (req, res) => {
 
 exports.OrderTools = async (req, res) => {
     try {
-        const { email_address, total_price, total_discount, amount_paid, products } = req.body
-        if (!email_address || total_price.length || !total_discount || !amount_paid || products.length < 1) return res.json({ status: 404, msg: `Incomplete request found` })
+        const { bank_id, email_address, total_price, total_discount, amount_paid, products } = req.body
+        if (!email_address || !total_price || total_discount === '' || !amount_paid || products.length < 1) return res.json({ status: 404, msg: `Incomplete request found` })
         if (isNaN(total_price) || isNaN(total_discount) || isNaN(amount_paid)) return res.json({ status: 404, msg: `Prices must be in numbers` })
+        if (!bank_id) return res.json({ status: 404, msg: `Please make payment before continuing` })
+        const adminBank = await Bank.findOne({ where: { id: bank_id } })
+        if (!adminBank) return res.json({ status: 404, msg: `Please make payment before continuing` })
+        if (adminBank.user !== 1) return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
 
         const nanoid = customAlphabet(blockAndNum, 15)
         const gen_id = nanoid()

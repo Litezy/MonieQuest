@@ -24,7 +24,7 @@ db.kyc = require('./kycModel')(sequelize, DataTypes)
 db.toolsOrders = require('./toolOrderModel')(sequelize, DataTypes)
 db.banks = require('./bankModel')(sequelize, DataTypes)
 db.utils = require('./utilsModel')(sequelize, DataTypes)
-db.exchangeBuys = require(`./exchangeBuyModel`)(sequelize, DataTypes) 
+db.exchangeBuys = require(`./exchangeBuyModel`)(sequelize, DataTypes)
 db.exchangeSells = require(`./exchangeSellModel`)(sequelize, DataTypes)
 db.giftCards = require(`./giftCardModel`)(sequelize, DataTypes)
 db.withdrawals = require(`./withdrawalModel`)(sequelize, DataTypes)
@@ -36,6 +36,7 @@ db.users.hasMany(db.exchangeSells, { foreignKey: 'userid', as: "crypto_sellers" 
 db.users.hasMany(db.giftCards, { foreignKey: 'userid', as: "gift_sellers" })
 db.users.hasMany(db.withdrawals, { foreignKey: 'userid', as: "user_withdrawals" })
 db.users.hasOne(db.wallets, { foreignKey: 'user', as: "user_wallets" })
+db.users.hasMany(db.profitTools, { foreignKey: 'user', as: "user_tools" })
 
 // One to One relationships
 db.exchangeBuys.belongsTo(db.users, { foreignKey: 'userid', as: "crypto_buyer" })
@@ -43,6 +44,7 @@ db.exchangeSells.belongsTo(db.users, { foreignKey: 'userid', as: "crypto_seller"
 db.giftCards.belongsTo(db.users, { foreignKey: 'userid', as: "gift_seller" })
 db.withdrawals.belongsTo(db.users, { foreignKey: 'userid', as: "user_withdrawal" })
 db.wallets.belongsTo(db.users, { foreignKey: 'user', as: "user_wallet" })
+db.profitTools.belongsTo(db.users, { foreignKey: 'user', as: "tool_user" })
 
 db.sequelize.sync({ force: false }).then(() => console.log('Tables synced'))
     .catch((error) => console.log(error))

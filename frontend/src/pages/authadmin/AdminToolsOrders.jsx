@@ -55,20 +55,20 @@ const AdminToolsOrders = () => {
                     :
                     <div className='flex flex-col gap-5'>
                         <div className="text-xl md:text-3xl font-bold text-gray-300 capitalize">latest tools purchases</div>
+                        {modal &&
+                            <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 scroll rounded-md`} setModal={setModal}>
+                                <div className="w-full p-5 lg:p-10 bg-primary">
+                                    <div className="flex items-center justify-between">
+                                        <ToolsOrdersModal selected={selected} />
+                                    </div>
+                                    <button className='mt-5 w-full text-center bg-red-600 py-2 rounded-md' onClick={() => setModal(false)} >close</button>
+                                </div>
+                            </ModalLayout>
+                        }
                         {allToolsOrders.length > 0 ?
                             <div className='flex flex-col gap-5'>
                                 {allToolsOrders.map((item, i) => (
                                     <div key={i}>
-                                        {modal &&
-                                            <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2`} setModal={setModal}>
-                                                <div className="w-full h-[70vh] overflow-y-auto scroll p-5 lg:p-10 bg-primary rounded-md">
-                                                    <div className="flex items-center justify-between">
-                                                        <ToolsOrdersModal selected={selected} />
-                                                    </div>
-                                                    <button className='mt-5 w-full text-center bg-red-600 py-2 rounded-md' onClick={() => setModal(false)} >close</button>
-                                                </div>
-                                            </ModalLayout>
-                                        }
                                         <div onClick={() => { setModal(true); setSelected(item) }} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2">
                                             <div className="flex items-start gap-2 lg:gap-5 w-fit lg:w-full">
                                                 <div className="w-fit px-4 py-4 rounded-full bg-primary">

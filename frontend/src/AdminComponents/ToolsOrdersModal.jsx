@@ -1,13 +1,19 @@
 import React from 'react'
-import { currencySign } from '../utils/pageUtils'
+import { currencySign, SuccessAlert } from '../utils/pageUtils'
 import moment from 'moment'
+import { MdContentCopy } from 'react-icons/md'
 
 const ToolsOrdersModal = ({ selected }) => {
     let products = []
     if (Object.values(selected).length !== 0) {
         products = JSON.parse(selected.products)
     }
-    
+
+    const copyFunction = (content) => {
+        navigator.clipboard.writeText(content)
+        SuccessAlert('Email address copied successfully')
+    }
+
     return (
         <div className="flex w-full gap-8 flex-col">
             <div className='flex flex-col gap-5'>
@@ -18,7 +24,7 @@ const ToolsOrdersModal = ({ selected }) => {
                         <div className="capitalize ">profit tools purchase</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
-                        <div className="">Transaction Date</div>
+                        <div>Transaction Date</div>
                         <div className="capitalize ">{moment(selected?.createdAt).format('Do MMM YYYY')} / {moment(selected?.createdAt).format('h:mm')}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
@@ -38,12 +44,17 @@ const ToolsOrdersModal = ({ selected }) => {
                         <div>{currencySign[1]}{selected?.amount_paid && selected.amount_paid.toLocaleString()}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
-                        <div className="">Transaction Status</div>
-                        <div className="">{selected?.status}</div>
+                        <div>Transaction Status</div>
+                        <div>{selected?.status}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
-                        <div className="">Email Address</div>
-                        <div className="">{selected?.email_address}</div>
+                        <div>Email Address</div>
+                        <div className='flex items-center gap-2'>
+                            <div>{selected?.email_address}</div>
+                            <div className='cursor-pointer text-lightgreen' onClick={() => copyFunction(selected?.email_address)}>
+                                <MdContentCopy />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

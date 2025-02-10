@@ -483,3 +483,66 @@ exports.getUserDetails = async (req,res) =>{
         ServerError(res,error)
     }
 }
+
+
+exports.UpdateKyc = async (req, res) => {
+    try {
+        const { kyc_id, status, message } = req.body
+        if (!kyc_id) return res.json({ status: 404, msg: 'KYC id is required' })
+        const kyc = await Kyc.findOne({ where: { id: kyc_id } })
+        if (!kyc) return res.json({ status: 404, msg: 'User KYC not found' })
+        const kycUser = await User.findOne({ where: { id: kyc.user } })
+        if (!kycUser) return res.json({ status: 404, msg: 'KYC user not found' })
+
+        if (status === 'verified') {
+            kycUser.kyc_verified = 'true'
+            await kycUser.save()
+
+            await Notification.create({
+                user: kyc.user,
+                title: `KYC verified`,
+                content: `Your KYC details submitted has been successfully verified after review.`,
+                url: '/user/profile/kyc',
+            })
+
+            await Mailing({
+                subject: `KYC Verification Success`,
+                eTitle: `KYC details verified`,
+                eBody: `
+                      <div>Hello ${kycUser.first_name} ${kycUser.surname} , Your KYC details submitted has been successfully verified after review.</div>
+                    `,
+                account: kycUser
+            })
+        }
+        if (status === 'failed') {
+
+            if (!message) return res.json({ status: 400, msg: 'Provide a reason for failed verification' })
+
+            await Notification.create({
+                user: kyc.user,
+                title: `KYC verification failed`,
+                content: message,
+                status: 'failed',
+                url: '/user/profile/kyc',
+            })
+
+            await Mailing({
+                subject: `KYC Verification Failed`,
+                eTitle: `KYC details rejected`,
+                eBody: `
+                      <div>${message}</div>
+                    `,
+                account: kycUser
+            })
+        }
+
+        if (status) {
+            kyc.status = status
+            await kyc.save()
+        }
+
+        return res.json({ status: 200, msg: 'KYC updated successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
