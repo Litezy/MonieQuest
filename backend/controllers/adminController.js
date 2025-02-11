@@ -429,7 +429,6 @@ exports.AllProfitToolsOrders = async (req, res) => {
     }
 }
 
-
 exports.getDashboardInfos = async (req, res) => {
     try {
         const totalProfitTools = await ProfitTool.count();
@@ -449,17 +448,16 @@ exports.getDashboardInfos = async (req, res) => {
         const data = [
             { title: 'total Users', value: totalUsers.length, color: 'red' },
             { title: 'total Airdrops', value: totalAirdrops, color: 'green' },
+            { title: 'total Profit Tools', value: totalProfitTools, color: 'red' },
             { title: 'total Crypto Buys', value: totalCryptobuys, color: 'yellow' },
             { title: 'total Crypto Sells', value: totalCryptosells, color: 'blue' },
-            { title: 'total Crypto Buys Amount', value: totalCryptoBuysAmount ? totalCryptoBuysAmount : 0, color: 'orange', cur: true },
-            { title: 'total Giftcards Sells Amount', value: totalGiftcardsAmt ? totalGiftcardsAmt : 0, color: 'purple', cur: true },
-            { title: 'total Crypto Sells Amount', value: totalCryptoSellsAmount ? totalCryptoSellsAmount : 0, color: 'indigo', cur: true },
-            { title: 'total Giftcard Sells', value: totalGiftcardSells, color: 'orange' },
             { title: 'total Withdrawals', value: totalWithdrawals, color: 'teal' },
-            { title: 'total Amount Withdrawn', value: totalWithdrawalAmt, color: 'amber', cur: true },
             { title: 'total Blogs', value: totalBlogs, color: 'pink' },
-            { title: 'total Profit Tools', value: totalProfitTools, color: 'red' },
             { title: 'total Profit Tools Orders', value: totalToolsOrders, color: 'lime', },
+            { title: 'total Crypto Buys Amount', value: totalCryptoBuysAmount ? totalCryptoBuysAmount : 0, color: 'orange', cur: true },
+            { title: 'total Crypto Sells Amount', value: totalCryptoSellsAmount ? totalCryptoSellsAmount : 0, color: 'indigo', cur: true },
+            { title: 'total Giftcards Sells Amount', value: totalGiftcardsAmt ? totalGiftcardsAmt : 0, color: 'purple', cur: true },
+            { title: 'total Amount Withdrawn', value: totalWithdrawalAmt ? totalWithdrawalAmt : 0, color: 'amber', naira: true },
             { title: 'total Profit Tools Revenue', value: totalProfitRevenue ? totalProfitRevenue : 0, color: 'gray', naira: true },
         ];
 

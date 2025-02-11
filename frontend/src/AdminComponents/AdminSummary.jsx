@@ -1,7 +1,7 @@
 import React from 'react'
 import { currencySign } from '../utils/pageUtils';
 
-const AdminSummary = ({ item, loading }) => {
+const AdminSummary = ({ item }) => {
     const colorClasses = {
         red: 'bg-red-500',
         blue: 'bg-blue-500',
@@ -20,20 +20,10 @@ const AdminSummary = ({ item, loading }) => {
 
     return (
         <div className="shadow-md rounded-e-xl h-32 mb-5 bg-primary">
-            {loading ?
-                <>
-                    <div className={`w-full animate-pulse bg-gray-500 rounded-lg h-1/2  flex font-bold px-3  items-center justify-center`}>
-                        <h1 className='text-base lg:text-lg capitalize'></h1>
-                    </div>
-                    <div className="h-1/2 "></div>
-                </> :
-                <>
-                    <div className={`w-full ${colorClasses[item?.color]} rounded-lg h-1/2  flex font-bold px-3  items-center justify-center`}>
-                        <h1 className='text-base lg:text-lg capitalize'>{item?.title}</h1>
-                    </div>
-                    <div className="h-1/2 flex items-center text-base lg:text-lg font-bold justify-center">{item?.cur && currencySign[0]}{item?.naira && currencySign[1]}{item?.value && item.value.toLocaleString()}</div>
-                </>
-            }
+            <div className={`w-full ${colorClasses[item?.color]} rounded-lg h-1/2  flex font-bold px-3  items-center justify-center`}>
+                <h1 className='text-base lg:text-lg capitalize'>{item?.title}</h1>
+            </div>
+            <div className="h-1/2 flex items-center text-base lg:text-lg font-bold justify-center">{item?.cur && currencySign[0]}{item?.naira && currencySign[1]}{item?.value && item.value.toLocaleString()}</div>
         </div>
     )
 }

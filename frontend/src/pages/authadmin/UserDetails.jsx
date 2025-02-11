@@ -79,10 +79,9 @@ const UserDetails = () => {
                                 </tr>
                             )) :
                                 <tr className=" w-full truncate text-lg font-semibold">
-                                    <td colSpan="4" className='text-center py-2'>No Users found</td>
+                                    <td colSpan="7" className='text-center py-2'>No Users found</td>
                                 </tr>
                             }
-
                         </tbody>
                     </table>
 
