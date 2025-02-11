@@ -65,6 +65,8 @@ const admin_urls = {
     all_tools_orders: admin + 'all-tools_orders',
     get_dashboard: admin + 'dashboard',
     update_kyc: admin + 'update-kyc',
+    user_details: admin+'get_users_details',
+    create_user: admin +'create_user',
     create_blog: admin + 'create-blog',
     update_blog: admin + 'update-blog',
     all_blogs: admin + 'all-blogs',

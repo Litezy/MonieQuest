@@ -1,4 +1,4 @@
-const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, AllProfitTools, SingleProfitTool, UpdateProfitTool, AllListedProfitTools, AllProfitToolsOrders, UpdateKyc, getDashboardInfos, getUserDetails, CreateBlog, AllBlogs, SingleBlog, UpdateBlog, FeatureBlogs } = require('../controllers/adminController')
+const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, AllProfitTools, SingleProfitTool, UpdateProfitTool, AllListedProfitTools, AllProfitToolsOrders, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs } = require('../controllers/adminController')
 const { AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -15,12 +15,14 @@ router.get('/single-profit_tool/:id', SingleProfitTool)
 router.get('/listed-profit_tools', AllListedProfitTools)
 router.get('/all-tools_orders', AdminMiddleware, AllProfitToolsOrders)
 router.get('/dashboard', AdminMiddleware, getDashboardInfos)
-router.get('/get_user_details', AdminMiddleware, getUserDetails)
+router.get('/get_users_details', AdminMiddleware, getAllUserDetails)
 router.put('/update-kyc', AdminMiddleware, UpdateKyc)
 router.post('/create-blog', AdminMiddleware, CreateBlog)
 router.put('/update-blog', AdminMiddleware, UpdateBlog)
 router.get('/all-blogs', AllBlogs)
 router.get('/single-blog/:id', SingleBlog)
 router.get('/feature-blogs/:feature', FeatureBlogs)
+router.post('/create_user', AdminMiddleware, CreateUser)
+
 
 module.exports = router

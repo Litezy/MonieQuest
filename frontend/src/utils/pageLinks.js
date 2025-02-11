@@ -58,6 +58,11 @@ import OrderPage from "../pages/authuser/OrderPage";
 import GiftCardOrders from "../pages/authuser/GiftCardOrders";
 import SellGiftcard from "../pages/authuser/SellGiftcard";
 import OneGiftcardOrder from "../pages/authuser/OneGiftcardOrder";
+import UserDetails from "../pages/authadmin/UserDetails";
+import UserBanks from "../pages/authadmin/UserBanks";
+import UserKycApplications from "../pages/authadmin/UserKycApplications";
+import VerifiedUsers from "../pages/authadmin/VerifiedUsers";
+import AdminCreateUsers from "../pages/authadmin/AdminCreateUsers";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -105,6 +110,11 @@ export const AuthPagesLinks = [
 export const AdminPagesLinks = [
     { path: '/admin/dashboard', component: AdminDashboard },
     { path: '/admin/all_users', component: AdminAllUsers },
+    { path: '/admin/all_users/create_user', component: AdminCreateUsers },
+    { path: '/admin/all_users/user_details', component: UserDetails },
+    { path: '/admin/all_users/user_banks', component: UserBanks },
+    { path: '/admin/all_users/submitted_kycs', component: UserKycApplications },
+    { path: '/admin/all_users/verified_kycs', component: VerifiedUsers },
     { path: '/admin/exchange/buy_orders/:id', component: SingleBuyOrder },
     { path: '/admin/exchange/sell_orders/:id', component: SingleSellOrder },
     { path: '/admin/exchange/buy_orders', component: AdminCryptoBuyOrders },

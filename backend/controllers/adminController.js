@@ -4,6 +4,7 @@ const Airdrop = require('../models').airdrops
 const ProfitTool = require('../models').profitTools
 const ToolOrder = require('../models').toolsOrders
 const Notification = require('../models').notifications
+const Bank = require('../models').banks
 const Blog = require('../models').blogs
 const BuyCrypto = require('../models').exchangeBuys
 const Wallet = require('../models').wallets
@@ -429,7 +430,6 @@ exports.AllProfitToolsOrders = async (req, res) => {
 }
 
 
-
 exports.getDashboardInfos = async (req, res) => {
     try {
         const totalProfitTools = await ProfitTool.count();
@@ -437,23 +437,23 @@ exports.getDashboardInfos = async (req, res) => {
         const totalCryptosells = await SellCrypto.count();
         const totalAirdrops = await Airdrop.count();
         const totalBlogs = await Blog.count();
-        const totalUsers = await User.count();
+        const totalUsers = await User.findAll({ where: { role: 'user' } });
         const totalGiftcardSells = await GiftCard.count();
         const totalWithdrawals = await Bank_Withdrawals.count();
-        const totalCryptoBuysAmount = await BuyCrypto.sum('amount');
-        const totalCryptoSellsAmount = await SellCrypto.sum('amount');
+        const totalCryptoBuysAmount = await BuyCrypto.sum('amount', { where: { status: 'paid' } });
+        const totalCryptoSellsAmount = await SellCrypto.sum('amount', { where: { status: 'completed' } });
         const totalWithdrawalAmt = await Bank_Withdrawals.sum('amount');
-        const totalGiftcardsAmt = await GiftCard.sum('amount');
-        const totalToolsOrders = await ToolOrder.count;
-        const totalProfitRevenue = await ToolOrder.sum('amount_paid');
+        const totalGiftcardsAmt = await GiftCard.sum('amount', { where: { status: 'completed' } });
+        const totalToolsOrders = await ToolOrder.count();
+        const totalProfitRevenue = await ToolOrder.sum('amount_paid', { where: { status: 'paid' } });
         const data = [
-            { title: 'total Users', value: totalUsers, color: 'red' },
+            { title: 'total Users', value: totalUsers.length, color: 'red' },
             { title: 'total Airdrops', value: totalAirdrops, color: 'green' },
             { title: 'total Crypto Buys', value: totalCryptobuys, color: 'yellow' },
             { title: 'total Crypto Sells', value: totalCryptosells, color: 'blue' },
-            { title: 'total Crypto Buys Amount', value: totalCryptoBuysAmount, color: 'orange', cur: true },
-            { title: 'total Giftcards Sells Amount', value: totalGiftcardsAmt, color: 'purple', cur: true },
-            { title: 'total Crypto Sells Amount', value: totalCryptoSellsAmount, color: 'indigo', cur: true },
+            { title: 'total Crypto Buys Amount', value: totalCryptoBuysAmount ? totalCryptoBuysAmount : 0, color: 'orange', cur: true },
+            { title: 'total Giftcards Sells Amount', value: totalGiftcardsAmt ? totalGiftcardsAmt : 0, color: 'purple', cur: true },
+            { title: 'total Crypto Sells Amount', value: totalCryptoSellsAmount ? totalCryptoSellsAmount : 0, color: 'indigo', cur: true },
             { title: 'total Giftcard Sells', value: totalGiftcardSells, color: 'orange' },
             { title: 'total Withdrawals', value: totalWithdrawals, color: 'teal' },
             { title: 'total Amount Withdrawn', value: totalWithdrawalAmt, color: 'amber', cur: true },
@@ -469,27 +469,57 @@ exports.getDashboardInfos = async (req, res) => {
     }
 };
 
-
-exports.getUserDetails = async (req, res) => {
+exports.getAllUserDetails = async (req, res) => {
     try {
         const all_users = await User.findAll({
             where: { role: 'user' },
-            attributes: [`id`, `first_name`, 'surname', 'email', 'createdAt'],
+            attributes: [`id`, `first_name`, 'surname', `kyc_verified`, 'email', 'role', 'createdAt'],
             include: [
                 {
                     model: Wallet, as: 'user_wallets',
                     attributes: [`balance`]
                 }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+        const all_user_banks = await Bank.findAll({
+            attributes: [`id`, `user`, `bank_name`, 'account_number', 'account_name'],
+            include: [
+                {
+                    model: User, as: 'user_bank',
+                    attributes: [`first_name`, 'surname']
+                }
             ]
         })
-        return res.json({ status: 200, msg: 'fetch success', data: all_users })
+        const submittedUsers = await Kyc.findAll({
+            where: { status: 'processing' },
+            include: [
+                {
+                    model: User, as: 'user_kyc',
+                    attributes: [`id`, `first_name`, 'surname']
+                },
+            ]
+        })
+        const verifiedUsers = await Kyc.findAll({
+            where: { status: 'verified' },
+            include: [
+                {
+                    model: User, as: 'user_kyc',
+                    attributes: [`id`, `first_name`, 'surname']
+                },
+            ]
+        })
+        const data = [
+            { label: 'All Users', data: all_users },
+            { label: 'All User Banks', data: all_user_banks },
+            { label: 'Submitted KYC Users', data: submittedUsers },
+            { label: 'Verified KYC Users', data: verifiedUsers },
+        ]
+        return res.json({ status: 200, msg: 'fetch success', data })
     } catch (error) {
         ServerError(res, error)
     }
 }
-
-// exports
-
 
 exports.UpdateKyc = async (req, res) => {
     try {
@@ -549,9 +579,54 @@ exports.UpdateKyc = async (req, res) => {
             await kyc.save()
         }
 
-        return res.json({ status: 200, msg: 'KYC updated successfully' })
+        const submitted = await Kyc.findAll({ where: { status: 'processing' } })
+        const verified = await Kyc.findAll({ where: { status: 'verified' } })
+
+        return res.json({
+            status: 200, msg: 'KYC updated successfully', data: {
+                submitted, verified
+            }
+        })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.CreateUser = async (req, res) => {
+    try {
+        const { first_name, surname, email, phone_number, password, confirm_password } = req.body
+        if (!first_name || !surname || !email || !phone_number || !password || !confirm_password) return res.json({ status: 404, msg: `Incomplete request found` })
+        if (password.length < 6) return res.json({ status: 404, msg: `Password must be at least 6 characters long` })
+        if (confirm_password !== password) return res.json({ status: 404, msg: `Passwords mismatch` })
+
+        const findEmail = await User.findOne({ where: { email } })
+        if (findEmail) return res.json({ status: 404, msg: `Email address already exists` })
+        const findPhone = await User.findOne({ where: { phone_number } })
+        if (findPhone) return res.json({ status: 404, msg: `Phone number used, try a different one` })
+
+        const user = await User.create({
+            first_name,
+            surname,
+            email,
+            phone_number,
+            password,
+        })
+
+        await Wallet.create({
+            user: user.id
+        })
+
+        await Notification.create({
+            user: user.id,
+            title: `welcome ${first_name}`,
+            content: `Welcome to ${webName} family, get ready for some amazing deals and updates with us.`,
+            url: '/user/dashboard',
+        })
+
+        const allUsers = await User.findAll({ where: { role: 'user' } })
+        return res.json({ status: 201, msg: 'Account created successfully', data: allUsers })
+    } catch (error) {
+        ServerError(res, error)
     }
 }
 
