@@ -48,16 +48,16 @@ const AdminPageLayout = ({ children }) => {
                 setUserSubmittedKycs(data[2].data)
                 setUserVerifiedKycs(data[3].data)
             } catch (error) {
-                console.log(error)
+               console.log(error)
             }
         }
-        fetchAllUsers()
+        FetchBankAndUtils()
         fetchAllUsers()
     }, [])
+    
 
-
-
-
+ 
+    
 
     return (
         <div className='w-full'>
