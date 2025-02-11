@@ -82,7 +82,7 @@ const VerifiedUsers = ({ setActive }) => {
                                 </tr>
                             )) :
                                 <tr className=" w-full truncate text-lg font-semibold">
-                                    <td colSpan="4" className='text-center py-2'>No verified Kyc's found</td>
+                                    <td colSpan="5" className='text-center py-2'>No verified Kyc's found</td>
                                 </tr>
                             }
 
