@@ -70,7 +70,7 @@ const AuthPageLayout = ({ children }) => {
           </div>
           <div onClick={() => navigate(`/user/profile`)} className='flex cursor-pointer gap-2 items-center justify-center mt-6 bg-primary p-4 rounded-lg w-11/12 h-fit mx-auto'>
             <img src={user.image ? `${imageurl}/profiles/${user.image}` : avatar} alt='user_profile' className='size-14 object-cover rounded-full border-2 border-ash'></img>
-            <div className='text-xl text-center font-bold capitalize text-gray-200'>{user?.first_name} {user?.surname}</div>
+            <div className='text-xl text-center font-bold capitalize text-gray-200'>{user?.surname} {user?.first_name}</div>
           </div>
           <div className="flex mt-10 pb-10 flex-col items-start px-5 gap-4 h-[65vh] overflow-y-auto scroll">
             {links.map((link, i) => {

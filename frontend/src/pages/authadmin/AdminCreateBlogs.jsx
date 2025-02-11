@@ -56,7 +56,7 @@ const AdminCreateBlogs = () => {
     const Submit = async (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.feature || !form.main_header || !form.first_paragraph || !form.second_paragraph) return ErrorAlert('Enter all required fields')
+        if (!form.title || !form.feature || !form.main_header || !form.first_paragraph || !form.second_paragraph || !form.extras || !form.conclusion) return ErrorAlert('Enter all required fields')
         if (!blogImage.image) return ErrorAlert('Upload blog image')
 
         const formbody = new FormData()
@@ -145,11 +145,11 @@ const AdminCreateBlogs = () => {
                                 </div>
                                 <div className='flex flex-col gap-6'>
                                     <div className='flex flex-col'>
-                                        <div className='text-lightgreen capitalize font-medium'>extras:</div>
+                                        <div className='text-lightgreen capitalize font-medium'>*extras:</div>
                                         <FormInput formtype='textarea' placeholder='Extra paragraph' name='extras' value={form.extras} onChange={formHandler} />
                                     </div>
                                     <div className='flex flex-col'>
-                                        <div className='text-lightgreen capitalize font-medium'>conclusion:</div>
+                                        <div className='text-lightgreen capitalize font-medium'>*conclusion:</div>
                                         <FormInput formtype='textarea' placeholder='Conclusion' name='conclusion' value={form.conclusion} onChange={formHandler} />
                                     </div>
                                 </div>

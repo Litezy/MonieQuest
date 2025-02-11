@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { currencies } from '../../AuthComponents/AuthUtils'
 
 const AdminGiftCards = () => {
-    const Topheaders = [ 'FullName', 'Gift-Brand', 'Code', 'Pin',`Amount`, 'Details']
+    const Topheaders = ['FullName', 'Gift-Brand', 'Code', 'Pin', `Amount`, 'Details']
 
     const dummy = [
         {
@@ -18,7 +18,7 @@ const AdminGiftCards = () => {
         {
             id: 2,
             fullname: 'Basit Money',
-            gift_brand:'Apple',
+            gift_brand: 'Apple',
             code: '748B-74FF-FJUR3....',
             pin: '',
             amount: 4000
@@ -27,8 +27,9 @@ const AdminGiftCards = () => {
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
-            <div className=" text-lg font-bold w-full text-center my-5 capitalize">See Latest Giftcards Sell Orders below</div>
-            <table className="w-full text-sm text-left rtl:text-right">
+                <div className=" text-lg font-bold w-full text-center my-5 capitalize">See Latest Giftcards Sell Orders below</div>
+                <div className='relative overflow-x-auto rounded-md'>
+                    <table className="w-full text-sm text-left rtl:text-right">
                         <thead className=" bg-primary text-base poppins ">
                             <tr>
                                 {Topheaders.map((item, i) => (
@@ -58,7 +59,7 @@ const AdminGiftCards = () => {
                                     </td>
                                     <td className="px-3 py-3">
                                         <Link to={`${item.id}`}
-                                        className="bg-primary to-sec truncate text-white px-5 rounded-lg py-2">view details</Link>
+                                            className="bg-primary to-sec truncate text-white px-5 rounded-lg py-2">view details</Link>
                                     </td>
 
                                 </tr>
@@ -68,6 +69,7 @@ const AdminGiftCards = () => {
 
                         </tbody>
                     </table>
+                </div>
             </div>
         </AdminPageLayout>
     )
