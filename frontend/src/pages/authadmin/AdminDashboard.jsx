@@ -17,7 +17,7 @@ const AdminDashboard = () => {
             const res = await AuthGetApi(Apis.admin.get_dashboard)
             if (res.status !== 200) return;
             const data = res.data
-            // setData(data)
+            setData(data)
             setUsers(data[0])
         } catch (error) {
             console.log(error)
