@@ -4,7 +4,7 @@ const Airdrop = require('../models').airdrops
 const ProfitTool = require('../models').profitTools
 const ToolOrder = require('../models').toolsOrders
 const Notification = require('../models').notifications
-const Blogs = require('../models').blogs
+const Blog = require('../models').blogs
 const BuyCrypto = require('../models').exchangeBuys
 const Wallet = require('../models').wallets
 const SellCrypto = require('../models').exchangeSells
@@ -431,59 +431,60 @@ exports.AllProfitToolsOrders = async (req, res) => {
 
 
 exports.getDashboardInfos = async (req, res) => {
-  try {
-    const totalProfitTools = await ProfitTool.count();
-    const totalCryptobuys = await BuyCrypto.count();
-    const totalCryptosells = await SellCrypto.count();
-    const totalAirdrops = await Airdrop.count();
-    const totalBlogs = await Blogs.count();
-    const totalUsers = await User.count();
-    const totalGiftcardSells = await GiftCard.count();
-    const totalWithdrawals = await Bank_Withdrawals.count();
-    const totalCryptoBuysAmount = await BuyCrypto.sum('amount');
-    const totalCryptoSellsAmount = await SellCrypto.sum('amount');
-    const totalWithdrawalAmt = await Bank_Withdrawals.sum('amount');
-    const totalGiftcardsAmt = await GiftCard.sum('amount');
-    const totalToolsOrders = await ToolOrder.count;
-    const totalProfitRevenue = await ToolOrder.sum('amount_paid');
-    const data = [
-      { title: 'total Users', value: totalUsers, color: 'red' },
-      { title: 'total Airdrops', value: totalAirdrops, color: 'green' },
-      { title: 'total Crypto Buys', value: totalCryptobuys, color: 'yellow' },
-      { title: 'total Crypto Sells', value: totalCryptosells, color: 'blue' },
-      { title: 'total Crypto Buys Amount', value: totalCryptoBuysAmount, color: 'orange',cur:true },
-      { title: 'total Giftcards Sells Amount', value: totalGiftcardsAmt, color: 'purple',cur:true },
-      { title: 'total Crypto Sells Amount', value: totalCryptoSellsAmount, color: 'indigo',cur:true },
-      { title: 'total Giftcard Sells', value: totalGiftcardSells, color: 'orange' },
-      { title: 'total Withdrawals', value: totalWithdrawals, color: 'teal' },
-      { title: 'total Amount Withdrawn', value: totalWithdrawalAmt, color: 'amber',cur:true },
-      { title: 'total Blogs', value: totalBlogs, color: 'pink' },
-      { title: 'total Profit Tools', value: totalProfitTools, color: 'red' },
-      { title: 'total Profit Tools Orders', value: totalToolsOrders  , color: 'lime', },
-      { title: 'total Profit Tools Revenue', value: totalProfitRevenue ? totalProfitRevenue  : 0 , color: 'gray',naira:true },
-    ];
+    try {
+        const totalProfitTools = await ProfitTool.count();
+        const totalCryptobuys = await BuyCrypto.count();
+        const totalCryptosells = await SellCrypto.count();
+        const totalAirdrops = await Airdrop.count();
+        const totalBlogs = await Blog.count();
+        const totalUsers = await User.count();
+        const totalGiftcardSells = await GiftCard.count();
+        const totalWithdrawals = await Bank_Withdrawals.count();
+        const totalCryptoBuysAmount = await BuyCrypto.sum('amount');
+        const totalCryptoSellsAmount = await SellCrypto.sum('amount');
+        const totalWithdrawalAmt = await Bank_Withdrawals.sum('amount');
+        const totalGiftcardsAmt = await GiftCard.sum('amount');
+        const totalToolsOrders = await ToolOrder.count;
+        const totalProfitRevenue = await ToolOrder.sum('amount_paid');
+        const data = [
+            { title: 'total Users', value: totalUsers, color: 'red' },
+            { title: 'total Airdrops', value: totalAirdrops, color: 'green' },
+            { title: 'total Crypto Buys', value: totalCryptobuys, color: 'yellow' },
+            { title: 'total Crypto Sells', value: totalCryptosells, color: 'blue' },
+            { title: 'total Crypto Buys Amount', value: totalCryptoBuysAmount, color: 'orange', cur: true },
+            { title: 'total Giftcards Sells Amount', value: totalGiftcardsAmt, color: 'purple', cur: true },
+            { title: 'total Crypto Sells Amount', value: totalCryptoSellsAmount, color: 'indigo', cur: true },
+            { title: 'total Giftcard Sells', value: totalGiftcardSells, color: 'orange' },
+            { title: 'total Withdrawals', value: totalWithdrawals, color: 'teal' },
+            { title: 'total Amount Withdrawn', value: totalWithdrawalAmt, color: 'amber', cur: true },
+            { title: 'total Blogs', value: totalBlogs, color: 'pink' },
+            { title: 'total Profit Tools', value: totalProfitTools, color: 'red' },
+            { title: 'total Profit Tools Orders', value: totalToolsOrders, color: 'lime', },
+            { title: 'total Profit Tools Revenue', value: totalProfitRevenue ? totalProfitRevenue : 0, color: 'gray', naira: true },
+        ];
 
-    return res.json({ status: 200, msg: 'fetch success', data });
-  } catch (error) {
-    ServerError(res, error);
-  }
+        return res.json({ status: 200, msg: 'fetch success', data });
+    } catch (error) {
+        ServerError(res, error);
+    }
 };
 
 
-exports.getUserDetails = async (req,res) =>{
+exports.getUserDetails = async (req, res) => {
     try {
-        const all_users = await User.findAll({ where:{role:'user'},
-            attributes:[`id`,`first_name`,'surname','email','createdAt'],
-            include:[
+        const all_users = await User.findAll({
+            where: { role: 'user' },
+            attributes: [`id`, `first_name`, 'surname', 'email', 'createdAt'],
+            include: [
                 {
-                    model: Wallet,as :'user_wallets',
-                    attributes:[`balance`]
+                    model: Wallet, as: 'user_wallets',
+                    attributes: [`balance`]
                 }
             ]
         })
-        return res.json({status:200, msg:'fetch success',data:all_users})
+        return res.json({ status: 200, msg: 'fetch success', data: all_users })
     } catch (error) {
-        ServerError(res,error)
+        ServerError(res, error)
     }
 }
 
@@ -522,6 +523,8 @@ exports.UpdateKyc = async (req, res) => {
         if (status === 'failed') {
 
             if (!message) return res.json({ status: 400, msg: 'Provide a reason for failed verification' })
+            kycUser.kyc_verified = 'false'
+            await kycUser.save()
 
             await Notification.create({
                 user: kyc.user,
@@ -551,3 +554,161 @@ exports.UpdateKyc = async (req, res) => {
         return res.json({ status: 500, msg: error.message })
     }
 }
+
+exports.CreateBlog = async (req, res) => {
+    try {
+        const { title, feature, main_header, first_paragraph, second_paragraph, extras, conclusion } = req.body
+        if (!title || !feature || !main_header || !first_paragraph || !second_paragraph || !extras || !conclusion) return res.json({ status: 404, msg: `Incomplete request found` })
+        const featureArray = ["airdrop", "trading", "personal_finance"]
+        if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
+
+        const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
+        const slugData = slug(title, '-')
+        const filePath = './public/blogs'
+        const date = new Date()
+        let blogImageName;
+
+        if (!req.files) return res.json({ status: 404, msg: `Upload airdrop logo and banner images` })
+        const blogImage = req.files.image
+        if (!blogImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
+        if (!fs.existsSync(filePath)) {
+            fs.mkdirSync(filePath)
+        }
+        blogImageName = `${slugData + 'logo'}-${date.getTime()}.jpg`
+        await blogImage.mv(`${filePath}/${blogImageName}`)
+
+        await Blog.create({
+            user: req.user,
+            slug: slugData,
+            gen_id: gen_id,
+            image: blogImageName,
+            title,
+            feature,
+            main_header,
+            first_paragraph,
+            second_paragraph,
+            extras,
+            conclusion
+        })
+
+        return res.json({ status: 200, msg: 'Blog created successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.UpdateBlog = async (req, res) => {
+    try {
+        const { blog_id, title, feature, main_header, first_paragraph, second_paragraph, extras, conclusion } = req.body
+        if (!blog_id) return res.json({ status: 404, msg: `Blog id is required` })
+        const blog = await Blog.findOne({ where: { id: blog_id } })
+        if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
+
+        const slugData = slug(title ? title : blog.title, '-')
+        const filePath = './public/blogs'
+        const date = new Date()
+        let blogImageName;
+        const blogImage = req?.files?.image
+
+        if (blogImage) {
+            if (!blogImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+            const currentImagePath = `${filePath}/${blog.image}`
+            if (fs.existsSync(currentImagePath)) {
+                fs.unlinkSync(currentImagePath)
+            }
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath)
+            }
+            blogImageName = `${slugData}-${date.getTime()}.jpg`
+            await blogImage.mv(`${filePath}/${blogImageName}`)
+            blog.image = blogImageName
+        }
+        if (title) {
+            blog.title = title
+        }
+        if (feature) {
+            const featureArray = ["airdrop", "trading", "personal_finance"]
+            if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
+            blog.feature = feature
+        }
+        if (main_header) {
+            blog.main_header = main_header
+        }
+        if (first_paragraph) {
+            blog.first_paragraph = first_paragraph
+        }
+        if (second_paragraph) {
+            blog.second_paragraph = second_paragraph
+        }
+        if (extras) {
+            blog.extras = extras
+        }
+        if (conclusion) {
+            blog.conclusion = conclusion
+        }
+
+        await blog.save()
+
+        return res.json({ status: 200, msg: 'Blog updated successfully' })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.AllBlogs = async (req, res) => {
+    try {
+        const blogs = await Blog.findAll({
+            include: [
+                {
+                    model: User,
+                    as: 'blog_user',
+                    attributes: ['id', 'image', 'first_name', 'surname', 'email']
+                },
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: blogs })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.SingleBlog = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 404, msg: `Blog id is required` })
+
+        const blog = await Blog.findOne({
+            where: { id },
+            include: [
+                {
+                    model: User, as: 'blog_user',
+                    attributes: ['id', 'image', 'first_name', 'surname', 'email']
+                },
+            ]
+        })
+        if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
+
+        return res.json({ status: 200, msg: blog })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.FeatureBlogs = async (req, res) => {
+    try {
+        const { feature } = req.params
+        if (!feature) return res.json({ status: 404, msg: `Provide a blog feature` })
+
+        const featureBlogs = await Blog.findAll({
+            where: { feature },
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: featureBlogs })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+

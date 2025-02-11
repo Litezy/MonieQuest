@@ -3,45 +3,8 @@ import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
 import BlogsLayout from '../../AdminComponents/BlogsLayout';
 import BlogComp from '../../AdminComponents/BlogComp';
+import { Apis, AuthGetApi } from '../../services/API';
 
-const records = [
-    {
-        id: 1,
-        gen_id: '123456789',
-        title: 'blum launches memepad for memecoin trading',
-        slug: 'blum-lauches',
-        feature: 'trading',
-        main_header: '',
-        first_paragraph: '',
-        second_paragraph: '',
-        extras: '',
-        conclusion: ''
-    },
-    {
-        id: 2,
-        gen_id: '123456789',
-        title: 'how to check your wallet gift card balance',
-        slug: 'how-to-check',
-        feature: 'trading',
-        main_header: '',
-        first_paragraph: '',
-        second_paragraph: '',
-        extras: '',
-        conclusion: ''
-    },
-    {
-        id: 2,
-        gen_id: '123456789',
-        title: 'how to earn $500 every week with your just your mobile phone and internet',
-        slug: 'how-to-earn',
-        feature: 'personal finance',
-        main_header: '',
-        first_paragraph: '',
-        second_paragraph: '',
-        extras: '',
-        conclusion: ''
-    },
-]
 
 const AdminAllBlogs = () => {
     const tags = ['all', 'airdrop', 'trading', 'personal finance']
@@ -52,13 +15,22 @@ const AdminAllBlogs = () => {
     const [blogs, setBlogs] = useState([])
 
     useEffect(() => {
-        setStaticData(records)
-        setBlogs(records);
-    }, []);
+        const FetchAllBlogs = async () => {
+            try {
+                const response = await AuthGetApi(Apis.admin.all_blogs)
+                if (response.status === 200) {
+                    setStaticData(response.msg)
+                    setBlogs(response.msg)
+                }
 
-    setTimeout(() => {
-        setDataLoading(false)
-    }, 2000)
+            } catch (error) {
+                //
+            } finally {
+                setDataLoading(false)
+            }
+        }
+        FetchAllBlogs()
+    }, [])
 
     const airdropBlogs = useMemo(() => {
         return blogs.filter((ele) => ele.feature === 'airdrop');
@@ -66,8 +38,8 @@ const AdminAllBlogs = () => {
     const tradingBlogs = useMemo(() => {
         return blogs.filter((ele) => ele.feature === 'trading');
     }, [blogs])
-    const financeBlogs = useMemo(() => {
-        return blogs.filter((ele) => ele.feature === 'personal finance');
+    const personalFinanceBlogs = useMemo(() => {
+        return blogs.filter((ele) => ele.feature === 'personal_finance');
     }, [blogs])
 
     const filterBlogs = () => {
@@ -148,9 +120,9 @@ const AdminAllBlogs = () => {
                                         }
                                         {active === 'personal finance' &&
                                             <>
-                                                {financeBlogs.length > 0 ?
+                                                {personalFinanceBlogs.length > 0 ?
                                                     <>
-                                                        {financeBlogs.map((item, i) => (
+                                                        {personalFinanceBlogs.map((item, i) => (
                                                             <BlogComp key={i} item={item} />
                                                         ))}
                                                     </>

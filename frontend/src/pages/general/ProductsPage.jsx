@@ -99,7 +99,7 @@ const ProductsPage = () => {
             <div className="mt-2 lg:w-1/2 text-center">Equip yourself with tools and knowledge designed by experts to help you simplify your workflow, manage income effectively and turn your dreams into reality.
             </div>
           </div>
-          <div className="flex flex-wrap gap-6 md:justify-normal justify-center mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-16">
             {dataLoading ?
               <>
                 {new Array(4).fill(0).map((_, i) => (
@@ -113,7 +113,7 @@ const ProductsPage = () => {
                 {products.length > 0 ?
                   <>
                     {products.map((item, i) => (
-                      <div key={i} className="bg-primary h-fit w-72 rounded-[4px] relative z-10">
+                      <div key={i} className="bg-primary h-fit md:w-full w-11/12 mx-auto rounded-[4px] relative z-10">
                         {item.discount_percentage &&
                           <>
                             <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">

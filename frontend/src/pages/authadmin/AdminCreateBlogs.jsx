@@ -10,9 +10,10 @@ import { Link } from 'react-router-dom'
 import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import SelectComp from '../../GeneralComponents/SelectComp'
+import { Apis, AuthPostApi } from '../../services/API'
 
 const features = [
-    "airdrop", "trading", "personal finance"
+    "airdrop", "trading", "personal_finance", 'yes'
 ]
 
 const AdminCreateBlogs = () => {
@@ -52,16 +53,35 @@ const AdminCreateBlogs = () => {
         })
     }
 
-    const Submit = (e) => {
+    const Submit = async (e) => {
         e.preventDefault()
 
         if (!form.title || !form.feature || !form.main_header || !form.first_paragraph || !form.second_paragraph) return ErrorAlert('Enter all required fields')
         if (!blogImage.image) return ErrorAlert('Upload blog image')
+
+        const formbody = new FormData()
+        formbody.append('image', blogImage.image)
+        formbody.append('title', form.title)
+        formbody.append('feature', form.feature)
+        formbody.append('main_header', form.main_header)
+        formbody.append('first_paragraph', form.first_paragraph)
+        formbody.append('second_paragraph', form.second_paragraph)
+        formbody.append('extras', form.extras)
+        formbody.append('conclusion', form.conclusion)
+
         setLoading(true)
-        setTimeout(() => {
+        try {
+            const response = await AuthPostApi(Apis.admin.create_blog, formbody)
+            if (response.status === 200) {
+                setScreen(2)
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
             setLoading(false)
-            setScreen(2)
-        }, 2000)
+        }
     }
 
     return (

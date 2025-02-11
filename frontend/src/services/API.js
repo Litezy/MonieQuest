@@ -64,8 +64,12 @@ const admin_urls = {
     listed_tools: admin + 'listed-profit_tools',
     all_tools_orders: admin + 'all-tools_orders',
     get_dashboard: admin + 'dashboard',
-    update_kyc: admin + 'update-kyc'
-
+    update_kyc: admin + 'update-kyc',
+    create_blog: admin + 'create-blog',
+    update_blog: admin + 'update-blog',
+    all_blogs: admin + 'all-blogs',
+    single_blog: admin + 'single-blog',
+    feature_blogs: admin + 'feature-blogs',
 }
 
 const profitTools = 'api/profit_tools/'

@@ -1,51 +1,37 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import { Link, useParams } from 'react-router-dom'
-import testimg from '../../assets/images/blog1.jpg'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import { FiUploadCloud } from 'react-icons/fi'
 import { FaEdit } from 'react-icons/fa'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import SelectComp from '../../GeneralComponents/SelectComp'
+import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
 
-const lorem = 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed delectus natus ullam laudantium id iste autem unde magni tempora pariatur dolor blanditiis tenetur, porro a repellat nobis quibusdam harum velit eum consequuntur dignissimos consectetur similique excepturi. Magnam rem a quia error eum natus possimus!'
-
-const fetchData = {
-    id: 1,
-    gen_id: '123456789',
-    image: testimg,
-    title: 'blum launches memepad for memecoin trading',
-    feature: 'airdrop',
-    main_header: lorem,
-    first_paragraph: lorem,
-    second_paragraph: lorem,
-    extras: lorem,
-    conclusion: lorem
-}
 
 const features = [
-    "airdrop", "trading", "personal finance"
+    "airdrop", "trading", "personal_finance"
 ]
 
 const AdminSingleBlog = () => {
     const { id } = useParams()
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
-    const [singleBlog, setSingleBlog] = useState(fetchData)
+    const [singleBlog, setSingleBlog] = useState({})
     const [form, setForm] = useState({
-        title: singleBlog?.title,
-        feature: singleBlog?.feature,
-        main_header: singleBlog?.main_header,
-        first_paragraph: singleBlog?.first_paragraph,
-        second_paragraph: singleBlog?.second_paragraph,
-        extras: singleBlog?.extras,
-        conclusion: singleBlog?.conclusion
+        title: '',
+        feature: '',
+        main_header: '',
+        first_paragraph: '',
+        second_paragraph: '',
+        extras: '',
+        conclusion: ''
     })
     const [blogImage, setBlogImage] = useState({
-        img: singleBlog?.image,
+        img: null,
         image: null
     })
     const imgRef = useRef()
@@ -57,9 +43,36 @@ const AdminSingleBlog = () => {
         })
     }
 
-    setTimeout(() => {
-        setDataLoading(false)
-    }, 2000)
+    const FetchSingleBlog = useCallback(async () => {
+        try {
+            const response = await AuthGetApi(`${Apis.admin.single_blog}/${id}`)
+            if (response.status === 200) {
+                setSingleBlog(response.msg)
+                setForm({
+                    title: response.msg.title || '',
+                    feature: response.msg.feature || features[0],
+                    main_header: response.msg.main_header || '',
+                    first_paragraph: response.msg.first_paragraph || '',
+                    second_paragraph: response.msg.second_paragraph || '',
+                    extras: response.msg.extras || '',
+                    conclusion: response.msg.conclusion || '',
+                })
+                setBlogImage({
+                    ...blogImage,
+                    img: `${imageurl}/blogs/${response.msg.image}` || null
+                })
+                console.log(response.msg)
+            }
+        } catch (error) {
+            //
+        } finally {
+            setDataLoading(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        FetchSingleBlog()
+    }, [FetchSingleBlog])
 
     const handleUpload = (event) => {
         const file = event.target.files[0]
@@ -73,11 +86,36 @@ const AdminSingleBlog = () => {
         })
     }
 
-    const Submit = (e) => {
+    const Submit = async (e) => {
         e.preventDefault()
 
         if (!form.title || !form.feature || !form.main_header || !form.first_paragraph || !form.second_paragraph) return ErrorAlert('Enter all required fields')
-        if (!blogImage.image) return ErrorAlert('Upload blog image')
+
+        const formbody = new FormData()
+        formbody.append('blog_id', singleBlog.id)
+        formbody.append('image', blogImage.image)
+        formbody.append('title', form.title)
+        formbody.append('feature', form.feature)
+        formbody.append('main_header', form.main_header)
+        formbody.append('first_paragraph', form.first_paragraph)
+        formbody.append('second_paragraph', form.second_paragraph)
+        formbody.append('extras', form.extras)
+        formbody.append('conclusion', form.conclusion)
+
+        setLoading(true)
+        try {
+            const response = await AuthPutApi(Apis.admin.update_blog, formbody)
+            if (response.status === 200) {
+                FetchSingleBlog()
+                SuccessAlert(response.msg)
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -92,7 +130,7 @@ const AdminSingleBlog = () => {
                     </ModalLayout>
                 }
                 <Link to='/admin/blogs/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
-                    back to all airdrops
+                    back to all blogs
                 </Link>
                 {dataLoading ?
                     <div className='mt-10 grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-6'>

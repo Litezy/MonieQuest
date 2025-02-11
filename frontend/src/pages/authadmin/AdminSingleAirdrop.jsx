@@ -65,12 +65,12 @@ const AdminSingleAirdrop = () => {
                 setSingleAirdrop(response.msg)
                 setForm({
                     title: response.msg.title || '',
-                    category: response.msg.category || '',
+                    category: response.msg.category || categories[0],
                     blockchain: response.msg.blockchain || '',
-                    kyc: response.msg.kyc || '',
+                    kyc: response.msg.kyc || kyces[0],
                     type: response.msg.type || '',
                     about: response.msg.about || '',
-                    status: response.msg.status || '',
+                    status: response.msg.status || statuses[0],
                     referral_link: response.msg.referral_link || '',
                     video_guide_link: response.msg.video_guide_link || '',
                     twitter_link: response.msg.twitter_link || '',
