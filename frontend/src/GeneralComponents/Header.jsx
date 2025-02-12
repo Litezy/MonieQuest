@@ -9,17 +9,17 @@ const pageLinks = [
   { path: 'home', url: '/' },
   { path: 'airdrops', url: '/airdrops' },
   { path: 'about us', url: '/about' },
-  { path: 'profit tools', url: '/products' },
+  { path: 'products', url: '/products' },
   { path: 'blogs', url: '/blogs' },
 ]
 
 const Header = () => {
   const [menu, setMenu] = useState(false)
   const location = useLocation()
-  useEffect(()=>{
+  useEffect(() => {
     // console.log(location.pathname)
-  },[location.pathname])
- 
+  }, [location.pathname])
+
 
   return (
     <div className='fixed top-0 left-0 w-full bg-dark z-50 border-b-2 border-primary'>
@@ -29,7 +29,7 @@ const Header = () => {
         </Link>
         <div className='lg:flex gap-2 hidden relative'>
           {pageLinks.map((item, i) => (
-            <Link key={i} to={item.url} onClick={MoveToTop} className={`hover:text-lightgreen text-white cursor-pointer capitalize px-3 ${(location.pathname === item.url)  && 'font-bold border-b border-bg-green'}`}>{item.path}</Link>
+            <Link key={i} to={item.url} onClick={MoveToTop} className={`hover:text-lightgreen text-white cursor-pointer capitalize px-3 ${(location.pathname === item.url) && 'font-bold border-b border-bg-green'}`}>{item.path}</Link>
           ))}
         </div>
         <div className='lg:flex gap-4 hidden'>

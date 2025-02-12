@@ -66,8 +66,8 @@ const ProductsPage = () => {
 
   const filterProducts = () => {
     const mainData = staticData
-    if (search.length > 1) {
-      const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
+    if (search.length > 2) {
+      const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.category).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.feature1).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.feature2).toLowerCase().startsWith(search.toLocaleLowerCase()))
       setProducts(filtered)
     } else {
       setProducts(staticData)
@@ -80,7 +80,7 @@ const ProductsPage = () => {
         <div className="pageBg">
           <div className="w-full h-full bg-[#212134ea] py-10">
             <div className="md:text-4xl text-3xl font-bold text-white text-center capitalize">
-              profit tools
+              products
             </div>
           </div>
         </div>
@@ -174,7 +174,9 @@ const ProductsPage = () => {
                     ))}
                   </>
                   :
-                  <div className="text-center mx-auto bg-primary py-2 px-4 rounded-md">No products listed yet...</div>
+                  <div className="flex justify-center items-center mx-auto col-span-4">
+                    <div className="text-center bg-primary py-2 px-4 rounded-md">No products found...</div>
+                  </div>
                 }
               </>
             }
