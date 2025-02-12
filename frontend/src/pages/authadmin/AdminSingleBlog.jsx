@@ -89,7 +89,7 @@ const AdminSingleBlog = () => {
     const Submit = async (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.feature || !form.main_header || !form.first_paragraph || !form.second_paragraph) return ErrorAlert('Enter all required fields')
+        if (!form.title || !form.feature || !form.main_header || !form.first_paragraph || !form.second_paragraph || !form.extras || !form.conclusion) return ErrorAlert('Enter all required fields')
 
         const formbody = new FormData()
         formbody.append('blog_id', singleBlog.id)

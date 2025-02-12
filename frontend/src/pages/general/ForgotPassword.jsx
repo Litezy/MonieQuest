@@ -33,6 +33,29 @@ const ForgotPassword = () => {
     })
   }
 
+
+  const SendOTP = async (e) => {
+    e.preventDefault()
+
+    if (!form.email) return ErrorAlert('Enter email address')
+    setLoading(true)
+    try {
+      const response = await PostApi(Apis.user.send_otp, { email: form.email })
+      if (response.status === 200) {
+        SuccessAlert(response.msg)
+        setScreen(2)
+        setCountDown(40)
+        setResend(true)
+      } else {
+        ErrorAlert(response.msg)
+      }
+    } catch (error) {
+      ErrorAlert(`${error.message}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     let timer;
     if (resend) {
@@ -50,26 +73,6 @@ const ForgotPassword = () => {
 
     return () => clearInterval(timer)
   }, [resend])
-
-  const SendOTP = async (e) => {
-    e.preventDefault()
-
-    if (!form.email) return ErrorAlert('Enter email address')
-    setLoading(true)
-    try {
-      const response = await PostApi(Apis.user.send_otp, { email: form.email })
-      if (response.status === 200) {
-        SuccessAlert(response.msg)
-        setScreen(2)
-      } else {
-        ErrorAlert(response.msg)
-      }
-    } catch (error) {
-      ErrorAlert(`${error.message}`)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const VerifyOTP = async (e) => {
     e.preventDefault()
@@ -176,7 +179,7 @@ const ForgotPassword = () => {
                     </div> :
                     <div className="w-fit ml-auto text-white">resend in <span className='text-lightgreen'>{countdown}s</span></div>
                   }
-                  <FormButton title='Verify email' className={`${checkPins.length < 6 ? '!bg-zinc-200 !hover:bg-none' : '!bg-ash hover:!bg-lightgreen'}`} />
+                  <FormButton title='Verify' className={`${checkPins.length < 6 && '!bg-zinc-400 !hover:bg-none hover:!text-white'}`} disabled={checkPins.length < 6 ? true : false} />
                 </div>
               </form>
             }

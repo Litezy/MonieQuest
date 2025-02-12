@@ -295,7 +295,7 @@ const AdminProfile = () => {
                             <div className='text-xl capitalize font-medium text-lightgreen'>update settings</div>
                             <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-4 relative'>
                                 {loading.sub2 && <Loading />}
-                                <div className='grid grid-cols-2 gap-4'>
+                                <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
                                     <div className='flex flex-col'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Exchange buy rate ($/₦)</div>
                                         <FormInput placeholder='Enter rate amount' name='exchange_buy_rate' value={form.exchange_buy_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
@@ -333,7 +333,7 @@ const AdminProfile = () => {
                                         <FormInput placeholder='Enter maximum buy/sell amount' name='kyc_threshold' value={form.kyc_threshold} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                 </div>
-                                <FormButton title='Update' className='!py-3 !text-base !w-1/2 mx-auto' type='button' onClick={UpdateUtils} />
+                                <FormButton title='Update' className='!py-3 !text-base md:!w-1/2 mx-auto' type='button' onClick={UpdateUtils} />
                             </div>
                         </div>
                     </form>
