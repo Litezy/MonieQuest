@@ -100,7 +100,7 @@ const HomePage = () => {
                     <FormButton title='Browse for Airdrops' className='!text-sm !rounded-md !py-3 !px-4 !w-fit' />
                   </Link>
                   <Link to='/airdrops' onClick={MoveToTop}>
-                    <FormButton title='solana airdrops' className='!text-sm !capitalize !rounded-md !py-3 !px-6 !w-fit' />
+                    <FormButton title='potential airdrops' className='!text-sm !capitalize !rounded-md !py-3 !px-6 !w-fit' />
                   </Link>
                 </div>
                 <div className='flex flex-wrap gap-14 justify-center text-gray-200'>

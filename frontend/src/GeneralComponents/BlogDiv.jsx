@@ -16,8 +16,8 @@ const BlogDiv = ({ item }) => {
                 </div>
                 <div className="mt-2 flex items-start flex-col gap-3">
                     <div className="text-sm text-gray-400 "><span className='capitalize'>{item?.feature === 'personal_finance' ? 'personal finance' : item?.feature}</span> article</div>
-                    <div className="lg:flex items-center gap-3  text-sky-400">
-                        <div className=" text-sm lg:w-3/4 capitalize">{item?.title}</div>
+                    <div className="lg:flex items-center gap-3 justify-between text-sky-400">
+                        <div className=" text-sm w-full capitalize">{item?.title}</div>
                         <PiArrowUpRight className='text-lg hidden lg:block' />
                     </div>
                     <div className="flex items-center gap-2 w-full ">
@@ -29,7 +29,7 @@ const BlogDiv = ({ item }) => {
                     </div>
                 </div>
             </Link>
-        </div>
+        </div> 
     )
 }
 
