@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
@@ -9,12 +9,16 @@ import { defaultOptions, ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import Loader from '../../GeneralComponents/Loader'
 import ModalLayout from '../../utils/ModalLayout'
 import Lottie from 'react-lottie'
+import { Apis, AuthGetApi, AuthPostApi } from '../../services/API'
+import { useAtom } from 'jotai'
+import { UTILS } from '../../services/store'
 
 const GiftCardSingleOrder = () => {
     const [forms, setForms] = useState({
         amount: '', valid: '', error: ''
     })
-
+    const [utils] = useAtom(UTILS)
+    const { id } = useParams()
     const [screen, setScreen] = useState(1)
     const [confirmBad, setConfirmBad] = useState(false)
     const [confirmMsg, setConfirmMsg] = useState(false)
@@ -23,13 +27,38 @@ const GiftCardSingleOrder = () => {
     })
     const [credited, setCredited] = useState(false)
     const [applyAmt, setApplyAmt] = useState(false)
+    const [data, setData] = useState({})
     const green = `text-lightgreen`
-
     const statuses = [`Yes`, `No`]
-    const { id } = useParams()
     const navigate = useNavigate()
+    const rate = utils?.giftcard_rate
+
+
+
+    const fetchGiftCardOrder = async () => {
+        try {
+            const res = await AuthGetApi(`${Apis.admin.get_single_giftcard_order}/${id}`)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            const data = res.data
+            setData(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchGiftCardOrder()
+    }, [])
+
+    const [inNaira, setInNaira] = useState('')
+    useEffect(() => {
+        if (data?.amount && data?.amount !== '0') {
+            const naira = data?.amount * rate
+            setInNaira(naira.toLocaleString())
+        }
+    }, [data?.amount])
     const handleChange = () => {
-        const amt = '1,500'
+        const amt = inNaira
         const formatVal = amt.replace(/,/g, '')
         setForms({ ...forms, amount: formatVal })
     }
@@ -39,16 +68,26 @@ const GiftCardSingleOrder = () => {
         handleChange()
     }
 
-    const creditUser = (e) => {
+    const creditUser = async (e) => {
         e.preventDefault()
         if (forms.valid !== 'Yes') return ErrorAlert(`Please confirm if Giftcard is valid`)
+        const formdata = { amount: forms.amount }
         setLoading({ status: true, param: 'credit' })
         setCredited(true)
-        setForms({ ...forms, amount: '' })
-        return setTimeout(() => {
+        try {
+            const res = await AuthPostApi(`${Apis.admin.credit_gift_customer}/${id}`,formdata)
+            console.log(res)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            await new Promise((resolve) => setTimeout(resolve, 2000))
             setLoading({ status: false, param: '' })
-            SuccessAlert(`Customer credited successfully.`)
-        }, 5000)
+            setForms({ ...forms, amount: '' })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading({ status: false, param: '' })
+
+        }
+
     }
 
     const afterLoad = () => {
@@ -85,7 +124,7 @@ const GiftCardSingleOrder = () => {
             setLoading({ status: false, param: '' })
             SuccessAlert(`Error message sent to user`)
             navigate('/admin/giftcards/orders')
-        }, 5000)
+        }, 2000)
     }
     return (
         <AdminPageLayout>
@@ -145,7 +184,7 @@ const GiftCardSingleOrder = () => {
                         </div>
                         <div className="mt-5 md:mt-10 mont">
 
-                            <div className="w-full text-center capitalize font-bold poppins">Review Order Number <span className={`${green}`}>GY8343</span></div>
+                            <div className="w-full text-center capitalize font-bold poppins">Review Order Number <span className={`${green}`}>{data?.order_no}</span></div>
 
                             <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md  mx-auto mt-5 md:mt-10 mb-5">
                                 <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
@@ -153,19 +192,26 @@ const GiftCardSingleOrder = () => {
                                         <div className="flex flex-col items-start">
                                             <div className="text-sm">Customer ID:</div>
                                             <div className="w-full">
-                                                <FormInput value={id} className={`${green}`} />
+                                                <FormInput value={data?.gift_seller?.id} className={`${green}`} />
                                             </div>
                                         </div>
                                         <div className="w-full">
                                             <div className="text-sm">GiftCard Brand:</div>
                                             <div className="w-full">
-                                                <FormInput value={`Amazon`} className={`${green}`} />
+                                                <FormInput value={data?.brand} className={`${green}`} />
                                             </div>
                                         </div>
                                         <div className="w-full">
                                             <div className="text-sm">Amount:</div>
                                             <div className="w-full">
-                                                <FormInput value={`${currencies[1].symbol}1000`} className={`${green}`} />
+                                                <FormInput value={`${currencies[0].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
+
+                                            </div>
+                                        </div>
+                                        <div className="w-full">
+                                            <div className="text-sm">Rate:</div>
+                                            <div className="w-full">
+                                                <FormInput value={`${currencies[1].symbol}${inNaira}`} className={`${green}`} />
 
                                             </div>
                                         </div>
@@ -174,15 +220,22 @@ const GiftCardSingleOrder = () => {
                                     <div className=" flex flex-col gap-3 w-full">
                                         <div className="">
                                             <div className="text-sm">FullName:</div>
-                                            <FormInput value={`Basit Money`} className={`${green}`} />
+                                            <FormInput value={`${data?.gift_seller?.first_name} ${data?.gift_seller?.surname}`} className={`${green}`} />
                                         </div>
                                         <div className="">
                                             <div className="text-sm">GitfCard Code:</div>
-                                            <FormInput value={`TRC9-HDBH-4477-4HFHF`} className={`${green}`} />
+                                            <FormInput value={data?.code} className={`${green} uppercase`} />
+                                        </div>
+                                        <div className="w-full">
+                                            <div className="text-sm">Amount In NGN:</div>
+                                            <div className="w-full">
+                                                <FormInput value={`${currencies[1].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
+
+                                            </div>
                                         </div>
                                         <div className="">
                                             <div className="text-sm">GitfCard PIN:</div>
-                                            <FormInput value={`4858`} className={`${green}`} />
+                                            <FormInput value={data?.pin ? data?.pin : 'n/a'} className={`${green}`} />
                                         </div>
 
                                     </div>

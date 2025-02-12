@@ -13,7 +13,7 @@ import SelectComp from '../../GeneralComponents/SelectComp'
 import { Apis, AuthPostApi } from '../../services/API'
 
 const features = [
-    "airdrop", "trading", "personal_finance", 'yes'
+    "airdrop", "trading", "personal_finance"
 ]
 
 const AdminCreateBlogs = () => {

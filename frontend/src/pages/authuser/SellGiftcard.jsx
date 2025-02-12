@@ -130,7 +130,7 @@ const SellGiftcard = () => {
         const selectedBrand = selectedCard.brand
         if (!selectedBrand) ErrorAlert('please select a giftcard brand')
         value = value.substring(0, selectedCard.length);
-        const formattedValue = value.match(/.{1,4}/g)?.join('-') || value;
+        const formattedValue = value.match(/.{1,5}/g)?.join('-') || value;
         const newval = formattedValue.replace(/-/g, '')
         setCards({
             ...cards,

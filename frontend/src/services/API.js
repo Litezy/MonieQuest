@@ -72,6 +72,15 @@ const admin_urls = {
     all_blogs: admin + 'all-blogs',
     single_blog: admin + 'single-blog',
     feature_blogs: admin + 'feature-blogs',
+    cryptobuy_orders: admin +'get_buy_orders',
+    cryptosell_orders: admin +'get_sell_orders',
+    single_buy:admin +'get_single_buy',
+    single_sell:admin +'get_single_sell',
+    confirm_buy: admin + 'confirm_buy',
+    confirm_sell: admin + 'confirm_sell',
+    get_giftcard_orders: admin + 'get_giftcard_orders',
+    get_single_giftcard_order: admin + 'get_single_giftcard_order',
+    credit_gift_customer: admin + 'credit_gift_customer'
 }
 
 const profitTools = 'api/profit_tools/'

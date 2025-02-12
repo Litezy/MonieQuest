@@ -1,4 +1,4 @@
-const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, AllProfitTools, SingleProfitTool, UpdateProfitTool, AllListedProfitTools, AllProfitToolsOrders, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs } = require('../controllers/adminController')
+const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, AllProfitTools, SingleProfitTool, UpdateProfitTool, AllListedProfitTools, AllProfitToolsOrders, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer } = require('../controllers/adminController')
 const { AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -22,7 +22,16 @@ router.put('/update-blog', AdminMiddleware, UpdateBlog)
 router.get('/all-blogs', AllBlogs)
 router.get('/single-blog/:id', SingleBlog)
 router.get('/feature-blogs/:feature', FeatureBlogs)
+router.get('/get_buy_orders', getCryptoBuysOrders)
+router.get('/get_sell_orders', getCryptoSellsOrders)
+router.get('/get_single_buy/:id', getSingleBuyOrder)
+router.get('/get_single_sell/:id', getSingleSellOrder)
 router.post('/create_user', AdminMiddleware, CreateUser)
+router.post('/confirm_buy/:id', AdminMiddleware, closeAndConfirmBuyOrder)
+router.post('/confirm_sell/:id', AdminMiddleware, closeAndConfirmSellOrder)
+router.get('/get_giftcard_orders', AdminMiddleware, getGiftCardOrders)
+router.get('/get_single_giftcard_order/:id', AdminMiddleware, getSingleGiftCardOrder)
+router.post('/credit_gift_customer/:id', AdminMiddleware, creditGiftCustomer)
 
 
 module.exports = router

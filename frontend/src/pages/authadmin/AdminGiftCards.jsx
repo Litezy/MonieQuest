@@ -1,29 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link } from 'react-router-dom'
 import { currencies } from '../../AuthComponents/AuthUtils'
+import { Apis, AuthGetApi } from '../../services/API'
 
 const AdminGiftCards = () => {
     const Topheaders = [ 'FullName', 'Gift-Brand', 'Code', 'Pin',`Amount`, 'Details']
+     const [data,setData] = useState([])
 
-    const dummy = [
-        {
-            id: 1,
-            fullname: 'Basit Money',
-            gift_brand: 'Amazon',
-            code: '748B-74FF-FJUR3....',
-            pin: 1748,
-            amount: 1000
-        },
-        {
-            id: 2,
-            fullname: 'Basit Money',
-            gift_brand:'Apple',
-            code: '748B-74FF-FJUR3....',
-            pin: '',
-            amount: 4000
-        },
-    ]
+     const fetchGiftOrders = async () =>{
+        try {
+            const res = await AuthGetApi(Apis.admin.get_giftcard_orders)
+            const data = res.data
+            setData(data)
+        } catch (error) {
+            console.log(error)
+        }
+     }
+
+     useEffect(()=>{
+        fetchGiftOrders()
+     },[])
+    
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
@@ -38,23 +36,23 @@ const AdminGiftCards = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.isArray(dummy) ? dummy.map((item, i) => (
+                            {data.length > 0 ? data.map((item, i) => (
                                 <tr className=" border-b " key={i}>
                                     <th scope="row" className="px-6 text-white py-4 font-medium  whitespace-nowrap ">
-                                        {item.fullname}
+                                        {item?.gift_seller?.first_name}  {item?.gift_seller?.surname}
                                     </th>
-                                    <td className="px-3 py-3">
-                                        {item.gift_brand}
+                                    <td className="px-3 py-3 text-lightgreen">
+                                        {item?.brand}
                                     </td>
                                     <td className="px-3 py-3">
-                                        {item.code}
+                                        {item?.code}
                                     </td>
                                     <td className="px-3 py-3">
-                                        {item.pin}
+                                        {item?.pin}
                                     </td>
 
                                     <td className="px-3 py-3">
-                                        {currencies[1].symbol}{item.amount.toLocaleString()}
+                                        {currencies[1].symbol}{item.amount?.toLocaleString()}
                                     </td>
                                     <td className="px-3 py-3">
                                         <Link to={`${item.id}`}

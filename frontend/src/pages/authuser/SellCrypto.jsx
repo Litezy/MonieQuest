@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
-import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
-import FormInput from '../utils/FormInput';
-import { coins, currencies, sellInstruction } from './AuthUtils';
-import ModalLayout from '../utils/ModalLayout';
+import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import FormInput from '../../utils/FormInput';
+import { coins, currencies, sellInstruction } from '../../AuthComponents/AuthUtils';
+import ModalLayout from '../../utils/ModalLayout';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCopy } from 'react-icons/fa';
 import { TfiTimer } from "react-icons/tfi";
 import { Link, useNavigate } from 'react-router-dom';
-import Loader from '../GeneralComponents/Loader';
-import Exchange from '../pages/authuser/Exchange';
-import { Apis, AuthPostApi } from '../services/API';
+import Loader from '../../GeneralComponents/Loader';
+import Exchange from './Exchange';
+import { Apis, AuthPostApi } from '../../services/API';
 
 
 const SellCrypto = () => {
@@ -24,6 +24,7 @@ const SellCrypto = () => {
     const [forms, setForms] = useState({
         amount: '',
         trans_hash: '',
+        symbol:'',
         network: coins[0].network,
         wallet_add: ''
     })
@@ -105,7 +106,8 @@ const SellCrypto = () => {
             amount: forms.amount,
             crypto_currency: forms.type,
             type: 'sell',
-            trans_hash: forms.trans_hash
+            trans_hash: forms.trans_hash,
+            network:forms.network
         }
         try {
             const res = await AuthPostApi(Apis.transaction.sell_crypto, formdata)
@@ -146,7 +148,7 @@ const SellCrypto = () => {
         const value = e.target.value
         const findNetwork = coins.find((trx) => trx.network === String(value))
         if (findNetwork) {
-            setForms({...forms, network: findNetwork.network, wallet_add: findNetwork.address });
+            setForms({...forms, network: findNetwork.network, wallet_add: findNetwork.address,symbol:findNetwork.symbol });
         }else{
             setForms({...forms, network: '', wallet_add: '' });
         }
@@ -226,7 +228,7 @@ const SellCrypto = () => {
                             <div className="flex w-full  mx-auto mt-5 items-start gap-5 flex-col">
                                 {/* <div className="text-center font-bold text-red-500 w-full">Sell Crypto</div> */}
                                 <div className="flex items-start gap-2 flex-col w-full">
-                                    <div className="font-bold text-lg">Cryto Currency:</div>
+                                    <div className="font-bold text-lg">Crypto Currency:</div>
                                     <select onChange={handleCoins} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
                                         {coins.map((coin, i) => {
                                             return (
@@ -268,7 +270,7 @@ const SellCrypto = () => {
                             <div className="flex w-11/12 lg:w-2/3  mx-auto mt-5 items-start gap-5 flex-col">
 
                                 <div className="flex items-start gap-2 flex-col w-full">
-                                    <div className="text-center  w-full text-2xl">Selling <span className='text-red-600 font-bold'>{currencies[0].symbol}{forms.amount}</span> worth of {forms.type} at <br /> <span className='text-red-600 font-bold'>{currencies[1].symbol}{inNaira}</span></div>
+                                    <div className="text-center  w-full text-2xl">Selling <span className='text-red-600 font-bold'>{currencies[0].symbol}{forms.amount}</span> worth of {forms.symbol} at <br /> <span className='text-red-600 font-bold'>{currencies[1].symbol}{inNaira}</span></div>
                                 </div>
                                 <div className="text-sm text-center w-full">kindly send tokens to the wallet address below</div>
 

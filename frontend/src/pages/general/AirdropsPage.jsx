@@ -135,17 +135,19 @@ const AirdropsPage = () => {
                 <div className='flex lg:flex-row flex-col lg:gap-8 gap-4 items-center justify-center'>
                   <div className='capitalize font-bold'>filter here:</div>
                   <div className='grid md:grid-cols-4 grid-cols-2 gap-4 items-center'>
-                    <div className='bg-[lightgrey] w-28 h-fit rounded-full flex justify-between items-center text-[#585858] p-3 font-semibold'>
+                    <div className='bg-[#ffffff] w-28 h-fit rounded-sm flex justify-between items-center text-[#585858] p-2 font-semibold'>
                       <span>KYC</span>
                       <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='cursor-pointer'></input>
                     </div>
-                    <SelectComp title='Status' options={statuses} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} value={select.status} handleChange={(e) => setSelect({ ...select, status: e.target.value })} />
-                    <SelectComp title='Categories' options={categories} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} value={select.category} handleChange={(e) => setSelect({ ...select, category: e.target.value })} />
-                    <SelectComp title='Blockchain' options={blockchains} style={{ bg: 'lightgrey', rounded: 8, color: 'text-[#585858]', font: '1rem' }} value={select.blockchain} handleChange={(e) => setSelect({ ...select, blockchain: e.target.value })} />
+                    
+                      <SelectComp title={'Status'}  options={statuses} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.status} handleChange={(e) => setSelect({ ...select, status: e.target.value })} />
+                   
+                    <SelectComp title={`Categories`} options={categories} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.category} handleChange={(e) => setSelect({ ...select, category: e.target.value })} />
+                    <SelectComp title={`Blockchain`}  options={blockchains} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.blockchain} handleChange={(e) => setSelect({ ...select, blockchain: e.target.value })} />
                   </div>
                   <div className='w-fit relative'>
                     {loading && <Loading />}
-                    <button onClick={SubmitFilter} className='outline-none w-fit h-fit bg-lightgreen text-black rounded-full py-3 px-8'>Search</button>
+                    <button onClick={SubmitFilter} className='outline-none w-fit h-fit bg-lightgreen text-black rounded-full py-2 px-8'>Search</button>
                   </div>
                 </div>
                 {airdrops.length > 0 ?

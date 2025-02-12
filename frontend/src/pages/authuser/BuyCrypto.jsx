@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
-import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
-import FormInput from '../utils/FormInput';
-import { BankAcc, blockchainNetworks, coins, currencies, instructions } from './AuthUtils';
-import ModalLayout from '../utils/ModalLayout';
+import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import FormInput from '../../utils/FormInput';
+import { BankAcc, blockchainNetworks, coins, currencies, instructions } from '../../AuthComponents/AuthUtils';
+import ModalLayout from '../../utils/ModalLayout';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { Link, useNavigate } from 'react-router-dom';
-import Loader from '../GeneralComponents/Loader';
-import Exchange from '../pages/authuser/Exchange';
-import { Apis, AuthGetApi, AuthPostApi } from '../services/API';
+import Loader from '../../GeneralComponents/Loader';
+import Exchange from './Exchange';
+import { Apis, AuthGetApi, AuthPostApi } from '../../services/API';
 
 
 const BuyCrypto = () => {

@@ -12,12 +12,13 @@ const SellCrypto = require('../models').exchangeSells
 const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
-const { webName, webShort, webURL, ServerError } = require('../utils/utils')
+const { webName, webShort, webURL, ServerError, nairaSign, dollarSign } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
 const moment = require('moment')
+
 // const { sequelize } = require('../models')
 
 
@@ -441,24 +442,35 @@ exports.getDashboardInfos = async (req, res) => {
         const totalWithdrawals = await Bank_Withdrawals.count();
         const totalCryptoBuysAmount = await BuyCrypto.sum('amount', { where: { status: 'paid' } });
         const totalCryptoSellsAmount = await SellCrypto.sum('amount', { where: { status: 'completed' } });
-        const totalWithdrawalAmt = await Bank_Withdrawals.sum('amount');
+        const totalCryptoBuysunpaid = await BuyCrypto.sum('amount', { where: { status: 'unpaid' } });
+        const totalCryptoBuyspaid = await BuyCrypto.sum('amount', { where: { status: 'paid' } });
+        const totalCryptosellspending = await SellCrypto.sum('amount', { where: { status: 'pending' } });
+        const totalWithdrawalAmtPending = await Bank_Withdrawals.sum('amount', { where: { status: 'pending' } });
+        const totalWithdrawalAmt = await Bank_Withdrawals.sum('amount', { where: { status: 'completed' } });
         const totalGiftcardsAmt = await GiftCard.sum('amount', { where: { status: 'completed' } });
+        const totalGiftcardspending = await GiftCard.sum('amount', { where: { status: 'pending' } });
         const totalToolsOrders = await ToolOrder.count();
         const totalProfitRevenue = await ToolOrder.sum('amount_paid', { where: { status: 'paid' } });
         const data = [
             { title: 'total Users', value: totalUsers.length, color: 'red' },
+            { title: 'total Blogs', value: totalBlogs, color: 'pink' },
             { title: 'total Airdrops', value: totalAirdrops, color: 'green' },
             { title: 'total Profit Tools', value: totalProfitTools, color: 'red' },
-            { title: 'total Crypto Buys', value: totalCryptobuys, color: 'yellow' },
-            { title: 'total Crypto Sells', value: totalCryptosells, color: 'blue' },
-            { title: 'total Withdrawals', value: totalWithdrawals, color: 'teal' },
-            { title: 'total Blogs', value: totalBlogs, color: 'pink' },
             { title: 'total Profit Tools Orders', value: totalToolsOrders, color: 'lime', },
-            { title: 'total Crypto Buys Amount', value: totalCryptoBuysAmount ? totalCryptoBuysAmount : 0, color: 'orange', cur: true },
-            { title: 'total Crypto Sells Amount', value: totalCryptoSellsAmount ? totalCryptoSellsAmount : 0, color: 'indigo', cur: true },
-            { title: 'total Giftcards Sells Amount', value: totalGiftcardsAmt ? totalGiftcardsAmt : 0, color: 'purple', cur: true },
-            { title: 'total Amount Withdrawn', value: totalWithdrawalAmt ? totalWithdrawalAmt : 0, color: 'amber', naira: true },
             { title: 'total Profit Tools Revenue', value: totalProfitRevenue ? totalProfitRevenue : 0, color: 'gray', naira: true },
+            { title: 'total Crypto Buy orders', value: totalCryptobuys, color: 'blue' },
+            { title: 'total Un-paid crypto buys', value: totalCryptoBuysunpaid || 0, color: 'blue', cur: true },
+            { title: 'total paid crypto buys', value: totalCryptoBuyspaid || 0, color: 'blue', cur: true },
+            { title: 'completed Crypto Buys Amount', value: totalCryptoBuysAmount ? totalCryptoBuysAmount : 0, color: 'blue', cur: true },
+            { title: 'total Crypto Sell orders', value: totalCryptosells, color: 'orange' },
+            { title: 'total Pending crypto sells', value: totalCryptosellspending || 0, color: 'orange', cur: true },
+            { title: 'completed Crypto Sells Amount', value: totalCryptoSellsAmount ? totalCryptoSellsAmount : 0, color: 'orange', cur: true },
+            { title: 'total Bank Withdrawals ', value: totalWithdrawals || 0, color: 'orangee' },
+            { title: 'total Bank Withdrawals Pending', value: totalWithdrawalAmtPending || 0, color: 'teal', naira: true },
+            { title: 'completed bank withdrawals', value: totalWithdrawalAmt ? totalWithdrawalAmt : 0, color: 'amber', naira: true },
+            { title: 'total Giftcards Sell orders ', value: totalGiftcardSells ? totalGiftcardSells : 0, color: 'purple' },
+            { title: 'total pending Giftcards orders ', value: totalGiftcardspending ? totalGiftcardspending : 0, color: 'purple', cur: true },
+            { title: 'complete Giftcards orders', value: totalGiftcardsAmt ? totalGiftcardsAmt : 0, color: 'purple', cur: true },
         ];
 
         return res.json({ status: 200, msg: 'fetch success', data });
@@ -785,3 +797,453 @@ exports.FeatureBlogs = async (req, res) => {
     }
 }
 
+exports.getCryptoBuysOrders = async (req, res) => {
+    try {
+        const allbuys = await BuyCrypto.findAll({
+            where: { status: [`unpaid`, `paid`] },
+            include: [
+                {
+                    model: User, as: 'crypto_buyer',
+                    attributes: [`id`, `first_name`, 'surname']
+                }
+            ],
+            order: [[`createdAt`, 'DESC']]
+        })
+        return res.json({ status: 200, msg: 'fetch success', data: allbuys })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+exports.getSingleBuyOrder = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 400, msg: "ID is missing" })
+        const findBuy = await BuyCrypto.findOne({
+            where: { id },
+            include: [
+                {
+                    model: User, as: 'crypto_buyer',
+                    attributes: [`id`, `first_name`, 'surname']
+                }
+            ]
+        })
+        if (!findBuy) return res.json({ status: 404, msg: 'Buy order not found' })
+        return res.json({ status: 200, msg: 'fetch success', data: findBuy })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getSingleSellOrder = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 400, msg: "ID is missing" })
+        const findSell = await SellCrypto.findOne({
+            where: { id },
+            include: [
+                {
+                    model: User, as: 'crypto_seller',
+                    attributes: [`id`, `first_name`, 'surname']
+                }
+            ]
+        })
+        if (!findSell) return res.json({ status: 404, msg: 'Buy order not found' })
+        return res.json({ status: 200, msg: 'fetch success', data: findSell })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+
+exports.getCryptoSellsOrders = async (req, res) => {
+    try {
+        const allsells = await SellCrypto.findAll({
+            where: { status: 'pending' },
+            include: [
+                {
+                    model: User, as: 'crypto_seller',
+                    attributes: [`id`, `first_name`, 'surname']
+                }
+            ]
+        })
+        return res.json({ status: 200, msg: 'fetch success', data: allsells })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.closeAndConfirmBuyOrder = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { tag, message } = req.params
+        if (!id || !tag) return res.json({ status: 400, msg: 'ID or Tag missing from request' })
+        const findBuy = await BuyCrypto.findOne({
+            where: { id },
+            include: [{ model: User, as: "crypto_buyer", attributes: [`first_name`] }]
+        })
+        if (!findBuy) return res.json({ status: 404, msg: 'Buy order ID not found' })
+        if (findBuy.status === 'completed') return res.json({ status: 400, msg: 'Order already completed' })
+        const user = await User.findOne({ where: { id: findBuy.userid } })
+        if (!user) return res.json({ status: 401, msg: 'Account owner not found' })
+
+
+        //if successful
+        if (tag === 'success') {
+            findBuy.status = 'completed'
+            await findBuy.save()
+            await Notification.create({
+                user: user.id,
+                title: `Balance Credit`,
+                content: `Hi dear, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked paid. Kindly check your  new balance in your provided wallet.`,
+                url: '/user/dashboard',
+            })
+            await Mailing({
+                subject: `Crypto buy Credit Alert`,
+                eTitle: `Credit Alert`,
+                eBody: `
+                  <div>Hello ${user.first_name}, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked paid with ${dollarSign}${findBuy.amount?.toLocaleString()}} worth of ${findBuy.crypto_currency} sent to the wallet address ending in ****${findBuy?.wallet_address.slice(-5)}. Kindly verify this transaction by checking your wallet. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                `,
+                account: user
+            })
+
+            const admins = await User.findAll({ where: { role: 'admin' } })
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `Crypto Buy Order Completed`,
+                        content: `You have completed the crypto buy order payment  with the ID of ${findBuy?.order_no}`,
+                        url: '/admin/transactions_history',
+                    })
+
+                    Mailing({
+                        subject: 'Order Completed',
+                        eTitle: `Crypto Buy Order `,
+                        eBody: `
+                     <div>Hello Admin, you have completed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${moment(findBuy.updatedAt).format('h:mm')}.</div> 
+                    `,
+                        account: ele,
+                    })
+
+                })
+            }
+            return res.json({ status: 200, msg: 'Buy order closed and confirmed' })
+        }
+        else if (tag === 'failed') {
+            if (!message) return res.json({ status: 400, msg: "Failed message is required" })
+            findBuy.status = 'failed'
+            await findBuy.save()
+
+            await Notification.create({
+                user: user.id,
+                title: `Credit Failed`,
+                content: `Hi dear, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked failed. Kindly check your email to learn more.`,
+                url: '/user/transactions_history',
+            })
+            await Mailing({
+                subject: `Crypto Buy Failed`,
+                eTitle: `Failed Transaction`,
+                eBody: `
+                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findBuy?.order_no} has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try again. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                `,
+                account: user
+            })
+
+            const admins = await User.findAll({ where: { role: 'admin' } })
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `Crypto Buy Order Failed`,
+                        content: `You have failed the crypto buy order payment  with the ID of ${order?.order_no}`,
+                        url: '/admin/transactions_history',
+                    })
+
+                    Mailing({
+                        subject: 'Order Failed',
+                        eTitle: `Crypto Buy Order Failed `,
+                        eBody: `
+                     <div>Hello Admin, you have failed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${moment(findBuy.updatedAt).format('h:mm')}.</div> 
+                    `,
+                        account: ele,
+                    })
+
+                })
+            }
+            return res.json({ status: 200, msg: 'Buy order closed and marked as failed' })
+        }
+        else {
+            return res.json({ status: 404, msg: 'Invalid Tag' })
+        }
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.closeAndConfirmSellOrder = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { tag, message } = req.body
+        if (!id || !tag) return res.json({ status: 400, msg: 'ID or Tag missing from request' })
+        const findSell = await SellCrypto.findOne({
+            where: { id },
+            include: [{ model: User, as: "crypto_seller", attributes: [`first_name`] }]
+        })
+        if (!findSell) return res.json({ status: 404, msg: 'Buy order ID not found' })
+        if (findSell.status === 'completed') return res.json({ status: 400, msg: 'Order already completed' })
+        const user = await User.findOne({ where: { id: findSell.userid } })
+        if (!user) return res.json({ status: 401, msg: 'Account owner not found' })
+        const admins = await User.findAll({ where: { role: 'admin' } })
+
+
+        if (tag === 'success') {
+            findSell.status = 'completed'
+            await findSell.save()
+            await Notification.create({
+                user: user.id,
+                title: `Balance Credit`,
+                content: `Hi dear, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked paid. Kindly check your  new balance.`,
+                url: '/user/dashboard',
+            })
+            await Mailing({
+                subject: `Crypto Credit Alert`,
+                eTitle: `Credit Alert`,
+                eBody: `
+                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked paid with the sum of ${nairaSign}${findSell?.amount?.toLocaleString()}} credited to your balance. Kindly get back to your account to see your new balance. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                `,
+                account: user
+            })
+
+
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `Crypto Sell Order Completed`,
+                        content: `You have completed the crypto sell order payment  with the ID of ${findSell?.order_no}`,
+                        url: '/admin/transactions_history',
+                    })
+
+                    Mailing({
+                        subject: 'Order Completed',
+                        eTitle: `Crypto Sell Order `,
+                        eBody: `
+                     <div>Hello Admin, you have completed the crypto sell order payment  with the ID of ${findSell?.order_no} today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updatedAt).format('h:mm')}.</div> 
+                    `,
+                        account: ele,
+                    })
+
+                })
+            }
+            return res.json({ status: 200, msg: 'Buy order closed and successfully confirmed' })
+        }
+
+        else if (tag === 'failed') {
+            if (!message) return res.json({ status: 400, msg: 'Message is required for failed transactions' })
+            findSell.status = 'failed'
+            await findSell.save()
+            await Notification.create({
+                user: user.id,
+                title: `Crypto Credit Failed`,
+                content: `Hi dear, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked failed. Kindly check email to learn more.`,
+                url: '/user/transactions_history',
+            })
+            await Mailing({
+                subject: `Crypto Credit Failed`,
+                eTitle: `Failed Transaction`,
+                eBody: `
+                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try again. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                `,
+                account: user
+            })
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `Crypto Sell Order Failed`,
+                        content: `You have marked the crypto sell order payment  with the ID of ${findSell?.order_no} as failed and user has been notified.`,
+                        url: '/admin/transactions_history',
+                    })
+
+                    Mailing({
+                        subject: 'Order Failed',
+                        eTitle: `Crypto Sell Order Failed`,
+                        eBody: `
+                     <div>Hello Admin, you have marked the crypto sell order payment  with the ID of ${findSell?.order_no} as failed today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updateddAt).format('h:mm')}.</div> 
+                    `,
+                        account: ele,
+                    })
+
+                })
+            }
+            return res.json({ status: 200, msg: 'Buy order closed and successfully marked as failed' })
+        }
+        else {
+            return res.json({ status: 404, msg: 'Invalid Tag' })
+        }
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getGiftCardOrders = async (req, res) => {
+    try {
+        const all_orders = await GiftCard.findAll({
+            where: { status: 'pending' },
+            include: [
+                {
+                    model: User, as: 'gift_seller',
+                    attributes: [`id`, `first_name`, `surname`]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+        return res.json({ status: 200, msg: "fetch success", data: all_orders })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+exports.getSingleGiftCardOrder = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 400, msg: "ID not found" })
+        const order = await GiftCard.findOne({
+            where: { id },
+            include: [
+                {
+                    model: User, as: 'gift_seller',
+                    attributes: [`id`, `first_name`, `surname`]
+                }
+            ]
+        })
+        return res.json({ status: 200, msg: "fetch success", data: order })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.creditGiftCustomer = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { amount, tag, message } = req.body
+        if (!id || !amount || !tag) return res.json({ status: 400, msg: "ID, Amount or Tag missing from request" })
+        const order = await GiftCard.findOne({
+            where: { id },
+            include: [
+                {
+                    model: User, as: 'gift_seller',
+                    attributes: [`id`, `first_name`, `surname`]
+                }
+            ]
+        })
+        if (!order) return res.json({ status: 404, msg: "Order not found" })
+        if (order.status === 'completed') return res.json({ status: 400, msg: 'Order already completed' })
+        const findUser = await User.findOne({ where: { id: order?.gift_seller.id } })
+        if (!findUser) return res.json({ status: 404, msg: "User not found" })
+        const findUserWallet = await Wallet.findOne({ where: { user: findUser.id } })
+        if (!findUserWallet) {
+            await Wallet.create({ user: findUser.id })
+        }
+
+        if (tag === 'success') {
+            //credit the customer
+            findUserWallet.balance = parseFloat(findUserWallet.balance) + parseFloat(amount)
+            order.status = 'completed'
+            await order.save()
+            await findUserWallet.save()
+
+            await Notification.create({
+                user: findUser.id,
+                title: `Balance Credit`,
+                content: `Hi dear, Your Gift-Card order with the ID of ${order?.order_no} has been marked paid. Kindly check your  new balance.`,
+                url: '/user/dashboard',
+            })
+            await Mailing({
+                subject: `Gift-Card Credit Alert`,
+                eTitle: `Credit Alert`,
+                eBody: `
+                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked paid with the sum of ${nairaSign}${amount?.toLocaleString()}} credited to your balance. Kindly get back to your account to see your new balance. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                `,
+                account: findUser
+            })
+            const admins = await User.findAll({ where: { role: 'admin' } })
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `Gift-Card Order Paid`,
+                        content: `You have completed the giftcard order payment with the ID of ${order?.order_no}`,
+                        url: '/admin/transactions_history',
+                    })
+
+                    Mailing({
+                        subject: 'Order Completed',
+                        eTitle: `Gift-Card Order`,
+                        eBody: `
+                     <div>Hello Admin, you have completed the giftcard order payment with the ID of ${order?.order_no} and the sum of ${nairaSign}${amount?.toLocaleString()}} today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm')}.</div> 
+                    `,
+                        account: ele,
+                    })
+
+                })
+            }
+
+            return res.json({ status: 200, msg: 'customer credited successfully' })
+        }
+        else if (tag === 'failed') {
+            if (!message) return res.json({ status: 400, msg: "Failed message is required" })
+       
+            order.status = 'failed'
+            await order.save()
+
+
+            await Notification.create({
+                user: findUser.id,
+                title: `Credit Failed`,
+                content: `Hi dear, Your Gift-Card order with the ID of ${order?.order_no} has been marked as failed. Kindly check your email to learn more.`,
+                url: '/user/transactions_history',
+            })
+            await Mailing({
+                subject: `Gift-Card Failed Transaction`,
+                eTitle: `Failed Transaction`,
+                eBody: `
+                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked failed with the following as reason(s) '${message}'. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                `,
+                account: findUser
+            })
+            const admins = await User.findAll({ where: { role: 'admin' } })
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `Gift-Card Order Failed`,
+                        content: `You have marked failed to the giftcard order payment with the ID of ${order?.order_no}`,
+                        url: '/admin/transactions_history',
+                    })
+
+                    Mailing({
+                        subject: 'Order Completed',
+                        eTitle: `Gift-Card Order`,
+                        eBody: `
+                     <div>Hello Admin, you have marked failed to the giftcard order payment with the ID of ${order?.order_no}  today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm')}.</div> 
+                    `,
+                        account: ele,
+                    })
+
+                })
+            }
+
+            return res.json({ status: 200, msg: 'transaction marked as failed successfully' })
+        } else {
+            return res.json({ status: 404, msg: "Invalid Tag" })
+        }
+    } catch (error) {
+        ServerError(res, error)
+    }
+}

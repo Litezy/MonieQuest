@@ -50,7 +50,7 @@ const AdminAllUsers = () => {
                                             <div className="text-base text-dark font-bold">{item.title}</div>
                                             <div onClick={() => { setActive(item.id) }}
                                                 className="px-5 py-2 rounded-lg bg-primary w-fit text-white cursor-pointer">
-                                                viewmore
+                                                view more
                                             </div>
                                         </Link>
                                     ))}

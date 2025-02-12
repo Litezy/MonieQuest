@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaRegCopy } from "react-icons/fa";
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
-import { currencies } from '../../AuthComponents/AuthUtils'
 import { defaultOptions, ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import SelectComp from '../../GeneralComponents/SelectComp';
 import FormButton from '../../utils/FormButton';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import Lottie from 'react-lottie';
+import { Apis, AuthGetApi, AuthPostApi } from '../../services/API';
+import { currencies } from '../../AuthComponents/AuthUtils';
 
 
 
@@ -17,7 +18,35 @@ const SingleSellOrder = () => {
 
     const { id } = useParams()
     const green = 'text-lightgreen'
+    const [data, setData] = useState({})
 
+    const fetchSellID = async () => {
+        setLoading(true)
+        try {
+            const res = await AuthGetApi(`${Apis.admin.single_sell}/${id}`)
+            // console.log(res)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            const data = res.data
+            setData(data)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchSellID()
+    }, [])
+
+    const fetchSells = async () => {
+        try {
+            const res = await AuthGetApi(Apis.admin.cryptobuy_orders)
+            if (res.status !== 200) return;
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const handleCopy = (type, val) => {
         navigator.clipboard.writeText(type)
             .then(() => { SuccessAlert(`${val} copied successfully'`) })
@@ -41,16 +70,9 @@ const SingleSellOrder = () => {
         SuccessAlert(`Order closed successfully`)
         setScreen(2)
     }
-    const submitOrder = (e) => {
-        e.preventDefault()
-        if (!credited) return ErrorAlert('Please credit customer before closing the order')
-        setLoading(true)
-        return setTimeout(() => {
-            afterLoad()
-        }, 5000)
-    }
+    
     const handleChange = () => {
-        const amt = '1,500'
+        const amt = data?.amount
         const formatVal = amt.replace(/,/g, '')
         setForms({ ...forms, amount: formatVal })
     }
@@ -69,7 +91,25 @@ const SingleSellOrder = () => {
         return setTimeout(() => {
             setLoad(false)
             SuccessAlert(`Customer credited successfully.`)
-        }, 5000)
+        }, 2000)
+    }
+
+    const submitOrder = async (e) => {
+        e.preventDefault()
+        if (!credited) return ErrorAlert('Please credit customer before closing the order')
+        setLoading(true)
+        try {
+            const res = await AuthPostApi(`${Apis.admin.confirm_sell}/${id}`)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            SuccessAlert(res.msg)
+            fetchSells()
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            afterLoad()
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
     }
     return (
         <AdminPageLayout>
@@ -97,43 +137,47 @@ const SingleSellOrder = () => {
                     </div>
                     <div className="mt-5 md:mt-10 w-11/12 mx-auto mont">
 
-                        <div className="w-full text-center capitalize font-bold poppins">Review Order Number <span className={`${green}`}>GY8343</span></div>
+                        <div className="w-full text-center capitalize font-bold poppins">Review Order Number <span className={`${green}`}>{data?.order_no}</span></div>
 
                         <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md  mx-auto mt-5 md:mt-10 mb-5">
                             <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
                                 <div className="flex flex-col gap-3 w-full">
                                     <div className="w-full">
                                         <div className="text-sm">Customer ID:</div>
-                                        <FormInput value={id} className={`${green}`} />
+                                        <FormInput value={data?.crypto_seller?.id} className={`${green}`} />
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">FullName:</div>
-                                        <FormInput value={`Basit Money`} className={`${green}`} />
+                                        <FormInput read={true} value={`${data?.crypto_seller?.first_name} ${data?.crypto_seller?.surname}`}
+                                            className={`${green}`} />
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">Amount:</div>
-                                        <FormInput value={`1,500`} className={`${green}`} />
-                                    </div>
-                                </div>
-                                <div className=" flex flex-col gap-3 w-full">
-
-                                    <div className="">
-                                        <div className="text-sm">Network Sent Via:</div>
-                                        <FormInput value={`TRC-20`} className={`${green}`} />
-                                    </div>
-                                    <div className="">
-                                        <div className="text-sm">Your Receiving Wallet Address :</div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-full">
-                                                <FormInput value={`0x958847473888383`} className={`${green}`} />
-                                            </div>
-                                            <FaRegCopy onClick={() => handleCopy(`88t9389fncjjefj`, 'wallet address')} className={`${green} cursor-pointer`} />
-                                        </div>
+                                        <FormInput value={`${currencies[0].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">Status:</div>
-                                        <FormInput value={`sent`} className={`${green}`} />
+                                        <FormInput value={data?.status} className={`${green}`} />
                                     </div>
+
+                                </div>
+                                <div className=" flex flex-col gap-3 w-full">
+                                    <div className="">
+                                        <div className="text-sm">Crypto Currency Sent:</div>
+                                        <FormInput value={data?.crypto_currency} className={`${green}`} />
+                                    </div>
+                                    <div className="">
+                                        <div className="text-sm">Network Sent Via:</div>
+                                        <FormInput value={data?.network} className={`${green}`} />
+                                    </div>
+                                    <div className="text-sm">Transaction Hash:</div>
+                                    <div className="flex items-center w-full gap-2">
+                                        <div className="w-full">
+                                            <FormInput value={data?.trans_hash} className={`${green}`} />
+                                        </div>
+                                        <FaRegCopy onClick={() => handleCopy(`jmkmkdmkkfk`, 'trans hash')} className={`${green} cursor-pointer`} />
+                                    </div>
+                                    
 
                                 </div>
 

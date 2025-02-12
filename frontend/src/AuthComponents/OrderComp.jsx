@@ -25,12 +25,12 @@ const OrderComp = ({trans}) => {
                         <div className="flex items-center gap-1 lg:text-base text-sm">
                             <div className="text-xs">{moment(trans.createdAt).format(`hh:mm a`)}</div>
                             <div className="w-1 h-1 bg-lightgreen rounded-full"></div>
-                            <div className="mont text-sm text-indigo-500">{moment(trans.createdAt).format('ddd')}</div>
+                            <div className="mont text-sm text-white">{moment(trans.createdAt).format('ddd')}</div>
                         </div>
                     </div>
                 </div>
                 <div
-                    className={` flex items-center text-sm justify-center lg:w-full rounded-md ${trans.status === 'pending' ? "text-yellow-300" : trans.status === 'paid' ? 'text-lightgreen/90  ' : 'text-red-600'}`}>
+                    className={` flex items-center text-sm justify-center lg:w-full rounded-md ${trans.status === 'pending' ? "text-gray-300" : trans.status === 'paid' ? 'text-yellow-300  ' : 'text-red-600'}`}>
                     {trans.status}</div>
 
                 <div className=" gap-1 font-bold lg:w-full flex items-center justify-center">

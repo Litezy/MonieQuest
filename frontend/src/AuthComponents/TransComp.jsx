@@ -27,7 +27,7 @@ const TransComp = ({ trans }) => {
                         {trans.type === 'buy' && <GoArrowDownLeft className='text-lightgreen' />}
                         {trans.type === 'sell' && <GoArrowUpRight className='text-red-600' />}
                         {trans.bank_user && <GoArrowUpLeft className='text-blue-600' />}
-                        {trans.brand && <GoArrowUpRight className='text-white' />}
+                        {trans.brand && <GoArrowUpRight className='text-red-600' />}
                     </div>
                     <div className="flex items-start flex-col gap-1">
                         <div className="flex items-center gap-3">
@@ -39,10 +39,9 @@ const TransComp = ({ trans }) => {
                             {trans.brand && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
                             {trans.brand && <div className={`text-red-600 capitalize`}>sell</div>}
                         </div>
-                        <div className="flex items-center gap-1 text-xs md:text-base">
-                            <div className="text-blue-600">{moment(trans.createdAt).format('hh:mm a')}</div>
-                            <div className="w-1 h-1 bg-white rounded-full"></div>
-                            <div className="text-blue-600">{moment(trans.createdAt).format('ddd')}</div>
+                        <div className="flex flex-col items-start gap-1 text-xs md:text-base">
+                        <div className="">{moment(trans.createdAt).format('ddd')} {moment(trans.createdAt).format('DD-MM-YYYY')}</div>
+                            <div className="">{moment(trans.createdAt).format('hh:mm a')}</div>
                         </div>
                     </div>
                 </div>
@@ -54,18 +53,18 @@ const TransComp = ({ trans }) => {
                 {trans.brand && <div className={`${trans.brand && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
 
                 <div className=" gap-1 font-bold lg:w-full flex items-center justify-center">
-                    {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'}`}>-</div>}
-                    {trans.brand && <div className={`text-white`}>-</div>}
-                    {trans.bank_user && <div className={`text-blue-600`}>-</div>}
+                    {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'}`}>{trans?.type === 'buy'?'+':'-'}</div>}
+                    {trans.brand && <div className={`text-red-600`}>-</div>}
+                    {trans.bank_user && <div className={``}>-</div>}
 
                     {trans.crypto_currency && <div
                         className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'} `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
                     </div>}
                     {trans.bank_user && <div
-                        className={`text-blue-600 `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                        className={` `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
                     </div>}
                     {trans.brand && <div
-                        className={` `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                        className={` text-red-600`}>{currencies[1].symbol}{trans.amount.toLocaleString()}
                     </div>}
                 </div>
             </div>

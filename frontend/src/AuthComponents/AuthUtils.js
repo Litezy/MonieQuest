@@ -20,51 +20,73 @@ export const coins = [
     },
     {
         network: 'Bitcoin BTC',
-        address: '1NnzdbP1TVjHHExWB53E9eaKL1J3aBoRvo'
+        address: '1NnzdbP1TVjHHExWB53E9eaKL1J3aBoRvo',
+        symbol:`BTC`
     },
     {
-        network: 'Ethereum ETH(ERC20, BEP20)',
-        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3'
+        network: 'Ethereum (ERC20)',
+        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
+        symbol:`ETH`
     },
     {
-        network: 'Binance BNB(BEP20)',
-        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3'
+        network: 'Ethereum (BEP20)',
+        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
+        symbol:`ETH`
+    },
+    {
+        network: 'Binance BNB (BEP20)',
+        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
+        symbol:`BNB`
     },
     {
         network: 'Solana SOL',
-        address: 'D71a9kxuHUGL56oViA8DxHkRgAqy1JAn2yE2P2rokvtx'
+        address: 'D71a9kxuHUGL56oViA8DxHkRgAqy1JAn2yE2P2rokvtx',
+        symbol:`SOL`
     },
     {
-        network: 'Tron TRX(TRC20)',
-        address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa'
+        network: 'Tron TRX (TRC20)',
+        address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa',
+        symbol:`TRX`
     },
     {
         network: 'TON (The Open Network)',
-        address: 'UQAiq2Fq9C8hSX4BBon1AQyBVTDWMXRFboAfd154Wv7Dttvi'
+        address: 'UQAiq2Fq9C8hSX4BBon1AQyBVTDWMXRFboAfd154Wv7Dttvi',
+        symbol:`TON`
     },
     {
         network: 'SUI',
-        address: '0xa687f64035d90685a80366d3b12d3c03ddc9711751b2c792adbd606d7b4dff6f'
+        address: '0xa687f64035d90685a80366d3b12d3c03ddc9711751b2c792adbd606d7b4dff6f',
+        symbol:`SUI`
     },
     {
         network: 'DOGE',
-        address: 'D7SKaCYu9ase4w7h9BY9xNP67xVxv7pVt3'
+        address: 'D7SKaCYu9ase4w7h9BY9xNP67xVxv7pVt3',
+        symbol:`DOGE`
     },
     {
         network: 'Litecoin LTC',
-        address: 'LVCjaPaxeSLd8jjABbzytPBPv9hqMGCxfi'
+        address: 'LVCjaPaxeSLd8jjABbzytPBPv9hqMGCxfi',
+        symbol:`LTC`
     },
     {
-        network: 'USDT(TRC20)',
-        address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa'
+        network: 'USDT (TRC20)',
+        address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa',
+        symbol:`USDT`
     },
     {
-        network: 'USDT(BEP20)',
-        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3'
+        network: 'USDT (BEP20)',
+        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
+        symbol:`USDT`
     },
     {
-        network: 'USDC(ERC20, BEP20)',
-        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3'
+        network: 'USDC (ERC20)',
+        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
+        symbol:`USDC`
+    },
+    {
+        network: 'USDC (BEP20)',
+        address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
+        symbol:`USDC`
     },
 ]
 export const currencies = [

@@ -15,7 +15,9 @@ const AdminSummary = ({ item }) => {
         cyan: 'bg-cyan-500',
         amber: 'bg-amber-500',
         lime: 'bg-lime-500',
-        gray: 'bg-gray-500'
+        gray: 'bg-gray-500',
+        orangee:'bg-orange-300',
+        greene:'bg-green-300'
     };
 
     return (

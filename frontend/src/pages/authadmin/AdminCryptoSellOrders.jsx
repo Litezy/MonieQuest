@@ -1,27 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { currencies } from '../../AuthComponents/AuthUtils'
 import { Link } from 'react-router-dom'
 import AdminExchangeLayout from '../../AdminComponents/AdminExchangeLayout'
+import { Apis, AuthGetApi } from '../../services/API'
 
 const AdminCryptoSellOrders = () => {
-    const Topheaders = [`ID`, 'FullName', 'Crypto', 'Network', 'Amount', 'Details']
+    const Topheaders = [`ID`, 'FullName', 'Crypto', 'TxID/Hash', 'Amount', 'Details']
 
-    const dummy = [
-        {
-            id: 1,
-            fullname: 'Basit Money',
-            crypto: 'USDT',
-            network: 'TRC-20',
-            amount: 1000
-        },
-        {
-            id: 2,
-            fullname: 'Basit Money',
-            crypto: 'Binance BNB',
-            network: 'BNB',
-            amount: 1000
-        },
-    ]
+    const [data, setData] = useState([])
+    const fetchSells = async () => {
+        try {
+            const res = await AuthGetApi(Apis.admin.cryptosell_orders)
+            // console.log(res)
+            if (res.status !== 200) return;
+            const data = await res.data
+            setData(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchSells()
+    }, [])
     return (
         <AdminExchangeLayout>
             <div className='w-11/12 mx-auto'>
@@ -37,27 +38,27 @@ const AdminCryptoSellOrders = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.isArray(dummy) ? dummy.map((item, i) => (
+                            {data.length > 0 ? data.map((item, i) => (
                                 <tr className=" border-b " key={i}>
                                     <th scope="row" className="px-6 text-white py-4 font-medium  whitespace-nowrap ">
-                                        {item.id}
+                                        {item?.id}
                                     </th>
                                     <td className="px-3 py-3">
-                                        {item.fullname}
+                                        {item?.crypto_seller?.first_name} {item?.crypto_seller?.surname}
                                     </td>
                                     <td className="px-3 py-3">
-                                        {item.crypto}
+                                        {item?.crypto_currency}
                                     </td>
                                     <td className="px-3 py-3">
-                                        {item.network}
+                                        {item?.trans_hash.slice(0,10)}*******
                                     </td>
 
                                     <td className="px-3 py-3">
-                                        {currencies[1].symbol}{item.amount.toLocaleString()}
+                                        {currencies[1].symbol}{item?.amount.toLocaleString()}
                                     </td>
                                     <td className="px-3 py-3">
-                                        <Link to={`${item.id}`}
-                                        className="bg-primary to-sec truncate text-white px-5 rounded-lg py-2">view details</Link>
+                                        <Link to={`${item?.id}`}
+                                            className="bg-primary to-sec truncate text-white px-5 rounded-lg py-2">view details</Link>
                                     </td>
 
                                 </tr>
