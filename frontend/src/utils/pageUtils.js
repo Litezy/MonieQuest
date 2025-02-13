@@ -35,13 +35,14 @@ export const MoveToTop = () => {
     })
 }
 
-export const MoveToSection = (id) => {
-    const section = document.getElementById(id)
+export const MoveToSection = (sectionId, marginTop = 0) => {
+    const section = document.getElementById(sectionId)
     if (section) {
-        section.scrollIntoView({
-            behavior: 'smooth',
-            height:'-2rem'
-        })
+        const sectionPosition = section.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({
+            top: sectionPosition - marginTop,
+            behavior: 'smooth'
+        });
     }
 }
 

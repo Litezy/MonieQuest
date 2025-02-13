@@ -8,7 +8,7 @@ import { imageurl } from '../services/API'
 
 const AirdropDiv = ({ item }) => {
     return (
-        <Link to={`/airdrops/${item.id}/${item.slug}`} onClick={MoveToTop} className='h-fit w-72 bg-primary hover:bg-[#2f2f47] border hover:border-bg-green border-ash rounded-md p-4 flex flex-col gap-4 text-white truncate'>
+        <Link to={`/airdrops/${item.category}/${item.id}/${item.slug}`} onClick={MoveToTop} className='h-fit w-72 bg-primary hover:bg-[#2f2f47] border hover:border-bg-green border-ash rounded-md p-4 flex flex-col gap-4 text-white truncate'>
             <div className='flex items-center gap-2'>
                 <img alt='airdrop logo' src={`${imageurl}/airdrops/${item?.logo_image}`} className='w-14 h-14 rounded-full object-cover'></img>
                 <div className='flex flex-col gap-1'>

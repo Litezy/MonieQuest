@@ -147,7 +147,7 @@ const SingleBlog = () => {
                                         <div className="mont font-bold text-2xl">Table of contents</div>
                                         {parapgraphs.map((item, i) => {
                                             return (
-                                                <div onClick={() => MoveToSection(item.sectionID)} key={i} className={`cursor-pointer hover:text-lightgreen mont `}>{item.title}</div>
+                                                <div onClick={() => MoveToSection(item.sectionID, 100)} key={i} className={`cursor-pointer hover:text-lightgreen mont `}>{item.title}</div>
                                             )
                                         })}
                                     </div>

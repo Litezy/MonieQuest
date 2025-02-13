@@ -72,7 +72,7 @@ export const GeneralPagesLinks = [
     { path: '/verify-account', component: VerifyAccount },
     { path: '/forgot-password', component: ForgotPassword },
     { path: '/airdrops', component: AirdropsPage },
-    { path: '/airdrops/:id/:slug', component: SingleAirdropPage },
+    { path: '/airdrops/:category/:id/:slug', component: SingleAirdropPage },
     { path: '/airdrops/:category', component: CategoryAirdropsPage },
     { path: '/products', component: ProductsPage },
     { path: '/products/:id/:slug', component: SingleProductPage },
@@ -83,7 +83,7 @@ export const GeneralPagesLinks = [
     { path: '/faqs', component: FAQS },
     { path: '/privacy_policy', component: PrivacyPolicy },
     { path: '/we_are_hiring', component: Hiring },
-    { path: '/blogs/:feature/:id', component: SingleBlog },
+    { path: '/blogs/:feature/:id/:slug', component: SingleBlog },
     { path: '/blogs/:feature/:id/comment/:commentid', component: SingleComment },
     { path: '/blogs/:feature', component: SingleFeatureBlog },
 ]
