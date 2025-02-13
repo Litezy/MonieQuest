@@ -8,19 +8,46 @@ import { useParams } from 'react-router-dom';
 import { Apis, GetApi, imageurl } from '../../services/API';
 import avatar from '../../assets/images/avatar.svg'
 import moment from 'moment';
+import { ErrorAlert, MoveToSection, SuccessAlert } from '../../utils/pageUtils';
 
 const parapgraphs = [
-    `Main header`,
-    `First paragraph`,
-    `Second paragraph`,
-    `Extras paragraph`,
-    `Conclusion`,
+    {
+        title: `Main header`,
+        sectionID: 'main'
+    },
+    {
+        title: `First paragraph`,
+        sectionID: 'first'
+    },
+    {
+        title: `Second paragraph`,
+        sectionID: 'second'
+    },
+    {
+        title: `Extras paragraph`,
+        sectionID: 'extras'
+    },
+    {
+        title: `Conclusion`,
+        sectionID: 'conclusion'
+    },
 ]
 
 const SingleBlog = () => {
     const { feature, id } = useParams()
     const [singleBlog, setSingleBlog] = useState({})
     const [dataLoading, setDataLoading] = useState(true)
+    const [form, setForm] = useState({
+        username: '',
+        email: '',
+        phone: '',
+    })
+    const formHandler = (event) => {
+        setForm({
+            ...form,
+            [event.target.name]: event.target.value
+        })
+    }
 
     useEffect(() => {
         const FetchSingleBlog = async () => {
@@ -38,6 +65,13 @@ const SingleBlog = () => {
         }
         FetchSingleBlog()
     }, [])
+
+
+    const SubmitComment = (e) => {
+        e.preventDefault()
+
+        if (!form.username || !form.email) return ErrorAlert('Enter all required fields')
+    }
 
     return (
         <PageLayout>
@@ -92,13 +126,13 @@ const SingleBlog = () => {
                     <div className="w-11/12 mx-auto">
                         <div className="w-full flex items-start gap-6 flex-col lg:flex-row">
                             <div className="lg:w-[30%] w-full">
-                                <div className="flex items-start flex-col gap-20">
+                                <div className="flex items-start flex-col gap-16">
                                     <img src={`${imageurl}/blogs/${singleBlog?.image}`} alt="blog image" className="w-full rounded-xl max-h-52 object-cover " />
                                     <div className="w-full flex items-start flex-col gap-2">
                                         <div className="poppins font-bold text-2xl">Table of contents</div>
                                         {parapgraphs.map((item, i) => {
                                             return (
-                                                <div key={i} className={`cursor-pointer hover:text-lightgreen mont `}>{item}</div>
+                                                <div onClick={() => MoveToSection(item.sectionID)} key={i} className={`cursor-pointer hover:text-lightgreen mont `}>{item.title}</div>
                                             )
                                         })}
                                     </div>
@@ -124,19 +158,19 @@ const SingleBlog = () => {
                                     <div className=" lowercase">{singleBlog?.feature}</div>
                                 </div>
                                 <div className="flex items-start poppins flex-col gap-16 mt-14 text-gray-400">
-                                    <div className='flex flex-col gap-2 items-start'>
+                                    <div className='flex flex-col gap-2 items-start' id='main'>
                                         <div className="text-[1.8rem] leading-[33px] font-bold poppins text-white"> Main Header</div>
                                         <div className="">{singleBlog?.main_header}</div>
                                     </div>
-                                    <div className="flex items-start gap-2 flex-col">
+                                    <div className="flex items-start gap-2 flex-col" id='first'>
                                         <div className="text-white font-bold leading-[33px] text-2xl poppins ">First Paragragh</div>
                                         <div className="">{singleBlog?.first_paragraph}</div>
                                     </div>
-                                    <div className="flex items-start gap-2 flex-col">
+                                    <div className="flex items-start gap-2 flex-col" id='second'>
                                         <div className="text-white font-bold leading-[33px] poppins  text-2xl">Second Paragraph.</div>
                                         <div className="">{singleBlog?.second_paragraph}</div>
                                     </div>
-                                    <div className="flex items-start gap-2 flex-col">
+                                    <div className="flex items-start gap-2 flex-col" id='extras'>
                                         <div className="text-white font-bold leading-[33px] poppins  text-2xl">extras</div>
                                         <div className="">{singleBlog?.extras}</div>
                                     </div>
@@ -144,7 +178,7 @@ const SingleBlog = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-start gap-2 flex-col my-5">
+                        <div className="flex items-start gap-2 flex-col my-5" id='conclusion'>
                             <div className="text-white font-bold leading-[33px] text-2xl poppins ">Conclusion</div>
                             <div className="text-gray-400 poppins">{singleBlog?.conclusion}</div>
                         </div>
@@ -159,15 +193,18 @@ const SingleBlog = () => {
                                 })}
                             </div>
                         </div>
-                        <form className="w-full p-3 rounded-md bg-primary">
+                        <form className="w-full p-3 rounded-md bg-primary" onSubmit={SubmitComment}>
                             <div className="text-lg mont">Leave a comment</div>
-                            <div className="flex mt-4 flex-col gap-4 w-full lg:w-3/4">
+                            <div className="flex mt-4 flex-col gap-5 w-full lg:w-3/4">
                                 <div className="flex items-center flex-col lg:flex-row gap-5">
                                     <div className="w-full">
-                                        <FormInput label={`Username`} />
+                                        <FormInput label={`Username`} placeholder='Username' name='username' value={form.username} onChange={formHandler} />
                                     </div>
                                     <div className="w-full">
-                                        <FormInput label={`Email Address`} type='email' />
+                                        <FormInput label={`Email Address`} type='email' name='email' placeholder='Email address' value={form.email} onChange={formHandler} />
+                                    </div>
+                                    <div className="w-full">
+                                        <FormInput label={`Phone number (optional)`} name='phone' placeholder='Phone number' value={form.phone} onChange={formHandler} />
                                     </div>
                                 </div>
                                 <div className="w-full flex-col  flex items-start gap-2">

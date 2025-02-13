@@ -2,6 +2,7 @@ import React from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import handsImg from '../../assets/images/hands2.png'
 import { IoTriangleSharp } from "react-icons/io5";
+import { MoveToSection } from '../../utils/pageUtils';
 
 const Jobs = [
     "Content Marketing Specialist", "Full-Stack Developer", "Project & Partnerships Coordinator", "Crypto & Financial Analyst", "Transaction Specialist (Customer Operations)", "Data & Reporting Specialist", "Multimedia Designer", "Payment & Security Specialist"
@@ -23,9 +24,9 @@ const Hiring = () => {
                 <div className="w-11/12 mx-auto mt-10">
                     <div className='flex flex-col gap-4 items-center justify-center'>
                         <div className='text-4xl font-bold capitalize text-center'>work at monieQuest.com</div>
-                        <a href='#jobs'>
+                        <div onClick={() => MoveToSection(`jobs`)}>
                             <button className='outline-none w-fit h-fit bg-ash px-6 py-2 capitalize rounded-md'>view jobs</button>
-                        </a>
+                        </div>
                     </div>
                     <div className='flex flex-col gap-10 mt-16'>
                         <div className='grid md:grid-cols-6 grid-cols-1 gap-12 items-center'>
