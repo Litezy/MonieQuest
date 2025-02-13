@@ -12,10 +12,10 @@ import FormButton from '../../utils/FormButton'
 import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
 
 const statuses = [
-    "active", "finished"
+    "open", "closed"
 ]
 const categories = [
-    "featured", "deFi", "new", "NFT", "other"
+    "deFi", "featured", "new", "NFT", "potential", "earn_crypto"
 ]
 const kyces = [
     "true", "false"
@@ -253,6 +253,10 @@ const AdminSingleAirdrop = () => {
                                     <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
                                     <FormInput placeholder='Blockchain' name='blockchain' value={form.blockchain} onChange={formHandler} />
                                 </div>
+                                {/* <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
+                                    <SelectComp options={statuses} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.blockchain} handleChange={(e) => setForm({ ...form, blockchain: e.target.value })} />
+                                </div> */}
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*type</div>
                                     <FormInput placeholder='Airdrop type' name='type' value={form.type} onChange={formHandler} />

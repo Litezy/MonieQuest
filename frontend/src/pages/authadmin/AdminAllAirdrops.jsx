@@ -7,7 +7,7 @@ import { Apis, AuthGetApi } from '../../services/API';
 
 
 const AdminAllAirdrops = () => {
-    const tags = ['all', 'featured', 'deFi', 'new', 'NFTs', 'others']
+    const tags = ['all', 'deFi', 'featured', 'new', 'NFT', 'potential', 'earn crypto']
     const [active, setActive] = useState(tags[0])
     const [search, setSearch] = useState('')
     const [dataLoading, setDataLoading] = useState(true)
@@ -17,7 +17,7 @@ const AdminAllAirdrops = () => {
     useEffect(() => {
         const FetchAllAirdrops = async () => {
             try {
-                const response = await AuthGetApi(Apis.admin.all_airdrops)
+                const response = await AuthGetApi(Apis.admin.all_open_airdrops)
                 if (response.status === 200) {
                     setStaticData(response.msg)
                     setAirdrops(response.msg)
@@ -44,8 +44,11 @@ const AdminAllAirdrops = () => {
     const deFiAirdrops = useMemo(() => {
         return airdrops.filter((ele) => ele.category === 'deFi');
     }, [airdrops])
-    const otherAirdrops = useMemo(() => {
-        return airdrops.filter((ele) => ele.category === 'other');
+    const potentialAirdrops = useMemo(() => {
+        return airdrops.filter((ele) => ele.category === 'potential');
+    }, [airdrops])
+    const earnCryptoAirdrops = useMemo(() => {
+        return airdrops.filter((ele) => ele.category === 'earn_crypto');
     }, [airdrops])
 
     const filterAirdrop = () => {
@@ -137,7 +140,7 @@ const AdminAllAirdrops = () => {
                                                 }
                                             </>
                                         }
-                                        {active === 'NFTs' &&
+                                        {active === 'NFT' &&
                                             <>
                                                 {NFTAirdrops.length > 0 ?
                                                     <>
@@ -150,11 +153,24 @@ const AdminAllAirdrops = () => {
                                                 }
                                             </>
                                         }
-                                        {active === 'others' &&
+                                        {active === 'potential' &&
                                             <>
-                                                {otherAirdrops.length > 0 ?
+                                                {potentialAirdrops.length > 0 ?
                                                     <>
-                                                        {otherAirdrops.map((item, i) => (
+                                                        {potentialAirdrops.map((item, i) => (
+                                                            <AdminAirdropComp key={i} item={item} />
+                                                        ))}
+                                                    </>
+                                                    :
+                                                    <div className="text-gray-400 text-center">No record found...</div>
+                                                }
+                                            </>
+                                        }
+                                        {active === 'earn crypto' &&
+                                            <>
+                                                {earnCryptoAirdrops.length > 0 ?
+                                                    <>
+                                                        {earnCryptoAirdrops.map((item, i) => (
                                                             <AdminAirdropComp key={i} item={item} />
                                                         ))}
                                                     </>

@@ -10,8 +10,8 @@ import { MoveToTop } from '../../utils/pageUtils'
 import { Apis, GetApi } from '../../services/API'
 import Loading from '../../GeneralComponents/Loading'
 
-const statuses = ["Active", "Finished"]
-const categories = ["Featured", "New", "DeFi", "NFT", "Other"]
+const statuses = ["Open", "Closed"]
+const categories = ["DeFi", "Featured", "New", "NFT", "Potential", "Earn_Crypto"]
 const blockchains = ["Ton", "BNB", "ETH", "Solana"]
 
 const AirdropsPage = () => {
@@ -30,7 +30,7 @@ const AirdropsPage = () => {
   useEffect(() => {
     const FetchAllAirdrops = async () => {
       try {
-        const response = await GetApi(Apis.admin.all_airdrops)
+        const response = await GetApi(Apis.admin.all_open_airdrops)
         if (response.status === 200) {
           setStaticData(response.msg)
           setAirdrops(response.msg)
@@ -44,6 +44,9 @@ const AirdropsPage = () => {
     FetchAllAirdrops()
   }, [])
 
+  const deFiAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'deFi');
+  }, [airdrops])
   const featuredAirdrops = useMemo(() => {
     return airdrops.filter((ele) => ele.category === 'featured');
   }, [airdrops])
@@ -53,11 +56,11 @@ const AirdropsPage = () => {
   const NFTAirdrops = useMemo(() => {
     return airdrops.filter((ele) => ele.category === 'NFT');
   }, [airdrops])
-  const deFiAirdrops = useMemo(() => {
-    return airdrops.filter((ele) => ele.category === 'deFi');
+  const potentialAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'potential');
   }, [airdrops])
-  const otherAirdrops = useMemo(() => {
-    return airdrops.filter((ele) => ele.category === 'other');
+  const earnCryptoAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'earn_crypto');
   }, [airdrops])
 
   const SubmitFilter = () => {
@@ -139,11 +142,11 @@ const AirdropsPage = () => {
                       <span>KYC</span>
                       <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='cursor-pointer'></input>
                     </div>
-                    
-                      <SelectComp title={'Status'}  options={statuses} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.status} handleChange={(e) => setSelect({ ...select, status: e.target.value })} />
-                   
+
+                    <SelectComp title={'Status'} options={statuses} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.status} handleChange={(e) => setSelect({ ...select, status: e.target.value })} />
+
                     <SelectComp title={`Categories`} options={categories} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.category} handleChange={(e) => setSelect({ ...select, category: e.target.value })} />
-                    <SelectComp title={`Blockchain`}  options={blockchains} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.blockchain} handleChange={(e) => setSelect({ ...select, blockchain: e.target.value })} />
+                    <SelectComp title={`Blockchain`} options={blockchains} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.blockchain} handleChange={(e) => setSelect({ ...select, blockchain: e.target.value })} />
                   </div>
                   <div className='w-fit relative'>
                     {loading && <Loading />}
@@ -152,6 +155,30 @@ const AirdropsPage = () => {
                 </div>
                 {airdrops.length > 0 ?
                   <div className='flex flex-col gap-12'>
+                    {deFiAirdrops.length > 0 &&
+                      <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
+                        <div className='flex justify-between gap-4 items-center'>
+                          <div className='flex gap-2 items-center text-xl'>
+                            <GiArrowScope />
+                            <span className='capitalize font-bold'>deFi airdrops</span>
+                          </div>
+                          <div className='flex gap-4 items-center'>
+                            <Link to='/airdrops/deFi' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
+                            <div className='md:flex gap-2 items-center hidden'>
+                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
+                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div className='w-full overflow-x-auto scrollsdown'>
+                          <div className='w-fit flex gap-4'>
+                            {deFiAirdrops.map((item, i) => (
+                              <AirdropDiv key={i} item={item} />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    }
                     {featuredAirdrops.length > 0 &&
                       <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
                         <div className='flex justify-between gap-4 items-center'>
@@ -224,36 +251,12 @@ const AirdropsPage = () => {
                         </div>
                       </div>
                     }
-                    {deFiAirdrops.length > 0 &&
+                    {potentialAirdrops.length > 0 &&
                       <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
                         <div className='flex justify-between gap-4 items-center'>
                           <div className='flex gap-2 items-center text-xl'>
                             <GiArrowScope />
-                            <span className='capitalize font-bold'>deFi airdrops</span>
-                          </div>
-                          <div className='flex gap-4 items-center'>
-                            <Link to='/airdrops/deFi' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
-                            <div className='md:flex gap-2 items-center hidden'>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div className='w-full overflow-x-auto scrollsdown'>
-                          <div className='w-fit flex gap-4'>
-                            {deFiAirdrops.map((item, i) => (
-                              <AirdropDiv key={i} item={item} />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    }
-                    {otherAirdrops.length > 0 &&
-                      <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
-                        <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-2 items-center text-xl'>
-                            <GiArrowScope />
-                            <span className='capitalize font-bold'>more ways to earn crypto</span>
+                            <span className='capitalize font-bold'>potential airdrops</span>
                           </div>
                           <div className='flex gap-4 items-center'>
                             <Link to='/airdrops/other' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
@@ -265,7 +268,31 @@ const AirdropsPage = () => {
                         </div>
                         <div className='w-full overflow-x-auto scrollsdown'>
                           <div className='w-fit flex gap-4'>
-                            {otherAirdrops.map((item, i) => (
+                            {potentialAirdrops.map((item, i) => (
+                              <AirdropDiv key={i} item={item} />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    }
+                    {earnCryptoAirdrops.length > 0 &&
+                      <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
+                        <div className='flex justify-between gap-4 items-center'>
+                          <div className='flex gap-2 items-center text-xl'>
+                            <GiArrowScope />
+                            <span className='capitalize font-bold'>earn crypto airdrops</span>
+                          </div>
+                          <div className='flex gap-4 items-center'>
+                            <Link to='/airdrops/deFi' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
+                            <div className='md:flex gap-2 items-center hidden'>
+                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
+                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
+                            </div>
+                          </div>
+                        </div>
+                        <div className='w-full overflow-x-auto scrollsdown'>
+                          <div className='w-fit flex gap-4'>
+                            {earnCryptoAirdrops.map((item, i) => (
                               <AirdropDiv key={i} item={item} />
                             ))}
                           </div>

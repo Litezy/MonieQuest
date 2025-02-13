@@ -54,7 +54,7 @@ const admin_urls = {
     update_utils: admin + 'update-utils',
     get_utils: admin + 'get-utils',
     create_airdrop: admin + 'create-airdrop',
-    all_airdrops: admin + 'all-airdrops',
+    all_open_airdrops: admin + 'all-open-airdrops',
     single_airdrop: admin + 'single-airdrop',
     update_airdrop: admin + 'update-airdrop',
     category_airdrops: admin + 'category-airdrops',

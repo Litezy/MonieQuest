@@ -1,11 +1,11 @@
-const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts } = require('../controllers/adminController')
+const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops } = require('../controllers/adminController')
 const { AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
 
 router.put('/update-utils', AdminMiddleware, UpdateUtils)
 router.post('/create-airdrop', AdminMiddleware, CreateAirdrop)
-router.get('/all-airdrops', AllAirdrops)
+router.get('/all-open-airdrops', AllOpenAirdrops)
 router.get('/single-airdrop/:id', SingleAirdrop)
 router.put('/update-airdrop', AdminMiddleware, UpdateAirdrop)
 router.get('/category-airdrops/:category', CategoryAirdrops)

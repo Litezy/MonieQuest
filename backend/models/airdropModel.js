@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         kyc: { type: DataTypes.STRING },
         type: { type: DataTypes.STRING },
         referral_link: { type: DataTypes.STRING },
-        status: { type: DataTypes.STRING, defaultValue: 'active' },
+        status: { type: DataTypes.STRING, defaultValue: 'open' },
         about: { type: DataTypes.TEXT },
         video_guide_link: { type: DataTypes.STRING },
         twitter_link: { type: DataTypes.STRING, allowNull: true },

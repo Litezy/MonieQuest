@@ -3,7 +3,7 @@ import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import { FaEdit } from 'react-icons/fa'
 import { FiUploadCloud } from 'react-icons/fi'
-import { defaultOptions, ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
+import { defaultOptions, ErrorAlert } from '../../utils/pageUtils'
 import FormInput from '../../utils/FormInput'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import FormButton from '../../utils/FormButton'
@@ -13,9 +13,8 @@ import { Link } from 'react-router-dom'
 import { Apis, AuthPostApi } from '../../services/API'
 
 const categories = [
-    "featured", "deFi", "new", "NFT", "other"
+    "deFi", "featured", "new", "NFT", "potential", "earn_crypto"
 ]
-
 const kyces = [
     "true", "false"
 ]

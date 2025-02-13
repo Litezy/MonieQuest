@@ -79,7 +79,7 @@ exports.CreateAirdrop = async (req, res) => {
     try {
         const { title, category, kyc, blockchain, type, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
         if (!title || !category || !blockchain || !type || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
-        const categoryArray = ["featured", "deFi", "new", "NFT", "other"]
+        const categoryArray = ["featured", "deFi", "new", "NFT", "potential", "earn_crypto"]
         if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
         const kycArray = ['false', "true"]
         if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid kyc value provided` })
@@ -128,9 +128,10 @@ exports.CreateAirdrop = async (req, res) => {
     }
 }
 
-exports.AllAirdrops = async (req, res) => {
+exports.AllOpenAirdrops = async (req, res) => {
     try {
         const airdrops = await Airdrop.findAll({
+            where: { status: 'open' },
             order: [['createdAt', 'DESC']]
         })
 
@@ -200,7 +201,7 @@ exports.UpdateAirdrop = async (req, res) => {
             airdrop.title = title
         }
         if (category) {
-            const categoryArray = ["featured", "deFi", "new", "NFT", "other"]
+            const categoryArray = ["featured", "deFi", "new", "NFT", "potential", "earn_crypto"]
             if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
             airdrop.category = category
         }
