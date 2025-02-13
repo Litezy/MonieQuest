@@ -3,7 +3,7 @@ import { currencySign, SuccessAlert } from '../utils/pageUtils'
 import moment from 'moment'
 import { MdContentCopy } from 'react-icons/md'
 
-const ToolsOrdersModal = ({ selected }) => {
+const ProductsOrdersModal = ({ selected }) => {
     let products = []
     if (Object.values(selected).length !== 0) {
         products = JSON.parse(selected.products)
@@ -99,4 +99,4 @@ const ToolsOrdersModal = ({ selected }) => {
     )
 }
 
-export default ToolsOrdersModal
+export default ProductsOrdersModal

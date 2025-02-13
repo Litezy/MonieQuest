@@ -1,8 +1,8 @@
 const User = require('../models').users
 const Util = require('../models').utils
 const Airdrop = require('../models').airdrops
-const ProfitTool = require('../models').profitTools
-const ToolOrder = require('../models').toolsOrders
+const Product = require('../models').products
+const ProductOrder = require('../models').productOrders
 const Notification = require('../models').notifications
 const Bank = require('../models').banks
 const Blog = require('../models').blogs
@@ -257,25 +257,25 @@ exports.CategoryAirdrops = async (req, res) => {
     }
 }
 
-exports.UpdateProfitTool = async (req, res) => {
+exports.UpdateProduct = async (req, res) => {
     try {
-        const { tool_id, title, category, price, about, feature1, feature2, status, listing, discount_percentage, discount_duration, discount_duration_type } = req.body
-        if (!tool_id) return res.json({ status: 404, msg: `Profit tool id is required` })
+        const { product_id, title, category, price, about, feature1, feature2, status, listing, discount_percentage, discount_duration, discount_duration_type } = req.body
+        if (!product_id) return res.json({ status: 404, msg: `Product id is required` })
 
-        const profitTool = await ProfitTool.findOne({ where: { id: tool_id } })
-        if (!profitTool) return res.json({ status: 404, msg: 'Profit tool not found' })
-        const user = await User.findOne({ where: { id: profitTool.user } })
+        const product = await Product.findOne({ where: { id: product_id } })
+        if (!product) return res.json({ status: 404, msg: 'Product not found' })
+        const user = await User.findOne({ where: { id: product.user } })
         if (!user) return res.json({ status: 404, msg: 'User not found' })
 
-        const slugData = slug(title ? title : profitTool.title, '-')
+        const slugData = slug(title ? title : product.title, '-')
         const filePath = './public/tools'
         const date = new Date()
         let imageName;
-        const toolImage = req?.files?.image
+        const productImage = req?.files?.image
 
-        if (toolImage) {
-            if (!toolImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            const currentImagePath = `${filePath}/${profitTool.image}`
+        if (productImage) {
+            if (!productImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+            const currentImagePath = `${filePath}/${product.image}`
             if (fs.existsSync(currentImagePath)) {
                 fs.unlinkSync(currentImagePath)
             }
@@ -283,148 +283,148 @@ exports.UpdateProfitTool = async (req, res) => {
                 fs.mkdirSync(filePath)
             }
             imageName = `${slugData}-${date.getTime()}.jpg`
-            await toolImage.mv(`${filePath}/${imageName}`)
-            profitTool.image = imageName
+            await productImage.mv(`${filePath}/${imageName}`)
+            product.image = imageName
         }
         if (title) {
-            profitTool.title = title
+            product.title = title
         }
         if (category) {
-            profitTool.category = category
+            product.category = category
         }
         if (price) {
             if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
-            profitTool.price = price
+            product.price = price
         }
         if (about) {
-            profitTool.about = about
+            product.about = about
         }
         if (feature1) {
-            profitTool.feature1 = feature1
+            product.feature1 = feature1
         }
         if (feature2) {
-            profitTool.feature2 = feature2
+            product.feature2 = feature2
         }
         if (status) {
             const statusArray = ["pending", "approved", "declined"]
             if (!statusArray.includes(status)) return res.json({ status: 404, msg: `Invalid status provided` })
 
-            if (profitTool.status !== 'approved') {
+            if (product.status !== 'approved') {
                 if (status === 'approved') {
                     await Notification.create({
-                        user: profitTool.user,
-                        title: `Profit tool approved`,
-                        content: `After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been approved, you'll be contacted soon for payment.`,
-                        url: '/user/profit_tools/all_tools',
+                        user: product.user,
+                        title: `Product submitted approved`,
+                        content: `After thorough review by our admins your profit tool submitted with the id (#${product.gen_id}) has been approved, you'll be contacted soon for payment.`,
+                        url: '/user/products/all',
                     })
                     await Mailing({
-                        subject: `Profit Tool Approved`,
-                        eTitle: `Profit tool approved`,
+                        subject: `Product submitted Approved`,
+                        eTitle: `Product submitted approved`,
                         eBody: `
-                          <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/profit_tools/all_tools' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the id (#${product.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: user
                     })
                 }
             }
-            if (profitTool.status !== 'declined') {
+            if (product.status !== 'declined') {
                 if (status === 'declined') {
                     await Notification.create({
-                        user: profitTool.user,
+                        user: product.user,
                         title: `Profit tool declined`,
-                        content: `After review by our admins, your profit tool submitted with the id (#${profitTool.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
-                        url: '/user/profit_tools/all_tools',
+                        content: `After review by our admins, your profit tool submitted with the id (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
+                        url: '/user/products/all',
                         status: 'failed'
                     })
                     await Mailing({
                         subject: `Profit Tool Declined`,
                         eTitle: `Profit tool declined`,
                         eBody: `
-                          <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${profitTool.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/profit_tools/all_tools' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: user
                     })
                 }
             }
-            profitTool.status = status
+            product.status = status
         }
         if (listing) {
             const listingArray = ["listed", "unlisted"]
             if (!listingArray.includes(listing)) return res.json({ status: 404, msg: `Invalid listing value provided` })
-            profitTool.listing = listing
+            product.listing = listing
         }
         if (discount_percentage) {
             if (isNaN(discount_percentage)) return res.json({ status: 404, msg: `Discount percentage must be a number` })
-            profitTool.discount_percentage = discount_percentage
+            product.discount_percentage = discount_percentage
         } else {
-            profitTool.discount_percentage = null
+            product.discount_percentage = null
         }
         if (discount_duration && discount_duration_type) {
             if (isNaN(discount_duration)) return res.json({ status: 404, msg: `Discount duration must be a number` })
             const endDate = moment().add(parseFloat(discount_duration), `${discount_duration_type}`)
-            profitTool.discount_duration = discount_duration
-            profitTool.discount_duration_type = discount_duration_type
-            profitTool.discount_endDate = `${endDate}`
+            product.discount_duration = discount_duration
+            product.discount_duration_type = discount_duration_type
+            product.discount_endDate = `${endDate}`
         } else {
-            profitTool.discount_duration = null
-            profitTool.discount_duration_type = null
-            profitTool.discount_endDate = null
+            product.discount_duration = null
+            product.discount_duration_type = null
+            product.discount_endDate = null
         }
 
-        await profitTool.save()
+        await product.save()
 
-        return res.json({ status: 200, msg: 'Profit tool updated successfully' })
+        return res.json({ status: 200, msg: 'Product updated successfully' })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }
 }
 
-exports.AllProfitTools = async (req, res) => {
+exports.AllProducts = async (req, res) => {
     try {
-        const allProfitTools = await ProfitTool.findAll({
+        const allproducts = await Product.findAll({
             order: [['createdAt', 'DESC']]
         })
 
-        return res.json({ status: 200, msg: allProfitTools })
+        return res.json({ status: 200, msg: allproducts })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
     }
 }
 
-exports.AllListedProfitTools = async (req, res) => {
+exports.AllListedProducts = async (req, res) => {
     try {
-        const allProfitTools = await ProfitTool.findAll({
+        const allListedProducts = await Product.findAll({
             where: { listing: 'listed' },
             order: [['createdAt', 'DESC']]
         })
 
-        return res.json({ status: 200, msg: allProfitTools })
+        return res.json({ status: 200, msg: allListedProducts })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
     }
 }
 
-exports.SingleProfitTool = async (req, res) => {
+exports.SingleProduct = async (req, res) => {
     try {
         const { id } = req.params
-        if (!id) return res.json({ status: 404, msg: `Profit tool id is required` })
+        if (!id) return res.json({ status: 404, msg: `Product id is required` })
 
-        const profitTool = await ProfitTool.findOne({ where: { id } })
-        if (!profitTool) return res.json({ status: 404, msg: 'Profit tool not found' })
+        const product = await Product.findOne({ where: { id } })
+        if (!product) return res.json({ status: 404, msg: 'Product not found' })
 
-        return res.json({ status: 200, msg: profitTool })
+        return res.json({ status: 200, msg: product })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
     }
 }
 
-exports.AllProfitToolsOrders = async (req, res) => {
+exports.AllProductOrders = async (req, res) => {
     try {
-        const allToolOrders = await ToolOrder.findAll({
+        const allProductOrders = await ProductOrder.findAll({
             order: [['createdAt', 'DESC']]
         })
 
-        return res.json({ status: 200, msg: allToolOrders })
+        return res.json({ status: 200, msg: allProductOrders })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
     }
@@ -432,57 +432,50 @@ exports.AllProfitToolsOrders = async (req, res) => {
 
 exports.getDashboardInfos = async (req, res) => {
     try {
-        const totalProfitTools = await ProfitTool.count();
-        const totalCryptobuys = await BuyCrypto.count();
-        const totalCryptosells = await SellCrypto.count();
+        const totalUsers = await User.findAll({ where: { role: 'user' } });
         const totalAirdrops = await Airdrop.count();
         const totalBlogs = await Blog.count();
-        const totalUsers = await User.findAll({ where: { role: 'user' } });
+        const totalProducts = await Product.count();
+        const totalProductOrders = await ProductOrder.count();
+        const totalProductsRevenue = await ProductOrder.sum('amount_paid', { where: { status: 'paid' } });
+        const totalCryptoBuys = await BuyCrypto.count();
+        const totalCryptoBuysPaidAmount = await BuyCrypto.sum('amount', { where: { status: 'paid' } });
+        const totalCryptoBuysUnpaidAmount = await BuyCrypto.sum('amount', { where: { status: 'unpaid' } });
+        const totalCryptoSells = await SellCrypto.count();
+        const totalCryptoSellsCompleted = await SellCrypto.sum('amount', { where: { status: 'completed' } });
+        const totalCryptoSellsPending = await SellCrypto.sum('amount', { where: { status: 'pending' } });
         const totalGiftcardSells = await GiftCard.count();
+        const totalGiftcardsSellsCompleted = await GiftCard.sum('amount', { where: { status: 'completed' } });
+        const totalGiftcardsSellsPending = await GiftCard.sum('amount', { where: { status: 'pending' } });
         const totalWithdrawals = await Bank_Withdrawals.count();
-        const totalCryptoBuysAmount = await BuyCrypto.sum('amount', { where: { status: 'paid' } });
-        const totalCryptoSellsAmount = await SellCrypto.sum('amount', { where: { status: 'completed' } });
-        const totalCryptoBuysunpaid = await BuyCrypto.sum('amount', { where: { status: 'unpaid' } });
-        const totalCryptoBuyspaid = await BuyCrypto.sum('amount', { where: { status: 'paid' } });
-        const totalCryptosellspending = await SellCrypto.sum('amount', { where: { status: 'pending' } });
-        const totalWithdrawalAmtPending = await Bank_Withdrawals.sum('amount', { where: { status: 'pending' } });
-        const totalWithdrawalAmt = await Bank_Withdrawals.sum('amount', { where: { status: 'completed' } });
-        const totalGiftcardsAmt = await GiftCard.sum('amount', { where: { status: 'completed' } });
-        const totalGiftcardspending = await GiftCard.sum('amount', { where: { status: 'pending' } });
-        const totalToolsOrders = await ToolOrder.count();
-        const totalProfitRevenue = await ToolOrder.sum('amount_paid', { where: { status: 'paid' } });
+        const totalWithdrawalCompletedAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'completed' } });
+        const totalWithdrawalPendingAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'pending' } });
         const data = [
-            { title: 'total Users', value: totalUsers.length, color: 'red' },
-            { title: 'total Blogs', value: totalBlogs, color: 'pink' },
-            { title: 'total Airdrops', value: totalAirdrops, color: 'green' },
-            { title: 'total Profit Tools', value: totalProfitTools, color: 'red' },
-            { title: 'total Crypto Buys', value: totalCryptobuys, color: 'yellow' },
-            { title: 'total Crypto Sells', value: totalCryptosells, color: 'blue' },
-            { title: 'total Giftcard Sells', value: totalGiftcardSells, color: 'orange' },
+            { title: 'Total Users', value: totalUsers.length, color: 'red' },
+            { title: 'Total Blogs', value: totalBlogs, color: 'pink' },
+            { title: 'Total Airdrops', value: totalAirdrops, color: 'green' },
+            { title: 'Total Products', value: totalProducts, color: 'red' },
+            { title: 'Total Products Orders', value: totalProductOrders, color: 'lime', },
+            { title: 'Total Products Orders Revenue', value: totalProductsRevenue ? totalProductsRevenue : 0, color: 'gray', naira: true },
+            { title: 'Total Crypto Buys', value: totalCryptoBuys, color: 'yellow' },
+            { title: 'Paid Crypto Buys Amount', value: totalCryptoBuysPaidAmount || 0, color: 'blue', cur: true },
+            { title: 'Unpaid Crypto Buys Amount', value: totalCryptoBuysUnpaidAmount || 0, color: 'amber', cur: true },
+            { title: 'Total Crypto Sells', value: totalCryptoSells, color: 'red' },
+            { title: 'Completed Crypto Sells Amount', value: totalCryptoSellsCompleted || 0, color: 'orange' },
+            { title: 'Pending Crypto Sells Amount', value: totalCryptoSellsPending || 0, color: 'purple', cur: true },
+            { title: 'Total Giftcard Sells', value: totalGiftcardSells, color: 'pink' },
+            { title: 'Pending Giftcards Sells Amount ', value: totalGiftcardsSellsPending || 0, color: 'orange', cur: true },
+            { title: 'Completed Giftcards Sells Amount', value: totalGiftcardsSellsCompleted || 0, color: 'lime', cur: true },
             { title: 'total Withdrawals', value: totalWithdrawals, color: 'teal' },
-            { title: 'total Blogs', value: totalBlogs, color: 'pink' },
-            { title: 'total Profit Tools Orders', value: totalToolsOrders, color: 'lime', },
-            { title: 'total Profit Tools Revenue', value: totalProfitRevenue ? totalProfitRevenue : 0, color: 'gray', naira: true },
-            { title: 'total Crypto Buy orders', value: totalCryptobuys, color: 'blue' },
-            { title: 'total Un-paid crypto buys', value: totalCryptoBuysunpaid || 0, color: 'blue', cur: true },
-            { title: 'total paid crypto buys', value: totalCryptoBuyspaid || 0, color: 'blue', cur: true },
-            { title: 'completed Crypto Buys Amount', value: totalCryptoBuysAmount ? totalCryptoBuysAmount : 0, color: 'blue', cur: true },
-            { title: 'total Crypto Sell orders', value: totalCryptosells, color: 'orange' },
-            { title: 'total Pending crypto sells', value: totalCryptosellspending || 0, color: 'orange', cur: true },
-            { title: 'completed Crypto Sells Amount', value: totalCryptoSellsAmount ? totalCryptoSellsAmount : 0, color: 'orange', cur: true },
-            { title: 'total Bank Withdrawals ', value: totalWithdrawals || 0, color: 'orangee' },
-            { title: 'total Bank Withdrawals Pending', value: totalWithdrawalAmtPending || 0, color: 'teal', naira: true },
-            { title: 'completed bank withdrawals', value: totalWithdrawalAmt ? totalWithdrawalAmt : 0, color: 'amber', naira: true },
-            { title: 'total Giftcards Sell orders ', value: totalGiftcardSells ? totalGiftcardSells : 0, color: 'purple' },
-            { title: 'total pending Giftcards orders ', value: totalGiftcardspending ? totalGiftcardspending : 0, color: 'purple', cur: true },
-            { title: 'complete Giftcards orders', value: totalGiftcardsAmt ? totalGiftcardsAmt : 0, color: 'purple', cur: true },
+            { title: 'Pending Bank Withdrawals Amount', value: totalWithdrawalPendingAmount || 0, color: 'teal', naira: true },
+            { title: 'Completed bank withdrawals Amount', value: totalWithdrawalCompletedAmount || 0, color: 'amber', naira: true },
         ];
 
         return res.json({ status: 200, msg: 'fetch success', data });
     } catch (error) {
         ServerError(res, error);
     }
-};
+}
 
 exports.getAllUserDetails = async (req, res) => {
     try {
@@ -819,6 +812,7 @@ exports.getCryptoBuysOrders = async (req, res) => {
         ServerError(res, error)
     }
 }
+
 exports.getSingleBuyOrder = async (req, res) => {
     try {
         const { id } = req.params
@@ -858,7 +852,6 @@ exports.getSingleSellOrder = async (req, res) => {
         ServerError(res, error)
     }
 }
-
 
 exports.getCryptoSellsOrders = async (req, res) => {
     try {
@@ -1112,6 +1105,7 @@ exports.getGiftCardOrders = async (req, res) => {
         ServerError(res, error)
     }
 }
+
 exports.getSingleGiftCardOrder = async (req, res) => {
     try {
         const { id } = req.params
@@ -1202,7 +1196,7 @@ exports.creditGiftCustomer = async (req, res) => {
         }
         else if (tag === 'failed') {
             if (!message) return res.json({ status: 400, msg: "Failed message is required" })
-       
+
             order.status = 'failed'
             await order.save()
 

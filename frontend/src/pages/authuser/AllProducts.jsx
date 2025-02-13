@@ -1,26 +1,26 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
-import AdminToolComp from '../../AdminComponents/AdminToolComp';
-import AdminToolsLayout from '../../AdminComponents/AdminToolsLayout';
 import { Apis, AuthGetApi } from '../../services/API';
+import ProductsLayout from '../../AuthComponents/ProductsLayout';
+import ProductComp from '../../AuthComponents/ProductComp';
 
 
-const AdminTools = () => {
+const AllProducts = () => {
     const tags = ['all', 'pending', 'approved', 'declined']
     const [active, setActive] = useState(tags[0])
     const [search, setSearch] = useState('')
-    const [dataLoading, setDataLoading] = useState(true)
     const [staticData, setStaticData] = useState([])
-    const [allTools, setAllTools] = useState([])
+    const [userProducts, setUserProducts] = useState([])
+    const [dataLoading, setDataLoading] = useState(true)
 
     useEffect(() => {
-        const FetchAllTools = async () => {
+        const FetchUserProducts = async () => {
             try {
-                const response = await AuthGetApi(Apis.admin.all_tools)
+                const response = await AuthGetApi(Apis.product.user_products)
                 if (response.status === 200) {
                     setStaticData(response.msg)
-                    setAllTools(response.msg)
+                    setUserProducts(response.msg)
                 }
 
             } catch (error) {
@@ -29,41 +29,40 @@ const AdminTools = () => {
                 setDataLoading(false)
             }
         }
-        FetchAllTools()
+        FetchUserProducts()
     }, [])
 
+    const pendingProducts = useMemo(() => {
+        return userProducts.filter((ele) => ele.status === 'pending');
+    }, [userProducts])
+    const approvedProducts = useMemo(() => {
+        return userProducts.filter((ele) => ele.status === 'approved');
+    }, [userProducts])
+    const declinedProducts = useMemo(() => {
+        return userProducts.filter((ele) => ele.status === 'declined');
+    }, [userProducts])
 
-    const pendingTools = useMemo(() => {
-        return allTools.filter((ele) => ele.status === 'pending');
-    }, [allTools])
-    const approvedTools = useMemo(() => {
-        return allTools.filter((ele) => ele.status === 'approved');
-    }, [allTools])
-    const declinedTools = useMemo(() => {
-        return allTools.filter((ele) => ele.status === 'declined');
-    }, [allTools])
-
-    const filterTools = () => {
+    const FilterProducts = () => {
         const mainData = staticData
         if (search.length > 1) {
             const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
-            setAllTools(filtered)
+            setUserProducts(filtered)
         } else {
-            setAllTools(mainData)
+            setUserProducts(mainData)
         }
     }
 
     return (
-        <AdminToolsLayout>
+        <ProductsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
-                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={filterTools} />
+                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterProducts} />
                     <div className="absolute top-5 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>
                 </div>
                 <div className="grid md:grid-cols-6 grid-cols-1 gap-2 items-center mt-4">
-                    <div className="text-zinc-300 font-semibold capitalize text-sm lg:text-base col-span-1">Sort tools by:</div>
+                    <div className="text-zinc-300 font-semibold capitalize text-sm lg:text-base col-span-1">Sort products by:</div>
                     <div className='md:col-span-5 col-span-1'>
                         <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 items-center lg:w-11/12 w-full mx-auto">
                             {tags.map((tag, i) => {
@@ -83,22 +82,22 @@ const AdminTools = () => {
                         </div>
                         :
                         <>
-                            {allTools.length > 0 ?
+                            {userProducts.length > 0 ?
                                 <>
                                     <div className='flex flex-col gap-4'>
                                         {active === 'all' &&
                                             <>
-                                                {allTools.map((item, i) => (
-                                                    <AdminToolComp key={i} item={item} />
+                                                {userProducts.map((item, i) => (
+                                                    <ProductComp key={i} item={item} />
                                                 ))}
                                             </>
                                         }
                                         {active === 'pending' &&
                                             <>
-                                                {pendingTools.length > 0 ?
+                                                {pendingProducts.length > 0 ?
                                                     <>
-                                                        {pendingTools.map((item, i) => (
-                                                            <AdminToolComp key={i} item={item} />
+                                                        {pendingProducts.map((item, i) => (
+                                                            <ProductComp key={i} item={item} />
                                                         ))}
                                                     </>
                                                     :
@@ -108,10 +107,10 @@ const AdminTools = () => {
                                         }
                                         {active === 'approved' &&
                                             <>
-                                                {approvedTools.length > 0 ?
+                                                {approvedProducts.length > 0 ?
                                                     <>
-                                                        {approvedTools.map((item, i) => (
-                                                            <AdminToolComp key={i} item={item} />
+                                                        {approvedProducts.map((item, i) => (
+                                                            <ProductComp key={i} item={item} />
                                                         ))}
                                                     </>
                                                     :
@@ -121,10 +120,10 @@ const AdminTools = () => {
                                         }
                                         {active === 'declined' &&
                                             <>
-                                                {declinedTools.length > 0 ?
+                                                {declinedProducts.length > 0 ?
                                                     <>
-                                                        {declinedTools.map((item, i) => (
-                                                            <AdminToolComp key={i} item={item} />
+                                                        {declinedProducts.map((item, i) => (
+                                                            <ProductComp key={i} item={item} />
                                                         ))}
                                                     </>
                                                     :
@@ -135,14 +134,14 @@ const AdminTools = () => {
                                     </div>
                                 </>
                                 :
-                                <div className="text-gray-400 text-center">No record found...</div>
+                                <div className="w-full text-gray-400 text-center">No record found...</div>
                             }
                         </>
                     }
                 </div>
             </div>
-        </AdminToolsLayout>
+        </ProductsLayout>
     )
 }
 
-export default AdminTools
+export default AllProducts

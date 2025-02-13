@@ -3,11 +3,11 @@ import { Link, useLocation } from 'react-router-dom'
 import AdminPageLayout from './AdminPageLayout'
 
 const profitToolsLinks = [
-    { path: 'orders', url: '/admin/profit_tools/orders' },
-    { path: 'tools', url: '/admin/profit_tools/all_tools' },
+    { path: 'orders', url: '/admin/products/orders' },
+    { path: 'products', url: '/admin/products/all' },
 ]
 
-const AdminToolsLayout = ({ children }) => {
+const AdminProductsLayout = ({ children }) => {
     const location = useLocation()
 
     return (
@@ -24,4 +24,4 @@ const AdminToolsLayout = ({ children }) => {
     )
 }
 
-export default AdminToolsLayout
+export default AdminProductsLayout

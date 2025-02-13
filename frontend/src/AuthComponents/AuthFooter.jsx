@@ -25,16 +25,16 @@ const mainIcons = [
         main: '/exchange'
     },
     {
-        name: 'gift cards',
+        name: 'giftcards',
         symbol: HiGift,
         url: '/user/giftcards/sell',
         main: '/giftcards'
     },
     {
-        name: 'profit tools',
+        name: 'products',
         symbol: CgToolbox,
-        url: '/user/profit_tools/create',
-        main: '/profit_tools'
+        url: '/user/products/create',
+        main: '/products'
     },
     {
         name: 'bank withdrawal',

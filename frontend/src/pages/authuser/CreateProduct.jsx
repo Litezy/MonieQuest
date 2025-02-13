@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react'
 import { SlClock } from "react-icons/sl";
 import { FiUploadCloud } from 'react-icons/fi'
 import { Link } from 'react-router-dom';
-import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout';
 import { ErrorAlert } from '../../utils/pageUtils';
 import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
@@ -11,12 +10,13 @@ import FormInput from '../../utils/FormInput';
 import { useAtom } from 'jotai';
 import { BANK } from '../../services/store';
 import { Apis, AuthPostApi } from '../../services/API';
+import ProductsLayout from '../../AuthComponents/ProductsLayout';
 
 const allCategories = [
   'AI Tool', 'Creative Tool', 'Productivity Tool', 'Business Resource', 'Learning and Skill Development', 'Media Generator', 'Automation and Utility Tool', 'Tech and Software Solution', 'eBooks and Written Guide'
 ]
 
-const CreateTools = () => {
+const CreateProduct = () => {
   const [bank] = useAtom(BANK)
   const [screen, setScreen] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -33,7 +33,7 @@ const CreateTools = () => {
     video_link: '',
     contact_detail: ''
   })
-  const [toolImage, setToolImage] = useState({
+  const [productImage, setProductImage] = useState({
     img: null,
     image: null
   })
@@ -52,7 +52,7 @@ const CreateTools = () => {
       imgref.current.value = null
       return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
     }
-    setToolImage({
+    setProductImage({
       img: URL.createObjectURL(file),
       image: file
     })
@@ -73,10 +73,10 @@ const CreateTools = () => {
     if (form.category.length < 1) return ErrorAlert('Choose a category')
     if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2 || !form.video_link || !form.contact_detail || !form.bank_name || !form.account_name || !form.account_number) return ErrorAlert('Enter all fields')
     if (isNaN(form.price)) return ErrorAlert('Price amount must be a number')
-    if (!toolImage.image) return ErrorAlert('Upload profit tool image')
+    if (!productImage.image) return ErrorAlert('Upload profit tool image')
 
     const formbody = new FormData()
-    formbody.append('image', toolImage.image)
+    formbody.append('image', productImage.image)
     formbody.append('title', form.title)
     form.category.forEach(ele => {
       formbody.append('category', ele)
@@ -93,7 +93,7 @@ const CreateTools = () => {
 
     setLoading(true)
     try {
-      const response = await AuthPostApi(Apis.profitTools.submit_tool, formbody)
+      const response = await AuthPostApi(Apis.product.submit_product, formbody)
       if (response.status === 200) {
         setScreen(3)
       } else {
@@ -124,7 +124,7 @@ const CreateTools = () => {
   }
 
   return (
-    <ProfitToolsLayout>
+    <ProductsLayout>
       <div className='w-11/12 mx-auto'>
         {loading &&
           <ModalLayout clas={`w-11/12 mx-auto`}>
@@ -137,7 +137,7 @@ const CreateTools = () => {
         {screen === 1 &&
           <div className='max-w-2xl mx-auto h-fit p-6 border border-gray-400'>
             <div className='flex flex-col gap-4'>
-              <div className='md:text-3xl text-2xl uppercase border-b-2 w-fit font-bold'>submit your tools</div>
+              <div className='md:text-3xl text-2xl uppercase border-b-2 w-fit font-bold'>submit your products</div>
               <div>If you have a tool, resource, or guide that could benefit others, share it with Us! Each
                 submission undergoes a quality review, and once approved, you’ll get paid. Your tool will then
                 be featured on our platform for others to discover and use.</div>
@@ -199,7 +199,7 @@ const CreateTools = () => {
                 <div className='flex flex-col gap-2'>
                   <div className='flex gap-3 font-bold text-lg text-lightgreen'>
                     <span>1.</span>
-                    <span>Pick the Type of Tool or eBook
+                    <span>Pick the Type of Product or eBook
                     </span>
                   </div>
                   <div className='text-sm'>(Choose the categories that best describes your submission)</div>
@@ -241,9 +241,9 @@ const CreateTools = () => {
                   <FormInput formtype='textarea' placeholder='Enter a key feature' name='feature1' value={form.feature1} onChange={formHandler} className='!rounded-none !h-20' />
                   <FormInput formtype='textarea' placeholder='Enter key feature2' name='feature2' value={form.feature2} onChange={formHandler} className='!rounded-none !h-20' />
                   <label className='cursor-pointer mt-2'>
-                    {toolImage.img ?
+                    {productImage.img ?
                       <div className='relative'>
-                        <img src={toolImage.img} alt={toolImage.img} className='h-56 w-full object-cover object-center'></img>
+                        <img src={productImage.img} alt={productImage.img} className='h-56 w-full object-cover object-center'></img>
                         <div className="absolute top-0 -right-3 main font-bold">
                           <FaEdit className='text-2xl text-lightgreen' />
                         </div>
@@ -302,8 +302,8 @@ const CreateTools = () => {
           </div>
         }
       </div>
-    </ProfitToolsLayout>
+    </ProductsLayout>
   )
 }
 
-export default CreateTools
+export default CreateProduct

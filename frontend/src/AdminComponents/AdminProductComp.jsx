@@ -3,7 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { currencySign, MoveToTop } from '../utils/pageUtils'
 
-const AdminToolComp = ({ item }) => {
+const AdminProductComp = ({ item }) => {
     let categories = []
     if (Object.values(item).length !== 0) {
         categories = JSON.parse(item?.category)
@@ -61,4 +61,4 @@ const AdminToolComp = ({ item }) => {
     )
 }
 
-export default AdminToolComp
+export default AdminProductComp

@@ -2,7 +2,7 @@ import moment from 'moment'
 import React from 'react'
 import { currencySign } from '../utils/pageUtils'
 
-const ToolComp = ({ item }) => {
+const ProductComp = ({ item }) => {
     let categories = []
     if (Object.values(item).length !== 0) {
         categories = JSON.parse(item?.category)
@@ -55,4 +55,4 @@ const ToolComp = ({ item }) => {
     )
 }
 
-export default ToolComp
+export default ProductComp

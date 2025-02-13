@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import AdminToolsLayout from '../../AdminComponents/AdminToolsLayout'
 import { GoArrowUpRight } from 'react-icons/go'
 import ModalLayout from '../../utils/ModalLayout'
 import moment from 'moment'
 import { currencySign } from '../../utils/pageUtils'
-import ToolsOrdersModal from '../../AdminComponents/ToolsOrdersModal'
 import { Apis, AuthGetApi } from '../../services/API'
+import AdminProductsLayout from '../../AdminComponents/AdminProductLayout'
+import ProductsOrdersModal from '../../AdminComponents/ProductOrdersModal'
 
 
-const AdminToolsOrders = () => {
-    const [allToolsOrders, setAllToolsOrders] = useState([])
+const AdminProductsOrders = () => {
+    const [productOrders, setProductOrders] = useState([])
     const [modal, setModal] = useState(false)
     const [selected, setSelected] = useState({})
     const [datatLoading, setDataLoading] = useState(true)
 
     useEffect(() => {
-        const FetchAllToolsOrders = async () => {
+        const FetchProductOrders = async () => {
             try {
-                const response = await AuthGetApi(Apis.admin.all_tools_orders)
+                const response = await AuthGetApi(Apis.admin.all_products_orders)
                 if (response.status === 200) {
-                    setAllToolsOrders(response.msg)
+                    setProductOrders(response.msg)
                 }
             } catch (error) {
                 //
@@ -27,11 +27,11 @@ const AdminToolsOrders = () => {
                 setDataLoading(false)
             }
         }
-        FetchAllToolsOrders()
+        FetchProductOrders()
     }, [])
 
     return (
-        <AdminToolsLayout>
+        <AdminProductsLayout>
             <div className='w-11/12 mx-auto'>
                 {datatLoading ?
                     <div className='flex flex-col gap-10'>
@@ -59,15 +59,15 @@ const AdminToolsOrders = () => {
                             <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 scroll rounded-md`} setModal={setModal}>
                                 <div className="w-full p-5 lg:p-10 bg-primary">
                                     <div className="flex items-center justify-between">
-                                        <ToolsOrdersModal selected={selected} />
+                                        <ProductsOrdersModal selected={selected} />
                                     </div>
                                     <button className='mt-5 w-full text-center bg-red-600 py-2 rounded-md' onClick={() => setModal(false)} >close</button>
                                 </div>
                             </ModalLayout>
                         }
-                        {allToolsOrders.length > 0 ?
+                        {productOrders.length > 0 ?
                             <div className='flex flex-col gap-5'>
-                                {allToolsOrders.map((item, i) => (
+                                {productOrders.map((item, i) => (
                                     <div key={i}>
                                         <div onClick={() => { setModal(true); setSelected(item) }} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2">
                                             <div className="flex items-start gap-2 lg:gap-5 w-fit lg:w-full">
@@ -97,8 +97,8 @@ const AdminToolsOrders = () => {
                     </div>
                 }
             </div>
-        </AdminToolsLayout>
+        </AdminProductsLayout>
     )
 }
 
-export default AdminToolsOrders
+export default AdminProductsOrders

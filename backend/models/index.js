@@ -17,11 +17,11 @@ db.Sequelize = Sequelize
 db.users = require('./userModel')(sequelize, DataTypes)
 db.wallets = require('./walletModel')(sequelize, DataTypes)
 db.notifications = require('./notificationModel')(sequelize, DataTypes)
-db.profitTools = require('./profitToolsModel')(sequelize, DataTypes)
+db.products = require('./productModel')(sequelize, DataTypes)
 db.airdrops = require('./airdropModel')(sequelize, DataTypes)
 db.blogs = require('./blogModel')(sequelize, DataTypes)
 db.kyc = require('./kycModel')(sequelize, DataTypes)
-db.toolsOrders = require('./toolOrderModel')(sequelize, DataTypes)
+db.productOrders = require('./productOrderModel')(sequelize, DataTypes)
 db.banks = require('./bankModel')(sequelize, DataTypes)
 db.utils = require('./utilsModel')(sequelize, DataTypes)
 db.exchangeBuys = require(`./exchangeBuyModel`)(sequelize, DataTypes)
@@ -38,7 +38,7 @@ db.users.hasMany(db.withdrawals, { foreignKey: 'userid', as: "user_withdrawals" 
 db.users.hasOne(db.wallets, { foreignKey: 'user', as: "user_wallets" })
 db.users.hasOne(db.banks, { foreignKey: 'user', as: "user_banks" })
 db.users.hasOne(db.kyc, { foreignKey: 'user', as: "user_kycs" })
-db.users.hasMany(db.profitTools, { foreignKey: 'user', as: "user_tools" })
+db.users.hasMany(db.products, { foreignKey: 'user', as: "user_products" })
 db.users.hasMany(db.blogs, { foreignKey: 'user', as: "user_blogs" })
 
 // One to One relationships
@@ -49,7 +49,7 @@ db.withdrawals.belongsTo(db.users, { foreignKey: 'userid', as: "user_withdrawal"
 db.wallets.belongsTo(db.users, { foreignKey: 'user', as: "user_wallet" })
 db.banks.belongsTo(db.users, { foreignKey: 'user', as: "user_bank" })
 db.kyc.belongsTo(db.users, { foreignKey: 'user', as: "user_kyc" })
-db.profitTools.belongsTo(db.users, { foreignKey: 'user', as: "tool_user" })
+db.products.belongsTo(db.users, { foreignKey: 'user', as: "product_user" })
 db.blogs.belongsTo(db.users, { foreignKey: 'user', as: "blog_user" })
 
 db.sequelize.sync({ force: false }).then(() => console.log('Tables synced'))

@@ -1,68 +1,68 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import ProfitToolsLayout from '../../AuthComponents/ProfitToolsLayout'
-import ToolComp from '../../AuthComponents/ToolComp';
 import { CiSearch } from 'react-icons/ci';
 import FormInput from '../../utils/FormInput';
 import { Apis, AuthGetApi } from '../../services/API';
+import AdminProductsLayout from '../../AdminComponents/AdminProductLayout';
+import AdminProductComp from '../../AdminComponents/AdminProductComp';
 
 
-const ProfitTools = () => {
+const AdminAllProducts = () => {
     const tags = ['all', 'pending', 'approved', 'declined']
     const [active, setActive] = useState(tags[0])
     const [search, setSearch] = useState('')
-    const [staticData, setStaticData] = useState([])
-    const [allTools, setAllTools] = useState([])
     const [dataLoading, setDataLoading] = useState(true)
+    const [staticData, setStaticData] = useState([])
+    const [allProducts, setAllProducts] = useState([])
 
     useEffect(() => {
-        const FetchUserTools = async () => {
+        const FetchAllProducts = async () => {
             try {
-                const response = await AuthGetApi(Apis.profitTools.user_tools)
+                const response = await AuthGetApi(Apis.admin.all_products)
                 if (response.status === 200) {
                     setStaticData(response.msg)
-                    setAllTools(response.msg)
+                    setAllProducts(response.msg)
                 }
-
             } catch (error) {
                 //
             } finally {
                 setDataLoading(false)
             }
         }
-        FetchUserTools()
+        FetchAllProducts()
     }, [])
 
-    const pendingTools = useMemo(() => {
-        return allTools.filter((ele) => ele.status === 'pending');
-    }, [allTools])
-    const approvedTools = useMemo(() => {
-        return allTools.filter((ele) => ele.status === 'approved');
-    }, [allTools])
-    const declinedTools = useMemo(() => {
-        return allTools.filter((ele) => ele.status === 'declined');
-    }, [allTools])
 
-    const filterTools = () => {
+    const pendingProducts = useMemo(() => {
+        return allProducts.filter((ele) => ele.status === 'pending');
+    }, [allProducts])
+    const approvedProducts = useMemo(() => {
+        return allProducts.filter((ele) => ele.status === 'approved');
+    }, [allProducts])
+    const declinedProducts = useMemo(() => {
+        return allProducts.filter((ele) => ele.status === 'declined');
+    }, [allProducts])
+
+    const FilterProducts = () => {
         const mainData = staticData
         if (search.length > 1) {
             const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
-            setAllTools(filtered)
+            setAllProducts(filtered)
         } else {
-            setAllTools(mainData)
+            setAllProducts(mainData)
         }
     }
 
     return (
-        <ProfitToolsLayout>
+        <AdminProductsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
-                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={filterTools} />
+                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterProducts} />
                     <div className="absolute top-5 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>
                 </div>
                 <div className="grid md:grid-cols-6 grid-cols-1 gap-2 items-center mt-4">
-                    <div className="text-zinc-300 font-semibold capitalize text-sm lg:text-base col-span-1">Sort tools by:</div>
+                    <div className="text-zinc-300 font-semibold capitalize text-sm lg:text-base col-span-1">Sort Products by:</div>
                     <div className='md:col-span-5 col-span-1'>
                         <div className="grid grid-cols-3 lg:grid-cols-4 gap-3 items-center lg:w-11/12 w-full mx-auto">
                             {tags.map((tag, i) => {
@@ -82,22 +82,22 @@ const ProfitTools = () => {
                         </div>
                         :
                         <>
-                            {allTools.length > 0 ?
+                            {allProducts.length > 0 ?
                                 <>
                                     <div className='flex flex-col gap-4'>
                                         {active === 'all' &&
                                             <>
-                                                {allTools.map((item, i) => (
-                                                    <ToolComp key={i} item={item} />
+                                                {allProducts.map((item, i) => (
+                                                    <AdminProductComp key={i} item={item} />
                                                 ))}
                                             </>
                                         }
                                         {active === 'pending' &&
                                             <>
-                                                {pendingTools.length > 0 ?
+                                                {pendingProducts.length > 0 ?
                                                     <>
-                                                        {pendingTools.map((item, i) => (
-                                                            <ToolComp key={i} item={item} />
+                                                        {pendingProducts.map((item, i) => (
+                                                            <AdminProductComp key={i} item={item} />
                                                         ))}
                                                     </>
                                                     :
@@ -107,10 +107,10 @@ const ProfitTools = () => {
                                         }
                                         {active === 'approved' &&
                                             <>
-                                                {approvedTools.length > 0 ?
+                                                {approvedProducts.length > 0 ?
                                                     <>
-                                                        {approvedTools.map((item, i) => (
-                                                            <ToolComp key={i} item={item} />
+                                                        {approvedProducts.map((item, i) => (
+                                                            <AdminProductComp key={i} item={item} />
                                                         ))}
                                                     </>
                                                     :
@@ -120,10 +120,10 @@ const ProfitTools = () => {
                                         }
                                         {active === 'declined' &&
                                             <>
-                                                {declinedTools.length > 0 ?
+                                                {declinedProducts.length > 0 ?
                                                     <>
-                                                        {declinedTools.map((item, i) => (
-                                                            <ToolComp key={i} item={item} />
+                                                        {declinedProducts.map((item, i) => (
+                                                            <AdminProductComp key={i} item={item} />
                                                         ))}
                                                     </>
                                                     :
@@ -134,14 +134,14 @@ const ProfitTools = () => {
                                     </div>
                                 </>
                                 :
-                                <div className="w-full text-gray-400 text-center">No record found...</div>
+                                <div className="text-gray-400 text-center">No record found...</div>
                             }
                         </>
                     }
                 </div>
             </div>
-        </ProfitToolsLayout>
+        </AdminProductsLayout>
     )
 }
 
-export default ProfitTools
+export default AdminAllProducts

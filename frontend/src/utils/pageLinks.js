@@ -18,8 +18,6 @@ import SingleProductPage from "../pages/general/SingleProductPage";
 import TermsPage from "../pages/general/TermsPage";
 import VerifyAccount from "../pages/general/VerifyAccount";
 import Notification from "../pages/authuser/Notification";
-import CreateTools from "../pages/authuser/CreateTools";
-import ProfitTools from "../pages/authuser/ProfitTools";
 import Leaderboards from "../pages/authuser/Leaderboards";
 import FAQS from "../pages/general/FAQS";
 import BankWithdrawal from "../pages/authuser/BankWithdrawal";
@@ -30,13 +28,11 @@ import SingleComment from "../pages/general/SingleComment";
 import UserKYC from "../pages/authuser/UserKYC";
 import AdminBankWithdrawals from "../pages/authadmin/AdminBankWithdrawals";
 import AdminGiftCards from "../pages/authadmin/AdminGiftCards";
-import AdminTools from "../pages/authadmin/AdminTools";
 import AdminProfile from "../pages/authadmin/AdminProfile";
 import AdminNotification from "../pages/authadmin/AdminNotification";
 import AdminLeaderboards from "../pages/authadmin/AdminLeaderboards";
 import AdminDashboard from "../pages/authadmin/AdminDashboard";
 import AdminAllUsers from "../pages/authadmin/AdminAllUsers";
-import AdminSingleTool from "../pages/authadmin/AdminSingleTool";
 import AdminAllAirdrops from "../pages/authadmin/AdminAllAirdrops";
 import AdminCreateAirdrops from "../pages/authadmin/AdminCreateAirdrops";
 import AdminAllBlogs from "../pages/authadmin/AdminAllBlogs";
@@ -46,7 +42,6 @@ import AdminCryptoBuyOrders from "../pages/authadmin/AdminCryptoBuyOrders";
 import AdminCryptoSellOrders from "../pages/authadmin/AdminCryptoSellOrders";
 import SingleBuyOrder from "../pages/authadmin/SingleBuyOrder";
 import SingleSellOrder from "../pages/authadmin/SingleSellOrder";
-import AdminToolsOrders from "../pages/authadmin/AdminToolsOrders";
 import GiftCardSingleOrder from "../pages/authadmin/GiftCardSingleOrder";
 import AdminTransHistory from "../pages/authadmin/AdminTransHistory";
 import AdminSingleWithdrawal from "../pages/authadmin/AdminSingleWithdrawal";
@@ -63,6 +58,11 @@ import UserBanks from "../pages/authadmin/UserBanks";
 import UserKycApplications from "../pages/authadmin/UserKycApplications";
 import VerifiedUsers from "../pages/authadmin/VerifiedUsers";
 import AdminCreateUsers from "../pages/authadmin/AdminCreateUsers";
+import AllProducts from "../pages/authuser/AllProducts";
+import CreateProduct from "../pages/authuser/CreateProduct";
+import AdminProductsOrders from "../pages/authadmin/AdminProductsOrders";
+import AdminAllProducts from "../pages/authadmin/AdminAllProducts";
+import AdminSingleProduct from "../pages/authadmin/AdminSingleProduct";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -92,13 +92,13 @@ export const AuthPagesLinks = [
     { path: '/user/dashboard', component: Dashboard },
     { path: '/user/giftcards/sell', component: SellGiftcard },
     { path: '/user/giftcards/orders', component: GiftCardOrders },
-    { path: '/user/giftcards/orders/:id', component: OneGiftcardOrder},
+    { path: '/user/giftcards/orders/:id', component: OneGiftcardOrder },
     { path: '/user/exchange/buy', component: BuyCrypto },
     { path: '/user/exchange/orders', component: BuyOrdersHistory },
     { path: '/user/exchange/orders/:id/:tag', component: OrderPage },
     { path: '/user/exchange/sell', component: SellCrypto },
-    { path: '/user/profit_tools/create', component: CreateTools },
-    { path: '/user/profit_tools/all_tools', component: ProfitTools },
+    { path: '/user/products/create', component: CreateProduct },
+    { path: '/user/products/all', component: AllProducts },
     { path: '/user/profile', component: Profile },
     { path: '/user/transactions_history', component: TransHistory },
     { path: '/user/notifications', component: Notification },
@@ -121,9 +121,9 @@ export const AdminPagesLinks = [
     { path: '/admin/exchange/sell_orders', component: AdminCryptoSellOrders },
     { path: '/admin/giftcards/orders', component: AdminGiftCards },
     { path: '/admin/giftcards/orders/:id', component: GiftCardSingleOrder },
-    { path: '/admin/profit_tools/orders', component: AdminToolsOrders },
-    { path: '/admin/profit_tools/all_tools', component: AdminTools },
-    { path: '/admin/profit_tools/:id/:slug', component: AdminSingleTool },
+    { path: '/admin/products/orders', component: AdminProductsOrders },
+    { path: '/admin/products/all', component: AdminAllProducts },
+    { path: '/admin/products/:id/:slug', component: AdminSingleProduct },
     { path: '/admin/bank_withdrawals', component: AdminBankWithdrawals },
     { path: '/admin/bank_withdrawals/:id', component: AdminSingleWithdrawal },
     { path: '/admin/profile', component: AdminProfile },

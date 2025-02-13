@@ -58,24 +58,24 @@ const admin_urls = {
     single_airdrop: admin + 'single-airdrop',
     update_airdrop: admin + 'update-airdrop',
     category_airdrops: admin + 'category-airdrops',
-    all_tools: admin + 'all-profit_tools',
-    single_tool: admin + 'single-profit_tool',
-    update_tool: admin + 'update-profit_tool',
-    listed_tools: admin + 'listed-profit_tools',
-    all_tools_orders: admin + 'all-tools_orders',
+    all_products: admin + 'all-products',
+    single_product: admin + 'single-product',
+    update_product: admin + 'update-product',
+    listed_products: admin + 'listed-products',
+    all_products_orders: admin + 'all-products-orders',
     get_dashboard: admin + 'dashboard',
     update_kyc: admin + 'update-kyc',
-    user_details: admin+'get_users_details',
-    create_user: admin +'create_user',
+    user_details: admin + 'get_users_details',
+    create_user: admin + 'create_user',
     create_blog: admin + 'create-blog',
     update_blog: admin + 'update-blog',
     all_blogs: admin + 'all-blogs',
     single_blog: admin + 'single-blog',
     feature_blogs: admin + 'feature-blogs',
-    cryptobuy_orders: admin +'get_buy_orders',
-    cryptosell_orders: admin +'get_sell_orders',
-    single_buy:admin +'get_single_buy',
-    single_sell:admin +'get_single_sell',
+    cryptobuy_orders: admin + 'get_buy_orders',
+    cryptosell_orders: admin + 'get_sell_orders',
+    single_buy: admin + 'get_single_buy',
+    single_sell: admin + 'get_single_sell',
     confirm_buy: admin + 'confirm_buy',
     confirm_sell: admin + 'confirm_sell',
     get_giftcard_orders: admin + 'get_giftcard_orders',
@@ -83,13 +83,13 @@ const admin_urls = {
     credit_gift_customer: admin + 'credit_gift_customer'
 }
 
-const profitTools = 'api/profit_tools/'
-const profit_tools_urls = {
-    submit_tool: profitTools + 'submit-profit_tool',
-    user_tools: profitTools + 'user-profit_tools',
-    add_rating: profitTools + 'add-rating',
-    get_admin_bank: profitTools + 'get-admin-bank',
-    place_tool_order: profitTools + 'place-tool-order'
+const products = 'api/product/'
+const products_urls = {
+    submit_product: products + 'submit-product',
+    user_products: products + 'user-products',
+    add_rating: products + 'add-rating',
+    get_admin_bank: products + 'get-admin-bank',
+    place_products_order: products + 'place-products-order'
 }
 
 export const Apis = {
@@ -97,7 +97,7 @@ export const Apis = {
     notification: notification_urls,
     transaction: trans_url,
     admin: admin_urls,
-    profitTools: profit_tools_urls
+    product: products_urls
 }
 
 

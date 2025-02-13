@@ -25,9 +25,9 @@ const listOptions = [
     "listed", "unlisted"
 ]
 
-const AdminSingleTool = () => {
+const AdminSingleProduct = () => {
     const { id } = useParams()
-    const [singleTool, setSingleTool] = useState({})
+    const [singleProduct, setSingleProduct] = useState({})
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
@@ -43,7 +43,7 @@ const AdminSingleTool = () => {
         discount_duration: '',
         discount_duration_type: '',
     })
-    const [toolImage, setToolImage] = useState({
+    const [productImage, setProductImage] = useState({
         img: null,
         image: null
     })
@@ -55,11 +55,11 @@ const AdminSingleTool = () => {
             [event.target.name]: event.target.value
         })
     }
-    const FetchSingleTool = useCallback(async () => {
+    const FetchSingleProduct = useCallback(async () => {
         try {
-            const response = await AuthGetApi(`${Apis.admin.single_tool}/${id}`)
+            const response = await AuthGetApi(`${Apis.admin.single_product}/${id}`)
             if (response.status === 200) {
-                setSingleTool(response.msg)
+                setSingleProduct(response.msg)
                 setForm({
                     ...form,
                     title: response.msg.title,
@@ -75,8 +75,8 @@ const AdminSingleTool = () => {
                     discount_duration: response.msg.discount_duration || '',
                     discount_duration_type: response.msg.discount_duration_type || durationTypes[0]
                 })
-                setToolImage({
-                    ...toolImage,
+                setProductImage({
+                    ...productImage,
                     img: `${imageurl}/tools/${response.msg.image}`
                 })
             }
@@ -88,8 +88,8 @@ const AdminSingleTool = () => {
     }, [])
 
     useEffect(() => {
-        FetchSingleTool()
-    }, [FetchSingleTool])
+        FetchSingleProduct()
+    }, [FetchSingleProduct])
 
     const handleUpload = (event) => {
         const file = event.target.files[0]
@@ -97,7 +97,7 @@ const AdminSingleTool = () => {
             imgRef.current.value = null
             return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
         }
-        setToolImage({
+        setProductImage({
             img: URL.createObjectURL(file),
             image: file
         })
@@ -133,8 +133,8 @@ const AdminSingleTool = () => {
         if (isNaN(form.price) || isNaN(form.discount_percentage) || isNaN(form.discount_duration)) return ErrorAlert('Price, discount percentage and discount duration must be valid numbers')
 
         const formbody = new FormData()
-        formbody.append('tool_id', singleTool.id)
-        formbody.append('image', toolImage.image)
+        formbody.append('product_id', singleProduct.id)
+        formbody.append('image', productImage.image)
         formbody.append('title', form.title)
         form.category.forEach(ele => {
             formbody.append('category', ele)
@@ -151,10 +151,10 @@ const AdminSingleTool = () => {
 
         setLoading(true)
         try {
-            const response = await AuthPutApi(Apis.admin.update_tool, formbody)
+            const response = await AuthPutApi(Apis.admin.update_product, formbody)
             if (response.status === 200) {
                 SuccessAlert(response.msg)
-                FetchSingleTool()
+                FetchSingleProduct()
             } else {
                 ErrorAlert(response.msg)
             }
@@ -196,9 +196,9 @@ const AdminSingleTool = () => {
                     <form className='mt-10 flex flex-col gap-10' onSubmit={Submit}>
                         <div className='grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-6'>
                             <label className='cursor-pointer w-full'>
-                                {toolImage.img ?
+                                {productImage.img ?
                                     <div className='relative'>
-                                        <img src={toolImage.img} alt={toolImage.img} className='w-full h-72 object-cover object-center'></img>
+                                        <img src={productImage.img} alt={productImage.img} className='w-full h-72 object-cover object-center'></img>
                                         <div className="absolute top-0 -right-3 main font-bold">
                                             <FaEdit className='text-2xl text-lightgreen' />
                                         </div>
@@ -261,30 +261,30 @@ const AdminSingleTool = () => {
                                 <div className='flex flex-col gap-1 w-full'>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Bank Name:</div>
-                                        <div className="">{singleTool?.bank_name}</div>
+                                        <div className="">{singleProduct?.bank_name}</div>
                                     </div>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Account number:</div>
                                         <div className="flex items-center gap-2">
-                                            <div className="">{singleTool?.account_number}</div>
-                                            <FaCopy onClick={() => copyFunction(singleTool?.account_number)} className='text-ash text-sm cursor-pointer' />
+                                            <div className="">{singleProduct?.account_number}</div>
+                                            <FaCopy onClick={() => copyFunction(singleProduct?.account_number)} className='text-ash text-sm cursor-pointer' />
                                         </div>
                                     </div>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Account name:</div>
-                                        <div className="">{singleTool?.account_name}</div>
+                                        <div className="">{singleProduct?.account_name}</div>
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-1 w-full border-t pt-2'>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Video link:</div>
-                                        <a href={singleTool?.video_link} className="underline">{singleTool?.video_link}</a>
+                                        <a href={singleProduct?.video_link} className="underline">{singleProduct?.video_link}</a>
                                     </div>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Contact Details:</div>
                                         <div className="flex items-center gap-2">
-                                            <div className="">{singleTool?.contact_detail}</div>
-                                            <FaCopy onClick={() => copyFunction(singleTool?.contact_detail)} className='text-ash text-sm cursor-pointer' />
+                                            <div className="">{singleProduct?.contact_detail}</div>
+                                            <FaCopy onClick={() => copyFunction(singleProduct?.contact_detail)} className='text-ash text-sm cursor-pointer' />
                                         </div>
                                     </div>
                                 </div>
@@ -327,4 +327,4 @@ const AdminSingleTool = () => {
     )
 }
 
-export default AdminSingleTool
+export default AdminSingleProduct

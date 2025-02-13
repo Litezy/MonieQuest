@@ -40,8 +40,8 @@ const mainIcons = [
     {
         name: 'profit tools',
         symbol: CgToolbox,
-        url: '/admin/profit_tools/orders',
-        main: '/profit_tools'
+        url: '/admin/products/orders',
+        main: '/products'
     },
 ]
 
