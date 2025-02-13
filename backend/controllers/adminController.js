@@ -131,7 +131,7 @@ exports.CreateAirdrop = async (req, res) => {
 exports.AllOpenAirdrops = async (req, res) => {
     try {
         const airdrops = await Airdrop.findAll({
-            where: { status: 'open' },
+            where: { status: ['open'] },
             order: [['createdAt', 'DESC']]
         })
 
