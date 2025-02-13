@@ -88,7 +88,7 @@ const Blogs = () => {
                                             </div>
                                             <div className="w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
                                                 {airdropBlogs.map((item, i) => (
-                                                    <BlogDiv key={i} item={item} i={i} dataLoading={dataLoading} />
+                                                    <BlogDiv key={i} item={item} />
                                                 ))}
                                             </div>
                                         </div>
@@ -104,7 +104,7 @@ const Blogs = () => {
                                             </div>
                                             <div className="w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
                                                 {tradingBlogs.map((item, i) => (
-                                                    <BlogDiv key={i} item={item} i={i} />
+                                                    <BlogDiv key={i} item={item} />
                                                 ))}
                                             </div>
                                         </div>
@@ -120,7 +120,7 @@ const Blogs = () => {
                                             </div>
                                             <div className="w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
                                                 {personalFinanceBlogs.map((item, i) => (
-                                                    <BlogDiv key={i} item={item} i={i} />
+                                                    <BlogDiv key={i} item={item} />
                                                 ))}
                                             </div>
                                         </div>

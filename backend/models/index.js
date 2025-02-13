@@ -28,6 +28,7 @@ db.exchangeBuys = require(`./exchangeBuyModel`)(sequelize, DataTypes)
 db.exchangeSells = require(`./exchangeSellModel`)(sequelize, DataTypes)
 db.giftCards = require(`./giftCardModel`)(sequelize, DataTypes)
 db.withdrawals = require(`./withdrawalModel`)(sequelize, DataTypes)
+db.comments = require(`./commentModel`)(sequelize, DataTypes)
 
 
 //One to Many relationships
@@ -40,6 +41,7 @@ db.users.hasOne(db.banks, { foreignKey: 'user', as: "user_banks" })
 db.users.hasOne(db.kyc, { foreignKey: 'user', as: "user_kycs" })
 db.users.hasMany(db.products, { foreignKey: 'user', as: "user_products" })
 db.users.hasMany(db.blogs, { foreignKey: 'user', as: "user_blogs" })
+db.blogs.hasMany(db.comments, { foreignKey: 'blog', as: "blog_comments" })
 
 // One to One relationships
 db.exchangeBuys.belongsTo(db.users, { foreignKey: 'userid', as: "crypto_buyer" })
@@ -51,6 +53,7 @@ db.banks.belongsTo(db.users, { foreignKey: 'user', as: "user_bank" })
 db.kyc.belongsTo(db.users, { foreignKey: 'user', as: "user_kyc" })
 db.products.belongsTo(db.users, { foreignKey: 'user', as: "product_user" })
 db.blogs.belongsTo(db.users, { foreignKey: 'user', as: "blog_user" })
+db.comments.belongsTo(db.blogs, { foreignKey: 'blog', as: "blog_comments" })
 
 db.sequelize.sync({ force: false }).then(() => console.log('Tables synced'))
     .catch((error) => console.log(error))

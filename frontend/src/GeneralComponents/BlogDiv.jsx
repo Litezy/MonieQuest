@@ -6,13 +6,13 @@ import { MoveToTop } from '../utils/pageUtils';
 import { imageurl } from '../services/API';
 import moment from 'moment';
 
-const BlogDiv = ({ item }) => {
+const BlogDiv = ({ item, className }) => {
 
     return (
-        <div className='w-full bg-black rounded-xl p-2'>
-            <Link to={`/blogs/${item.feature}/${item.id}/${item.slug}`} className={`w-full`} onClick={MoveToTop} >
+        <div className={`w-full h-fit bg-black rounded-xl p-2 ${className}`}>
+            <Link to={`/blogs/${item.feature}/${item.id}`} onClick={MoveToTop} >
                 <div className="w-full">
-                    <img src={`${imageurl}/blogs/${item?.image}`} alt="blog image" className="w-full rounded-xl max-h-40 object-cover " />
+                    <img src={`${imageurl}/blogs/${item?.image}`} alt="blog image" className="w-full rounded-xl h-40 object-cover " />
                 </div>
                 <div className="mt-2 flex items-start flex-col gap-3">
                     <div className="text-sm text-gray-400 "><span className='capitalize'>{item?.feature === 'personal_finance' ? 'personal finance' : item?.feature}</span> article</div>

@@ -1,4 +1,4 @@
-const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops } = require('../controllers/adminController')
+const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops, AllRelatedBlogsExceptCurrent } = require('../controllers/adminController')
 const { AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -22,6 +22,7 @@ router.put('/update-blog', AdminMiddleware, UpdateBlog)
 router.get('/all-blogs', AllBlogs)
 router.get('/single-blog/:id', SingleBlog)
 router.get('/feature-blogs/:feature', FeatureBlogs)
+router.get('/related-blogs/:feature/:id', AllRelatedBlogsExceptCurrent)
 router.get('/get_buy_orders', getCryptoBuysOrders)
 router.get('/get_sell_orders', getCryptoSellsOrders)
 router.get('/get_single_buy/:id', getSingleBuyOrder)

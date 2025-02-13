@@ -8,11 +8,8 @@ import { Link, useParams } from 'react-router-dom';
 import { Apis, GetApi, imageurl } from '../../services/API';
 import avatar from '../../assets/images/avatar.svg'
 import moment from 'moment';
-import { ErrorAlert, MoveToSection, } from '../../utils/pageUtils';
-import { PiArrowUpRight } from 'react-icons/pi';
-import { FaUser } from 'react-icons/fa';
-import dummyImg from '../../assets/images/blog1.jpg'
-
+import { ErrorAlert, MoveToSection, MoveToTop, } from '../../utils/pageUtils';
+import BlogDiv from '../../GeneralComponents/BlogDiv';
 
 const parapgraphs = [
     {
@@ -37,21 +34,14 @@ const parapgraphs = [
     },
 ]
 
-    const blogs = new Array(8).fill({
-      feature: 'sample-feature',
-      id: 'sample-id',
-      title: 'Sample Title',
-      description: 'Sample Description',
-      date: 'Sample Date',
-      author: 'Sample Author',
-      category: 'airdrop',
-    });
-
-
 const SingleBlog = () => {
     const { feature, id } = useParams()
     const [singleBlog, setSingleBlog] = useState({})
-    const [dataLoading, setDataLoading] = useState(true)
+    const [relatedBlogs, setRelatedBlogs] = useState([])
+    const [dataLoading, setDataLoading] = useState({
+        single: true,
+        related: true
+    })
     const [form, setForm] = useState({
         username: '',
         email: '',
@@ -75,11 +65,29 @@ const SingleBlog = () => {
             } catch (error) {
                 //
             } finally {
-                setDataLoading(false)
+                setDataLoading({
+                    single: false
+                })
+            }
+        }
+        const FetchRelatedBlogs = async () => {
+            try {
+                const response = await GetApi(`${Apis.admin.related_blogs}/${feature}/${id}`)
+                if (response.status === 200) {
+                    setRelatedBlogs(response.msg)
+                }
+
+            } catch (error) {
+                //
+            } finally {
+                setDataLoading({
+                    related: false
+                })
             }
         }
         FetchSingleBlog()
-    }, [])
+        FetchRelatedBlogs()
+    }, [feature, id])
 
 
     const SubmitComment = (e) => {
@@ -91,7 +99,7 @@ const SingleBlog = () => {
     return (
         <PageLayout>
             <div className='w-full bg-dark py-10 text-white'>
-                {dataLoading ?
+                {dataLoading.single ?
                     <div className='w-11/12 mx-auto'>
                         <div className='flex items-start gap-5 flex-col lg:flex-row animate-pulse'>
                             <div className='flex flex-col gap-16 lg:w-[30%] w-full p-2'>
@@ -208,7 +216,9 @@ const SingleBlog = () => {
                                     )
                                 })}
                             </div>
-                            <button className="mt-5 w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
+                            <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/comments`} onClick={MoveToTop}>
+                                <button className="mt-5 w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
+                            </Link>
                         </div>
                         <form className="w-full p-3 rounded-md bg-primary" onSubmit={SubmitComment}>
                             <div className="text-lg mont">Leave a comment</div>
@@ -237,45 +247,40 @@ const SingleBlog = () => {
                         </form>
                     </div>
                 }
-                <div className="mt-10 w-11/12 mx-auto">
+                <div className="mt-10 w-11/12 mx-auto flex flex-col gap-2">
                     <div className="">You may also like:</div>
-                    <div className="w-full flex items-center gap-3 overflow-x-auto scroll">
-                    {blogs.map((item, i) => (
-                        <div key={i} className="flex-none w-64 bg-black rounded-xl p-2">
-                            <Link
-                                // to={`/blogs/${item.feature}/${item.id}`}
-                                className="w-full"
-                            >
-                                <div className="w-full">
-                                    <img
-                                        src={dummyImg}
-                                        alt="blog"
-                                        className="w-full rounded-xl max-h-40 object-cover"
-                                    />
-                                </div>
-                                <div className="mt-2 flex items-start flex-col gap-3">
-                                    <div className="text-sm text-gray-400">
-                                        <span className="capitalize">{item.category}</span> article
-                                    </div>
-                                    <div className="lg:flex items-center gap-3 justify-between text-sky-400">
-                                        <div className="text-sm w-full capitalize">{item.title}</div>
-                                        <PiArrowUpRight className="text-lg hidden lg:block" />
-                                    </div>
-                                    <div className="flex items-center gap-2 w-full">
-                                        <div>
-                                            <FaUser className="text-2xl text-white" />
-                                        </div>
-                                        <div className="flex flex-col gap-1 text-sm">
-                                            <div className="font-bold capitalize">{item.author}</div>
-                                            <div className="text-xs">{item.date}</div>
+                    {dataLoading.related ?
+                        <div className='w-full flex gap-3 overflow-x-auto scroll'>
+                            {new Array(8).fill(0).map((_, i) => (
+                                <div key={i} className='flex-none w-64 bg-black rounded-xl p-2 animate-pulse'>
+                                    <div className=" bg-gray-500 h-40 rounded-xl w-full"></div>
+                                    <div className="mt-2 flex items-start flex-col gap-3  ">
+                                        <div className=" rounded-sm h-3 w-1/2  bg-gray-500"></div>
+                                        <div className="h-10 bg-gray-500 w-full"></div>
+                                        <div className="flex items-center gap-2 w-full ">
+                                            <div className="bg-gray-500 h-10 w-12 rounded-full"></div>
+                                            <div className="flex flex-col gap-1 w-full">
+                                                <div className="bg-gray-500 w-1/2 h-3"></div>
+                                                <div className="bg-gray-500 w-1/2 h-3"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
+                            ))}
                         </div>
-                    ))}
-                    </div>
-
+                        :
+                        <>
+                            {relatedBlogs.length > 0 ?
+                                <div className="w-full flex items-center gap-3 overflow-x-auto scroll">
+                                    {relatedBlogs.map((item, i) => (
+                                        <BlogDiv item={item} key={i} className={`!w-64 flex-none`} />
+                                    ))}
+                                </div>
+                                :
+                                <div className='mt-2'>No related blogs found...</div>
+                            }
+                        </>
+                    }
                 </div>
             </div>
 

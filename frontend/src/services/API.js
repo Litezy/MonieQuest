@@ -72,6 +72,7 @@ const admin_urls = {
     all_blogs: admin + 'all-blogs',
     single_blog: admin + 'single-blog',
     feature_blogs: admin + 'feature-blogs',
+    related_blogs: admin + 'related-blogs',
     cryptobuy_orders: admin + 'get_buy_orders',
     cryptosell_orders: admin + 'get_sell_orders',
     single_buy: admin + 'get_single_buy',

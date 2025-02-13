@@ -139,7 +139,7 @@ const AirdropsPage = () => {
                 <div className='flex lg:flex-row flex-col lg:gap-8 gap-4 items-center justify-center'>
                   <div className='capitalize font-bold'>filter here:</div>
                   <div className='grid md:grid-cols-4 grid-cols-2 gap-4 items-center'>
-                    <div className='bg-[#ffffff] w-28 h-fit rounded-sm flex justify-between items-center text-[#585858] p-2 font-semibold'>
+                    <div className='bg-[#ffffff] w-28 h-fit rounded-[3px] flex justify-between items-center text-[#585858] p-2 font-semibold'>
                       <span>KYC</span>
                       <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='cursor-pointer'></input>
                     </div>

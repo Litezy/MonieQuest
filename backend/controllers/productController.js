@@ -7,7 +7,7 @@ const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
-const { webURL } = require('../utils/utils')
+const { webURL, nairaSign } = require('../utils/utils')
 const moment = require('moment')
 const blockAndNum = 'abcdefghijklmnopqrstuvwxyz0123456789'
 const { customAlphabet } = require('nanoid')
@@ -172,7 +172,7 @@ exports.ProductOrder = async (req, res) => {
             subject: 'New Order Placed',
             eTitle: `Order placed`,
             eBody: `
-             <div>You have successfully placed an order with the id (#${productOrder.gen_id}) for ${products.length} product(s) purchase and payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
+             <div>You have successfully placed an order with the id (#${productOrder.gen_id}) for ${products.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.total_price} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
             `,
             account: buyer
         })
@@ -184,7 +184,7 @@ exports.ProductOrder = async (req, res) => {
                 await Notification.create({
                     user: ele.id,
                     title: `Product order alert`,
-                    content: `Hello Admin, a new product order with the id (${productOrder.gen_id} has been placed for ${products.length} product(s) purchase and payment made via bank transfer, kindly confirm this transaction.`,
+                    content: `Hello Admin, a new product order with the id (${productOrder.gen_id} has been placed for ${products.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.total_price} payment made via bank transfer, kindly confirm this transaction.`,
                     url: '/admin/products/orders',
                 })
 
@@ -192,7 +192,7 @@ exports.ProductOrder = async (req, res) => {
                     subject: 'Product Order Alert',
                     eTitle: `Product order placed`,
                     eBody: `
-                     <div>Hello Admin, a new product order with the id (#${productOrder.gen_id}) has been placed for ${products.length} product(s) purchase and payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm')}. See more details of this transaction <a href='${webURL}/admin/products/orders' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                     <div>Hello Admin, a new product order with the id (#${productOrder.gen_id}) has been placed for ${products.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.total_price} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm')}. See more details of this transaction <a href='${webURL}/admin/products/orders' style="text-decoration: underline; color: #00fe5e">here</a></div> 
                     `,
                     account: ele
                 })

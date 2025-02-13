@@ -24,7 +24,6 @@ import BankWithdrawal from "../pages/authuser/BankWithdrawal";
 import SingleBlog from "../pages/general/SingleBlog";
 import SingleFeatureBlog from "../pages/general/SingleFeatureBlog";
 import Hiring from "../pages/general/Hiring";
-import SingleComment from "../pages/general/SingleComment";
 import UserKYC from "../pages/authuser/UserKYC";
 import AdminBankWithdrawals from "../pages/authadmin/AdminBankWithdrawals";
 import AdminGiftCards from "../pages/authadmin/AdminGiftCards";
@@ -63,6 +62,7 @@ import CreateProduct from "../pages/authuser/CreateProduct";
 import AdminProductsOrders from "../pages/authadmin/AdminProductsOrders";
 import AdminAllProducts from "../pages/authadmin/AdminAllProducts";
 import AdminSingleProduct from "../pages/authadmin/AdminSingleProduct";
+import BlogComments from "../pages/general/BlogComments";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -83,8 +83,8 @@ export const GeneralPagesLinks = [
     { path: '/faqs', component: FAQS },
     { path: '/privacy_policy', component: PrivacyPolicy },
     { path: '/we_are_hiring', component: Hiring },
-    { path: '/blogs/:feature/:id/:slug', component: SingleBlog },
-    { path: '/blogs/:feature/:id/comment/:commentid', component: SingleComment },
+    { path: '/blogs/:feature/:id', component: SingleBlog },
+    { path: '/blogs/:feature/:id/comments', component: BlogComments },
     { path: '/blogs/:feature', component: SingleFeatureBlog },
 ]
 

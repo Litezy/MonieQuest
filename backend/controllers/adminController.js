@@ -18,8 +18,7 @@ const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
 const moment = require('moment')
-
-// const { sequelize } = require('../models')
+const { Op } = require('sequelize')
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -795,6 +794,23 @@ exports.FeatureBlogs = async (req, res) => {
         return res.json({ status: 400, msg: error.message })
     }
 }
+
+exports.AllRelatedBlogsExceptCurrent = async (req, res) => {
+    try {
+        const { feature, id } = req.params
+        if (!feature || !id) return res.json({ status: 404, msg: `Provide a blog feature and ID` })
+
+        const relatedBlogs = await Blog.findAll({
+            where: { feature, id: { [Op.ne]: id } },
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: relatedBlogs })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
 
 exports.getCryptoBuysOrders = async (req, res) => {
     try {
