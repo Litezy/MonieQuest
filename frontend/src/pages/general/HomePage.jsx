@@ -15,9 +15,9 @@ const HomePage = () => {
   const [dataLoading, setDataLoading] = useState(true)
 
   useEffect(() => {
-    const FetchAllAirdrops = async () => {
+    const FetchAllOpenAirdrops = async () => {
       try {
-        const response = await GetApi(Apis.admin.all_airdrops)
+        const response = await GetApi(Apis.admin.all_open_airdrops)
         if (response.status === 200) {
           setAirdrops(response.msg)
         }
@@ -28,7 +28,7 @@ const HomePage = () => {
         setDataLoading(false)
       }
     }
-    FetchAllAirdrops()
+    FetchAllOpenAirdrops()
   }, [])
 
   const featuredAirdrops = useMemo(() => {

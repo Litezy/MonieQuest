@@ -226,7 +226,7 @@ exports.UpdateAirdrop = async (req, res) => {
             airdrop.video_guide_link = video_guide_link
         }
         if (status) {
-            const statusArray = ["active", "finished"]
+            const statusArray = ["open", "closed"]
             if (!statusArray.includes(status)) return res.json({ status: 404, msg: `Invalid status provided` })
             airdrop.status = status
         }

@@ -10,7 +10,7 @@ const BlogDiv = ({ item }) => {
 
     return (
         <div className='w-full bg-black rounded-xl p-2'>
-            <Link to={`/blogs/${item.feature}/${item.id}`} className={`w-full`} onClick={MoveToTop} >
+            <Link to={`/blogs/${item.feature}/${item.id}/${item.slug}`} className={`w-full`} onClick={MoveToTop} >
                 <div className="w-full">
                     <img src={`${imageurl}/blogs/${item?.image}`} alt="blog image" className="w-full rounded-xl max-h-40 object-cover " />
                 </div>
@@ -29,7 +29,7 @@ const BlogDiv = ({ item }) => {
                     </div>
                 </div>
             </Link>
-        </div> 
+        </div>
     )
 }
 
