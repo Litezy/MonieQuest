@@ -85,7 +85,13 @@ const AuthPageLayout = ({ children }) => {
                 </Link>
               )
             })}
-            <button className="text-sm px-3 py-2 rounded-md bg-ash text-white">Not Seeing What You Need? Tap and Contact Support Now!</button>
+            <a
+              target="_blank"
+              href="mailto:officialmoniequest@gmail.com?subject=Hello&body=I%20am%20looking%20to%20contact%20support."
+              className="text-sm px-3 py-2 mb-2 rounded-md bg-ash text-white"
+            >
+              Not Seeing What You Need? Tap and Contact Support Now!
+            </a>
           </div>
         </div>
         <div className='lg:w-[80%] w-full h-screen bg-[#141523] pt-10 pb-20 lg:pb-10 overflow-y-auto overflow-x-hidden text-white'>
