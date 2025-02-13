@@ -20,9 +20,9 @@ const ProductsPage = () => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    const FetchAllProducts = async () => {
+    const FetchAllListedProducts = async () => {
       try {
-        const response = await GetApi(Apis.admin.listed_tools)
+        const response = await GetApi(Apis.admin.listed_products)
         if (response.status === 200) {
           setStaticData(response.msg)
           setProducts(response.msg)
@@ -33,7 +33,7 @@ const ProductsPage = () => {
         setDataLoading(false)
       }
     }
-    FetchAllProducts()
+    FetchAllListedProducts()
   }, [])
 
   useEffect(() => {
@@ -124,7 +124,7 @@ const ProductsPage = () => {
                         }
                         <Link to={`/products/${item.id}/${item.slug}`} onClick={MoveToTop}>
                           <img
-                            src={`${imageurl}/tools/${item.image}`}
+                            src={`${imageurl}/products/${item.image}`}
                             alt='product image'
                             className="w-full h-48 rounded-t-[4px] object-cover object-center"
                           />

@@ -24,11 +24,11 @@ exports.SubmitProduct = async (req, res) => {
 
         const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
-        const filePath = './public/tools'
+        const filePath = './public/products'
         const date = new Date()
         let imageName;
 
-        if (!req.files) return res.json({ status: 404, msg: `Upload profit tool image` })
+        if (!req.files) return res.json({ status: 404, msg: `Upload product image` })
         const productImage = req.files.image
         if (!productImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
         if (!fs.existsSync(filePath)) {
@@ -58,7 +58,7 @@ exports.SubmitProduct = async (req, res) => {
         await Notification.create({
             user: req.user,
             title: `Product submitted`,
-            content: `Your product created with the id (#${product.gen_id}) has been successfully submiited. Our team will go through it and check if it meets our requirements, you'll get a response from us soon.`,
+            content: `Your product created with the id (#${product.gen_id}) has been successfully submitted. Our team will go through it and check if it meets our requirements, you'll get a response from us soon.`,
             url: '/user/products/all',
         })
 
@@ -91,7 +91,7 @@ exports.SubmitProduct = async (req, res) => {
     }
 }
 
-exports.AllUserProduct = async (req, res) => {
+exports.AllUserProducts = async (req, res) => {
     try {
         const userProducts = await Product.findAll({
             where: { user: req.user },
@@ -110,19 +110,19 @@ exports.AddRating = async (req, res) => {
         if (!product_id, !rating) return res.json({ status: 404, msg: 'Incomplete request found' })
 
         const product = await Product.findOne({ where: { id: product_id } })
-        if (!product) return res.json({ status: 404, msg: 'Profit tool not found' })
+        if (!product) return res.json({ status: 404, msg: 'Product not found' })
 
         product.total_ratings += parseFloat(rating)
         product.total_rate_persons += 1
-        await profitTool.save()
+        await product.save()
 
-        const form = {
-            id: product_id,
+        const ratingData = {
+            id: product.id,
             rating: rating,
             submit: true
         }
 
-        return res.json({ status: 200, msg: form })
+        return res.json({ status: 200, msg: ratingData })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }

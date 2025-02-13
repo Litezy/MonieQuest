@@ -36,7 +36,7 @@ const ProductsOrdersModal = ({ selected }) => {
                         <div>{currencySign[1]}{selected?.total_price && selected.total_price.toLocaleString()}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
-                        <div>Total Discount</div>
+                        <div>Total Discount Amount</div>
                         <div>{currencySign[1]}{selected?.total_discount && selected.total_discount.toLocaleString()}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">

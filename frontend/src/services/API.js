@@ -89,7 +89,7 @@ const products_urls = {
     user_products: products + 'user-products',
     add_rating: products + 'add-rating',
     get_admin_bank: products + 'get-admin-bank',
-    place_products_order: products + 'place-products-order'
+    place_product_order: products + 'place-product-order'
 }
 
 export const Apis = {

@@ -75,7 +75,7 @@ const AdminProductsOrders = () => {
                                                     <GoArrowUpRight className='text-lightgreen' />
                                                 </div>
                                                 <div className="flex items-start flex-col gap-1">
-                                                    <div className={`text-zinc-200 capitalize`}>tools purchase</div>
+                                                    <div className={`text-zinc-200`}>ID: {item?.gen_id}</div>
                                                     <div className="flex items-center gap-1 md:text-sm text-xs">
                                                         <div>{moment(item?.createdAt).format('Do MMMM YYYY')}</div>
                                                         <div className="w-1 h-1 bg-lightgreen rounded-full"></div>

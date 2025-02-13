@@ -77,7 +77,7 @@ const AdminSingleProduct = () => {
                 })
                 setProductImage({
                     ...productImage,
-                    img: `${imageurl}/tools/${response.msg.image}`
+                    img: `${imageurl}/products/${response.msg.image}`
                 })
             }
         } catch (error) {
@@ -177,7 +177,7 @@ const AdminSingleProduct = () => {
                         </div>
                     </ModalLayout>
                 }
-                <Link to='/admin/profit_tools/all_tools' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
+                <Link to='/admin/products/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
                     back to all tools
                 </Link>
                 {dataLoading ?

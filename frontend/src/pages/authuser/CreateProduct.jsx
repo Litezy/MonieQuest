@@ -296,7 +296,7 @@ const CreateProduct = () => {
           <div className='flex flex-col gap-7 items-center max-w-md mx-auto mt-20'>
             <SlClock className='text-8xl' />
             <div className='text-center'>Thank you for your submission! Our team is currently reviewing your demo video. Please allow up to 2 days for us to assess it. We’ll reach out to you via WhatsApp or phone with our feedback soon.</div>
-            <Link to="/user/profit_tools/all_tools">
+            <Link to="/user/products/all">
               <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-16 rounded-lg outline-none uppercase font-bold'>go to all tools</button>
             </Link>
           </div>

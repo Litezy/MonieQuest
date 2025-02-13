@@ -268,7 +268,7 @@ exports.UpdateProduct = async (req, res) => {
         if (!user) return res.json({ status: 404, msg: 'User not found' })
 
         const slugData = slug(title ? title : product.title, '-')
-        const filePath = './public/tools'
+        const filePath = './public/products'
         const date = new Date()
         let imageName;
         const productImage = req?.files?.image
@@ -314,7 +314,7 @@ exports.UpdateProduct = async (req, res) => {
                     await Notification.create({
                         user: product.user,
                         title: `Product submitted approved`,
-                        content: `After thorough review by our admins your profit tool submitted with the id (#${product.gen_id}) has been approved, you'll be contacted soon for payment.`,
+                        content: `After thorough review by our admins your product submitted with the id (#${product.gen_id}) has been approved, you'll be contacted soon for payment.`,
                         url: '/user/products/all',
                     })
                     await Mailing({
@@ -331,16 +331,16 @@ exports.UpdateProduct = async (req, res) => {
                 if (status === 'declined') {
                     await Notification.create({
                         user: product.user,
-                        title: `Profit tool declined`,
-                        content: `After review by our admins, your profit tool submitted with the id (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
+                        title: `Product submitted declined`,
+                        content: `After review by our admins, your product submitted with the id (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
                         url: '/user/products/all',
                         status: 'failed'
                     })
                     await Mailing({
-                        subject: `Profit Tool Declined`,
-                        eTitle: `Profit tool declined`,
+                        subject: `Product submitted Declined`,
+                        eTitle: `Product submitted declined`,
                         eBody: `
-                          <div>Hello ${user.first_name}, After thorough review by our admins your profit tool submitted with the id (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the id (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: user
                     })

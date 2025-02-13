@@ -40,7 +40,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
         if (!email) return ErrorAlert('Enter your email address')
         setLoading(true)
         try {
-            const response = await GetApi(Apis.profitTools.get_admin_bank)
+            const response = await GetApi(Apis.product.get_admin_bank)
             if (response.status === 200) {
                 setAdminBank(response.msg)
                 setScreen(2)
@@ -66,7 +66,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
 
         setLoading(true)
         try {
-            const response = await PostApi(Apis.profitTools.place_tool_order, formbody)
+            const response = await PostApi(Apis.product.place_product_order, formbody)
             if (response.status === 200) {
                 setScreen(3)
             } else {
@@ -107,7 +107,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                 {cartItems.map((item, i) => (
                                     <div className='w-full h-fit bg-primary flex md:p-0 p-3 rounded-[3px] overflow-hidden' key={i}>
                                         <div className='md:w-[25%] w-[40%]'>
-                                            <img src={`${imageurl}/tools/${item?.image}`} alt={item?.image} className='w-full md:h-28 h-[5.5rem] object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
+                                            <img src={`${imageurl}/products/${item?.image}`} alt={item?.image} className='w-full md:h-28 h-[5.5rem] object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
                                         </div>
                                         <div className='md:w-[75%] w-[60%] px-4 md:py-3 flex flex-col'>
                                             <div className='flex md:flex-row flex-col md:justify-between gap-1'>

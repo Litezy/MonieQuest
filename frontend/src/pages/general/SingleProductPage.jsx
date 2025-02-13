@@ -46,7 +46,7 @@ const SingleProductPage = () => {
 
     const FetchSingleProduct = useCallback(async () => {
         try {
-            const response = await GetApi(`${Apis.admin.single_tool}/${id}`)
+            const response = await GetApi(`${Apis.admin.single_product}/${id}`)
             if (response.status === 200) {
                 setSingleProduct(response.msg)
             }
@@ -87,12 +87,12 @@ const SingleProductPage = () => {
     const submitRating = async () => {
         if (!form.submit) {
             const formbody = {
-                tool_id: singleProduct.id,
+                product_id: singleProduct.id,
                 rating: form.rating
             }
             setLoading(true)
             try {
-                const response = await PutApi(Apis.profitTools.add_rating, formbody)
+                const response = await PutApi(Apis.product.add_rating, formbody)
                 if (response.status === 200) {
                     setForm({ ...form, submit: true })
                     const currentData = JSON.parse(localStorage.getItem('ratingData'))
@@ -173,7 +173,7 @@ const SingleProductPage = () => {
                             </div>
                             <div className='grid lg:grid-cols-2 grid-cols-1 gap-6'>
                                 <div className='w-full md:h-96 h-60'>
-                                    <img src={`${imageurl}/tools/${singleProduct?.image}`} alt='product image' className='w-full h-full object-cover' />
+                                    <img src={`${imageurl}/products/${singleProduct?.image}`} alt='product image' className='w-full h-full object-cover' />
                                 </div>
                                 <div>
                                     <div className='bg-primary border border-ash w-full h-fit p-5 flex flex-col gap-4'>
