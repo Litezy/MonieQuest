@@ -90,8 +90,8 @@ const SingleBlog = () => {
                     </div>
                     :
                     <div className="w-11/12 mx-auto">
-                        <div className="w-full flex items-start gap-5 flex-col lg:flex-row">
-                            <div className="lg:w-[30%] w-full p-2">
+                        <div className="w-full flex items-start gap-6 flex-col lg:flex-row">
+                            <div className="lg:w-[30%] w-full">
                                 <div className="flex items-start flex-col gap-20">
                                     <img src={`${imageurl}/blogs/${singleBlog?.image}`} alt="blog image" className="w-full rounded-xl max-h-52 object-cover " />
                                     <div className="w-full flex items-start flex-col gap-2">

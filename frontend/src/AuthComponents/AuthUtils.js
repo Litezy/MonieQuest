@@ -9,84 +9,84 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 
 
 
-export const  delay =(ms)=> {
+export const delay = (ms) => {
     new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 
 export const coins = [
     {
-          network:`--select--`
+        network: `--select--`
     },
     {
         network: 'Bitcoin BTC',
         address: '1NnzdbP1TVjHHExWB53E9eaKL1J3aBoRvo',
-        symbol:`BTC`
+        symbol: `BTC`
     },
     {
         network: 'Ethereum (ERC20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol:`ETH`
+        symbol: `ETH`
     },
     {
         network: 'Ethereum (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol:`ETH`
+        symbol: `ETH`
     },
     {
         network: 'Binance BNB (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol:`BNB`
+        symbol: `BNB`
     },
     {
         network: 'Solana SOL',
         address: 'D71a9kxuHUGL56oViA8DxHkRgAqy1JAn2yE2P2rokvtx',
-        symbol:`SOL`
+        symbol: `SOL`
     },
     {
         network: 'Tron TRX (TRC20)',
         address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa',
-        symbol:`TRX`
+        symbol: `TRX`
     },
     {
         network: 'TON (The Open Network)',
         address: 'UQAiq2Fq9C8hSX4BBon1AQyBVTDWMXRFboAfd154Wv7Dttvi',
-        symbol:`TON`
+        symbol: `TON`
     },
     {
         network: 'SUI',
         address: '0xa687f64035d90685a80366d3b12d3c03ddc9711751b2c792adbd606d7b4dff6f',
-        symbol:`SUI`
+        symbol: `SUI`
     },
     {
         network: 'DOGE',
         address: 'D7SKaCYu9ase4w7h9BY9xNP67xVxv7pVt3',
-        symbol:`DOGE`
+        symbol: `DOGE`
     },
     {
         network: 'Litecoin LTC',
         address: 'LVCjaPaxeSLd8jjABbzytPBPv9hqMGCxfi',
-        symbol:`LTC`
+        symbol: `LTC`
     },
     {
         network: 'USDT (TRC20)',
         address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa',
-        symbol:`USDT`
+        symbol: `USDT`
     },
     {
         network: 'USDT (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol:`USDT`
+        symbol: `USDT`
     },
     {
         network: 'USDC (ERC20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol:`USDC`
+        symbol: `USDC`
     },
     {
         network: 'USDC (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol:`USDC`
+        symbol: `USDC`
     },
 ]
 export const currencies = [
@@ -98,7 +98,7 @@ export const links = [
     { label: 'dashboard', url: '/user/dashboard', icon: MdDashboard },
     { label: 'crypto exchange', main: '/exchange', url: '/user/exchange/buy', icon: MdCurrencyExchange },
     { label: 'gift cards', main: '/giftcards', url: '/user/giftcards/sell', icon: HiGift },
-    { label: 'profit tools', main: '/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox },
+    { label: 'products', main: '/profit_tools', url: '/user/profit_tools/create', icon: CgToolbox },
     { label: 'bank withdrawal', url: '/user/bank_withdrawal', icon: BiMoneyWithdraw },
     { label: 'transaction history', url: '/user/transactions_history', icon: GoHistory },
     { label: 'profile', main: '/profile', url: '/user/profile', icon: RiUser3Fill },
