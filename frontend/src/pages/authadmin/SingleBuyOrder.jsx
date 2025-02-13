@@ -25,7 +25,7 @@ const SingleBuyOrder = () => {
         setLoading(true)
         try {
             const res = await AuthGetApi(`${Apis.admin.single_buy}/${id}`)
-            console.log(res)
+            // console.log(res)
             if (res.status !== 200) return ErrorAlert(res.msg)
             const data = res.data
             setData(data)
@@ -66,47 +66,51 @@ const SingleBuyOrder = () => {
         setLoading(false)
         setScreen(2)
     }
-    const handleChange = (e)=>{
-        setForms({...forms,msg:e.target.value})
+    const handleChange = (e) => {
+        setForms({ ...forms, msg: e.target.value })
     }
+
+
     const submitOrder = async (e) => {
         e.preventDefault()
-        if (forms.confirmed === 'Yes' && forms.sent_crypto === 'Yes') {
-            const data = { tag: 'success' }
-            setLoading(true)
-            try {
-                const res = await AuthPostApi(`${Apis.admin.confirm_buy}/${id}`, data)
-                if (res.status !== 200) return ErrorAlert(res.msg)
-                SuccessAlert(res.msg)
-                fetchBuys()
-                await new Promise((resolve) => setTimeout(resolve, 2000))
-                afterLoad()
-            } catch (error) {
-                console.log(error)
-            } finally {
-                setLoading(false)
-            }
-        }
-        else if (forms.confirmed === "No" && forms.sent_crypto === 'No') {
-            if (!forms.msg) return ErrorAlert(`Please provide failed message to user`)
-            const data = { tag: 'failed' }
-            setLoading(true)
-            try {
-                const res = await AuthPostApi(`${Apis.admin.confirm_buy}/${id}`, data)
-                if (res.status !== 200) return ErrorAlert(res.msg)
-                SuccessAlert(res.msg)
-                fetchBuys()
-                await new Promise((resolve) => setTimeout(resolve, 2000))
-                afterLoad()
-            } catch (error) {
-                console.log(error)
-            } finally {
-                setLoading(false)
-            }
+        if (forms.confirmed !== 'Yes' || forms.sent_crypto !== 'Yes') return ErrorAlert('Please confirm that you have received the funds and sent crypto')
+        const data = { tag: 'success' }
+        setLoading(true)
+        try {
+            const res = await AuthPostApi(`${Apis.admin.confirm_buy}/${id}`, data)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            SuccessAlert(res.msg)
+            fetchBuys()
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            afterLoad()
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
         }
 
     }
 
+    const declineOrder = async () => {
+        if (!forms.msg) return ErrorAlert(`Please provide failed message to user`)
+        const data = { tag: 'failed',message:forms.msg }
+        setLoading(true)
+        try {
+            const res = await AuthPostApi(`${Apis.admin.confirm_buy}/${id}`, data)
+            console.log(res)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            SuccessAlert(res.msg)
+            fetchBuys()
+            setFailed(false)
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            afterLoad()
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+
+    }
 
     return (
         <AdminPageLayout>
@@ -123,11 +127,11 @@ const SingleBuyOrder = () => {
                 <div className="w-full p-5 bg-white text-dark rounded-md flex items-center flex-col justify-center">
                     <div className="flex flex-col gap-4 w-full">
                         <div className="font-semibold text-center">Please provide failed message</div>
-                       
+
                         <FormInput formtype='textarea' value={forms.msg} name={`msg`} onChange={handleChange} />
                         <div className="flex w-full items-center justify-between ">
-                            <button onClick={() => {setFailed(false); setForms({...forms,msg:""})}} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
-                            <button   className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm</button>
+                            <button onClick={() => { setFailed(false); setForms({ ...forms, msg: "" }) }} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
+                            <button onClick={declineOrder} className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm decline</button>
                         </div>
                     </div>
                 </div>
@@ -204,7 +208,7 @@ const SingleBuyOrder = () => {
 
 
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-3 items-center mt-5">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:grid-cols-3 items-center mt-5">
                                 <div className="flex items-start flex-col w-full ">
                                     <div className="lowercase">Confirm Payment to your Bank ?</div>
                                     <div className="">
@@ -223,7 +227,7 @@ const SingleBuyOrder = () => {
                                     </div>
                                 </div>
                                 <div className="">
-                                    <button onClick={() => setFailed(true)} className='px-4 py-1.5 rounded-sm bg-red-600 text-sm'>Mark As Failed</button>
+                                    <button type='button' onClick={() => setFailed(true)} className='px-4 py-1.5 rounded-sm bg-red-600 text-sm'>Mark As Failed</button>
                                 </div>
                             </div>
                             <div className="w-11/12 mt-5 mx-auto md:w-5/6">

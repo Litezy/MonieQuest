@@ -71,13 +71,14 @@ const GiftCardSingleOrder = () => {
     const creditUser = async (e) => {
         e.preventDefault()
         if (forms.valid !== 'Yes') return ErrorAlert(`Please confirm if Giftcard is valid`)
-        const formdata = { amount: forms.amount }
+        if (!forms.amount) return ErrorAlert(`Please apply amount to be credited to user`)
+        const formdata = { amount: forms.amount, tag: 'success' }
         setLoading({ status: true, param: 'credit' })
         setCredited(true)
         try {
-            const res = await AuthPostApi(`${Apis.admin.credit_gift_customer}/${id}`,formdata)
-            console.log(res)
+            const res = await AuthPostApi(`${Apis.admin.credit_gift_customer}/${id}`, formdata)
             if (res.status !== 200) return ErrorAlert(res.msg)
+            fetchGiftCardOrder()
             await new Promise((resolve) => setTimeout(resolve, 2000))
             setLoading({ status: false, param: '' })
             setForms({ ...forms, amount: '' })
@@ -96,36 +97,60 @@ const GiftCardSingleOrder = () => {
         setScreen(2)
     }
 
-    const submitOrder = (e) => {
-        e.preventDefault()
-        if (!credited) return ErrorAlert('Please credit customer before closing the order')
-        setLoading({ status: true, param: 'close' })
-        return setTimeout(() => {
-            afterLoad()
-        }, 5000)
-    }
     const handleErr = (e) => {
         setForms({ ...forms, [e.target.name]: e.target.value })
     }
 
-    const submitErrorMsg = () => {
+    const declineOrder = async (e) => {
+        e.preventDefault()
+        const formdata = { message: forms.error, tag: 'failed' }
+        setLoading({ status: true, param: 'credit' })
+        setConfirmMsg(true)
+        try {
+            const res = await AuthPostApi(`${Apis.admin.credit_gift_customer}/${id}`, formdata)
+            console.log(res)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            setLoading({ status: true, param: 'exit' })
+            setConfirmBad(false)
+            setConfirmMsg(false)
+            setCredited(false)
+            setApplyAmt(false)
+            fetchGiftCardOrder()
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            setLoading({ status: false, param: '' })
+            setForms({ ...forms, amount: '' })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading({ status: false, param: '' })
+
+        }
+    }
+
+    const submitErrorMsg = (e) => {
+        e.preventDefault()
         if (forms.error.length < 1) return ErrorAlert(`Please enter an error message to customer`)
         setConfirmMsg(true)
     }
 
-    const closeAndExit = () => {
-        setLoading({ status: true, param: 'exit' })
-        setConfirmBad(false)
-        setConfirmMsg(false)
-        setCredited(false)
-        setApplyAmt(false)
-        setForms({ amount: '', valid: '', error: '' })
-        return setTimeout(() => {
-            setLoading({ status: false, param: '' })
-            SuccessAlert(`Error message sent to user`)
-            navigate('/admin/giftcards/orders')
-        }, 2000)
+    const closeOrder = (e, tag) => {
+        if (tag === 'success') {
+            e.preventDefault()
+            setLoading({ status: true, param: 'close' })
+            return setTimeout(() => {
+                afterLoad()
+            }, 2000)
+        } else {
+            e.preventDefault()
+            setLoading({ status: true, param: 'close' })
+            return setTimeout(() => {
+                setLoading({ status: false, param: '' })
+                SuccessAlert(`Order marked failed & closed successfully`)
+                setScreen(2)
+            }, 2000)
+        }
     }
+    // console.log(data?.status)
     return (
         <AdminPageLayout>
             {
@@ -138,7 +163,7 @@ const GiftCardSingleOrder = () => {
                                 <div className="w-full text-center">Are you sure you to proceed</div>
                                 <div className="mt-5 justify-between flex items-center w-11/12 lg:w-2/4">
                                     <button onClick={() => setConfirmMsg(false)} className='px-4 rounded-md bg-red-600 py-1.5'>cancel</button>
-                                    <button onClick={closeAndExit} className='px-4 rounded-md bg-green-600 py-1.5'>proceed</button>
+                                    <button onClick={declineOrder} className='px-4 rounded-md bg-green-600 py-1.5'>proceed</button>
                                 </div>
                             </div>
                         }
@@ -164,7 +189,7 @@ const GiftCardSingleOrder = () => {
                 <ModalLayout clas={`w-11/12 mx-auto`}>
                     <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
                         <Loader />
-                        <div>...sending error message to user</div>
+                        <div>...closing order & sending error message to user</div>
                     </div>
                 </ModalLayout>
             }
@@ -186,7 +211,7 @@ const GiftCardSingleOrder = () => {
 
                             <div className="w-full text-center capitalize font-bold poppins">Review Order Number <span className={`${green}`}>{data?.order_no}</span></div>
 
-                            <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md  mx-auto mt-5 md:mt-10 mb-5">
+                            <form className="bg-primary p-3 rounded-md  mx-auto mt-5 md:mt-10 mb-5">
                                 <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
                                     <div className="flex flex-col gap-3 w-full">
                                         <div className="flex flex-col items-start">
@@ -211,7 +236,7 @@ const GiftCardSingleOrder = () => {
                                         <div className="w-full">
                                             <div className="text-sm">Rate:</div>
                                             <div className="w-full">
-                                                <FormInput value={`${currencies[1].symbol}${inNaira}`} className={`${green}`} />
+                                                <FormInput value={`${currencies[1].symbol}${rate}`} className={`${green}`} />
 
                                             </div>
                                         </div>
@@ -229,7 +254,7 @@ const GiftCardSingleOrder = () => {
                                         <div className="w-full">
                                             <div className="text-sm">Amount In NGN:</div>
                                             <div className="w-full">
-                                                <FormInput value={`${currencies[1].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
+                                                <FormInput value={`${currencies[1].symbol}${inNaira}`} className={`${green}`} />
 
                                             </div>
                                         </div>
@@ -242,8 +267,9 @@ const GiftCardSingleOrder = () => {
 
 
                                 </div>
+
                                 <div className="w-full grid grid-cols-1 md:grid-cols-2 items-center mt-5 ">
-                                    {!credited && <div className="flex items-start flex-col w-full  ">
+                                    {!credited && data?.status === 'pending' && <div className="flex items-start flex-col w-full  ">
                                         <div className=" lowercase">Confirm Valid Card</div>
                                         <div className="">
                                             <SelectComp options={statuses} value={forms.sent_crypto} width={200} style={{ bg: '#212134', color: 'lightgreen', font: '0.8rem' }}
@@ -259,14 +285,17 @@ const GiftCardSingleOrder = () => {
                                         <button type='button' onClick={applyAmt ? creditUser : applyamount} className='px-3 py-1 rounded-md bg-ash'>{applyAmt ? 'credit customer' : 'apply amount'}</button>
                                     </div>}
 
-                                    {forms.valid === 'No' &&
+                                    {data?.status !== 'completed' && forms.valid === 'No' &&
                                         <div className="">
                                             <button type='button' onClick={() => setConfirmBad(true)} className='px-4 rounded-md bg-red-600 py-1.5'>confirm card is bad</button>
                                         </div>
                                     }
                                 </div>
-                                {forms.valid !== 'No' && <div className="w-11/12 mt-5 mx-auto md:w-5/6">
-                                    <FormButton title={`Confirm & Close Order`} />
+                                {data?.status !== 'completed' && <div className="w-11/12 mt-5 mx-auto md:w-5/6">
+                                    <FormButton type='button' onClick={(e) => closeOrder(e, 'failed')} title={` Close Order`} />
+                                </div>}
+                                {data?.status === 'completed' && <div className="w-11/12 mt-5 mx-auto md:w-5/6">
+                                    <FormButton type='button' onClick={(e) => closeOrder(e, 'success')} title={`Confirm & Close Order`} />
                                 </div>}
                             </form>
 

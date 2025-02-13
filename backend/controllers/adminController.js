@@ -880,7 +880,7 @@ exports.getCryptoSellsOrders = async (req, res) => {
 exports.closeAndConfirmBuyOrder = async (req, res) => {
     try {
         const { id } = req.params
-        const { tag, message } = req.params
+        const { tag, message } = req.body
         if (!id || !tag) return res.json({ status: 400, msg: 'ID or Tag missing from request' })
         const findBuy = await BuyCrypto.findOne({
             where: { id },
@@ -962,7 +962,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                     await Notification.create({
                         user: ele.id,
                         title: `Crypto Buy Order Failed`,
-                        content: `You have failed the crypto buy order payment  with the ID of ${order?.order_no}`,
+                        content: `You have failed the crypto buy order payment  with the ID of ${findBuy?.order_no}`,
                         url: '/admin/transactions_history',
                     })
 
@@ -990,7 +990,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
 exports.closeAndConfirmSellOrder = async (req, res) => {
     try {
         const { id } = req.params
-        const { tag, message } = req.body
+        const { tag, amount, message } = req.body
         if (!id || !tag) return res.json({ status: 400, msg: 'ID or Tag missing from request' })
         const findSell = await SellCrypto.findOne({
             where: { id },
@@ -1001,9 +1001,14 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
         const user = await User.findOne({ where: { id: findSell.userid } })
         if (!user) return res.json({ status: 401, msg: 'Account owner not found' })
         const admins = await User.findAll({ where: { role: 'admin' } })
-
+        const findUserWallet = await Wallet.findOne({ where: { user: user.id } })
+        if (!findUserWallet) {
+            await Wallet.create({ user: user.id })
+        }
 
         if (tag === 'success') {
+            if (!amount) return res.json({ status: 400, msg: "Amount is missing" })
+            findUserWallet.balance = parseFloat(findUserWallet.balance) + parseFloat(amount)
             findSell.status = 'completed'
             await findSell.save()
             await Notification.create({
@@ -1135,7 +1140,7 @@ exports.creditGiftCustomer = async (req, res) => {
     try {
         const { id } = req.params
         const { amount, tag, message } = req.body
-        if (!id || !amount || !tag) return res.json({ status: 400, msg: "ID, Amount or Tag missing from request" })
+        if (!id || !tag) return res.json({ status: 400, msg: "ID, Amount or Tag missing from request" })
         const order = await GiftCard.findOne({
             where: { id },
             include: [
@@ -1202,7 +1207,7 @@ exports.creditGiftCustomer = async (req, res) => {
         }
         else if (tag === 'failed') {
             if (!message) return res.json({ status: 400, msg: "Failed message is required" })
-       
+
             order.status = 'failed'
             await order.save()
 
