@@ -11,6 +11,8 @@ import Loader from '../../GeneralComponents/Loader';
 import Lottie from 'react-lottie';
 import { Apis, AuthGetApi, AuthPostApi } from '../../services/API';
 import { currencies } from '../../AuthComponents/AuthUtils';
+import { useAtom } from 'jotai';
+import { UTILS } from '../../services/store';
 
 
 
@@ -19,6 +21,7 @@ const SingleSellOrder = () => {
     const { id } = useParams()
     const green = 'text-lightgreen'
     const [data, setData] = useState({})
+    const [utils] = useAtom(UTILS)
 
     const fetchSellID = async () => {
         setLoading(true)
@@ -47,6 +50,7 @@ const SingleSellOrder = () => {
             console.log(error)
         }
     }
+    const rate = utils?.exchange_sell_rate
     const handleCopy = (type, val) => {
         navigator.clipboard.writeText(type)
             .then(() => { SuccessAlert(`${val} copied successfully'`) })
@@ -55,26 +59,29 @@ const SingleSellOrder = () => {
     const [forms, setForms] = useState({
         confirmed: '',
         sent_crypto: '',
-        amount: ''
+        amount: '', message: ''
     })
 
     const [applyAmt, setApplyAmt] = useState(false)
+    const [failed, setFailed] = useState(false)
     const statuses = ["Yes", "No"]
     const [screen, setScreen] = useState(1)
-    const [credited, setCredited] = useState(false)
     const [loading, setLoading] = useState(false)
     const [load, setLoad] = useState(false)
-
     const afterLoad = () => {
         setLoading(false)
         SuccessAlert(`Order closed successfully`)
         setScreen(2)
     }
-    
+
     const handleChange = () => {
         const amt = data?.amount
         const formatVal = amt.replace(/,/g, '')
-        setForms({ ...forms, amount: formatVal })
+        const newAmt = formatVal * rate
+        setForms({ ...forms, amount: newAmt?.toLocaleString() })
+    }
+    const handleMsg = (e) => {
+        setForms({ ...forms, message: e.target.value })
     }
 
     const applyamount = () => {
@@ -82,29 +89,44 @@ const SingleSellOrder = () => {
         handleChange()
     }
 
-    const creditUser = (e) => {
-        e.preventDefault()
-        if (forms.sent_crypto !== 'Yes') return ErrorAlert(`Please confirm if you have received crypto currency`)
-        setLoad(true)
-        setCredited(true)
-        setForms({ ...forms, amount: '' })
-        return setTimeout(() => {
-            setLoad(false)
-            SuccessAlert(`Customer credited successfully.`)
-        }, 2000)
-    }
+
 
     const submitOrder = async (e) => {
         e.preventDefault()
-        if (!credited) return ErrorAlert('Please credit customer before closing the order')
+        if (forms.sent_crypto !== 'Yes') return ErrorAlert(`Please confirm if you have received crypto currency`)
+        const amt = forms.amount.replace(/,/g, "")
+        const data = { amount: amt, tag: 'success' }
         setLoading(true)
         try {
-            const res = await AuthPostApi(`${Apis.admin.confirm_sell}/${id}`)
+            const res = await AuthPostApi(`${Apis.admin.confirm_sell}/${id}`, data)
+            console.log(res)
             if (res.status !== 200) return ErrorAlert(res.msg)
             SuccessAlert(res.msg)
+            setForms({ message: "",amount:"" })
             fetchSells()
             await new Promise((resolve) => setTimeout(resolve, 2000))
             afterLoad()
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const declineOrder = async () => {
+        if (!forms.message) return ErrorAlert('Please provide failed message to user')
+        const data = { message: forms.message, tag: 'failed' }
+        setFailed(false)
+        setLoading(true)
+        try {
+            const res = await AuthPostApi(`${Apis.admin.confirm_sell}/${id}`, data)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            fetchSells()
+            setForms({ message: "" })
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            setLoading(false)
+            SuccessAlert(`Order marked failed & closed successfully`)
+            setScreen(2)
         } catch (error) {
             console.log(error)
         } finally {
@@ -130,6 +152,19 @@ const SingleSellOrder = () => {
                     </div>
                 </ModalLayout>
             }
+            {failed && <ModalLayout setModal={setFailed} clas={`w-11/12 mx-auto lg:w-1/2`}>
+                <div className="w-full p-5 bg-white text-dark rounded-md flex items-center flex-col justify-center">
+                    <div className="flex flex-col gap-4 w-full">
+                        <div className="font-semibold text-center">Please provide failed message</div>
+
+                        <FormInput formtype='textarea' value={forms.message} name={`message`} onChange={handleMsg} />
+                        <div className="flex w-full items-center justify-between ">
+                            <button onClick={() => { setFailed(false); setForms({ ...forms, message: "" }) }} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
+                            <button onClick={declineOrder} className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm decline</button>
+                        </div>
+                    </div>
+                </div>
+            </ModalLayout>}
             {screen === 1 &&
                 <>
                     <div className="w-11/12 mx-auto mt-2">
@@ -144,7 +179,7 @@ const SingleSellOrder = () => {
                                 <div className="flex flex-col gap-3 w-full">
                                     <div className="w-full">
                                         <div className="text-sm">Customer ID:</div>
-                                        <FormInput value={data?.crypto_seller?.id} className={`${green}`} />
+                                        <FormInput read={true} value={data?.crypto_seller?.id} className={`${green}`} />
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">FullName:</div>
@@ -153,31 +188,34 @@ const SingleSellOrder = () => {
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">Amount:</div>
-                                        <FormInput value={`${currencies[0].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
+                                        <FormInput read={true} value={`${currencies[0].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">Status:</div>
-                                        <FormInput value={data?.status} className={`${green}`} />
+                                        <FormInput read={true} value={data?.status} className={`${green}`} />
                                     </div>
 
                                 </div>
-                                <div className=" flex flex-col gap-3 w-full">
+                                <div className=" flex flex-col gap-2.5 w-full">
                                     <div className="">
                                         <div className="text-sm">Crypto Currency Sent:</div>
-                                        <FormInput value={data?.crypto_currency} className={`${green}`} />
+                                        <FormInput read={true} value={data?.crypto_currency} className={`${green}`} />
                                     </div>
                                     <div className="">
                                         <div className="text-sm">Network Sent Via:</div>
-                                        <FormInput value={data?.network} className={`${green}`} />
+                                        <FormInput read={true} value={data?.network} className={`${green}`} />
                                     </div>
                                     <div className="text-sm">Transaction Hash:</div>
                                     <div className="flex items-center w-full gap-2">
                                         <div className="w-full">
-                                            <FormInput value={data?.trans_hash} className={`${green}`} />
+                                            <FormInput read={true} value={data?.trans_hash} className={`${green}`} />
                                         </div>
                                         <FaRegCopy onClick={() => handleCopy(`jmkmkdmkkfk`, 'trans hash')} className={`${green} cursor-pointer`} />
                                     </div>
-                                    
+                                    <div className="">
+                                        <div className="text-sm">Rate:</div>
+                                        <FormInput read={true} value={`${currencies[1].symbol}${rate}`} className={`${green}`} />
+                                    </div>
 
                                 </div>
 
@@ -192,18 +230,23 @@ const SingleSellOrder = () => {
                                         />
                                     </div>
                                 </div>
-                                {!credited && <div className="flex items-start flex-col gap-2 w-full ">
+                                {forms.sent_crypto === 'Yes' && <div className="flex items-start flex-col gap-2 w-full ">
                                     <div className="l">Credit Customer Balance:</div>
                                     <div className="">
                                         <input onChange={handleChange} name='amount' value={forms.amount} type="text" className='input-off w-1/2 bg-primary text-white font-bold' />
                                     </div>
-                                    <button type='button' onClick={applyAmt ? creditUser : applyamount} className='px-3 py-1 rounded-md bg-ash'>{applyAmt ? 'credit customer' : 'apply amount'}</button>
+                                    {!applyAmt && <button type='button' onClick={applyamount} className='px-3 py-1 rounded-md bg-ash'>apply amount</button>}
                                 </div>}
 
                             </div>
-                            <div className="w-11/12 mt-5 mx-auto md:w-5/6">
-                                <FormButton title={`Confirm & Close Order`} />
-                            </div>
+                            {forms.sent_crypto === 'Yes' || forms.sent_crypto === '' ? <div className="w-11/12 mt-5 mx-auto md:w-5/6">
+                                <FormButton title={`Credit & Close Order`} />
+                            </div> :
+                                <div className="w-full flex items-center mt-5">
+                                    <button type='button' onClick={() => setFailed(true)} className='w-3/4 mx-auto py-1.5 bg-red-600 text-white rounded-md '>Mark As Failed</button>
+
+                                </div>
+                            }
                         </form>
 
 
