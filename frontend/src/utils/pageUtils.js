@@ -39,7 +39,8 @@ export const MoveToSection = (id) => {
     const section = document.getElementById(id)
     if (section) {
         section.scrollIntoView({
-            behavior: 'smooth'
+            behavior: 'smooth',
+            height:'-2rem'
         })
     }
 }

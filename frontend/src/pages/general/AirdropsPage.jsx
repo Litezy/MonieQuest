@@ -84,6 +84,7 @@ const AirdropsPage = () => {
     }
   }
 
+  // console.log(airdrops,staticData)
   return (
     <PageLayout>
       <div className='pb-20 bg-dark w-full text-gray-200'>

@@ -4,11 +4,15 @@ import { CiLink } from "react-icons/ci";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import FormInput from '../../utils/FormInput';
 import Comments from '../../GeneralComponents/Comments';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Apis, GetApi, imageurl } from '../../services/API';
 import avatar from '../../assets/images/avatar.svg'
 import moment from 'moment';
-import { ErrorAlert, MoveToSection, SuccessAlert } from '../../utils/pageUtils';
+import { ErrorAlert, MoveToSection, } from '../../utils/pageUtils';
+import { PiArrowUpRight } from 'react-icons/pi';
+import { FaUser } from 'react-icons/fa';
+import dummyImg from '../../assets/images/blog1.jpg'
+
 
 const parapgraphs = [
     {
@@ -32,6 +36,17 @@ const parapgraphs = [
         sectionID: 'conclusion'
     },
 ]
+
+    const blogs = new Array(8).fill({
+      feature: 'sample-feature',
+      id: 'sample-id',
+      title: 'Sample Title',
+      description: 'Sample Description',
+      date: 'Sample Date',
+      author: 'Sample Author',
+      category: 'airdrop',
+    });
+
 
 const SingleBlog = () => {
     const { feature, id } = useParams()
@@ -129,7 +144,7 @@ const SingleBlog = () => {
                                 <div className="flex items-start flex-col gap-16">
                                     <img src={`${imageurl}/blogs/${singleBlog?.image}`} alt="blog image" className="w-full rounded-xl max-h-52 object-cover " />
                                     <div className="w-full flex items-start flex-col gap-2">
-                                        <div className="poppins font-bold text-2xl">Table of contents</div>
+                                        <div className="mont font-bold text-2xl">Table of contents</div>
                                         {parapgraphs.map((item, i) => {
                                             return (
                                                 <div onClick={() => MoveToSection(item.sectionID)} key={i} className={`cursor-pointer hover:text-lightgreen mont `}>{item.title}</div>
@@ -144,8 +159,8 @@ const SingleBlog = () => {
                                         <img src={singleBlog?.blog_user?.image ? `${imageurl}/profiles/${singleBlog?.blog_user?.image}` : avatar} alt="blog" className=" rounded-full h-10 w-10 object-cover " />
                                         <div className="flex items-start flex-col gap-1 text-sm">
                                             <div className="mont capitalize">{singleBlog?.blog_user?.first_name} {singleBlog?.blog_user?.surname}</div>
-                                            <div className="text-xs text-gray-400">Updated on {moment(singleBlog?.updatedAt).format('D MMM YYYY')}</div>
-                                            <div className="text-xs text-gray-400">Written on {moment(singleBlog?.createdAt).format('D MMM YYYY')}</div>
+                                            <div className="text-xs poppins text-gray-400">Updated on {moment(singleBlog?.updatedAt).format('D MMM YYYY hh:mm a')}</div>
+                                            <div className="text-xs poppins text-gray-400">Written on {moment(singleBlog?.createdAt).format('D MMM YYYY  hh:mm a')}</div>
                                         </div>
                                     </div>
                                     <div className="">
@@ -157,21 +172,22 @@ const SingleBlog = () => {
                                     <div className=""><IoChevronForwardSharp /></div>
                                     <div className=" lowercase">{singleBlog?.feature}</div>
                                 </div>
-                                <div className="flex items-start poppins flex-col gap-16 mt-14 text-gray-400">
+                                <div className="mt-3 text-[1.8rem] leading-[33px] font-bold max-w-3/4">{singleBlog?.title}</div>
+                                <div className="flex items-start mont flex-col gap-16 mt-8 text-gray-400">
                                     <div className='flex flex-col gap-2 items-start' id='main'>
-                                        <div className="text-[1.8rem] leading-[33px] font-bold poppins text-white"> Main Header</div>
+                                        <div className="text-[1.8rem] leading-[33px] font-bold mont text-white"> Main Header</div>
                                         <div className="">{singleBlog?.main_header}</div>
                                     </div>
                                     <div className="flex items-start gap-2 flex-col" id='first'>
-                                        <div className="text-white font-bold leading-[33px] text-2xl poppins ">First Paragragh</div>
+                                        <div className="text-white font-bold leading-[33px] text-2xl mont ">First Paragragh</div>
                                         <div className="">{singleBlog?.first_paragraph}</div>
                                     </div>
                                     <div className="flex items-start gap-2 flex-col" id='second'>
-                                        <div className="text-white font-bold leading-[33px] poppins  text-2xl">Second Paragraph.</div>
+                                        <div className="text-white font-bold leading-[33px] mont  text-2xl">Second Paragraph.</div>
                                         <div className="">{singleBlog?.second_paragraph}</div>
                                     </div>
                                     <div className="flex items-start gap-2 flex-col" id='extras'>
-                                        <div className="text-white font-bold leading-[33px] poppins  text-2xl">extras</div>
+                                        <div className="text-white font-bold leading-[33px] mont  text-2xl">extras</div>
                                         <div className="">{singleBlog?.extras}</div>
                                     </div>
 
@@ -179,8 +195,8 @@ const SingleBlog = () => {
                             </div>
                         </div>
                         <div className="flex items-start gap-2 flex-col my-5" id='conclusion'>
-                            <div className="text-white font-bold leading-[33px] text-2xl poppins ">Conclusion</div>
-                            <div className="text-gray-400 poppins">{singleBlog?.conclusion}</div>
+                            <div className="text-white font-bold leading-[33px] text-2xl mont ">Conclusion</div>
+                            <div className="text-gray-400 mont">{singleBlog?.conclusion}</div>
                         </div>
 
                         <div className="w-full my-10">
@@ -192,6 +208,7 @@ const SingleBlog = () => {
                                     )
                                 })}
                             </div>
+                            <button className="mt-5 w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
                         </div>
                         <form className="w-full p-3 rounded-md bg-primary" onSubmit={SubmitComment}>
                             <div className="text-lg mont">Leave a comment</div>
@@ -220,7 +237,48 @@ const SingleBlog = () => {
                         </form>
                     </div>
                 }
+                <div className="mt-10 w-11/12 mx-auto">
+                    <div className="">You may also like:</div>
+                    <div className="w-full flex items-center gap-3 overflow-x-auto scroll">
+                    {blogs.map((item, i) => (
+                        <div key={i} className="flex-none w-64 bg-black rounded-xl p-2">
+                            <Link
+                                // to={`/blogs/${item.feature}/${item.id}`}
+                                className="w-full"
+                            >
+                                <div className="w-full">
+                                    <img
+                                        src={dummyImg}
+                                        alt="blog"
+                                        className="w-full rounded-xl max-h-40 object-cover"
+                                    />
+                                </div>
+                                <div className="mt-2 flex items-start flex-col gap-3">
+                                    <div className="text-sm text-gray-400">
+                                        <span className="capitalize">{item.category}</span> article
+                                    </div>
+                                    <div className="lg:flex items-center gap-3 justify-between text-sky-400">
+                                        <div className="text-sm w-full capitalize">{item.title}</div>
+                                        <PiArrowUpRight className="text-lg hidden lg:block" />
+                                    </div>
+                                    <div className="flex items-center gap-2 w-full">
+                                        <div>
+                                            <FaUser className="text-2xl text-white" />
+                                        </div>
+                                        <div className="flex flex-col gap-1 text-sm">
+                                            <div className="font-bold capitalize">{item.author}</div>
+                                            <div className="text-xs">{item.date}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    ))}
+                    </div>
+
+                </div>
             </div>
+
         </PageLayout>
     )
 }

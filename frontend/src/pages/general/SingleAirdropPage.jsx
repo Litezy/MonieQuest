@@ -6,6 +6,9 @@ import { SiTelegram } from 'react-icons/si'
 import { LuArrowRightLeft } from 'react-icons/lu'
 import { RxExternalLink } from "react-icons/rx";
 import { Apis, GetApi, imageurl } from '../../services/API'
+import YouTubeComp from '../../GeneralComponents/YouTubeComp'
+
+
 
 const SingleAirdropPage = () => {
   const { id } = useParams()
@@ -138,19 +141,17 @@ const SingleAirdropPage = () => {
                 <div className='lg:col-span-4 col-span-1'>
                   <div className='w-full h-fit border border-ash bg-secondary rounded-md py-10 px-4'>
                     <div className='flex flex-col gap-4'>
-                      <div className='text-xl font-bold'>Step by step video guide on <span className='capitalize'>ape express</span> Airdrop</div>
-                      <a href={singleAirdrop?.video_guide_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
-                        <div className='text-lightgreen underline'>{singleAirdrop?.video_guide_link}</div>
-                        <RxExternalLink className='text-lg' />
-                      </a>
+                      <div className='text-xl font-bold'>Step by step video guide on <span className='capitalize'>{singleAirdrop?.title}</span></div>
+                      <YouTubeComp videoId={singleAirdrop?.video_guide_link} title={singleAirdrop?.title} />
                     </div>
-                    <div className='flex flex-col gap-4 mt-8'>
-                      <div className='text-xl font-bold'>Referral link to earn</div>
-                      <a href={singleAirdrop?.referral_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
-                        <div className='text-lightgreen underline'>{singleAirdrop?.referral_link}</div>
-                        <RxExternalLink className='text-lg' />
-                      </a>
-                    </div>
+
+                  </div>
+                  <div className='flex flex-col gap-4 mt-8'>
+                    <div className='text-xl font-bold'>Referral link to earn</div>
+                    <a href={singleAirdrop?.referral_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
+                      <div className='text-lightgreen underline'>{singleAirdrop?.referral_link}</div>
+                      <RxExternalLink className='text-lg' />
+                    </a>
                   </div>
                 </div>
               </div>

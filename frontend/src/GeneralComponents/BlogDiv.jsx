@@ -24,7 +24,7 @@ const BlogDiv = ({ item }) => {
                         <div className=""><FaUser className='text-2xl text-white' /></div>
                         <div className="flex flex-col gap-1 text-sm">
                             <div className="font-bold capitalize">{item?.blog_user?.first_name} {item?.blog_user?.surname}</div>
-                            <div className="text-xs">{moment(item?.createdAt).format('D MMM YYYY')}</div>
+                            <div className="text-xs">{moment(item?.createdAt).format('D MMM YYYY hh:mm a')}</div>
                         </div>
                     </div>
                 </div>
