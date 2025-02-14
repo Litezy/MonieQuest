@@ -8,6 +8,7 @@ import { MoveToTop } from "../../utils/pageUtils";
 import CartComponent from "../../GeneralComponents/CartComponent";
 import FormInput from "../../utils/FormInput";
 import { Apis, GetApi, imageurl } from "../../services/API";
+import { AiOutlineMessage } from "react-icons/ai";
 
 
 const ProductsPage = () => {
@@ -18,6 +19,7 @@ const ProductsPage = () => {
   const [cartItems, setCartItems] = useState(localData || []);
   const [dataLoading, setDataLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [submitBtn, setSubmitBtn] = useState(false)
 
   useEffect(() => {
     const FetchAllListedProducts = async () => {
@@ -74,8 +76,27 @@ const ProductsPage = () => {
     }
   }
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setSubmitBtn(true)
+      } else {
+        setSubmitBtn(false)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
   return (
     <PageLayout>
+      {submitBtn &&
+        <div
+          data-aos='fade-up-left' data-aos-duration="1000"
+          className="fixed z-40 bg-sec p-2 rounded-full cursor-pointer right-5 top-1/2">
+         <Link to={`/login`} className="w-fit px-3 py-1.5 bg-ash text-white rounded-md">Submit your product</Link>
+        </div>}
       <div className="pb-20 bg-dark">
         <div className="pageBg">
           <div className="w-full h-full bg-[#212134ea] py-10">
