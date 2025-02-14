@@ -73,7 +73,7 @@ const Footer = () => {
               <div className='flex flex-col gap-4 mt-4 text-sm text-white font-medium'>
                 <span>Follow us!</span>
                 <span>Stay tuned and access latest deals and discounts with:</span>
-                <div className='flex items-center gap-4 mt-2'>
+                <div className='flex flex-wrap items-center gap-4 mt-2'>
                   {Socials.map((item, i) => (
                     <a href={item.href} className='w-fit h-fit bg-ash hover:bg-primary rounded-md text-lg p-2' key={i}><item.icon /></a>
                   ))}

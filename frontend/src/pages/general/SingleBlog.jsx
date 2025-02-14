@@ -124,8 +124,8 @@ const SingleBlog = () => {
             <div className='w-full bg-dark py-10 text-white'>
                 {dataLoading ?
                     <div className='w-11/12 mx-auto'>
-                        <div className='flex items-start gap-5 flex-col lg:flex-row animate-pulse'>
-                            <div className='flex flex-col gap-16 lg:w-[30%] w-full p-2'>
+                        <div className='flex items-start lg:gap-6 gap-10 flex-col lg:flex-row animate-pulse'>
+                            <div className='flex flex-col gap-12 lg:w-[30%] w-full p-2'>
                                 <div className='w-full h-52 bg-slate-500 rounded-xl'></div>
                                 <div className='flex flex-col gap-6'>
                                     <div className='bg-slate-500 w-52 h-4 rounded-full'></div>
@@ -156,7 +156,7 @@ const SingleBlog = () => {
                                         <div className='w-14 h-1.5 bg-slate-500 rounded-full'></div>
                                     </div>
                                 </div>
-                                <div className='flex flex-col gap-16 mt-14'>
+                                <div className='flex flex-col gap-12 mt-14'>
                                     {new Array(2).fill(0).map((_, i) => (
                                         <div key={i} className='flex flex-col gap-5'>
                                             <div className='w-48 h-4 bg-slate-500 rounded-full'></div>
@@ -173,9 +173,9 @@ const SingleBlog = () => {
                     </div>
                     :
                     <div className="w-11/12 mx-auto">
-                        <div className="w-full flex items-start gap-6 flex-col lg:flex-row">
+                        <div className="w-full flex items-start lg:gap-6 gap-10 flex-col lg:flex-row">
                             <div className="lg:w-[30%] w-full">
-                                <div className="flex items-start flex-col gap-16">
+                                <div className="flex items-start flex-col gap-12">
                                     <img src={`${imageurl}/blogs/${singleBlog?.image}`} alt="blog image" className="w-full rounded-xl max-h-52 object-cover object-center " />
                                     <div className="w-full flex items-start flex-col gap-2">
                                         <div className="mont font-bold text-2xl">Table of contents</div>
@@ -209,7 +209,7 @@ const SingleBlog = () => {
                                         <div className=" lowercase">{singleBlog?.feature}</div>
                                     </div>
                                 </div>
-                                <div className="flex items-start mont flex-col gap-14 mt-10 text-gray-400">
+                                <div className="flex items-start mont flex-col gap-12 mt-10 text-gray-400">
                                     <div className='flex flex-col gap-2 items-start' id='main'>
                                         <div className="text-[1.8rem] leading-[33px] font-bold mont text-white"> Main Header</div>
                                         <div className="">{singleBlog?.main_header}</div>
@@ -230,7 +230,7 @@ const SingleBlog = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-start gap-2 flex-col my-5" id='conclusion'>
+                        <div className="flex items-start gap-2 flex-col mt-10 mb-5" id='conclusion'>
                             <div className="text-white font-bold leading-[33px] text-2xl mont ">Conclusion</div>
                             <div className="text-gray-400 mont">{singleBlog?.conclusion}</div>
                         </div>
