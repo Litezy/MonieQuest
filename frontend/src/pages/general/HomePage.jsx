@@ -31,6 +31,9 @@ const HomePage = () => {
     FetchAllOpenAirdrops()
   }, [])
 
+  const deFiAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'deFi');
+  }, [airdrops])
   const featuredAirdrops = useMemo(() => {
     return airdrops.filter((ele) => ele.category === 'featured');
   }, [airdrops])
@@ -38,13 +41,13 @@ const HomePage = () => {
     return airdrops.filter((ele) => ele.category === 'new');
   }, [airdrops])
   const NFTAirdrops = useMemo(() => {
-    return airdrops.filter((ele) => ele.category === 'nft');
+    return airdrops.filter((ele) => ele.category === 'NFT');
   }, [airdrops])
-  const deFiAirdrops = useMemo(() => {
-    return airdrops.filter((ele) => ele.category === 'deFi');
+  const potentialAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'potential');
   }, [airdrops])
-  const otherAirdrops = useMemo(() => {
-    return airdrops.filter((ele) => ele.category === 'others');
+  const earnCryptoAirdrops = useMemo(() => {
+    return airdrops.filter((ele) => ele.category === 'earn_crypto');
   }, [airdrops])
 
 
@@ -104,6 +107,18 @@ const HomePage = () => {
                   </Link>
                 </div>
                 <div className='flex flex-wrap gap-14 justify-center text-gray-200'>
+                  {deFiAirdrops.length > 0 &&
+                    <div className='flex flex-col gap-2'>
+                      <div className='flex flex-col gap-4'>
+                        {deFiAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} />
+                        ))}
+                      </div>
+                      <Link to='/airdrops/deFi' onClick={MoveToTop}>
+                        <FormButton title='show more deFi airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                      </Link>
+                    </div>
+                  }
                   {featuredAirdrops.length > 0 &&
                     <div className='flex flex-col gap-2'>
                       <div className='flex flex-col gap-4'>
@@ -140,27 +155,27 @@ const HomePage = () => {
                       </Link>
                     </div>
                   }
-                  {deFiAirdrops.length > 0 &&
+                  {potentialAirdrops.length > 0 &&
                     <div className='flex flex-col gap-2'>
                       <div className='flex flex-col gap-4'>
-                        {deFiAirdrops.slice(0, 2).map((item, i) => (
-                          <AirdropDiv key={i} item={item} />
-                        ))}
-                      </div>
-                      <Link to='/airdrops/deFi' onClick={MoveToTop}>
-                        <FormButton title='show more deFi airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
-                      </Link>
-                    </div>
-                  }
-                  {otherAirdrops.length > 0 &&
-                    <div className='flex flex-col gap-2'>
-                      <div className='flex flex-col gap-4'>
-                        {otherAirdrops.slice(0, 2).map((item, i) => (
+                        {potentialAirdrops.slice(0, 2).map((item, i) => (
                           <AirdropDiv key={i} item={item} />
                         ))}
                       </div>
                       <Link to='/airdrops/others' onClick={MoveToTop}>
-                        <FormButton title='show more ways to earn crypto' className='!text-sm !capitalize !rounded-md !py-4' />
+                        <FormButton title='show more potential airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
+                      </Link>
+                    </div>
+                  }
+                  {earnCryptoAirdrops.length > 0 &&
+                    <div className='flex flex-col gap-2'>
+                      <div className='flex flex-col gap-4'>
+                        {earnCryptoAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} />
+                        ))}
+                      </div>
+                      <Link to='/airdrops/others' onClick={MoveToTop}>
+                        <FormButton title='show more earn crypto airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
                       </Link>
                     </div>
                   }

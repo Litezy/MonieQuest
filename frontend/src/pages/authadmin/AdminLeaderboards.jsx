@@ -71,7 +71,7 @@ const AdminLeaderboards = () => {
                                                 {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}
                                             </td>
                                             <td class="px-6 py-4 text-lightgreen">
-                                                {currencySign[0]}{item?.user_wallets?.total_deposit.toLocaleString()}
+                                                {currencySign[1]}{item?.user_wallets?.total_deposit && item.user_wallets.total_deposit.toLocaleString()}
                                             </td>
                                             <td class="px-6 py-4">
                                                 {moment(item.createdAt).format(`DD-MM-YYYY`)}

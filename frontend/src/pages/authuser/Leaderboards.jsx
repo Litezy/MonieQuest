@@ -32,14 +32,12 @@ const Leaderboards = () => {
     return (
         <AuthPageLayout>
             <div className='w-11/12 mx-auto'>
-
-
                 {dataLoading && new Array(3).fill().map((_, i) => (
                     <div key={i} className="w-full mb-5 h-16 bg-gray-500 rounded-md animate-pulse"></div>
 
                 ))}
                 {!dataLoading &&
-                    <div className="w-full flex items-center gap-5 flex-col lg:flex-row">
+                    <div className="w-full flex items-start gap-5 flex-col lg:flex-row">
                         <div className="w-full lg:w-1/2">
                             <img src={banner} className='rounded-md' alt="" />
                         </div>

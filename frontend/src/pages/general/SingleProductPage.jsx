@@ -8,7 +8,7 @@ import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Rating from '@mui/material/Rating';
 import { Apis, GetApi, imageurl, PutApi } from '../../services/API';
 import moment from 'moment'
-import Loading from '../../GeneralComponents/Loading';
+import ButtonLoader from '../../GeneralComponents/ButtonLoader';
 
 
 const SingleProductPage = () => {
@@ -237,7 +237,7 @@ const SingleProductPage = () => {
                                                 />
                                             </div>
                                             <div className='w-fit relative'>
-                                                {loading && <Loading />}
+                                                {loading && <ButtonLoader className={`rounded-[4px]`} />}
                                                 <button className='outline-none w-fit h-fit flex gap-1 items-center justify-center py-3 px-8 bg-ash uppercase text-sm font-bold rounded-[4px] text-white tracking-widest relative' onClick={submitRating}>
                                                     <span>{form.submit ? 'submitted' : 'submit'}</span>
                                                     <IoCheckmarkDoneCircle />
