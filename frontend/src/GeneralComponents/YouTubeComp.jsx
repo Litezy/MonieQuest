@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { LiteYoutubeEmbed } from 'react-lite-yt-embed';
 
 const YouTubeComp = ({ videoId }) => {
 

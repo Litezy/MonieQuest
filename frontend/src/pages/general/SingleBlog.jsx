@@ -12,28 +12,7 @@ import { ErrorAlert, MoveToSection, MoveToTop, SuccessAlert, } from '../../utils
 import BlogDiv from '../../GeneralComponents/BlogDiv';
 import Loading from '../../GeneralComponents/Loading';
 
-const parapgraphs = [
-    {
-        title: `Main header`,
-        sectionID: 'main'
-    },
-    {
-        title: `First paragraph`,
-        sectionID: 'first'
-    },
-    {
-        title: `Second paragraph`,
-        sectionID: 'second'
-    },
-    {
-        title: `Extras paragraph`,
-        sectionID: 'extras'
-    },
-    {
-        title: `Conclusion`,
-        sectionID: 'conclusion'
-    },
-]
+
 
 const SingleBlog = () => {
     const { feature, id } = useParams()
@@ -67,6 +46,7 @@ const SingleBlog = () => {
             setDataLoading(false)
         }
     }, [id])
+
 
     const FetchRelatedBlogs = async () => {
         try {
@@ -118,6 +98,29 @@ const SingleBlog = () => {
             setLoading(false)
         }
     }
+
+    const parapgraphs = [
+        {
+            title: singleBlog?.main_header_title,
+            sectionID: 'main'
+        },
+        {
+            title: singleBlog?.first_paragraph_subtitle,
+            sectionID: 'first'
+        },
+        {
+            title: singleBlog?.second_paragraph_subtitle,
+            sectionID: 'second'
+        },
+        {
+            title: singleBlog?.extras_title,
+            sectionID: 'extras'
+        },
+        {
+            title:singleBlog?.conclusion,
+            sectionID: 'conclusion'
+        },
+    ]
 
     return (
         <PageLayout>
@@ -176,12 +179,12 @@ const SingleBlog = () => {
                         <div className="w-full flex items-start lg:gap-6 gap-10 flex-col lg:flex-row">
                             <div className="lg:w-[30%] w-full">
                                 <div className="flex items-start flex-col gap-12">
-                                    <img src={`${imageurl}/blogs/${singleBlog?.image}`} alt="blog image" className="w-full rounded-xl max-h-52 object-cover object-center " />
+                                    <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.image}`} alt="blog image" className="w-full rounded-xl max-h-52 object-cover object-center " />
                                     <div className="w-full flex items-start flex-col gap-2">
                                         <div className="mont font-bold text-2xl">Table of contents</div>
                                         {parapgraphs.map((item, i) => {
                                             return (
-                                                <div onClick={() => MoveToSection(item.sectionID, 100)} key={i} className={`cursor-pointer hover:text-lightgreen mont `}>{item.title}</div>
+                                                <div onClick={() => MoveToSection(item.sectionID, 100)} key={i} className={`cursor-pointer capitalize hover:text-lightgreen mont `}>{item.title}</div>
                                             )
                                         })}
                                     </div>
@@ -211,21 +214,30 @@ const SingleBlog = () => {
                                 </div>
                                 <div className="flex items-start mont flex-col gap-12 mt-10 text-gray-400">
                                     <div className='flex flex-col gap-2 items-start' id='main'>
-                                        <div className="text-[1.8rem] leading-[33px] font-bold mont text-white"> Main Header</div>
-                                        <div className="">{singleBlog?.main_header}</div>
+                                        <div className="text-[1.8rem] leading-[33px] capitalize font-bold mont text-white"> {singleBlog?.main_header_title}</div>
+                                        <div className="">{singleBlog?.main_header_content}</div>
                                     </div>
                                     <div className="flex items-start gap-2 flex-col" id='first'>
-                                        <div className="text-white font-bold leading-[33px] text-2xl mont ">First Paragragh</div>
-                                        <div className="">{singleBlog?.first_paragraph}</div>
+                                        <div className="text-white font-bold capitalize leading-[33px] text-2xl mont ">{singleBlog?.first_paragraph_subtitle}</div>
+                                        <div className="">{singleBlog?.first_paragraph_content}</div>
                                     </div>
                                     <div className="flex items-start gap-2 flex-col" id='second'>
-                                        <div className="text-white font-bold leading-[33px] mont  text-2xl">Second Paragraph.</div>
-                                        <div className="">{singleBlog?.second_paragraph}</div>
+                                        <div className="text-white font-bold capitalize leading-[33px] mont  text-2xl">{singleBlog?.second_paragraph_subtitle}.</div>
+                                        <div className="">{singleBlog?.second_paragraph_content}</div>
                                     </div>
+
+                                    {singleBlog?.second_paragraph_image && <div className="flex items-start gap-2 flex-col" id='second'>
+                                        <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.second_paragraph_image}`} alt="second image" className="w-full rounded-xl max-h-52 object-cover object-center " />
+                                    </div>}
+
+
                                     <div className="flex items-start gap-2 flex-col" id='extras'>
-                                        <div className="text-white font-bold leading-[33px] mont  text-2xl">extras</div>
-                                        <div className="">{singleBlog?.extras}</div>
+                                        <div className="text-white font-bold capitalize leading-[33px] mont  text-2xl">{singleBlog?.extras_title}</div>
+                                        <div className="">{singleBlog?.extras_content}</div>
                                     </div>
+                                    {singleBlog?.extras_image && <div className="flex items-start gap-2 flex-col" id='second'>
+                                        <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.extras_image}`} alt="extras image" className="w-full rounded-xl max-h-52 object-cover object-center " />
+                                    </div>}
 
                                 </div>
                             </div>
