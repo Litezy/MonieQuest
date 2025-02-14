@@ -8,7 +8,7 @@ import { GiArrowScope } from "react-icons/gi";
 import SelectComp from '../../GeneralComponents/SelectComp'
 import { MoveToTop } from '../../utils/pageUtils'
 import { Apis, GetApi } from '../../services/API'
-import Loading from '../../GeneralComponents/Loading'
+import ButtonLoader from '../../GeneralComponents/ButtonLoader'
 
 const statuses = ["Open", "Closed"]
 const categories = ["DeFi", "Featured", "New", "NFT", "Potential", "Earn_Crypto"]
@@ -34,7 +34,6 @@ const AirdropsPage = () => {
         if (response.status === 200) {
           setStaticData(response.msg)
           setAirdrops(response.msg)
-          console.log(response.msg)
         }
       } catch (error) {
         //
@@ -148,8 +147,8 @@ const AirdropsPage = () => {
                     <SelectComp title={`Blockchain`} options={blockchains} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.blockchain} handleChange={(e) => setSelect({ ...select, blockchain: e.target.value })} />
                   </div>
                   <div className='w-fit relative'>
-                    {loading && <Loading />}
-                    <button onClick={SubmitFilter} className='outline-none w-fit h-fit bg-lightgreen text-black rounded-full py-2 px-8'>Search</button>
+                    {loading && <ButtonLoader className={`rounded-full`} />}
+                    <button onClick={SubmitFilter} className='outline-none w-fit h-fit bg-lightgreen text-black rounded-full py-3 px-8'>Search</button>
                   </div>
                 </div>
                 {airdrops.length > 0 ?
