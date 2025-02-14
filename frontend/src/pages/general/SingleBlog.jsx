@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import { CiLink } from "react-icons/ci";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import FormInput from '../../utils/FormInput';
 import Comments from '../../GeneralComponents/Comments';
 import { Link, useParams } from 'react-router-dom';
-import { Apis, GetApi, imageurl } from '../../services/API';
+import { Apis, GetApi, imageurl, PostApi } from '../../services/API';
 import avatar from '../../assets/images/avatar.svg'
 import moment from 'moment';
-import { ErrorAlert, MoveToSection, MoveToTop, } from '../../utils/pageUtils';
+import { ErrorAlert, MoveToSection, MoveToTop, SuccessAlert, } from '../../utils/pageUtils';
 import BlogDiv from '../../GeneralComponents/BlogDiv';
+import Loading from '../../GeneralComponents/Loading';
 
 const parapgraphs = [
     {
@@ -39,10 +40,12 @@ const SingleBlog = () => {
     const [singleBlog, setSingleBlog] = useState({})
     const [relatedBlogs, setRelatedBlogs] = useState([])
     const [dataLoading, setDataLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({
         username: '',
         email: '',
         phone: '',
+        content: ''
     })
     const formHandler = (event) => {
         setForm({
@@ -51,42 +54,69 @@ const SingleBlog = () => {
         })
     }
 
+    const FetchSingleBlog = useCallback(async () => {
+        try {
+            const response = await GetApi(`${Apis.admin.single_blog}/${id}`)
+            if (response.status === 200) {
+                setSingleBlog(response.msg)
+            }
+
+        } catch (error) {
+            //
+        } finally {
+            setDataLoading(false)
+        }
+    }, [id])
+
+    const FetchRelatedBlogs = async () => {
+        try {
+            const response = await GetApi(`${Apis.admin.related_blogs}/${feature}/${id}`)
+            if (response.status === 200) {
+                setRelatedBlogs(response.msg)
+            }
+        } catch (error) {
+            //
+        }
+    }
+
     useEffect(() => {
-        const FetchSingleBlog = async () => {
-            setDataLoading(true)
-            try {
-                const response = await GetApi(`${Apis.admin.single_blog}/${id}`)
-                if (response.status === 200) {
-                    setSingleBlog(response.msg)
-                    console.log(response.msg)
-                }
-
-            } catch (error) {
-                //
-            } finally {
-                setDataLoading(false)
-            }
-        }
-        const FetchRelatedBlogs = async () => {
-            try {
-                const response = await GetApi(`${Apis.admin.related_blogs}/${feature}/${id}`)
-                if (response.status === 200) {
-                    setRelatedBlogs(response.msg)
-                }
-
-            } catch (error) {
-                //
-            }
-        }
         FetchSingleBlog()
         FetchRelatedBlogs()
-    }, [feature, id])
+    }, [FetchSingleBlog, id])
 
 
-    const SubmitComment = (e) => {
+    const SubmitComment = async (e) => {
         e.preventDefault()
 
-        if (!form.username || !form.email) return ErrorAlert('Enter all required fields')
+        if (!form.username || !form.email || !form.content) return ErrorAlert('Enter all required fields')
+        const formbody = {
+            blog_id: singleBlog.id,
+            email_address: form.email,
+            username: form.username,
+            phone_number: form.phone,
+            content: form.content
+        }
+
+        setLoading(true)
+        try {
+            const response = await PostApi(Apis.admin.add_comment, formbody)
+            if (response.status === 200) {
+                FetchSingleBlog()
+                SuccessAlert(response.msg)
+                setForm({
+                    username: '',
+                    email: '',
+                    phone: '',
+                    content: ''
+                })
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -118,12 +148,15 @@ const SingleBlog = () => {
                                     </div>
                                     <CiLink className='text-3xl text-sky-400' />
                                 </div>
-                                <div className='mt-8 flex gap-2 items-center'>
-                                    <div className='w-14 h-1.5 bg-slate-500 rounded-full'></div>
-                                    <IoChevronForwardSharp className='text-slate-500' />
-                                    <div className='w-14 h-1.5 bg-slate-500 rounded-full'></div>
+                                <div className='flex flex-col gap-3 mt-8'>
+                                    <div className='w-3/4 h-5 bg-slate-500 rounded-full'></div>
+                                    <div className='flex gap-2 items-center'>
+                                        <div className='w-14 h-1.5 bg-slate-500 rounded-full'></div>
+                                        <IoChevronForwardSharp className='text-slate-500' />
+                                        <div className='w-14 h-1.5 bg-slate-500 rounded-full'></div>
+                                    </div>
                                 </div>
-                                <div className='flex flex-col gap-16 mt-16'>
+                                <div className='flex flex-col gap-16 mt-14'>
                                     {new Array(2).fill(0).map((_, i) => (
                                         <div key={i} className='flex flex-col gap-5'>
                                             <div className='w-48 h-4 bg-slate-500 rounded-full'></div>
@@ -168,13 +201,15 @@ const SingleBlog = () => {
                                         <CiLink className='text-3xl text-sky-400' />
                                     </div>
                                 </div>
-                                <div className="mt-5 text-sky-400 text-sm flex items-center gap-2">
-                                    <div className="">blogs</div>
-                                    <div className=""><IoChevronForwardSharp /></div>
-                                    <div className=" lowercase">{singleBlog?.feature}</div>
+                                <div className='flex flex-col gap-3 mt-5'>
+                                    <div className="text-[1.8rem] leading-[33px] font-bold max-w-3/4">{singleBlog?.title}</div>
+                                    <div className="text-sky-400 text-sm flex items-center gap-2">
+                                        <div className="">blogs</div>
+                                        <div className=""><IoChevronForwardSharp /></div>
+                                        <div className=" lowercase">{singleBlog?.feature}</div>
+                                    </div>
                                 </div>
-                                <div className="mt-3 text-[1.8rem] leading-[33px] font-bold max-w-3/4">{singleBlog?.title}</div>
-                                <div className="flex items-start mont flex-col gap-16 mt-8 text-gray-400">
+                                <div className="flex items-start mont flex-col gap-14 mt-10 text-gray-400">
                                     <div className='flex flex-col gap-2 items-start' id='main'>
                                         <div className="text-[1.8rem] leading-[33px] font-bold mont text-white"> Main Header</div>
                                         <div className="">{singleBlog?.main_header}</div>
@@ -205,19 +240,22 @@ const SingleBlog = () => {
                             {Object.values(singleBlog).length !== 0 && singleBlog.blog_comments.length > 0 ?
                                 <div className='flex flex-col gap-5'>
                                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
-                                        {singleBlog.blog_comments.slice(0, 10).map((item, i) => (
+                                        {singleBlog.blog_comments.slice(0, 8).map((item, i) => (
                                             <Comments key={i} item={item} />
                                         ))}
                                     </div>
-                                    <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/comments`} onClick={MoveToTop}>
-                                        <button className="w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
-                                    </Link>
+                                    {singleBlog.blog_comments.length > 8 &&
+                                        <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/comments`} onClick={MoveToTop}>
+                                            <button className="w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
+                                        </Link>
+                                    }
                                 </div>
                                 :
-                                <div>Be the first to comment!</div>
+                                <div>Be the first to comment on this blog!</div>
                             }
                         </div>
-                        <form className="w-full p-3 rounded-md bg-primary" onSubmit={SubmitComment}>
+                        <form className="w-full p-4 rounded-md bg-primary relative" onSubmit={SubmitComment}>
+                            {loading && <Loading />}
                             <div className="text-lg mont">Leave a comment</div>
                             <div className="flex mt-4 flex-col gap-5 w-full lg:w-3/4">
                                 <div className="flex items-center flex-col lg:flex-row gap-5">
@@ -228,32 +266,32 @@ const SingleBlog = () => {
                                         <FormInput label={`Email Address`} type='email' name='email' placeholder='Email address' value={form.email} onChange={formHandler} />
                                     </div>
                                     <div className="w-full">
-                                        <FormInput label={`Phone number (optional)`} name='phone' placeholder='Phone number' value={form.phone} onChange={formHandler} />
+                                        <FormInput label={`Phone number (Optional)`} name='phone' placeholder='Phone number' value={form.phone} onChange={formHandler} />
                                     </div>
                                 </div>
                                 <div className="w-full flex-col  flex items-start gap-2">
                                     <div className="text-base">Comment</div>
                                     <textarea
-                                        className=' resize-y w-full max-h-52 min-h-20 p-2 rounded-md bg-primary' placeholder='enter your comment'
-                                        name="" id=""></textarea>
+                                        className='resize-y w-full max-h-52 min-h-20 p-2 rounded-md bg-primary' placeholder='enter your comment'
+                                        name="content" value={form.content} onChange={formHandler}></textarea>
                                 </div>
                                 <div className="w-1/2 flex items-center justify-center ml-auto">
                                     <button className='w-full bg-ash hover:bg-ash/90 rounded-md py-2'>Submit</button>
                                 </div>
                             </div>
                         </form>
-                        <div className="mt-10 flex flex-col gap-2">
-                            <div className="">You may also like:</div>
-                            {relatedBlogs.length > 0 ?
+                        {relatedBlogs.length > 0 ?
+                            <div className="mt-10 flex flex-col gap-2">
+                                <div className="">You may also like:</div>
                                 <div className="w-full flex items-center gap-3 overflow-x-auto scroll">
                                     {relatedBlogs.map((item, i) => (
                                         <BlogDiv item={item} key={i} className={`!w-64 flex-none`} />
                                     ))}
                                 </div>
-                                :
-                                <div className='mt-2'>No related blogs found...</div>
-                            }
-                        </div>
+                            </div>
+                            :
+                            <div className='mt-10'>No related blogs found...</div>
+                        }
                     </div>
                 }
             </div>

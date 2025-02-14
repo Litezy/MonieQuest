@@ -34,6 +34,7 @@ const AirdropsPage = () => {
         if (response.status === 200) {
           setStaticData(response.msg)
           setAirdrops(response.msg)
+          console.log(response.msg)
         }
       } catch (error) {
         //
@@ -84,7 +85,6 @@ const AirdropsPage = () => {
     }
   }
 
-  // console.log(airdrops,staticData)
   return (
     <PageLayout>
       <div className='pb-20 bg-dark w-full text-gray-200'>
@@ -105,7 +105,7 @@ const AirdropsPage = () => {
                   <div className='w-24 h-2 rounded-full bg-slate-400 animate-pulse'></div>
                   <div className='grid md:grid-cols-4 grid-cols-2 gap-8 items-center'>
                     {new Array(4).fill(0).map((_, i) => (
-                      <div key={i} className='w-28 h-12 rounded-full bg-slate-400 animate-pulse'></div>
+                      <div key={i} className='w-28 h-12 rounded-[3px] bg-slate-400 animate-pulse'></div>
                     ))}
                   </div>
                   <div className='w-28 h-12 rounded-full bg-slate-400 animate-pulse'></div>
@@ -139,15 +139,13 @@ const AirdropsPage = () => {
                 <div className='flex lg:flex-row flex-col lg:gap-8 gap-4 items-center justify-center'>
                   <div className='capitalize font-bold'>filter here:</div>
                   <div className='grid md:grid-cols-4 grid-cols-2 gap-4 items-center'>
-                    <div className='bg-[#ffffff] w-28 h-fit rounded-[3px] flex justify-between items-center text-[#585858] p-2 font-semibold'>
+                    <div className='bg-[#ffffff] w-28 h-fit rounded-[3px] flex justify-between items-center text-[#585858] p-[0.55rem] font-semibold'>
                       <span>KYC</span>
                       <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='cursor-pointer'></input>
                     </div>
-
-                    <SelectComp title={'Status'} options={statuses} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.status} handleChange={(e) => setSelect({ ...select, status: e.target.value })} />
-
-                    <SelectComp title={`Categories`} options={categories} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.category} handleChange={(e) => setSelect({ ...select, category: e.target.value })} />
-                    <SelectComp title={`Blockchain`} options={blockchains} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '.78rem' }} value={select.blockchain} handleChange={(e) => setSelect({ ...select, blockchain: e.target.value })} />
+                    <SelectComp title={'Status'} options={statuses} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.status} handleChange={(e) => setSelect({ ...select, status: e.target.value })} />
+                    <SelectComp title={`Categories`} options={categories} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.category} handleChange={(e) => setSelect({ ...select, category: e.target.value })} />
+                    <SelectComp title={`Blockchain`} options={blockchains} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.blockchain} handleChange={(e) => setSelect({ ...select, blockchain: e.target.value })} />
                   </div>
                   <div className='w-fit relative'>
                     {loading && <Loading />}
@@ -159,7 +157,7 @@ const AirdropsPage = () => {
                     {deFiAirdrops.length > 0 &&
                       <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
                         <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-2 items-center text-xl'>
+                          <div className='flex gap-3 items-center text-xl'>
                             <GiArrowScope />
                             <span className='capitalize font-bold'>deFi airdrops</span>
                           </div>
@@ -183,7 +181,7 @@ const AirdropsPage = () => {
                     {featuredAirdrops.length > 0 &&
                       <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
                         <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-2 items-center text-xl'>
+                          <div className='flex gap-3 items-center text-xl'>
                             <GiArrowScope />
                             <span className='capitalize font-bold'>featured airdrops</span>
                           </div>
@@ -207,7 +205,7 @@ const AirdropsPage = () => {
                     {newAirdrops.length > 0 &&
                       <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
                         <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-2 items-center text-xl'>
+                          <div className='flex gap-3 items-center text-xl'>
                             <GiArrowScope />
                             <span className='capitalize font-bold'>new airdrops</span>
                           </div>
@@ -231,7 +229,7 @@ const AirdropsPage = () => {
                     {NFTAirdrops.length > 0 &&
                       <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
                         <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-2 items-center text-xl'>
+                          <div className='flex gap-3 items-center text-xl'>
                             <GiArrowScope />
                             <span className='capitalize font-bold'>NFT airdrops</span>
                           </div>
@@ -255,7 +253,7 @@ const AirdropsPage = () => {
                     {potentialAirdrops.length > 0 &&
                       <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
                         <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-2 items-center text-xl'>
+                          <div className='flex gap-3 items-center text-xl'>
                             <GiArrowScope />
                             <span className='capitalize font-bold'>potential airdrops</span>
                           </div>
@@ -279,7 +277,7 @@ const AirdropsPage = () => {
                     {earnCryptoAirdrops.length > 0 &&
                       <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
                         <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-2 items-center text-xl'>
+                          <div className='flex gap-3 items-center text-xl'>
                             <GiArrowScope />
                             <span className='capitalize font-bold'>earn crypto airdrops</span>
                           </div>

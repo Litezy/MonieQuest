@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import AirdropDiv from '../../GeneralComponents/AirdropDiv'
 import { Apis, GetApi } from '../../services/API'
+import { GiArrowScope } from 'react-icons/gi'
 
 const CategoryAirdropsPage = () => {
     const { category } = useParams()
@@ -32,17 +33,23 @@ const CategoryAirdropsPage = () => {
             <div className='w-full bg-dark py-20'>
                 <div className='w-11/12 mx-auto text-gray-200'>
                     {dataLoading ?
-                        <div className='flex flex-col gap-6'>
-                            <div className='w-64 h-4 rounded-full bg-slate-400 animate-pulse'></div>
+                        <div className='flex flex-col gap-6 animate-pulse'>
+                            <div className='flex gap-3 items-center'>
+                                <div className='w-6 h-6 rounded-full bg-slate-400'></div>
+                                <div className='w-52 h-4 rounded-full bg-slate-400'></div>
+                            </div>
                             <div className='flex flex-wrap gap-4'>
                                 {new Array(4).fill(0).map((_, i) => (
-                                    <div className='w-72 h-40 rounded-md bg-slate-400 animate-pulse' key={i}></div>
+                                    <div className='w-72 h-40 rounded-md bg-slate-400' key={i}></div>
                                 ))}
                             </div>
                         </div>
                         :
                         <div className='flex flex-col gap-6'>
-                            <div className='text-2xl font-bold capitalize'>{category === 'earn_crypto' ? 'all earn crypto' : `all ${category} airdrops`}</div>
+                            <div className='flex gap-3 items-center text-2xl'>
+                                <GiArrowScope />
+                                <div className='font-bold capitalize'>{category === 'earn_crypto' ? 'all earn crypto' : `all ${category} airdrops`}</div>
+                            </div>
                             {categoryAirdrops.length > 0 ?
                                 <div className='flex flex-wrap gap-4'>
                                     {categoryAirdrops.map((item, i) => (

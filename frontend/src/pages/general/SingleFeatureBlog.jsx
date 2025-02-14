@@ -33,7 +33,10 @@ const SingleFeatureBlog = () => {
                 <div className="w-11/12 mx-auto my-10 poppins">
                     {dataLoading ?
                         <div className='flex flex-col gap-4 animate-pulse'>
-                            <div className='w-56 h-2 rounded-full bg-gray-500'></div>
+                            <div className='flex gap-3 items-center'>
+                                <div className='w-5 h-5 rounded-full bg-slate-400'></div>
+                                <div className='w-56 h-4 rounded-full bg-slate-400'></div>
+                            </div>
                             <div className='grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4'>
                                 {new Array(4).fill(0).map((_, i) => (
                                     <div key={i} className='w-full bg-black rounded-xl p-2'>

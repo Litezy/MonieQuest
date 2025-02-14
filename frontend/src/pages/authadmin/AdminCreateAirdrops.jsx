@@ -18,6 +18,7 @@ const categories = [
 const kyces = [
     "true", "false"
 ]
+const blockchains = ["ton", "bnb", "eth", "solana"]
 
 const AdminCreateAirdrops = () => {
     const [screen, setScreen] = useState(1)
@@ -26,7 +27,7 @@ const AdminCreateAirdrops = () => {
         title: '',
         category: categories[0],
         kyc: kyces[0],
-        blockchain: '',
+        blockchain: blockchains[0],
         type: '',
         about: '',
         video_guide_link: '',
@@ -186,7 +187,7 @@ const AdminCreateAirdrops = () => {
                                     </div>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
-                                        <FormInput placeholder='Blockchain' name='blockchain' value={form.blockchain} onChange={formHandler} />
+                                        <SelectComp options={blockchains} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.blockchain} handleChange={(e) => setForm({ ...form, blockchain: e.target.value })} />
                                     </div>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*type <span className='lowercase'>(gaming, bot, meme, e.t.c.):</span></div>

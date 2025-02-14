@@ -50,7 +50,7 @@ const AdminCryptoSellOrders = () => {
                                         {item?.crypto_currency}
                                     </td>
                                     <td className="px-3 py-3">
-                                        {item?.trans_hash.slice(0,10)}*******
+                                        {item?.trans_hash.slice(0, 10)}*******
                                     </td>
 
                                     <td className="px-3 py-3">
@@ -63,7 +63,9 @@ const AdminCryptoSellOrders = () => {
 
                                 </tr>
                             )) :
-                                <div className=" w-full text-lg font-semibold flex items-center justify-center">No Sell Orders  </div>
+                                <tr className="w-full truncate text-lg font-semibold">
+                                    <td colSpan="6" className='text-center py-2'>No Sell Orders</td>
+                                </tr>
                             }
 
                         </tbody>

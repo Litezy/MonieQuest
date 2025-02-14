@@ -11,7 +11,6 @@ const Comments = ({ item }) => {
     <div className='w-full px-4 relative py-2 rounded-md bg-primary/20'>
       {/* 
       {showComments &&
-
         <ModalLayout setModal={setShowComments} clas={`lg:w-5/6 w-11/12 mx-auto scroll`}>
           <div className="w-full bg-primary  p-5 rounded-md ">
             <div className="flex items-start gap-52 md:gap-0 lg:justify-between w-full">
@@ -26,7 +25,6 @@ const Comments = ({ item }) => {
               </div>
             </div>
             <div className="poppins mt-2">This is the actual comment. It's can be long or short. And must contain only text information.</div>
-
             <div className="mt-10 mb-5 poppins font-bold text-xl ">Top 5 replies</div>
             <div className="ml-5 lg:ml-10">
               {new Array(5).fill(0, 1, 5).map((_, j) => {
@@ -52,8 +50,6 @@ const Comments = ({ item }) => {
               </div>
             </div>
           </div>
-
-
         </ModalLayout>
       } */}
 

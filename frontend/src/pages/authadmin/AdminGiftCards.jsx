@@ -5,10 +5,10 @@ import { currencies } from '../../AuthComponents/AuthUtils'
 import { Apis, AuthGetApi } from '../../services/API'
 
 const AdminGiftCards = () => {
-    const Topheaders = [ 'FullName', 'Gift-Brand', 'Code', 'Pin',`Amount`, 'Details']
-     const [data,setData] = useState([])
+    const Topheaders = ['FullName', 'Gift-Brand', 'Code', 'Pin', `Amount`, 'Details']
+    const [data, setData] = useState([])
 
-     const fetchGiftOrders = async () =>{
+    const fetchGiftOrders = async () => {
         try {
             const res = await AuthGetApi(Apis.admin.get_giftcard_orders)
             const data = res.data
@@ -16,12 +16,12 @@ const AdminGiftCards = () => {
         } catch (error) {
             console.log(error)
         }
-     }
+    }
 
-     useEffect(()=>{
+    useEffect(() => {
         fetchGiftOrders()
-     },[])
-    
+    }, [])
+
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
@@ -62,7 +62,9 @@ const AdminGiftCards = () => {
 
                                 </tr>
                             )) :
-                                <div className=" w-full text-lg font-semibold flex items-center justify-center">No Buy Orders  </div>
+                                <tr className="w-full truncate text-lg font-semibold">
+                                    <td colSpan="6" className='text-center py-2'>No Giftcard Orders</td>
+                                </tr>
                             }
 
                         </tbody>

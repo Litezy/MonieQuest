@@ -51,8 +51,11 @@ const Blogs = () => {
                     {dataLoading ?
                         <div className='flex flex-col gap-4 animate-pulse'>
                             <div className='flex gap-5 items-center'>
-                                <div className='w-56 h-2 rounded-full bg-gray-500'></div>
-                                <div className='w-20 h-2 rounded-full bg-gray-500 mx-4'></div>
+                                <div className='flex gap-3 items-center'>
+                                    <div className='w-5 h-5 rounded-full bg-slate-400'></div>
+                                    <div className='w-56 h-4 rounded-full bg-slate-400'></div>
+                                </div>
+                                <div className='w-20 h-3 rounded-full bg-slate-400 mx-4'></div>
                             </div>
                             <div className='grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4'>
                                 {new Array(4).fill(0).map((_, i) => (

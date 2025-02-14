@@ -20,6 +20,7 @@ const categories = [
 const kyces = [
     "true", "false"
 ]
+const blockchains = ["ton", "bnb", "eth", "solana"]
 
 const AdminSingleAirdrop = () => {
     const { id } = useParams()
@@ -66,7 +67,7 @@ const AdminSingleAirdrop = () => {
                 setForm({
                     title: response.msg.title || '',
                     category: response.msg.category || categories[0],
-                    blockchain: response.msg.blockchain || '',
+                    blockchain: response.msg.blockchain || blockchains[0],
                     kyc: response.msg.kyc || kyces[0],
                     type: response.msg.type || '',
                     about: response.msg.about || '',
@@ -251,12 +252,8 @@ const AdminSingleAirdrop = () => {
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
-                                    <FormInput placeholder='Blockchain' name='blockchain' value={form.blockchain} onChange={formHandler} />
+                                    <SelectComp options={blockchains} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.blockchain} handleChange={(e) => setForm({ ...form, blockchain: e.target.value })} />
                                 </div>
-                                {/* <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
-                                    <SelectComp options={statuses} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.blockchain} handleChange={(e) => setForm({ ...form, blockchain: e.target.value })} />
-                                </div> */}
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*type</div>
                                     <FormInput placeholder='Airdrop type' name='type' value={form.type} onChange={formHandler} />

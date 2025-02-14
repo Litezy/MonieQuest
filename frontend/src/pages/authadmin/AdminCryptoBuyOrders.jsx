@@ -20,9 +20,9 @@ const AdminCryptoBuyOrders = () => {
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchBuys()
-    },[])
+    }, [])
 
     return (
         <AdminExchangeLayout>
@@ -64,7 +64,9 @@ const AdminCryptoBuyOrders = () => {
 
                                 </tr>
                             )) :
-                                <div className=" w-full text-lg font-semibold flex items-center justify-center">No Buy Orders  </div>
+                                <tr className="w-full truncate text-lg font-semibold">
+                                    <td colSpan="6" className='text-center py-2'>No Buy Orders</td>
+                                </tr>
                             }
 
                         </tbody>
