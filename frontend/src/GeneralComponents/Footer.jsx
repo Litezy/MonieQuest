@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { AiOutlineMail } from "react-icons/ai";
 import { LuPhone } from "react-icons/lu";
 import { RiFacebookFill } from "react-icons/ri";
-import { FaInstagram } from "react-icons/fa6";
-import { FaXTwitter } from "react-icons/fa6";
-import { FaLinkedin } from "react-icons/fa";
+import { FaInstagram, FaXTwitter, FaLinkedin, FaTiktok, FaPinterestP } from "react-icons/fa6";
+import { FaTelegramPlane, FaSnapchatGhost, FaYoutube, FaRedditAlien, FaQuora } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import FormInput from '../utils/FormInput';
 import FormButton from '../utils/FormButton';
@@ -12,10 +11,17 @@ import { ErrorAlert, MoveToTop } from '../utils/pageUtils';
 import Loading from './Loading';
 
 const Socials = [
-  { href: '', icon: RiFacebookFill },
-  { href: '', icon: FaInstagram },
-  { href: '', icon: FaXTwitter },
-  { href: '', icon: FaLinkedin }
+  { href: 'https://www.facebook.com/profile.php?id=61571510583455', icon: RiFacebookFill },
+  { href: 'https://www.instagram.com/official_moniequest', icon: FaInstagram },
+  { href: 'https://x.com/TheMonieQuest', icon: FaXTwitter },
+  { href: 'https://www.youtube.com/@Official_MonieQuest', icon: FaYoutube },
+  { href: 'http://t.me/Officialmoniequest', icon: FaTelegramPlane },
+  { href: 'https://www.tiktok.com/@official_moniequest', icon: FaTiktok },
+  { href: 'https://www.linkedin.com/in/MonieQuest/', icon: FaLinkedin },
+  { href: 'https://www.reddit.com/u/TimeConversation6102/s/fg3X4zMJht', icon: FaRedditAlien },
+  { href: 'https://www.snapchat.com/add/moniequest?share_id=DmZEmXUC8rk&locale=en-US', icon: FaSnapchatGhost },
+  { href: 'http://www.pinterest.com/moniequest', icon: FaPinterestP },
+  { href: 'https://www.quora.com/profile/Monie-Quest?ch=10&oid=2912302513&share=0b0a5353&srid=36peXp&target_type=user', icon: FaQuora },
 ]
 
 const pageLinks = [

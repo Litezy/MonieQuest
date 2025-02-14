@@ -1,14 +1,15 @@
+import moment from 'moment';
 import React, { useState } from 'react'
 import { FaUser } from "react-icons/fa";
 ;
 
-const Comments = ({ i,param,feature }) => {
-  const [reply, setReply] = useState(false)
-  const [showComments, setShowComments] = useState(false)
+const Comments = ({ item }) => {
+  // const [reply, setReply] = useState(false)
+  // const [showComments, setShowComments] = useState(false)
 
   return (
-    <div className='w-full px-4 relative py-2 rounded-md bg-primary/20 '>
-{/* 
+    <div className='w-full px-4 relative py-2 rounded-md bg-primary/20'>
+      {/* 
       {showComments &&
 
         <ModalLayout setModal={setShowComments} clas={`lg:w-5/6 w-11/12 mx-auto scroll`}>
@@ -63,15 +64,12 @@ const Comments = ({ i,param,feature }) => {
               <FaUser className='text-primary text-2xl' />
             </div>
             <div className="flex items-start flex-col text-base">
-              <div className="text-white font-bold lg:text-xl">Basir ahmed</div>
-              <div className="text-xs text-gray-500">11 min ago</div>
+              <div className="text-white font-bold lg:text-xl">{item?.username}</div>
+              <div className="text-xs text-gray-500">{moment(item?.createdAt).fromNow()}</div>
             </div>
           </div>
-         
         </div>
-        <div className="poppins ">This is the actual comment. It's can be long or short. And must contain only text information.</div>
-
-      
+        <div className="poppins ">{item?.content}</div>
       </div>
     </div>
   )

@@ -12,6 +12,7 @@ const SellCrypto = require('../models').exchangeSells
 const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
+const Comment = require('../models').comments
 const { webName, webShort, webURL, ServerError, nairaSign, dollarSign } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
@@ -769,6 +770,7 @@ exports.SingleBlog = async (req, res) => {
                     model: User, as: 'blog_user',
                     attributes: ['id', 'image', 'first_name', 'surname', 'email']
                 },
+                { model: Comment, as: 'blog_comments' },
             ]
         })
         if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
@@ -810,6 +812,40 @@ exports.AllRelatedBlogsExceptCurrent = async (req, res) => {
         return res.json({ status: 400, msg: error.message })
     }
 }
+
+exports.CommentOnBlog = async (req, res) => {
+    try {
+        const { blog_id, content, email_address, username, phone_number } = req.body
+        if (!blog_id || !username || !email_address || !content) return res.json({ status: 404, msg: 'Incomplete request found' })
+        await Comment.create({
+            blog: blog_id,
+            username,
+            email_address,
+            phone_number: phone_number || null,
+            content,
+        })
+        return res.json({ status: 200, msg: 'Comment sent' })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.AllBlogComments = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 404, msg: `Provide a blog ID` })
+
+        const allBlogComments = await Comment.findAll({
+            where: { blog: id },
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: allBlogComments })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
 
 
 exports.getCryptoBuysOrders = async (req, res) => {

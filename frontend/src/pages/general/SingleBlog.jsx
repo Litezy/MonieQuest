@@ -38,10 +38,7 @@ const SingleBlog = () => {
     const { feature, id } = useParams()
     const [singleBlog, setSingleBlog] = useState({})
     const [relatedBlogs, setRelatedBlogs] = useState([])
-    const [dataLoading, setDataLoading] = useState({
-        single: true,
-        related: true
-    })
+    const [dataLoading, setDataLoading] = useState(true)
     const [form, setForm] = useState({
         username: '',
         email: '',
@@ -56,18 +53,18 @@ const SingleBlog = () => {
 
     useEffect(() => {
         const FetchSingleBlog = async () => {
+            setDataLoading(true)
             try {
                 const response = await GetApi(`${Apis.admin.single_blog}/${id}`)
                 if (response.status === 200) {
                     setSingleBlog(response.msg)
+                    console.log(response.msg)
                 }
 
             } catch (error) {
                 //
             } finally {
-                setDataLoading({
-                    single: false
-                })
+                setDataLoading(false)
             }
         }
         const FetchRelatedBlogs = async () => {
@@ -79,10 +76,6 @@ const SingleBlog = () => {
 
             } catch (error) {
                 //
-            } finally {
-                setDataLoading({
-                    related: false
-                })
             }
         }
         FetchSingleBlog()
@@ -99,7 +92,7 @@ const SingleBlog = () => {
     return (
         <PageLayout>
             <div className='w-full bg-dark py-10 text-white'>
-                {dataLoading.single ?
+                {dataLoading ?
                     <div className='w-11/12 mx-auto'>
                         <div className='flex items-start gap-5 flex-col lg:flex-row animate-pulse'>
                             <div className='flex flex-col gap-16 lg:w-[30%] w-full p-2'>
@@ -123,7 +116,7 @@ const SingleBlog = () => {
                                             <div className='w-32 h-1.5 bg-slate-500 rounded-full'></div>
                                         </div>
                                     </div>
-                                    <CiLink className='text-3xl cursor-pointer text-sky-400' />
+                                    <CiLink className='text-3xl text-sky-400' />
                                 </div>
                                 <div className='mt-8 flex gap-2 items-center'>
                                     <div className='w-14 h-1.5 bg-slate-500 rounded-full'></div>
@@ -150,7 +143,7 @@ const SingleBlog = () => {
                         <div className="w-full flex items-start gap-6 flex-col lg:flex-row">
                             <div className="lg:w-[30%] w-full">
                                 <div className="flex items-start flex-col gap-16">
-                                    <img src={`${imageurl}/blogs/${singleBlog?.image}`} alt="blog image" className="w-full rounded-xl max-h-52 object-cover " />
+                                    <img src={`${imageurl}/blogs/${singleBlog?.image}`} alt="blog image" className="w-full rounded-xl max-h-52 object-cover object-center " />
                                     <div className="w-full flex items-start flex-col gap-2">
                                         <div className="mont font-bold text-2xl">Table of contents</div>
                                         {parapgraphs.map((item, i) => {
@@ -172,7 +165,7 @@ const SingleBlog = () => {
                                         </div>
                                     </div>
                                     <div className="">
-                                        <CiLink className='text-3xl cursor-pointer text-sky-400' />
+                                        <CiLink className='text-3xl text-sky-400' />
                                     </div>
                                 </div>
                                 <div className="mt-5 text-sky-400 text-sm flex items-center gap-2">
@@ -209,16 +202,20 @@ const SingleBlog = () => {
 
                         <div className="w-full my-10">
                             <div className="mont text-lg font-bold mb-5 ">Comments</div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
-                                {new Array(5).fill(0).map((_, i) => {
-                                    return (
-                                        <Comments feature={feature} key={i} i={i} param={id} />
-                                    )
-                                })}
-                            </div>
-                            <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/comments`} onClick={MoveToTop}>
-                                <button className="mt-5 w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
-                            </Link>
+                            {Object.values(singleBlog).length !== 0 && singleBlog.blog_comments.length > 0 ?
+                                <div className='flex flex-col gap-5'>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
+                                        {singleBlog.blog_comments.slice(0, 10).map((item, i) => (
+                                            <Comments key={i} item={item} />
+                                        ))}
+                                    </div>
+                                    <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/comments`} onClick={MoveToTop}>
+                                        <button className="w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
+                                    </Link>
+                                </div>
+                                :
+                                <div>Be the first to comment!</div>
+                            }
                         </div>
                         <form className="w-full p-3 rounded-md bg-primary" onSubmit={SubmitComment}>
                             <div className="text-lg mont">Leave a comment</div>
@@ -245,31 +242,8 @@ const SingleBlog = () => {
                                 </div>
                             </div>
                         </form>
-                    </div>
-                }
-                <div className="mt-10 w-11/12 mx-auto flex flex-col gap-2">
-                    <div className="">You may also like:</div>
-                    {dataLoading.related ?
-                        <div className='w-full flex gap-3 overflow-x-auto scroll'>
-                            {new Array(8).fill(0).map((_, i) => (
-                                <div key={i} className='flex-none w-64 bg-black rounded-xl p-2 animate-pulse'>
-                                    <div className=" bg-gray-500 h-40 rounded-xl w-full"></div>
-                                    <div className="mt-2 flex items-start flex-col gap-3  ">
-                                        <div className=" rounded-sm h-3 w-1/2  bg-gray-500"></div>
-                                        <div className="h-10 bg-gray-500 w-full"></div>
-                                        <div className="flex items-center gap-2 w-full ">
-                                            <div className="bg-gray-500 h-10 w-12 rounded-full"></div>
-                                            <div className="flex flex-col gap-1 w-full">
-                                                <div className="bg-gray-500 w-1/2 h-3"></div>
-                                                <div className="bg-gray-500 w-1/2 h-3"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        :
-                        <>
+                        <div className="mt-10 flex flex-col gap-2">
+                            <div className="">You may also like:</div>
                             {relatedBlogs.length > 0 ?
                                 <div className="w-full flex items-center gap-3 overflow-x-auto scroll">
                                     {relatedBlogs.map((item, i) => (
@@ -279,9 +253,9 @@ const SingleBlog = () => {
                                 :
                                 <div className='mt-2'>No related blogs found...</div>
                             }
-                        </>
-                    }
-                </div>
+                        </div>
+                    </div>
+                }
             </div>
 
         </PageLayout>
