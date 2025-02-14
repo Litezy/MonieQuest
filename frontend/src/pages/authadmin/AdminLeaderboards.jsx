@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { BiSolidToTop } from "react-icons/bi";
 import { Apis, AuthGetApi } from '../../services/API';
 import { currencySign } from '../../utils/pageUtils';
+import moment from 'moment'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout';
-import logo from '../../assets/images/trophy.png'
-import banner from '../../assets/images/toptrader1.jpg'
 
 const AdminLeaderboards = () => {
     const [dataLoading, setDataLoading] = useState(true)
@@ -31,71 +30,65 @@ const AdminLeaderboards = () => {
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
+                <div className="flex justify-center w-full  items-center gap-3 mb-10">
+                    <BiSolidToTop className='text-3xl text-lightgreen' />
+                    <div className="text-2xl font-bold ">Top Traders on MonieQuest</div>
+                </div>
+
                 {dataLoading && new Array(3).fill().map((_, i) => (
                     <div key={i} className="w-full mb-5 h-16 bg-gray-500 rounded-md animate-pulse"></div>
 
                 ))}
-                {!dataLoading &&
-                    <div className="w-full flex items-start gap-5 flex-col lg:flex-row">
-                        <div className="w-full lg:w-1/2">
-                            <img src={banner} className='rounded-md' alt="" />
-                        </div>
+                {!dataLoading && <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <table class="w-11/12 mx-auto text-sm text-center rounded-e-md rounded-s-md truncate rtl:text-right text-gray-400 ">
+                        <thead class="text-sm bg-primary lg:text-base">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    User ID
+                                </th>
 
-                        <div className="w-full lg:w-1/2">
-                            <div className="flex justify-center w-full  items-center gap-3 mb-10">
-                                <BiSolidToTop className='text-3xl text-lightgreen' />
-                                <div className="text-2xl font-bold ">Top Traders on MonieQuest</div>
-                            </div>
-                            <div class="relative overflow-y-auto shadow-md sm:rounded-lg w-full max-h-96 lg:max-h-80 scroll ">
+                                <th scope="col" class="px-6 py-3">
+                                    <div className="">Name</div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <div className="">Amount Traded</div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <div className="">Date Joined</div>
+                                </th>
 
-                                <table class="w-full text-sm text-center rounded-e-md rounded-s-md truncate rtl:text-right text-gray-400 ">
-                                    <thead class="text-sm bg-primary lg:text-base">
-                                        <tr>
-                                            <th scope="col" class="text-start px-7 text-2xl">
-                                                #
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {leaderboard.length > 0 ? leaderboard.slice(0, 20).map((item, i) => {
+                                return (
+                                    (
+                                        <tr key={i} class="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
+                                            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                                                {item.id}
                                             </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                <div className="">Name</div>
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                <div className="">Prizes</div>
-                                            </th>
-
+                                            <td class="px-6 py-4">
+                                                {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}
+                                            </td>
+                                            <td class="px-6 py-4 text-lightgreen">
+                                                {currencySign[0]}{item?.user_wallets?.total_deposit && item.user_wallets.total_deposit.toLocaleString()}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {moment(item.createdAt).format(`DD-MM-YYYY`)}
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {leaderboard.length > 0 ? leaderboard.slice(0, 10).map((item, i) => {
-                                            return (
-                                                (
-                                                    <tr key={i} class="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
-                                                        <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-                                                            <img src={logo} className='w-10' alt="winner_" />
-                                                        </th>
-                                                        <td class="px-6 py-4">
-                                                            {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}
-                                                        </td>
-                                                        <td class="px-6 py-4 text-lightgreen">
-                                                            {currencySign[0]}25
-                                                        </td>
-
-                                                    </tr>
-
-                                                )
-                                            )
-                                        }) :
-                                            <tr className='bg-dark truncate text-white border-b'>
-                                                <td colSpan="4" className='py-2 italic text-center'>
-                                                    No leaders available yet...
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-                }
+                                    )
+                                )
+                            }) :
+                                <tr className='bg-dark truncate text-white border-b'>
+                                    <td colSpan="4" className='italic text-center px-6 py-4'>
+                                        No leaders available yet...
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>}
 
             </div>
         </AdminPageLayout>
