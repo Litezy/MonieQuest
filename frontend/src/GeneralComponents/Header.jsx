@@ -7,10 +7,10 @@ import logo from '../assets/images/logo.png'
 
 const pageLinks = [
   { path: 'home', url: '/' },
-  { path: 'airdrops', url: '/airdrops' },
+  { path: 'airdrops', url: '/airdrops',main:'/airdrops/' },
   { path: 'about us', url: '/about' },
-  { path: 'products', url: '/products' },
-  { path: 'blogs', url: '/blogs' },
+  { path: 'products', url: '/products',main:'/products' },
+  { path: 'blogs', url: '/blogs',main:'/blogs' },
 ]
 
 const Header = () => {
@@ -29,7 +29,7 @@ const Header = () => {
         </Link>
         <div className='lg:flex gap-2 hidden relative'>
           {pageLinks.map((item, i) => (
-            <Link key={i} to={item.url} onClick={MoveToTop} className={`hover:text-lightgreen text-white cursor-pointer capitalize px-3 ${(location.pathname === item.url) && 'font-bold border-b border-bg-green'}`}>{item.path}</Link>
+            <Link key={i} to={item.url} onClick={MoveToTop} className={`hover:text-lightgreen text-white cursor-pointer capitalize px-3 ${( location.pathname.includes(item.main && item.url )) && 'font-bold border-b border-bg-green'}`}>{item.path}</Link>
           ))}
         </div>
         <div className='lg:flex gap-4 hidden'>
