@@ -57,6 +57,7 @@ const admin_urls = {
     all_open_airdrops: admin + 'all-open-airdrops',
     single_airdrop: admin + 'single-airdrop',
     update_airdrop: admin + 'update-airdrop',
+    delete_blog_img: admin +'delete_blog_img',
     category_airdrops: admin + 'category-airdrops',
     all_products: admin + 'all-products',
     single_product: admin + 'single-product',

@@ -9,6 +9,7 @@ import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
+import { MdDelete } from "react-icons/md";
 
 
 const features = [
@@ -23,17 +24,32 @@ const AdminSingleBlog = () => {
     const [form, setForm] = useState({
         title: '',
         feature: '',
-        main_header: '',
-        first_paragraph: '',
-        second_paragraph: '',
-        extras: '',
+        main_header_title: '',
+        main_header_content: '',
+        first_paragraph_subtitle: '',
+        first_paragraph_content: '',
+        second_paragraph_subtitle: '',
+        second_paragraph_content: '',
+        extras_subtitle: '',
+        extras_content: '',
         conclusion: ''
     })
-    const [blogImage, setBlogImage] = useState({
+    const [secondImg, setSecondImg] = useState({
+        img: null,
+        image: null,
+    })
+    const [extrasImg, setExtrasImg] = useState({
         img: null,
         image: null
     })
+    const [blogImage, setBlogImage] = useState({
+        img: null,
+        image: null,
+    })
+
     const imgRef = useRef()
+    const imgSecondRef = useRef()
+    const imgExtrasRef = useRef()
 
     const formHandler = (event) => {
         setForm({
@@ -42,28 +58,70 @@ const AdminSingleBlog = () => {
         })
     }
 
+    const deleteImg = async (val) => {
+        const data = { tag: val }
+        setLoading(true)
+        try {
+            const res = await AuthPutApi(`${Apis.admin.delete_blog_img}/${id}`, data)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            if (val === 'paragraph') {
+                setSecondImg({ img: null, image: null });
+            }
+            else if (val === 'extras') {
+                setExtrasImg({ img: null, image: null }); 
+            }
+            FetchSingleBlog()
+            SuccessAlert(res.msg)
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const FetchSingleBlog = useCallback(async () => {
         try {
             const response = await AuthGetApi(`${Apis.admin.single_blog}/${id}`)
+            // console.log(response)
             if (response.status === 200) {
                 setSingleBlog(response.msg)
                 setForm({
                     title: response.msg.title || '',
                     feature: response.msg.feature || features[0],
-                    main_header: response.msg.main_header || '',
-                    first_paragraph: response.msg.first_paragraph || '',
-                    second_paragraph: response.msg.second_paragraph || '',
-                    extras: response.msg.extras || '',
-                    conclusion: response.msg.conclusion || '',
+                    main_header_title: response.msg.main_header_title || '',
+                    main_header_content: response.msg.main_header_content || '',
+                    first_paragraph_subtitle: response.msg.first_paragraph_subtitle || '',
+                    first_paragraph_content: response.msg.first_paragraph_content || '',
+                    second_paragraph_subtitle: response.msg.second_paragraph_subtitle || '',
+                    second_paragraph_content: response.msg.second_paragraph_content || '',
+                    extras_subtitle: response.msg.extras_title || '',
+                    extras_content: response.msg.extras_content || '',
+                    conclusion: response.msg.conclusion || ''
                 })
                 setBlogImage({
                     ...blogImage,
-                    img: `${imageurl}/blogs/${response.msg.image}` || null
+                    img: `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.image}`
                 })
-                console.log(response.msg)
+                setSecondImg({
+                    img: response.msg.second_paragraph_image
+                        ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.second_paragraph_image}`
+                        : null,
+                    image: null
+                });
+    
+                setExtrasImg({
+                    img: response.msg.extras_image
+                        ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.extras_image}`
+                        : null,
+                    image: null
+                });
+
+                // console.log(response.msg.extras_image)
             }
         } catch (error) {
-            //
+            console.log(error)
         } finally {
             setDataLoading(false)
         }
@@ -85,21 +143,53 @@ const AdminSingleBlog = () => {
         })
     }
 
+    const handleSecondImg = (e) => {
+        const file = e.target.files[0]
+        if (!file.type.startsWith('image/')) {
+            imgSecondRef.current.value = null
+            return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
+        }
+        setSecondImg({
+            img: URL.createObjectURL(file),
+            image: file
+        })
+    }
+
+    const handleExtasImg = (e) => {
+        const file = e.target.files[0]
+        if (!file.type.startsWith('image/')) {
+            imgExtrasRef.current.value = null
+            return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
+        }
+        setExtrasImg({
+            img: URL.createObjectURL(file),
+            image: file
+        })
+    }
+
     const Submit = async (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.feature || !form.main_header || !form.first_paragraph || !form.second_paragraph || !form.extras || !form.conclusion) return ErrorAlert('Enter all required fields')
+        if (!form.title || !form.feature || !form.main_header_title || !form.main_header_content ||
+            !form.first_paragraph_subtitle || !form.first_paragraph_content || !form.second_paragraph_subtitle || !form.second_paragraph_content || !form.extras_subtitle ||
+            !form.extras_content || !form.conclusion) return ErrorAlert('Enter all required fields')
 
         const formbody = new FormData()
-        formbody.append('blog_id', singleBlog.id)
         formbody.append('image', blogImage.image)
+        formbody.append('blog_id', id)
         formbody.append('title', form.title)
         formbody.append('feature', form.feature)
-        formbody.append('main_header', form.main_header)
-        formbody.append('first_paragraph', form.first_paragraph)
-        formbody.append('second_paragraph', form.second_paragraph)
-        formbody.append('extras', form.extras)
+        formbody.append('main_header_title', form.main_header_title)
+        formbody.append('main_header_content', form.main_header_content)
+        formbody.append('first_paragraph_subtitle', form.first_paragraph_subtitle)
+        formbody.append('first_paragraph_content', form.first_paragraph_content)
+        formbody.append('second_paragraph_subtitle', form.second_paragraph_subtitle)
+        formbody.append('second_paragraph_content', form.second_paragraph_content)
+        formbody.append('extras_title', form.extras_subtitle)
+        formbody.append('extras_content', form.extras_content)
         formbody.append('conclusion', form.conclusion)
+        formbody.append('second_paragraph_image', secondImg.image)
+        formbody.append('extras_image', extrasImg.image)
 
         setLoading(true)
         try {
@@ -107,6 +197,7 @@ const AdminSingleBlog = () => {
             if (response.status === 200) {
                 FetchSingleBlog()
                 SuccessAlert(response.msg)
+                await new Promise((resolve) => setTimeout(resolve, 2000))
             } else {
                 ErrorAlert(response.msg)
             }
@@ -116,6 +207,9 @@ const AdminSingleBlog = () => {
             setLoading(false)
         }
     }
+
+    // console.log(secondImg.img)
+
 
     return (
         <AdminPageLayout>
@@ -145,53 +239,122 @@ const AdminSingleBlog = () => {
                     :
                     <form className='flex flex-col gap-10 mt-10' onSubmit={Submit}>
                         <div className='grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-6'>
-                            <label className='cursor-pointer w-full'>
-                                {blogImage.img ?
-                                    <div className='relative'>
-                                        <img src={blogImage.img} alt={blogImage.img} className='w-full h-72 object-cover object-center'></img>
-                                        <div className="absolute top-0 -right-3 main font-bold">
-                                            <FaEdit className='text-2xl text-lightgreen' />
+                            <div className="">
+                                <label className='cursor-pointer w-full'>
+                                    {blogImage.img ?
+                                        <div className='relative'>
+                                            <img src={blogImage.img} className='w-full h-72 object-cover object-center'></img>
+                                            <div className="absolute -top-3 -right-3 main font-bold">
+                                                <FaEdit className='text-2xl text-lightgreen' />
+                                            </div>
+
                                         </div>
-                                    </div>
-                                    :
-                                    <div className='w-full h-72 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
-                                        <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
-                                        <span>click to add image</span>
-                                    </div>
-                                }
-                                <input ref={imgRef} type="file" onChange={handleUpload} hidden />
-                            </label>
+                                        :
+                                        <div className='w-full h-72 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
+                                            <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
+                                            <span>click to add image</span>
+                                        </div>
+                                    }
+                                    <input ref={imgRef} type="file" onChange={(e) => handleUpload(e, 'main')} hidden />
+                                </label>
+
+                            </div>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*title:</div>
                                     <FormInput placeholder='Title' name='title' value={form.title} onChange={formHandler} />
                                 </div>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>*feature:</div>
                                     <SelectComp options={features} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.feature} handleChange={(e) => setForm({ ...form, feature: e.target.value })} />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>*main header:</div>
-                                    <FormInput formtype='textarea' placeholder='Main header' name='main_header' value={form.main_header} onChange={formHandler} />
+                                    <div className='text-lightgreen capitalize font-medium'>*main header subtitle:</div>
+                                    <FormInput placeholder='Main header' name='main_header_subtitle' value={form.main_header_title} onChange={formHandler} />
                                 </div>
+                                <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>*main header content:</div>
+                                    <FormInput formtype='textarea' placeholder='Main header' name='main_header_content' value={form.main_header_content} onChange={formHandler} />
+                                </div>
+                            </div>
+                            <div className='flex  flex-col gap-6'>
+                                <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>*first paragraph subtitle:</div>
+                                    <FormInput placeholder='First paragraph' name='first_paragraph_subtitle' value={form.first_paragraph_subtitle} onChange={formHandler} />
+                                </div>
+                                <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>*first paragraph content:</div>
+                                    <FormInput formtype='textarea' placeholder='First paragraph' name='first_paragraph_content' value={form.first_paragraph_content} onChange={formHandler} />
+                                </div>
+                                <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>*second paragraph subtitle:</div>
+                                    <FormInput placeholder='Second paragraph' name='second_paragraph_subtitle' value={form.second_paragraph_subtitle} onChange={formHandler} />
+                                </div>
+                                <div className='flex flex-col'>
+                                    <div className='text-lightgreen capitalize font-medium'>*second paragraph content:</div>
+                                    <FormInput formtype='textarea' placeholder='Second paragraph' name='second_paragraph_content' value={form.second_paragraph_content} onChange={formHandler} />
+                                </div>
+
+                                <div className="w-full">
+                                    <label className='cursor-pointer w-full'>
+                                        {secondImg.img !== null ?
+                                            <div className='relative'>
+                                                <img src={secondImg.img} className='w-full h-72 object-cover object-center'></img>
+                                                <div className="absolute top-0 -right-3 main font-bold">
+                                                    <FaEdit className='text-2xl text-lightgreen' />
+                                                </div>
+                                            </div>
+                                            :
+                                            <div className='w-full h-72 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
+                                                <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
+                                                <span>click to add second paragraph image</span>
+                                            </div>
+                                        }
+                                        <input ref={imgSecondRef} type="file" onChange={handleSecondImg} hidden />
+                                    </label>
+                                    {secondImg?.img !== null &&
+                                        <div className=" mt-5 main font-bold">
+                                            <button type='button' onClick={() => deleteImg(`paragraph`)} className='px-4 py-1.5 rounded-md bg-red-600'>delete paragraph image</button>
+                                        </div>
+                                    }
+                                </div>
+
                             </div>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>*first paragraph:</div>
-                                    <FormInput formtype='textarea' placeholder='First paragraph' name='first_paragraph' value={form.first_paragraph} onChange={formHandler} />
+                                    <div className='text-lightgreen capitalize font-medium'>*extras subtitle:</div>
+                                    <FormInput placeholder='Extra paragraph' name='extras_subtitle' value={form.extras_subtitle} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>*second paragraph:</div>
-                                    <FormInput formtype='textarea' placeholder='Second paragraph' name='second_paragraph' value={form.second_paragraph} onChange={formHandler} />
+                                    <div className='text-lightgreen capitalize font-medium'>*extras content:</div>
+                                    <FormInput formtype='textarea' placeholder='Extra paragraph' name='extras_content' value={form.extras_content} onChange={formHandler} />
                                 </div>
-                            </div>
-                            <div className='flex flex-col gap-6'>
-                                <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>extras:</div>
-                                    <FormInput formtype='textarea' placeholder='Extra paragraph' name='extras' value={form.extras} onChange={formHandler} />
+                                <div className="w-full">
+                                    <label className='cursor-pointer w-full'>
+                                        {extrasImg.img ?
+                                            <div className='relative'>
+                                                <img src={extrasImg.img} className='w-full h-72 object-cover object-center'></img>
+                                                <div className="absolute top-0 -right-3 main font-bold">
+                                                    <FaEdit className='text-2xl text-lightgreen' />
+                                                </div>
+                                            </div>
+                                            :
+                                            <div className='w-full h-72 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
+                                                <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
+                                                <span>click to add extras image</span>
+                                            </div>
+                                        }
+                                        <input ref={imgExtrasRef} type="file" onChange={handleExtasImg} hidden />
+                                    </label>
+
+                                    {extrasImg?.img &&
+                                        <div className=" mt-5 main font-bold">
+                                            <button type='button' onClick={() => deleteImg(`extras`)} className='px-4 py-1.5 rounded-md bg-red-600'>delete extras image</button>
+                                        </div>
+                                    }
                                 </div>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>conclusion:</div>
+                                    <div className='text-lightgreen capitalize font-medium'>*conclusion:</div>
                                     <FormInput formtype='textarea' placeholder='Conclusion' name='conclusion' value={form.conclusion} onChange={formHandler} />
                                 </div>
                             </div>

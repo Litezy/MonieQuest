@@ -9,12 +9,12 @@ import moment from 'moment';
 const BlogDiv = ({ item, className }) => {
 
     return (
-        <div className={`w-full h-fit bg-black rounded-xl p-2 ${className}`}>
+        <div className={`w-full  bg-black rounded-xl p-2 ${className}`}>
             <Link to={`/blogs/${item.feature}/${item.id}`} onClick={MoveToTop} >
                 <div className="w-full">
-                    <img src={`${imageurl}/blogs/${item?.image}`} alt="blog image" className="w-full rounded-xl h-40 object-cover " />
+                    <img src={`${imageurl}/blogs/${item.gen_id}/${item?.image}`} alt="blog image" className="w-full rounded-xl h-40 object-cover " />
                 </div>
-                <div className="mt-2 flex items-start flex-col gap-3">
+                <div className="mt-2 flex items-start flex-col justify-between gap-3">
                     <div className="text-sm text-gray-400 "><span className='capitalize'>{item?.feature === 'personal_finance' ? 'personal finance' : item?.feature}</span> article</div>
                     <div className="lg:flex items-center gap-3 justify-between text-sky-400">
                         <div className=" text-sm w-full capitalize">{item?.title}</div>
