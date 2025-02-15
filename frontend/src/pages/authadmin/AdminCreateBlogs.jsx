@@ -7,7 +7,6 @@ import { FaEdit } from 'react-icons/fa'
 import Lottie from 'react-lottie'
 import { defaultOptions, ErrorAlert } from '../../utils/pageUtils'
 import { Link } from 'react-router-dom'
-import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import { Apis, AuthPostApi } from '../../services/API'
@@ -87,14 +86,7 @@ const AdminCreateBlogs = () => {
     return (
         <BlogsLayout>
             <div className='w-11/12 mx-auto'>
-                {loading &&
-                    <ModalLayout clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...submitting</div>
-                        </div>
-                    </ModalLayout>
-                }
+                {loading && <Loader title={`submitting`} />}
                 {screen === 1 &&
                     <div className='flex flex-col gap-10'>
                         <div className='flex flex-col gap-2'>

@@ -9,7 +9,7 @@ import { FaCopy } from 'react-icons/fa';
 import { TfiTimer } from "react-icons/tfi";
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../../GeneralComponents/Loader';
-import Exchange from './Exchange';
+import ExchangeLayout from '../../AuthComponents/ExchangeLayout';
 import { Apis, AuthPostApi } from '../../services/API';
 
 
@@ -24,7 +24,7 @@ const SellCrypto = () => {
     const [forms, setForms] = useState({
         amount: '',
         trans_hash: '',
-        symbol:'',
+        symbol: '',
         network: coins[0].network,
         wallet_add: ''
     })
@@ -107,7 +107,7 @@ const SellCrypto = () => {
             crypto_currency: forms.type,
             type: 'sell',
             trans_hash: forms.trans_hash,
-            network:forms.network
+            network: forms.network
         }
         try {
             const res = await AuthPostApi(Apis.transaction.sell_crypto, formdata)
@@ -148,22 +148,17 @@ const SellCrypto = () => {
         const value = e.target.value
         const findNetwork = coins.find((trx) => trx.network === String(value))
         if (findNetwork) {
-            setForms({...forms, network: findNetwork.network, wallet_add: findNetwork.address,symbol:findNetwork.symbol });
-        }else{
-            setForms({...forms, network: '', wallet_add: '' });
+            setForms({ ...forms, network: findNetwork.network, wallet_add: findNetwork.address, symbol: findNetwork.symbol });
+        } else {
+            setForms({ ...forms, network: '', wallet_add: '' });
         }
 
     }
     return (
-        <Exchange>
+        <ExchangeLayout>
             <div className='w-full'>
                 {loading &&
-                    <ModalLayout clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...processing</div>
-                        </div>
-                    </ModalLayout>
+                    <Loader title={`processing`} />
                 }
                 {confirm &&
                     <ModalLayout setModal={setConfirm} clas={`w-11/12 mx-auto lg:w-1/2`}>
@@ -286,9 +281,9 @@ const SellCrypto = () => {
                                     <div className="font-bold text-lg">Wallet Address</div>
                                     <div className="w-full flex items-center gap-1  rounded-md ">
                                         <div className="w-full">
-                                        <input readOnly={true} type="text" value={forms.wallet_add}
-                                            className='w-full bg-dark focus:border-zinc-300 focus-ring-0 outline-none '
-                                        />
+                                            <input readOnly={true} type="text" value={forms.wallet_add}
+                                                className='w-full bg-dark focus:border-zinc-300 focus-ring-0 outline-none '
+                                            />
                                         </div>
                                         <FaCopy onClick={copyToClip} className='text-white text-xl cursor-pointer' />
 
@@ -328,7 +323,7 @@ const SellCrypto = () => {
                 </div>}
 
             </div>
-        </Exchange>
+        </ExchangeLayout>
     )
 }
 

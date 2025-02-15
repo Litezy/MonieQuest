@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Exchange from './Exchange'
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import ModalLayout from '../../utils/ModalLayout'
@@ -8,8 +7,8 @@ import { Apis, AuthGetApi, AuthPostApi } from '../../services/API'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import FormButton from '../../utils/FormButton'
 import FormInput from '../../utils/FormInput'
-import { FaCopy, FaRegCopy } from 'react-icons/fa'
-import { BankAcc, currencies, delay } from '../../AuthComponents/AuthUtils'
+import { FaCopy } from 'react-icons/fa'
+import { BankAcc, currencies } from '../../AuthComponents/AuthUtils'
 import { TfiTimer } from 'react-icons/tfi'
 
 const OrderPage = () => {
@@ -39,8 +38,8 @@ const OrderPage = () => {
             console.log(res.msg)
             return;
         }
-    },[])
-   
+    }, [])
+
     const rate = 1750
     useEffect(() => {
         fetchSingleHistory()
@@ -119,12 +118,7 @@ const OrderPage = () => {
                 <Link to={`/user/exchange/orders`} className='w-fit px-4 py-1.5 rounded-md bg-primary'>back to orders </Link>
             </div>
             {load &&
-                <ModalLayout setModal={setLoad} clas={`w-11/12 mx-auto md:w-1/2`}>
-                    <div className="w-full p-5 flex items-center flex-col justify-center">
-                        <Loader />
-                        <div className="">...processing</div>
-                    </div>
-                </ModalLayout>
+                <Loader title={`processing`} />
             }
             <div className="mt-5">
                 {loading &&
@@ -227,12 +221,12 @@ const OrderPage = () => {
                         </div>
                     </div>
                 }
-                {!loading && screen === 1 && tag ==='sell' &&
+                {!loading && screen === 1 && tag === 'sell' &&
 
                     <div className="">
-                        
+
                         <div className="bg-primary p-10 rounded-md w-11/12 mx-auto mt-5 md:mt-10 mb-5">
-                            
+
                             <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
                                 <div className="flex flex-col gap-3 w-full">
                                     <div className="flex flex-col items-start">
@@ -291,7 +285,7 @@ const OrderPage = () => {
                         </div>
                     </div>
                 }
-                {!loading && screen === 2  && tag === 'buy' &&
+                {!loading && screen === 2 && tag === 'buy' &&
 
                     <div className="w-full min-h-[70dvh] flex items-center justify-center">
 
@@ -345,7 +339,7 @@ const OrderPage = () => {
 
                 }
 
-                {!loading && screen === 3  && tag === 'buy' &&
+                {!loading && screen === 3 && tag === 'buy' &&
                     <div className="">
                         <div className="w-11/12 mx-auto min-h-[80dvh] flex items-center justify-center">
 

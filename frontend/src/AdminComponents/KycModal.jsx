@@ -14,7 +14,7 @@ const KycModal = ({ data, setModal }) => {
     const refdiv = useRef(null)
     const [, setSubKycs] = useAtom(USER_SUB_KYCS)
     const [, setVerifiedKycs] = useAtom(USER_VER_KYCS)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
     const [form, setForm] = useState({ msg: '' })
     const [approve, setApprove] = useState(false)
@@ -32,7 +32,7 @@ const KycModal = ({ data, setModal }) => {
             if (response.status !== 200) return ErrorAlert(response.msg)
             SuccessAlert(response.msg)
             setSubKycs(response.data?.submitted)
-            setForm({msg:''})
+            setForm({ msg: '' })
             await new Promise((resolve) => setTimeout(resolve, 3000))
             setLoading(false)
             setModal(false)
@@ -53,7 +53,7 @@ const KycModal = ({ data, setModal }) => {
             if (response.status !== 200) return ErrorAlert(response.msg)
             SuccessAlert(response.msg)
             setVerifiedKycs(response.data?.verified)
-            setForm({msg:''})
+            setForm({ msg: '' })
             await new Promise((resolve) => setTimeout(resolve, 3000))
             setModal(false)
             navigate(`/admin/all_users/submitted_kycs`)
@@ -64,8 +64,8 @@ const KycModal = ({ data, setModal }) => {
         }
     }
 
-    const handleMsg = (e) =>{
-        setForm({...form,[e.target.name]:e.target.value})
+    const handleMsg = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value })
     }
     return (
         <div className="w-full mx-auto mt-5 relative">
@@ -79,13 +79,7 @@ const KycModal = ({ data, setModal }) => {
                     <h1 className='text-center py-4 font-bold '>KYC submission from </h1>
                 </div>
 
-
-
-                {loading &&
-                    <div className="absolute top-0  backdrop-blur-sm w-full h-full rounded-md left-1/2 -translate-x-1/2">
-                        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-fit p-5 rounded-md bg-white"><Loader /></div>
-                    </div>
-                }
+                {loading && <Loader />}
                 <div className="flex w-11/12 mx-auto items-baseline">
                     <div className="flex flex-col gap-2 w-1/2">
                         <div className="">

@@ -93,7 +93,7 @@ const SingleBuyOrder = () => {
 
     const declineOrder = async () => {
         if (!forms.msg) return ErrorAlert(`Please provide failed message to user`)
-        const data = { tag: 'failed',message:forms.msg }
+        const data = { tag: 'failed', message: forms.msg }
         setLoading(true)
         try {
             const res = await AuthPostApi(`${Apis.admin.confirm_buy}/${id}`, data)
@@ -116,12 +116,7 @@ const SingleBuyOrder = () => {
         <AdminPageLayout>
 
             {loading &&
-                <ModalLayout clas={`w-11/12 mx-auto`}>
-                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                        <Loader />
-                        <div>...closing order</div>
-                    </div>
-                </ModalLayout>
+                <Loader title={`closing order`} />
             }
             {failed && <ModalLayout setModal={setFailed} clas={`w-11/12 mx-auto lg:w-1/2`}>
                 <div className="w-full p-5 bg-white text-dark rounded-md flex items-center flex-col justify-center">

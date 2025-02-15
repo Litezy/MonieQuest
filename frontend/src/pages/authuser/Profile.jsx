@@ -14,7 +14,6 @@ import FormButton from '../../utils/FormButton';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 import { FaRegIdCard } from "react-icons/fa";
 import Loader from '../../GeneralComponents/Loader';
-import ModalLayout from '../../utils/ModalLayout';
 import Loading from '../../GeneralComponents/Loading';
 import Cookies from 'js-cookie'
 import { useAtom } from 'jotai';
@@ -60,11 +59,11 @@ const Profile = () => {
     })
   }
 
-  const handleAccNum = (e)=>{
+  const handleAccNum = (e) => {
     let value = e.target.value
-     const formatVal = value.replace(/\D/g, '')
-     const numLenght= formatVal.substring(0,10)
-     setForm({...form,account_number:numLenght})
+    const formatVal = value.replace(/\D/g, '')
+    const numLenght = formatVal.substring(0, 10)
+    setForm({ ...form, account_number: numLenght })
   }
 
   useEffect(() => {
@@ -131,7 +130,7 @@ const Profile = () => {
   }
 
   const AddBankAccount = async () => {
-    if (!form.account_number  || !form.bank_name) return ErrorAlert('Enter all fields')
+    if (!form.account_number || !form.bank_name) return ErrorAlert('Enter all fields')
     const formbody = {
       bank_name: form.bank_name,
       account_number: form.account_number,
@@ -162,14 +161,7 @@ const Profile = () => {
   return (
     <AuthPageLayout>
       <div>
-        {loading.main &&
-          <ModalLayout clas={`w-11/12 mx-auto`}>
-            <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-              <Loader />
-              <div>...submitting</div>
-            </div>
-          </ModalLayout>
-        }
+        {loading.main && <Loader title={`updating`} />}
         <div className='h-36 w-full -mt-10 py-8 bg-gradient-to-br from-ash to-primary'>
           <div className='w-11/12 mx-auto flex gap-2 justify-end items-center text-2xl font-bold uppercase mt-14'>
             <span>profile</span>
@@ -210,12 +202,14 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            <Link
-              to={`/user/profile/kyc`}
-              className='bg-primary w-fit h-fit py-1.5 px-5 rounded-lg md:text-base text-sm text-lightgreen font-medium flex gap-1 items-center mt-4 cursor-pointer hover:bg-[#2f2f47]' >
-              <FaRegIdCard />
-              <span>Apply for KYC Verification</span>
-            </Link>
+            {user?.kyc_verified !== 'true' &&
+              <Link
+                to={`/user/profile/kyc`}
+                className='bg-primary w-fit h-fit py-1.5 px-5 rounded-lg md:text-base text-sm text-lightgreen font-medium flex gap-1 items-center mt-4 cursor-pointer hover:bg-[#2f2f47]' >
+                <FaRegIdCard />
+                <span>Apply for KYC Verification</span>
+              </Link>
+            }
             <div className='bg-primary w-fit h-fit py-1.5 px-5 rounded-lg md:text-base text-sm text-red-600 font-medium flex gap-1 items-center mt-4 cursor-pointer hover:bg-[#2f2f47]' onClick={logoutAccount}>
               <IoLogOut />
               <span>Log out</span>
@@ -258,7 +252,7 @@ const Profile = () => {
               <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1 relative'>
                 {loading.sub && <Loading />}
                 <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={handleAccNum} className='!bg-secondary !w-64' border={false} />
-                <FormInput  value={`${user?.first_name} ${user?.surname}`} className='!bg-secondary !w-64' border={false} />
+                <FormInput value={`${user?.first_name} ${user?.surname}`} className='!bg-secondary !w-64' border={false} />
                 <FormInput placeholder='Bank name' name='bank_name' value={form.bank_name} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                 <FormButton title={Object.keys(bank).length !== 0 ? 'Update' : 'Save'} className='!py-3 !text-base mt-2' type='button' onClick={AddBankAccount} />
               </div>

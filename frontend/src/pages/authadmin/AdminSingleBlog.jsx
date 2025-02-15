@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
-import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import { Link, useParams } from 'react-router-dom'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
@@ -121,14 +120,7 @@ const AdminSingleBlog = () => {
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
-                {loading &&
-                    <ModalLayout clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...submitting</div>
-                        </div>
-                    </ModalLayout>
-                }
+                {loading && <Loader title={`submitting`} />}
                 <Link to='/admin/blogs/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
                     back to all blogs
                 </Link>

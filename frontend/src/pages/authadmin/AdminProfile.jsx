@@ -10,7 +10,6 @@ import PasswordInputField from '../../utils/PasswordInputField';
 import { CookieName, ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import FormButton from '../../utils/FormButton';
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout';
-import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import Loading from '../../GeneralComponents/Loading';
 import Cookies from 'js-cookie'
@@ -212,14 +211,7 @@ const AdminProfile = () => {
     return (
         <AdminPageLayout>
             <div>
-                {loading.main &&
-                    <ModalLayout clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...submitting</div>
-                        </div>
-                    </ModalLayout>
-                }
+                {loading.main && <Loader title={`updating`} />}
                 <div className='h-36 w-full -mt-10 py-8 bg-gradient-to-br from-ash to-primary'>
                     <div className='w-11/12 mx-auto flex gap-2 justify-end items-center text-2xl font-bold uppercase mt-14'>
                         <span>profile</span>

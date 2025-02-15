@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import FormInput from '../../utils/FormInput';
-import { BankAcc, blockchainNetworks, coins, currencies, instructions } from '../../AuthComponents/AuthUtils';
+import { blockchainNetworks, coins, currencies, instructions } from '../../AuthComponents/AuthUtils';
 import ModalLayout from '../../utils/ModalLayout';
 import { BsInfoCircleFill } from "react-icons/bs";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Loader from '../../GeneralComponents/Loader';
-import Exchange from './Exchange';
 import { Apis, AuthGetApi, AuthPostApi } from '../../services/API';
+import ExchangeLayout from '../../AuthComponents/ExchangeLayout';
 
 
 const BuyCrypto = () => {
@@ -137,20 +137,15 @@ const BuyCrypto = () => {
     }, []);
 
     return (
-        <Exchange>
+        <ExchangeLayout>
             <div className='w-full'>
                 {loading &&
-                    <ModalLayout clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...submitting order</div>
-                        </div>
-                    </ModalLayout>
+                    <Loader title={`submitting order`} />
                 }
 
                 {isPageLoading &&
                     <div className="mt-10 w-11/12  lg:w-2/3 mx-auto">
-                        {new Array(4).fill(0).map((_,i) => {
+                        {new Array(4).fill(0).map((_, i) => {
                             return (
                                 <div key={i} className="flex animate-pulse mb-5 items-start gap-1 flex-col">
                                     <div className="w-32 h-8 rounded-sm bg-gray-500"></div>
@@ -295,7 +290,7 @@ const BuyCrypto = () => {
                 </div>}
 
             </div>
-        </Exchange>
+        </ExchangeLayout>
     )
 }
 

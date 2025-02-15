@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import { FaEdit } from 'react-icons/fa'
 import { FiUploadCloud } from 'react-icons/fi'
@@ -117,14 +116,7 @@ const AdminCreateAirdrops = () => {
     return (
         <AirdropsLayout>
             <div className='w-11/12 mx-auto'>
-                {loading &&
-                    <ModalLayout clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...submitting</div>
-                        </div>
-                    </ModalLayout>
-                }
+                {loading && <Loader title={`submitting`} />}
                 {screen === 1 &&
                     <div className='flex flex-col gap-10'>
                         <div className='flex flex-col gap-2'>

@@ -6,7 +6,6 @@ import FormButton from '../../utils/FormButton'
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import logo from '../../assets/images/logo.png'
 import { Apis, PostApi } from '../../services/API'
-import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 
 const SignUpPage = () => {
@@ -64,13 +63,7 @@ const SignUpPage = () => {
 
   return (
     <div className="w-full bg-dark h-screen overflow-y-auto">
-      {loading &&
-        <ModalLayout>
-          <div className="w-full p-5 flex items-center justify-center">
-            <Loader />
-          </div>
-        </ModalLayout>
-      }
+      {loading && <Loader />}
       <div className='w-11/12 mx-auto py-10'>
         <div className='flex items-center justify-center max-w-xl mx-auto relative'>
           <div className='w-full h-full flex flex-col text-zinc-300'>
