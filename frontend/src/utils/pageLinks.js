@@ -62,7 +62,7 @@ import AdminProductsOrders from "../pages/authadmin/AdminProductsOrders";
 import AdminAllProducts from "../pages/authadmin/AdminAllProducts";
 import AdminSingleProduct from "../pages/authadmin/AdminSingleProduct";
 import BlogComments from "../pages/general/BlogComments";
-import { FeatureBlogs } from "../../../backend/controllers/adminController";
+import FeatureBlogs from "../pages/general/FeatureBlogs";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },

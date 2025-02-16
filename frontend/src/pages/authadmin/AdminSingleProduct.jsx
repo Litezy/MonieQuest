@@ -75,8 +75,7 @@ const AdminSingleProduct = () => {
                     discount_duration_type: response.msg.discount_duration_type || durationTypes[0]
                 })
                 setProductImage({
-                    ...productImage,
-                    img: `${imageurl}/products/${response.msg.image}`
+                    img: `${imageurl}/products/${response.msg.image}` || null
                 })
             }
         } catch (error) {

@@ -295,6 +295,32 @@ exports.CategoryAirdrops = async (req, res) => {
     }
 }
 
+exports.DeleteClosedAirdrop = async (req, res) => {
+    try {
+        const { airdrop_id } = req.body
+        if (!airdrop_id) return res.json({ status: 404, msg: `Provide an airdrop id` })
+
+        const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
+        if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
+        if (airdrop.status !== 'closed') return res.json({ status: 404, msg: 'You can only delete an airdrop with a closed status' })
+
+        const LogoImgPath = `./public/airdrops/${airdrop.logo_image}`
+        if (fs.existsSync(LogoImgPath)) {
+            fs.unlinkSync(LogoImgPath)
+        }
+        const BannerImgPath = `./public/airdrops/${airdrop.banner_image}`
+        if (fs.existsSync(BannerImgPath)) {
+            fs.unlinkSync(BannerImgPath)
+        }
+
+        await airdrop.destroy()
+
+        return res.json({ status: 200, msg: 'Airdrop deleted successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
 exports.UpdateProduct = async (req, res) => {
     try {
         const { product_id, title, category, price, about, feature1, feature2, status, listing, discount_percentage, discount_duration, discount_duration_type } = req.body
@@ -678,25 +704,42 @@ exports.CreateUser = async (req, res) => {
 
 exports.CreateBlog = async (req, res) => {
     try {
-        const { title, feature, main_header, first_paragraph, second_paragraph, extras, conclusion } = req.body
-        if (!title || !feature || !main_header || !first_paragraph || !second_paragraph || !extras || !conclusion) return res.json({ status: 404, msg: `Incomplete request found` })
+        const { title, feature, main_header_title, main_header_content, first_paragraph_title, first_paragraph_content, second_paragraph_title, second_paragraph_content, extras_title, extras_content, conclusion } = req.body;
+        const requiredFields = [title, feature, main_header_title, main_header_content, first_paragraph_title, first_paragraph_content, second_paragraph_title, second_paragraph_content, extras_title, extras_content, conclusion
+        ]
+        if (requiredFields.some(field => !field)) {
+            return res.json({ status: 400, msg: 'Incomplete request. Please fill all fields.' });
+        }
         const featureArray = ["airdrop", "trading", "personal_finance"]
         if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
 
-        const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
+        const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false })
         const slugData = slug(title, '-')
-        const filePath = './public/blogs'
+        const filePath = `./public/blogs/${gen_id}`
         const date = new Date()
         let blogImageName;
+        let secondParImageName;
+        let extrasImageName;
 
-        if (!req.files) return res.json({ status: 404, msg: `Upload airdrop logo and banner images` })
+        if (!req.files || !req.files.image) return res.json({ status: 404, msg: `Upload blog image` })
         const blogImage = req.files.image
-        if (!blogImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
+        const secondImage = req.files?.second_paragraph_image
+        const extrasImage = req.files?.extras_image
+        const isValidImage = (file) => file && !file.mimetype.startsWith('image/')
+        if (isValidImage(blogImage) || (secondImage && isValidImage(secondImage)) || (extrasImage && isValidImage(extrasImage))) return res.json({ status: 400, msg: `File error, upload valid images format(jpg, jpeg, png, svg)` })
         if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath)
+            fs.mkdirSync(filePath, { recursive: true })
         }
-        blogImageName = `${slugData + 'logo'}-${date.getTime()}.jpg`
+        blogImageName = `${slugData + 'main'} -${date.getTime()}.jpg`
+        secondParImageName = secondImage ? `${slugData + 'second'}-${date.getTime()}.jpg` : null
+        extrasImageName = extrasImage ? `${slugData + 'extras'}-${date.getTime()}.jpg` : null
         await blogImage.mv(`${filePath}/${blogImageName}`)
+        if (secondImage) {
+            await secondImage.mv(`${filePath}/${secondParImageName}`)
+        }
+        if (extrasImage) {
+            await extrasImage.mv(`${filePath}/${extrasImageName}`)
+        }
 
         await Blog.create({
             user: req.user,
@@ -707,14 +750,14 @@ exports.CreateBlog = async (req, res) => {
             feature,
             main_header_title,
             main_header_content,
-            first_paragraph_subtitle,
+            first_paragraph_title,
             first_paragraph_content,
-            second_paragraph_subtitle,
+            second_paragraph_title,
             second_paragraph_content,
             second_paragraph_image: secondParImageName,
             extras_title,
-            extras_image: extasImageName,
             extras_content,
+            extras_image: extrasImageName,
             conclusion
         })
 
@@ -726,30 +769,57 @@ exports.CreateBlog = async (req, res) => {
 
 exports.UpdateBlog = async (req, res) => {
     try {
-        const { blog_id, title, feature, main_header, first_paragraph, second_paragraph, extras, conclusion } = req.body
-        if (!blog_id) return res.json({ status: 404, msg: `Blog id is required` })
+        const { title, blog_id, feature, main_header_title, main_header_content, first_paragraph_title, first_paragraph_content, second_paragraph_title, second_paragraph_content, extras_title, extras_content, conclusion } = req.body;
+        if (!blog_id) return res.json({ status: 400, msg: `Blog id is required` })
         const blog = await Blog.findOne({ where: { id: blog_id } })
         if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
 
+        const filePath = `./public/blogs/${blog.gen_id}`
+        if (!fs.existsSync(filePath)) {
+            fs.mkdirSync(filePath, { recursive: true })
+        }
         const slugData = slug(title ? title : blog.title, '-')
-        const filePath = './public/blogs'
         const date = new Date()
         let blogImageName;
+        let secondImageName;
+        let extrasImageName;
         const blogImage = req?.files?.image
+        const secondImage = req?.files?.second_paragraph_image
+        const extrasImage = req?.files?.extras_image
 
         if (blogImage) {
-            if (!blogImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+            if (!blogImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format(jpg, jpeg, png, svg)` })
             const currentImagePath = `${filePath}/${blog.image}`
             if (fs.existsSync(currentImagePath)) {
                 fs.unlinkSync(currentImagePath)
             }
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath)
-            }
-            blogImageName = `${slugData}-${date.getTime()}.jpg`
+            blogImageName = `${slugData + 'main'}-${date.getTime()}.jpg`
             await blogImage.mv(`${filePath}/${blogImageName}`)
             blog.image = blogImageName
         }
+        if (secondImage) {
+            if (!secondImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format(jpg, jpeg, png, svg)` })
+            const currentImagePath = `${filePath}/${blog.second_paragraph_image}`
+            if (fs.existsSync(currentImagePath)) {
+                fs.unlinkSync(currentImagePath)
+            }
+            secondImageName = `${slugData + 'second'}-${date.getTime()}.jpg`
+            await secondImage.mv(`${filePath}/${secondImageName}`)
+            blog.second_paragraph_image = secondImageName
+        }
+        if (extrasImage) {
+            if (!extrasImage.mimetype.startsWith('image/'))
+                return res.json({ status: 404, msg: `File error, upload a valid image format(jpg, jpeg, png, svg)` })
+            const currentImagePath = `${filePath}/${blog.extras_image}`
+            if (fs.existsSync(currentImagePath)) {
+                fs.unlinkSync(currentImagePath)
+            }
+            extrasImageName = `${slugData + 'extras'}-${date.getTime()}.jpg`
+            await extrasImage.mv(`${filePath}/${extrasImageName}`)
+            blog.extras_image = extrasImageName
+        }
+
+
         if (title) {
             blog.title = title
         }
@@ -758,17 +828,29 @@ exports.UpdateBlog = async (req, res) => {
             if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
             blog.feature = feature
         }
-        if (main_header) {
-            blog.main_header = main_header
+        if (main_header_title) {
+            blog.main_header_title = main_header_title
         }
-        if (first_paragraph) {
-            blog.first_paragraph = first_paragraph
+        if (main_header_content) {
+            blog.main_header_content = main_header_content
         }
-        if (second_paragraph) {
-            blog.second_paragraph = second_paragraph
+        if (first_paragraph_title) {
+            blog.first_paragraph_title = first_paragraph_title
         }
-        if (extras) {
-            blog.extras = extras
+        if (first_paragraph_content) {
+            blog.first_paragraph_content = first_paragraph_content
+        }
+        if (second_paragraph_title) {
+            blog.second_paragraph_title = second_paragraph_title
+        }
+        if (second_paragraph_content) {
+            blog.second_paragraph_content = second_paragraph_content
+        }
+        if (extras_title) {
+            blog.extras_title = extras_title
+        }
+        if (extras_content) {
+            blog.extras_content = extras_content
         }
         if (conclusion) {
             blog.conclusion = conclusion
@@ -824,28 +906,30 @@ exports.SingleBlog = async (req, res) => {
     }
 }
 
-
-exports.deleteSingleImage = async (req, res) => {
+exports.DeleteBlogImages = async (req, res) => {
     try {
         const { id } = req.params
         const { tag } = req.body
         if (!id || !tag) return res.json({ status: 400, msg: 'Incomplete request' })
+        const tagArray = ["paragraph", "extras"]
+        if (!tagArray.includes(tag)) return res.json({ status: 404, msg: `Invalid tag provided` })
         const findImage = await Blog.findOne({ where: { id } })
-        if (!findImage) return res.json({ status: 404, msg: 'Blog ID not found' })
+        if (!findImage) return res.json({ status: 404, msg: 'Blog images not found' })
         const filePath = `./public/blogs/${findImage.gen_id}`;
+
         if (tag === 'paragraph') {
-            const currentImagePath = `${filePath}/${findImage?.second_paragraph_image}`
+            const currentImagePath = `${filePath}/${findImage.second_paragraph_image}`
             if (fs.existsSync(currentImagePath)) {
                 fs.unlinkSync(currentImagePath)
             }
             findImage.second_paragraph_image = null
             await findImage.save()
 
-            return res.json({ status: 200, msg: "Second Paragraph image successfully deleted", data: findImage })
+            return res.json({ status: 200, msg: "Second paragraph image successfully deleted", data: findImage })
 
         }
-        else if (tag === 'extras') {
-            const currentImagePath = `${filePath}/${findImage?.extras_image}`
+        if (tag === 'extras') {
+            const currentImagePath = `${filePath}/${findImage.extras_image}`
             if (fs.existsSync(currentImagePath)) {
                 fs.unlinkSync(currentImagePath)
             }
@@ -853,9 +937,6 @@ exports.deleteSingleImage = async (req, res) => {
             await findImage.save()
 
             return res.json({ status: 200, msg: "Extras image successfully deleted", data: findImage })
-        }
-        else {
-            return res.json({ status: 404, msg: 'Invalid Tag' })
         }
     } catch (error) {
         ServerError(res, error)
@@ -1392,7 +1473,7 @@ exports.getAdminTransHistory = async (req, res) => {
             include: [
                 {
                     model: User, as: 'crypto_buyer',
-                    attributes:[`id`,'image','first_name','surname','email']
+                    attributes: [`id`, 'image', 'first_name', 'surname', 'email']
                 }
             ]
         })
@@ -1401,7 +1482,7 @@ exports.getAdminTransHistory = async (req, res) => {
             include: [
                 {
                     model: User, as: 'crypto_seller',
-                    attributes:[`id`,'image','first_name','surname','email']
+                    attributes: [`id`, 'image', 'first_name', 'surname', 'email']
                 }
             ]
         })
@@ -1410,7 +1491,7 @@ exports.getAdminTransHistory = async (req, res) => {
             include: [
                 {
                     model: User, as: 'gift_seller',
-                    attributes:[`id`,'image','first_name','surname','email']
+                    attributes: [`id`, 'image', 'first_name', 'surname', 'email']
                 }
             ]
         })
@@ -1419,7 +1500,7 @@ exports.getAdminTransHistory = async (req, res) => {
             include: [
                 {
                     model: User, as: 'user_withdrawal',
-                    attributes:[`id`,'image','first_name','surname','email']
+                    attributes: [`id`, 'image', 'first_name', 'surname', 'email']
                 }
             ]
         })
@@ -1439,10 +1520,10 @@ exports.getBankWithdrawals = async (req, res) => {
             include: [
                 {
                     model: User, as: 'user_withdrawal',
-                    attributes:[`id`,'image','first_name','surname','email']
+                    attributes: [`id`, 'image', 'first_name', 'surname', 'email']
                 }
             ],
-            order:[['createdAt','DESC']]
+            order: [['createdAt', 'DESC']]
         })
         return res.json({ status: 200, msg: 'fetch success', data: allWithdrawals })
     } catch (error) {

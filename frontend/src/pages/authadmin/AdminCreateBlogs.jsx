@@ -18,16 +18,16 @@ const features = [
 const AdminCreateBlogs = () => {
     const [screen, setScreen] = useState(1)
     const [loading, setLoading] = useState(false)
-    const [forms, setForms] = useState({
+    const [form, setForm] = useState({
         title: '',
         feature: features[0],
-        main_header_subtitle: '',
+        main_header_title: '',
         main_header_content: '',
-        first_paragraph_subtitle: '',
+        first_paragraph_title: '',
         first_paragraph_content: '',
-        second_paragraph_subtitle: '',
+        second_paragraph_title: '',
         second_paragraph_content: '',
-        extras_subtitle: '',
+        extras_title: '',
         extras_content: '',
         conclusion: ''
     })
@@ -49,8 +49,8 @@ const AdminCreateBlogs = () => {
     const imgExtrasRef = useRef()
 
     const formHandler = (event) => {
-        setForms({
-            ...forms,
+        setForm({
+            ...form,
             [event.target.name]: event.target.value
         })
     }
@@ -66,7 +66,7 @@ const AdminCreateBlogs = () => {
             image: file
         })
     }
-    const handleSecondImg = (e) => {
+    const handleSecondImgUpload = (e) => {
         const file = e.target.files[0]
         if (!file.type.startsWith('image/')) {
             imgSecondRef.current.value = null
@@ -79,7 +79,7 @@ const AdminCreateBlogs = () => {
     }
 
 
-    const handleExtasImg = (e) => {
+    const handleExtasImgUpload = (e) => {
         const file = e.target.files[0]
         if (!file.type.startsWith('image/')) {
             imgExtrasRef.current.value = null
@@ -94,26 +94,26 @@ const AdminCreateBlogs = () => {
     const Submit = async (e) => {
         e.preventDefault()
 
-        if (!forms.title || !forms.feature || !forms.main_header_subtitle || !forms.main_header_content ||
-            !forms.first_paragraph_subtitle || !forms.first_paragraph_content || !forms.second_paragraph_subtitle || !forms.second_paragraph_content || !forms.extras_subtitle ||
-            !forms.extras_content || !forms.conclusion) return ErrorAlert('Enter all required fields')
+        if (!form.title || !form.feature || !form.main_header_title || !form.main_header_content ||
+            !form.first_paragraph_title || !form.first_paragraph_content || !form.second_paragraph_title || !form.second_paragraph_content || !form.extras_title ||
+            !form.extras_content || !form.conclusion) return ErrorAlert('Enter all required fields')
         if (!blogImage.image) return ErrorAlert('Upload blog image')
 
         const formbody = new FormData()
         formbody.append('image', blogImage.image)
-        formbody.append('title', forms.title)
-        formbody.append('feature', forms.feature)
-        formbody.append('main_header_title', forms.main_header_subtitle)
-        formbody.append('main_header_content', forms.main_header_content)
-        formbody.append('first_paragraph_subtitle', forms.first_paragraph_subtitle)
-        formbody.append('first_paragraph_content', forms.first_paragraph_content)
-        formbody.append('second_paragraph_subtitle', forms.second_paragraph_subtitle)
-        formbody.append('second_paragraph_content', forms.second_paragraph_content)
-        formbody.append('extras_title', forms.extras_subtitle)
-        formbody.append('extras_content', forms.extras_content)
-        formbody.append('conclusion', forms.conclusion)
+        formbody.append('title', form.title)
+        formbody.append('feature', form.feature)
+        formbody.append('main_header_title', form.main_header_title)
+        formbody.append('main_header_content', form.main_header_content)
+        formbody.append('first_paragraph_title', form.first_paragraph_title)
+        formbody.append('first_paragraph_content', form.first_paragraph_content)
+        formbody.append('second_paragraph_title', form.second_paragraph_title)
+        formbody.append('second_paragraph_content', form.second_paragraph_content)
         formbody.append('second_paragraph_image', secondImg.second_image)
+        formbody.append('extras_title', form.extras_title)
+        formbody.append('extras_content', form.extras_content)
         formbody.append('extras_image', extrasImg.extras_image)
+        formbody.append('conclusion', form.conclusion)
 
         setLoading(true)
         try {
@@ -161,37 +161,37 @@ const AdminCreateBlogs = () => {
                                 <div className='flex flex-col gap-6'>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*blog title:</div>
-                                        <FormInput placeholder='Title' name='title' value={forms.title} onChange={formHandler} />
+                                        <FormInput placeholder='Blog Title' name='title' value={form.title} onChange={formHandler} />
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*feature:</div>
-                                        <SelectComp options={features} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={forms.feature} handleChange={(e) => setForms({ ...forms, feature: e.target.value })} />
+                                        <SelectComp options={features} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.feature} handleChange={(e) => setForm({ ...form, feature: e.target.value })} />
                                     </div>
                                     <div className='flex flex-col'>
-                                        <div className='text-lightgreen capitalize font-medium'>*main header subtitle:</div>
-                                        <FormInput placeholder='Main header subtitle' name='main_header_subtitle' value={forms.main_header_subtitle} onChange={formHandler} />
+                                        <div className='text-lightgreen capitalize font-medium'>*main header title:</div>
+                                        <FormInput placeholder='Main header title' name='main_header_title' value={form.main_header_title} onChange={formHandler} />
                                     </div>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*main header content:</div>
-                                        <FormInput formtype='textarea' placeholder='Main header content' name='main_header_content' value={forms.main_header_content} onChange={formHandler} />
+                                        <FormInput formtype='textarea' placeholder='Main header content' name='main_header_content' value={form.main_header_content} onChange={formHandler} />
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-6'>
                                     <div className='flex flex-col'>
-                                        <div className='text-lightgreen capitalize font-medium'>*first paragraph subtitle:</div>
-                                        <FormInput placeholder='First paragraph subtitle' name='first_paragraph_subtitle' value={forms.first_paragraph_subtitle} onChange={formHandler} />
+                                        <div className='text-lightgreen capitalize font-medium'>*first paragraph title:</div>
+                                        <FormInput placeholder='First paragraph title' name='first_paragraph_title' value={form.first_paragraph_title} onChange={formHandler} />
                                     </div>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*first paragraph content:</div>
-                                        <FormInput formtype='textarea' placeholder='First paragraph content' name='first_paragraph_content' value={forms.first_paragraph_content} onChange={formHandler} />
+                                        <FormInput formtype='textarea' placeholder='First paragraph content' name='first_paragraph_content' value={form.first_paragraph_content} onChange={formHandler} />
                                     </div>
                                     <div className='flex flex-col'>
-                                        <div className='text-lightgreen capitalize font-medium'>*second paragraph subtitle:</div>
-                                        <FormInput placeholder='Second paragraph subtitle' name='second_paragraph_subtitle' value={forms.second_paragraph_subtitle} onChange={formHandler} />
+                                        <div className='text-lightgreen capitalize font-medium'>*second paragraph title:</div>
+                                        <FormInput placeholder='Second paragraph title' name='second_paragraph_title' value={form.second_paragraph_title} onChange={formHandler} />
                                     </div>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*second paragraph content:</div>
-                                        <FormInput formtype='textarea' placeholder='Second paragraph content' name='second_paragraph_content' value={forms.second_paragraph_content} onChange={formHandler} />
+                                        <FormInput formtype='textarea' placeholder='Second paragraph content' name='second_paragraph_content' value={form.second_paragraph_content} onChange={formHandler} />
                                     </div>
                                     <label className='cursor-pointer w-full'>
                                         {secondImg.second_img ?
@@ -207,17 +207,17 @@ const AdminCreateBlogs = () => {
                                                 <span>click to add second paragraph image</span>
                                             </div>
                                         }
-                                        <input ref={imgSecondRef} type="file" onChange={handleSecondImg} hidden />
+                                        <input ref={imgSecondRef} type="file" onChange={handleSecondImgUpload} hidden />
                                     </label>
                                 </div>
                                 <div className='flex flex-col gap-6'>
                                     <div className='flex flex-col'>
-                                        <div className='text-lightgreen capitalize font-medium'>*extras subtitle:</div>
-                                        <FormInput placeholder='Extras paragraph subtitle' name='extras_subtitle' value={forms.extras_subtitle} onChange={formHandler} />
+                                        <div className='text-lightgreen capitalize font-medium'>*extras title:</div>
+                                        <FormInput placeholder='Extras paragraph title' name='extras_title' value={form.extras_title} onChange={formHandler} />
                                     </div>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*extras content:</div>
-                                        <FormInput formtype='textarea' placeholder='Extras paragraph content' name='extras_content' value={forms.extras_content} onChange={formHandler} />
+                                        <FormInput formtype='textarea' placeholder='Extras paragraph content' name='extras_content' value={form.extras_content} onChange={formHandler} />
                                     </div>
                                     <label className='cursor-pointer w-full'>
                                         {extrasImg.extras_img ?
@@ -233,11 +233,11 @@ const AdminCreateBlogs = () => {
                                                 <span>click to add extras paragraph image</span>
                                             </div>
                                         }
-                                        <input ref={imgExtrasRef} type="file" onChange={handleExtasImg} hidden />
+                                        <input ref={imgExtrasRef} type="file" onChange={handleExtasImgUpload} hidden />
                                     </label>
                                     <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*conclusion:</div>
-                                        <FormInput formtype='textarea' placeholder='Conclusion' name='conclusion' value={forms.conclusion} onChange={formHandler} />
+                                        <FormInput formtype='textarea' placeholder='Conclusion' name='conclusion' value={form.conclusion} onChange={formHandler} />
                                     </div>
                                 </div>
                             </div>

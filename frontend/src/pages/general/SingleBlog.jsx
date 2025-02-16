@@ -105,11 +105,11 @@ const SingleBlog = () => {
             sectionID: 'main'
         },
         {
-            title: singleBlog?.first_paragraph_subtitle,
+            title: singleBlog?.first_paragraph_title,
             sectionID: 'first'
         },
         {
-            title: singleBlog?.second_paragraph_subtitle,
+            title: singleBlog?.second_paragraph_title,
             sectionID: 'second'
         },
         {
@@ -117,7 +117,7 @@ const SingleBlog = () => {
             sectionID: 'extras'
         },
         {
-            title:singleBlog?.conclusion,
+            title: `conclusion`,
             sectionID: 'conclusion'
         },
     ]
@@ -218,27 +218,27 @@ const SingleBlog = () => {
                                         <div className="">{singleBlog?.main_header_content}</div>
                                     </div>
                                     <div className="flex items-start gap-2 flex-col" id='first'>
-                                        <div className="text-white font-bold capitalize leading-[33px] text-2xl mont ">{singleBlog?.first_paragraph_subtitle}</div>
+                                        <div className="text-white font-bold capitalize leading-[33px] text-2xl mont ">{singleBlog?.first_paragraph_title}</div>
                                         <div className="">{singleBlog?.first_paragraph_content}</div>
                                     </div>
-                                    <div className="flex items-start gap-2 flex-col" id='second'>
-                                        <div className="text-white font-bold capitalize leading-[33px] mont  text-2xl">{singleBlog?.second_paragraph_subtitle}.</div>
-                                        <div className="">{singleBlog?.second_paragraph_content}</div>
+                                    <div className='flex flex-col gap-8'>
+                                        <div className="flex items-start gap-2 flex-col" id='second'>
+                                            <div className="text-white font-bold capitalize leading-[33px] mont  text-2xl">{singleBlog?.second_paragraph_title}.</div>
+                                            <div className="">{singleBlog?.second_paragraph_content}</div>
+                                        </div>
+                                        {singleBlog?.second_paragraph_image && <div className="" id='second'>
+                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.second_paragraph_image}`} alt="second image" className="w-full rounded-xl max-h-52 object-cover object-center" />
+                                        </div>}
                                     </div>
-
-                                    {singleBlog?.second_paragraph_image && <div className="flex items-start gap-2 flex-col" id='second'>
-                                        <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.second_paragraph_image}`} alt="second image" className="w-full rounded-xl max-h-52 object-cover object-center " />
-                                    </div>}
-
-
-                                    <div className="flex items-start gap-2 flex-col" id='extras'>
-                                        <div className="text-white font-bold capitalize leading-[33px] mont  text-2xl">{singleBlog?.extras_title}</div>
-                                        <div className="">{singleBlog?.extras_content}</div>
+                                    <div className='flex flex-col gap-8'>
+                                        <div className="flex items-start gap-2 flex-col" id='extras'>
+                                            <div className="text-white font-bold capitalize leading-[33px] mont  text-2xl">{singleBlog?.extras_title}</div>
+                                            <div className="">{singleBlog?.extras_content}</div>
+                                        </div>
+                                        {singleBlog?.extras_image && <div className="" id='second'>
+                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.extras_image}`} alt="extras image" className="w-full rounded-xl max-h-52 object-cover object-center " />
+                                        </div>}
                                     </div>
-                                    {singleBlog?.extras_image && <div className="flex items-start gap-2 flex-col" id='second'>
-                                        <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.extras_image}`} alt="extras image" className="w-full rounded-xl max-h-52 object-cover object-center " />
-                                    </div>}
-
                                 </div>
                             </div>
                         </div>

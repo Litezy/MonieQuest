@@ -25,11 +25,11 @@ const AdminSingleBlog = () => {
         feature: '',
         main_header_title: '',
         main_header_content: '',
-        first_paragraph_subtitle: '',
+        first_paragraph_title: '',
         first_paragraph_content: '',
-        second_paragraph_subtitle: '',
+        second_paragraph_title: '',
         second_paragraph_content: '',
-        extras_subtitle: '',
+        extras_title: '',
         extras_content: '',
         conclusion: ''
     })
@@ -45,6 +45,7 @@ const AdminSingleBlog = () => {
         img: null,
         image: null,
     })
+    console.log(extrasImg)
 
     const imgRef = useRef()
     const imgSecondRef = useRef()
@@ -61,7 +62,6 @@ const AdminSingleBlog = () => {
     const FetchSingleBlog = useCallback(async () => {
         try {
             const response = await AuthGetApi(`${Apis.admin.single_blog}/${id}`)
-            // console.log(response)
             if (response.status === 200) {
                 setSingleBlog(response.msg)
                 setForm({
@@ -69,24 +69,22 @@ const AdminSingleBlog = () => {
                     feature: response.msg.feature || features[0],
                     main_header_title: response.msg.main_header_title || '',
                     main_header_content: response.msg.main_header_content || '',
-                    first_paragraph_subtitle: response.msg.first_paragraph_subtitle || '',
+                    first_paragraph_title: response.msg.first_paragraph_title || '',
                     first_paragraph_content: response.msg.first_paragraph_content || '',
-                    second_paragraph_subtitle: response.msg.second_paragraph_subtitle || '',
+                    second_paragraph_title: response.msg.second_paragraph_title || '',
                     second_paragraph_content: response.msg.second_paragraph_content || '',
-                    extras_subtitle: response.msg.extras_title || '',
+                    extras_title: response.msg.extras_title || '',
                     extras_content: response.msg.extras_content || '',
                     conclusion: response.msg.conclusion || ''
                 })
                 setBlogImage({
-                    ...blogImage,
-                    img: `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.image}` || null
+                    img: response.msg.image ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.image}` : null
                 })
                 setSecondImg({
-                    img: `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.second_paragraph_image}` || null,
+                    img: response.msg.second_paragraph_image ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.second_paragraph_image}` : null,
                 })
-
                 setExtrasImg({
-                    img: `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.extras_image}` || null
+                    img: response.msg.extras_image ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.extras_image}` : null
                 })
 
             }
@@ -113,7 +111,7 @@ const AdminSingleBlog = () => {
         })
     }
 
-    const handleSecondImg = (e) => {
+    const handleSecondImgUpload = (e) => {
         const file = e.target.files[0]
         if (!file.type.startsWith('image/')) {
             imgSecondRef.current.value = null
@@ -125,7 +123,7 @@ const AdminSingleBlog = () => {
         })
     }
 
-    const handleExtasImg = (e) => {
+    const handleExtasImgUpload = (e) => {
         const file = e.target.files[0]
         if (!file.type.startsWith('image/')) {
             imgExtrasRef.current.value = null
@@ -141,21 +139,21 @@ const AdminSingleBlog = () => {
         e.preventDefault()
 
         if (!form.title || !form.feature || !form.main_header_title || !form.main_header_content ||
-            !form.first_paragraph_subtitle || !form.first_paragraph_content || !form.second_paragraph_subtitle || !form.second_paragraph_content || !form.extras_subtitle ||
+            !form.first_paragraph_title || !form.first_paragraph_content || !form.second_paragraph_title || !form.second_paragraph_content || !form.extras_title ||
             !form.extras_content || !form.conclusion) return ErrorAlert('Enter all required fields')
 
         const formbody = new FormData()
-        formbody.append('image', blogImage.image)
         formbody.append('blog_id', singleBlog.id)
+        formbody.append('image', blogImage.image)
         formbody.append('title', form.title)
         formbody.append('feature', form.feature)
         formbody.append('main_header_title', form.main_header_title)
         formbody.append('main_header_content', form.main_header_content)
-        formbody.append('first_paragraph_subtitle', form.first_paragraph_subtitle)
+        formbody.append('first_paragraph_title', form.first_paragraph_title)
         formbody.append('first_paragraph_content', form.first_paragraph_content)
-        formbody.append('second_paragraph_subtitle', form.second_paragraph_subtitle)
+        formbody.append('second_paragraph_title', form.second_paragraph_title)
         formbody.append('second_paragraph_content', form.second_paragraph_content)
-        formbody.append('extras_title', form.extras_subtitle)
+        formbody.append('extras_title', form.extras_title)
         formbody.append('extras_content', form.extras_content)
         formbody.append('conclusion', form.conclusion)
         formbody.append('second_paragraph_image', secondImg.image)
@@ -167,7 +165,7 @@ const AdminSingleBlog = () => {
             if (response.status === 200) {
                 FetchSingleBlog()
                 SuccessAlert(response.msg)
-                await new Promise((resolve) => setTimeout(resolve, 2000))
+                // await new Promise((resolve) => setTimeout(resolve, 2000))
             } else {
                 ErrorAlert(response.msg)
             }
@@ -192,8 +190,7 @@ const AdminSingleBlog = () => {
             }
             FetchSingleBlog()
             SuccessAlert(res.msg)
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-            setLoading(false)
+            // await new Promise((resolve) => setTimeout(resolve, 2000))
         } catch (error) {
             ErrorAlert(`${error.message}`)
         } finally {
@@ -253,15 +250,15 @@ const AdminSingleBlog = () => {
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*blog title:</div>
-                                    <FormInput placeholder='Title' name='title' value={form.title} onChange={formHandler} />
+                                    <FormInput placeholder='Blog Title' name='title' value={form.title} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>*feature:</div>
                                     <SelectComp options={features} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.feature} handleChange={(e) => setForm({ ...form, feature: e.target.value })} />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>*main header subtitle:</div>
-                                    <FormInput placeholder='Main header subtitle' name='main_header_subtitle' value={form.main_header_title} onChange={formHandler} />
+                                    <div className='text-lightgreen capitalize font-medium'>*main header title:</div>
+                                    <FormInput placeholder='Main header title' name='main_header_title' value={form.main_header_title} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*main header content:</div>
@@ -270,16 +267,16 @@ const AdminSingleBlog = () => {
                             </div>
                             <div className='flex  flex-col gap-6'>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>*first paragraph subtitle:</div>
-                                    <FormInput placeholder='First paragraph subtitle' name='first_paragraph_subtitle' value={form.first_paragraph_subtitle} onChange={formHandler} />
+                                    <div className='text-lightgreen capitalize font-medium'>*first paragraph title:</div>
+                                    <FormInput placeholder='First paragraph title' name='first_paragraph_title' value={form.first_paragraph_title} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*first paragraph content:</div>
                                     <FormInput formtype='textarea' placeholder='First paragraph content' name='first_paragraph_content' value={form.first_paragraph_content} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>*second paragraph subtitle:</div>
-                                    <FormInput placeholder='Second paragraph subtitle' name='second_paragraph_subtitle' value={form.second_paragraph_subtitle} onChange={formHandler} />
+                                    <div className='text-lightgreen capitalize font-medium'>*second paragraph title:</div>
+                                    <FormInput placeholder='Second paragraph title' name='second_paragraph_title' value={form.second_paragraph_title} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*second paragraph content:</div>
@@ -301,11 +298,11 @@ const AdminSingleBlog = () => {
                                                 <span>click to add second paragraph image</span>
                                             </div>
                                         }
-                                        <input ref={imgSecondRef} type="file" onChange={handleSecondImg} hidden />
+                                        <input ref={imgSecondRef} type="file" onChange={handleSecondImgUpload} hidden />
                                     </label>
-                                    {secondImg.img &&
+                                    {singleBlog.second_paragraph_image &&
                                         <div className=" mt-5 main font-bold">
-                                            <button type='button' onClick={() => deleteImg(`paragraph`)} className='px-4 py-1.5 rounded-md bg-red-600'>delete paragraph image</button>
+                                            <button type='button' onClick={() => deleteImg(`paragraph`)} className='px-4 py-1.5 rounded-md bg-red-700'>delete paragraph image</button>
                                         </div>
                                     }
                                 </div>
@@ -313,8 +310,8 @@ const AdminSingleBlog = () => {
                             </div>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>*extras subtitle:</div>
-                                    <FormInput placeholder='Extra paragraph subtitle' name='extras_subtitle' value={form.extras_subtitle} onChange={formHandler} />
+                                    <div className='text-lightgreen capitalize font-medium'>*extras title:</div>
+                                    <FormInput placeholder='Extra paragraph title' name='extras_title' value={form.extras_title} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*extras content:</div>
@@ -335,11 +332,11 @@ const AdminSingleBlog = () => {
                                                 <span>click to add extras paragraph image</span>
                                             </div>
                                         }
-                                        <input ref={imgExtrasRef} type="file" onChange={handleExtasImg} hidden />
+                                        <input ref={imgExtrasRef} type="file" onChange={handleExtasImgUpload} hidden />
                                     </label>
-                                    {extrasImg.img &&
+                                    {singleBlog.extras_image &&
                                         <div className="mt-5 main font-bold">
-                                            <button type='button' onClick={() => deleteImg(`extras`)} className='px-4 py-1.5 rounded-md bg-red-600'>delete extras image</button>
+                                            <button type='button' onClick={() => deleteImg(`extras`)} className='px-4 py-1.5 rounded-md bg-red-700'>delete extras image</button>
                                         </div>
                                     }
                                 </div>
