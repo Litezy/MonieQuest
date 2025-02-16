@@ -112,7 +112,7 @@ const SingleAirdropPage = () => {
                     }
                   </div>
                   <div className='flex gap-3 items-center'>
-                    <button className='outline-none bg-primary rounded-[4px] py-2 px-6 text-sm text-lightgreen font-semibold capitalize cursor-default'>{singleAirdrop?.category}</button>
+                    <button className='outline-none bg-primary rounded-[4px] py-2 px-6 text-sm text-lightgreen font-semibold capitalize cursor-default'>{singleAirdrop?.category === 'earn_crypto' ? 'earn crypto' : singleAirdrop?.category}</button>
                     <button className='outline-none bg-lightgreen rounded-[4px] py-2 px-6 text-sm text-primary font-bold capitalize cursor-default'>{singleAirdrop?.status}</button>
                   </div>
                 </div>

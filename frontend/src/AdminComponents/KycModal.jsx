@@ -14,7 +14,7 @@ const KycModal = ({ data, setModal }) => {
     const refdiv = useRef(null)
     const [, setSubKycs] = useAtom(USER_SUB_KYCS)
     const [, setVerifiedKycs] = useAtom(USER_VER_KYCS)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const [form, setForm] = useState({ msg: '' })
     const [approve, setApprove] = useState(false)

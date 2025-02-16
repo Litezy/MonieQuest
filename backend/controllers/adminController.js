@@ -7,7 +7,6 @@ const Notification = require('../models').notifications
 const Bank = require('../models').banks
 const Blog = require('../models').blogs
 const BuyCrypto = require('../models').exchangeBuys
-const path = require('path')
 const Wallet = require('../models').wallets
 const SellCrypto = require('../models').exchangeSells
 const Kyc = require('../models').kyc
@@ -118,41 +117,14 @@ exports.CreateAirdrop = async (req, res) => {
             referral_link,
             about,
             video_guide_link,
-            twitter_link: twitter_link ? twitter_link : null,
-            telegram_link: telegram_link ? telegram_link : null,
-            website_link: website_link ? website_link : null
+            twitter_link: twitter_link || null,
+            telegram_link: telegram_link || null,
+            website_link: website_link || null
         })
 
         return res.json({ status: 200, msg: 'Airdrop created successfully' })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
-    }
-}
-
-exports.AllOpenAirdrops = async (req, res) => {
-    try {
-        const airdrops = await Airdrop.findAll({
-            where: { status: ['open'] },
-            order: [['createdAt', 'DESC']]
-        })
-
-        return res.json({ status: 200, msg: airdrops })
-    } catch (error) {
-        return res.json({ status: 400, msg: error.message })
-    }
-}
-
-exports.SingleAirdrop = async (req, res) => {
-    try {
-        const { id } = req.params
-        if (!id) return res.json({ status: 404, msg: `Airdrop id is required` })
-
-        const airdrop = await Airdrop.findOne({ where: { id } })
-        if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
-
-        return res.json({ status: 200, msg: airdrop })
-    } catch (error) {
-        return res.json({ status: 400, msg: error.message })
     }
 }
 
@@ -231,13 +203,77 @@ exports.UpdateAirdrop = async (req, res) => {
             if (!statusArray.includes(status)) return res.json({ status: 404, msg: `Invalid status provided` })
             airdrop.status = status
         }
-        airdrop.twitter_link = twitter_link ? twitter_link : null
-        airdrop.telegram_link = telegram_link ? telegram_link : null
-        airdrop.website_link = website_link ? website_link : null
+        airdrop.twitter_link = twitter_link || null
+        airdrop.telegram_link = telegram_link || null
+        airdrop.website_link = website_link || null
 
         await airdrop.save()
 
         return res.json({ status: 200, msg: 'Airdrop updated successfully' })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.DeleteClosedAirdrops = async (req, res) => {
+    try {
+        const { airdrop_id } = req.body
+        if (!airdrop_id) return res.json({ status: 404, msg: `Provide an airdrop id` })
+
+        const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
+        if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
+
+        const airdropLogoPath = `./public/airdrops/${airdrop.logo_image}`
+        const airdropBannerPath = `./public/airdrops/${airdrop.banner_image}`
+        if (fs.existsSync(airdropLogoPath)) {
+            fs.unlinkSync(airdropLogoPath)
+        }
+        if (fs.existsSync(airdropBannerPath)) {
+            fs.unlinkSync(airdropBannerPath)
+        }
+
+        await airdrop.destroy()
+
+        return res.json({ status: 200, msg: 'Airdrop deleted successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.AllAirdrops = async (req, res) => {
+    try {
+        const airdrops = await Airdrop.findAll({
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: airdrops })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.AllOpenAirdrops = async (req, res) => {
+    try {
+        const openAirdrops = await Airdrop.findAll({
+            where: { status: ['open'] },
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: openAirdrops })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.SingleAirdrop = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 404, msg: `Airdrop id is required` })
+
+        const airdrop = await Airdrop.findOne({ where: { id } })
+        if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
+
+        return res.json({ status: 200, msg: airdrop })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
     }
@@ -642,74 +678,25 @@ exports.CreateUser = async (req, res) => {
 
 exports.CreateBlog = async (req, res) => {
     try {
-        const {
-            title,
-            feature,
-            main_header_title,
-            main_header_content,
-            first_paragraph_subtitle,
-            first_paragraph_content,
-            second_paragraph_subtitle,
-            second_paragraph_content,
-            extras_title,
-            extras_content,
-            conclusion
-        } = req.body;
-        const requiredFields = [
-            title,
-            feature,
-            main_header_title,
-            main_header_content,
-            first_paragraph_subtitle,
-            first_paragraph_content,
-            second_paragraph_subtitle,
-            second_paragraph_content,
-            extras_title,
-            extras_content,
-            conclusion
-        ];
-
-        if (requiredFields.some(field => !field)) {
-            return res.json({ status: 400, msg: 'Incomplete request. Please fill all fields.' });
-        }
+        const { title, feature, main_header, first_paragraph, second_paragraph, extras, conclusion } = req.body
+        if (!title || !feature || !main_header || !first_paragraph || !second_paragraph || !extras || !conclusion) return res.json({ status: 404, msg: `Incomplete request found` })
         const featureArray = ["airdrop", "trading", "personal_finance"]
         if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
-        const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false })
+
+        const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
-        const secondData = slug(second_paragraph_subtitle, '-')
-        const extrasData = slug(extras_title, '-')
-        let secondParImageName;
-        let extasImageName;
-        const filePath = `./public/blogs/${gen_id}`
+        const filePath = './public/blogs'
         const date = new Date()
         let blogImageName;
 
-        if (!req.files || !req.files?.image) return res.json({ status: 404, msg: `Upload blog logo or banner image` })
-        const { image, second_paragraph_image, extras_image } = req.files
-        const isValidImage = (file) => file && file.mimetype.startsWith('image/');
-
-        if (!isValidImage(image) || (second_paragraph_image && !isValidImage(second_paragraph_image)) || (extras_image && !isValidImage(extras_image))) {
-            return res.json({ status: 400, msg: 'Invalid file format. Only images (jpg, jpeg, png, svg) are allowed.' });
-        }
-
-        const blogImage = req.files?.image
-        const secondImage = req.files?.second_paragraph_image
-        const extrasImage = req.files?.extras_image
-
+        if (!req.files) return res.json({ status: 404, msg: `Upload airdrop logo and banner images` })
+        const blogImage = req.files.image
+        if (!blogImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
         if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true });
+            fs.mkdirSync(filePath)
         }
         blogImageName = `${slugData + 'logo'}-${date.getTime()}.jpg`
-        secondParImageName = secondImage ? `${secondData + 'image'}-${date.getTime()}.jpg` : null
-        extasImageName = extrasImage ? `${extrasData + 'image'}-${date.getTime()}.jpg` : null
-
         await blogImage.mv(`${filePath}/${blogImageName}`)
-        if (secondImage) {
-            await secondImage.mv(`${filePath}/${secondParImageName}`)
-        }
-        if (extrasImage) {
-            await extrasImage.mv(`${filePath}/${extasImageName}`)
-        }
 
         await Blog.create({
             user: req.user,
@@ -718,18 +705,10 @@ exports.CreateBlog = async (req, res) => {
             image: blogImageName,
             title,
             feature,
-            main_header_title,
-            main_header_content,
-            first_paragraph_subtitle,
-            first_paragraph_content,
-            second_paragraph_subtitle,
-            second_paragraph_content,
-            second_paragraph_image: secondParImageName,
-            extras_title,
-            extras_image: extasImageName,
-            extras_content,
-            second_slug: secondData,
-            extras_slug: extrasData,
+            main_header,
+            first_paragraph,
+            second_paragraph,
+            extras,
             conclusion
         })
 
@@ -741,42 +720,16 @@ exports.CreateBlog = async (req, res) => {
 
 exports.UpdateBlog = async (req, res) => {
     try {
-        const {
-            title,
-            blog_id,
-            feature,
-            main_header_title,
-            main_header_content,
-            first_paragraph_subtitle,
-            first_paragraph_content,
-            second_paragraph_subtitle,
-            second_paragraph_content,
-            extras_title,
-            extras_content,
-            conclusion
-        } = req.body;
-        if (!blog_id) return res.json({ status: 400, msg: `Blog id is required` })
+        const { blog_id, title, feature, main_header, first_paragraph, second_paragraph, extras, conclusion } = req.body
+        if (!blog_id) return res.json({ status: 404, msg: `Blog id is required` })
         const blog = await Blog.findOne({ where: { id: blog_id } })
         if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
 
-        const filePath = `./public/blogs/${blog.gen_id}`;
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true });
-        }
-
-
         const slugData = slug(title ? title : blog.title, '-')
-        const secondData = slug(second_paragraph_subtitle ? second_paragraph_subtitle : blog.second_paragraph_subtitle, '-')
-        const extrasData = slug(extras_title ? extras_title : blog.extras_title, '-')
-
+        const filePath = './public/blogs'
         const date = new Date()
         let blogImageName;
-        let secondImageName;
-        let extrasImageName;
         const blogImage = req?.files?.image
-        const secondImage = req?.files?.second_paragraph_image
-        const extrasImage = req?.files?.extras_image
-
 
         if (blogImage) {
             if (!blogImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
@@ -784,33 +737,13 @@ exports.UpdateBlog = async (req, res) => {
             if (fs.existsSync(currentImagePath)) {
                 fs.unlinkSync(currentImagePath)
             }
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath)
+            }
             blogImageName = `${slugData}-${date.getTime()}.jpg`
             await blogImage.mv(`${filePath}/${blogImageName}`)
             blog.image = blogImageName
         }
-        if (secondImage) {
-            if (!secondImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            const currentImagePath = `${filePath}/${blog.second_paragraph_image ? blog.second_paragraph_image : null}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
-            secondImageName = `${secondData}-${date.getTime()}.jpg`
-            await secondImage.mv(`${filePath}/${secondImageName}`)
-            blog.second_paragraph_image = secondImageName
-        }
-        if (extrasImage) {
-            if (!extrasImage.mimetype.startsWith('image/'))
-                return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            const currentImagePath = `${filePath}/${blog.extras_image ? blog.extras_image : null}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
-            extrasImageName = `${extrasData}-${date.getTime()}.jpg`
-            await extrasImage.mv(`${filePath}/${extrasImageName}`)
-            blog.extras_image = extrasImageName
-        }
-
-
         if (title) {
             blog.title = title
         }
@@ -819,29 +752,17 @@ exports.UpdateBlog = async (req, res) => {
             if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
             blog.feature = feature
         }
-        if (main_header_title) {
-            blog.main_header_title = main_header_title
+        if (main_header) {
+            blog.main_header = main_header
         }
-        if (main_header_content) {
-            blog.main_header_content = main_header_content
+        if (first_paragraph) {
+            blog.first_paragraph = first_paragraph
         }
-        if (first_paragraph_subtitle) {
-            blog.first_paragraph_subtitle = first_paragraph_subtitle
+        if (second_paragraph) {
+            blog.second_paragraph = second_paragraph
         }
-        if (first_paragraph_content) {
-            blog.first_paragraph_content = first_paragraph_content
-        }
-        if (second_paragraph_subtitle) {
-            blog.second_paragraph_subtitle = second_paragraph_subtitle
-        }
-        if (second_paragraph_content) {
-            blog.second_paragraph_content = second_paragraph_content
-        }
-        if (extras_title) {
-            blog.extras_title = extras_title
-        }
-        if (extras_content) {
-            blog.extras_content = extras_content
+        if (extras) {
+            blog.extras = extras
         }
         if (conclusion) {
             blog.conclusion = conclusion
@@ -854,19 +775,6 @@ exports.UpdateBlog = async (req, res) => {
         return res.json({ status: 400, msg: error.message })
     }
 }
-
-
-// for (const [key, value] of Object.entries(fieldsToUpdate)) {
-//     if (value !== undefined) {
-//         if (key === 'feature') {
-//             const validFeatures = ['airdrop', 'trading', 'personal_finance'];
-//             if (!validFeatures.includes(value)) {
-//                 return res.status(400).json({ status: 400, msg: 'Invalid blog feature provided.' });
-//             }
-//         }
-//         blog[key] = value;
-//     }
-// }
 
 exports.AllBlogs = async (req, res) => {
     try {
@@ -907,44 +815,6 @@ exports.SingleBlog = async (req, res) => {
         return res.json({ status: 200, msg: blog })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
-    }
-}
-
-
-exports.deleteSingleImage = async (req, res) => {
-    try {
-        const { id } = req.params
-        const { tag } = req.body
-        if (!id || !tag) return res.json({ status: 400, msg: 'Incomplete request' })
-        const findImage = await Blog.findOne({ where: { id } })
-        if (!findImage) return res.json({ status: 404, msg: 'Blog ID not found' })
-        const filePath = `./public/blogs/${findImage.gen_id}`;
-        if (tag === 'paragraph') {
-            const currentImagePath = `${filePath}/${findImage?.second_paragraph_image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
-            findImage.second_paragraph_image = null
-            await findImage.save()
-
-            return res.json({ status: 200, msg: "Second Paragraph image successfully deleted",data:findImage })
-
-        }
-        else if (tag === 'extras') {
-            const currentImagePath = `${filePath}/${findImage?.extras_image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
-            findImage.extras_image = null
-            await findImage.save()
-
-            return res.json({ status: 200, msg: "Extras image successfully deleted",data:findImage })
-        }
-        else {
-            return res.json({ status: 404, msg: 'Invalid Tag' })
-        }
-    } catch (error) {
-        ServerError(res, error)
     }
 }
 
@@ -1012,8 +882,6 @@ exports.AllBlogComments = async (req, res) => {
         return res.json({ status: 400, msg: error.message })
     }
 }
-
-
 
 exports.getCryptoBuysOrders = async (req, res) => {
     try {

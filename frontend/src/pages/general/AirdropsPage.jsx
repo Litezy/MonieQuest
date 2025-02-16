@@ -12,7 +12,7 @@ import ButtonLoader from '../../GeneralComponents/ButtonLoader'
 
 const statuses = ["Open", "Closed"]
 const categories = ["DeFi", "Featured", "New", "NFT", "Potential", "Earn_Crypto"]
-const blockchains = ["Ton", "BNB", "ETH", "Solana"]
+const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche', 'Base', 'Berachain', 'Binance', 'Bitcoin', 'Blast', 'Cardano', 'Celestia', 'Cosmos', 'Dogechain', 'Ethereum', 'Filecoin', 'Immutable', 'Injective', 'IoTeX', 'Linea', 'Manta Network', 'Near Protocol', 'Optimism', 'Other', 'Polkadot', 'Polygon', 'Ronin', 'Scroll', 'Solana', 'Sui', 'Tesnet', 'TON', 'Tron', 'zkSync']
 
 const AirdropsPage = () => {
   const [staticData, setStaticData] = useState([])
@@ -66,7 +66,7 @@ const AirdropsPage = () => {
   const SubmitFilter = () => {
     const mainData = staticData
     const kyc = check ? 'true' : 'false'
-    const filteredData = mainData.filter(item => item.kyc === kyc || item.category.toLocaleLowerCase() === select.category.toLocaleLowerCase() || item.status.toLocaleLowerCase() === select.status.toLocaleLowerCase() || item.blockchain.toLocaleLowerCase() === select.blockchain.toLocaleLowerCase())
+    const filteredData = mainData.filter(item => item.kyc === kyc || item.category.toLocaleLowerCase() === select.category.toLocaleLowerCase() || item.status.toLocaleLowerCase() === select.status.toLocaleLowerCase() || item.blockchain === select.blockchain)
     setLoading(true)
     setTimeout(() => {
       setAirdrops(filteredData)
@@ -257,7 +257,7 @@ const AirdropsPage = () => {
                             <span className='capitalize font-bold'>potential airdrops</span>
                           </div>
                           <div className='flex gap-4 items-center'>
-                            <Link to='/airdrops/other' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
+                            <Link to='/airdrops/potential' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
                             <div className='md:flex gap-2 items-center hidden'>
                               <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
                               <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
@@ -281,7 +281,7 @@ const AirdropsPage = () => {
                             <span className='capitalize font-bold'>earn crypto airdrops</span>
                           </div>
                           <div className='flex gap-4 items-center'>
-                            <Link to='/airdrops/deFi' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
+                            <Link to='/airdrops/earn_crypto' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
                             <div className='md:flex gap-2 items-center hidden'>
                               <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
                               <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>

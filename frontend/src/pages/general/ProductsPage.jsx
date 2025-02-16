@@ -8,7 +8,6 @@ import { MoveToTop } from "../../utils/pageUtils";
 import CartComponent from "../../GeneralComponents/CartComponent";
 import FormInput from "../../utils/FormInput";
 import { Apis, GetApi, imageurl } from "../../services/API";
-import { AiOutlineMessage } from "react-icons/ai";
 
 
 const ProductsPage = () => {
@@ -94,8 +93,8 @@ const ProductsPage = () => {
       {submitBtn &&
         <div
           data-aos='fade-up-left' data-aos-duration="1000"
-          className="fixed z-40 bg-sec p-2 rounded-full cursor-pointer right-5 top-1/2">
-         <Link to={`/login`} className="w-fit px-3 py-1.5 bg-ash text-white rounded-md">Submit your product</Link>
+          className="fixed z-40 rounded-full cursor-pointer right-5 top-1/2">
+         <Link to={`/login`} className="w-fit px-4 py-2 bg-ash text-white rounded-md">Submit your product</Link>
         </div>}
       <div className="pb-20 bg-dark">
         <div className="pageBg">

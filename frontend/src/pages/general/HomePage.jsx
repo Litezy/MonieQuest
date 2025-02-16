@@ -162,7 +162,7 @@ const HomePage = () => {
                           <AirdropDiv key={i} item={item} />
                         ))}
                       </div>
-                      <Link to='/airdrops/others' onClick={MoveToTop}>
+                      <Link to='/airdrops/potential' onClick={MoveToTop}>
                         <FormButton title='show more potential airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
                       </Link>
                     </div>
@@ -174,7 +174,7 @@ const HomePage = () => {
                           <AirdropDiv key={i} item={item} />
                         ))}
                       </div>
-                      <Link to='/airdrops/others' onClick={MoveToTop}>
+                      <Link to='/airdrops/earn_crypto' onClick={MoveToTop}>
                         <FormButton title='show more earn crypto airdrops' className='!text-sm !capitalize !rounded-md !py-4' />
                       </Link>
                     </div>

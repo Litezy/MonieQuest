@@ -48,7 +48,7 @@ const CategoryAirdropsPage = () => {
                         <div className='flex flex-col gap-6'>
                             <div className='flex gap-3 items-center text-2xl'>
                                 <GiArrowScope />
-                                <div className='font-bold capitalize'>{category === 'earn_crypto' ? 'all earn crypto' : `all ${category} airdrops`}</div>
+                                <div className='font-bold capitalize'>{category === 'earn_crypto' ? 'all earn crypto airdrops' : `all ${category} airdrops`}</div>
                             </div>
                             {categoryAirdrops.length > 0 ?
                                 <div className='flex flex-wrap gap-4'>

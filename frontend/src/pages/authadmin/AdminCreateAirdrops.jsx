@@ -17,7 +17,8 @@ const categories = [
 const kyces = [
     "true", "false"
 ]
-const blockchains = ["ton", "bnb", "eth", "solana"]
+const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche', 'Base', 'Berachain', 'Binance', 'Bitcoin', 'Blast', 'Cardano', 'Celestia', 'Cosmos', 'Dogechain', 'Ethereum', 'Filecoin', 'Immutable', 'Injective', 'IoTeX', 'Linea', 'Manta Network', 'Near Protocol', 'Optimism', 'Other', 'Polkadot', 'Polygon', 'Ronin', 'Scroll', 'Solana', 'Sui', 'Tesnet', 'TON', 'Tron', 'zkSync']
+
 
 const AdminCreateAirdrops = () => {
     const [screen, setScreen] = useState(1)
