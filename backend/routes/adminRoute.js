@@ -1,4 +1,4 @@
-const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops, AllRelatedBlogsExceptCurrent, CommentOnBlog, AllBlogComments, deleteSingleImage } = require('../controllers/adminController')
+const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops, AllRelatedBlogsExceptCurrent, CommentOnBlog, AllBlogComments, deleteSingleImage, getAdminTransHistory, getBankWithdrawals } = require('../controllers/adminController')
 const { AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -36,6 +36,8 @@ router.post('/confirm_sell/:id', AdminMiddleware, closeAndConfirmSellOrder)
 router.get('/get_giftcard_orders', AdminMiddleware, getGiftCardOrders)
 router.get('/get_single_giftcard_order/:id', AdminMiddleware, getSingleGiftCardOrder)
 router.post('/credit_gift_customer/:id', AdminMiddleware, creditGiftCustomer)
+router.get('/get_trans_history', AdminMiddleware, getAdminTransHistory)
+router.get('/get_bank_withdrawals', AdminMiddleware, getBankWithdrawals)
 
 
 module.exports = router

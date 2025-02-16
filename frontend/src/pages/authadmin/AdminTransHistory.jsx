@@ -2,25 +2,42 @@ import React, { useEffect, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { alltransactions } from '../../AuthComponents/AuthUtils'
 import { CiSearch } from 'react-icons/ci'
-import TransComp from '../../AuthComponents/TransComp'
+
+import AdminTransComp from '../../AdminComponents/AdminTransComp'
+import { Apis, AuthGetApi } from '../../services/API'
+import { ErrorAlert } from '../../utils/pageUtils'
 
 const AdminTransHistory = () => {
   const tags = ['All', 'Crypto', 'GiftCards', 'Withdrawal']
   const [active, setActive] = useState(tags[0])
   const [searchValue, setSearchValue] = useState('')
-  const [staticData, setStaticData] = useState([])
+  const [dynamicData, setDynamicData] = useState([])
   const [transactions, setTransactions] = useState([])
 
+  const fetchTrans = async () => {
+    try {
+      const res = await AuthGetApi(Apis.admin.get_trans_history)
+      if (res.status !== 200) return ErrorAlert(res.msg)
+      const data = res.data
+      setDynamicData(data)
+      setTransactions(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
-    setStaticData(alltransactions)
-    setTransactions(alltransactions);
+    fetchTrans()
   }, []);
 
   const filterTrans = () => {
-    const mainData = staticData
+    const mainData = dynamicData
     if (searchValue.length > 1) {
-      const filtered = mainData.filter(trans => String(trans.tag).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.type).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.trans_id).toLowerCase().startsWith(searchValue.toLocaleLowerCase()))
-      setTransactions(filtered)
+      const filtered = mainData.filter(trans => String(trans.tag).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.type).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) ||
+        String(trans.trans_id).toLowerCase().startsWith(searchValue.toLocaleLowerCase()))
+      if (filtered) {
+        setTransactions(filtered)
+      }
     } else {
       setTransactions(mainData)
     }
@@ -63,7 +80,7 @@ const AdminTransHistory = () => {
                 <>
                   {transactions.length > 0 && transactions.map((trans, i) => {
                     return (
-                      <TransComp key={i} trans={trans} />
+                      <AdminTransComp key={i} trans={trans} />
                     )
                   })}
                 </>
@@ -72,7 +89,7 @@ const AdminTransHistory = () => {
                 <>
                   {transactions.filter((trx) => trx.tag === 'crypto').map((trans, i) => {
                     return (
-                      <TransComp key={i} trans={trans} />
+                      <AdminTransComp key={i} trans={trans} />
                     )
                   })}
                 </>
@@ -81,16 +98,16 @@ const AdminTransHistory = () => {
                 <>
                   {transactions.filter((trx) => trx.tag === 'giftcard').map((trans, i) => {
                     return (
-                      <TransComp key={i} trans={trans} />
+                      <AdminTransComp key={i} trans={trans} />
                     )
                   })}
                 </>
               }
               {active === tags[3] &&
                 <>
-                  {transactions.filter((trx) => trx.tag === 'bank withdrawal').map((trans, i) => {
+                  {transactions.filter((trx) => trx.tag === 'bank').map((trans, i) => {
                     return (
-                      <TransComp key={i} trans={trans} />
+                      <AdminTransComp key={i} trans={trans} />
                     )
                   })}
                 </>

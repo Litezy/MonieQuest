@@ -728,8 +728,6 @@ exports.CreateBlog = async (req, res) => {
             extras_title,
             extras_image: extasImageName,
             extras_content,
-            second_slug: secondData,
-            extras_slug: extrasData,
             conclusion
         })
 
@@ -927,7 +925,7 @@ exports.deleteSingleImage = async (req, res) => {
             findImage.second_paragraph_image = null
             await findImage.save()
 
-            return res.json({ status: 200, msg: "Second Paragraph image successfully deleted",data:findImage })
+            return res.json({ status: 200, msg: "Second Paragraph image successfully deleted", data: findImage })
 
         }
         else if (tag === 'extras') {
@@ -938,7 +936,7 @@ exports.deleteSingleImage = async (req, res) => {
             findImage.extras_image = null
             await findImage.save()
 
-            return res.json({ status: 200, msg: "Extras image successfully deleted",data:findImage })
+            return res.json({ status: 200, msg: "Extras image successfully deleted", data: findImage })
         }
         else {
             return res.json({ status: 404, msg: 'Invalid Tag' })
@@ -1467,6 +1465,72 @@ exports.creditGiftCustomer = async (req, res) => {
         } else {
             return res.json({ status: 404, msg: "Invalid Tag" })
         }
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+
+exports.getAdminTransHistory = async (req, res) => {
+    try {
+        const cryptoBuys = await BuyCrypto.findAll({
+            where: { status: [`unpaid`, `paid`, 'completed'] },
+            include: [
+                {
+                    model: User, as: 'crypto_buyer',
+                    attributes:[`id`,'image','first_name','surname','email']
+                }
+            ]
+        })
+        const cryptoSells = await SellCrypto.findAll({
+            where: { status: [`pending`, 'completed'] },
+            include: [
+                {
+                    model: User, as: 'crypto_seller',
+                    attributes:[`id`,'image','first_name','surname','email']
+                }
+            ]
+        })
+        const giftSells = await GiftCard.findAll({
+            where: { status: [`pending`, 'completed'] },
+            include: [
+                {
+                    model: User, as: 'gift_seller',
+                    attributes:[`id`,'image','first_name','surname','email']
+                }
+            ]
+        })
+        const bankWithdrawals = await Bank_Withdrawals.findAll({
+            where: { status: [`pending`, 'completed'] },
+            include: [
+                {
+                    model: User, as: 'user_withdrawal',
+                    attributes:[`id`,'image','first_name','surname','email']
+                }
+            ]
+        })
+        const allArray = [...cryptoBuys, ...cryptoSells, ...giftSells, ...bankWithdrawals]
+        const sortArray = allArray.sort((a, b) => b.createdAt - a.createdAt)
+        return res.json({ status: 200, msg: 'fetch success', data: sortArray })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getBankWithdrawals = async (req, res) => {
+    try {
+        const allWithdrawals = await Bank_Withdrawals.findAll({
+            where: { status: 'pending' },
+
+            include: [
+                {
+                    model: User, as: 'user_withdrawal',
+                    attributes:[`id`,'image','first_name','surname','email']
+                }
+            ],
+            order:[['createdAt','DESC']]
+        })
+        return res.json({ status: 200, msg: 'fetch success', data: allWithdrawals })
     } catch (error) {
         ServerError(res, error)
     }

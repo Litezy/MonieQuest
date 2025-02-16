@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import { GoArrowDownLeft,  GoArrowUpLeft, GoArrowUpRight } from 'react-icons/go'
-import { currencies } from './AuthUtils'
+import TransModal from '../AuthComponents/TransModal'
 import ModalLayout from '../utils/ModalLayout'
-import TransModal from './TransModal'
+import { GoArrowDownLeft, GoArrowUpLeft, GoArrowUpRight } from 'react-icons/go'
 import moment from 'moment'
+import { currencies } from '../AuthComponents/AuthUtils'
 
-const TransComp = ({ trans }) => {
-    const [modal, setModal] = useState(false)
-
+const AdminTransComp = ({trans}) => {
+    const [modal,setModal] = useState(false)
     return (
         <div className='w-full mb-5'>
             {modal &&
@@ -39,8 +38,8 @@ const TransComp = ({ trans }) => {
                             {trans.brand && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
                             {trans.brand && <div className={`text-red-600 capitalize`}>sell</div>}
                         </div>
-                        <div className="flex flex-col items-start gap-1 text-xs md:text-base">
-                        <div className="">{moment(trans.createdAt).format('ddd')} {moment(trans.createdAt).format('DD-MM-YYYY')}</div>
+                        <div className="flex flex-col items-start gap-1 text-xs md:text-sm">
+                            <div className="">{moment(trans.createdAt).format('ddd')} {moment(trans.createdAt).format('DD-MM-YYYY')}</div>
                             <div className="">{moment(trans.createdAt).format('hh:mm a')}</div>
                         </div>
                     </div>
@@ -53,9 +52,7 @@ const TransComp = ({ trans }) => {
                 {trans.brand && <div className={`${trans.brand && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
 
                 <div className=" gap-1 font-bold lg:w-full flex items-center justify-center">
-                    {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'}`}>{trans?.type === 'buy'?'+':'-'}</div>}
-                    {trans.brand && <div className={`text-red-600`}>-</div>}
-                    {trans.bank_user && <div className={``}>-</div>}
+                    
 
                     {trans.crypto_currency && <div
                         className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'} `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
@@ -72,4 +69,4 @@ const TransComp = ({ trans }) => {
     )
 }
 
-export default TransComp
+export default AdminTransComp

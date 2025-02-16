@@ -13,8 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         second_paragraph_subtitle: { type: DataTypes.TEXT },
         second_paragraph_content: { type: DataTypes.STRING },
         second_paragraph_image: { type: DataTypes.STRING,allowNull:true },
-        second_slug: { type: DataTypes.STRING},
-        extras_slug: { type: DataTypes.STRING},
         extras_title: { type: DataTypes.TEXT },
         extras_content: { type: DataTypes.STRING },
         extras_image: { type: DataTypes.STRING,allowNull:true },
