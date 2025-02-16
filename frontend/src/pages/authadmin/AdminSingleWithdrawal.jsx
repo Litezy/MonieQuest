@@ -7,7 +7,6 @@ import { defaultOptions, ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import FormButton from '../../utils/FormButton'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import Lottie from 'react-lottie'
-import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 
 const AdminSingleWithdrawal = () => {
@@ -30,23 +29,16 @@ const AdminSingleWithdrawal = () => {
         if (forms.sent_money === 'No' || !forms.sent_money) return ErrorAlert(`Please confirm money have been paid`)
         if (!forms.ref || forms.ref.length < 10) return ErrorAlert(`Please input a valid transfer reference`)
         setLoading(true)
-       return setTimeout(()=>{
-        setForms({ref:'',sent_money:''})
-        setLoading(false)
-        setScreen(2)
-       },5000)
+        return setTimeout(() => {
+            setForms({ ref: '', sent_money: '' })
+            setLoading(false)
+            setScreen(2)
+        }, 5000)
     }
     return (
         <AdminPageLayout>
 
-            {loading &&
-                <ModalLayout>
-                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                        <Loader />
-                        <div>...closing order</div>
-                    </div>
-                </ModalLayout>
-            }
+            {loading && <Loader title={`closing order`} />}
             {screen === 1 && <div className="w-11/12 mx-auto">
                 <div className=" mt-2">
                     <Link to={`/admin/bank_withdrawals  `} className="w-fit px-4 py-1.5 rounded-md bg-ash">back</Link>

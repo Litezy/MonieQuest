@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 import { FaEdit } from 'react-icons/fa'
 import { FiUploadCloud } from 'react-icons/fi'
@@ -18,7 +17,8 @@ const categories = [
 const kyces = [
     "true", "false"
 ]
-const blockchains = ["ton", "bnb", "eth", "solana"]
+const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche', 'Base', 'Berachain', 'Binance', 'Bitcoin', 'Blast', 'Cardano', 'Celestia', 'Cosmos', 'Dogechain', 'Ethereum', 'Filecoin', 'Immutable', 'Injective', 'IoTeX', 'Linea', 'Manta Network', 'Near Protocol', 'Optimism', 'Other', 'Polkadot', 'Polygon', 'Ronin', 'Scroll', 'Solana', 'Sui', 'Tesnet', 'TON', 'Tron', 'zkSync']
+
 
 const AdminCreateAirdrops = () => {
     const [screen, setScreen] = useState(1)
@@ -117,14 +117,7 @@ const AdminCreateAirdrops = () => {
     return (
         <AirdropsLayout>
             <div className='w-11/12 mx-auto'>
-                {loading &&
-                    <ModalLayout clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...submitting</div>
-                        </div>
-                    </ModalLayout>
-                }
+                {loading && <Loader title={`submitting`} />}
                 {screen === 1 &&
                     <div className='flex flex-col gap-10'>
                         <div className='flex flex-col gap-2'>

@@ -22,7 +22,6 @@ import Leaderboards from "../pages/authuser/Leaderboards";
 import FAQS from "../pages/general/FAQS";
 import BankWithdrawal from "../pages/authuser/BankWithdrawal";
 import SingleBlog from "../pages/general/SingleBlog";
-import SingleFeatureBlog from "../pages/general/SingleFeatureBlog";
 import Hiring from "../pages/general/Hiring";
 import UserKYC from "../pages/authuser/UserKYC";
 import AdminBankWithdrawals from "../pages/authadmin/AdminBankWithdrawals";
@@ -63,6 +62,7 @@ import AdminProductsOrders from "../pages/authadmin/AdminProductsOrders";
 import AdminAllProducts from "../pages/authadmin/AdminAllProducts";
 import AdminSingleProduct from "../pages/authadmin/AdminSingleProduct";
 import BlogComments from "../pages/general/BlogComments";
+import { FeatureBlogs } from "../../../backend/controllers/adminController";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -85,7 +85,7 @@ export const GeneralPagesLinks = [
     { path: '/we_are_hiring', component: Hiring },
     { path: '/blogs/:feature/:id', component: SingleBlog },
     { path: '/blogs/:feature/:id/comments', component: BlogComments },
-    { path: '/blogs/:feature', component: SingleFeatureBlog },
+    { path: '/blogs/:feature', component: FeatureBlogs },
 ]
 
 export const AuthPagesLinks = [

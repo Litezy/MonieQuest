@@ -10,13 +10,12 @@ import { Link } from 'react-router-dom'
 import SuccessCheck from '../../utils/SuccessCheck'
 import logo from '../../assets/images/logo.png'
 import { Apis, PostApi } from '../../services/API';
-import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 
 const ForgotPassword = () => {
   const [screen, setScreen] = useState(1)
   const [loading, setLoading] = useState(false)
-  const [pins, setPins] = useState(['', '', '', '', '', '']);
+  const [pins, setPins] = useState(['', '', '', '', '', ''])
   const checkPins = pins.join('')
   const [resend, setResend] = useState(true)
   const [countdown, setCountDown] = useState(40)
@@ -129,13 +128,7 @@ const ForgotPassword = () => {
 
   return (
     <div className='w-full bg-dark h-screen overflow-y-auto'>
-      {loading &&
-        <ModalLayout>
-          <div className="w-full p-5 flex items-center justify-center">
-            <Loader />
-          </div>
-        </ModalLayout>
-      }
+      {loading && <Loader />}
       <div className='w-11/12 mx-auto py-24'>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
           <div className='w-full h-full flex flex-col'>

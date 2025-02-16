@@ -5,7 +5,7 @@ import { GiArrowScope } from 'react-icons/gi'
 import BlogDiv from '../../GeneralComponents/BlogDiv'
 import { Apis, GetApi } from '../../services/API'
 
-const SingleFeatureBlog = () => {
+const FeatureBlogs = () => {
     const { feature } = useParams()
     const [featureBlogs, setFeatureBlogs] = useState([])
     const [dataLoading, setDataLoading] = useState(true)
@@ -69,7 +69,7 @@ const SingleFeatureBlog = () => {
                                     ))}
                                 </div>
                                 :
-                                <div>No {feature} blogs available yet...</div>
+                                <div>No {feature} blogs published yet...</div>
                             }
                         </div>
                     }
@@ -79,4 +79,4 @@ const SingleFeatureBlog = () => {
     )
 }
 
-export default SingleFeatureBlog
+export default FeatureBlogs

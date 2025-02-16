@@ -6,19 +6,18 @@ import { Link, useSearchParams } from 'react-router-dom';
 import SuccessCheck from '../../utils/SuccessCheck';
 import logo from '../../assets/images/logo.png'
 import { Apis, AuthPostApi, PostApi } from '../../services/API';
-import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 
 
 
 const VerifyAccount = () => {
-    const [loading, setLoading] = useState({ status: false, val: "" })
+    const [loading, setLoading] = useState({ status: false, val: "resending" })
     const [params] = useSearchParams()
     const [resend, setResend] = useState(true)
     const [countdown, setCountDown] = useState(40)
     const userEmail = params.get('v')
     const [screen, setScreen] = useState(1)
-    const [pins, setPins] = useState(['', '', '', '', '', '']);
+    const [pins, setPins] = useState(['', '', '', '', '', ''])
     const checkPins = pins.join('')
 
     const VerifyEmail = async (e) => {
@@ -89,12 +88,7 @@ const VerifyAccount = () => {
     return (
         <div className='bg-dark w-full h-screen overflow-y-auto'>
             {loading.status &&
-                <ModalLayout>
-                    <div className="w-full p-5 flex-col flex items-center justify-center">
-                        <Loader />
-                        <div className="text-white">...{loading.val}</div>
-                    </div>
-                </ModalLayout>
+                <Loader title={loading.val} />
             }
             <div className='w-11/12 mx-auto py-36'>
                 <div className='flex items-center justify-center max-w-md mx-auto relative'>

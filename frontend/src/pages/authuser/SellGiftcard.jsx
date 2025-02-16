@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { TbSwitch2 } from 'react-icons/tb'
 import FormInput from '../../utils/FormInput'
 import { currencies } from '../../AuthComponents/AuthUtils'
 import { currencySign, ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
-import ModalLayout from '../../utils/ModalLayout'
 import { SlClock } from 'react-icons/sl'
 import { Link, useNavigate } from 'react-router-dom'
 import Loader from '../../GeneralComponents/Loader'
@@ -232,20 +230,10 @@ const SellGiftcard = () => {
         <Giftcards>
             <div className='w-11/12 mx-auto lg:w-8/12 mt-5 lg:mt-10'>
                 {loading.status && loading.param === 'check' &&
-                    <ModalLayout setModal={setLoading} clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...processing</div>
-                        </div>
-                    </ModalLayout>
+                    <Loader title={`processing`} />
                 }
                 {loading.status && loading.param === 'confirmed' &&
-                    <ModalLayout setModal={setLoading} clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...submitting order</div>
-                        </div>
-                    </ModalLayout>
+                    <Loader title={`submitting order`} />
                 }
                 {isPageLoading &&
                     <div className="mt-10 w-11/12  lg:w-11/12 mx-auto">
@@ -296,7 +284,7 @@ const SellGiftcard = () => {
                         </div>
                         <div className="flex item-center justify-between w-full">
                             <div className="font-bold">Amount in Naira</div>
-                            <div  className="flex items-center gap-1 cursor-pointer">
+                            <div className="flex items-center gap-1 cursor-pointer">
                                 <div className="text-sm">{inNaira}</div>
                             </div>
                         </div>
@@ -371,9 +359,9 @@ const SellGiftcard = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div onClick={()=>setScreen(1)} className="flex w-full items-center justify-between gap-4">
+                            <div onClick={() => setScreen(1)} className="flex w-full items-center justify-between gap-4">
                                 <button className='w-1/2 bg-primary py-2 rounded-md'>back</button>
-                            <button type='button' onClick={confirmSend} className='w-1/2 py-2 rounded-md bg-ash'>Confirm & Sell</button>
+                                <button type='button' onClick={confirmSend} className='w-1/2 py-2 rounded-md bg-ash'>Confirm & Sell</button>
                             </div>
                         </div>
                     </div>}

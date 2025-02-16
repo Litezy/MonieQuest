@@ -102,7 +102,7 @@ const SingleSellOrder = () => {
             console.log(res)
             if (res.status !== 200) return ErrorAlert(res.msg)
             SuccessAlert(res.msg)
-            setForms({ message: "",amount:"" })
+            setForms({ message: "", amount: "" })
             fetchSells()
             await new Promise((resolve) => setTimeout(resolve, 2000))
             afterLoad()
@@ -137,20 +137,10 @@ const SingleSellOrder = () => {
         <AdminPageLayout>
 
             {loading &&
-                <ModalLayout clas={`w-11/12 mx-auto`}>
-                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                        <Loader />
-                        <div>...closing order</div>
-                    </div>
-                </ModalLayout>
+                <Loader title={`closing order`} />
             }
             {load &&
-                <ModalLayout clas={`w-11/12 mx-auto`}>
-                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                        <Loader />
-                        <div>...crediting customer</div>
-                    </div>
-                </ModalLayout>
+                <Loader title={`crediting customer`} />
             }
             {failed && <ModalLayout setModal={setFailed} clas={`w-11/12 mx-auto lg:w-1/2`}>
                 <div className="w-full p-5 bg-white text-dark rounded-md flex items-center flex-col justify-center">

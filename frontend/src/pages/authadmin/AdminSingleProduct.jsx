@@ -7,7 +7,6 @@ import { FaCopy, FaEdit } from 'react-icons/fa';
 import { RiDiscountPercentFill } from "react-icons/ri";
 import SelectComp from '../../GeneralComponents/SelectComp';
 import FormButton from '../../utils/FormButton';
-import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import { FiUploadCloud } from 'react-icons/fi';
 import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API';
@@ -169,14 +168,7 @@ const AdminSingleProduct = () => {
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
-                {loading &&
-                    <ModalLayout clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...submitting</div>
-                        </div>
-                    </ModalLayout>
-                }
+                {loading && <Loader title={`submitting`} />}
                 <Link to='/admin/products/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
                     back to all tools
                 </Link>

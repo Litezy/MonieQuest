@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Exchange from './Exchange'
 import { Apis, AuthGetApi } from '../../services/API'
 import OrderComp from '../../AuthComponents/OrderComp'
 import { Link } from 'react-router-dom'
+import ExchangeLayout from '../../AuthComponents/ExchangeLayout'
 
 const BuyOrdersHistory = () => {
     const [data, setData] = useState([])
     const fetchOrders = useCallback(async () => {
         const res = await AuthGetApi(Apis.transaction.crypto_order_history)
-        
+
         if (res.status !== 200) {
             console.log(res.msg)
             return;
@@ -20,7 +20,7 @@ const BuyOrdersHistory = () => {
         fetchOrders()
     }, [])
     return (
-        <Exchange>
+        <ExchangeLayout>
             <div className="w-11/12 mx-auto">
                 <div className="my-5 text-2xl font-bold lg:text-center ">Recent Orders</div>
                 <div className="mt-10">
@@ -34,7 +34,7 @@ const BuyOrdersHistory = () => {
                     }
                 </div>
             </div>
-        </Exchange>
+        </ExchangeLayout>
     )
 }
 

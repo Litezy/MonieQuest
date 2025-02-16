@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import AuthPageLayout from '../../AuthComponents/AuthPageLayout'
+import AuthPageLayout from './AuthPageLayout'
 import { Link, useLocation } from 'react-router-dom'
-import { Apis, AuthGetApi } from '../../services/API'
+import { Apis, AuthGetApi } from '../services/API'
 
-const Exchange = ({ children }) => {
+const ExchangeLayout = ({ children }) => {
 
   const [ordersNotify, setOrdersNotify] = useState([])
   const fetchOrders = useCallback(async () => {
@@ -48,4 +48,4 @@ const Exchange = ({ children }) => {
   )
 }
 
-export default Exchange
+export default ExchangeLayout

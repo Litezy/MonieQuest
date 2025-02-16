@@ -47,7 +47,7 @@ const AdminCreateUsers = () => {
             email: forms.email,
             phone_number: forms.email,
             password: forms.password,
-            confirm_password:forms.confirm_password
+            confirm_password: forms.confirm_password
         }
         setLoading(true)
         try {
@@ -70,11 +70,7 @@ const AdminCreateUsers = () => {
             <div className='mx-auto w-11/12'>
                 <div className='w-full '>
                     {loading &&
-                        <ModalLayout setModal={setLoading} clas={`w-11/12 mx-auto lg:w-[60%]`}>
-                            <div className="absolute left-1/2 bg-white p-5 rounded-md -translate-x-1/2 top-1/2">
-                                <Loader />
-                            </div>
-                        </ModalLayout>
+                        <Loader title={`creating`} />
                     }
                     <div className="w-full flex items-center  justify-between">
                         <Link to={`/admin/all_users`} className="w-fit cursor-pointer mr-auto bg-primary text-white px-3 py-1 rounded-md">

@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
-import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { FaEdit } from 'react-icons/fa'
 import { FiUploadCloud } from 'react-icons/fi'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import FormInput from '../../utils/FormInput'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import FormButton from '../../utils/FormButton'
-import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
+import { Apis, AuthGetApi, AuthPostApi, AuthPutApi, imageurl } from '../../services/API'
+import ModalLayout from '../../utils/ModalLayout'
 
 const statuses = [
     "open", "closed"
@@ -20,13 +20,15 @@ const categories = [
 const kyces = [
     "true", "false"
 ]
-const blockchains = ["ton", "bnb", "eth", "solana"]
+const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche', 'Base', 'Berachain', 'Binance', 'Bitcoin', 'Blast', 'Cardano', 'Celestia', 'Cosmos', 'Dogechain', 'Ethereum', 'Filecoin', 'Immutable', 'Injective', 'IoTeX', 'Linea', 'Manta Network', 'Near Protocol', 'Optimism', 'Other', 'Polkadot', 'Polygon', 'Ronin', 'Scroll', 'Solana', 'Sui', 'Tesnet', 'TON', 'Tron', 'zkSync']
+
 
 const AdminSingleAirdrop = () => {
     const { id } = useParams()
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
     const [singleAirdrop, setSingleAirdrop] = useState({})
+    const [modal, setModal] = useState(false)
     const [form, setForm] = useState({
         title: '',
         category: '',
@@ -51,6 +53,7 @@ const AdminSingleAirdrop = () => {
     })
     const bannerRef = useRef()
     const logoRef = useRef()
+    const navigate = useNavigate()
 
     const formHandler = (event) => {
         setForm({
@@ -160,17 +163,27 @@ const AdminSingleAirdrop = () => {
         }
     }
 
+    const DeleteAirdrop = async () => {
+        setLoading(true)
+        try {
+            const response = await AuthPostApi(Apis.admin.delete_closed_airdrop, { airdrop_id: singleAirdrop.id })
+            if (response.status === 200) {
+                SuccessAlert(response.msg)
+                navigate(`/admin/airdrops/all`)
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
-                {loading &&
-                    <ModalLayout clas={`w-11/12 mx-auto`}>
-                        <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                            <Loader />
-                            <div>...submitting</div>
-                        </div>
-                    </ModalLayout>
-                }
+                {loading && <Loader title={`submitting`} />}
                 <Link to='/admin/airdrops/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
                     back to all airdrops
                 </Link>
@@ -293,6 +306,19 @@ const AdminSingleAirdrop = () => {
                             </div>
                         </div>
                         <FormButton title='Save Changes' className='md:!w-1/2 w-full mx-auto' />
+                        {singleAirdrop.status === 'closed' && <FormButton title='Delete Airdrop' type='button' className='md:!w-1/2 w-full mx-auto !bg-red-700' onClick={() => setModal(true)} />}
+                        {modal &&
+                            <ModalLayout setModal={setModal} clas={`lg:w-[50%] w-10/12 mx-auto`}>
+                                <div className="p-5 bg-primary rounded-md">
+                                    <div className="text-base text-center mb-3 text-white">Are you sure you want to delete airdrop</div>
+                                    <div className="flex items-center justify-between">
+                                        <button onClick={() => setModal(false)} className='px-4 py-2 bg-red-700 text-white rounded-md' type='button'>Cancel</button>
+                                        <button className='px-4 py-2 bg-ash text-white rounded-md' type='button' onClick={DeleteAirdrop}>Confirm delete</button>
+                                    </div>
+
+                                </div>
+                            </ModalLayout>
+                        }
                     </form>
                 }
             </div>

@@ -7,7 +7,7 @@ import { Apis, AuthGetApi } from '../../services/API';
 
 
 const AdminAllAirdrops = () => {
-    const tags = ['all', 'deFi', 'featured', 'new', 'NFT', 'potential', 'earn crypto']
+    const tags = ['all', 'deFi', 'featured', 'new', 'NFT', 'potential', 'earn_crypto']
     const [active, setActive] = useState(tags[0])
     const [search, setSearch] = useState('')
     const [dataLoading, setDataLoading] = useState(true)
@@ -17,7 +17,7 @@ const AdminAllAirdrops = () => {
     useEffect(() => {
         const FetchAllAirdrops = async () => {
             try {
-                const response = await AuthGetApi(Apis.admin.all_open_airdrops)
+                const response = await AuthGetApi(Apis.admin.all_airdrops)
                 if (response.status === 200) {
                     setStaticData(response.msg)
                     setAirdrops(response.msg)

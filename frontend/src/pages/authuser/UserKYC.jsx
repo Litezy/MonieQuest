@@ -4,7 +4,6 @@ import { FaEdit } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 import Loader from '../../GeneralComponents/Loader';
-import ModalLayout from '../../utils/ModalLayout';
 import { ErrorAlert } from '../../utils/pageUtils';
 import { TfiTimer } from 'react-icons/tfi';
 import { Apis, AuthGetApi, AuthPostApi, imageurl } from '../../services/API';
@@ -134,101 +133,93 @@ const UserKYC = () => {
 
         <AuthPageLayout>
             <div className=' w-11/12 mx-auto'>
-                {screen === 1 && <div className="w-full">
-                    <Link to={'/user/profile'} className="w-fit  rounded-md px-5 py-2 bg-ash text-white mr-auto cursor-pointer ">
-                        back to profile
-                    </Link>
-                </div>}
                 {screen === 1 &&
-                    <form onSubmit={Submit} className="h-fit relative rounded-md text-sm  md:pt-3 ">
-
-                        {loading &&
-                            <ModalLayout clas={`w-11/12 mx-auto`}>
-                                <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                                    <Loader />
-                                    <div>...submitting</div>
-                                </div>
-                            </ModalLayout>
-                        }
-                        <div className='text-center text-lg bg-ash flex justify-between items-center px-4 mt-5'>
-                            <span>KYC status:</span>
-                            {dataLoading ?
-                                <div className='w-24 h-2 rounded-full bg-slate-400 animate-pulse'></div>
-                                :
-                                <div className={`italic ${kyc?.status === 'verified' ? 'text-green-400' : kyc?.status === 'processing' ? 'text-yellow-300' : 'text-red-500'}`}>{kyc?.status ? kyc.status : 'unverified'}</div>
-                            }
-                        </div>
-                        <div className="grid md:grid-cols-2 grid-cols-1 md:items-baseline gap-5 mt-6 w-full">
-                            <div className="flex flex-col w-full gap-2">
-                                <h1 className='text-lightgreen'>Date of Birth</h1>
-                                <div className="relative max-w-sm w-1/2">
-                                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                        </svg>
+                    <div>
+                        <Link to={'/user/profile'} className="w-fit  rounded-md px-5 py-2 bg-ash text-white mr-auto cursor-pointer ">
+                            back to profile
+                        </Link>
+                        {loading && <Loader title={`submitting`} />}
+                        <form onSubmit={Submit} className="h-fit relative rounded-md text-sm  md:pt-3 ">
+                            <div className='text-center text-lg bg-ash flex justify-between items-center px-4 mt-5'>
+                                <span>KYC status:</span>
+                                {dataLoading ?
+                                    <div className='w-24 h-2 rounded-full bg-slate-400 animate-pulse'></div>
+                                    :
+                                    <div className={`italic ${kyc?.status === 'verified' ? 'text-green-400' : kyc?.status === 'processing' ? 'text-yellow-300' : 'text-red-500'}`}>{kyc?.status ? kyc.status : 'unverified'}</div>
+                                }
+                            </div>
+                            <div className="grid md:grid-cols-2 grid-cols-1 md:items-baseline gap-5 mt-6 w-full">
+                                <div className="flex flex-col w-full gap-2">
+                                    <h1 className='text-lightgreen'>Date of Birth</h1>
+                                    <div className="relative max-w-sm w-1/2">
+                                        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                            </svg>
+                                        </div>
+                                        <input name='date_of_birth' value={forms.date_of_birth} onChange={handleChange} datepicker="true" datepicker-buttons="true" datepicker-autoselect-today="true" type="date" className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="Select date" />
                                     </div>
-                                    <input name='date_of_birth' value={forms.date_of_birth} onChange={handleChange} datepicker="true" datepicker-buttons="true" datepicker-autoselect-today="true" type="date" className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Select date" />
+                                </div>
+                                <div className="flex flex-col w-full gap-2">
+                                    <h1 className='text-lightgreen'> Address:</h1>
+                                    <input name='address' value={forms.address} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' placeholder='enter your address' />
+                                </div>
+                                <div className="flex flex-col w-full gap-2">
+                                    <h1 className='text-lightgreen'>Government Issued ID:</h1>
+                                    <select name="id_type" onChange={handleChange} value={forms.id_type} className='border-b bg-dark w-full outline-none'>
+                                        <option >--select--</option>
+                                        <option value="driver's license">Driver's License/State ID</option>
+                                        <option value="Nin">NIN</option>
+                                    </select>
+                                </div>
+                                <div className="flex flex-col w-full gap-2">
+                                    <h1 className='text-lightgreen capitalize'>{forms.id_type && forms.id_type} ID Number:</h1>
+                                    <input name='id_number' value={forms.id_number} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' />
                                 </div>
                             </div>
-                            <div className="flex flex-col w-full gap-2">
-                                <h1 className='text-lightgreen'> Address:</h1>
-                                <input name='address' value={forms.address} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' placeholder='enter your address' />
-                            </div>
-                            <div className="flex flex-col w-full gap-2">
-                                <h1 className='text-lightgreen'>Government Issued ID:</h1>
-                                <select name="id_type" onChange={handleChange} value={forms.id_type} className='border-b bg-dark w-full outline-none'>
-                                    <option >--select--</option>
-                                    <option value="driver's license">Driver's License/State ID</option>
-                                    <option value="Nin">NIN</option>
-                                </select>
-                            </div>
-                            <div className="flex flex-col w-full gap-2">
-                                <h1 className='text-lightgreen capitalize'>{forms.id_type && forms.id_type} ID Number:</h1>
-                                <input name='id_number' value={forms.id_number} onChange={handleChange} type="text" className='w-full text-dark outline-none border-b h-10 overflow-x-auto' />
-                            </div>
-                        </div>
-                        <div className="grid md:grid-cols-2 grid-cols-1 w-full items-center gap-5 lg:gap-20 mt-5">
-                            <div className="w-full">
-                                <h1 className='text-lightgreen text-center text-lg font-bold'>Upload Front ID Image</h1>
-                                <div className="md:h-64 h-48 w-full mt-4">
-                                    <label className={`${frontimg.img ? '' : 'border-2 border-black'} w-full  h-full border-dashed flex cursor-pointer items-center justify-center `}>
-                                        {frontimg.img ?
-                                            <div className="relative w-full h-full">
-                                                <div className="absolute top-0 -right-3 main font-bold">
-                                                    <FaEdit className='text-2xl text-lightgreen' />
+                            <div className="grid md:grid-cols-2 grid-cols-1 w-full items-center gap-5 lg:gap-20 mt-5">
+                                <div className="w-full">
+                                    <h1 className='text-lightgreen text-center text-lg font-bold'>Upload Front ID Image</h1>
+                                    <div className="md:h-64 h-48 w-full mt-4">
+                                        <label className={`${frontimg.img ? '' : 'border-2 border-black'} w-full  h-full border-dashed flex cursor-pointer items-center justify-center `}>
+                                            {frontimg.img ?
+                                                <div className="relative w-full h-full">
+                                                    <div className="absolute top-0 -right-3 main font-bold">
+                                                        <FaEdit className='text-2xl text-lightgreen' />
+                                                    </div>
+                                                    <img src={frontimg.img} className='w-full h-full' />
                                                 </div>
-                                                <img src={frontimg.img} className='w-full h-full' />
-                                            </div>
-                                            : <FaPlus className='text-2xl' />
-                                        }
-                                        <input type="file" onChange={handleImageFront} hidden ref={frontRef} />
-                                    </label>
+                                                : <FaPlus className='text-2xl' />
+                                            }
+                                            <input type="file" onChange={handleImageFront} hidden ref={frontRef} />
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="w-full">
-                                <h1 className='text-lightgreen text-center text-lg font-bold'>Upload Back ID Image</h1>
-                                <div className="md:h-64 h-48 w-full mt-4">
-                                    <label className={`${backimg.img ? '' : 'border-2 border-black border-dashed'} w-full h-full flex cursor-pointer items-center justify-center `}>
-                                        {backimg.img ?
-                                            <div className="relative w-full h-full">
-                                                <div className="absolute top-0 -right-3 main font-bold">
-                                                    <FaEdit className='text-2xl text-lightgreen' />
+                                <div className="w-full">
+                                    <h1 className='text-lightgreen text-center text-lg font-bold'>Upload Back ID Image</h1>
+                                    <div className="md:h-64 h-48 w-full mt-4">
+                                        <label className={`${backimg.img ? '' : 'border-2 border-black border-dashed'} w-full h-full flex cursor-pointer items-center justify-center `}>
+                                            {backimg.img ?
+                                                <div className="relative w-full h-full">
+                                                    <div className="absolute top-0 -right-3 main font-bold">
+                                                        <FaEdit className='text-2xl text-lightgreen' />
+                                                    </div>
+                                                    <img src={backimg.img} className='w-full h-full' />
                                                 </div>
-                                                <img src={backimg.img} className='w-full h-full' />
-                                            </div>
-                                            : <FaPlus className='text-2xl' />
-                                        }
-                                        <input type="file" onChange={handleImageBack} hidden ref={backRef} />
-                                    </label>
+                                                : <FaPlus className='text-2xl' />
+                                            }
+                                            <input type="file" onChange={handleImageBack} hidden ref={backRef} />
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="mt-5 w-full flex items-center justify-center">
-                            <button className='w-3/4 md:w-1/2 mx-auto bg-ash py-3 hover:bg-ash/90 rounded-md'>Submit</button>
-                        </div>
+                            <div className="mt-5 w-full flex items-center justify-center">
+                                <button className='w-3/4 md:w-1/2 mx-auto bg-ash py-3 hover:bg-ash/90 rounded-md'>Submit</button>
+                            </div>
 
-                    </form>
+                        </form>
+                    </div>
                 }
                 {screen === 2 &&
                     <div className='w-full'>

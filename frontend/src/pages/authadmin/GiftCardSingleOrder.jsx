@@ -178,28 +178,13 @@ const GiftCardSingleOrder = () => {
                 </ModalLayout>
             }
             {loading.status && loading.param === 'close' &&
-                <ModalLayout clas={`w-11/12 mx-auto`}>
-                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                        <Loader />
-                        <div>...closing order</div>
-                    </div>
-                </ModalLayout>
+                <Loader title={`closing order`} />
             }
             {loading.status && loading.param === 'exit' &&
-                <ModalLayout clas={`w-11/12 mx-auto`}>
-                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                        <Loader />
-                        <div>...closing order & sending error message to user</div>
-                    </div>
-                </ModalLayout>
+                <Loader title={`closing order and sending error message to user`} />
             }
             {loading.status && loading.param === 'credit' &&
-                <ModalLayout clas={`w-11/12 mx-auto`}>
-                    <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-                        <Loader />
-                        <div>...crediting customer</div>
-                    </div>
-                </ModalLayout>
+                <Loader title={`crediting customer`} />
             }
             <div className="w-11/12 mx-auto">
                 {screen === 1 &&

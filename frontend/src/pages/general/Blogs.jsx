@@ -130,7 +130,7 @@ const Blogs = () => {
                                     }
                                 </div>
                                 :
-                                <div className='text-center'>No blogs available yet...</div>
+                                <div className='text-center'>No blogs published yet...</div>
                             }
                         </>
 

@@ -3,7 +3,6 @@ import { SlClock } from "react-icons/sl";
 import { FiUploadCloud } from 'react-icons/fi'
 import { Link } from 'react-router-dom';
 import { ErrorAlert } from '../../utils/pageUtils';
-import ModalLayout from '../../utils/ModalLayout';
 import Loader from '../../GeneralComponents/Loader';
 import { FaEdit } from 'react-icons/fa';
 import FormInput from '../../utils/FormInput';
@@ -127,12 +126,7 @@ const CreateProduct = () => {
     <ProductsLayout>
       <div className='w-11/12 mx-auto'>
         {loading &&
-          <ModalLayout clas={`w-11/12 mx-auto`}>
-            <div className="w-full flex-col gap-2 h-fit flex items-center justify-center">
-              <Loader />
-              <div>...submitting</div>
-            </div>
-          </ModalLayout>
+          <Loader title={`submitting`} />
         }
         {screen === 1 &&
           <div className='max-w-2xl mx-auto h-fit p-6 border border-gray-400'>
