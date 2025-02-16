@@ -9,7 +9,6 @@ import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
-import { MdDelete } from "react-icons/md";
 
 
 const features = [
@@ -58,28 +57,6 @@ const AdminSingleBlog = () => {
         })
     }
 
-    const deleteImg = async (val) => {
-        const data = { tag: val }
-        setLoading(true)
-        try {
-            const res = await AuthPutApi(`${Apis.admin.delete_blog_img}/${id}`, data)
-            if (res.status !== 200) return ErrorAlert(res.msg)
-            if (val === 'paragraph') {
-                setSecondImg({ img: null, image: null });
-            }
-            else if (val === 'extras') {
-                setExtrasImg({ img: null, image: null }); 
-            }
-            FetchSingleBlog()
-            SuccessAlert(res.msg)
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-            setLoading(false)
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setLoading(false)
-        }
-    }
 
     const FetchSingleBlog = useCallback(async () => {
         try {
@@ -102,23 +79,16 @@ const AdminSingleBlog = () => {
                 })
                 setBlogImage({
                     ...blogImage,
-                    img: `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.image}`
+                    img: `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.image}` || null
                 })
                 setSecondImg({
-                    img: response.msg.second_paragraph_image
-                        ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.second_paragraph_image}`
-                        : null,
-                    image: null
-                });
-    
-                setExtrasImg({
-                    img: response.msg.extras_image
-                        ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.extras_image}`
-                        : null,
-                    image: null
-                });
+                    img: `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.second_paragraph_image}` || null,
+                })
 
-                // console.log(response.msg.extras_image)
+                setExtrasImg({
+                    img: `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.extras_image}` || null
+                })
+
             }
         } catch (error) {
             console.log(error)
@@ -176,7 +146,7 @@ const AdminSingleBlog = () => {
 
         const formbody = new FormData()
         formbody.append('image', blogImage.image)
-        formbody.append('blog_id', id)
+        formbody.append('blog_id', singleBlog.id)
         formbody.append('title', form.title)
         formbody.append('feature', form.feature)
         formbody.append('main_header_title', form.main_header_title)
@@ -208,7 +178,28 @@ const AdminSingleBlog = () => {
         }
     }
 
-    // console.log(secondImg.img)
+    const deleteImg = async (val) => {
+        const data = { tag: val }
+        setLoading(true)
+        try {
+            const res = await AuthPutApi(`${Apis.admin.delete_blog_img}/${id}`, data)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            if (val === 'paragraph') {
+                setSecondImg({ img: null, image: null });
+            }
+            else if (val === 'extras') {
+                setExtrasImg({ img: null, image: null });
+            }
+            FetchSingleBlog()
+            SuccessAlert(res.msg)
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            setLoading(false)
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading(false)
+        }
+    }
 
 
     return (
@@ -252,7 +243,7 @@ const AdminSingleBlog = () => {
                                         :
                                         <div className='w-full h-72 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
                                             <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
-                                            <span>click to add image</span>
+                                            <span>click to add blog image</span>
                                         </div>
                                     }
                                     <input ref={imgRef} type="file" onChange={(e) => handleUpload(e, 'main')} hidden />
@@ -261,7 +252,7 @@ const AdminSingleBlog = () => {
                             </div>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
-                                    <div className='text-lightgreen capitalize font-medium'>*title:</div>
+                                    <div className='text-lightgreen capitalize font-medium'>*blog title:</div>
                                     <FormInput placeholder='Title' name='title' value={form.title} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col gap-2'>
@@ -270,34 +261,34 @@ const AdminSingleBlog = () => {
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*main header subtitle:</div>
-                                    <FormInput placeholder='Main header' name='main_header_subtitle' value={form.main_header_title} onChange={formHandler} />
+                                    <FormInput placeholder='Main header subtitle' name='main_header_subtitle' value={form.main_header_title} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*main header content:</div>
-                                    <FormInput formtype='textarea' placeholder='Main header' name='main_header_content' value={form.main_header_content} onChange={formHandler} />
+                                    <FormInput formtype='textarea' placeholder='Main header content' name='main_header_content' value={form.main_header_content} onChange={formHandler} />
                                 </div>
                             </div>
                             <div className='flex  flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*first paragraph subtitle:</div>
-                                    <FormInput placeholder='First paragraph' name='first_paragraph_subtitle' value={form.first_paragraph_subtitle} onChange={formHandler} />
+                                    <FormInput placeholder='First paragraph subtitle' name='first_paragraph_subtitle' value={form.first_paragraph_subtitle} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*first paragraph content:</div>
-                                    <FormInput formtype='textarea' placeholder='First paragraph' name='first_paragraph_content' value={form.first_paragraph_content} onChange={formHandler} />
+                                    <FormInput formtype='textarea' placeholder='First paragraph content' name='first_paragraph_content' value={form.first_paragraph_content} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*second paragraph subtitle:</div>
-                                    <FormInput placeholder='Second paragraph' name='second_paragraph_subtitle' value={form.second_paragraph_subtitle} onChange={formHandler} />
+                                    <FormInput placeholder='Second paragraph subtitle' name='second_paragraph_subtitle' value={form.second_paragraph_subtitle} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*second paragraph content:</div>
-                                    <FormInput formtype='textarea' placeholder='Second paragraph' name='second_paragraph_content' value={form.second_paragraph_content} onChange={formHandler} />
+                                    <FormInput formtype='textarea' placeholder='Second paragraph content' name='second_paragraph_content' value={form.second_paragraph_content} onChange={formHandler} />
                                 </div>
 
                                 <div className="w-full">
                                     <label className='cursor-pointer w-full'>
-                                        {secondImg.img !== null ?
+                                        {secondImg.img ?
                                             <div className='relative'>
                                                 <img src={secondImg.img} className='w-full h-72 object-cover object-center'></img>
                                                 <div className="absolute top-0 -right-3 main font-bold">
@@ -312,7 +303,7 @@ const AdminSingleBlog = () => {
                                         }
                                         <input ref={imgSecondRef} type="file" onChange={handleSecondImg} hidden />
                                     </label>
-                                    {secondImg?.img !== null &&
+                                    {secondImg.img &&
                                         <div className=" mt-5 main font-bold">
                                             <button type='button' onClick={() => deleteImg(`paragraph`)} className='px-4 py-1.5 rounded-md bg-red-600'>delete paragraph image</button>
                                         </div>
@@ -323,11 +314,11 @@ const AdminSingleBlog = () => {
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*extras subtitle:</div>
-                                    <FormInput placeholder='Extra paragraph' name='extras_subtitle' value={form.extras_subtitle} onChange={formHandler} />
+                                    <FormInput placeholder='Extra paragraph subtitle' name='extras_subtitle' value={form.extras_subtitle} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>*extras content:</div>
-                                    <FormInput formtype='textarea' placeholder='Extra paragraph' name='extras_content' value={form.extras_content} onChange={formHandler} />
+                                    <FormInput formtype='textarea' placeholder='Extra paragraph content' name='extras_content' value={form.extras_content} onChange={formHandler} />
                                 </div>
                                 <div className="w-full">
                                     <label className='cursor-pointer w-full'>
@@ -341,14 +332,13 @@ const AdminSingleBlog = () => {
                                             :
                                             <div className='w-full h-72 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
                                                 <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
-                                                <span>click to add extras image</span>
+                                                <span>click to add extras paragraph image</span>
                                             </div>
                                         }
                                         <input ref={imgExtrasRef} type="file" onChange={handleExtasImg} hidden />
                                     </label>
-
-                                    {extrasImg?.img &&
-                                        <div className=" mt-5 main font-bold">
+                                    {extrasImg.img &&
+                                        <div className="mt-5 main font-bold">
                                             <button type='button' onClick={() => deleteImg(`extras`)} className='px-4 py-1.5 rounded-md bg-red-600'>delete extras image</button>
                                         </div>
                                     }
