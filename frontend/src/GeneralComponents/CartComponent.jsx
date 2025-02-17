@@ -38,6 +38,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
 
     const CheckOutAndGetAdminBank = async () => {
         if (!email) return ErrorAlert('Enter your email address')
+        if (!/\S+@\S+\.\S+/.test(email)) return ErrorAlert('Enter a valid email address')
         setLoading(true)
         try {
             const response = await GetApi(Apis.product.get_admin_bank)

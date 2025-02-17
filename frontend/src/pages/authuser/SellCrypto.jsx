@@ -7,7 +7,7 @@ import ModalLayout from '../../utils/ModalLayout';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCopy } from 'react-icons/fa';
 import { TfiTimer } from "react-icons/tfi";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Loader from '../../GeneralComponents/Loader';
 import ExchangeLayout from '../../AuthComponents/ExchangeLayout';
 import { Apis, AuthPostApi } from '../../services/API';
@@ -166,7 +166,7 @@ const SellCrypto = () => {
                             <div className="flex flex-col gap-4 w-full">
                                 <div className="font-semibold text-center">To confirm you've sent crypto asset, input the transaction hash below</div>
                                 <div className="text-xs text-green-500">NB: this transaction hash can be found on the blockchain, kindly go through the history of wallet used to get it. </div>
-                                <FormInput formtype='text' value={forms.trans_hash.trim()} name={`trans_hash`} onChange={handleChange} />
+                                <FormInput value={forms.trans_hash.trim()} name={`trans_hash`} onChange={handleChange} />
                                 <div className="flex w-full items-center justify-between ">
                                     <button onClick={() => setConfirm(false)} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
                                     <button onClick={confirmOrder} className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm</button>

@@ -8,11 +8,9 @@ const PasswordInputField = ({ label, onChange, value, name, placeholder, classNa
     const EyeIcon = eye ? HiOutlineEye : HiOutlineEyeSlash
 
     return (
-        <div className='flex flex-col gap-2'>
-            <div className='relative'>
-                <FormInput label={label} className={`${className?.input}`} name={name} value={value} placeholder={placeholder} onChange={onChange} type={`${eye ? 'text' : 'password'}`} />
-                <EyeIcon className={`absolute top-11 right-4 cursor-pointer text-light text-xl ${className?.icon}`} onClick={() => setEye(!eye)} />
-            </div>
+        <div className='relative'>
+            <FormInput label={label} className={`${className?.input}`} name={name} value={value} placeholder={placeholder} onChange={onChange} type={`${eye ? 'text' : 'password'}`} />
+            <EyeIcon className={`absolute top-11 right-4 cursor-pointer text-light text-xl ${className?.icon}`} onClick={() => setEye(!eye)} />
         </div>
     )
 }

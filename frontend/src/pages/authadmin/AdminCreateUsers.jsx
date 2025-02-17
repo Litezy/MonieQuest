@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import Loader from '../../GeneralComponents/Loader'
-import ModalLayout from '../../utils/ModalLayout'
 import { IoReturnUpBackOutline } from 'react-icons/io5'
 import { Link, useNavigate } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
@@ -10,6 +9,7 @@ import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import { Apis, AuthPostApi } from '../../services/API'
 import { useAtom } from 'jotai'
 import { USERDETAILS } from '../../services/store'
+import PasswordInputField from '../../utils/PasswordInputField'
 
 const AdminCreateUsers = () => {
 
@@ -81,45 +81,26 @@ const AdminCreateUsers = () => {
                     <div className="my-5 text-center poppins font-semibold">Create new user by entering the following details</div>
                     <form onSubmit={createUser} className='shadow-xl w-full p-2 rounded-lg relative'>
                         <div className="flex items-start flex-col   lg:flex-row gap-10">
-                            <div className="flex flex-col items-start lg:w-3/4  w-full gap-3">
-                                <div className="flex items-start gap-1 flex-col w-full ">
-                                    <div className="">First Name:</div>
-                                    <div className="w-full">
-                                        <FormInput name={`firstname`} value={forms.firstname} onChange={handleChange} />
-                                    </div>
+                            <div className="flex flex-col items-start lg:w-3/4  w-full gap-4">
+                                <div className="w-full">
+                                    <FormInput label='First Name' name={`firstname`} value={forms.firstname} onChange={handleChange} />
                                 </div>
-                                <div className="flex items-start gap-1 flex-col w-full">
-                                    <div className="">Last Name:</div>
-                                    <div className="w-full">
-                                        <FormInput name={`lastname`} value={forms.lastname} onChange={handleChange} />
-                                    </div>
+                                <div className="w-full">
+                                    <FormInput label='Last Name' name={`lastname`} value={forms.lastname} onChange={handleChange} />
                                 </div>
-
-                                <div className="flex items-start gap-1 flex-col w-full">
-                                    <div className="">Phone No:</div>
-                                    <div className="w-full">
-                                        <FormInput type='phone' name={`phone`} value={forms.phone} onChange={handleChange} />
-                                    </div>
+                                <div className="w-full">
+                                    <FormInput label='Phone No' type='phone' name={`phone`} value={forms.phone} onChange={handleChange} />
                                 </div>
                             </div>
-                            <div className="flex flex-col items-start lg:w-3/4  w-full gap-3">
-                                <div className="flex items-start gap-1 flex-col w-full ">
-                                    <div className="">Email Address:</div>
-                                    <div className="w-full">
-                                        <FormInput type='email' name={`email`} value={forms.email} onChange={handleChange} />
-                                    </div>
+                            <div className="flex flex-col items-start lg:w-3/4  w-full gap-4">
+                                <div className="w-full">
+                                    <FormInput label='Email Address:' type='email' name={`email`} value={forms.email} onChange={handleChange} />
                                 </div>
-                                <div className="flex items-start gap-1 flex-col w-full">
-                                    <div className="">Password:</div>
-                                    <div className="w-full">
-                                        <FormInput type='password' name={`password`} value={forms.password} onChange={handleChange} />
-                                    </div>
+                                <div className="w-full">
+                                    <PasswordInputField label='Password' type='password' name={`password`} value={forms.password} onChange={handleChange} />
                                 </div>
-                                <div className="flex items-start gap-1 flex-col w-full">
-                                    <div className="">Confirm Password:</div>
-                                    <div className="w-full">
-                                        <FormInput className={`w-full`} formtype='password' name={`confirm_password`} value={forms.confirm_password} onChange={handleChange} />
-                                    </div>
+                                <div className="w-full relative">
+                                    <PasswordInputField label='Confirm Password' type='password' name={`confirm_password`} value={forms.confirm_password} onChange={handleChange} />
                                 </div>
                             </div>
                         </div>
