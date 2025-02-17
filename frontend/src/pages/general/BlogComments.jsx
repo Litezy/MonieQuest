@@ -8,7 +8,7 @@ import { Apis, GetApi } from '../../services/API';
 import moment from 'moment';
 
 const BlogComments = () => {
-    const { feature, id } = useParams()
+    const { feature, id, slug } = useParams()
     // const [reply, setReply] = useState(false)
     const [blogComments, setBlogComments] = useState([])
     const [dataLoading, setDataLoading] = useState(true)
@@ -35,7 +35,7 @@ const BlogComments = () => {
             <div className='py-1 bg-dark w-full text-white '>
                 <div className="w-11/12 mx-auto">
                     <div className="w-full  p-5 rounded-md ">
-                        <Link to={`/blogs/${feature}/${id}`}
+                        <Link to={`/blogs/${feature}/${id}/${slug}`}
                             className="flex mb-5 w-fit px-4 py-1 rounded-2xl items-center gap-2 bg-ash">
                             <FaLongArrowAltLeft
                                 className='text-white text-2xl ' />

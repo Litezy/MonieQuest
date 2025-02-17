@@ -7,7 +7,7 @@ import { Apis, AuthGetApi } from '../../services/API';
 
 
 const AdminAllAirdrops = () => {
-    const tags = ['all', 'deFi', 'featured', 'new', 'NFT', 'potential', 'earn_crypto']
+    const tags = ['all', 'deFi', 'featured', 'new', 'NFT', 'potential', 'earn crypto']
     const [active, setActive] = useState(tags[0])
     const [search, setSearch] = useState('')
     const [dataLoading, setDataLoading] = useState(true)
@@ -54,7 +54,7 @@ const AdminAllAirdrops = () => {
     const filterAirdrop = () => {
         const mainData = staticData
         if (search.length > 1) {
-            const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
+            const filtered = mainData.filter(item => item.title.toLowerCase().includes(search.toLowerCase()) || item.gen_id.toLowerCase().includes(search.toLowerCase()))
             setAirdrops(filtered)
         } else {
             setAirdrops(mainData)

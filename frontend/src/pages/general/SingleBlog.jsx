@@ -257,7 +257,7 @@ const SingleBlog = () => {
                                         ))}
                                     </div>
                                     {singleBlog.blog_comments.length > 8 &&
-                                        <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/comments`} onClick={MoveToTop}>
+                                        <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/${singleBlog.slug}/comments`} onClick={MoveToTop}>
                                             <button className="w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
                                         </Link>
                                     }

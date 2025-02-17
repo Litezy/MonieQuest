@@ -45,7 +45,7 @@ const AdminAllBlogs = () => {
     const filterBlogs = () => {
         const mainData = staticData
         if (search.length > 1) {
-            const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
+            const filtered = mainData.filter(item => item.title.toLowerCase().includes(search.toLowerCase()) || item.gen_id.toLowerCase().includes(search.toLowerCase()))
             setBlogs(filtered)
         } else {
             setBlogs(mainData)

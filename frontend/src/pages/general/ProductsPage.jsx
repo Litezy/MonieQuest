@@ -68,7 +68,7 @@ const ProductsPage = () => {
   const filterProducts = () => {
     const mainData = staticData
     if (search.length > 2) {
-      const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.category).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.feature1).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.feature2).toLowerCase().startsWith(search.toLocaleLowerCase()))
+      const filtered = mainData.filter(item => item.title.toLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLowerCase().includes(search.toLocaleLowerCase()) || item.category.toLowerCase().includes(search.toLocaleLowerCase()) || item.feature1.toLowerCase().includes(search.toLocaleLowerCase()) || item.feature2.toLowerCase().includes(search.toLocaleLowerCase()))
       setProducts(filtered)
     } else {
       setProducts(staticData)
@@ -94,7 +94,7 @@ const ProductsPage = () => {
         <div
           data-aos='fade-up-left' data-aos-duration="1000"
           className="fixed z-40 rounded-full cursor-pointer right-5 top-1/2">
-         <Link to={`/login`} className="w-fit px-4 py-2 bg-ash text-white rounded-md">Submit your product</Link>
+          <Link to={`/login`} className="w-fit px-4 py-2 bg-ash text-white rounded-md">Submit your product</Link>
         </div>}
       <div className="pb-20 bg-dark">
         <div className="pageBg">

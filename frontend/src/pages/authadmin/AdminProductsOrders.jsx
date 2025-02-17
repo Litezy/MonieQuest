@@ -6,12 +6,16 @@ import { currencySign } from '../../utils/pageUtils'
 import { Apis, AuthGetApi } from '../../services/API'
 import AdminProductsLayout from '../../AdminComponents/AdminProductLayout'
 import ProductsOrdersModal from '../../AdminComponents/ProductOrdersModal'
+import FormInput from '../../utils/FormInput'
+import { CiSearch } from 'react-icons/ci'
 
 
 const AdminProductsOrders = () => {
+    const [staticData, setStaticData] = useState([])
     const [productOrders, setProductOrders] = useState([])
     const [modal, setModal] = useState(false)
     const [selected, setSelected] = useState({})
+    const [search, setSearch] = useState('')
     const [datatLoading, setDataLoading] = useState(true)
 
     useEffect(() => {
@@ -19,6 +23,7 @@ const AdminProductsOrders = () => {
             try {
                 const response = await AuthGetApi(Apis.admin.all_products_orders)
                 if (response.status === 200) {
+                    setStaticData(response.msg)
                     setProductOrders(response.msg)
                 }
             } catch (error) {
@@ -30,9 +35,25 @@ const AdminProductsOrders = () => {
         FetchProductOrders()
     }, [])
 
+    const FilterOrders = () => {
+        const mainData = staticData
+        if (search.length > 1) {
+            const filtered = mainData.filter(item => moment(item.createdAt).format('Do MMMM YYYY').toLowerCase().includes(search.toLowerCase()) || item.gen_id.toLowerCase().includes(search.toLowerCase()))
+            setProductOrders(filtered)
+        } else {
+            setProductOrders(mainData)
+        }
+    }
+
     return (
         <AdminProductsLayout>
             <div className='w-11/12 mx-auto'>
+                <div className="w-full lg:w-2/3 mx-auto relative">
+                    <FormInput placeholder='Search by date and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterOrders} />
+                    <div className="absolute top-5 right-3">
+                        <CiSearch className='text-xl cursor-pointer text-white' />
+                    </div>
+                </div>
                 {datatLoading ?
                     <div className='flex flex-col gap-10'>
                         <div className='md:w-80 w-56 md:h-5 h-3.5 rounded-full bg-slate-400'></div>
@@ -53,7 +74,7 @@ const AdminProductsOrders = () => {
                         </div>
                     </div>
                     :
-                    <div className='flex flex-col gap-5'>
+                    <div className='flex flex-col gap-5 mt-8'>
                         <div className="text-xl md:text-3xl font-bold text-gray-300 capitalize">latest tools purchases</div>
                         {modal &&
                             <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 scroll rounded-md`} setModal={setModal}>

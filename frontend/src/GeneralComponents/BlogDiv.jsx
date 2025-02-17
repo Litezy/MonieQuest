@@ -10,7 +10,7 @@ const BlogDiv = ({ item, className }) => {
 
     return (
         <div className={`w-full  bg-black rounded-xl p-2 ${className}`}>
-            <Link to={`/blogs/${item.feature}/${item.id}`} onClick={MoveToTop} >
+            <Link to={`/blogs/${item.feature}/${item.id}/${item.slug}`} onClick={MoveToTop} >
                 <div className="w-full">
                     <img src={`${imageurl}/blogs/${item.gen_id}/${item?.image}`} alt="blog image" className="w-full rounded-xl h-40 object-cover " />
                 </div>
