@@ -81,12 +81,14 @@ const AirdropsPage = () => {
 
   const SubmitFilter = () => {
     const mainData = staticData
-    const filteredData = mainData.filter(item => item.kyc.toLocaleLowerCase() === select.kyc.toLocaleLowerCase() || item.category.toLocaleLowerCase() === select.category.toLocaleLowerCase() || item.status.toLocaleLowerCase() === select.status.toLocaleLowerCase() || item.blockchain === select.blockchain)
-    setLoading(true)
-    setTimeout(() => {
-      setAirdrops(filteredData)
-      setLoading(false)
-    }, 1500)
+    if (select.kyc || select.category || select.blockchain || select.status) {
+      const filteredData = mainData.filter(item => item.kyc.toLocaleLowerCase() === select.kyc.toLocaleLowerCase() || item.category.toLocaleLowerCase() === select.category.toLocaleLowerCase() || item.status.toLocaleLowerCase() === select.status.toLocaleLowerCase() || item.blockchain === select.blockchain)
+      setLoading(true)
+      setTimeout(() => {
+        setAirdrops(filteredData)
+        setLoading(false)
+      }, 1500)
+    }
   }
 
   const SearchFilter = () => {
