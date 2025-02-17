@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import AirdropDiv from '../../GeneralComponents/AirdropDiv'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
 import { LuChevronRight, LuChevronLeft } from "react-icons/lu";
 import { GiArrowScope } from "react-icons/gi";
@@ -11,18 +11,21 @@ import { Apis, GetApi } from '../../services/API'
 import ButtonLoader from '../../GeneralComponents/ButtonLoader'
 
 const statuses = ["Open", "Closed"]
-const categories = ["DeFi", "Featured", "New", "NFT", "Potential", "Earn_Crypto"]
+const kyces = ["Required", "Unrequired"]
+const categories = ["DeFi", "Featured", "New", "NFT", "Potential", "Earn_crypto"]
 const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche', 'Base', 'Berachain', 'Binance', 'Bitcoin', 'Blast', 'Cardano', 'Celestia', 'Cosmos', 'Dogechain', 'Ethereum', 'Filecoin', 'Immutable', 'Injective', 'IoTeX', 'Linea', 'Manta Network', 'Near Protocol', 'Optimism', 'Other', 'Polkadot', 'Polygon', 'Ronin', 'Scroll', 'Solana', 'Sui', 'Tesnet', 'TON', 'Tron', 'zkSync']
 
 const AirdropsPage = () => {
+  const [params] = useSearchParams()
+  const filCategory = params.get('c')
   const [staticData, setStaticData] = useState([])
   const [airdrops, setAirdrops] = useState([])
-  const [check, setCheck] = useState('')
   const [search, setSearch] = useState('')
   const [select, setSelect] = useState({
     status: '',
     category: '',
-    blockchain: ''
+    blockchain: '',
+    kyc: ''
   })
   const [loading, setLoading] = useState(false)
   const [dataLoading, setDataLoading] = useState(true)
@@ -43,6 +46,19 @@ const AirdropsPage = () => {
     }
     FetchAllAirdrops()
   }, [])
+
+  useEffect(() => {
+    if (!dataLoading && filCategory) {
+      setSelect({
+        ...select,
+        category: filCategory.charAt(0).toUpperCase() + filCategory.slice(1).toLowerCase()
+      })
+      const mainData = staticData
+      const filteredData = mainData.filter(item => item.category.toLocaleLowerCase() === filCategory.toLocaleLowerCase())
+      setAirdrops(filteredData)
+    }
+  }, [staticData])
+
 
   const deFiAirdrops = useMemo(() => {
     return airdrops.filter((ele) => ele.category === 'deFi');
@@ -65,8 +81,7 @@ const AirdropsPage = () => {
 
   const SubmitFilter = () => {
     const mainData = staticData
-    const kyc = check ? 'true' : 'false'
-    const filteredData = mainData.filter(item => item.kyc === kyc || item.category.toLocaleLowerCase() === select.category.toLocaleLowerCase() || item.status.toLocaleLowerCase() === select.status.toLocaleLowerCase() || item.blockchain === select.blockchain)
+    const filteredData = mainData.filter(item => item.kyc.toLocaleLowerCase() === select.kyc.toLocaleLowerCase() || item.category.toLocaleLowerCase() === select.category.toLocaleLowerCase() || item.status.toLocaleLowerCase() === select.status.toLocaleLowerCase() || item.blockchain === select.blockchain)
     setLoading(true)
     setTimeout(() => {
       setAirdrops(filteredData)
@@ -102,12 +117,11 @@ const AirdropsPage = () => {
               <div className='flex flex-col gap-16'>
                 <div className='flex lg:flex-row flex-col lg:gap-8 gap-4 items-center justify-center'>
                   <div className='w-24 h-2 rounded-full bg-slate-400 animate-pulse'></div>
-                  <div className='grid md:grid-cols-4 grid-cols-2 gap-8 items-center'>
-                    {new Array(4).fill(0).map((_, i) => (
+                  <div className='grid md:grid-cols-5 grid-cols-2 gap-8 items-center'>
+                    {new Array(5).fill(0).map((_, i) => (
                       <div key={i} className='w-28 h-12 rounded-[3px] bg-slate-400 animate-pulse'></div>
                     ))}
                   </div>
-                  <div className='w-28 h-12 rounded-full bg-slate-400 animate-pulse'></div>
                 </div>
                 <div className='flex flex-col gap-4 pb-8 border-b border-slate-400 animate-pulse'>
                   <div className='flex justify-between items-center gap-4'>
@@ -138,17 +152,14 @@ const AirdropsPage = () => {
                 <div className='flex lg:flex-row flex-col lg:gap-8 gap-4 items-center justify-center'>
                   <div className='capitalize font-bold'>filter here:</div>
                   <div className='grid md:grid-cols-4 grid-cols-2 gap-4 items-center'>
-                    <div className='bg-[#ffffff] w-28 h-fit rounded-[3px] flex justify-between items-center text-[#585858] p-[0.55rem] font-semibold'>
-                      <span>KYC</span>
-                      <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='cursor-pointer'></input>
-                    </div>
+                    <SelectComp title={'KYC'} options={kyces} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.kyc} handleChange={(e) => setSelect({ ...select, kyc: e.target.value })} />
                     <SelectComp title={'Status'} options={statuses} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.status} handleChange={(e) => setSelect({ ...select, status: e.target.value })} />
-                    <SelectComp title={`Categories`} options={categories} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.category} handleChange={(e) => setSelect({ ...select, category: e.target.value })} />
+                    <SelectComp title={`Category`} options={categories} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.category} handleChange={(e) => setSelect({ ...select, category: e.target.value })} />
                     <SelectComp title={`Blockchain`} options={blockchains} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.blockchain} handleChange={(e) => setSelect({ ...select, blockchain: e.target.value })} />
                   </div>
                   <div className='w-fit relative'>
-                    {loading && <ButtonLoader className={`rounded-full`} />}
-                    <button onClick={SubmitFilter} className='outline-none w-fit h-fit bg-lightgreen text-black rounded-full py-3 px-8'>Search</button>
+                    {loading && <ButtonLoader className={`rounded-[4px]`} />}
+                    <button onClick={SubmitFilter} className='outline-none w-fit h-fit bg-lightgreen/90 text-ash rounded-[4px] py-2.5 px-8 font-bold'>Search</button>
                   </div>
                 </div>
                 {airdrops.length > 0 ?

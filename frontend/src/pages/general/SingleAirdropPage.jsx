@@ -133,18 +133,25 @@ const SingleAirdropPage = () => {
                       <span className='text-gray-400 md:text-base text-xs text-center'>Blockchain</span>
                     </div>
                     <div className='border border-ash bg-secondary w-full h-24 rounded-md flex flex-col gap-2 justify-center items-center overflow-hidden p-4'>
+                      <span className='md:text-lg text-sm font-bold text-center capitalize'>{singleAirdrop?.category === 'earn_crypto' ? 'earn crypto' : singleAirdrop?.category}</span>
+                      <span className='text-gray-400 md:text-base text-xs text-center'>Category</span>
+                    </div>
+                    <div className='border border-ash bg-secondary w-full h-24 rounded-md flex flex-col gap-2 justify-center items-center overflow-hidden p-4'>
                       <span className='md:text-lg text-sm font-bold text-center capitalize'>{singleAirdrop?.status}</span>
                       <span className='text-gray-400 md:text-base text-xs text-center'>Mining</span>
+                    </div>
+                    <div className='border border-ash bg-secondary w-full h-24 rounded-md flex flex-col gap-2 justify-center items-center overflow-hidden p-4'>
+                      <span className='md:text-lg text-sm font-bold text-center capitalize'>{singleAirdrop?.kyc}</span>
+                      <span className='text-gray-400 md:text-base text-xs text-center'>KYC</span>
                     </div>
                   </div>
                 </div>
                 <div className='lg:col-span-4 col-span-1'>
-                  <div className='w-full h-fit border border-ash bg-secondary rounded-md py-10'>
+                  <div className='w-full h-fit border border-ash bg-secondary rounded-md py-8'>
                     <div className='flex flex-col gap-4'>
                       <div className='text-xl font-bold px-4'>Step by step video guide on <span className='capitalize'>{singleAirdrop?.title}</span></div>
                       <YouTubeComp videoId={singleAirdrop?.video_guide_link} title={singleAirdrop?.title} />
                     </div>
-
                   </div>
                   <div className='flex flex-col gap-4 mt-8'>
                     <div className='text-xl font-bold'>Referral link to earn</div>

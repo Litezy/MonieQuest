@@ -38,7 +38,7 @@ const AdminProductsOrders = () => {
     const FilterOrders = () => {
         const mainData = staticData
         if (search.length > 1) {
-            const filtered = mainData.filter(item => moment(item.createdAt).format('Do MMMM YYYY').toLowerCase().includes(search.toLowerCase()) || item.gen_id.toLowerCase().includes(search.toLowerCase()))
+            const filtered = mainData.filter(item => moment(item.createdAt).format('Do MMMM YYYY').toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
             setProductOrders(filtered)
         } else {
             setProductOrders(mainData)

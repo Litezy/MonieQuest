@@ -45,7 +45,7 @@ const AdminAllProducts = () => {
     const FilterProducts = () => {
         const mainData = staticData
         if (search.length > 1) {
-            const filtered = mainData.filter(item => item.title.toLowerCase().includes(search.toLowerCase()) || item.gen_id.toLowerCase().includes(search.toLowerCase()))
+            const filtered = mainData.filter(item => item.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
             setAllProducts(filtered)
         } else {
             setAllProducts(mainData)

@@ -81,7 +81,7 @@ exports.CreateAirdrop = async (req, res) => {
         if (!title || !category || !blockchain || !type || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
         const categoryArray = ["featured", "deFi", "new", "NFT", "potential", "earn_crypto"]
         if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
-        const kycArray = ['false', "true"]
+        const kycArray = ['required', "unrequired"]
         if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid kyc value provided` })
 
         const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
@@ -179,7 +179,7 @@ exports.UpdateAirdrop = async (req, res) => {
             airdrop.category = category
         }
         if (kyc) {
-            const kycArray = ['false', "true"]
+            const kycArray = ['required', "unrequired"]
             if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid KYC value provided` })
             airdrop.kyc = kyc
         }

@@ -68,7 +68,7 @@ const ProductsPage = () => {
   const filterProducts = () => {
     const mainData = staticData
     if (search.length > 2) {
-      const filtered = mainData.filter(item => item.title.toLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLowerCase().includes(search.toLocaleLowerCase()) || item.category.toLowerCase().includes(search.toLocaleLowerCase()) || item.feature1.toLowerCase().includes(search.toLocaleLowerCase()) || item.feature2.toLowerCase().includes(search.toLocaleLowerCase()))
+      const filtered = mainData.filter(item => item.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.category.toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.feature1.toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.feature2.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
       setProducts(filtered)
     } else {
       setProducts(staticData)

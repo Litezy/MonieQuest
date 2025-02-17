@@ -54,7 +54,7 @@ const AdminAllAirdrops = () => {
     const filterAirdrop = () => {
         const mainData = staticData
         if (search.length > 1) {
-            const filtered = mainData.filter(item => item.title.toLowerCase().includes(search.toLowerCase()) || item.gen_id.toLowerCase().includes(search.toLowerCase()))
+            const filtered = mainData.filter(item => item.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
             setAirdrops(filtered)
         } else {
             setAirdrops(mainData)
