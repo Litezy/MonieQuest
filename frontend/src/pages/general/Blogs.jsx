@@ -38,7 +38,6 @@ const Blogs = () => {
         return blogs.filter((ele) => ele.feature === 'personal_finance');
     }, [blogs])
 
-
     return (
         <PageLayout>
             <div className='pb-20 bg-dark w-full text-gray-200'>

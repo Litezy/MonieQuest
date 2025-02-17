@@ -77,6 +77,7 @@ const AdminSingleBlog = () => {
                     extras_content: response.msg.extras_content || '',
                     conclusion: response.msg.conclusion || ''
                 })
+                
                 setBlogImage({
                     img: response.msg.image ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.image}` : null
                 })

@@ -87,7 +87,9 @@ const admin_urls = {
     get_giftcard_orders: admin + 'get_giftcard_orders',
     get_single_giftcard_order: admin + 'get_single_giftcard_order',
     credit_gift_customer: admin + 'credit_gift_customer',
-    get_trans_history: admin+'get_trans_history'
+    get_trans_history: admin+'get_trans_history',
+    get_bank_withdrawals: admin +'get_bank_withdrawals',
+    get_single_withdrawal: admin +'get_single_withdrawal'
 }
 
 const products = 'api/product/'

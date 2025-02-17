@@ -15,7 +15,7 @@ const UserBanks = ({}) => {
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
-  console.log(userbanks)
+  // console.log(userbanks)
   return (
     <AdminPageLayout>
       <div className="w-11/12 mx-auto">
