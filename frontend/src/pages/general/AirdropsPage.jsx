@@ -6,7 +6,7 @@ import FormInput from '../../utils/FormInput'
 import { LuChevronRight, LuChevronLeft } from "react-icons/lu";
 import { GiArrowScope } from "react-icons/gi";
 import SelectComp from '../../GeneralComponents/SelectComp'
-import { MoveToTop } from '../../utils/pageUtils'
+import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import { Apis, GetApi } from '../../services/API'
 import ButtonLoader from '../../GeneralComponents/ButtonLoader'
 
@@ -88,6 +88,8 @@ const AirdropsPage = () => {
         setAirdrops(filteredData)
         setLoading(false)
       }, 1500)
+    }else {
+      ErrorAlert('Select a filter option')
     }
   }
 
