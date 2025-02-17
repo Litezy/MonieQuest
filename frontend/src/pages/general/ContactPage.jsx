@@ -23,7 +23,7 @@ const ContactPage = () => {
   const SubmitForm = async (e) => {
     e.preventDefault()
 
-    if (!form.email || !form.message) return ErrorAlert('Enter the required fields')
+    if (!form.email || !form.message) return ErrorAlert('Enter required fields')
     const formbody = {
       full_name: form.full_name,
       email: form.email,

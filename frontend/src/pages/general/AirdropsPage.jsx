@@ -115,7 +115,7 @@ const AirdropsPage = () => {
           <div className='flex flex-col gap-6'>
             <div className='flex md:flex-row flex-col gap-4 items-center justify-center'>
               <div>Find an airdrop:</div>
-              <FormInput placeholder='Search airdrops by title' className='md:!w-96 !w-72 -mt-2 !rounded-full ipt' value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={SearchFilter} />
+              <FormInput placeholder='Search airdrops by title' className='md:!w-96 !w-72 !rounded-full ipt' value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={SearchFilter} />
             </div>
             {dataLoading ?
               <div className='flex flex-col gap-16'>
@@ -162,7 +162,7 @@ const AirdropsPage = () => {
                     <SelectComp title={`Blockchain`} options={blockchains} style={{ bg: 'white', rounded: 1, color: 'text-[#585858]', font: '0.8rem' }} value={select.blockchain} handleChange={(e) => setSelect({ ...select, blockchain: e.target.value })} />
                   </div>
                   <div className='w-fit relative'>
-                    {loading && <ButtonLoader className={`rounded-[4px]`} />}
+                    {loading && <ButtonLoader />}
                     <button onClick={SubmitFilter} className='outline-none w-fit h-fit bg-lightgreen text-ash rounded-[4px] py-2.5 px-8 font-bold'>Search</button>
                   </div>
                 </div>

@@ -78,7 +78,7 @@ const AdminBankWithdrawals = () => {
                                         </tr>
                                     )) :
                                         <tr className=" w-full text-lg  font-semibold ">
-                                            <td>No withdrawal requests  </td>
+                                            <td colSpan='5' className='text-center py-2'>No withdrawal requests  </td>
                                         </tr>
                                     }
 

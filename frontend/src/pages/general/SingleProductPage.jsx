@@ -189,7 +189,7 @@ const SingleProductPage = () => {
                                                 :
                                                 <div className='text-3xl font-bold'>₦{singleProduct?.price && singleProduct.price.toLocaleString()}</div>
                                             }
-                                            {singleProduct?.discount_endDate && <div className='text-sm italic text-lightgreen'>Discount ends {moment(new Date(singleProduct?.discount_endDate)).format('Do MMMM')}.</div>}
+                                            {singleProduct?.discount_endDate && <div className='text-sm italic text-lightgreen'>Discount ends {moment(new Date(singleProduct?.discount_endDate)).format('Do MMMM')}</div>}
                                         </div>
                                         <p className='text-sm'>{singleProduct?.about}</p>
                                         <div className='flex flex-col gap-2'>
@@ -237,7 +237,7 @@ const SingleProductPage = () => {
                                                 />
                                             </div>
                                             <div className='w-fit relative'>
-                                                {loading && <ButtonLoader className={`rounded-[4px]`} />}
+                                                {loading && <ButtonLoader  />}
                                                 <button className='outline-none w-fit h-fit flex gap-1 items-center justify-center py-3 px-8 bg-ash uppercase text-sm font-bold rounded-[4px] text-white tracking-widest relative' onClick={submitRating}>
                                                     <span>{form.submit ? 'submitted' : 'submit'}</span>
                                                     <IoCheckmarkDoneCircle />

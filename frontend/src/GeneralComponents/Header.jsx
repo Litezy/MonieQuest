@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { MoveToTop } from '../utils/pageUtils';
 import { PiX } from "react-icons/pi";

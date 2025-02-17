@@ -49,8 +49,8 @@ const AdminProductsOrders = () => {
         <AdminProductsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
-                    <FormInput placeholder='Search by date and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterOrders} />
-                    <div className="absolute top-5 right-3">
+                    <FormInput placeholder='Search by Date and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterOrders} />
+                    <div className="absolute top-3 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>
                 </div>

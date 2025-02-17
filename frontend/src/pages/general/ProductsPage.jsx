@@ -111,7 +111,7 @@ const ProductsPage = () => {
             </div>
             <div className="text-lg font-bold text-center">“Tools you can Trust, Knowledge that pays”</div>
             <div className="flex gap-2 items-center mt-2">
-              <FormInput placeholder='Find available tools and eBooks' className='md:!w-96 !w-64 -mt-2' value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={filterProducts} />
+              <FormInput placeholder='Find available tools and eBooks' className='md:!w-96 !w-64' value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={filterProducts} />
               <button className="outline-none w-fit h-fit bg-ash py-2 px-4 text-2xl rounded-lg" onClick={filterProducts}>
                 <IoIosSearch />
               </button>

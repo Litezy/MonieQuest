@@ -157,7 +157,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                                 <div>Total</div>
                                                 <div className='text-xl'>₦{totalPriceAfterDiscount.toLocaleString()}</div>
                                             </div>
-                                            <div className='-mt-2'>
+                                            <div>
                                                 <FormInput placeholder='Enter Email Address' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
                                             </div>
                                             <button className='bg-lightgreen text-ash uppercase font-extrabold w-full h-fit py-3 rounded-[4px]' onClick={CheckOutAndGetAdminBank}>proceed to checkout</button>
