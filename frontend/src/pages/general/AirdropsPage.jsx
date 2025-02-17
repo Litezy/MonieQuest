@@ -159,7 +159,7 @@ const AirdropsPage = () => {
                   </div>
                   <div className='w-fit relative'>
                     {loading && <ButtonLoader className={`rounded-[4px]`} />}
-                    <button onClick={SubmitFilter} className='outline-none w-fit h-fit bg-lightgreen/90 text-ash rounded-[4px] py-2.5 px-8 font-bold'>Search</button>
+                    <button onClick={SubmitFilter} className='outline-none w-fit h-fit bg-lightgreen text-ash rounded-[4px] py-2.5 px-8 font-bold'>Search</button>
                   </div>
                 </div>
                 {airdrops.length > 0 ?

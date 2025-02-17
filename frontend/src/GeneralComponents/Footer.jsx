@@ -6,7 +6,6 @@ import { FaInstagram, FaXTwitter, FaLinkedin, FaTiktok, FaPinterestP } from "rea
 import { FaTelegramPlane, FaSnapchatGhost, FaYoutube, FaRedditAlien, FaQuora } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import FormInput from '../utils/FormInput';
-import FormButton from '../utils/FormButton';
 import { ErrorAlert, MoveToTop } from '../utils/pageUtils';
 import Loading from './Loading';
 
@@ -90,11 +89,13 @@ const Footer = () => {
                   To stay ahead in the crypto world!</div>
               </div>
               <form className='flex flex-col gap-3 mt-6' onSubmit={SubmitForm}>
-                <FormInput placeholder='Email address' type='email' name='email' value={form.email} onChange={formHandler} className='text-white !rounded-md' />
-                <div className='relative'>
-                  <FormInput placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} className='text-white !rounded-md' />
-                  <div className='absolute top-2 right-0'>
-                    <FormButton title='Subscribe' className='!py-3.5 !px-8 !text-ash text-sm !rounded-md !font-semibold !bg-lightgreen' />
+                <FormInput placeholder='Email address' type='email' name='email' value={form.email} onChange={formHandler} className='!rounded-md' />
+                <div className='flex items-center'>
+                  <div className='md:w-3/4 w-2/3 border-y border-l border-gray-400 rounded-l-md'>
+                    <FormInput placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} className='!-mt-2' border={false} />
+                  </div>
+                  <div className='md:w-1/4 w-2/6'>
+                    <button className='h-fit w-full py-3.5 flex justify-center items-center text-ash text-sm rounded-[4px] font-bold bg-lightgreen capitalize'>subscribe</button>
                   </div>
                 </div>
               </form>
