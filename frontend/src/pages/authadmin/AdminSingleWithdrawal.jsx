@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
 import FormInput from '../../utils/FormInput'
@@ -8,37 +8,63 @@ import FormButton from '../../utils/FormButton'
 import SelectComp from '../../GeneralComponents/SelectComp'
 import Lottie from 'react-lottie'
 import Loader from '../../GeneralComponents/Loader'
+import { Apis, AuthGetApi } from '../../services/API'
+import { currencies } from '../../AuthComponents/AuthUtils'
 
 const AdminSingleWithdrawal = () => {
 
+    const { id } = useParams()
     const [forms, setForms] = useState({ sent_money: '', ref: '' })
     const [screen, setScreen] = useState(1)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState({status:false,val:""})
+    const [data, setData] = useState({})
     const green = `text-lightgreen`
-    const handleCopy = () => {
-        navigator.clipboard.writeText(`0123456789`)
-            .then(() => { return SuccessAlert(`Bank account copied successfully`) })
-            .catch((error) => { console.log(`failed to copy account number`, error) })
+   
+
+
+    const fetchWithdrawal = async () => {
+        setLoading({status:true,val:"load"})
+        try {
+            const res = await AuthGetApi(`${Apis.admin.get_single_withdrawal}/${id}`)
+            if (res.status !== 200) return ErrorAlert(res.msg);
+            const data = res.data
+            setData(data)
+        } catch (error) {
+            console.log(error)
+        } finally { setLoading({status:false,val:""}) }
     }
 
-    const { id } = useParams()
+    useEffect(()=>{
+        fetchWithdrawal()
+    },[])
+
     const handleChange = (e) => { setForms({ ...forms, [e.target.name]: e.target.value }) }
     const options = [`Yes`, 'No']
+
+
     const submitOrder = (e) => {
         e.preventDefault()
         if (forms.sent_money === 'No' || !forms.sent_money) return ErrorAlert(`Please confirm money have been paid`)
         if (!forms.ref || forms.ref.length < 10) return ErrorAlert(`Please input a valid transfer reference`)
-        setLoading(true)
+        setLoading({status:true,val:'close'})
         return setTimeout(() => {
             setForms({ ref: '', sent_money: '' })
-            setLoading(false)
+            setLoading({status:false,val:""})
             setScreen(2)
         }, 5000)
     }
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(data?.account_number)
+            .then(() => { return SuccessAlert(`Bank account copied successfully`) })
+            .catch((error) => { console.log(`failed to copy account number`, error) })
+    }
+
     return (
         <AdminPageLayout>
 
-            {loading && <Loader title={`closing order`} />}
+            {loading.status && loading.val === 'load' && <Loader title={`...loading`} />}
+            {loading.status && loading.val === 'close' && <Loader title={`closing order`} />}
             {screen === 1 && <div className="w-11/12 mx-auto">
                 <div className=" mt-2">
                     <Link to={`/admin/bank_withdrawals  `} className="w-fit px-4 py-1.5 rounded-md bg-ash">back</Link>
@@ -49,32 +75,32 @@ const AdminSingleWithdrawal = () => {
                         <div className="flex flex-col gap-3 w-full">
                             <div className="w-full">
                                 <div className="text-sm">Customer ID:</div>
-                                <FormInput value={id} className={`${green}`} />
+                                <FormInput value={data?.user_withdrawal?.id} className={`${green}`} />
                             </div>
                             <div className="w-full">
                                 <div className="text-sm">FullName:</div>
-                                <FormInput value={`Basit Money`} className={`${green}`} />
+                                <FormInput value={` ${data.user_withdrawal?.first_name} ${data?.user_withdrawal?.surname}`} className={`${green}`} />
                             </div>
                             <div className="w-full">
                                 <div className="text-sm">Amount:</div>
-                                <FormInput value={`1,500`} className={`${green}`} />
+                                <FormInput value={`${currencies[1].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
                             </div>
                         </div>
                         <div className=" flex flex-col gap-3 w-full">
 
                             <div className="">
-                                <div className="text-sm">Bank Name:</div>
-                                <FormInput value={`Moniepoint`} className={`${green}`} />
+                                <div className="text-sm">Beneficiary Name:</div>
+                                <FormInput value={data?.bank_name} className={`${green}`} />
                             </div>
                             <div className="w-full">
-                                <div className="text-sm">Bank Name:</div>
-                                <FormInput value={`Basit Money`} className={`${green}`} />
+                                <div className="text-sm">Beneficiary Bank:</div>
+                                <FormInput value={data?.bank_user} className={`${green}`} />
                             </div>
                             <div className="">
                                 <div className="text-sm">Bank Account :</div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-full">
-                                        <FormInput value={`0x958847473888383`} className={`${green}`} />
+                                        <FormInput value={data?.account_number} className={`${green}`} />
                                     </div>
                                     <FaRegCopy onClick={handleCopy} className={`${green} cursor-pointer`} />
                                 </div>

@@ -1530,3 +1530,23 @@ exports.getBankWithdrawals = async (req, res) => {
         ServerError(res, error)
     }
 }
+
+exports.getSingleWithdrawal = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 400, msg: "ID missing from request" })
+        const findWithdrawal = await Bank_Withdrawals.findOne({
+            where: { id },
+            include: [
+                {
+                    model: User, as: 'user_withdrawal',
+                    attributes: [`id`, 'image', 'first_name', 'surname', 'email']
+                }
+            ],
+        })
+        if (!findWithdrawal) return res.json({ status: 404, msg: "Withdrawal ID not found" })
+        return res.json({ status: 200, msg: 'fetch success', data: findWithdrawal })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
