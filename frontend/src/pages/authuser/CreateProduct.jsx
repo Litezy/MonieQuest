@@ -265,7 +265,7 @@ const CreateProduct = () => {
               <div className='flex gap-2'>
                 <div className='font-bold text-lg text-lightgreen'>5.</div>
                 <div className='flex flex-col w-full'>
-                  <div className='font-bold text-lg text-lightgreen'>Video Link</div>
+                  <div className='font-bold text-lg text-lightgreen'>Video Link / URL</div>
                   <FormInput placeholder='Insert URL to the tool or eBook Demo' name='video_link' value={form.video_link} onChange={formHandler} className='!rounded-none' />
                 </div>
               </div>

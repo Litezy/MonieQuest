@@ -169,7 +169,7 @@ const AdminSingleProduct = () => {
             <div className='w-11/12 mx-auto'>
                 {loading && <Loader title={`submitting`} />}
                 <Link to='/admin/products/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
-                    back to all tools
+                    back to all products
                 </Link>
                 {dataLoading ?
                     <div className='mt-10 grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-6'>
@@ -268,8 +268,8 @@ const AdminSingleProduct = () => {
                                 </div>
                                 <div className='flex flex-col gap-1 w-full border-t pt-2'>
                                     <div className="flex items-center justify-between gap-4">
-                                        <div className="">Video link:</div>
-                                        <a href={singleProduct?.video_link} className="underline">{singleProduct?.video_link}</a>
+                                        <div className="">Video link / URL:</div>
+                                        <a href={singleProduct?.video_link} target="_blank" rel="noopener noreferrer" className="underline">{singleProduct?.video_link}</a>
                                     </div>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Contact Details:</div>

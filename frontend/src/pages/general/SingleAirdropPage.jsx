@@ -96,17 +96,17 @@ const SingleAirdropPage = () => {
                 <div className='flex lg:flex-row lg:gap-40 flex-col gap-8 ml-auto'>
                   <div className='flex items-center gap-2 justify-end'>
                     {singleAirdrop.twitter_link &&
-                      <a href={singleAirdrop.twitter_link} className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
+                      <a target="_blank" rel="noopener noreferrer" href={singleAirdrop.twitter_link} className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
                         <FaXTwitter />
                       </a>
                     }
                     {singleAirdrop.telegram_link &&
-                      <a href={singleAirdrop.telegram_link} className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
+                      <a target="_blank" rel="noopener noreferrer" href={singleAirdrop.telegram_link} className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
                         <SiTelegram />
                       </a>
                     }
                     {singleAirdrop.website_link &&
-                      <a href={singleAirdrop.website_link} className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
+                      <a target="_blank" rel="noopener noreferrer" href={singleAirdrop.website_link} className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-sm hover:border-lightgreen hover:bg-lightgreen hover:text-black flex items-center justify-center'>
                         <LuArrowRightLeft />
                       </a>
                     }
@@ -155,7 +155,7 @@ const SingleAirdropPage = () => {
                   </div>
                   <div className='flex flex-col gap-4 mt-8'>
                     <div className='text-xl font-bold'>Referral link to earn</div>
-                    <a href={singleAirdrop?.referral_link} target='blank' className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
+                    <a target="_blank" rel="noopener noreferrer" href={singleAirdrop?.referral_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
                       <div className='text-lightgreen underline'>{singleAirdrop?.referral_link}</div>
                       <RxExternalLink className='text-lg' />
                     </a>

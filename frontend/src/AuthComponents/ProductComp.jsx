@@ -39,7 +39,7 @@ const ProductComp = ({ item }) => {
                 <div className='flex flex-col gap-2 md:p-4 md:border-l border-gray-800 overflow-hidden'>
                     <div className='flex justify-between gap-4'>
                         <span>Link:</span>
-                        <a href={item?.video_link} className='underline'>{item?.video_link}</a>
+                        <a href={item?.video_link} target="_blank" rel="noopener noreferrer" className='underline'>{item?.video_link}</a>
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>Contact details:</span>
