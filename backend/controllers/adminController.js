@@ -504,6 +504,7 @@ exports.getDashboardInfos = async (req, res) => {
         const totalProductsRevenue = await ProductOrder.sum('amount_paid', { where: { status: 'paid' } });
         const totalCryptoBuys = await BuyCrypto.count();
         const totalCryptoBuysPaidAmount = await BuyCrypto.sum('amount', { where: { status: 'paid' } });
+        const completedCryptoBuys = await BuyCrypto.sum('amount', { where: { status: 'completed' } });
         const totalCryptoBuysUnpaidAmount = await BuyCrypto.sum('amount', { where: { status: 'unpaid' } });
         const totalCryptoSells = await SellCrypto.count();
         const totalCryptoSellsCompleted = await SellCrypto.sum('amount', { where: { status: 'completed' } });
@@ -514,25 +515,27 @@ exports.getDashboardInfos = async (req, res) => {
         const totalWithdrawals = await Bank_Withdrawals.count();
         const totalWithdrawalCompletedAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'completed' } });
         const totalWithdrawalPendingAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'pending' } });
+        
         const data = [
             { title: 'Total Users', value: totalUsers.length, color: 'red' },
-            { title: 'Total Blogs', value: totalBlogs, color: 'pink' },
+            { title: 'blog Posts', value: totalBlogs, color: 'pink' },
             { title: 'Total Airdrops', value: totalAirdrops, color: 'green' },
             { title: 'Total Products', value: totalProducts, color: 'orange' },
-            { title: 'Total Products Orders', value: totalProductOrders, color: 'lime', },
-            { title: 'Total Products Orders Revenue', value: totalProductsRevenue ? totalProductsRevenue : 0, color: 'gray', naira: true },
-            { title: 'Total Crypto Buys', value: totalCryptoBuys, color: 'green' },
-            { title: 'Paid Crypto Buys Amount', value: totalCryptoBuysPaidAmount || 0, color: 'blue', cur: true },
-            { title: 'Unpaid Crypto Buys Amount', value: totalCryptoBuysUnpaidAmount || 0, color: 'amber', cur: true },
-            { title: 'Total Crypto Sells', value: totalCryptoSells, color: 'red' },
-            { title: 'Completed Crypto Sells Amount', value: totalCryptoSellsCompleted || 0, color: 'orange', cur: true },
-            { title: 'Pending Crypto Sells Amount', value: totalCryptoSellsPending || 0, color: 'purple', cur: true },
-            { title: 'Total Giftcard Sells', value: totalGiftcardSells, color: 'pink' },
-            { title: 'Pending Giftcards Sells Amount ', value: totalGiftcardsSellsPending || 0, color: 'blue', cur: true },
-            { title: 'Completed Giftcards Sells Amount', value: totalGiftcardsSellsCompleted || 0, color: 'lime', cur: true },
-            { title: 'total Withdrawals', value: totalWithdrawals, color: 'teal' },
-            { title: 'Pending Bank Withdrawals Amount', value: totalWithdrawalPendingAmount || 0, color: 'gray', naira: true },
-            { title: 'Completed bank withdrawals Amount', value: totalWithdrawalCompletedAmount || 0, color: 'amber', naira: true },
+            { title: ' Product Orders', value: totalProductOrders, color: 'lime', },
+            { title: 'Product Revenue', value: totalProductsRevenue ? totalProductsRevenue : 0, color: 'gray', naira: true },
+            { title: ' Crypto Buy Orders', value: totalCryptoBuys, color: 'green' },
+            { title: 'Paid Buys value', value: totalCryptoBuysPaidAmount || 0, color: 'blue', cur: true },
+            { title: 'Unpaid Buys value', value: totalCryptoBuysUnpaidAmount || 0, color: 'amber', cur: true },
+            { title: 'Completed Buys Value', value: completedCryptoBuys || 0, color: 'amber', cur: true },
+            { title: 'Crypto Sell Orders', value: totalCryptoSells, color: 'red' },
+            { title: 'Pending  Sells value', value: totalCryptoSellsPending || 0, color: 'purple', cur: true },
+            { title: 'Completed Sells value ', value: totalCryptoSellsCompleted || 0, color: 'orange', cur: true },
+            { title: 'Giftcard Sell Orders', value: totalGiftcardSells, color: 'pink' },
+            { title: 'Pending Giftcard orders value', value: totalGiftcardsSellsPending || 0, color: 'blue', cur: true },
+            { title: 'Completed Giftcard orders value', value: totalGiftcardsSellsCompleted || 0, color: 'lime', cur: true },
+            { title: 'withdrawal requests', value: totalWithdrawals, color: 'teal' },
+            { title: 'Pending withdrawals value', value: totalWithdrawalPendingAmount || 0, color: 'gray', naira: true },
+            { title: 'Completed withdrawals value', value: totalWithdrawalCompletedAmount || 0, color: 'amber', naira: true },
         ];
 
         return res.json({ status: 200, msg: 'fetch success', data });
