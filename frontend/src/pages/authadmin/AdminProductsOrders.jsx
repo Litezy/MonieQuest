@@ -75,7 +75,7 @@ const AdminProductsOrders = () => {
                     </div>
                     :
                     <div className='flex flex-col gap-5 mt-8'>
-                        <div className="text-xl md:text-3xl font-bold text-gray-300 capitalize">latest tools purchases</div>
+                        <div className="text-xl md:text-3xl font-bold text-gray-300 capitalize">latest products purchases</div>
                         {modal &&
                             <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 scroll rounded-md`} setModal={setModal}>
                                 <div className="w-full p-5 lg:p-10 bg-primary">
