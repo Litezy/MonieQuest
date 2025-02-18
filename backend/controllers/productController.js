@@ -16,12 +16,12 @@ const { customAlphabet } = require('nanoid')
 exports.SubmitProduct = async (req, res) => {
     try {
         const { title, category, price, about, feature1, feature2, video_link, contact_detail, bank_name, account_number, account_name } = req.body
-
-        if (!title || category.length < 1 || !price || !about || !feature1 || !feature2 || !video_link || !contact_detail | !bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
+        if (!title || !category || category.length < 1 || !price || !about || !feature1 || !feature2 || !video_link || !contact_detail | !bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
         if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 404, msg: 'User not found' })
 
+        const categoryArray = Array.isArray(category) ? category : [category]
         const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
         const filePath = './public/products'
@@ -43,7 +43,7 @@ exports.SubmitProduct = async (req, res) => {
             gen_id: gen_id,
             image: imageName,
             title,
-            category: category,
+            category: categoryArray,
             price,
             about,
             feature1,
@@ -145,13 +145,14 @@ exports.GetAdminBankAccount = async (req, res) => {
 exports.ProductOrder = async (req, res) => {
     try {
         const { bank_id, email_address, total_price, total_discount, amount_paid, products } = req.body
-        if (!email_address || !total_price || total_discount === '' || !amount_paid || products.length < 1) return res.json({ status: 404, msg: `Incomplete request found` })
+        if (!email_address || !total_price || total_discount === '' || !amount_paid || !products || products.length < 1) return res.json({ status: 404, msg: `Incomplete request found` })
         if (isNaN(total_price) || isNaN(total_discount) || isNaN(amount_paid)) return res.json({ status: 404, msg: `Prices must be in numbers` })
         if (!bank_id) return res.json({ status: 404, msg: `Please make payment before continuing` })
         const adminBank = await Bank.findOne({ where: { id: bank_id } })
         if (!adminBank) return res.json({ status: 404, msg: `Please make payment before continuing` })
         if (adminBank.user !== 1) return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
 
+        const productsArray = Array.isArray(products) ? products : [products]
         const nanoid = customAlphabet(blockAndNum, 15)
         const gen_id = nanoid()
 
@@ -161,7 +162,7 @@ exports.ProductOrder = async (req, res) => {
             total_price,
             total_discount,
             amount_paid,
-            products: products,
+            products: productsArray,
             status: 'paid'
         })
 
@@ -172,7 +173,7 @@ exports.ProductOrder = async (req, res) => {
             subject: 'New Order Placed',
             eTitle: `Order placed`,
             eBody: `
-             <div>You have successfully placed an order with the id (#${productOrder.gen_id}) for ${products.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.total_price.toLocaleString()} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
+             <div>You have successfully placed an order with the id (#${productOrder.gen_id}) for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.total_price.toLocaleString()} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
             `,
             account: buyer
         })
@@ -184,7 +185,7 @@ exports.ProductOrder = async (req, res) => {
                 await Notification.create({
                     user: ele.id,
                     title: `Product order alert`,
-                    content: `Hello Admin, a new product order with the id (#${productOrder.gen_id}) has been placed for ${products.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.total_price} payment made via bank transfer, kindly confirm this transaction.`,
+                    content: `Hello Admin, a new product order with the id (#${productOrder.gen_id}) has been placed for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.total_price} payment made via bank transfer, kindly confirm this transaction.`,
                     url: '/admin/products/orders',
                 })
 
@@ -193,7 +194,7 @@ exports.ProductOrder = async (req, res) => {
                     eTitle: `Product order placed`,
                     eBody: `
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">order ID:</span><span style="padding-left: 1rem">#${productOrder.gen_id}</span></div>
-                     <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">$${products.length}</span></div>
+                     <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">$${productsArray.length}</span></div>
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">amount paid:</span><span style="padding-left: 1rem">${nairaSign}${productOrder.total_price.toLocaleString()}</span></div>
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment method:</span><span style="padding-left: 1rem">bank transfer</span></div>
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment status:</span><span style="padding-left: 1rem">${productOrder.status}</span></div>

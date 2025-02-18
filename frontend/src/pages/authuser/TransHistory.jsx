@@ -50,7 +50,7 @@ const TransHistory = () => {
 
         <div className="flex w-11/12 mx-auto mt-20 items-start animate-pulse gap-3 flex-col">
           {
-            new Array(5).fill(0).map((_,i) =>{
+            new Array(5).fill(0).map((_, i) => {
               return (
                 <div key={i} className="w-full mb-3 flex items-center gap-2">
                   <div className="w-14 rounded-full h-14 bg-gray-500"></div>
@@ -59,7 +59,7 @@ const TransHistory = () => {
               )
             })
           }
-          
+
         </div>
 
       }

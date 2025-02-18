@@ -221,20 +221,20 @@ const CreateProduct = () => {
                   <div className='grid grid-cols-6 w-full h-fit items-center'>
                     <div className='col-span-1 h-full flex items-center justify-center border border-gray-400 uppercase text-xs'>ngn</div>
                     <div className='col-span-5'>
-                      <FormInput placeholder='Amount' name='price' value={form.price} onChange={formHandler} className='!rounded-none !-mt-2' />
+                      <FormInput placeholder='Amount' name='price' value={form.price} onChange={formHandler} className='!rounded-none' />
                     </div>
                   </div>
                 </div>
               </div>
               <div className='flex gap-2'>
                 <div className='font-bold text-lg text-lightgreen'>3.</div>
-                <div className='flex flex-col w-full'>
-                  <div className='font-bold text-lg text-lightgreen'>Tool Details</div>
+                <div className='flex flex-col gap-2 w-full'>
+                  <div className='font-bold text-lg text-lightgreen'>Product Details</div>
                   <FormInput placeholder='Enter title' name='title' value={form.title} onChange={formHandler} className='!rounded-none' />
-                  <FormInput formtype='textarea' placeholder='What is this tool about?' name='about' value={form.about} onChange={formHandler} className='!rounded-none' />
+                  <FormInput formtype='textarea' placeholder='What is this product about?' name='about' value={form.about} onChange={formHandler} className='!rounded-none' />
                   <FormInput formtype='textarea' placeholder='Enter a key feature' name='feature1' value={form.feature1} onChange={formHandler} className='!rounded-none !h-20' />
                   <FormInput formtype='textarea' placeholder='Enter key feature2' name='feature2' value={form.feature2} onChange={formHandler} className='!rounded-none !h-20' />
-                  <label className='cursor-pointer mt-2'>
+                  <label className='cursor-pointer'>
                     {productImage.img ?
                       <div className='relative'>
                         <img src={productImage.img} alt={productImage.img} className='h-56 w-full object-cover object-center'></img>
@@ -254,7 +254,7 @@ const CreateProduct = () => {
               </div>
               <div className='flex gap-2'>
                 <div className='font-bold text-lg text-lightgreen'>4.</div>
-                <div className='flex flex-col w-full'>
+                <div className='flex flex-col gap-2 w-full'>
                   <div className='font-bold text-lg text-lightgreen'>Payment Details</div>
                   <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={formHandler} className='!rounded-none' />
                   <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!rounded-none' />
@@ -264,14 +264,14 @@ const CreateProduct = () => {
               </div>
               <div className='flex gap-2'>
                 <div className='font-bold text-lg text-lightgreen'>5.</div>
-                <div className='flex flex-col w-full'>
-                  <div className='font-bold text-lg text-lightgreen'>Video Link</div>
+                <div className='flex flex-col gap-2 w-full'>
+                  <div className='font-bold text-lg text-lightgreen'>Video Link / URL</div>
                   <FormInput placeholder='Insert URL to the tool or eBook Demo' name='video_link' value={form.video_link} onChange={formHandler} className='!rounded-none' />
                 </div>
               </div>
               <div className='flex gap-2'>
                 <div className='font-bold text-lg text-lightgreen'>6.</div>
-                <div className='flex flex-col w-full'>
+                <div className='flex flex-col gap-2 w-full'>
                   <div className='font-bold text-lg text-lightgreen'>Contact Details</div>
                   <FormInput placeholder='WhatsApp or phone number' name='contact_detail' value={form.contact_detail} onChange={formHandler} className='!rounded-none' />
                 </div>

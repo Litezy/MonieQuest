@@ -15,9 +15,10 @@ const categories = [
     "deFi", "featured", "new", "NFT", "potential", "earn_crypto"
 ]
 const kyces = [
-    "true", "false"
+    "required", "unrequired"
 ]
-const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche', 'Base', 'Berachain', 'Binance', 'Bitcoin', 'Blast', 'Cardano', 'Celestia', 'Cosmos', 'Dogechain', 'Ethereum', 'Filecoin', 'Immutable', 'Injective', 'IoTeX', 'Linea', 'Manta Network', 'Near Protocol', 'Optimism', 'Other', 'Polkadot', 'Polygon', 'Ronin', 'Scroll', 'Solana', 'Sui', 'Tesnet', 'TON', 'Tron', 'zkSync']
+const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche', 'Base', 'Berachain', 'Binance', 'Bitcoin', 'Blast', 'Cardano', 'Celestia', 'Cosmos', 'Dogechain', 'Ethereum', 'Filecoin', 'Immutable', 'Injective', 'IoTeX', 'Linea', 'Manta Network', 'Near Protocol', 'Optimism', 'Other', 'Polkadot', 'Polygon', 'Ronin', 'Scroll', 'Solana', 'Sui', 'Tesnet', 'TON', 'Tron', 'zkSync'
+]
 
 
 const AdminCreateAirdrops = () => {
@@ -166,7 +167,7 @@ const AdminCreateAirdrops = () => {
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-6'>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*title:</div>
                                         <FormInput placeholder='Title' name='title' value={form.title} onChange={formHandler} />
                                     </div>
@@ -182,35 +183,35 @@ const AdminCreateAirdrops = () => {
                                         <div className='text-lightgreen capitalize font-medium'>*blockchain:</div>
                                         <SelectComp options={blockchains} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.blockchain} handleChange={(e) => setForm({ ...form, blockchain: e.target.value })} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*type <span className='lowercase'>(gaming, bot, meme, e.t.c.):</span></div>
                                         <FormInput placeholder='Airdrop type' name='type' value={form.type} onChange={formHandler} />
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-6'>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*referral link:</div>
                                         <FormInput placeholder='Referral link' name='referral_link' value={form.referral_link} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*about:</div>
                                         <FormInput formtype='textarea' placeholder='About airdrop' name='about' value={form.about} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*video guide link:</div>
                                         <FormInput placeholder='Video guide link' name='video_guide_link' value={form.video_guide_link} onChange={formHandler} />
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-6'>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>twitter link:</div>
                                         <FormInput placeholder='Twitter link' name='twitter_link' value={form.twitter_link} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>telegram link:</div>
                                         <FormInput placeholder='Telegram link' name='telegram_link' value={form.telegram_link} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>website link:</div>
                                         <FormInput placeholder='Website link' name='website_link' value={form.website_link} onChange={formHandler} />
                                     </div>

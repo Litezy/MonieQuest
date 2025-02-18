@@ -275,12 +275,12 @@ const AdminProfile = () => {
                         </div>
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>add a bank account</div>
-                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-1 relative'>
+                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-3 relative'>
                                 {loading.sub1 && <Loading />}
                                 <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={handleAccNum} className='!bg-secondary !w-64' border={false} />
                                 <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                 <FormInput placeholder='Bank name' name='bank_name' value={form.bank_name} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
-                                <FormButton title={Object.keys(bank).length !== 0 ? 'Update' : 'Save'} className='!py-3 !text-base mt-2' type='button' onClick={AddBankAccount} />
+                                <FormButton title={Object.keys(bank).length !== 0 ? 'Update' : 'Save'} className='!py-3 !text-base' type='button' onClick={AddBankAccount} />
                             </div>
                         </div>
                         <div className='flex flex-col gap-5'>
@@ -288,39 +288,39 @@ const AdminProfile = () => {
                             <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-4 relative'>
                                 {loading.sub2 && <Loading />}
                                 <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Exchange buy rate ($/₦)</div>
                                         <FormInput placeholder='Enter rate amount' name='exchange_buy_rate' value={form.exchange_buy_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Exchange sell rate ($/₦)</div>
                                         <FormInput placeholder='Enter rate amount' name='exchange_sell_rate' value={form.exchange_sell_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Giftcard rate ($/₦)</div>
                                         <FormInput placeholder='Enter rate amount' name='giftcard_rate' value={form.giftcard_rate} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Buy min (USD)</div>
                                         <FormInput placeholder='Enter mininimum buy amount' name='buy_min' value={form.buy_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Buy max (USD)</div>
                                         <FormInput placeholder='Enter maximum buy amount' name='buy_max' value={form.buy_max} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Sell min (USD)</div>
                                         <FormInput placeholder='Enter maximum buy amount' name='sell_min' value={form.sell_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Sell max (USD)</div>
                                         <FormInput placeholder='Enter maximum buy amount' name='sell_max' value={form.sell_max} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Bank withdrawal min (NGN)</div>
                                         <FormInput placeholder='Enter maximum buy amount' name='bank_min' value={form.bank_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>KYC Threshold (USD)</div>
                                         <FormInput placeholder='Enter maximum buy/sell amount' name='kyc_threshold' value={form.kyc_threshold} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>

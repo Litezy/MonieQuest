@@ -4,11 +4,11 @@ import { LuPhone } from "react-icons/lu";
 import { RiFacebookFill } from "react-icons/ri";
 import { FaInstagram, FaXTwitter, FaLinkedin, FaTiktok, FaPinterestP } from "react-icons/fa6";
 import { FaTelegramPlane, FaSnapchatGhost, FaYoutube, FaRedditAlien, FaQuora } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import FormInput from '../utils/FormInput';
-import FormButton from '../utils/FormButton';
-import { ErrorAlert, MoveToTop } from '../utils/pageUtils';
-import Loading from './Loading';
+import { ErrorAlert, MoveToTop, SuccessAlert } from '../utils/pageUtils';
+import ButtonLoader from './ButtonLoader';
+import { Apis, PostApi } from '../services/API';
 
 const Socials = [
   { href: 'https://www.facebook.com/profile.php?id=61571510583455', icon: RiFacebookFill },
@@ -34,6 +34,7 @@ const pageLinks = [
 ]
 
 const Footer = () => {
+  const location = useLocation()
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     email: '',
@@ -46,11 +47,31 @@ const Footer = () => {
     })
   }
 
-  const SubmitForm = (e) => {
+  const SubmitForm = async (e) => {
     e.preventDefault()
 
     if (!form.email || !form.phone) return ErrorAlert('Enter email address and phone number')
+    const formbody = {
+      email: form.email,
+      phone_number: form.phone
+    }
     setLoading(true)
+    try {
+      const response = await PostApi(Apis.user.subscribe, formbody)
+      if (response.status === 200) {
+        SuccessAlert(response.msg)
+        setForm({
+          email: '',
+          phone: ''
+        })
+      } else {
+        ErrorAlert(response.msg)
+      }
+    } catch (error) {
+      ErrorAlert(`${error.message}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -75,26 +96,28 @@ const Footer = () => {
                 <span>Stay tuned and access latest deals and discounts with:</span>
                 <div className='flex flex-wrap items-center gap-4 mt-2'>
                   {Socials.map((item, i) => (
-                    <a href={item.href} className='w-fit h-fit bg-ash hover:bg-primary rounded-md text-lg p-2' key={i}><item.icon /></a>
+                    <a href={item.href} target="_blank" rel="noopener noreferrer" className='w-fit h-fit bg-ash hover:bg-primary rounded-md text-lg p-2' key={i}><item.icon /></a>
                   ))}
                 </div>
               </div>
             </div>
             <div className='py-3 lg:px-4 text-gray-200 text-sm relative'>
-              {loading && <Loading />}
               <div className="flex gap-2 flex-col">
                 <div className='text-lightgreen md:text-base text-sm text-center'>Don't miss out on the latest Airdrops</div>
                 <div className='md:text-4xl text-2xl text-center'>Be the first to know</div>
                 <div className='text-base text-center'>Join our 2.5k MQ Squad and gain access to the latest
                   Contact our Nigerian Local Team @08186890156 Airdrops, best Crypto rewards and must know tips
-                  To stay ahead in the crypto world!</div>
+                  to stay ahead in the crypto world!</div>
               </div>
               <form className='flex flex-col gap-3 mt-6' onSubmit={SubmitForm}>
-                <FormInput placeholder='Email address' type='email' name='email' value={form.email} onChange={formHandler} className='text-white !rounded-md' />
-                <div className='relative'>
-                  <FormInput placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} className='text-white !rounded-md' />
-                  <div className='absolute top-2 right-0'>
-                    <FormButton title='Subscribe' className='!py-3.5 !px-8 !text-ash text-sm !rounded-md !font-semibold !bg-lightgreen' />
+                <FormInput placeholder='Email address' type='email' name='email' value={form.email} onChange={formHandler} className='!rounded-md' />
+                <div className='flex items-center'>
+                  <div className='md:w-3/4 w-2/3 border-y border-l border-gray-400 rounded-l-md'>
+                    <FormInput placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} className='!rounded-l-md !rounded-e-none' border={false} />
+                  </div>
+                  <div className='md:w-1/4 w-2/6 relative'>
+                    {loading && <ButtonLoader />}
+                    <button className='h-fit w-full py-3.5 flex justify-center items-center text-ash text-sm rounded-md font-bold bg-lightgreen capitalize'>subscribe</button>
                   </div>
                 </div>
               </form>
@@ -104,7 +127,7 @@ const Footer = () => {
             <div className='w-11/12 mx-auto'>
               <div className='grid md:grid-cols-6 grid-cols-2 gap-4'>
                 {pageLinks.map((item, i) => (
-                  <Link to={item.url} key={i} className='hover:text-lightgreen text-sm w-fit capitalize' onClick={MoveToTop}>{item.path}</Link>
+                  <Link to={item.url} key={i} className={`hover:text-lightgreen text-sm w-fit capitalize ${location.pathname === item.url && 'border-b border-bg-green'}`} onClick={MoveToTop}>{item.path}</Link>
                 ))}
               </div>
             </div>

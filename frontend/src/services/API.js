@@ -21,7 +21,8 @@ const user_urls = {
     wallet_bank_utils: user + 'wallet-bank-utils',
     create_update_kyc: user + 'create-update-kyc',
     user_kyc: user + 'user-kyc',
-    get_leaderboard: user + 'get_leader'
+    get_leaderboard: user + 'get_leader',
+    subscribe: user + 'subscribe'
 }
 
 const notification = 'api/notification/'
@@ -87,9 +88,9 @@ const admin_urls = {
     get_giftcard_orders: admin + 'get_giftcard_orders',
     get_single_giftcard_order: admin + 'get_single_giftcard_order',
     credit_gift_customer: admin + 'credit_gift_customer',
-    get_trans_history: admin+'get_trans_history',
-    get_bank_withdrawals: admin +'get_bank_withdrawals',
-    get_single_withdrawal: admin +'get_single_withdrawal'
+    get_trans_history: admin + 'get_trans_history',
+    get_bank_withdrawals: admin + 'get_bank_withdrawals',
+    get_single_withdrawal: admin + 'get_single_withdrawal'
 }
 
 const products = 'api/product/'

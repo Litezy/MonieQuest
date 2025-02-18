@@ -29,6 +29,7 @@ db.exchangeSells = require(`./exchangeSellModel`)(sequelize, DataTypes)
 db.giftCards = require(`./giftCardModel`)(sequelize, DataTypes)
 db.withdrawals = require(`./withdrawalModel`)(sequelize, DataTypes)
 db.comments = require(`./commentModel`)(sequelize, DataTypes)
+db.subscribers = require(`./subscriberModel`)(sequelize, DataTypes)
 
 
 //One to Many relationships

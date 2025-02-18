@@ -149,7 +149,7 @@ const AdminSingleProduct = () => {
 
         setLoading(true)
         try {
-            const response = await AuthPutApi(Apis.admin.update_product, formbody)
+            const response = await AuthPutApi(Apis.admin.update_product, formbody, { category: form.category })
             if (response.status === 200) {
                 SuccessAlert(response.msg)
                 FetchSingleProduct()
@@ -169,7 +169,7 @@ const AdminSingleProduct = () => {
             <div className='w-11/12 mx-auto'>
                 {loading && <Loader title={`submitting`} />}
                 <Link to='/admin/products/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
-                    back to all tools
+                    back to all products
                 </Link>
                 {dataLoading ?
                     <div className='mt-10 grid md:grid-cols-2 grid-cols-1 md:gap-10 gap-6'>
@@ -203,18 +203,22 @@ const AdminSingleProduct = () => {
                                 <input ref={imgRef} type="file" onChange={handleUpload} hidden />
                             </label>
                             <div className='flex flex-col gap-6'>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>title:</div>
                                     <FormInput placeholder='Title' name='title' value={form.title} onChange={formHandler} />
                                 </div>
                                 <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>category:</div>
                                     <div className='flex flex-wrap gap-2'>
-                                        {form.category.map((item, i) => (
-                                            <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl text-sm'>
-                                                {item}
-                                            </div>
-                                        ))}
+                                        {form.category.length > 0 &&
+                                            <>
+                                                {form.category.map((item, i) => (
+                                                    <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl text-sm'>
+                                                        {item}
+                                                    </div>
+                                                ))}
+                                            </>
+                                        }
                                     </div>
                                     <div className='flex flex-wrap gap-4 mt-2'>
                                         {allCategories.map((item, i) => (
@@ -229,21 +233,21 @@ const AdminSingleProduct = () => {
                                 </div>
                             </div>
                             <div className='flex flex-col gap-6'>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>price ({currencySign[1]}):</div>
                                     <FormInput placeholder='Price' name='price' value={form.price} onChange={formHandler} />
                                 </div>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>about:</div>
                                     <FormInput formtype='textarea' placeholder='About tool' name='about' value={form.about} onChange={formHandler} />
                                 </div>
                             </div>
                             <div className='flex flex-col gap-6'>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>feature 1:</div>
                                     <FormInput formtype='textarea' placeholder='Enter tool feature' name='feature1' value={form.feature1} onChange={formHandler} className='!h-20' />
                                 </div>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>feature 2:</div>
                                     <FormInput formtype='textarea' placeholder='Enter tool feature' name='feature2' value={form.feature2} onChange={formHandler} className='!h-20' />
                                 </div>
@@ -268,8 +272,8 @@ const AdminSingleProduct = () => {
                                 </div>
                                 <div className='flex flex-col gap-1 w-full border-t pt-2'>
                                     <div className="flex items-center justify-between gap-4">
-                                        <div className="">Video link:</div>
-                                        <a href={singleProduct?.video_link} className="underline">{singleProduct?.video_link}</a>
+                                        <div className="">Video link / URL:</div>
+                                        <a href={singleProduct?.video_link} target="_blank" rel="noopener noreferrer" className="underline">{singleProduct?.video_link}</a>
                                     </div>
                                     <div className="flex items-center justify-between gap-4">
                                         <div className="">Contact Details:</div>
@@ -295,14 +299,14 @@ const AdminSingleProduct = () => {
                                         <RiDiscountPercentFill />
                                     </div>
                                     <div className='grid md:grid-cols-2 grid-cols-1 gap-4 items-center'>
-                                        <div className='flex flex-col'>
+                                        <div className='flex flex-col gap-2'>
                                             <div className='text-lightgreen capitalize font-medium'>discount percentage (%):</div>
                                             <FormInput placeholder='Discount' name='discount_percentage' value={form.discount_percentage} onChange={formHandler} />
                                         </div>
-                                        <div className='flex flex-col'>
+                                        <div className='flex flex-col gap-1'>
                                             <div className='text-lightgreen capitalize font-medium'>duration:</div>
                                             <div className='flex items-center'>
-                                                <FormInput name='discount_duration' value={form.discount_duration} onChange={formHandler} className='!w-14 !py-2 !px-4 !rounded-md -mt-2' />
+                                                <FormInput name='discount_duration' value={form.discount_duration} onChange={formHandler} className='!w-14 !py-2 !px-4 !rounded-md' />
                                                 <SelectComp options={durationTypes} width={150} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.discount_duration_type} handleChange={(e) => setForm({ ...form, discount_duration_type: e.target.value })} />
                                             </div>
                                         </div>

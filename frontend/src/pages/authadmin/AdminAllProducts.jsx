@@ -45,7 +45,7 @@ const AdminAllProducts = () => {
     const FilterProducts = () => {
         const mainData = staticData
         if (search.length > 1) {
-            const filtered = mainData.filter(item => item.title.toLowerCase().includes(search.toLowerCase()) || item.gen_id.toLowerCase().includes(search.toLowerCase()))
+            const filtered = mainData.filter(item => item.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
             setAllProducts(filtered)
         } else {
             setAllProducts(mainData)
@@ -56,8 +56,8 @@ const AdminAllProducts = () => {
         <AdminProductsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
-                    <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterProducts} />
-                    <div className="absolute top-5 right-3">
+                    <FormInput placeholder='Search by Title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterProducts} />
+                    <div className="absolute top-3 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import emptybox from '../assets/images/emptybox.png'
 import FormInput from '../utils/FormInput'
 import { ErrorAlert, SuccessAlert } from '../utils/pageUtils'
@@ -108,7 +108,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                 {cartItems.map((item, i) => (
                                     <div className='w-full h-fit bg-primary flex md:p-0 p-3 rounded-[3px] overflow-hidden' key={i}>
                                         <div className='md:w-[25%] w-[40%]'>
-                                            <img src={`${imageurl}/products/${item?.image}`} alt={item?.image} className='w-full md:h-28 h-[5.5rem] object-cover rounded-tl-[3px] rounded-bl-[3px]'></img>
+                                            <img src={`${imageurl}/products/${item?.image}`} alt={item?.image} className='w-full md:h-28 h-[5.5rem] object-cover md:rounded-l-[3px] md:rounded-r-none rounded-[3px]'></img>
                                         </div>
                                         <div className='md:w-[75%] w-[60%] px-4 md:py-3 flex flex-col'>
                                             <div className='flex md:flex-row flex-col md:justify-between gap-1'>
@@ -125,7 +125,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                                 </div>
                                             </div>
                                             <div className='flex justify-between items-center mt-auto text-xs'>
-                                                <button className='outline-none w-fit h-fit bg-secondary rounded-md py-2 px-3 hover:text-lightgreen' onClick={() => RemoveCart(item)}>Remove tool</button>
+                                                <button className='outline-none w-fit h-fit bg-secondary rounded-md py-2 px-4 hover:text-lightgreen' onClick={() => RemoveCart(item)}>Remove</button>
                                                 {item.discount_percentage && <div className='text-lightgreen md:block hidden'>You are saving {item.discount_percentage}%</div>}
                                             </div>
                                         </div>
@@ -157,7 +157,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                                                 <div>Total</div>
                                                 <div className='text-xl'>₦{totalPriceAfterDiscount.toLocaleString()}</div>
                                             </div>
-                                            <div className='-mt-2'>
+                                            <div>
                                                 <FormInput placeholder='Enter Email Address' type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
                                             </div>
                                             <button className='bg-lightgreen text-ash uppercase font-extrabold w-full h-fit py-3 rounded-[4px]' onClick={CheckOutAndGetAdminBank}>proceed to checkout</button>

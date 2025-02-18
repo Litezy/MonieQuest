@@ -81,7 +81,7 @@ exports.CreateAirdrop = async (req, res) => {
         if (!title || !category || !blockchain || !type || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
         const categoryArray = ["featured", "deFi", "new", "NFT", "potential", "earn_crypto"]
         if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
-        const kycArray = ['false', "true"]
+        const kycArray = ['required', "unrequired"]
         if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid kyc value provided` })
 
         const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
@@ -179,7 +179,7 @@ exports.UpdateAirdrop = async (req, res) => {
             airdrop.category = category
         }
         if (kyc) {
-            const kycArray = ['false', "true"]
+            const kycArray = ['required', "unrequired"]
             if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid KYC value provided` })
             airdrop.kyc = kyc
         }
@@ -354,7 +354,8 @@ exports.UpdateProduct = async (req, res) => {
             product.title = title
         }
         if (category) {
-            product.category = category
+            const categoryArray = Array.isArray(category) ? category : [category]
+            product.category = categoryArray
         }
         if (price) {
             if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
@@ -515,7 +516,7 @@ exports.getDashboardInfos = async (req, res) => {
         const totalWithdrawals = await Bank_Withdrawals.count();
         const totalWithdrawalCompletedAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'completed' } });
         const totalWithdrawalPendingAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'pending' } });
-        
+
         const data = [
             { title: 'Total Users', value: totalUsers.length, color: 'red' },
             { title: 'blog Posts', value: totalBlogs, color: 'pink' },

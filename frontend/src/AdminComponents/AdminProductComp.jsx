@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom'
 import { currencySign, MoveToTop } from '../utils/pageUtils'
 
 const AdminProductComp = ({ item }) => {
-    let categories = []
-    if (Object.values(item).length !== 0) {
-        categories = JSON.parse(item?.category)
-    }
+    const categories = item?.category ? JSON.parse(item.category) : []
 
     return (
         <div className='w-full h-fit relative text-semi-white rounded-lg shadow_auth'>
@@ -49,7 +46,7 @@ const AdminProductComp = ({ item }) => {
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>Link:</span>
-                        <a href={item?.video_link} className='underline'>{item?.video_link}</a>
+                        <a href={item?.video_link} target="_blank" rel="noopener noreferrer" className='underline'>{item?.video_link}</a>
                     </div>
                     <div className='flex justify-between gap-4 capitalize'>
                         <span>status:</span>

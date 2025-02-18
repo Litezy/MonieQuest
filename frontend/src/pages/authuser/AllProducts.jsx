@@ -45,7 +45,7 @@ const AllProducts = () => {
     const FilterProducts = () => {
         const mainData = staticData
         if (search.length > 1) {
-            const filtered = mainData.filter(item => String(item.title).toLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLowerCase().startsWith(search.toLocaleLowerCase()))
+            const filtered = mainData.filter(item => String(item.title).toLocaleLowerCase().startsWith(search.toLocaleLowerCase()) || String(item.gen_id).toLocaleLowerCase().startsWith(search.toLocaleLowerCase()))
             setUserProducts(filtered)
         } else {
             setUserProducts(mainData)
@@ -57,7 +57,7 @@ const AllProducts = () => {
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
                     <FormInput placeholder='Search by title and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterProducts} />
-                    <div className="absolute top-5 right-3">
+                    <div className="absolute top-3 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>
                 </div>

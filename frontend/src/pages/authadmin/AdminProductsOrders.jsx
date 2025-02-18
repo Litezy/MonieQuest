@@ -38,7 +38,7 @@ const AdminProductsOrders = () => {
     const FilterOrders = () => {
         const mainData = staticData
         if (search.length > 1) {
-            const filtered = mainData.filter(item => moment(item.createdAt).format('Do MMMM YYYY').toLowerCase().includes(search.toLowerCase()) || item.gen_id.toLowerCase().includes(search.toLowerCase()))
+            const filtered = mainData.filter(item => moment(item.createdAt).format('Do MMMM YYYY').toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
             setProductOrders(filtered)
         } else {
             setProductOrders(mainData)
@@ -49,13 +49,13 @@ const AdminProductsOrders = () => {
         <AdminProductsLayout>
             <div className='w-11/12 mx-auto'>
                 <div className="w-full lg:w-2/3 mx-auto relative">
-                    <FormInput placeholder='Search by date and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterOrders} />
-                    <div className="absolute top-5 right-3">
+                    <FormInput placeholder='Search by Date and ID' value={search} onChange={(e) => setSearch(e.target.value)} className="!rounded-lg" onKeyUp={FilterOrders} />
+                    <div className="absolute top-3 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>
                 </div>
                 {datatLoading ?
-                    <div className='flex flex-col gap-10'>
+                    <div className='flex flex-col gap-10 mt-8'>
                         <div className='md:w-80 w-56 md:h-5 h-3.5 rounded-full bg-slate-400'></div>
                         <div className='flex items-center lg:grid lg:grid-cols-3 justify-between  border-b border-slate-400 pb-1 w-full'>
                             <div className='flex lg:gap-5 gap-2 items-start'>

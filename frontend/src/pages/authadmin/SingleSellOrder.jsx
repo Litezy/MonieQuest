@@ -167,42 +167,44 @@ const SingleSellOrder = () => {
                         <form onSubmit={submitOrder} className="bg-primary p-3 rounded-md  mx-auto mt-5 md:mt-10 mb-5">
                             <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
                                 <div className="flex flex-col gap-3 w-full">
-                                    <div className="w-full">
+                                    <div className="flex flex-col gap-2 w-full">
                                         <div className="text-sm">Customer ID:</div>
                                         <FormInput read={true} value={data?.crypto_seller?.id} className={`${green}`} />
                                     </div>
-                                    <div className="w-full">
+                                    <div className="flex flex-col gap-2 w-full">
                                         <div className="text-sm">FullName:</div>
                                         <FormInput read={true} value={`${data?.crypto_seller?.first_name} ${data?.crypto_seller?.surname}`}
                                             className={`${green}`} />
                                     </div>
-                                    <div className="w-full">
+                                    <div className="flex flex-col gap-2 w-full">
                                         <div className="text-sm">Amount:</div>
                                         <FormInput read={true} value={`${currencies[0].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
                                     </div>
-                                    <div className="w-full">
+                                    <div className="flex flex-col gap-2 w-full">
                                         <div className="text-sm">Status:</div>
                                         <FormInput read={true} value={data?.status} className={`${green}`} />
                                     </div>
 
                                 </div>
-                                <div className=" flex flex-col gap-2.5 w-full">
-                                    <div className="">
+                                <div className=" flex flex-col gap-3 w-full">
+                                    <div className="flex flex-col gap-2">
                                         <div className="text-sm">Crypto Currency Sent:</div>
                                         <FormInput read={true} value={data?.crypto_currency} className={`${green}`} />
                                     </div>
-                                    <div className="">
+                                    <div className="flex flex-col gap-2">
                                         <div className="text-sm">Network Sent Via:</div>
                                         <FormInput read={true} value={data?.network} className={`${green}`} />
                                     </div>
-                                    <div className="text-sm">Transaction Hash:</div>
-                                    <div className="flex items-center w-full gap-2">
-                                        <div className="w-full">
-                                            <FormInput read={true} value={data?.trans_hash} className={`${green}`} />
+                                    <div className='flex flex-col gap-2'>
+                                        <div className="text-sm">Transaction Hash:</div>
+                                        <div className="flex items-center w-full gap-2">
+                                            <div className="w-full">
+                                                <FormInput read={true} value={data?.trans_hash} className={`${green}`} />
+                                            </div>
+                                            <FaRegCopy onClick={() => handleCopy(`jmkmkdmkkfk`, 'trans hash')} className={`${green} cursor-pointer`} />
                                         </div>
-                                        <FaRegCopy onClick={() => handleCopy(`jmkmkdmkkfk`, 'trans hash')} className={`${green} cursor-pointer`} />
                                     </div>
-                                    <div className="">
+                                    <div className="flex flex-col gap-2">
                                         <div className="text-sm">Rate:</div>
                                         <FormInput read={true} value={`${currencies[1].symbol}${rate}`} className={`${green}`} />
                                     </div>

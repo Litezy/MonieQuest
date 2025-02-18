@@ -159,37 +159,37 @@ const AdminCreateBlogs = () => {
                                     <input ref={imgRef} type="file" onChange={handleUpload} hidden />
                                 </label>
                                 <div className='flex flex-col gap-6'>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*blog title:</div>
                                         <FormInput placeholder='Blog Title' name='title' value={form.title} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col gap-2'>
+                                    <div className='flex flex-col'>
                                         <div className='text-lightgreen capitalize font-medium'>*feature:</div>
                                         <SelectComp options={features} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.feature} handleChange={(e) => setForm({ ...form, feature: e.target.value })} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*main header title:</div>
                                         <FormInput placeholder='Main header title' name='main_header_title' value={form.main_header_title} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*main header content:</div>
                                         <FormInput formtype='textarea' placeholder='Main header content' name='main_header_content' value={form.main_header_content} onChange={formHandler} />
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-6'>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*first paragraph title:</div>
                                         <FormInput placeholder='First paragraph title' name='first_paragraph_title' value={form.first_paragraph_title} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*first paragraph content:</div>
                                         <FormInput formtype='textarea' placeholder='First paragraph content' name='first_paragraph_content' value={form.first_paragraph_content} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*second paragraph title:</div>
                                         <FormInput placeholder='Second paragraph title' name='second_paragraph_title' value={form.second_paragraph_title} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*second paragraph content:</div>
                                         <FormInput formtype='textarea' placeholder='Second paragraph content' name='second_paragraph_content' value={form.second_paragraph_content} onChange={formHandler} />
                                     </div>
@@ -211,11 +211,11 @@ const AdminCreateBlogs = () => {
                                     </label>
                                 </div>
                                 <div className='flex flex-col gap-6'>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*extras title:</div>
                                         <FormInput placeholder='Extras paragraph title' name='extras_title' value={form.extras_title} onChange={formHandler} />
                                     </div>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*extras content:</div>
                                         <FormInput formtype='textarea' placeholder='Extras paragraph content' name='extras_content' value={form.extras_content} onChange={formHandler} />
                                     </div>
@@ -235,7 +235,7 @@ const AdminCreateBlogs = () => {
                                         }
                                         <input ref={imgExtrasRef} type="file" onChange={handleExtasImgUpload} hidden />
                                     </label>
-                                    <div className='flex flex-col'>
+                                    <div className='flex flex-col gap-2'>
                                         <div className='text-lightgreen capitalize font-medium'>*conclusion:</div>
                                         <FormInput formtype='textarea' placeholder='Conclusion' name='conclusion' value={form.conclusion} onChange={formHandler} />
                                     </div>

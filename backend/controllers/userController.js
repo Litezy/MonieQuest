@@ -4,6 +4,7 @@ const Notification = require('../models').notifications
 const Util = require('../models').utils
 const Bank = require('../models').banks
 const Kyc = require('../models').kyc
+const Subscriber = require('../models').subscribers
 const moment = require('moment')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
@@ -268,6 +269,24 @@ exports.Contacts = async (req, res) => {
     }
 }
 
+exports.SubscribeToPlatform = async (req, res) => {
+    try {
+        const { email, phone_number } = req.body
+        if (!email || !phone_number) return res.json({ status: 404, msg: `Incomplete request found` })
+        const subscriber = await Subscriber.findOne({ where: { email: email } })
+        if (subscriber) return res.json({ status: 404, msg: `Email entered is already subscribed to our platform` })
+
+        await Subscriber.create({
+            email,
+            phone_number,
+        })
+
+        return res.json({ status: 200, msg: `You've successfully subscribed to our platform` })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
 exports.UpdateProfile = async (req, res) => {
     try {
         const { first_name, surname, email, phone_number, old_password, new_password } = req.body
@@ -283,26 +302,27 @@ exports.UpdateProfile = async (req, res) => {
                 user.email_verified = 'false'
             }
         }
-
+        if (phone_number) {
+            if (phone_number !== user.phone_number) {
+                const matchedSomeoneElse = await User.findOne({ where: { phone_number } })
+                if (matchedSomeoneElse) return res.json({ status: 404, msg: `Phone number used, try a different one` })
+                user.phone_number = phone_number
+            }
+        }
         if (old_password) {
             if (user.password !== old_password) return res.json({ status: 404, msg: 'Incorrect old password' })
             if (!new_password) return res.json({ status: 404, msg: `Create a new password` })
         }
-
         if (new_password) {
             if (!old_password) return res.json({ status: 404, msg: `Enter your old password` })
             if (new_password.length < 6) return res.json({ status: 404, msg: `New Password must be at least six characters long` })
             user.password = new_password
         }
-
         if (first_name) {
             user.first_name = first_name
         }
         if (surname) {
             user.surname = surname
-        }
-        if (phone_number) {
-            user.phone_number = phone_number
         }
 
         const slugData = slug(first_name ? first_name : user.first_name, '-')

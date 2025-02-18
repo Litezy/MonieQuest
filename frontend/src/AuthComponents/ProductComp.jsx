@@ -3,10 +3,7 @@ import React from 'react'
 import { currencySign } from '../utils/pageUtils'
 
 const ProductComp = ({ item }) => {
-    let categories = []
-    if (Object.values(item).length !== 0) {
-        categories = JSON.parse(item?.category)
-    }
+    const categories = item?.category ? JSON.parse(item.category) : []
 
     return (
         <div className='w-full h-fit relative text-semi-white rounded-lg shadow_auth'>
@@ -39,7 +36,7 @@ const ProductComp = ({ item }) => {
                 <div className='flex flex-col gap-2 md:p-4 md:border-l border-gray-800 overflow-hidden'>
                     <div className='flex justify-between gap-4'>
                         <span>Link:</span>
-                        <a href={item?.video_link} className='underline'>{item?.video_link}</a>
+                        <a href={item?.video_link} target="_blank" rel="noopener noreferrer" className='underline'>{item?.video_link}</a>
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>Contact details:</span>

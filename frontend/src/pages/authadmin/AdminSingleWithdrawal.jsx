@@ -73,31 +73,30 @@ const AdminSingleWithdrawal = () => {
                 <form onSubmit={submitOrder} className="bg-primary p-5 rounded-md  mx-auto mt-5 md:mt-10 mb-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-5   ">
                         <div className="flex flex-col gap-3 w-full">
-                            <div className="w-full">
+                            <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">Customer ID:</div>
                                 <FormInput read={true} value={data?.user_withdrawal?.id} className={`${green}`} />
                             </div>
-                            <div className="w-full">
+                            <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">FullName:</div>
                                 <FormInput read={true} value={` ${data.user_withdrawal?.first_name} ${data?.user_withdrawal?.surname}`} className={`${green}`} />
                             </div>
-                            <div className="w-full">
+                            <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">Amount:</div>
                                 <FormInput read={true} value={`${currencies[1].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
                             </div>
                         </div>
                         <div className=" flex flex-col gap-3 w-full">
-
-                            <div className="">
+                            <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">Beneficiary Name:</div>
                                 <FormInput read={true} value={data?.bank_name} className={`${green}`} />
                             </div>
-                            <div className="w-full">
+                            <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">Beneficiary Bank:</div>
                                 <FormInput read={true} value={data?.bank_user} className={`${green}`} />
                             </div>
-                            <div className="">
-                                <div className="text-sm">Bank Account :</div>
+                            <div className="flex flex-col gap-2">
+                                <div className="text-sm">Bank Account:</div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-full">
                                         <FormInput read={true} value={data?.account_number} className={`${green}`} />
@@ -117,7 +116,7 @@ const AdminSingleWithdrawal = () => {
                             </div>
                         </div>
                         {forms.sent_money === 'Yes' &&
-                            <div className="">
+                            <div className="flex flex-col gap-2">
                                 <div className="text-sm">Bank Transfer Reference :</div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-full">

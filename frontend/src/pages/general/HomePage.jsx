@@ -102,7 +102,7 @@ const HomePage = () => {
                   <Link to='/airdrops' onClick={MoveToTop}>
                     <FormButton title='Browse for Airdrops' className='!text-sm !rounded-md !py-3 !px-4 !w-fit' />
                   </Link>
-                  <Link to='/airdrops' onClick={MoveToTop}>
+                  <Link to={`/airdrops?c=potential`} onClick={MoveToTop}>
                     <FormButton title='potential airdrops' className='!text-sm !capitalize !rounded-md !py-3 !px-6 !w-fit' />
                   </Link>
                 </div>
@@ -179,20 +179,20 @@ const HomePage = () => {
                       </Link>
                     </div>
                   }
-                  <div className='max-w-xs h-fit bg-primary p-4'>
-                    <div className='text-lg font-bold text-center'>How it works for Airdrop Farmers</div>
-                    <div className='flex flex-col gap-4 mt-8 pb-4'>
+                  <div className='max-w-[18rem] h-fit bg-primary p-4'>
+                    <div className='font-bold text-center'>How it works for Airdrop Farmers</div>
+                    <div className='flex flex-col gap-4 mt-6 pb-4'>
                       <div className='flex flex-col gap-2'>
                         <div className='text-lightgreen uppercase'>1. <span className='pl-1'>browse airdrops</span></div>
-                        <div className='text-sm pl-5 w-11/12'>Use advanced filters to easily search through airdrop opportunities and find ones that match your interests and which blockchain you prefer to farm on.</div>
+                        <div className='text-sm pl-5'>Use advanced filters to easily search through airdrop opportunities and find ones that match your interests and which blockchain you prefer to farm on.</div>
                       </div>
                       <div className='flex flex-col gap-2'>
                         <div className='text-lightgreen uppercase'>2. <span className='pl-1'>select and participate</span></div>
-                        <div className='text-sm pl-5 w-11/12'>Choose a crypto airdrop campaign on your preferred blockchain, follow the step-by-step guide provided, and start participating right away.</div>
+                        <div className='text-sm pl-5'>Choose a crypto airdrop campaign on your preferred blockchain, follow the step-by-step guide provided, and start participating right away.</div>
                       </div>
                       <div className='flex flex-col gap-2'>
                         <div className='text-lightgreen uppercase'>3. <span className='pl-1'>stay updated</span></div>
-                        <div className='text-sm pl-5 w-11/12'>Enable notifications to receive real-time alerts about the latest airdrops, TGE’S, and airdrop eligibility checks, ensuring you never out on free crypto tokens</div>
+                        <div className='text-sm pl-5'>Enable notifications to receive real-time alerts about the latest airdrops, TGE’S, and airdrop eligibility checks, ensuring you never out on free crypto tokens</div>
                       </div>
                     </div>
                   </div>
