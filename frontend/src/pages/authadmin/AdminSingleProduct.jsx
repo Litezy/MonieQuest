@@ -306,7 +306,7 @@ const AdminSingleProduct = () => {
                                         <div className='flex flex-col gap-1'>
                                             <div className='text-lightgreen capitalize font-medium'>duration:</div>
                                             <div className='flex items-center'>
-                                                <FormInput name='discount_duration' value={form.discount_duration} onChange={formHandler} className='!w-14 !py-2 !px-4 !rounded-md' />
+                                                <FormInput name='discount_duration' value={form.discount_duration} onChange={formHandler} className='!w-14 !px-3' />
                                                 <SelectComp options={durationTypes} width={150} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.discount_duration_type} handleChange={(e) => setForm({ ...form, discount_duration_type: e.target.value })} />
                                             </div>
                                         </div>
