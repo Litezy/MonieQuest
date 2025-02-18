@@ -3,10 +3,7 @@ import React from 'react'
 import { currencySign } from '../utils/pageUtils'
 
 const ProductComp = ({ item }) => {
-    let categories = []
-    if (Object.values(item).length !== 0 && item.category) {
-        categories = JSON.parse(item?.category)
-    }
+    const categories = item?.category ? JSON.parse(item.category) : []
 
     return (
         <div className='w-full h-fit relative text-semi-white rounded-lg shadow_auth'>

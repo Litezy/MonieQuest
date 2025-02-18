@@ -23,10 +23,7 @@ const SingleProductPage = () => {
     })
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
-    let categories = []
-    if (Object.values(singleProduct).length !== 0 && singleProduct.category) {
-        categories = JSON.parse(singleProduct.category)
-    }
+    const categories = singleProduct?.category ? JSON.parse(singleProduct.category) : []
 
     useEffect(() => {
         if (!ratingData) {

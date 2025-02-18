@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom'
 import { currencySign, MoveToTop } from '../utils/pageUtils'
 
 const AdminProductComp = ({ item }) => {
-    let categories = []
-    if (Object.values(item).length !== 0 && item.category) {
-        categories = JSON.parse(item?.category)
-    }
+    const categories = item?.category ? JSON.parse(item.category) : []
 
     return (
         <div className='w-full h-fit relative text-semi-white rounded-lg shadow_auth'>

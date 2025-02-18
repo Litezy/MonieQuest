@@ -88,6 +88,7 @@ const ProductsPage = () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
   return (
     <PageLayout>
       {submitBtn &&
@@ -132,66 +133,69 @@ const ProductsPage = () => {
               <>
                 {products.length > 0 ?
                   <>
-                    {products.map((item, i) => (
-                      <div key={i} className="bg-primary h-fit md:w-full w-11/12 mx-auto rounded-[4px] relative z-10">
-                        {item.discount_percentage &&
-                          <>
-                            <div className="bg-red-700 text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
-                              {item.discount_percentage}% off
+                    {products.map((item, i) => {
+                      const categories = item.category ? JSON.parse(item.category) : []
+                      return (
+                        <div key={i} className="bg-primary h-fit md:w-full w-11/12 mx-auto rounded-[4px] relative z-10">
+                          {item.discount_percentage &&
+                            <>
+                              <div className="bg-red-700 text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
+                                {item.discount_percentage}% off
+                              </div>
+                              <div className="edge"></div>
+                            </>
+                          }
+                          <Link to={`/products/${item.id}/${item.slug}`} onClick={MoveToTop}>
+                            <img
+                              src={`${imageurl}/products/${item.image}`}
+                              alt='product image'
+                              className="w-full h-48 rounded-t-[4px] object-cover object-center"
+                            />
+                          </Link>
+                          <div className="flex flex-col gap-4 px-2 py-4">
+                            <div className="flex justify-between items-center">
+                              <div className="capitalize text-sm font-bold">
+                                {item?.title}
+                              </div>
+                              <FaCheckCircle className="text-lightgreen text-xl" />
                             </div>
-                            <div className="edge"></div>
-                          </>
-                        }
-                        <Link to={`/products/${item.id}/${item.slug}`} onClick={MoveToTop}>
-                          <img
-                            src={`${imageurl}/products/${item.image}`}
-                            alt='product image'
-                            className="w-full h-48 rounded-t-[4px] object-cover object-center"
-                          />
-                        </Link>
-                        <div className="flex flex-col gap-4 px-2 py-4">
-                          <div className="flex justify-between items-center">
-                            <div className="capitalize text-sm font-bold">
-                              {item?.title}
-                            </div>
-                            <FaCheckCircle className="text-lightgreen text-xl" />
-                          </div>
-                          <div className="flex justify-between gap-4 items-center">
-                            <div className="w-full overflow-x-auto scrollsdown cursor-all-scroll">
-                              <div className="w-fit">
-                                {item.category &&
-                                  <div className='flex gap-1 text-xs text-lightgreen truncate'>
-                                    {JSON.parse(item.category).slice(0, 2).map((ele, i) => (
-                                      <div key={i}>{ele},</div>
-                                    ))}
-                                  </div>
+                            <div className="flex justify-between gap-4 items-center">
+                              <div className="w-full overflow-x-auto scrollsdown cursor-all-scroll">
+                                <div className="w-fit">
+                                  {categories.length > 0 &&
+                                    <div className='flex gap-1 text-xs text-lightgreen truncate'>
+                                      {categories.map((ele, i) => (
+                                        <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
+                                      ))}
+                                    </div>
+                                  }
+                                </div>
+                              </div>
+                              <div className="flex gap-2 items-center text-sm font-extrabold">
+                                {item.discount_percentage && item.price ?
+                                  <>
+                                    <div className="text-red-700 underline">
+                                      ₦{((100 - item.discount_percentage) / 100 * item.price).toLocaleString()}
+                                    </div>
+                                    <div className="line-through">
+                                      ₦{item.price.toLocaleString()}
+                                    </div>
+                                  </>
+                                  :
+                                  <div>₦{item.price.toLocaleString()}</div>
                                 }
                               </div>
                             </div>
-                            <div className="flex gap-2 items-center text-sm font-extrabold">
-                              {item.discount_percentage && item.price ?
-                                <>
-                                  <div className="text-red-700 underline">
-                                    ₦{((100 - item.discount_percentage) / 100 * item.price).toLocaleString()}
-                                  </div>
-                                  <div className="line-through">
-                                    ₦{item.price.toLocaleString()}
-                                  </div>
-                                </>
-                                :
-                                <div>₦{item.price.toLocaleString()}</div>
-                              }
-                            </div>
+                            <button
+                              className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
+                              onClick={() => AddToCart(item)}
+                            >
+                              {CartButton(item.id)}
+                            </button>
                           </div>
-                          <button
-                            className="outline-none w-full h-fit flex gap-2 items-center justify-center py-2 bg-ash hover:bg-secondary uppercase text-sm font-semibold rounded-[4px] text-white tracking-wider"
-                            onClick={() => AddToCart(item)}
-                          >
-                            {CartButton(item.id)}
-                          </button>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </>
                   :
                   <div className="flex justify-center items-center mx-auto col-span-4">
