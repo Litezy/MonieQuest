@@ -5,7 +5,7 @@ import BlogDiv from '../../GeneralComponents/BlogDiv';
 import { Link } from 'react-router-dom';
 import { MoveToTop } from '../../utils/pageUtils';
 import { Apis, GetApi } from '../../services/API';
-
+import empty from '../../assets/images/empty.webp'
 
 
 const Blogs = () => {
@@ -129,7 +129,10 @@ const Blogs = () => {
                                     }
                                 </div>
                                 :
-                                <div className='text-center'>No blogs published yet...</div>
+                                <div className='flex gap-1 items-center justify-center'>
+                                    <div className='text-center'>No blogs published yet...</div>
+                                    <img src={empty} alt='empty img' className='size-8'></img>
+                                </div>
                             }
                         </>
 

@@ -9,6 +9,7 @@ import SelectComp from '../../GeneralComponents/SelectComp'
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import { Apis, GetApi } from '../../services/API'
 import ButtonLoader from '../../GeneralComponents/ButtonLoader'
+import empty from '../../assets/images/empty.webp'
 
 const statuses = ["Open", "Closed"]
 const kyces = ["Required", "Unrequired"]
@@ -314,7 +315,10 @@ const AirdropsPage = () => {
                     }
                   </div>
                   :
-                  <div className='text-center'>No airdrop found...</div>
+                  <div className='flex gap-1 items-center justify-center'>
+                    <div className='text-center'>No airdrop found...</div>
+                    <img src={empty} alt='empty img' className='size-8'></img>
+                  </div>
                 }
               </div>
             }

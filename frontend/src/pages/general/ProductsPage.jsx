@@ -8,6 +8,7 @@ import { MoveToTop } from "../../utils/pageUtils";
 import CartComponent from "../../GeneralComponents/CartComponent";
 import FormInput from "../../utils/FormInput";
 import { Apis, GetApi, imageurl } from "../../services/API";
+import empty from '../../assets/images/empty.webp'
 
 
 const ProductsPage = () => {
@@ -198,8 +199,9 @@ const ProductsPage = () => {
                     })}
                   </>
                   :
-                  <div className="flex justify-center items-center mx-auto col-span-4">
-                    <div className="text-center bg-primary py-2 px-4 rounded-md">No products found...</div>
+                  <div className='flex gap-1 items-center justify-center col-span-4'>
+                    <div className='text-center'>No products listed yet...</div>
+                    <img src={empty} alt='empty img' className='size-8'></img>
                   </div>
                 }
               </>
