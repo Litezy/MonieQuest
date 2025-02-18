@@ -7,6 +7,8 @@ import { currencies } from '../../AuthComponents/AuthUtils';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 import { useAtom } from 'jotai';
 import { WALLET } from '../../services/store';
+import TrendingCoins from '../../AuthComponents/TrendingCoins';
+
 
 
 const calender = [
@@ -16,16 +18,13 @@ const tradeOverviewFilter = [
   "All Coins", "All Gift Card", "All Products", "All Categories", "Recent Trades"
 ]
 
-const tradingAnalyticFilter = [
-  "Popular", "Top Gainers", "Top Losers", "Most Traded"
-]
+
 
 
 const Dashboard = () => {
   const [wallet] = useAtom(WALLET)
   const [active, setActive] = useState(calender[0])
   const [select, setSelect] = useState({
-    analytics: tradingAnalyticFilter[0],
     overview: tradeOverviewFilter[0],
   })
 
@@ -55,8 +54,8 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className='col-span-1'>
-                <img src={iconImg} alt='dashboard_icon' className='w-full h-auto'></img>
+              <div className='col-span-1 md:hidden lg:block'>
+                <img src={iconImg} alt='dashboard_icon' className='lg:w-full h-auto w-fit'></img>
               </div>
             </div>
           </div>
@@ -65,17 +64,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className='grid md:grid-cols-2 grid-cols-1 gap-6 mt-12'>
-          <div className='flex flex-col gap-2'>
-            <div className='flex justify-between gap-4 items-center'>
-              <div className='text-2xl capitalize font-bold'>trading analytics</div>
-              <SelectComp options={tradingAnalyticFilter} style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem' }} value={select.analytics} handleChange={(e) => setSelect({ ...select, analytics: e.target.value })} />
-            </div>
-            <div className='grid grid-cols-2 gap-4'>
-              {new Array(4).fill(0).map((_, i) => (
-                <div className='w-full bg-primary h-44' key={i}></div>
-              ))}
-            </div>
-          </div>
+         <TrendingCoins/>
           <div className='flex flex-col gap-4'>
             <div className='text-2xl capitalize font-bold'>your trading overview</div>
             <div className='bg-primary h-fit w-full px-4 pt-4 flex flex-col gap-2 overflow-hidden'>

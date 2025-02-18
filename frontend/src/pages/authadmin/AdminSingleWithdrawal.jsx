@@ -75,31 +75,31 @@ const AdminSingleWithdrawal = () => {
                         <div className="flex flex-col gap-3 w-full">
                             <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">Customer ID:</div>
-                                <FormInput value={data?.user_withdrawal?.id} className={`${green}`} />
+                                <FormInput read={true} value={data?.user_withdrawal?.id} className={`${green}`} />
                             </div>
                             <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">FullName:</div>
-                                <FormInput value={` ${data.user_withdrawal?.first_name} ${data?.user_withdrawal?.surname}`} className={`${green}`} />
+                                <FormInput read={true} value={` ${data.user_withdrawal?.first_name} ${data?.user_withdrawal?.surname}`} className={`${green}`} />
                             </div>
                             <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">Amount:</div>
-                                <FormInput value={`${currencies[1].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
+                                <FormInput read={true} value={`${currencies[1].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
                             </div>
                         </div>
                         <div className=" flex flex-col gap-3 w-full">
                             <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">Beneficiary Name:</div>
-                                <FormInput value={data?.bank_name} className={`${green}`} />
+                                <FormInput read={true} value={data?.bank_name} className={`${green}`} />
                             </div>
                             <div className="w-full flex flex-col gap-2">
                                 <div className="text-sm">Beneficiary Bank:</div>
-                                <FormInput value={data?.bank_user} className={`${green}`} />
+                                <FormInput read={true} value={data?.bank_user} className={`${green}`} />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <div className="text-sm">Bank Account:</div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-full">
-                                        <FormInput value={data?.account_number} className={`${green}`} />
+                                        <FormInput read={true} value={data?.account_number} className={`${green}`} />
                                     </div>
                                     <FaRegCopy onClick={handleCopy} className={`${green} cursor-pointer`} />
                                 </div>
