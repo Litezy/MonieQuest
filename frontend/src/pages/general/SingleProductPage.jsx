@@ -24,7 +24,7 @@ const SingleProductPage = () => {
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
     let categories = []
-    if (Object.values(singleProduct).length !== 0) {
+    if (Object.values(singleProduct).length !== 0 && singleProduct.category) {
         categories = JSON.parse(singleProduct.category)
     }
 
@@ -237,7 +237,7 @@ const SingleProductPage = () => {
                                                 />
                                             </div>
                                             <div className='w-fit relative'>
-                                                {loading && <ButtonLoader  />}
+                                                {loading && <ButtonLoader />}
                                                 <button className='outline-none w-fit h-fit flex gap-1 items-center justify-center py-3 px-8 bg-ash uppercase text-sm font-bold rounded-[4px] text-white tracking-widest relative' onClick={submitRating}>
                                                     <span>{form.submit ? 'submitted' : 'submit'}</span>
                                                     <IoCheckmarkDoneCircle />

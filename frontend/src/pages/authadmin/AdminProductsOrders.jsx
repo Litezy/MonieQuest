@@ -55,7 +55,7 @@ const AdminProductsOrders = () => {
                     </div>
                 </div>
                 {datatLoading ?
-                    <div className='flex flex-col gap-10'>
+                    <div className='flex flex-col gap-10 mt-8'>
                         <div className='md:w-80 w-56 md:h-5 h-3.5 rounded-full bg-slate-400'></div>
                         <div className='flex items-center lg:grid lg:grid-cols-3 justify-between  border-b border-slate-400 pb-1 w-full'>
                             <div className='flex lg:gap-5 gap-2 items-start'>

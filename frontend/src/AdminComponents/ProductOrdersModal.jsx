@@ -5,7 +5,7 @@ import { MdContentCopy } from 'react-icons/md'
 
 const ProductsOrdersModal = ({ selected }) => {
     let products = []
-    if (Object.values(selected).length !== 0) {
+    if (Object.values(selected).length !== 0 && selected.products) {
         products = JSON.parse(selected.products)
     }
 

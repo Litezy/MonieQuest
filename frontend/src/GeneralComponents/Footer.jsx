@@ -6,8 +6,9 @@ import { FaInstagram, FaXTwitter, FaLinkedin, FaTiktok, FaPinterestP } from "rea
 import { FaTelegramPlane, FaSnapchatGhost, FaYoutube, FaRedditAlien, FaQuora } from "react-icons/fa";
 import { Link, useLocation } from 'react-router-dom';
 import FormInput from '../utils/FormInput';
-import { ErrorAlert, MoveToTop } from '../utils/pageUtils';
+import { ErrorAlert, MoveToTop, SuccessAlert } from '../utils/pageUtils';
 import ButtonLoader from './ButtonLoader';
+import { Apis, PostApi } from '../services/API';
 
 const Socials = [
   { href: 'https://www.facebook.com/profile.php?id=61571510583455', icon: RiFacebookFill },
@@ -46,11 +47,31 @@ const Footer = () => {
     })
   }
 
-  const SubmitForm = (e) => {
+  const SubmitForm = async (e) => {
     e.preventDefault()
 
     if (!form.email || !form.phone) return ErrorAlert('Enter email address and phone number')
+    const formbody = {
+      email: form.email,
+      phone_number: form.phone
+    }
     setLoading(true)
+    try {
+      const response = await PostApi(Apis.user.subscribe, formbody)
+      if (response.status === 200) {
+        SuccessAlert(response.msg)
+        setForm({
+          email: '',
+          phone: ''
+        })
+      } else {
+        ErrorAlert(response.msg)
+      }
+    } catch (error) {
+      ErrorAlert(`${error.message}`)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -96,7 +117,7 @@ const Footer = () => {
                   </div>
                   <div className='md:w-1/4 w-2/6 relative'>
                     {loading && <ButtonLoader />}
-                    <button className='h-fit w-full py-3.5 flex justify-center items-center text-ash text-sm rounded-[4px] font-bold bg-lightgreen capitalize'>subscribe</button>
+                    <button className='h-fit w-full py-3.5 flex justify-center items-center text-ash text-sm rounded-md font-bold bg-lightgreen capitalize'>subscribe</button>
                   </div>
                 </div>
               </form>

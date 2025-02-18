@@ -149,7 +149,7 @@ const AdminSingleProduct = () => {
 
         setLoading(true)
         try {
-            const response = await AuthPutApi(Apis.admin.update_product, formbody)
+            const response = await AuthPutApi(Apis.admin.update_product, formbody, { category: form.category })
             if (response.status === 200) {
                 SuccessAlert(response.msg)
                 FetchSingleProduct()
@@ -210,11 +210,15 @@ const AdminSingleProduct = () => {
                                 <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>category:</div>
                                     <div className='flex flex-wrap gap-2'>
-                                        {form.category.map((item, i) => (
-                                            <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl text-sm'>
-                                                {item}
-                                            </div>
-                                        ))}
+                                        {form.category.length > 0 &&
+                                            <>
+                                                {form.category.map((item, i) => (
+                                                    <div key={i} className='w-fit h-fit p-3 bg-gray-300 text-black rounded-xl text-sm'>
+                                                        {item}
+                                                    </div>
+                                                ))}
+                                            </>
+                                        }
                                     </div>
                                     <div className='flex flex-wrap gap-4 mt-2'>
                                         {allCategories.map((item, i) => (
@@ -299,7 +303,7 @@ const AdminSingleProduct = () => {
                                             <div className='text-lightgreen capitalize font-medium'>discount percentage (%):</div>
                                             <FormInput placeholder='Discount' name='discount_percentage' value={form.discount_percentage} onChange={formHandler} />
                                         </div>
-                                        <div className='flex flex-col'>
+                                        <div className='flex flex-col gap-1'>
                                             <div className='text-lightgreen capitalize font-medium'>duration:</div>
                                             <div className='flex items-center'>
                                                 <FormInput name='discount_duration' value={form.discount_duration} onChange={formHandler} className='!w-14 !py-2 !px-4 !rounded-md' />

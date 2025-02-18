@@ -109,7 +109,7 @@ const ProductsPage = () => {
           <div className="flex flex-col gap-2 items-center mt-20">
             <div className="text-3xl font-bold text-center">Say Goodbye to Stress, Simplify your Hustle, Maximize your Wealth!
             </div>
-            <div className="text-lg font-bold text-center">“Tools you can Trust, Knowledge that pays”</div>
+            <div className="text-lg font-bold text-center">“Products you can Trust, Knowledge that pays”</div>
             <div className="flex gap-2 items-center mt-2">
               <FormInput placeholder='Find available tools and eBooks' className='md:!w-96 !w-64' value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={filterProducts} />
               <button className="outline-none w-fit h-fit bg-ash py-2 px-4 text-2xl rounded-lg" onClick={filterProducts}>
@@ -136,7 +136,7 @@ const ProductsPage = () => {
                       <div key={i} className="bg-primary h-fit md:w-full w-11/12 mx-auto rounded-[4px] relative z-10">
                         {item.discount_percentage &&
                           <>
-                            <div className="bg-[#B2212F] text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
+                            <div className="bg-red-700 text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
                               {item.discount_percentage}% off
                             </div>
                             <div className="edge"></div>
@@ -171,7 +171,7 @@ const ProductsPage = () => {
                             <div className="flex gap-2 items-center text-sm font-extrabold">
                               {item.discount_percentage && item.price ?
                                 <>
-                                  <div className="text-[#B2212F] underline">
+                                  <div className="text-red-700 underline">
                                     ₦{((100 - item.discount_percentage) / 100 * item.price).toLocaleString()}
                                   </div>
                                   <div className="line-through">

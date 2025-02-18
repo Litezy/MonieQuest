@@ -354,7 +354,8 @@ exports.UpdateProduct = async (req, res) => {
             product.title = title
         }
         if (category) {
-            product.category = category
+            const categoryArray = Array.isArray(category) ? category : [category]
+            product.category = categoryArray
         }
         if (price) {
             if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
@@ -515,7 +516,7 @@ exports.getDashboardInfos = async (req, res) => {
         const totalWithdrawals = await Bank_Withdrawals.count();
         const totalWithdrawalCompletedAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'completed' } });
         const totalWithdrawalPendingAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'pending' } });
-        
+
         const data = [
             { title: 'Total Users', value: totalUsers.length, color: 'red' },
             { title: 'blog Posts', value: totalBlogs, color: 'pink' },

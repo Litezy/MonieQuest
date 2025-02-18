@@ -5,7 +5,7 @@ import { currencySign, MoveToTop } from '../utils/pageUtils'
 
 const AdminProductComp = ({ item }) => {
     let categories = []
-    if (Object.values(item).length !== 0) {
+    if (Object.values(item).length !== 0 && item.category) {
         categories = JSON.parse(item?.category)
     }
 
