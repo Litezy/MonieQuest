@@ -33,7 +33,10 @@ const TransHistory = () => {
   const filterTrans = () => {
     const mainData = transData
     if (searchValue.length > 1) {
-      const filtered = mainData.filter(trans => String(trans.amount).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.type).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.trans_id).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.order_no).toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase()))
+      const filtered = mainData.filter(trans => String(trans.amount).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.type).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || 
+      String(trans.trans_id).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || 
+      String(trans.tag).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || 
+      String(trans.order_no).toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase()))
       setTransactions(filtered)
     } else {
       setTransactions(mainData)

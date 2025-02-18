@@ -39,7 +39,7 @@ const Leaderboards = () => {
                 {!dataLoading &&
                     <div className="w-full flex items-start gap-5 flex-col lg:flex-row">
                         <div className="w-full lg:w-1/2">
-                            <img src={banner} className='rounded-md' alt="" />
+                            <img src={banner} loading='lazy' className='rounded-md' alt="" />
                         </div>
 
                         <div className="w-full lg:w-1/2">

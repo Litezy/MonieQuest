@@ -1,4 +1,4 @@
-import { atom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 
 export const PROFILE = atom({})
 export const WALLET = atom({})
@@ -9,3 +9,4 @@ export const USERDETAILS = atom([])
 export const USERBANKS = atom([])
 export const USER_SUB_KYCS = atom([])
 export const USER_VER_KYCS = atom([])
+
