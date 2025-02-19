@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { MdEmail, MdOutlineAdminPanelSettings } from "react-icons/md";
-import { FaRegUserCircle } from "react-icons/fa";
+import { FaEdit, FaRegUserCircle } from "react-icons/fa";
 import { HiUser } from "react-icons/hi2";
 import { BiSolidEditAlt, BiSolidPhoneCall } from "react-icons/bi";
 import { IoLogOut } from "react-icons/io5";
@@ -16,16 +16,19 @@ import Cookies from 'js-cookie'
 import { useAtom } from 'jotai';
 import { BANK, PROFILE, UTILS } from '../../services/store';
 import avatar from '../../assets/images/avatar.svg'
-import { Apis, AuthPostApi, AuthPutApi, imageurl } from '../../services/API';
+import { Apis, AuthGetApi, AuthPostApi, AuthPutApi, imageurl } from '../../services/API';
+import { FiUploadCloud } from 'react-icons/fi';
 
 const AdminProfile = () => {
     const [user, setUser] = useAtom(PROFILE)
     const [bank, setBank] = useAtom(BANK)
     const [utils, setUtils] = useAtom(UTILS)
+    const [allCarouselImages, setAllCarouselImages] = useState([])
     const [loading, setLoading] = useState({
         main: false,
         sub1: false,
-        sub2: false
+        sub2: false,
+        sub3: false
     })
     const [form, setForm] = useState({
         first_name: user?.first_name || '',
@@ -52,7 +55,13 @@ const AdminProfile = () => {
         img: user.image ? `${imageurl}/profiles/${user.image}` : avatar,
         image: null
     })
+    const [carouselImage, setCarouselImage] = useState({
+        img: null,
+        image: null
+    })
+
     const imgref = useRef()
+    const carouselimgref = useRef()
     const navigate = useNavigate()
 
     const logoutAccount = () => {
@@ -92,6 +101,21 @@ const AdminProfile = () => {
         })
     }, [utils, bank])
 
+    const FetchCarouselImages = useCallback(async () => {
+        try {
+            const response = await AuthGetApi(Apis.user.get_carousel_images)
+            if (response.status === 200) {
+                setAllCarouselImages(response.msg)
+                console.log(response.msg)
+            }
+        } catch (error) {
+            //
+        }
+    }, [])
+    useEffect(() => {
+        FetchCarouselImages()
+    }, [FetchCarouselImages])
+
     const handleProfileUpload = (event) => {
         const file = event.target.files[0]
         if (file.size >= 1000000) {
@@ -103,6 +127,18 @@ const AdminProfile = () => {
             return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
         }
         setProfile({
+            img: URL.createObjectURL(file),
+            image: file
+        })
+    }
+
+    const handleCarouselUpload = (event) => {
+        const file = event.target.files[0]
+        if (!file.type.startsWith('image/')) {
+            carouselimgref.current.value = null
+            return ErrorAlert('File error, upload a valid image format (jpg, jpeg, png, svg)')
+        }
+        setCarouselImage({
             img: URL.createObjectURL(file),
             image: file
         })
@@ -191,7 +227,6 @@ const AdminProfile = () => {
         })
         try {
             const response = await AuthPutApi(Apis.admin.update_utils, formbody)
-            console.log(response)
             if (response.status === 200) {
                 SuccessAlert(response.msg)
                 setUtils(response.utils)
@@ -203,6 +238,55 @@ const AdminProfile = () => {
         } finally {
             setLoading({
                 sub2: false
+            })
+        }
+    }
+
+    const AddCarouselImage = async () => {
+        if (!carouselImage.image) return ErrorAlert('Upload an image')
+        const formbody = new FormData()
+        formbody.append('image', carouselImage.image)
+        setLoading({
+            sub3: true
+        })
+        try {
+            const response = await AuthPostApi(Apis.user.add_carousel_image, formbody)
+            if (response.status === 200) {
+                SuccessAlert(response.msg)
+                FetchCarouselImages()
+                setCarouselImage({
+                    img: null,
+                    image: null
+                })
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading({
+                sub3: false
+            })
+        }
+    }
+
+    const DeleteCarouselImage = async (id) => {
+        setLoading({
+            sub3: true
+        })
+        try {
+            const response = await AuthPostApi(Apis.user.delete_carousel_image, { id: id })
+            if (response.status === 200) {
+                SuccessAlert(response.msg)
+                FetchCarouselImages()
+            } else {
+                ErrorAlert(response.msg)
+            }
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading({
+                sub3: false
             })
         }
     }
@@ -326,6 +410,43 @@ const AdminProfile = () => {
                                     </div>
                                 </div>
                                 <FormButton title='Update' className='!py-3 !text-base md:!w-1/2 mx-auto' type='button' onClick={UpdateUtils} />
+                            </div>
+                        </div>
+                        <div className='flex flex-col gap-5'>
+                            <div className='text-xl capitalize font-medium text-lightgreen'>add carousel images</div>
+                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-4 relative'>
+                                {loading.sub3 && <Loading />}
+                                <div className='flex md:flex-row flex-col gap-4 md:items-start items-center'>
+                                    {allCarouselImages.length > 0 &&
+                                        <div className={`grid ${allCarouselImages.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-3`}>
+                                            {allCarouselImages.map((item, i) => (
+                                                <div key={i} className='relative'>
+                                                    <img src={`${imageurl}/carousels/${item.image}`} alt='carousel image' className='w-40 h-32 object-cover object-center border-2 border-ash rounded-md'></img>
+                                                    <div className='bg-red-700 py-1 px-2 rounded-md cursor-pointer text-xs absolute top-1 right-1' onClick={() => DeleteCarouselImage(item.id)}>delete</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    }
+                                    <div className='flex flex-col gap-4'>
+                                        <label className='cursor-pointer'>
+                                            {carouselImage.img ?
+                                                <div className='relative'>
+                                                    <img src={carouselImage.img} alt={carouselImage.img} className='w-60 h-56 object-cover object-center'></img>
+                                                    <div className="absolute top-0 -right-3 main font-bold">
+                                                        <FaEdit className='text-2xl text-lightgreen' />
+                                                    </div>
+                                                </div>
+                                                :
+                                                <div className='w-60 h-56 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
+                                                    <div className='bg-secondary rounded-full p-4'><FiUploadCloud /></div>
+                                                    <span>click to add image</span>
+                                                </div>
+                                            }
+                                            <input ref={carouselimgref} type="file" onChange={handleCarouselUpload} hidden />
+                                        </label>
+                                        <FormButton title='Save' className='!py-3 !text-base' type='button' onClick={AddCarouselImage} />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>

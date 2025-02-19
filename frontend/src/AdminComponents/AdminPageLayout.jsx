@@ -31,8 +31,6 @@ const AdminPageLayout = ({ children }) => {
                 if (response.status === 200) {
                     setBank(response.bank)
                     setUtils(response.utils)
-                } else {
-                    console.log(response.msg)
                 }
             } catch (error) {
                 //

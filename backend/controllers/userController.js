@@ -5,6 +5,7 @@ const Util = require('../models').utils
 const Bank = require('../models').banks
 const Kyc = require('../models').kyc
 const Subscriber = require('../models').subscribers
+const CarouselImage = require('../models').carouselImages
 const moment = require('moment')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
@@ -584,3 +585,65 @@ exports.getLeaderboard = async (req, res) => {
         ServerError(res, error)
     }
 }
+
+exports.AddCarouselImage = async (req, res) => {
+    try {
+        const slugData = slug('carousel-image', '-')
+        const filePath = './public/carousels'
+        const date = new Date()
+        let imageName;
+
+        if (!req.files) return res.json({ status: 404, msg: `Upload an image` })
+        const image = req.files.image
+        if (!image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+        if (!fs.existsSync(filePath)) {
+            fs.mkdirSync(filePath)
+        }
+        imageName = `${slugData}-${date.getTime()}.jpg`
+        await image.mv(`${filePath}/${imageName}`)
+
+        await CarouselImage.create({
+            image: imageName
+        })
+
+        return res.json({ status: 200, msg: 'Carousel image added successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.GetCarouselImages = async (req, res) => {
+    try {
+        const allCarouselImages = await CarouselImage.findAll({
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: allCarouselImages })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.DeleteCarouselImage = async (req, res) => {
+    try {
+        const { id } = req.body
+        if (!id) return res.json({ status: 404, msg: `Provide a carousel image id` })
+
+        const singleCarousel = await CarouselImage.findOne({ where: { id } })
+        if (!singleCarousel) return res.json({ status: 404, msg: 'Carousel Image not found' })
+        const imagePath = `./public/carousels/${singleCarousel.image}`
+        if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath)
+        }
+
+        await singleCarousel.destroy()
+
+        return res.json({ status: 200, msg: 'Carousel image deleted successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
+
+
+

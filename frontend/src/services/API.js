@@ -22,7 +22,10 @@ const user_urls = {
     create_update_kyc: user + 'create-update-kyc',
     user_kyc: user + 'user-kyc',
     get_leaderboard: user + 'get_leader',
-    subscribe: user + 'subscribe'
+    subscribe: user + 'subscribe',
+    add_carousel_image: user + 'add-carousel-image',
+    get_carousel_images: user + 'get-carousel-images',
+    delete_carousel_image: user + 'delete-carousel-image',
 }
 
 const notification = 'api/notification/'
