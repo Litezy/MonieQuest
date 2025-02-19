@@ -87,7 +87,7 @@ const TrendingCoins = () => {
                             </div>
                         </div>
                         <div className="w-1/2 ml-auto">
-                            <div className="w-full">
+                            <div className="w-full h-14 md:h-16">
                                 <Sparklines data={item?.sparkline_in_7d?.price}  />
                             </div>
                         </div>

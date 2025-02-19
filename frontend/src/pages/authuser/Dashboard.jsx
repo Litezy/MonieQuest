@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import CarouselComp from '../../GeneralComponents/Carousel';
 import iconImg from '../../assets/images/db_icon.png'
-import TradingChart from '../../GeneralComponents/TradingChart';
+import TradingChart from '../../AuthComponents/TradingChart';
 import SelectComp from '../../GeneralComponents/SelectComp'
 import { currencies } from '../../AuthComponents/AuthUtils';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';

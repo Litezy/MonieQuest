@@ -11,6 +11,7 @@ import moment from 'moment';
 import { ErrorAlert, MoveToSection, MoveToTop, SuccessAlert, } from '../../utils/pageUtils';
 import BlogDiv from '../../GeneralComponents/BlogDiv';
 import Loading from '../../GeneralComponents/Loading';
+import Loader from '../../GeneralComponents/Loader';
 
 
 
@@ -267,7 +268,7 @@ const SingleBlog = () => {
                             }
                         </div>
                         <form className="w-full p-4 rounded-md bg-primary relative" onSubmit={SubmitComment}>
-                            {loading && <Loading />}
+                            {loading && <Loader/>}
                             <div className="text-lg mont">Leave a comment</div>
                             <div className="flex mt-4 flex-col gap-5 w-full lg:w-3/4">
                                 <div className="flex items-center flex-col lg:flex-row gap-5">
