@@ -340,7 +340,7 @@ input[type=number]:focus {
 /*animation stops */
 
 .pageBg {
-  background-image: url('./assets/images/airdrop_banner.jfif');
+  background-image: url('./assets/images/airdrop.jpg');
   width: 100%;
   height: fit-content;
   background-position: center;

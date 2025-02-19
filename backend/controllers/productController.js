@@ -194,7 +194,7 @@ exports.ProductOrder = async (req, res) => {
                     eTitle: `Product order placed`,
                     eBody: `
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">order ID:</span><span style="padding-left: 1rem">#${productOrder.gen_id}</span></div>
-                     <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">$${productsArray.length}</span></div>
+                     <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">${productsArray.length}</span></div>
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">amount paid:</span><span style="padding-left: 1rem">${nairaSign}${productOrder.total_price.toLocaleString()}</span></div>
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment method:</span><span style="padding-left: 1rem">bank transfer</span></div>
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment status:</span><span style="padding-left: 1rem">${productOrder.status}</span></div>
