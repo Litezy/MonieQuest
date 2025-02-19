@@ -34,6 +34,7 @@ const TrendingCoins = () => {
         }
     };
 
+
     useEffect(() => {
         const storedData = JSON.parse(localStorage.getItem(localName));
         if (!storedData) {
@@ -41,27 +42,19 @@ const TrendingCoins = () => {
                 setCoins([...data].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4));
             });
         } else {
-            setCoins([...storedData].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4));
+            let filteredCoins = [];
+            if (select.analytics === "Popular") {
+                filteredCoins = [...storedData].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4);
+            } else if (select.analytics === "Top Gainers") {
+                filteredCoins = [...storedData].sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h).slice(0, 4);
+            } else if (select.analytics === "Top Losers") {
+                filteredCoins = [...storedData].sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h).slice(0, 4);
+            } else if (select.analytics === "Most Traded") {
+                filteredCoins = [...storedData].sort((a, b) => b.total_volume - a.total_volume).slice(0, 4);
+            }
+
+            setCoins(filteredCoins);
         }
-    }, []);
-
-
-
-    useEffect(() => {
-        const storedData = JSON.parse(localStorage.getItem(localName));
-        if (!storedData) return;
-        let filteredCoins = [];
-        if (select.analytics === "Popular") {
-            filteredCoins = [...storedData].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4);
-        } else if (select.analytics === "Top Gainers") {
-            filteredCoins = [...storedData].sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h).slice(0, 4);
-        } else if (select.analytics === "Top Losers") {
-            filteredCoins = [...storedData].sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h).slice(0, 4);
-        } else if (select.analytics === "Most Traded") {
-            filteredCoins = [...storedData].sort((a, b) => b.total_volume - a.total_volume).slice(0, 4);
-        }
-
-        setCoins(filteredCoins);
     }, [select.analytics]);
 
     // console.log(coins)
@@ -88,7 +81,7 @@ const TrendingCoins = () => {
                         </div>
                         <div className="w-1/2 ml-auto">
                             <div className="w-full h-14 md:h-16">
-                                <Sparklines data={item?.sparkline_in_7d?.price}  />
+                                <Sparklines data={item?.sparkline_in_7d?.price} />
                             </div>
                         </div>
                         <div className="flex flex-col items-start gap-1">

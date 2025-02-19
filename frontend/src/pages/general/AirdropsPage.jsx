@@ -10,6 +10,7 @@ import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import { Apis, GetApi } from '../../services/API'
 import ButtonLoader from '../../GeneralComponents/ButtonLoader'
 import empty from '../../assets/images/empty.webp'
+import AirdropCarousel from '../../GeneralComponents/AirdropCarousel'
 
 const statuses = ["Open", "Closed"]
 const kyces = ["Required", "Unrequired"]
@@ -89,7 +90,7 @@ const AirdropsPage = () => {
         setAirdrops(filteredData)
         setLoading(false)
       }, 1500)
-    }else {
+    } else {
       ErrorAlert('Select a filter option')
     }
   }
@@ -170,148 +171,22 @@ const AirdropsPage = () => {
                 {airdrops.length > 0 ?
                   <div className='flex flex-col gap-12'>
                     {deFiAirdrops.length > 0 &&
-                      <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
-                        <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-3 items-center text-xl'>
-                            <GiArrowScope />
-                            <span className='capitalize font-bold'>deFi airdrops</span>
-                          </div>
-                          <div className='flex gap-4 items-center'>
-                            <Link to='/airdrops/deFi' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
-                            <div className='md:flex gap-2 items-center hidden'>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div className='w-full overflow-x-auto scrollsdown'>
-                          <div className='w-fit flex gap-4'>
-                            {deFiAirdrops.map((item, i) => (
-                              <AirdropDiv key={i} item={item} />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
+                      <AirdropCarousel array={deFiAirdrops} feature={`deFi`} />
                     }
                     {featuredAirdrops.length > 0 &&
-                      <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
-                        <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-3 items-center text-xl'>
-                            <GiArrowScope />
-                            <span className='capitalize font-bold'>featured airdrops</span>
-                          </div>
-                          <div className='flex gap-4 items-center'>
-                            <Link to='/airdrops/featured' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
-                            <div className='md:flex gap-2 items-center hidden'>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div className='w-full overflow-x-auto scrollsdown'>
-                          <div className='w-fit flex gap-4'>
-                            {featuredAirdrops.map((item, i) => (
-                              <AirdropDiv key={i} item={item} />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
+                      <AirdropCarousel array={featuredAirdrops} feature={`featured`} />
                     }
                     {newAirdrops.length > 0 &&
-                      <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
-                        <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-3 items-center text-xl'>
-                            <GiArrowScope />
-                            <span className='capitalize font-bold'>new airdrops</span>
-                          </div>
-                          <div className='flex gap-4 items-center'>
-                            <Link to='/airdrops/new' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
-                            <div className='md:flex gap-2 items-center hidden'>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div className='w-full overflow-x-auto scrollsdown'>
-                          <div className='w-fit flex gap-4'>
-                            {newAirdrops.map((item, i) => (
-                              <AirdropDiv key={i} item={item} />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
+                      <AirdropCarousel array={newAirdrops} feature={`new`} />
                     }
                     {NFTAirdrops.length > 0 &&
-                      <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
-                        <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-3 items-center text-xl'>
-                            <GiArrowScope />
-                            <span className='capitalize font-bold'>NFT airdrops</span>
-                          </div>
-                          <div className='flex gap-4 items-center'>
-                            <Link to='/airdrops/NFT' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
-                            <div className='md:flex gap-2 items-center hidden'>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div className='w-full overflow-x-auto scrollsdown'>
-                          <div className='w-fit flex gap-4'>
-                            {NFTAirdrops.map((item, i) => (
-                              <AirdropDiv key={i} item={item} />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
+                      <AirdropCarousel array={NFTAirdrops} feature={`NFT`} />
                     }
                     {potentialAirdrops.length > 0 &&
-                      <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
-                        <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-3 items-center text-xl'>
-                            <GiArrowScope />
-                            <span className='capitalize font-bold'>potential airdrops</span>
-                          </div>
-                          <div className='flex gap-4 items-center'>
-                            <Link to='/airdrops/potential' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
-                            <div className='md:flex gap-2 items-center hidden'>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div className='w-full overflow-x-auto scrollsdown'>
-                          <div className='w-fit flex gap-4'>
-                            {potentialAirdrops.map((item, i) => (
-                              <AirdropDiv key={i} item={item} />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
+                      <AirdropCarousel array={potentialAirdrops} feature={`potential`} />
                     }
                     {earnCryptoAirdrops.length > 0 &&
-                      <div className='flex flex-col gap-4 pb-8 border-b border-gray-600'>
-                        <div className='flex justify-between gap-4 items-center'>
-                          <div className='flex gap-3 items-center text-xl'>
-                            <GiArrowScope />
-                            <span className='capitalize font-bold'>earn crypto airdrops</span>
-                          </div>
-                          <div className='flex gap-4 items-center'>
-                            <Link to='/airdrops/earn_crypto' className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
-                            <div className='md:flex gap-2 items-center hidden'>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronLeft /></button>
-                              <button className='bg-primary hover:bg-[#2f2f47] w-fit h-fit p-2 outline-none rounded-[3px] text-lightgreen text-sm'><LuChevronRight /></button>
-                            </div>
-                          </div>
-                        </div>
-                        <div className='w-full overflow-x-auto scrollsdown'>
-                          <div className='w-fit flex gap-4'>
-                            {earnCryptoAirdrops.map((item, i) => (
-                              <AirdropDiv key={i} item={item} />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
+                      <AirdropCarousel array={earnCryptoAirdrops} feature={`earn_crypto`} />
                     }
                   </div>
                   :
