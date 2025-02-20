@@ -669,7 +669,7 @@ exports.AddCarouselImage = async (req, res) => {
 exports.GetCarouselImages = async (req, res) => {
     try {
         const allCarouselImages = await CarouselImage.findAll({
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'ASC']]
         })
 
         return res.json({ status: 200, msg: allCarouselImages })
