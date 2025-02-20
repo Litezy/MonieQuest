@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import CarouselComp from '../../GeneralComponents/Carousel';
 import iconImg from '../../assets/images/db_icon.png'
 import TradingChart from '../../AuthComponents/TradingChart';
 import { currencies } from '../../AuthComponents/AuthUtils';
@@ -8,6 +7,7 @@ import { useAtom } from 'jotai';
 import { USER_CHARTS, WALLET } from '../../services/store';
 import TrendingCoins from '../../AuthComponents/TrendingCoins';
 import { Apis, AuthGetApi } from '../../services/API';
+import ImagesCarousel from '../../GeneralComponents/ImagesCarousel';
 
 
 const localName = 'Charts'
@@ -49,6 +49,7 @@ const Dashboard = () => {
     }
     FetchCarouselImages()
   }, [])
+
   return (
     <AuthPageLayout>
       <div className="w-11/12 mx-auto">
