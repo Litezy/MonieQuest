@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import CarouselComp from '../../GeneralComponents/Carousel';
+import ImagesCarousel from '../../GeneralComponents/ImagesCarousel';
 import iconImg from '../../assets/images/db_icon.png'
 import TradingChart from '../../AuthComponents/TradingChart';
 import { currencies } from '../../AuthComponents/AuthUtils';
