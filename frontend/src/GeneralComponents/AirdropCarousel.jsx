@@ -56,11 +56,11 @@ const AirdropCarousel = ({ array, feature }) => {
                 </div>
                 <div ref={containerRef} className='overflow-x-auto whitespace-nowrap scroll-smooth flex gap-4 airdrop-container scrollsdown'>
                     {new Array(10).fill(0).map((_, i) => (
-                        <>
+                        <div key={i}>
                             {array.map((item, i) => (
                                 <AirdropDiv key={i} item={item} className={`flex-none`} />
                             ))}
-                        </>
+                        </div>
                     ))}
                 </div>
             </div>
