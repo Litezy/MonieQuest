@@ -1,5 +1,5 @@
-const { CreateAccount, LoginAccount, GetProfile, SendOTP, VerifyOtp, ChangePasswordOnRequest, Contacts, UpdateProfile, VerifyEmail, CreateUpdateBankAccount, CreateUpdateKYC, UserKYC, GetWalletBankAndUtils, getLeaderboard, SubscribeToPlatform, getUserData } = require('../controllers/userController')
-const { AllMiddleware, UserMiddleware } = require('../middleware/auth')
+const { CreateAccount, LoginAccount, GetProfile, SendOTP, VerifyOtp, ChangePasswordOnRequest, Contacts, UpdateProfile, VerifyEmail, CreateUpdateBankAccount, CreateUpdateKYC, UserKYC, GetWalletBankAndUtils, getLeaderboard, SubscribeToPlatform, AddCarouselImage, GetCarouselImages, DeleteCarouselImage, getUserData } = require('../controllers/userController')
+const { AllMiddleware, UserMiddleware, AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
 
@@ -18,6 +18,9 @@ router.post('/create-update-kyc', UserMiddleware, CreateUpdateKYC)
 router.get('/user-kyc', UserMiddleware, UserKYC)
 router.get('/get_leader', getLeaderboard)
 router.post('/subscribe', SubscribeToPlatform)
+router.post('/add-carousel-image', AdminMiddleware, AddCarouselImage)
+router.get('/get-carousel-images', AllMiddleware, GetCarouselImages)
+router.post('/delete-carousel-image', AdminMiddleware, DeleteCarouselImage)
 router.get('/get_user_data',UserMiddleware, getUserData)
 
 module.exports = router

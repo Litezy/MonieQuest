@@ -39,6 +39,7 @@ const TrendingCoins = () => {
         }
     };
 
+
     useEffect(() => {
         const storedData = JSON.parse(localStorage.getItem(localName));
         if (!storedData.length > 0) {
@@ -46,16 +47,6 @@ const TrendingCoins = () => {
                 setCoins([...data].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4));
             });
         } else {
-            setCoins([...storedData].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4));
-        }
-
-    }, []);
-
-
-
-    useEffect(() => {
-            const storedData = JSON.parse(localStorage.getItem(localName));
-            if (!storedData) return;
             let filteredCoins = [];
             if (select.analytics === "Popular") {
                 filteredCoins = [...storedData].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4);
@@ -66,14 +57,15 @@ const TrendingCoins = () => {
             } else if (select.analytics === "Most Traded") {
                 filteredCoins = [...storedData].sort((a, b) => b.total_volume - a.total_volume).slice(0, 4);
             }
+
             setCoins(filteredCoins);
-        
+        }
     }, [select.analytics]);
 
     // console.log(coins)
     return (
         <div className='flex flex-col gap-2'>
-            <div className='flex justify-between gap-4 items-center'>
+            <div className='flex justify-between items-center'>
                 <div className='text-2xl capitalize font-bold px-2'>trading analytics</div>
                 <SelectComp
                     options={tradingAnalyticFilter}

@@ -30,6 +30,7 @@ db.giftCards = require(`./giftCardModel`)(sequelize, DataTypes)
 db.withdrawals = require(`./withdrawalModel`)(sequelize, DataTypes)
 db.comments = require(`./commentModel`)(sequelize, DataTypes)
 db.subscribers = require(`./subscriberModel`)(sequelize, DataTypes)
+db.carouselImages = require(`./carouselImageModel`)(sequelize, DataTypes)
 
 
 //One to Many relationships
