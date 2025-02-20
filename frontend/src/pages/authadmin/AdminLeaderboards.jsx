@@ -39,21 +39,21 @@ const AdminLeaderboards = () => {
                     <div key={i} className="w-full mb-5 h-16 bg-gray-500 rounded-md animate-pulse"></div>
 
                 ))}
-                {!dataLoading && <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table class="w-11/12 mx-auto text-sm text-center rounded-e-md rounded-s-md truncate rtl:text-right text-gray-400 ">
-                        <thead class="text-sm bg-primary lg:text-base">
+                {!dataLoading && <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <table className="w-11/12 mx-auto text-sm text-center rounded-e-md rounded-s-md truncate rtl:text-right text-gray-400 ">
+                        <thead className="text-sm bg-primary lg:text-base">
                             <tr>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" className="px-6 py-3">
                                     User ID
                                 </th>
 
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" className="px-6 py-3">
                                     <div className="">Name</div>
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" className="px-6 py-3">
                                     <div className="">Amount Traded</div>
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" className="px-6 py-3">
                                     <div className="">Date Joined</div>
                                 </th>
 
@@ -63,17 +63,17 @@ const AdminLeaderboards = () => {
                             {leaderboard.length > 0 ? leaderboard.slice(0, 20).map((item, i) => {
                                 return (
                                     (
-                                        <tr key={i} class="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
-                                            <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                                        <tr key={i} className="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
+                                            <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
                                                 {item.id}
                                             </th>
-                                            <td class="px-6 py-4">
+                                            <td className="px-6 py-4">
                                                 {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}
                                             </td>
-                                            <td class="px-6 py-4 text-lightgreen">
+                                            <td className="px-6 py-4 text-lightgreen">
                                                 {currencySign[1]}{item?.user_wallets?.total_deposit && item.user_wallets.total_deposit.toLocaleString()}
                                             </td>
-                                            <td class="px-6 py-4">
+                                            <td className="px-6 py-4">
                                                 {moment(item.createdAt).format(`DD-MM-YYYY`)}
                                             </td>
                                         </tr>

@@ -30,8 +30,6 @@ const AuthPageLayout = ({ children }) => {
           setBank(response.bank)
           setWallet(response.wallet)
           setUtils(response.utils)
-        } else {
-          console.log(response.msg)
         }
       } catch (error) {
         //

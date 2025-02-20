@@ -41,6 +41,7 @@ const Dashboard = () => {
     }
     FetchCarouselImages()
   }, [])
+
   return (
     <AuthPageLayout>
       <div className="w-11/12 mx-auto">
