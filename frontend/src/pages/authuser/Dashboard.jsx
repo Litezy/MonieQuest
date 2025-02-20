@@ -32,7 +32,6 @@ const Dashboard = () => {
         const response = await AuthGetApi(Apis.user.get_carousel_images)
         if (response.status === 200) {
           setAllCarouselImages(response.msg)
-          console.log(response.msg)
         }
       } catch (error) {
         //

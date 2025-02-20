@@ -106,7 +106,6 @@ const AdminProfile = () => {
             const response = await AuthGetApi(Apis.user.get_carousel_images)
             if (response.status === 200) {
                 setAllCarouselImages(response.msg)
-                console.log(response.msg)
             }
         } catch (error) {
             //
@@ -359,7 +358,7 @@ const AdminProfile = () => {
                         </div>
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>add a bank account</div>
-                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-3 relative'>
+                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-3 relative overflow-hidden'>
                                 {loading.sub1 && <Loading />}
                                 <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={handleAccNum} className='!bg-secondary !w-64' border={false} />
                                 <FormInput placeholder='Account name' name='account_name' value={form.account_name} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
@@ -369,7 +368,7 @@ const AdminProfile = () => {
                         </div>
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>update settings</div>
-                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-4 relative'>
+                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden'>
                                 {loading.sub2 && <Loading />}
                                 <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
                                     <div className='flex flex-col gap-2'>
@@ -414,7 +413,7 @@ const AdminProfile = () => {
                         </div>
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>add carousel images</div>
-                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-4 relative'>
+                            <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden'>
                                 {loading.sub3 && <Loading />}
                                 <div className='flex md:flex-row flex-col gap-4 md:items-start items-center'>
                                     {allCarouselImages.length > 0 &&
@@ -422,7 +421,7 @@ const AdminProfile = () => {
                                             {allCarouselImages.map((item, i) => (
                                                 <div key={i} className='relative'>
                                                     <img src={`${imageurl}/carousels/${item.image}`} alt='carousel image' className='w-40 h-32 object-cover object-center border-2 border-ash rounded-md'></img>
-                                                    <div className='bg-red-700 py-1 px-2 rounded-md cursor-pointer text-xs absolute top-1 right-1' onClick={() => DeleteCarouselImage(item.id)}>delete</div>
+                                                    <div className='bg-red-700 hover:bg-red-500 py-1 px-2 rounded-md cursor-pointer text-xs absolute top-1 right-1' onClick={() => DeleteCarouselImage(item.id)}>delete</div>
                                                 </div>
                                             ))}
                                         </div>
