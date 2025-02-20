@@ -10,6 +10,7 @@ const AirdropCarousel = ({ array, feature }) => {
     const [atStart, setAtStart] = useState(true);
     const [atEnd, setAtEnd] = useState(false);
     const scrollAmount = 500
+    const repeatedArr = Array(10).fill(array).flat() //testing purpose
 
     useEffect(() => {
         const container = containerRef.current;
@@ -44,7 +45,7 @@ const AirdropCarousel = ({ array, feature }) => {
                 <div className='flex justify-between gap-4 items-center'>
                     <div className='flex gap-3 items-center text-xl'>
                         <GiArrowScope />
-                        <span className='capitalize font-bold'>{feature} airdrops</span>
+                        <span className='capitalize font-bold'>{feature === 'earn_crypto' ? 'earn crypto' : feature} airdrops</span>
                     </div>
                     <div className='flex gap-4 items-center'>
                         <Link to={`/airdrops/${feature}`} className='capitalize text-sm hover:text-lightgreen' onClick={MoveToTop}>view all</Link>
@@ -55,12 +56,8 @@ const AirdropCarousel = ({ array, feature }) => {
                     </div>
                 </div>
                 <div ref={containerRef} className='overflow-x-auto whitespace-nowrap scroll-smooth flex gap-4 airdrop-container scrollsdown'>
-                    {new Array(10).fill(0).map((_, i) => (
-                        <>
-                            {array.map((item, j) => (
-                                <AirdropDiv key={j} item={item} className={`flex-none`} />
-                            ))}
-                        </>
+                    {repeatedArr.map((item, i) => (
+                        <AirdropDiv key={i} item={item} className={`flex-none`} />
                     ))}
                 </div>
             </div>
