@@ -10,23 +10,15 @@ import TrendingCoins from '../../AuthComponents/TrendingCoins';
 import { Apis, AuthGetApi } from '../../services/API';
 
 
-const localName = 'Charts'
 const Dashboard = () => {
   const [wallet] = useAtom(WALLET)
   const [allCarouselImages,setAllCarouselImages] = useState('')
   const [, setCharts] = useAtom(USER_CHARTS)
-  const localData = JSON.parse(localStorage.getItem(localName))
-  useEffect(() => {
-    if (!localData) {
-      localStorage.setItem(localName, JSON.stringify([]))
-    }
-  }, [])
   const fetchChartData = useCallback(async () => {
     try {
       const res = await AuthGetApi(Apis.user.get_user_charts);
       if (res.status !== 200) return;
       setCharts(res.data);
-      localStorage.setItem(localName, JSON.stringify(res.data))
     } catch (error) {
       console.log(error);
     }
