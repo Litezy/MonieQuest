@@ -1,30 +1,40 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import CarouselComp from '../../GeneralComponents/Carousel';
 import iconImg from '../../assets/images/db_icon.png'
 import TradingChart from '../../AuthComponents/TradingChart';
-import SelectComp from '../../GeneralComponents/SelectComp'
 import { currencies } from '../../AuthComponents/AuthUtils';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 import { useAtom } from 'jotai';
-import { WALLET } from '../../services/store';
+import { USER_CHARTS, WALLET } from '../../services/store';
 import TrendingCoins from '../../AuthComponents/TrendingCoins';
-import ImagesCarousel from '../../GeneralComponents/ImagesCarousel';
 import { Apis, AuthGetApi } from '../../services/API';
 
-const calender = [
-  "daily", "monthly", "yearly"
-]
-const tradeOverviewFilter = [
-  "All Coins", "All Gift Card", "All Products", "All Categories", "Recent Trades"
-]
 
-
+const localName = 'Charts'
 const Dashboard = () => {
   const [wallet] = useAtom(WALLET)
-  const [allCarouselImages, setAllCarouselImages] = useState([])
-  const [active, setActive] = useState(calender[0])
-  const [select, setSelect] = useState({
-    overview: tradeOverviewFilter[0],
-  })
+  const [allCarouselImages,setAllCarouselImages] = useState('')
+  const [, setCharts] = useAtom(USER_CHARTS)
+  const localData = JSON.parse(localStorage.getItem(localName))
+  useEffect(() => {
+    if (!localData) {
+      localStorage.setItem(localName, JSON.stringify([]))
+    }
+  }, [])
+  const fetchChartData = useCallback(async () => {
+    try {
+      const res = await AuthGetApi(Apis.user.get_user_charts);
+      if (res.status !== 200) return;
+      setCharts(res.data);
+      localStorage.setItem(localName, JSON.stringify(res.data))
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchChartData()
+  }, [fetchChartData])
 
   useEffect(() => {
     const FetchCarouselImages = async () => {
@@ -39,7 +49,6 @@ const Dashboard = () => {
     }
     FetchCarouselImages()
   }, [])
-
   return (
     <AuthPageLayout>
       <div className="w-11/12 mx-auto">
@@ -75,24 +84,9 @@ const Dashboard = () => {
             <ImagesCarousel array={allCarouselImages} />
           </div>
         </div>
-        <div className='grid md:grid-cols-2 grid-cols-1 gap-6 mt-12'>
+        <div className='grid lg:grid-cols-2 grid-cols-1 gap-6 mt-12 lg:h-[25rem] overflow-hidden'>
           <TrendingCoins />
-          <div className='flex flex-col gap-4'>
-            <div className='text-2xl capitalize font-bold'>your trading overview</div>
-            <div className='bg-primary h-fit w-full px-4 pt-4 flex flex-col gap-2 overflow-hidden'>
-              <div className='flex justify-between gap-2'>
-                <SelectComp options={tradeOverviewFilter} style={{ bg: '#171828', color: 'lightgrey', font: '0.8rem' }} value={select.overview} handleChange={(e) => setSelect({ ...select, overview: e.target.value })} />
-                <div className='flex items-center'>
-                  {calender.map((item, i) => (
-                    <div key={i} onClick={() => setActive(item)} className={`w-fit h-fit md:px-4 px-3 py-1.5 md:text-sm text-xs capitalize cursor-pointer ${active === item && 'bg-[#143f75] rounded-full'}`}>{item}</div>
-                  ))}
-                </div>
-              </div>
-              <div className='flex items-center'>
-                <TradingChart />
-              </div>
-            </div>
-          </div>
+          <TradingChart/>
         </div>
       </div>
     </AuthPageLayout>
