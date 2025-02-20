@@ -7,13 +7,18 @@ import { currencies } from './AuthUtils';
 const TrendingCoins = () => {
     const [coins, setCoins] = useState([]);
     const localName = 'Coins';
+    const localData = JSON.parse(localStorage.getItem(localName))
     const tradingAnalyticFilter = [
         "Popular", "Top Gainers", "Top Losers", "Most Traded"
     ];
     const [select, setSelect] = useState({
         analytics: tradingAnalyticFilter[0],
     });
-
+    useEffect(() => {
+        if (!localData) {
+            localStorage.setItem(localName, JSON.stringify([]));
+        }
+    }, [])
     const getCryptoData = async () => {
         try {
             const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
@@ -26,7 +31,7 @@ const TrendingCoins = () => {
             });
 
             const data = response.data;
-            localStorage.setItem(localName, JSON.stringify(data));
+            localStorage.setItem(localName, JSON.stringify(data) || []);
             return data;
         } catch (error) {
             console.error("Error fetching crypto data:", error);
@@ -36,32 +41,33 @@ const TrendingCoins = () => {
 
     useEffect(() => {
         const storedData = JSON.parse(localStorage.getItem(localName));
-        if (!storedData) {
+        if (!storedData.length > 0) {
             getCryptoData().then(data => {
                 setCoins([...data].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4));
             });
         } else {
             setCoins([...storedData].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4));
         }
+
     }, []);
 
 
 
     useEffect(() => {
-        const storedData = JSON.parse(localStorage.getItem(localName));
-        if (!storedData) return;
-        let filteredCoins = [];
-        if (select.analytics === "Popular") {
-            filteredCoins = [...storedData].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4);
-        } else if (select.analytics === "Top Gainers") {
-            filteredCoins = [...storedData].sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h).slice(0, 4);
-        } else if (select.analytics === "Top Losers") {
-            filteredCoins = [...storedData].sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h).slice(0, 4);
-        } else if (select.analytics === "Most Traded") {
-            filteredCoins = [...storedData].sort((a, b) => b.total_volume - a.total_volume).slice(0, 4);
-        }
-
-        setCoins(filteredCoins);
+            const storedData = JSON.parse(localStorage.getItem(localName));
+            if (!storedData) return;
+            let filteredCoins = [];
+            if (select.analytics === "Popular") {
+                filteredCoins = [...storedData].sort((a, b) => b.market_cap - a.market_cap).slice(0, 4);
+            } else if (select.analytics === "Top Gainers") {
+                filteredCoins = [...storedData].sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h).slice(0, 4);
+            } else if (select.analytics === "Top Losers") {
+                filteredCoins = [...storedData].sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h).slice(0, 4);
+            } else if (select.analytics === "Most Traded") {
+                filteredCoins = [...storedData].sort((a, b) => b.total_volume - a.total_volume).slice(0, 4);
+            }
+            setCoins(filteredCoins);
+        
     }, [select.analytics]);
 
     // console.log(coins)
@@ -87,8 +93,8 @@ const TrendingCoins = () => {
                             </div>
                         </div>
                         <div className="w-1/2 ml-auto">
-                            <div className="w-full h-14 md:h-16">
-                                <Sparklines data={item?.sparkline_in_7d?.price}  />
+                            <div className="w-full h-14 md:h-16 ">
+                                <Sparklines data={item?.sparkline_in_7d?.price} />
                             </div>
                         </div>
                         <div className="flex flex-col items-start gap-1">

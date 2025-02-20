@@ -55,13 +55,13 @@ const AdminTransComp = ({trans}) => {
                     
 
                     {trans.crypto_currency && <div
-                        className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'} `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                        className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'} `}>{currencies[0].symbol}{trans.amount.toLocaleString()}
                     </div>}
                     {trans.bank_user && <div
                         className={` `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
                     </div>}
                     {trans.brand && <div
-                        className={` text-red-600`}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                        className={` text-red-600`}>{currencies[0].symbol}{trans.amount.toLocaleString()}
                     </div>}
                 </div>
             </div>

@@ -22,7 +22,8 @@ const user_urls = {
     create_update_kyc: user + 'create-update-kyc',
     user_kyc: user + 'user-kyc',
     get_leaderboard: user + 'get_leader',
-    subscribe: user + 'subscribe'
+    subscribe: user + 'subscribe',
+    get_user_charts: user+'get_user_data'
 }
 
 const notification = 'api/notification/'

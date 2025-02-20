@@ -6,6 +6,9 @@ const Bank = require('../models').banks
 const Kyc = require('../models').kyc
 const Subscriber = require('../models').subscribers
 const moment = require('moment')
+const BuyCrypto = require('../models').exchangeBuys
+const SellCrypto = require('../models').exchangeSells
+const GiftCard = require('../models').giftCards
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const otpGenerator = require('otp-generator')
@@ -580,6 +583,58 @@ exports.getLeaderboard = async (req, res) => {
             order: [[{ model: Wallet, as: 'user_wallets' }, 'total_deposit', 'DESC']]
         })
         return res.json({ status: 200, msg: 'fetch success', data: all_users })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getUserData = async (req, res) => {
+    try {
+        let allTrades = []
+
+        const buys = await BuyCrypto.findAll({
+            where: { userid: req.user, status: 'completed' },
+            attributes: [`amount`, 'tag', 'type','createdAt']
+        })
+        const sells = await SellCrypto.findAll({
+            where: { userid: req.user, status: 'completed' },
+            attributes: [`amount`, 'tag', 'type','createdAt']
+        })
+        const gifts = await GiftCard.findAll({
+            where: { userid: req.user, status: 'completed' },
+            attributes: [`amount`, 'tag','createdAt']
+        })
+
+        allTrades = [...buys, ...sells, ...gifts]
+        const allcoins = [...buys, ...sells]
+
+        // Get highest and lowest amount
+        const amounts = allTrades.map(trade => trade.amount).filter(amount => amount > 0)
+        const highestAmount = Math.max(...amounts)
+        const lowestAmount = Math.min(...amounts)
+
+        // Determine step size dynamically (avoid too many points)
+        const rangeDiff = highestAmount - lowestAmount
+        const stepSize = Math.ceil(rangeDiff / 5) || 10  // Ensures at least 5 intervals
+
+        // Generate y-axis range
+        const yAxisRange = []
+        for (let i = lowestAmount; i <= highestAmount; i += stepSize) {
+            yAxisRange.push(i)
+        }
+
+        return res.json({
+            status: 200,
+            msg: 'fetch success',
+            data: [
+              { yaxis: yAxisRange},
+                {allcoins},
+                {allTrades},
+                {buys},
+                {sells},
+                {gifts}
+            ]
+        })
     } catch (error) {
         ServerError(res, error)
     }

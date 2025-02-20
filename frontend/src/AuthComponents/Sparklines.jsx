@@ -8,7 +8,7 @@ const Sparklines = ({ data }) => {
         : '#ef4444';
 
     return (
-        <ResponsiveContainer width="100%" height={250} >
+        <ResponsiveContainer width="100%" height={200} >
             <LineChart data={data.map((price, index) => ({ index, price }))}>
                 <Line type="monotone"
                     dataKey="price"
