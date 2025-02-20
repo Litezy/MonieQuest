@@ -47,18 +47,18 @@ const Leaderboards = () => {
                                 <BiSolidToTop className='text-3xl text-lightgreen' />
                                 <div className="text-2xl font-bold ">Top Traders on MonieQuest</div>
                             </div>
-                            <div class="relative overflow-y-auto shadow-md sm:rounded-lg w-full max-h-96 lg:max-h-80 scroll ">
+                            <div className="relative overflow-y-auto shadow-md sm:rounded-lg w-full max-h-96 lg:max-h-80 scroll ">
 
-                                <table class="w-full text-sm text-center rounded-e-md rounded-s-md truncate rtl:text-right text-gray-400 ">
-                                    <thead class="text-sm bg-primary lg:text-base">
+                                <table className="w-full text-sm text-center rounded-e-md rounded-s-md truncate rtl:text-right text-gray-400 ">
+                                    <thead className="text-sm bg-primary lg:text-base">
                                         <tr>
-                                            <th scope="col" class="text-start px-7 text-2xl">
+                                            <th scope="col" className="text-start px-7 text-2xl">
                                                 #
                                             </th>
-                                            <th scope="col" class="px-6 py-3">
+                                            <th scope="col" className="px-6 py-3">
                                                 <div className="">Name</div>
                                             </th>
-                                            <th scope="col" class="px-6 py-3">
+                                            <th scope="col" className="px-6 py-3">
                                                 <div className="">Prizes</div>
                                             </th>
 
@@ -68,14 +68,14 @@ const Leaderboards = () => {
                                         {leaderboard.length > 0 ? leaderboard.slice(0, 10).map((item, i) => {
                                             return (
                                                 (
-                                                    <tr key={i} class="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
-                                                        <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                                                    <tr key={i} className="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
+                                                        <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
                                                             <img src={logo} className='w-10' alt="winner_" />
                                                         </th>
-                                                        <td class="px-6 py-4">
+                                                        <td className="px-6 py-4">
                                                             {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}
                                                         </td>
-                                                        <td class="px-6 py-4 text-lightgreen">
+                                                        <td className="px-6 py-4 text-lightgreen">
                                                             {currencySign[0]}25
                                                         </td>
 
