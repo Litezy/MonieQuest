@@ -228,7 +228,7 @@ const SingleBlog = () => {
                                             <div className="">{singleBlog?.second_paragraph_content}</div>
                                         </div>
                                         {singleBlog?.second_paragraph_image && <div className="" id='second'>
-                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.second_paragraph_image}`} alt="second image" className="w-full rounded-xl max-h-52 object-cover object-center" />
+                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.second_paragraph_image}`} alt="second image" className="w-full rounded-xl md:max-h-72 max-h-52 object-cover object-center" />
                                         </div>}
                                     </div>
                                     <div className='flex flex-col gap-8'>
@@ -237,7 +237,7 @@ const SingleBlog = () => {
                                             <div className="">{singleBlog?.extras_content}</div>
                                         </div>
                                         {singleBlog?.extras_image && <div className="" id='second'>
-                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.extras_image}`} alt="extras image" className="w-full rounded-xl max-h-52 object-cover object-center " />
+                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.extras_image}`} alt="extras image" className="w-full rounded-xl md:max-h-72 max-h-52 object-cover object-center " />
                                         </div>}
                                     </div>
                                 </div>
@@ -253,11 +253,11 @@ const SingleBlog = () => {
                             {Object.values(singleBlog).length !== 0 && singleBlog.blog_comments.length > 0 ?
                                 <div className='flex flex-col gap-5'>
                                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
-                                        {singleBlog.blog_comments.slice(0, 8).map((item, i) => (
+                                        {singleBlog.blog_comments.slice(0, 10).map((item, i) => (
                                             <Comments key={i} item={item} />
                                         ))}
                                     </div>
-                                    {singleBlog.blog_comments.length > 8 &&
+                                    {singleBlog.blog_comments.length > 10 &&
                                         <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/${singleBlog.slug}/comments`} onClick={MoveToTop}>
                                             <button className="w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
                                         </Link>
@@ -268,7 +268,7 @@ const SingleBlog = () => {
                             }
                         </div>
                         <form className="w-full p-4 rounded-md bg-primary relative" onSubmit={SubmitComment}>
-                            {loading && <Loader/>}
+                            {loading && <Loader />}
                             <div className="text-lg mont">Leave a comment</div>
                             <div className="flex mt-4 flex-col gap-5 w-full lg:w-3/4">
                                 <div className="flex items-center flex-col lg:flex-row gap-5">

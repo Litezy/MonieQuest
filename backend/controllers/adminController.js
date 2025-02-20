@@ -24,19 +24,20 @@ const { Op } = require('sequelize')
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max } = req.body
+        const { exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max, leaderboard_reward } = req.body
         const utils = await Util.findOne({})
         if (!utils) {
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (!exchange_buy_rate || !exchange_sell_rate || !kyc_threshold || !bank_withdraw_min || !giftcard_rate || !buy_min || !buy_max || !sell_min || !sell_max || !leaderboard_reward) return res.json({ status: 404, msg: `Incomplete request found` })
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
 
             const newUtils = await Util.create({
-                exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max
+                exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max, leaderboard_reward
             })
 
             return res.json({ status: 200, msg: 'Rate(s) created successfully', utils: newUtils })
         }
-        else if (utils) {
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
+        else {
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
             if (exchange_buy_rate) {
                 utils.exchange_buy_rate = exchange_buy_rate
             }
@@ -63,6 +64,9 @@ exports.UpdateUtils = async (req, res) => {
             }
             if (sell_max) {
                 utils.sell_max = sell_max
+            }
+            if (leaderboard_reward) {
+                utils.leaderboard_reward = leaderboard_reward
             }
 
             await utils.save()

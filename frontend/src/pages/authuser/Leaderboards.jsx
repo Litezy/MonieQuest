@@ -5,10 +5,13 @@ import { Apis, AuthGetApi } from '../../services/API';
 import { currencySign } from '../../utils/pageUtils';
 import logo from '../../assets/images/trophy.png'
 import banner from '../../assets/images/toptrader1.jpg'
+import { UTILS } from '../../services/store';
+import { useAtom } from 'jotai';
 
 const Leaderboards = () => {
     const [dataLoading, setDataLoading] = useState(true)
     const [leaderboard, setLeaderboard] = useState([])
+    const [utils] = useAtom(UTILS)
 
     const fetchLeaderboard = async () => {
         try {
@@ -76,7 +79,7 @@ const Leaderboards = () => {
                                                             {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}
                                                         </td>
                                                         <td className="px-6 py-4 text-lightgreen">
-                                                            {currencySign[0]}25
+                                                            {currencySign[0]}{utils?.leaderboard_reward}
                                                         </td>
 
                                                     </tr>
