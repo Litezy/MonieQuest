@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
-import { alltransactions } from '../../AuthComponents/AuthUtils'
 import { CiSearch } from 'react-icons/ci'
-
 import AdminTransComp from '../../AdminComponents/AdminTransComp'
 import { Apis, AuthGetApi } from '../../services/API'
 import { ErrorAlert } from '../../utils/pageUtils'

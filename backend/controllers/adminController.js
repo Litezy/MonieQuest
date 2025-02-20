@@ -872,6 +872,27 @@ exports.UpdateBlog = async (req, res) => {
     }
 }
 
+exports.DeleteBlog = async (req, res) => {
+    try {
+        const { blog_id } = req.body
+        if (!blog_id) return res.json({ status: 404, msg: `Provide a blog id` })
+
+        const blog = await Blog.findOne({ where: { id: blog_id } })
+        if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
+
+        const blogFolderPath = `./public/blogs/${blog.gen_id}`
+        if (fs.existsSync(blogFolderPath)) {
+            fs.rmSync(blogFolderPath, { recursive: true, force: true })
+        }
+
+        await blog.destroy()
+
+        return res.json({ status: 200, msg: 'Blog deleted successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
 exports.AllBlogs = async (req, res) => {
     try {
         const blogs = await Blog.findAll({
@@ -914,7 +935,7 @@ exports.SingleBlog = async (req, res) => {
     }
 }
 
-exports.DeleteBlogImages = async (req, res) => {
+exports.DeleteSingleBlogImages = async (req, res) => {
     try {
         const { id } = req.params
         const { tag } = req.body

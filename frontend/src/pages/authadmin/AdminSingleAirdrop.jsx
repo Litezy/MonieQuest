@@ -308,11 +308,11 @@ const AdminSingleAirdrop = () => {
                         {singleAirdrop.status === 'closed' && <FormButton title='Delete Airdrop' type='button' className='md:!w-1/2 w-full mx-auto !bg-red-700 hover:!bg-red-400' onClick={() => setModal(true)} />}
                         {modal &&
                             <ModalLayout setModal={setModal} clas={`lg:w-[50%] w-10/12 mx-auto`}>
-                                <div className="p-5 bg-primary rounded-md">
-                                    <div className="text-base text-center mb-3 text-white">Are you sure you want to delete airdrop</div>
+                                <div className="p-5 bg-white text-dark rounded-md">
+                                    <div className="text-base text-center mb-3">Are you sure you want to delete this airdrop?</div>
                                     <div className="flex items-center justify-between">
-                                        <button onClick={() => setModal(false)} className='px-4 py-2 bg-red-700 text-white rounded-md' type='button'>Cancel</button>
-                                        <button className='px-4 py-2 bg-ash text-white rounded-md' type='button' onClick={DeleteAirdrop}>Confirm delete</button>
+                                        <button onClick={() => setModal(false)} className='px-4 py-2 bg-red-600 text-white rounded-md' type='button'>Cancel</button>
+                                        <button className='px-4 py-2 bg-green-600 text-white rounded-md' type='button' onClick={DeleteAirdrop}>confirm delete</button>
                                     </div>
 
                                 </div>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { currencies } from '../../AuthComponents/AuthUtils'
 import { Link } from 'react-router-dom'
 import AdminExchangeLayout from '../../AdminComponents/AdminExchangeLayout'
-import { dummy } from '../../AdminComponents/AdminUtils'
 import { Apis, AuthGetApi } from '../../services/API'
 
 const AdminCryptoBuyOrders = () => {

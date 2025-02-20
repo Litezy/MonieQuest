@@ -24,20 +24,3 @@ export const pagelinks = [
     { label: 'notifications', url: '/admin/notifications', icon: IoNotificationsSharp },
     { label: 'leaderboard', url: '/admin/leaderboard', icon: MdLeaderboard },
 ]
-
-export const dummy = [
-    {
-        id: 1,
-        fullname: 'Basit Money',
-        crypto: 'USDT',
-        network: 'TRC-20',
-        amount: 1000
-    },
-    {
-        id: 2,
-        fullname: 'Basit Money',
-        crypto: 'Binance BNB',
-        network: 'BNB',
-        amount: 1000
-    },
-]

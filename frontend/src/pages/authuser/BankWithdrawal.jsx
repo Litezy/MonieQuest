@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { alltransactions, banksArr, currencies } from '../../AuthComponents/AuthUtils'
-import TransComp from '../../AuthComponents/TransComp'
+import { banksArr, currencies } from '../../AuthComponents/AuthUtils'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import { defaultOptions, ErrorAlert } from '../../utils/pageUtils'
@@ -17,7 +16,6 @@ import { Link } from 'react-router-dom'
 
 
 const formsal = () => {
-    const [bank] = useAtom(BANK)
     const [wallet, setWallet] = useAtom(WALLET)
     const [utils] = useAtom(UTILS)
     const [bankAcc] = useAtom(BANK)

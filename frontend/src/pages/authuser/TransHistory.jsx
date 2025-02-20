@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { alltransactions, currencies } from '../../AuthComponents/AuthUtils'
 import { CiSearch } from "react-icons/ci";
 import TransComp from '../../AuthComponents/TransComp';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';

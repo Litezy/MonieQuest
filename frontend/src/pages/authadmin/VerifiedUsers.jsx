@@ -8,7 +8,7 @@ import { USER_VER_KYCS } from '../../services/store'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link } from 'react-router-dom'
 
-const VerifiedUsers = ({ setActive }) => {
+const VerifiedUsers = () => {
     const [modal, setModal] = useState()
     const [selected, setSelected] = useState({})
     const [users,] = useAtom(USER_VER_KYCS)

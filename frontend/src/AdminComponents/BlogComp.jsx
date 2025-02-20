@@ -23,7 +23,7 @@ const BlogComp = ({ item }) => {
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>feature:</span>
-                        <span>{item?.feature}</span>
+                        <span>{item?.feature === 'personal_finance' ? 'personal finance' : item?.feature}</span>
                     </div>
                 </div>
             </div>

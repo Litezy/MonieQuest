@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import Loader from '../../GeneralComponents/Loader'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import { FiUploadCloud } from 'react-icons/fi'
 import { FaEdit } from 'react-icons/fa'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
 import SelectComp from '../../GeneralComponents/SelectComp'
-import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
+import { Apis, AuthGetApi, AuthPostApi, AuthPutApi, imageurl } from '../../services/API'
+import ModalLayout from '../../utils/ModalLayout'
 
 
 const features = [
@@ -20,6 +21,8 @@ const AdminSingleBlog = () => {
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
     const [singleBlog, setSingleBlog] = useState({})
+    const [modal, setModal] = useState(false)
+    const navigate = useNavigate()
     const [form, setForm] = useState({
         title: '',
         feature: '',
@@ -77,7 +80,7 @@ const AdminSingleBlog = () => {
                     extras_content: response.msg.extras_content || '',
                     conclusion: response.msg.conclusion || ''
                 })
-                
+
                 setBlogImage({
                     img: response.msg.image ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.image}` : null
                 })
@@ -181,7 +184,7 @@ const AdminSingleBlog = () => {
         const data = { tag: val }
         setLoading(true)
         try {
-            const res = await AuthPutApi(`${Apis.admin.delete_blog_img}/${id}`, data)
+            const res = await AuthPostApi(`${Apis.admin.delete_single_blogimg}/${id}`, data)
             if (res.status !== 200) return ErrorAlert(res.msg)
             if (val === 'paragraph') {
                 setSecondImg({ img: null, image: null });
@@ -192,6 +195,23 @@ const AdminSingleBlog = () => {
             FetchSingleBlog()
             SuccessAlert(res.msg)
             // await new Promise((resolve) => setTimeout(resolve, 2000))
+        } catch (error) {
+            ErrorAlert(`${error.message}`)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const DeleteBlog = async () => {
+        setLoading(true)
+        try {
+            const response = await AuthPostApi(Apis.admin.delete_blog, { blog_id: singleBlog.id })
+            if (response.status === 200) {
+                SuccessAlert(response.msg)
+                navigate(`/admin/blogs/all`)
+            } else {
+                ErrorAlert(response.msg)
+            }
         } catch (error) {
             ErrorAlert(`${error.message}`)
         } finally {
@@ -347,6 +367,19 @@ const AdminSingleBlog = () => {
                             </div>
                         </div>
                         <FormButton title='Save Changes' className='md:!w-1/2 w-full mx-auto' />
+                        <FormButton title='Delete Blog' type='button' className='md:!w-1/2 w-full mx-auto !bg-red-700 hover:!bg-red-400' onClick={() => setModal(true)} />
+                        {modal &&
+                            <ModalLayout setModal={setModal} clas={`lg:w-[50%] w-10/12 mx-auto`}>
+                                <div className="p-5 bg-white text-dark rounded-md">
+                                    <div className="text-base text-center mb-3">Are you sure you want to delete this blog?</div>
+                                    <div className="flex items-center justify-between">
+                                        <button onClick={() => setModal(false)} className='px-4 py-2 bg-red-600 text-white rounded-md' type='button'>Cancel</button>
+                                        <button className='px-4 py-2 bg-green-600 text-white rounded-md' type='button' onClick={DeleteBlog}>confirm delete</button>
+                                    </div>
+
+                                </div>
+                            </ModalLayout>
+                        }
                     </form>
                 }
             </div>
