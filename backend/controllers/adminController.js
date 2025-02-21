@@ -88,7 +88,7 @@ exports.CreateAirdrop = async (req, res) => {
         const kycArray = ['required', "unrequired"]
         if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid kyc value provided` })
 
-        const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
+        const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
         const filePath = './public/airdrops'
         const date = new Date()
@@ -721,7 +721,7 @@ exports.CreateBlog = async (req, res) => {
         const featureArray = ["airdrop", "trading", "personal_finance"]
         if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
 
-        const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
+        const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
         const slugData = slug(title, '-')
         const filePath = `./public/blogs/${gen_id}`
         const date = new Date()

@@ -20,7 +20,7 @@ exports.SubmitProduct = async (req, res) => {
         if (!user) return res.json({ status: 404, msg: 'User not found' })
 
         const categoryArray = Array.isArray(category) ? category : [category]
-        const gen_id = `01` + otpGenerator.generate(9, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
+        const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
         const filePath = './public/products'
         const date = new Date()

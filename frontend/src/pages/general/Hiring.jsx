@@ -177,15 +177,17 @@ const Hiring = () => {
                         <div className='grid grid-cols-4'>
                             {Hire.map((item, i) => (
                                 <div key={i} className='flex flex-col gap-2'>
-                                    <div className='font-semibold ml-2 truncate'>{item}</div>
-                                    <div className='flex items-center'>
-                                        <div className='w-[6%]'>
-                                            <div className='size-5 bg-lightgreen rounded-full'>
+                                    <div className="w-full overflow-x-auto scrollsdown cursor-all-scroll">
+                                        <div className='w-fit font-semibold ml-2 truncate'>{item}</div>
+                                    </div>
+                                    <div className='flex items-center relative'>
+                                        <div className='w-[6%] z-20'>
+                                            <div className='size-6 bg-lightgreen rounded-full -ml-0.5'>
                                             </div>
                                         </div>
-                                        <div className='w-[94%] flex items-center'>
+                                        <div className='w-[94%] flex items-center z-10'>
                                             <div className='border-b-[6px] w-full border-lightgreen'></div>
-                                            {i === 3 && <IoTriangleSharp className='text-lightgreen rotate-90 -ml-1' />}
+                                            {i === 3 && <IoTriangleSharp className='text-lightgreen text-lg rotate-90 -ml-1' />}
                                         </div>
                                     </div>
                                     <div className='md:text-3xl text-2xl font-semibold ml-2'>0{i + 1}</div>

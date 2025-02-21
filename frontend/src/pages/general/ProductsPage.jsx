@@ -145,9 +145,9 @@ const ProductsPage = () => {
         <div className="w-11/12 mx-auto text-gray-200 mt-16">
           <CartComponent cartItems={cartItems} setCartItems={setCartItems} dataLoading={dataLoading} />
           <div className="flex flex-col gap-2 items-center mt-20" id="section">
-            <div className="text-3xl font-bold text-center">Say Goodbye to Stress, Simplify your Hustle, Maximize your Wealth!
+            <div className="md:text-3xl text-2xl font-bold text-center">Say Goodbye to Stress, Simplify your Hustle, Maximize your Wealth!
             </div>
-            <div className="text-lg font-bold text-center">“Products you can Trust, Knowledge that pays”</div>
+            <div className="md:text-lg font-bold text-center">“Products you can Trust, Knowledge that pays”</div>
             <div className="flex gap-2 items-center mt-2">
               <FormInput placeholder='Find available products and eBooks' className='md:!w-96 !w-64' value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={FilterProducts} />
               <button className="outline-none w-fit h-fit bg-ash py-2 px-4 text-2xl rounded-lg" onClick={FilterProducts}>
@@ -198,17 +198,15 @@ const ProductsPage = () => {
                                 <FaCheckCircle className="text-lightgreen text-xl" />
                               </div>
                               <div className="flex justify-between gap-4 items-center">
-                                <div className="w-full overflow-x-auto scrollsdown cursor-all-scroll">
-                                  <div className="w-fit">
-                                    {categories.length > 0 &&
-                                      <div className='flex gap-1 text-xs text-lightgreen truncate'>
-                                        {categories.map((ele, i) => (
-                                          <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
-                                        ))}
-                                      </div>
-                                    }
+                                {categories.length > 0 &&
+                                  <div className="w-full overflow-x-auto scrollsdown cursor-all-scroll">
+                                    <div className='w-fit flex gap-1 text-xs text-lightgreen truncate'>
+                                      {categories.map((ele, i) => (
+                                        <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
+                                      ))}
+                                    </div>
                                   </div>
-                                </div>
+                                }
                                 <div className="flex gap-2 items-center text-sm font-extrabold">
                                   {item.discount_percentage && item.price ?
                                     <>
@@ -239,7 +237,7 @@ const ProductsPage = () => {
                       <button
                         onClick={() => { ChangePage(currentPage - 1); MoveToSection(`section`, 100, 'auto') }}
                         disabled={currentPage === 1}
-                        className={`border md:px-3.5 px-2.5 py-2 border-[#333350] rounded-full ${currentPage !== 1 && 'hover:text-lightgreen'}`}><MdDoubleArrow className="rotate-180"/></button>
+                        className={`border md:px-3.5 px-2.5 py-2 border-[#333350] rounded-full ${currentPage !== 1 && 'hover:text-lightgreen'}`}><MdDoubleArrow className="rotate-180" /></button>
                       {GetPagination().map((page, i) => (
                         <button
                           key={i}
@@ -250,7 +248,7 @@ const ProductsPage = () => {
                       <button
                         onClick={() => { ChangePage(currentPage + 1); MoveToSection(`section`, 100, 'auto') }}
                         disabled={currentPage === totalPages}
-                        className={`md:px-3.5 px-2.5 py-2 border border-[#333350] rounded-full ${currentPage !== totalPages && 'hover:text-lightgreen'}`}><MdDoubleArrow/></button>
+                        className={`md:px-3.5 px-2.5 py-2 border border-[#333350] rounded-full ${currentPage !== totalPages && 'hover:text-lightgreen'}`}><MdDoubleArrow /></button>
                     </div>
                   </div>
                   :

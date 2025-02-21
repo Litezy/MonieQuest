@@ -38,7 +38,7 @@ const AdminProductsOrders = () => {
     const FilterOrders = () => {
         const mainData = staticData
         if (search.length > 1) {
-            const filtered = mainData.filter(item => moment(item.createdAt).format('Do MMMM YYYY').toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+            const filtered = mainData.filter(item => moment(item.createdAt).format('Do MMM YYYY').toLocaleLowerCase().includes(search.toLocaleLowerCase()) || item.gen_id.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
             setProductOrders(filtered)
         } else {
             setProductOrders(mainData)
@@ -55,14 +55,17 @@ const AdminProductsOrders = () => {
                     </div>
                 </div>
                 {datatLoading ?
-                    <div className='flex flex-col gap-10 mt-8'>
-                        <div className='md:w-80 w-56 md:h-5 h-3.5 rounded-full bg-slate-400'></div>
-                        <div className='flex items-center lg:grid lg:grid-cols-3 justify-between  border-b border-slate-400 pb-1 w-full'>
+                    <div className='flex flex-col gap-10 mt-8 animate-pulse'>
+                        <div className='md:w-96 w-64 md:h-5 h-4 rounded-md bg-slate-400'></div>
+                        <div className='flex items-center lg:grid lg:grid-cols-3 justify-between border-b border-slate-400 pb-1 w-full'>
                             <div className='flex lg:gap-5 gap-2 items-start'>
                                 <div className='w-12 h-12 rounded-full bg-slate-400'></div>
                                 <div className='flex flex-col gap-5'>
-                                    <div className='md:w-32 w-28 md:h-3.5 h-3 rounded-full bg-slate-400'></div>
-                                    <div className='md:w-44 w-36 h-2 rounded-full bg-slate-400'></div>
+                                    <div className='md:w-40 w-36 md:h-3.5 h-3 rounded-full bg-slate-400'></div>
+                                    <div className='flex flex-col gap-2'>
+                                        <div className='md:w-28 w-24 h-2 rounded-full bg-slate-400'></div>
+                                        <div className='md:w-16 w-12 h-2 rounded-full bg-slate-400'></div>
+                                    </div>
                                 </div>
                             </div>
                             <div className='flex justify-center items-center'>
@@ -75,7 +78,7 @@ const AdminProductsOrders = () => {
                     </div>
                     :
                     <div className='flex flex-col gap-5 mt-8'>
-                        <div className="text-xl md:text-3xl font-bold text-gray-300 capitalize">latest products purchases</div>
+                        <div className="text-2xl md:text-3xl font-bold text-gray-300 capitalize">latest products purchases</div>
                         {modal &&
                             <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 scroll rounded-md`} setModal={setModal}>
                                 <div className="w-full p-5 lg:p-10 bg-primary">
@@ -96,11 +99,10 @@ const AdminProductsOrders = () => {
                                                     <GoArrowUpRight className='text-lightgreen' />
                                                 </div>
                                                 <div className="flex items-start flex-col gap-1">
-                                                    <div className={`text-zinc-200`}>ID: {item?.gen_id}</div>
-                                                    <div className="flex items-center gap-1 md:text-sm text-xs">
-                                                        <div>{moment(item?.createdAt).format('Do MMMM YYYY')}</div>
-                                                        <div className="w-1 h-1 bg-lightgreen rounded-full"></div>
-                                                        <div className="">{moment(item?.createdAt).format('h:mm')}</div>
+                                                    <div><span className='font-bold'>ID:</span> {item?.gen_id}</div>
+                                                    <div className="flex flex-col items-start gap-1 text-xs md:text-sm">
+                                                        <div className="">{moment(item.createdAt).format('ddd')} {moment(item.createdAt).format('DD-MM-YYYY')}</div>
+                                                        <div className="">{moment(item.createdAt).format('hh:mm a')}</div>
                                                     </div>
                                                 </div>
                                             </div>
