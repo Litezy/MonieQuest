@@ -1141,7 +1141,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                 subject: `Crypto buy Credit Alert`,
                 eTitle: `Credit Alert`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked paid with ${dollarSign}${findBuy.amount?.toLocaleString()}} worth of ${findBuy.crypto_currency} sent to the wallet address ending in ****${findBuy?.wallet_address.slice(-5)}. Kindly verify this transaction by checking your wallet. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                  <div>Hello ${user.first_name}, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked paid with ${dollarSign}${findBuy.amount?.toLocaleString()}} worth of ${findBuy.crypto_currency} sent to the wallet address ending in ****${findBuy?.wallet_address.slice(-5)}. Kindly verify this transaction by checking your <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">wallet</a>. Thank you for trading with us.
                 `,
                 account: user
             })
@@ -1185,7 +1185,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                 subject: `Crypto Buy Failed`,
                 eTitle: `Failed Transaction`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findBuy?.order_no} has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try again. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findBuy?.order_no} has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try <a href='${webURL}/user/exchange/buy' style="text-decoration: underline; color: #00fe5e">again</a>. Thank you for trading with us.</div>
                 `,
                 account: user
             })
@@ -1258,7 +1258,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                 subject: `Crypto Credit Alert`,
                 eTitle: `Credit Alert`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked paid with the sum of ${nairaSign}${findSell?.amount?.toLocaleString()}} credited to your balance. Kindly get back to your account to see your new balance. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked paid with the sum of ${nairaSign}${findSell?.amount?.toLocaleString()}} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading with us.</div>
                 `,
                 account: user
             })
@@ -1302,7 +1302,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                 subject: `Crypto Credit Failed`,
                 eTitle: `Failed Transaction`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try again. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try <a href='${webURL}/user/exchange/sell' style="text-decoration: underline; color: #00fe5e">again</a>. Thank you for trading with us.</div>
                 `,
                 account: user
             })
@@ -1415,7 +1415,7 @@ exports.creditGiftCustomer = async (req, res) => {
                 subject: `Gift-Card Credit Alert`,
                 eTitle: `Credit Alert`,
                 eBody: `
-                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked paid with the sum of ${nairaSign}${amount?.toLocaleString()}} credited to your balance. Kindly get back to your account to see your new balance. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked paid with the sum of ${nairaSign}${amount?.toLocaleString()}} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading.</div>
                 `,
                 account: findUser
             })
@@ -1461,7 +1461,7 @@ exports.creditGiftCustomer = async (req, res) => {
                 subject: `Gift-Card Failed Transaction`,
                 eTitle: `Failed Transaction`,
                 eBody: `
-                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked failed with the following as reason(s) '${message}'. Thank you for trading with us ' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked failed with the following as reason(s) '${message}'. Thank you for trading with us.</div>
                 `,
                 account: findUser
             })
