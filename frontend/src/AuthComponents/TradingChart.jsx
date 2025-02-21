@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AreaChart, Area, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import SelectComp from "../GeneralComponents/SelectComp";
 import { useAtom } from "jotai";
 import { USER_CHARTS } from "../services/store";
@@ -7,9 +7,9 @@ import { USER_CHARTS } from "../services/store";
 const calender = ["daily", "monthly", "yearly"];
 const tradeOverviewFilter = [
   "All Trades",
+  "All Coins",
   "Crypto Buys",
   "Crypto Sells",
-  "All Coins",
   "Gift Cards",
 ];
 
@@ -25,7 +25,7 @@ export default function TradingChart() {
     if (!charts.length) return;
 
     let transactions = [];
-    
+
     if (select.overview === "All Trades") {
       transactions = charts.find((item) => item.allTrades)?.allTrades || [];
     } else if (select.overview === "Crypto Buys") {
@@ -88,7 +88,7 @@ export default function TradingChart() {
     }, {});
   };
 
-  // ✅ Ensure at least two points exist for proper chart rendering
+  // Ensure at least two points exist for proper chart rendering
   const ensureTwoPoints = (groupedData) => {
     let dataArray = Object.values(groupedData);
 

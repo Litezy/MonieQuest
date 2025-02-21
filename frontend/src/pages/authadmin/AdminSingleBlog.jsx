@@ -142,7 +142,7 @@ const AdminSingleBlog = () => {
         if (!form.title || !form.feature || !form.main_header_title || !form.main_header_content ||
             !form.first_paragraph_title || !form.first_paragraph_content || !form.second_paragraph_title || !form.second_paragraph_content || !form.extras_title ||
             !form.extras_content || !form.conclusion) return ErrorAlert('Enter all required fields')
-
+z
         const formbody = new FormData()
         formbody.append('blog_id', singleBlog.id)
         formbody.append('image', blogImage.image)

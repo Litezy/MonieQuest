@@ -97,7 +97,7 @@ const SingleBuyOrder = () => {
         setLoading(true)
         try {
             const res = await AuthPostApi(`${Apis.admin.confirm_buy}/${id}`, data)
-            console.log(res)
+            // console.log(res)
             if (res.status !== 200) return ErrorAlert(res.msg)
             SuccessAlert(res.msg)
             fetchBuys()
@@ -203,31 +203,35 @@ const SingleBuyOrder = () => {
 
 
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:grid-cols-3 items-center mt-5">
-                                <div className="flex items-start flex-col w-full ">
-                                    <div className="lowercase">Confirm Payment to your Bank ?</div>
-                                    <div className="">
-                                        <SelectComp width={200} value={forms.confirmed}
-                                            options={statuses} style={{ bg: '#212134', color: 'lightgreen', font: '0.8rem' }}
-                                            handleChange={(e) => setForms({ ...forms, confirmed: e.target.value })}
-                                        />
+                            {data?.status === 'paid' &&
+                                <>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:grid-cols-3 items-center mt-5">
+                                        <div className="flex items-start flex-col w-full ">
+                                            <div className="lowercase">Confirm Payment to your Bank ?</div>
+                                            <div className="">
+                                                <SelectComp width={200} value={forms.confirmed}
+                                                    options={statuses} style={{ bg: '#212134', color: 'lightgreen', font: '0.8rem' }}
+                                                    handleChange={(e) => setForms({ ...forms, confirmed: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start flex-col w-full  ">
+                                            <div className="lowercase">Sent Crypto ?</div>
+                                            <div className="">
+                                                <SelectComp options={statuses} value={forms.sent_crypto} width={200} style={{ bg: '#212134', color: 'lightgreen', font: '0.8rem' }}
+                                                    handleChange={(e) => setForms({ ...forms, sent_crypto: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="">
+                                            <button type='button' onClick={() => setFailed(true)} className='px-4 py-1.5 rounded-sm bg-red-600 text-sm'>Mark As Failed</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex items-start flex-col w-full  ">
-                                    <div className="lowercase">Sent Crypto ?</div>
-                                    <div className="">
-                                        <SelectComp options={statuses} value={forms.sent_crypto} width={200} style={{ bg: '#212134', color: 'lightgreen', font: '0.8rem' }}
-                                            handleChange={(e) => setForms({ ...forms, sent_crypto: e.target.value })}
-                                        />
+                                    <div className="w-11/12 mt-5 mx-auto md:w-5/6">
+                                        <FormButton title={`Confirm & Close Order`} />
                                     </div>
-                                </div>
-                                <div className="">
-                                    <button type='button' onClick={() => setFailed(true)} className='px-4 py-1.5 rounded-sm bg-red-600 text-sm'>Mark As Failed</button>
-                                </div>
-                            </div>
-                            <div className="w-11/12 mt-5 mx-auto md:w-5/6">
-                                <FormButton title={`Confirm & Close Order`} />
-                            </div>
+                                </>
+                            }
                         </form>
 
 

@@ -1,11 +1,36 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { GoArrowDownLeft, GoArrowUpRight } from 'react-icons/go'
 import moment from 'moment'
 import { currencies } from './AuthUtils'
 import { Link } from 'react-router-dom'
+import { useAtom } from 'jotai'
+import { UTILS } from '../services/store'
 
 const OrderComp = ({trans}) => {
+ const [naira,setNaira] = useState('')
+    const [utils] = useAtom(UTILS)
+    const giftcardrate = utils?.giftcard_rate
+    const buyrate = utils?.exchange_buy_rate
+    const sellrate = utils?.exchange_sell_rate
 
+    useEffect(()=>{
+        let naira ;
+        if(trans){
+            if(trans.crypto_currency && trans.type === 'buy'){
+                const amt = trans?.amount * buyrate
+                naira = amt.toLocaleString()
+            }
+            else if (trans.crypto_currency && trans.type === 'sell'){
+                const amt = trans?.amount * sellrate
+                naira = amt.toLocaleString()
+            }
+            else if (trans.brand){
+                const amt = trans?.amount * giftcardrate
+                naira = amt.toLocaleString()
+            }
+            setNaira(naira)
+        }
+    },[])
     
     return (
         <div className='w-full mb-5'>
@@ -30,13 +55,13 @@ const OrderComp = ({trans}) => {
                     </div>
                 </div>
                 <div
-                    className={` flex items-center text-sm justify-center lg:w-full rounded-md ${trans.status === 'pending' ? "text-gray-300" : trans.status === 'paid' ? 'text-yellow-300  ' : 'text-red-600'}`}>
+                    className={` flex items-center capitalize text-sm justify-center lg:w-full rounded-md ${trans.status === 'pending' ? "text-gray-300" : trans.status === 'paid' ? 'text-green-400 ' : 'text-yellow-300'}`}>
                     {trans.status}</div>
 
                 <div className=" gap-1 font-bold lg:w-full flex items-center justify-center">
-                    <div className={`${trans.type === 'buy' ? 'text-lightgreen' : trans.type === 'sell' ? 'text-red-600' : trans.tap === 'tools' ? 'text-white' : 'text-blue-600'}`}>{trans.type === 'buy' ? '+' : trans.type === 'sell' ? "-" : '-'}</div>
+                    
                     <div
-                        className={`${trans.type === 'buy' ? 'text-lightgreen' : trans.tag === 'bank withdrawal' ? 'text-blue-500' : trans.tap === 'tools' ? 'text-white' : 'text-red-600'} `}>{currencies[0].symbol}{trans.amount.toLocaleString()}
+                        className={`text-white `}>{currencies[1].symbol}{naira}
                     </div>
                 </div>
             </Link>

@@ -177,8 +177,7 @@ const formsal = () => {
                                     <div className='md:size-3.5 size-3 bg-red-600 rounded-full'></div>
                                     <div className='md:text-sm text-xs capitalize font-medium'>total outflow</div>
                                 </div>
-                                <div className='font-bold'>{currencies[1].symbol}
-                                    {Object.values(wallet).length !== 0 ? <span>{wallet.total_outflow.toFixed(2).toLocaleString()} </span> : <span>0.00</span>}</div>
+                                <div className='font-bold'>{currencies[1].symbol}{Object.values(wallet).length !== 0 ? <span>{wallet.total_outflow.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} </span> : <span>0.00</span>}</div>
                             </div>
                         </div>
                     </div>
@@ -188,7 +187,7 @@ const formsal = () => {
                         <div className="w-full bg-primary p-5">
                             <div className="flex items-center flex-col lg:flex-row w-full justify-between  mb-5">
                                 <div className="text-xl lg:text-3xl font-bold text-gray-300  ">Request Withdrawal</div>
-                                <div className="text-sm text-red-600">minimum of {currencies[1].symbol}{utils.bank_withdraw_min} to initiate withdrawal</div>
+                                <div className="text-sm text-red-600">minimum of {currencies[1].symbol}{utils.bank_withdraw_min.toLocaleString()} to initiate withdrawal</div>
                             </div>
                             <div onClick={prefillBank} className="mb-5 w-fit px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
                             <div className="grid md:grid-cols-2 grid-cols-1 gap-5 lg:gap-10 mb-5">

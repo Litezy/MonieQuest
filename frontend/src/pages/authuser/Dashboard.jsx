@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [wallet] = useAtom(WALLET)
   const [allCarouselImages,setAllCarouselImages] = useState('')
   const [, setCharts] = useAtom(USER_CHARTS)
+
   const fetchChartData = useCallback(async () => {
     try {
       const res = await AuthGetApi(Apis.user.get_user_charts);
@@ -23,6 +24,7 @@ const Dashboard = () => {
       console.log(error);
     }
   }, []);
+  
 
   useEffect(() => {
     fetchChartData()

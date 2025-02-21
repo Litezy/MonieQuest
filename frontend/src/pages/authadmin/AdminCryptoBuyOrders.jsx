@@ -5,7 +5,7 @@ import AdminExchangeLayout from '../../AdminComponents/AdminExchangeLayout'
 import { Apis, AuthGetApi } from '../../services/API'
 
 const AdminCryptoBuyOrders = () => {
-    const Topheaders = [`ID`, 'FullName', 'Crypto', 'Network', 'Amount', 'Details']
+    const Topheaders = [`ID`, 'FullName', 'Crypto', 'Network', 'Amount','Status', 'Details']
     const [data, setData] = useState([])
 
     const fetchBuys = async () => {
@@ -56,9 +56,12 @@ const AdminCryptoBuyOrders = () => {
                                     <td className="px-3 py-3">
                                         {currencies[1].symbol}{item?.amount.toLocaleString()}
                                     </td>
+                                    <td className={`${item.status === 'paid' ? "text-green-300":"text-yellow-300" } px-3 py-3 capitalize`}>
+                                        {item?.status}
+                                    </td>
                                     <td className="px-3 py-3">
                                         <Link to={`${item?.id}`}
-                                            className="bg-primary to-sec truncate text-white px-5 rounded-lg py-2">view details</Link>
+                                            className="bg-primary to-sec capitalize truncate text-white px-5 rounded-lg py-2">view details</Link>
                                     </td>
 
                                 </tr>

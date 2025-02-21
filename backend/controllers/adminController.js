@@ -1244,7 +1244,9 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
         if (tag === 'success') {
             if (!amount) return res.json({ status: 400, msg: "Amount is missing" })
             findUserWallet.balance = parseFloat(findUserWallet.balance) + parseFloat(amount)
+            findUserWallet.total_deposit = parseFloat(findUserWallet.total_deposit) + parseFloat(amount)
             findSell.status = 'completed'
+            await findUserWallet.save()
             await findSell.save()
             await Notification.create({
                 user: user.id,
@@ -1398,6 +1400,7 @@ exports.creditGiftCustomer = async (req, res) => {
         if (tag === 'success') {
             //credit the customer
             findUserWallet.balance = parseFloat(findUserWallet.balance) + parseFloat(amount)
+            findUserWallet.total_deposit = parseFloat(findUserWallet.deposit) + parseFloat(amount)
             order.status = 'completed'
             await order.save()
             await findUserWallet.save()

@@ -1,13 +1,39 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GoArrowDownLeft,  GoArrowUpLeft, GoArrowUpRight } from 'react-icons/go'
 import { currencies } from './AuthUtils'
 import ModalLayout from '../utils/ModalLayout'
 import TransModal from './TransModal'
 import moment from 'moment'
+import { useAtom } from 'jotai'
+import { UTILS } from '../services/store'
 
 const TransComp = ({ trans }) => {
     const [modal, setModal] = useState(false)
 
+    const [naira,setNaira] = useState('')
+    const [utils] = useAtom(UTILS)
+    const giftcardrate = utils?.giftcard_rate
+    const buyrate = utils?.exchange_buy_rate
+    const sellrate = utils?.exchange_sell_rate
+
+    useEffect(()=>{
+        let naira ;
+        if(trans){
+            if(trans.crypto_currency && trans.type === 'buy'){
+                const amt = trans?.amount * buyrate
+                naira = amt.toLocaleString()
+            }
+            else if (trans.crypto_currency && trans.type === 'sell'){
+                const amt = trans?.amount * sellrate
+                naira = amt.toLocaleString()
+            }
+            else if (trans.brand){
+                const amt = trans?.amount * giftcardrate
+                naira = amt.toLocaleString()
+            }
+            setNaira(naira)
+        }
+    },[])
     return (
         <div className='w-full mb-5'>
             {modal &&
@@ -45,7 +71,7 @@ const TransComp = ({ trans }) => {
                         </div>
                     </div>
                 </div>
-                {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
+                {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.status === 'pending' ? "text-yellow-300" : trans?.status === 'failed' ? 'text-red-600': 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
 
                 {trans.bank_user &&
                     <div className={`${trans.bank_user && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
@@ -53,18 +79,18 @@ const TransComp = ({ trans }) => {
                 {trans.brand && <div className={`${trans.brand && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
 
                 <div className=" gap-1 font-bold lg:w-full flex items-center justify-center">
-                    {/* {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'}`}>{trans?.type === 'buy'?'+':'-'}</div>}
-                    {trans.brand && <div className={`text-red-600`}>-</div>}
-                    {trans.bank_user && <div className={``}>-</div>} */}
 
-                    {trans.crypto_currency && <div
-                        className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'} `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                    {/* {trans.crypto_currency && trans.type === 'buy'  &&<div
+                        className={`${ trans.type === 'buy' && trans?.status === 'failed' ? 'text-red-600':'text-lightgreen'} `}>{currencies[1].symbol}{naira}
                     </div>}
+                    {trans.crypto_currency && trans.type === 'sell'  && <div
+                        className={`${ trans.type === 'sell' && trans?.status === 'failed' ? 'text-red-600':'text-red-600'} `}>{currencies[1].symbol}{naira}
+                    </div>} */}
                     {trans.bank_user && <div
-                        className={` `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                        className={` text-white`}>{currencies[1].symbol}{trans?.amount?.toLocaleString()}
                     </div>}
-                    {trans.brand && <div
-                        className={` text-red-600`}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                    {!trans?.bank_user && <div
+                        className={` text-white`}>{currencies[1].symbol}{naira}
                     </div>}
                 </div>
             </div>

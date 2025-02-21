@@ -41,7 +41,6 @@ const WithdrawComp = ({trans}) => {
             {trans.status}</div>
 
         <div className=" gap-1 font-bold lg:w-full flex items-center justify-center">
-            <div className={`text-blue-600`}>-</div>
             <div
                 className={`text-blue-600 `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
             </div>
