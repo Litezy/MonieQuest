@@ -14,95 +14,112 @@ export const delay = (ms) => {
 }
 
 
-export const coins = [
+export const coinNames = [
+    '--select--',
+    'Bitcoin',
+    'Ethereum',
+    'Binance',
+    'Solana',
+    'Tron',
+    'The Open Network',
+    'SUI',
+    'DOGE',
+    'Litecoin',
+    'USDT',
+    'USDT',
+];
+
+export const coinDetails = [
     {
-        network: `--select--`
+        name: `--select--`,
+        network: '--select--'
     },
     {
-        name:'Bitcoin ',
+        name: 'Bitcoin',
         network: 'Bitcoin BTC',
         address: '1NnzdbP1TVjHHExWB53E9eaKL1J3aBoRvo',
-        symbol: `BTC`
+        symbol: 'BTC'
     },
     {
-        name:'Ethereum  ',
+        name: 'Ethereum (ERC20)',
         network: 'Ethereum (ERC20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol: `ETH`
+        symbol: 'ETH'
     },
     {
-        name: 'Ethereum ',
+        name: 'Ethereum (BEP20)',
         network: 'Ethereum (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol: `ETH`
+        symbol: 'ETH'
     },
     {
-        name: 'Binance',
+        name: 'Binance BNB',
         network: 'BNB (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol: `BNB`
+        symbol: 'BNB'
     },
     {
         name: 'Solana',
         network: 'Solana',
         address: 'D71a9kxuHUGL56oViA8DxHkRgAqy1JAn2yE2P2rokvtx',
-        symbol: `SOL`
+        symbol: 'SOL'
     },
     {
         name: 'Tron',
         network: 'TRX (TRC20)',
         address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa',
-        symbol: `TRX`
+        symbol: 'TRX'
     },
     {
-        name: 'TON ',
-        network: 'The Open Network',
+        name: 'The Open Network',
+        network: 'TON',
         address: 'UQAiq2Fq9C8hSX4BBon1AQyBVTDWMXRFboAfd154Wv7Dttvi',
-        symbol: `TON`
+        symbol: 'TON'
     },
     {
         name: 'SUI',
         network: 'SUI',
         address: '0xa687f64035d90685a80366d3b12d3c03ddc9711751b2c792adbd606d7b4dff6f',
-        symbol: `SUI`
+        symbol: 'SUI'
     },
     {
         name: 'DOGE',
         network: 'DOGE',
         address: 'D7SKaCYu9ase4w7h9BY9xNP67xVxv7pVt3',
-        symbol: `DOGE`
+        symbol: 'DOGE'
     },
     {
         name: 'Litecoin',
         network: 'Litecoin LTC',
         address: 'LVCjaPaxeSLd8jjABbzytPBPv9hqMGCxfi',
-        symbol: `LTC`
+        symbol: 'LTC'
     },
     {
         name: 'USDT',
         network: 'USDT (TRC20)',
         address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa',
-        symbol: `USDT`
+        symbol: 'USDT'
     },
     {
-        name: 'USDT',
+        name: 'USDT (BEP20)',
         network: 'USDT (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol: `USDT`
+        symbol: 'USDT'
     },
     {
-        name: 'USDC',
+        name: 'USDC (ERC20)',
         network: 'USDC (ERC20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol: `USDC`
+        symbol: 'USDC'
     },
     {
-        name: 'USDC',
+        name: 'USDC (BEP20)',
         network: 'USDC (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
-        symbol: `USDC`
-    },
-]
+        symbol: 'USDC'
+    }
+];
+
 export const currencies = [
     { name: 'USD', symbol: '$' },
     { name: 'NGN', symbol: '₦' },

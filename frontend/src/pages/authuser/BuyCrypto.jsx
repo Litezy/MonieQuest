@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import FormInput from '../../utils/FormInput';
-import { blockchainNetworks, coins, currencies, instructions } from '../../AuthComponents/AuthUtils';
+import { blockchainNetworks, coinDetails, coinNames, currencies, instructions } from '../../AuthComponents/AuthUtils';
 import ModalLayout from '../../utils/ModalLayout';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +20,7 @@ const BuyCrypto = () => {
     const rate = 1715
     const [forms, setForms] = useState({
         amount: '',
-        type: coins[0],
+        type: coinNames[0],
         network: '',
         wallet_add: '',
         isExpired: 'No'
@@ -83,6 +83,7 @@ const BuyCrypto = () => {
             setInNaira(naira.toLocaleString())
         }
     }, [forms.amount, rate])
+    const [selected, setSelected] = useState([])
 
 
     const navigate = useNavigate()
@@ -95,14 +96,14 @@ const BuyCrypto = () => {
             }
             return res.data
         } catch (error) {
-          console.log(error)
+            console.log(error)
         }
     }
     const confirmAndBuy = async (e) => {
         e.preventDefault();
         setModal(false);
         setLoading(true);
-    
+
         const formdata = {
             crypto_currency: forms.type,
             type: 'buy',
@@ -111,26 +112,26 @@ const BuyCrypto = () => {
             amount: forms.amount,
             wallet_exp: forms.isExpired
         };
-    
+        // return console.log(formdata)
         try {
             const response = await AuthPostApi(Apis.transaction.buy_crypto, formdata);
             if (response.status !== 201) {
                 setLoading(false);
                 ErrorAlert(response.msg);
-                return; 
+                return;
             }
             fetchOrders();
             await new Promise((resolve) => setTimeout(resolve, 2000));
             SuccessAlert(response.msg);
             navigate(`/user/exchange/orders`);
-    
+
         } catch (error) {
             ErrorAlert(error.message);
         } finally {
             setLoading(false);
         }
     };
-    
+
 
 
     useEffect(() => {
@@ -147,6 +148,15 @@ const BuyCrypto = () => {
             window.removeEventListener('offline', handleOffline);
         };
     }, []);
+
+    useEffect(() => {
+        if (forms.type) {
+            const staticData = [{network: "--select--"} ];
+            const filteredNetworks = coinDetails.filter((name) => name.name.includes(forms.type))
+            const newArr = staticData.concat(filteredNetworks)
+            setSelected(newArr);
+        }
+    }, [forms.type])
 
     return (
         <ExchangeLayout>
@@ -177,9 +187,9 @@ const BuyCrypto = () => {
                                 <div className="flex items-start gap-2 flex-col w-full">
                                     <div className="font-bold text-lg">Crypto Currency:</div>
                                     <select onChange={(e) => setForms({ ...forms, type: e.target.value })} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
-                                        {coins.map((coin, i) => {
+                                        {coinNames.map((coin, i) => {
                                             return (
-                                                <option value={coin.network} key={i} className="outline-none">{coin.network}</option>
+                                                <option value={coin} key={i} className="outline-none">{coin}</option>
                                             )
                                         })}
                                     </select>
@@ -248,13 +258,23 @@ const BuyCrypto = () => {
                                 <div className="flex w-full items-start gap-2 flex-col  ">
                                     <div className="font-bold text-lg">Network</div>
                                     <div className="w-full ">
-                                        <select name='network' value={forms.network} onChange={handleChange} className='w-full bg-dark rounded-md'>
-                                            {blockchainNetworks.map((network) => (
-                                                <option className='bg-' key={network.value} value={network.value}>
-                                                    {network.label}
-                                                </option>
-                                            ))}
+                                        <select
+                                            name="network"
+                                            value={forms.network || ""}
+                                            onChange={(e) => setForms({ ...forms, network: e.target.value })}
+                                            className="w-full bg-dark rounded-md"
+                                        >
+                                            {selected.length > 0 ? (
+                                                selected.map((item, i) => (
+                                                    <option key={i} value={item.network}>
+                                                        {item.network}
+                                                    </option>
+                                                ))
+                                            ) : (
+                                                <option value="">--select--</option>
+                                            )}
                                         </select>
+
                                         <div className="text-red-600 mt-1 text-sm">Please ensure that the network you select matches the wallet address provided to prevent any loss of funds.</div>
 
                                     </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import FormInput from '../../utils/FormInput';
-import { coins, currencies, sellInstruction } from '../../AuthComponents/AuthUtils';
+import { coinDetails, currencies, sellInstruction } from '../../AuthComponents/AuthUtils';
 import ModalLayout from '../../utils/ModalLayout';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaCopy } from 'react-icons/fa';
@@ -26,7 +26,7 @@ const SellCrypto = () => {
         trans_hash: '',
         symbol: '',
         crypto:"",
-        network: coins[0].network,
+        network: '',
         wallet_add: ''
     })
 
@@ -115,7 +115,7 @@ const SellCrypto = () => {
             const res = await AuthPostApi(Apis.transaction.sell_crypto, formdata)
             if (res.status !== 201) return ErrorAlert(res.msg)
             SuccessAlert(res.msg);
-            setForms({ amount: '', type: coins[0], trans_hash: '' });
+            setForms({ amount: '', type: coinDetails[0], trans_hash: '' });
             setScreen(1);
             await new Promise((resolve) => setTimeout(resolve, 2000));
             navigate('/user/exchange/orders');
@@ -148,7 +148,7 @@ const SellCrypto = () => {
 
     const handleCoins = (e) => {
         const value = e.target.value
-        const findNetwork = coins.find((trx) => trx.network === String(value))
+        const findNetwork = coinDetails.find((trx) => trx.network === String(value))
         if (findNetwork) {
             setForms({ ...forms, network: findNetwork.network, wallet_add: findNetwork.address, crypto: findNetwork.name });
         } else {
@@ -227,7 +227,7 @@ const SellCrypto = () => {
                                 <div className="flex items-start gap-2 flex-col w-full">
                                     <div className="font-bold text-lg">Crypto Currency:</div>
                                     <select onChange={handleCoins} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
-                                        {coins.map((coin, i) => {
+                                        {coinDetails.map((coin, i) => {
                                             return (
                                                 <option value={coin.network} key={i} className="outline-none">{coin.network}</option>
                                             )
