@@ -12,7 +12,7 @@ const ProductsOrdersModal = ({ selected }) => {
     }
 
     return (
-        <div className="flex w-full gap-8 flex-col">
+        <div className="flex w-full gap-8 flex-col poppins">
             <div className='flex flex-col gap-5'>
                 <div className="text-center text-lightgreen">Transaction Details</div>
                 <div className='flex flex-col gap-2'>

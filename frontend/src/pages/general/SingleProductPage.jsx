@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
 import { Link, useParams } from 'react-router-dom'
-import { IoCart } from 'react-icons/io5'
-import { IoCheckmarkDoneCircle } from "react-icons/io5";
+import { IoEnter, IoCheckmarkCircleSharp, IoCart } from "react-icons/io5";
 import { GiCheckMark } from "react-icons/gi";
 import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
 import Rating from '@mui/material/Rating';
@@ -217,7 +216,7 @@ const SingleProductPage = () => {
                                         </div>
                                         <Link to='/contact' onClick={MoveToTop} className='text-xs underline capitalize'>report problem</Link>
                                     </div>
-                                    <div className='bg-primary border border-ash w-full h-fit p-5 mt-4'>
+                                    <div className='bg-primary border border-ash w-full h-fit p-5 mt-4 overflow-hidden'>
                                         <div className='grid grid-cols-2 items-center'>
                                             <div className='flex flex-col gap-2'>
                                                 <div className='text-xl font-bold'>Reviews</div>
@@ -235,9 +234,9 @@ const SingleProductPage = () => {
                                             </div>
                                             <div className='w-fit relative'>
                                                 {loading && <ButtonLoader />}
-                                                <button className='outline-none w-fit h-fit flex gap-1 items-center justify-center py-3 px-10 bg-ash uppercase text-sm font-bold rounded-[4px] text-white tracking-widest relative' onClick={submitRating}>
+                                                <button className='outline-none h-fit flex gap-1 items-center justify-center py-3 px-6 bg-ash uppercase text-sm font-bold rounded-[4px] text-white tracking-widest relative' onClick={submitRating}>
                                                     <span>{form.submit ? 'submitted' : 'submit'}</span>
-                                                    {form.submit && <IoCheckmarkDoneCircle />}
+                                                    {form.submit ? <IoCheckmarkCircleSharp /> : <IoEnter />}
                                                 </button>
                                             </div>
                                         </div>

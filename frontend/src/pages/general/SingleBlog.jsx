@@ -227,7 +227,7 @@ const SingleBlog = () => {
                                             <div className="">{singleBlog?.second_paragraph_content}</div>
                                         </div>
                                         {singleBlog?.second_paragraph_image && <div className="flex items-center justify-center" id='second'>
-                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.second_paragraph_image}`} alt="second image" className="w-fit rounded-xl md:max-h-[20rem] object-cover object-center" />
+                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.second_paragraph_image}`} alt="second image" className="w-auto rounded-xl md:max-h-[20rem] object-cover object-center" />
                                         </div>}
                                     </div>
                                     <div className='flex flex-col gap-8'>
@@ -236,7 +236,7 @@ const SingleBlog = () => {
                                             <div className="">{singleBlog?.extras_content}</div>
                                         </div>
                                         {singleBlog?.extras_image && <div className="flex items-center justify-center" id='second'>
-                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.extras_image}`} alt="extras image" className="w-fit rounded-xl md:max-h-[20rem] object-cover object-center " />
+                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.extras_image}`} alt="extras image" className="w-auto rounded-xl md:max-h-[20rem] object-cover object-center " />
                                         </div>}
                                     </div>
                                 </div>

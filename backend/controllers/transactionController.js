@@ -74,7 +74,7 @@ exports.BuyCrypto = async (req, res) => {
 
 exports.SellCrypto = async (req, res) => {
     try {
-        const { crypto_currency, type, amount, trans_hash,network } = req.body
+        const { crypto_currency, type, amount, trans_hash, network } = req.body
         if (!crypto_currency || !type || !amount || !trans_hash || !network) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
         const findUser = await User.findOne({ where: { id: req.user } })
         if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
@@ -310,7 +310,7 @@ exports.cancelOrder = async (req, res) => {
         })
         await Mailing({
             subject: 'Crypto Buy Order canceled',
-            eTitle: `Order ID: ${findBuyId.order_no} Marked as Paid`,
+            eTitle: `Order ID: ${findBuyId.order_no} canceled`,
             eBody: `
              <div style="font-size: 2rem">Hi ${findUser.first_name},</div>
              <div style="margin-top: 1.5rem">Your crypto buy order with the ID: ${findBuyId.order_no} has been canceled. If you feel this was done by a mistake, kindly place another order as we are here to serve you better. Thank you for trading with us.</div>
@@ -347,8 +347,8 @@ exports.cancelOrder = async (req, res) => {
 
 exports.requestWithdrawal = async (req, res) => {
     try {
-        const { bank_name, account_number, bank_user, amount} = req.body
-        if (!bank_name || !account_number || !bank_user || !amount ) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
+        const { bank_name, account_number, bank_user, amount } = req.body
+        if (!bank_name || !account_number || !bank_user || !amount) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const findUserWallet = await Wallet.findOne({ where: { user: user ? user.id : req.user } })
@@ -399,7 +399,7 @@ exports.requestWithdrawal = async (req, res) => {
                     eBody: `
                      <div>Hi Admin, A bank withdrawal request with the transaction ID of: ${transId} has been made, kindly review and credit customer ${user.first_name}. ${moment(withdrawal.createdAt).format('DD-MM-yyyy')} / ${moment(withdrawal.createdAt).format('h:mm')}.</div> 
                     `,
-                    account: admin, 
+                    account: admin,
                 })
             })
         }
@@ -417,7 +417,7 @@ exports.getUserLatestWithdrawals = async (req, res) => {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const getWithdrawals = await BankWithdrawal.findAll({
-            where: { userid:  req.user, status: 'pending' },
+            where: { userid: req.user, status: 'pending' },
             limit: 5,
             order: [['createdAt', 'DESC']]
         })
@@ -433,8 +433,8 @@ exports.getAllTransactions = async (req, res) => {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const giftcardsTrans = await GiftCardSell.findAll({ where: { userid: user ? user.id : req.user } })
-        const cryptobuysTrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user,status:['failed','completed'] } })
-        const cryptosellsTrans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user,status:['failed','completed'] } })
+        const cryptobuysTrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user, status: ['failed', 'completed'] } })
+        const cryptosellsTrans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user, status: ['failed', 'completed'] } })
         const bankWithdrawals = await BankWithdrawal.findAll({ where: { userid: user ? user.id : req.user } })
         const alltrans = [...giftcardsTrans, ...cryptobuysTrans, ...cryptosellsTrans, ...bankWithdrawals]
         //sort by created At
