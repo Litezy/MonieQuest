@@ -170,7 +170,7 @@ exports.ProductOrder = async (req, res) => {
             subject: 'New Order Placed',
             eTitle: `Order placed`,
             eBody: `
-             <div>You have successfully placed an order with the id (#${productOrder.gen_id}) for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
+             <div>You have successfully placed an order with the id (#${productOrder.gen_id}) for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm A')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
             `,
             account: buyer
         })
