@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AreaChart, Area, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import SelectComp from "../GeneralComponents/SelectComp";
 import { useAtom } from "jotai";
 import { USER_CHARTS } from "../services/store";

@@ -19,71 +19,85 @@ export const coins = [
         network: `--select--`
     },
     {
+        name:'Bitcoin ',
         network: 'Bitcoin BTC',
         address: '1NnzdbP1TVjHHExWB53E9eaKL1J3aBoRvo',
         symbol: `BTC`
     },
     {
+        name:'Ethereum  ',
         network: 'Ethereum (ERC20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
         symbol: `ETH`
     },
     {
+        name: 'Ethereum ',
         network: 'Ethereum (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
         symbol: `ETH`
     },
     {
-        network: 'Binance BNB (BEP20)',
+        name: 'Binance',
+        network: 'BNB (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
         symbol: `BNB`
     },
     {
-        network: 'Solana SOL',
+        name: 'Solana',
+        network: 'Solana',
         address: 'D71a9kxuHUGL56oViA8DxHkRgAqy1JAn2yE2P2rokvtx',
         symbol: `SOL`
     },
     {
-        network: 'Tron TRX (TRC20)',
+        name: 'Tron',
+        network: 'TRX (TRC20)',
         address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa',
         symbol: `TRX`
     },
     {
-        network: 'TON (The Open Network)',
+        name: 'TON ',
+        network: 'The Open Network',
         address: 'UQAiq2Fq9C8hSX4BBon1AQyBVTDWMXRFboAfd154Wv7Dttvi',
         symbol: `TON`
     },
     {
+        name: 'SUI',
         network: 'SUI',
         address: '0xa687f64035d90685a80366d3b12d3c03ddc9711751b2c792adbd606d7b4dff6f',
         symbol: `SUI`
     },
     {
+        name: 'DOGE',
         network: 'DOGE',
         address: 'D7SKaCYu9ase4w7h9BY9xNP67xVxv7pVt3',
         symbol: `DOGE`
     },
     {
+        name: 'Litecoin',
         network: 'Litecoin LTC',
         address: 'LVCjaPaxeSLd8jjABbzytPBPv9hqMGCxfi',
         symbol: `LTC`
     },
     {
+        name: 'USDT',
         network: 'USDT (TRC20)',
         address: 'TLA9qYoZ35TJ3jfaZQeDVpGD6B2injCsTa',
         symbol: `USDT`
     },
     {
+        name: 'USDT',
         network: 'USDT (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
         symbol: `USDT`
     },
     {
+        name: 'USDC',
         network: 'USDC (ERC20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
         symbol: `USDC`
     },
     {
+        name: 'USDC',
         network: 'USDC (BEP20)',
         address: '0x21b01fedd8822936924cd2de09c589ef2b9caba3',
         symbol: `USDC`
@@ -199,121 +213,6 @@ export const formatter = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0
 })
 
-export const alltransactions = [
-    {
-        tag: 'crypto',
-        type: 'buy',
-        amount: '200',
-        date: '22 Feb 2024',
-        status: 'completed',
-        trans_id: '28fndjfhbfvfj33',
-        trans_hash: '28fndjfhbfvfjhashgraph',
-        receiving_wallet: '0xrfnfu488493494',
-        get desc() {
-            return `Your p2p buy order of $${this.amount} is marked as completed, kindly check your balance.`;
-        },
-        id: 1
-    },
-    {
-        tag: 'crypto',
-        type: 'sell',
-        amount: '210',
-        date: '22 Feb 2024',
-        status: 'completed',
-        trans_id: '28fndjfhbfvfj9400',
-        sending_wallet: '0xrfnfu488493494',
-        get desc() {
-            return `Your p2p sell order of $${this.amount} is marked as completed, kindly check your balance.`;
-        },
-        id: 2
-    },
-    {
-        tag: 'bank withdrawal',
-        amount: '1000',
-        date: '20 Feb 2024',
-        status: 'pending',
-        account_number: '274774783827',
-        bank_account: 'Moniepoint',
-        account_name: 'Moniequest Basit',
-        trans_id: '7583ndjfiufuf0r9994',
-        reference_id: '7583ndjfiufuf0r9994222',
-        get desc() {
-            return `Your withdrawal of $${this.amount} is marked as ${this.status}, kindly wait as we process your transaction.`;
-        },
-        id: 3
-    },
-    {
-        tag: 'bank withdrawal',
-        amount: '1000',
-        date: '20 Feb 2024',
-        status: 'completed',
-        account_number: '274774783827',
-        bank_acount: 'Moniepoint',
-        account_name: 'Moniequest Basit',
-        trans_id: '75383ndjf84',
-        reference_id: '72583ndjfiufu33fkf4',
-        get desc() {
-            return `Your withdrawal of $${this.amount} is marked as ${this.status}, kindly check your local bank.`;
-        },
-        id: 4
-    },
-    {
-        tag: 'profit tools',
-        amount: '1500',
-        date: '20 Feb 2024',
-        tap: 'tools',
-        status: 'completed',
-        order_no: '274774783827',
-        produt_title: 'Diets',
-        product_desc: 'How to eat smart',
-        trans_id: '753283ndjfiufuf2',
-        id: 5
-    },
-    {
-        tag: 'giftcard',
-        type: 'sell',
-        amount: '200',
-        date: '20 March 2024',
-        status: 'declined',
-        trans_id: '75832ndjfiufuf0r9994gift',
-        card_code: '70583ndjfiufuf0r9994code',
-        card_brand: 'apple',
-        card_pin: '294',
-        get desc() {
-            return `Your order of $${this.amount} is marked as ${this.status}, kindly check notifications or email to find out more about your failed transaction.`;
-        },
-        id: 6
-    },
-    {
-        tag: 'giftcard',
-        type: 'sell',
-        amount: '200',
-        date: '20 March 2024',
-        status: 'completed',
-        trans_id: '75183ndjfiufuf0r9994gift99',
-        card_code: '7222583ndjfiufuf0r9994code88',
-        card_brand: 'amazon',
-        card_pin: '',
-        get desc() {
-            return `Your order of $${this.amount} is marked as ${this.status}, kindly check your balance.`;
-        },
-        id: 7
-    },
-    {
-        tag: 'profit tools',
-        amount: '1200',
-        date: '20 Feb 2024',
-        status: 'pending',
-        tap: 'tools',
-        order_no: '274774783827',
-        produt_title: 'Deodorants',
-        product_desc: 'How to apply deodorants',
-        trans_id: '7099583ndjfiufuf',
-        id: 8
-    },
-
-]
-
 export const banksArr = [
     "AB Microfinance Bank",
     "Access Bank",
@@ -353,8 +252,3 @@ export const banksArr = [
     "Zenith Bank"
 ];
 
-export const bankacc = {
-    bank: 'Zenith Bank',
-    account_name: 'Basit MoneyQuest',
-    account_number: '1234567890',
-}

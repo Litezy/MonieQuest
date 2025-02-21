@@ -74,8 +74,8 @@ exports.BuyCrypto = async (req, res) => {
 
 exports.SellCrypto = async (req, res) => {
     try {
-        const { crypto_currency, type, amount, trans_hash, } = req.body
-        if (!crypto_currency || !type || !amount || !trans_hash) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
+        const { crypto_currency, type, amount, trans_hash,network } = req.body
+        if (!crypto_currency || !type || !amount || !trans_hash || !network) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
         const findUser = await User.findOne({ where: { id: req.user } })
         if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
         const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
@@ -83,6 +83,7 @@ exports.SellCrypto = async (req, res) => {
             crypto_currency,
             type,
             amount,
+            network,
             trans_hash,
             userid: req.user,
             order_no: orderId
@@ -432,8 +433,8 @@ exports.getAllTransactions = async (req, res) => {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const giftcardsTrans = await GiftCardSell.findAll({ where: { userid: user ? user.id : req.user } })
-        const cryptobuysTrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user } })
-        const cryptosellsTrans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user } })
+        const cryptobuysTrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user,status:['failed','completed'] } })
+        const cryptosellsTrans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user,status:['failed','completed'] } })
         const bankWithdrawals = await BankWithdrawal.findAll({ where: { userid: user ? user.id : req.user } })
         const alltrans = [...giftcardsTrans, ...cryptobuysTrans, ...cryptosellsTrans, ...bankWithdrawals]
         //sort by created At

@@ -86,39 +86,51 @@ const BuyCrypto = () => {
 
 
     const navigate = useNavigate()
-    const fetchOrders = useCallback(async () => {
-        const res = await AuthGetApi(Apis.transaction.crypto_order_history)
-        if (res.status !== 200) {
-            console.log(res.msg)
-            return;
-        }
-    }, [])
-    const confirmAndBuy = async (e) => {
-        e.preventDefault()
-        setModal(false)
-        setLoading(true)
-        const formdata = {
-            crypto_currency: forms.type, type: 'buy', wallet_address: forms.wallet_add, network: forms.network,
-            amount: forms.amount, wallet_exp: forms.isExpired
-        }
+    const fetchOrders = async () => {
         try {
-            const response = await AuthPostApi(Apis.transaction.buy_crypto, formdata)
-            if (response.status !== 201) {
-                setLoading(false)
-                ErrorAlert(response.msg)
+            const res = await AuthGetApi(Apis.transaction.crypto_order_history)
+            if (res.status !== 200) {
+                console.log(res.msg)
+                return;
             }
-            fetchOrders()
-            setForms({ amount: '', type: coins[0], network: '', wallet_add: '', isExpired: 'No' })
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-            SuccessAlert(response.msg)
-            navigate(`/user/exchange/orders`)
+            return res.data
         } catch (error) {
-            ErrorAlert(error.message)
-        } finally {
-            setLoading(false)
+          console.log(error)
         }
-
     }
+    const confirmAndBuy = async (e) => {
+        e.preventDefault();
+        setModal(false);
+        setLoading(true);
+    
+        const formdata = {
+            crypto_currency: forms.type,
+            type: 'buy',
+            wallet_address: forms.wallet_add,
+            network: forms.network,
+            amount: forms.amount,
+            wallet_exp: forms.isExpired
+        };
+    
+        try {
+            const response = await AuthPostApi(Apis.transaction.buy_crypto, formdata);
+            if (response.status !== 201) {
+                setLoading(false);
+                ErrorAlert(response.msg);
+                return; 
+            }
+            fetchOrders();
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            SuccessAlert(response.msg);
+            navigate(`/user/exchange/orders`);
+    
+        } catch (error) {
+            ErrorAlert(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
 
 
     useEffect(() => {

@@ -11,7 +11,7 @@ import AirdropCarousel from '../../GeneralComponents/AirdropCarousel'
 
 const statuses = ["Open", "Closed"]
 const kyces = ["Required", "Unrequired"]
-const categories = ["DeFi", "Featured", "New", "NFT", "Potential", "Earn_crypto"]
+const categories = ["DeFi", "Featured", "New", "NFT", "Potential", "Earn Crypto"]
 const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche', 'Base', 'Berachain', 'Binance', 'Bitcoin', 'Blast', 'Cardano', 'Celestia', 'Cosmos', 'Dogechain', 'Ethereum', 'Filecoin', 'Immutable', 'Injective', 'IoTeX', 'Linea', 'Manta Network', 'Near Protocol', 'Optimism', 'Other', 'Polkadot', 'Polygon', 'Ronin', 'Scroll', 'Solana', 'Sui', 'Tesnet', 'TON', 'Tron', 'zkSync']
 
 const AirdropsPage = () => {
@@ -80,8 +80,9 @@ const AirdropsPage = () => {
 
   const SubmitFilter = () => {
     const mainData = staticData
+    const selectedCategory = select.category === 'Earn Crypto' ? 'earn_crypto' : select.category
     if (select.kyc || select.category || select.blockchain || select.status) {
-      const filteredData = mainData.filter(item => item.kyc.toLocaleLowerCase() === select.kyc.toLocaleLowerCase() || item.category.toLocaleLowerCase() === select.category.toLocaleLowerCase() || item.status.toLocaleLowerCase() === select.status.toLocaleLowerCase() || item.blockchain === select.blockchain)
+      const filteredData = mainData.filter(item => item.kyc.toLocaleLowerCase() === select.kyc.toLocaleLowerCase() || item.category.toLocaleLowerCase() === selectedCategory.toLocaleLowerCase() || item.status.toLocaleLowerCase() === select.status.toLocaleLowerCase() || item.blockchain === select.blockchain)
       setLoading(true)
       setTimeout(() => {
         setAirdrops(filteredData)

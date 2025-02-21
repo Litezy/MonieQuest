@@ -24,7 +24,7 @@ const OrderPage = () => {
             const res = await AuthGetApi(`${Apis.transaction.single_history}/${id}/${tag}`)
             if (res.status !== 200) return ErrorAlert(res.msg)
             setData(res.data[0])
-            console.log(res)
+            // console.log(res)
         } catch (error) {
             ErrorAlert(error.message)
         } finally {
@@ -163,19 +163,19 @@ const OrderPage = () => {
                                     <div className="flex flex-col items-start">
                                         <div className="text-sm">Crypto Currency:</div>
                                         <div className="w-full">
-                                            <FormInput value={data.crypto_currency} className={`${green} capitalize`} />
+                                            <FormInput read={true} value={data.crypto_currency} className={`${green} capitalize`} />
                                         </div>
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">Amount to pay in USD:</div>
                                         <div className="w-full">
-                                            <FormInput value={`${currencies[0].symbol}${data.amount}`} className={`${green}`} />
+                                            <FormInput read={true} value={`${currencies[0].symbol}${data.amount}`} className={`${green}`} />
                                         </div>
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">Amount to pay in NGN:</div>
                                         <div className="w-full">
-                                            <FormInput value={`${currencies[1].symbol}${naira}`} className={`${green}`} />
+                                            <FormInput read={true} value={`${currencies[1].symbol}${naira}`} className={`${green}`} />
                                         </div>
                                     </div>
 
@@ -186,19 +186,19 @@ const OrderPage = () => {
 
                                     <div className="">
                                         <div className="text-sm">Network provided:</div>
-                                        <FormInput value={data?.network} className={`${green}`} />
+                                        <FormInput read={true} value={data?.network} className={`${green}`} />
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">Wallet Address Provided:</div>
                                         <div className="flex items-center gap-2">
                                             <div className="w-full">
-                                                <FormInput value={data?.wallet_address} className={`${green}`} />
+                                                <FormInput read={true} value={data?.wallet_address} className={`${green}`} />
                                             </div>
                                         </div>
                                     </div>
                                     <div className="w-full">
                                         <div className="text-sm">Status:</div>
-                                        <FormInput value={data?.status} className={`${data?.status === 'paid' ? green : 'text-yellow-300'}`} />
+                                        <FormInput read={true} value={data?.status} className={`${data?.status === 'paid' ? green : 'text-yellow-300'}`} />
                                     </div>
 
                                 </div>

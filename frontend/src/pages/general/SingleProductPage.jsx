@@ -235,9 +235,9 @@ const SingleProductPage = () => {
                                             </div>
                                             <div className='w-fit relative'>
                                                 {loading && <ButtonLoader />}
-                                                <button className='outline-none w-fit h-fit flex gap-1 items-center justify-center py-3 px-8 bg-ash uppercase text-sm font-bold rounded-[4px] text-white tracking-widest relative' onClick={submitRating}>
+                                                <button className='outline-none w-fit h-fit flex gap-1 items-center justify-center py-3 px-10 bg-ash uppercase text-sm font-bold rounded-[4px] text-white tracking-widest relative' onClick={submitRating}>
                                                     <span>{form.submit ? 'submitted' : 'submit'}</span>
-                                                    <IoCheckmarkDoneCircle />
+                                                    {form.submit && <IoCheckmarkDoneCircle />}
                                                 </button>
                                             </div>
                                         </div>

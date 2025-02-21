@@ -25,6 +25,7 @@ const SellCrypto = () => {
         amount: '',
         trans_hash: '',
         symbol: '',
+        crypto:"",
         network: coins[0].network,
         wallet_add: ''
     })
@@ -104,18 +105,19 @@ const SellCrypto = () => {
         setLoading(true)
         const formdata = {
             amount: forms.amount,
-            crypto_currency: forms.type,
+            crypto_currency: forms.crypto,
             type: 'sell',
             trans_hash: forms.trans_hash,
             network: forms.network
         }
+
         try {
             const res = await AuthPostApi(Apis.transaction.sell_crypto, formdata)
             if (res.status !== 201) return ErrorAlert(res.msg)
             SuccessAlert(res.msg);
             setForms({ amount: '', type: coins[0], trans_hash: '' });
             setScreen(1);
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             navigate('/user/exchange/orders');
             setLoading(false);
 
@@ -148,7 +150,7 @@ const SellCrypto = () => {
         const value = e.target.value
         const findNetwork = coins.find((trx) => trx.network === String(value))
         if (findNetwork) {
-            setForms({ ...forms, network: findNetwork.network, wallet_add: findNetwork.address, symbol: findNetwork.symbol });
+            setForms({ ...forms, network: findNetwork.network, wallet_add: findNetwork.address, crypto: findNetwork.name });
         } else {
             setForms({ ...forms, network: '', wallet_add: '' });
         }

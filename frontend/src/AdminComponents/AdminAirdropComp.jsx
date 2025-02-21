@@ -23,7 +23,7 @@ const AdminAirdropComp = ({ item }) => {
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>category:</span>
-                        <span>{item?.category}</span>
+                        <span>{item?.category === 'earn_crypto' ? 'earn crypto' : item?.category}</span>
                     </div>
                     <div className='flex justify-between gap-4'>
                         <span>blockchain:</span>

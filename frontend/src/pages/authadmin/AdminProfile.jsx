@@ -49,7 +49,8 @@ const AdminProfile = () => {
         sell_min: '',
         sell_max: '',
         bank_min: '',
-        kyc_threshold: ''
+        kyc_threshold: '',
+        leaderboard_reward: ''
     })
     const [profile, setProfile] = useState({
         img: user.image ? `${imageurl}/profiles/${user.image}` : avatar,
@@ -98,6 +99,7 @@ const AdminProfile = () => {
             sell_max: utils?.sell_max || '',
             bank_min: utils?.bank_withdraw_min || '',
             kyc_threshold: utils?.kyc_threshold || '',
+            leaderboard_reward: utils?.leaderboard_reward || '',
         })
     }, [utils, bank])
 
@@ -219,6 +221,7 @@ const AdminProfile = () => {
             buy_max: parseFloat(form.buy_max),
             sell_min: parseFloat(form.sell_min),
             sell_max: parseFloat(form.sell_max),
+            leaderboard_reward: parseFloat(form.leaderboard_reward),
         }
 
         setLoading({
@@ -393,19 +396,23 @@ const AdminProfile = () => {
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Sell min (USD)</div>
-                                        <FormInput placeholder='Enter maximum buy amount' name='sell_min' value={form.sell_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                        <FormInput placeholder='Enter minimum sell amount' name='sell_min' value={form.sell_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Sell max (USD)</div>
-                                        <FormInput placeholder='Enter maximum buy amount' name='sell_max' value={form.sell_max} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                        <FormInput placeholder='Enter maximum sell amount' name='sell_max' value={form.sell_max} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <div className='font-medium text-gray-200 text-sm ml-2'>Bank withdrawal min (NGN)</div>
-                                        <FormInput placeholder='Enter maximum buy amount' name='bank_min' value={form.bank_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                        <FormInput placeholder='Enter minimum withdrawal amount' name='bank_min' value={form.bank_min} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                     <div className='flex flex-col gap-2'>
-                                        <div className='font-medium text-gray-200 text-sm ml-2'>KYC Threshold (USD)</div>
-                                        <FormInput placeholder='Enter maximum buy/sell amount' name='kyc_threshold' value={form.kyc_threshold} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                        <div className='font-medium text-gray-200 text-sm ml-2'>KYC threshold (USD)</div>
+                                        <FormInput placeholder='Enter KYC threshold amount' name='kyc_threshold' value={form.kyc_threshold} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
+                                    </div>
+                                    <div className='flex flex-col gap-2'>
+                                        <div className='font-medium text-gray-200 text-sm ml-2'>Leaderboard reward (USD)</div>
+                                        <FormInput placeholder='Enter leaderboard reward amount' name='leaderboard_reward' value={form.leaderboard_reward} onChange={formHandler} className='!bg-secondary !w-64' border={false} />
                                     </div>
                                 </div>
                                 <FormButton title='Update' className='!py-3 !text-base md:!w-1/2 mx-auto' type='button' onClick={UpdateUtils} />

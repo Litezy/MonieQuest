@@ -83,13 +83,13 @@ const Blogs = () => {
                                         <div className="flex flex-col gap-4">
                                             <div className="flex items-center gap-5">
                                                 <div className="text-xl"><GiArrowScope /></div>
-                                                <div className="text-lg">Latest articles on Airdrops</div>
+                                                <div className="t text-lg font-bold">Latest articles on Airdrops</div>
                                                 <Link
                                                     to={`/blogs/airdrop`} onClick={MoveToTop}
-                                                    className="w-fit px-4 ml-auto lg:ml-0 text-xl">view all</Link>
+                                                    className="w-fit px-4 bg-white text-ash  rounded-md py-1 ml-auto lg:ml-0 text-lg ">view all</Link>
                                             </div>
                                             <div className="w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-                                                {airdropBlogs.map((item, i) => (
+                                                {airdropBlogs.slice(0, 10).map((item, i) => (
                                                     <BlogDiv key={i} item={item} />
                                                 ))}
                                             </div>
@@ -99,13 +99,13 @@ const Blogs = () => {
                                         <div className="flex flex-col gap-4">
                                             <div className="flex items-center gap-5">
                                                 <div className="text-xl"><GiArrowScope /></div>
-                                                <div className="text-lg">Latest articles on Trading</div>
+                                                <div className="text-lg font-bold">Latest articles on Trading</div>
                                                 <Link
                                                     to={`/blogs/trading`} onClick={MoveToTop}
-                                                    className="w-fit px-4 ml-auto lg:ml-0 text-xl">view all</Link>
+                                                    className="w-fit px-4 bg-white text-ash  rounded-md py-1 ml-auto lg:ml-0 text-lg ">view all</Link>
                                             </div>
                                             <div className="w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-                                                {tradingBlogs.map((item, i) => (
+                                                {tradingBlogs.slice(0, 10).map((item, i) => (
                                                     <BlogDiv key={i} item={item} />
                                                 ))}
                                             </div>
@@ -115,13 +115,13 @@ const Blogs = () => {
                                         <div className="flex flex-col gap-4">
                                             <div className="flex items-center gap-5">
                                                 <div className="text-xl"><GiArrowScope /></div>
-                                                <div className="text-lg">Latest articles on Personal Finances</div>
+                                                <div className="text-lg font-bold">Latest articles on Personal Finances</div>
                                                 <Link
                                                     to={`/blogs/personal_finance`} onClick={MoveToTop}
-                                                    className="w-fit px-4 ml-auto lg:ml-0 text-xl">view all</Link>
+                                                    className="w-fit px-4 bg-white text-ash  rounded-md py-1 ml-auto lg:ml-0 text-lg ">view all</Link>
                                             </div>
                                             <div className="w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
-                                                {personalFinanceBlogs.map((item, i) => (
+                                                {personalFinanceBlogs.slice(0, 10).map((item, i) => (
                                                     <BlogDiv key={i} item={item} />
                                                 ))}
                                             </div>

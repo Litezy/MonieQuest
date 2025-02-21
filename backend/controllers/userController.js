@@ -91,7 +91,7 @@ exports.CreateAccount = async (req, res) => {
                     subject: 'New User Alert',
                     eTitle: `New user joins ${webShort}`,
                     eBody: `
-                     <div>Hello Admin, you have a new user as ${user.first_name} ${user.surname} joins ${webName} today; ${moment(user.createdAt).format('DD-MM-yyyy')} / ${moment(user.createdAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have a new user as ${user.first_name} ${user.surname} joins ${webName} today; ${moment(user.createdAt).format('DD-MM-yyyy')} / ${moment(user.createdAt).format('h:mm A')}.</div> 
                     `,
                     account: ele,
                 })
@@ -277,7 +277,7 @@ exports.SubscribeToPlatform = async (req, res) => {
     try {
         const { email, phone_number } = req.body
         if (!email || !phone_number) return res.json({ status: 404, msg: `Incomplete request found` })
-        const subscriber = await Subscriber.findOne({ where: { email: email } })
+        const subscriber = await Subscriber.findOne({ where: { email } })
         if (subscriber) return res.json({ status: 404, msg: `Email entered is already subscribed to our platform` })
 
         await Subscriber.create({
@@ -481,7 +481,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                         subject: `KYC Submission Alert`,
                         eTitle: `New KYC uploaded`,
                         eBody: `
-                          <div>Hello Admin, ${user.first_name} ${user.surname} just submitted KYC details today ${moment(kyc.createdAt).format('DD-MM-yyyy')} / ${moment(kyc.createdAt).format('h:mm')} verify authenticity <a href='${webURL}/admin/all_users' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello Admin, ${user.first_name} ${user.surname} just submitted KYC details today ${moment(kyc.createdAt).format('DD-MM-yyyy')} / ${moment(kyc.createdAt).format('h:mm A')} verify authenticity <a href='${webURL}/admin/all_users' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: ele
                     })
@@ -550,7 +550,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                         subject: `KYC Re-upload Alert`,
                         eTitle: `KYC re-uploaded`,
                         eBody: `
-                          <div>Hello Admin, ${user.first_name} ${user.surname} re-uploaded KYC details today ${moment(kyc.updatedAt).format('DD-MM-yyyy')} / ${moment(kyc.updatedAt).format('h:mm')}  verify authenticity <a href='${webURL}/admin-controls/users' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello Admin, ${user.first_name} ${user.surname} re-uploaded KYC details today ${moment(kyc.updatedAt).format('DD-MM-yyyy')} / ${moment(kyc.updatedAt).format('h:mm A')}  verify authenticity <a href='${webURL}/admin-controls/users' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: ele
                     })

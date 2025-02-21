@@ -24,19 +24,20 @@ const { Op } = require('sequelize')
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max } = req.body
+        const { exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max, leaderboard_reward } = req.body
         const utils = await Util.findOne({})
         if (!utils) {
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (!exchange_buy_rate || !exchange_sell_rate || !kyc_threshold || !bank_withdraw_min || !giftcard_rate || !buy_min || !buy_max || !sell_min || !sell_max || !leaderboard_reward) return res.json({ status: 404, msg: `Incomplete request found` })
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
 
             const newUtils = await Util.create({
-                exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max
+                exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max, leaderboard_reward
             })
 
             return res.json({ status: 200, msg: 'Rate(s) created successfully', utils: newUtils })
         }
-        else if (utils) {
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
+        else {
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
             if (exchange_buy_rate) {
                 utils.exchange_buy_rate = exchange_buy_rate
             }
@@ -63,6 +64,9 @@ exports.UpdateUtils = async (req, res) => {
             }
             if (sell_max) {
                 utils.sell_max = sell_max
+            }
+            if (leaderboard_reward) {
+                utils.leaderboard_reward = leaderboard_reward
             }
 
             await utils.save()
@@ -621,7 +625,7 @@ exports.UpdateKyc = async (req, res) => {
                 subject: `KYC Verification Success`,
                 eTitle: `KYC details verified`,
                 eBody: `
-                      <div>Hello ${kycUser.first_name} ${kycUser.surname} , Your KYC details submitted has been successfully verified after review.</div>
+                      <div>Hello ${kycUser.first_name} ${kycUser.surname}, Your KYC details submitted has been successfully verified after review.</div>
                     `,
                 account: kycUser
             })
@@ -868,6 +872,27 @@ exports.UpdateBlog = async (req, res) => {
     }
 }
 
+exports.DeleteBlog = async (req, res) => {
+    try {
+        const { blog_id } = req.body
+        if (!blog_id) return res.json({ status: 404, msg: `Provide a blog id` })
+
+        const blog = await Blog.findOne({ where: { id: blog_id } })
+        if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
+
+        const blogFolderPath = `./public/blogs/${blog.gen_id}`
+        if (fs.existsSync(blogFolderPath)) {
+            fs.rmSync(blogFolderPath, { recursive: true, force: true })
+        }
+
+        await blog.destroy()
+
+        return res.json({ status: 200, msg: 'Blog deleted successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
 exports.AllBlogs = async (req, res) => {
     try {
         const blogs = await Blog.findAll({
@@ -910,7 +935,7 @@ exports.SingleBlog = async (req, res) => {
     }
 }
 
-exports.DeleteBlogImages = async (req, res) => {
+exports.DeleteSingleBlogImages = async (req, res) => {
     try {
         const { id } = req.params
         const { tag } = req.body
@@ -1219,7 +1244,9 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
         if (tag === 'success') {
             if (!amount) return res.json({ status: 400, msg: "Amount is missing" })
             findUserWallet.balance = parseFloat(findUserWallet.balance) + parseFloat(amount)
+            findUserWallet.total_deposit = parseFloat(findUserWallet.total_deposit) + parseFloat(amount)
             findSell.status = 'completed'
+            await findUserWallet.save()
             await findSell.save()
             await Notification.create({
                 user: user.id,
@@ -1373,6 +1400,7 @@ exports.creditGiftCustomer = async (req, res) => {
         if (tag === 'success') {
             //credit the customer
             findUserWallet.balance = parseFloat(findUserWallet.balance) + parseFloat(amount)
+            findUserWallet.total_deposit = parseFloat(findUserWallet.deposit) + parseFloat(amount)
             order.status = 'completed'
             await order.save()
             await findUserWallet.save()
