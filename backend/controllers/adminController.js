@@ -625,7 +625,7 @@ exports.UpdateKyc = async (req, res) => {
                 subject: `KYC Verification Success`,
                 eTitle: `KYC details verified`,
                 eBody: `
-                      <div>Hello ${kycUser.first_name} ${kycUser.surname} , Your KYC details submitted has been successfully verified after review.</div>
+                      <div>Hello ${kycUser.first_name} ${kycUser.surname}, Your KYC details submitted has been successfully verified after review.</div>
                     `,
                 account: kycUser
             })
