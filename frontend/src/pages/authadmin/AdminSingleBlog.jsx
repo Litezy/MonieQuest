@@ -36,6 +36,10 @@ const AdminSingleBlog = () => {
         extras_content: '',
         conclusion: ''
     })
+    const [blogImage, setBlogImage] = useState({
+        img: null,
+        image: null,
+    })
     const [secondImg, setSecondImg] = useState({
         img: null,
         image: null,
@@ -44,12 +48,6 @@ const AdminSingleBlog = () => {
         img: null,
         image: null
     })
-    const [blogImage, setBlogImage] = useState({
-        img: null,
-        image: null,
-    })
-    console.log(extrasImg)
-
     const imgRef = useRef()
     const imgSecondRef = useRef()
     const imgExtrasRef = useRef()
@@ -60,7 +58,6 @@ const AdminSingleBlog = () => {
             [event.target.name]: event.target.value
         })
     }
-
 
     const FetchSingleBlog = useCallback(async () => {
         try {

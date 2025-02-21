@@ -266,10 +266,10 @@ const SingleBlog = () => {
                                 <div>Be the first to comment on this blog!</div>
                             }
                         </div>
-                        <form className="w-full p-4 rounded-md bg-primary relative" onSubmit={SubmitComment}>
+                        <form className="lg:w-5/6 w-full p-4 rounded-md bg-primary relative" onSubmit={SubmitComment}>
                             {loading && <Loading />}
                             <div className="text-lg mont">Leave a comment</div>
-                            <div className="flex mt-4 flex-col gap-5 w-full lg:w-3/4">
+                            <div className="flex mt-4 flex-col gap-5 w-full lg:w-11/12">
                                 <div className="flex items-center flex-col lg:flex-row gap-5">
                                     <div className="w-full">
                                         <FormInput label={`Username`} placeholder='Username' name='username' value={form.username} onChange={formHandler} />
@@ -284,7 +284,7 @@ const SingleBlog = () => {
                                 <div className="w-full flex-col  flex items-start gap-2">
                                     <div className="text-base">Comment</div>
                                     <textarea
-                                        className='resize-y w-full max-h-52 min-h-20 p-2 rounded-md bg-primary' placeholder='enter your comment'
+                                        className='resize-y w-full max-h-52 min-h-24 p-2 rounded-md bg-primary' placeholder='enter your comment'
                                         name="content" value={form.content} onChange={formHandler}></textarea>
                                 </div>
                                 <div className="w-1/2 flex items-center justify-center ml-auto">
@@ -293,8 +293,8 @@ const SingleBlog = () => {
                             </div>
                         </form>
                         {relatedBlogs.length > 0 ?
-                            <div className="mt-10 flex flex-col gap-2">
-                                <div className="">You may also like:</div>
+                            <div className="mt-10 flex flex-col gap-3">
+                                <div className="text-lg">You may also like:</div>
                                 <div className="w-full flex items-center gap-3 overflow-x-auto scroll">
                                     {relatedBlogs.map((item, i) => (
                                         <BlogDiv item={item} key={i} className={`!w-64 flex-none`} />
