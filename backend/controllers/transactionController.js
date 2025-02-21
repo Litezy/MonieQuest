@@ -346,8 +346,8 @@ exports.cancelOrder = async (req, res) => {
 
 exports.requestWithdrawal = async (req, res) => {
     try {
-        const { bank_name, account_number, bank_user, amount, trans_id } = req.body
-        if (!bank_name || !account_number || !bank_user || !amount || !trans_id) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
+        const { bank_name, account_number, bank_user, amount} = req.body
+        if (!bank_name || !account_number || !bank_user || !amount ) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const findUserWallet = await Wallet.findOne({ where: { user: user ? user.id : req.user } })
