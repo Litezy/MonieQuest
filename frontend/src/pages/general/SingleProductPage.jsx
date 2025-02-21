@@ -23,6 +23,7 @@ const SingleProductPage = () => {
     const [dataLoading, setDataLoading] = useState(true)
     const [loading, setLoading] = useState(false)
     const categories = singleProduct?.category ? JSON.parse(singleProduct.category) : []
+    const discountPrice = singleProduct?.discount_percentage && singleProduct?.price ? (100 - singleProduct.discount_percentage) / 100 * singleProduct.price : 0
 
     useEffect(() => {
         if (!ratingData) {
@@ -156,7 +157,7 @@ const SingleProductPage = () => {
                                     <Rating
                                         name="half-rating"
                                         precision={0.25}
-                                        value={singleProduct.total_ratings > 0 ? singleProduct.total_ratings / singleProduct.total_rate_persons : 0}
+                                        value={singleProduct?.total_ratings && singleProduct?.total_rate_persons > 0 ? singleProduct.total_ratings / singleProduct.total_rate_persons : 0}
                                         readOnly
                                         sx={{
                                             '& .MuiRating-iconEmpty': {
@@ -164,7 +165,7 @@ const SingleProductPage = () => {
                                             }
                                         }}
                                     />
-                                    <div>Score of {singleProduct?.total_ratings > 0 ? (singleProduct.total_ratings / singleProduct.total_rate_persons).toFixed(1) : 0} based on {singleProduct?.total_rate_persons || 0} review{singleProduct?.total_rate_persons > 1 && 's'}</div>
+                                    <div>Score of {singleProduct?.total_ratings && singleProduct?.total_rate_persons > 0 ? (singleProduct.total_ratings / singleProduct.total_rate_persons).toFixed(1) : 0} based on {singleProduct?.total_rate_persons || 0} review{singleProduct?.total_rate_persons > 1 && 's'}</div>
                                 </div>
                             </div>
                             <div className='grid lg:grid-cols-2 grid-cols-1 gap-6'>
@@ -178,7 +179,7 @@ const SingleProductPage = () => {
                                                 <div className='flex gap-4 items-center'>
                                                     <div className='text-sm text-red-600'>-{singleProduct.discount_percentage}%</div>
                                                     <div className='flex gap-2 items-end'>
-                                                        {singleProduct.discount_percentage && <div className='text-3xl font-bold'>₦{((100 - singleProduct.discount_percentage) / 100 * singleProduct.price).toLocaleString()}</div>}
+                                                        {singleProduct.discount_percentage && <div className='text-3xl font-bold'>₦{discountPrice.toLocaleString()}</div>}
                                                         <div className='line-through text-sm'>₦{singleProduct.price.toLocaleString()}</div>
                                                     </div>
                                                 </div>

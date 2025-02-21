@@ -105,32 +105,35 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
                         <div className='uppercase font-bold border-b border-zinc-500 pb-2'>{cartItems.length > 0 ? <span>your shopping cart ({cartItems.length} item{cartItems.length > 1 && 's'})</span> : <span>your cart is still empty</span>}</div>
                         {cartItems.length > 0 ?
                             <div className='flex flex-col gap-5 mt-8'>
-                                {cartItems.map((item, i) => (
-                                    <div className='w-full h-fit bg-primary flex md:p-0 p-3 rounded-[3px] overflow-hidden' key={i}>
-                                        <div className='md:w-[25%] w-[40%]'>
-                                            <img src={`${imageurl}/products/${item?.image}`} alt={item?.image} className='w-full md:h-28 h-[5.5rem] object-cover md:rounded-l-[3px] md:rounded-r-none rounded-[3px]'></img>
-                                        </div>
-                                        <div className='md:w-[75%] w-[60%] px-4 md:py-3 flex flex-col'>
-                                            <div className='flex md:flex-row flex-col md:justify-between gap-1'>
-                                                <div className='capitalize font-bold md:text-base text-sm'>{item?.title}</div>
-                                                <div className='flex items-center md:flex-col flex-row gap-1.5 font-semibold'>
-                                                    {item.discount_percentage && item.price ?
-                                                        <>
-                                                            <div>₦{((100 - item.discount_percentage) / 100 * item.price).toLocaleString()}</div>
-                                                            <div className='text-xs line-through'>₦{item.price.toLocaleString()}</div>
-                                                        </>
-                                                        :
-                                                        <div>₦{item.price && item.price.toLocaleString()}</div>
-                                                    }
+                                {cartItems.map((item, i) => {
+                                    const discountPrice = item?.discount_percentage && item?.price ? (100 - item.discount_percentage) / 100 * item.price : 0
+                                    return (
+                                        <div className='w-full h-fit bg-primary flex md:p-0 p-3 rounded-[3px] overflow-hidden' key={i}>
+                                            <div className='md:w-[25%] w-[40%]'>
+                                                <img src={`${imageurl}/products/${item?.image}`} alt={item?.image} className='w-full md:h-28 h-[5.5rem] object-cover md:rounded-l-[3px] md:rounded-r-none rounded-[3px]'></img>
+                                            </div>
+                                            <div className='md:w-[75%] w-[60%] px-4 md:py-3 flex flex-col'>
+                                                <div className='flex md:flex-row flex-col md:justify-between gap-1'>
+                                                    <div className='capitalize font-bold md:text-base text-sm'>{item?.title}</div>
+                                                    <div className='flex items-center md:flex-col flex-row gap-1.5 font-semibold'>
+                                                        {item?.discount_percentage ?
+                                                            <>
+                                                                <div>₦{discountPrice.toLocaleString()}</div>
+                                                                <div className='text-xs line-through'>₦{item.price && item.price.toLocaleString()}</div>
+                                                            </>
+                                                            :
+                                                            <div>₦{item.price && item.price.toLocaleString()}</div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div className='flex justify-between items-center mt-auto text-xs'>
+                                                    <button className='outline-none w-fit h-fit bg-secondary rounded-md py-2 px-4 hover:text-lightgreen' onClick={() => RemoveCart(item)}>Remove</button>
+                                                    {item?.discount_percentage && <div className='text-lightgreen md:block hidden'>You are saving {item?.discount_percentage}%</div>}
                                                 </div>
                                             </div>
-                                            <div className='flex justify-between items-center mt-auto text-xs'>
-                                                <button className='outline-none w-fit h-fit bg-secondary rounded-md py-2 px-4 hover:text-lightgreen' onClick={() => RemoveCart(item)}>Remove</button>
-                                                {item.discount_percentage && <div className='text-lightgreen md:block hidden'>You are saving {item.discount_percentage}%</div>}
-                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    )
+                                })}
                             </div>
                             :
                             <div className='flex flex-col gap-8 mt-6'>

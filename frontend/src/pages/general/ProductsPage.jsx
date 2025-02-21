@@ -172,20 +172,21 @@ const ProductsPage = () => {
                   <div className="flex flex-col gap-16">
                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
                       {currentProducts.map((item, i) => {
-                        const categories = item.category ? JSON.parse(item.category) : []
+                        const categories = item?.category ? JSON.parse(item.category) : []
+                        const discountPrice = item?.discount_percentage && item?.price ? (100 - item.discount_percentage) / 100 * item.price : 0
                         return (
                           <div key={i} className="bg-primary h-fit md:w-full w-11/12 mx-auto rounded-[4px] relative z-10">
                             {item.discount_percentage &&
                               <>
                                 <div className="bg-red-700 text-white text-[0.8rem] uppercase font-extrabold py-1.5 px-3 absolute -top-1 -left-3">
-                                  {item.discount_percentage}% off
+                                  {item?.discount_percentage}% off
                                 </div>
                                 <div className="edge"></div>
                               </>
                             }
                             <Link to={`/products/${item.id}/${item.slug}`} onClick={MoveToTop}>
                               <img
-                                src={`${imageurl}/products/${item.image}`}
+                                src={`${imageurl}/products/${item?.image}`}
                                 alt='product image'
                                 className="w-full h-48 rounded-t-[4px] object-cover object-center"
                               />
@@ -208,17 +209,17 @@ const ProductsPage = () => {
                                   </div>
                                 }
                                 <div className="flex gap-2 items-center text-sm font-extrabold">
-                                  {item.discount_percentage && item.price ?
+                                  {item?.discount_percentage ?
                                     <>
                                       <div className="text-red-700 underline">
-                                        ₦{((100 - item.discount_percentage) / 100 * item.price).toLocaleString()}
+                                        ₦{discountPrice.toLocaleString()}
                                       </div>
                                       <div className="line-through">
-                                        ₦{item.price.toLocaleString()}
+                                        ₦{item.price && item.price.toLocaleString()}
                                       </div>
                                     </>
                                     :
-                                    <div>₦{item.price.toLocaleString()}</div>
+                                    <div>₦{item.price && item.price.toLocaleString()}</div>
                                   }
                                 </div>
                               </div>
