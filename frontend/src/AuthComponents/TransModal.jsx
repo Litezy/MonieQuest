@@ -5,29 +5,12 @@ import { useAtom } from 'jotai'
 import { UTILS } from '../services/store'
 
 const TransModal = ({ trans }) => {
-    const [utils] = useAtom(UTILS)
-    const buyrate = utils?.exchange_buy_rate
-    const sellrate = utils?.exchange_sell_rate
-    const giftcardrate = utils?.giftcard_rate
-
-
+    
     const [inNaira, setInNaira] = useState('')
 
     useEffect(() => {
-        let naira;
-        if (trans.type === 'sell') {
-            const amt = trans?.amount * sellrate
-            naira = amt.toLocaleString()
-        }
-        if (trans.type === 'buy') {
-            const amt = trans?.amount * buyrate
-            naira = amt.toLocaleString()
-        }
-        if (trans.brand) {
-            const amt = trans?.amount * giftcardrate
-            naira = amt.toLocaleString()
-        }
-        setInNaira(naira)
+        let amt = trans?.amount * trans?.rate
+        setInNaira(amt.toLocaleString())
     }, [trans])
 
     return (
@@ -56,18 +39,12 @@ const TransModal = ({ trans }) => {
             </div>}
 
             {/* rates */}
-            {trans.brand && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
+           
+            {!trans.bank_user &&<div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Rate</div>
-                <div className="capitalize ">{currencies[1].symbol}{giftcardrate}/$</div>
+                <div className="capitalize ">{currencies[1].symbol}{trans?.rate}/$</div>
             </div>}
-            {trans.type === 'buy' && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
-                <div className="">Rate</div>
-                <div className="capitalize ">{currencies[1].symbol}{buyrate}/$</div>
-            </div>}
-            {trans.type === 'sell' && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
-                <div className="">Rate</div>
-                <div className="capitalize ">{currencies[1].symbol}{sellrate}/$</div>
-            </div>}
+            
             {!trans.bank_user && <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between">
                 <div className="">Amount in NGN</div>
                 <div className="capitalize ">{currencies[1].symbol}{inNaira}</div>

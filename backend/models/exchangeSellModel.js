@@ -8,6 +8,7 @@ module.exports = (sequelize,DataTypes) =>{
         network:{type: DataTypes.TEXT, allowNull:false},
         tag:{type: DataTypes.TEXT, allowNull:false,defaultValue:'crypto'},
         userid:{type: DataTypes.INTEGER},
+        rate:{type: DataTypes.STRING, allowNull:false},
         status:{type: DataTypes.TEXT,defaultValue:'pending'}
     })
 }

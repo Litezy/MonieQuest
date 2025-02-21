@@ -1,12 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TransModal from '../AuthComponents/TransModal'
 import ModalLayout from '../utils/ModalLayout'
 import { GoArrowDownLeft, GoArrowUpLeft, GoArrowUpRight } from 'react-icons/go'
 import moment from 'moment'
 import { currencies } from '../AuthComponents/AuthUtils'
 
-const AdminTransComp = ({trans}) => {
-    const [modal,setModal] = useState(false)
+const AdminTransComp = ({ trans }) => {
+    const [modal, setModal] = useState(false)
+    const [naira, setNaira] = useState('')
+    useEffect(() => {
+        let amt = trans?.amount * trans?.rate
+        setNaira(amt.toLocaleString())
+    }, [trans])
     return (
         <div className='w-full mb-5'>
             {modal &&
@@ -38,13 +43,13 @@ const AdminTransComp = ({trans}) => {
                             {trans.brand && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
                             {trans.brand && <div className={`text-red-600 capitalize`}>sell</div>}
                         </div>
-                        <div className="flex flex-col items-start gap-1 text-xs md:text-sm">
+                        <div className="flex flex-col items-start gap-1 text-xs md:text-base">
                             <div className="">{moment(trans.createdAt).format('ddd')} {moment(trans.createdAt).format('DD-MM-YYYY')}</div>
                             <div className="">{moment(trans.createdAt).format('hh:mm a')}</div>
                         </div>
                     </div>
                 </div>
-                {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
+                {trans.crypto_currency && <div className={`${trans.crypto_currency && trans.status === 'pending' ? "text-yellow-300" : trans?.status === 'failed' ? 'text-red-600' : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
 
                 {trans.bank_user &&
                     <div className={`${trans.bank_user && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
@@ -52,16 +57,18 @@ const AdminTransComp = ({trans}) => {
                 {trans.brand && <div className={`${trans.brand && trans.status === 'pending' ? "text-yellow-300" : 'text-lightgreen'} flex items-center text-sm justify-center lg:w-full rounded-md `}>{trans.status}</div>}
 
                 <div className=" gap-1 font-bold lg:w-full flex items-center justify-center">
-                    
 
-                    {trans.crypto_currency && <div
-                        className={`${trans.crypto_currency && trans.type === 'buy' ? 'text-lightgreen' : 'text-red-600'} `}>{currencies[0].symbol}{trans.amount.toLocaleString()}
+                    {/* {trans.crypto_currency && trans.type === 'buy'  &&<div
+                        className={`${ trans.type === 'buy' && trans?.status === 'failed' ? 'text-red-600':'text-lightgreen'} `}>{currencies[1].symbol}{naira}
                     </div>}
+                    {trans.crypto_currency && trans.type === 'sell'  && <div
+                        className={`${ trans.type === 'sell' && trans?.status === 'failed' ? 'text-red-600':'text-red-600'} `}>{currencies[1].symbol}{naira}
+                    </div>} */}
                     {trans.bank_user && <div
-                        className={` `}>{currencies[1].symbol}{trans.amount.toLocaleString()}
+                        className={` text-white`}>{currencies[1].symbol}{trans?.amount?.toLocaleString()}
                     </div>}
-                    {trans.brand && <div
-                        className={` text-red-600`}>{currencies[0].symbol}{trans.amount.toLocaleString()}
+                    {!trans?.bank_user && <div
+                        className={` text-white`}>{currencies[1].symbol}{naira}
                     </div>}
                 </div>
             </div>

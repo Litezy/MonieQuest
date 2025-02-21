@@ -4,33 +4,17 @@ import { currencies } from './AuthUtils'
 import ModalLayout from '../utils/ModalLayout'
 import TransModal from './TransModal'
 import moment from 'moment'
-import { useAtom } from 'jotai'
-import { UTILS } from '../services/store'
+
 
 const TransComp = ({ trans }) => {
     const [modal, setModal] = useState(false)
 
     const [naira,setNaira] = useState('')
-    const [utils] = useAtom(UTILS)
-    const giftcardrate = utils?.giftcard_rate
-    const buyrate = utils?.exchange_buy_rate
-    const sellrate = utils?.exchange_sell_rate
-
     useEffect(()=>{
         let naira ;
         if(trans){
-            if(trans.crypto_currency && trans.type === 'buy'){
-                const amt = trans?.amount * buyrate
+                const amt = trans?.amount * trans?.rate
                 naira = amt.toLocaleString()
-            }
-            else if (trans.crypto_currency && trans.type === 'sell'){
-                const amt = trans?.amount * sellrate
-                naira = amt.toLocaleString()
-            }
-            else if (trans.brand){
-                const amt = trans?.amount * giftcardrate
-                naira = amt.toLocaleString()
-            }
             setNaira(naira)
         }
     },[])

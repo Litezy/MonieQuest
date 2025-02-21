@@ -8,6 +8,7 @@ module.exports = (sequelize,DataTypes) =>{
         tag:{type: DataTypes.TEXT, allowNull:false,defaultValue:'crypto'},
         order_no:{type: DataTypes.STRING, allowNull:false},
         wallet_exp:{type: DataTypes.STRING, allowNull:true},
+        rate:{type: DataTypes.STRING, allowNull:false},
         userid:{type: DataTypes.INTEGER,},
         status:{type: DataTypes.TEXT,defaultValue:'unpaid'}
     })
