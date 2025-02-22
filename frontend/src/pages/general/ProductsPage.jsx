@@ -122,7 +122,11 @@ const ProductsPage = () => {
   const ChangePage = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage)
-      setSearchParams({ page: newPage })
+      if (newPage > 1) {
+        setSearchParams({ page: newPage })
+      } else {
+        setSearchParams({})
+      }
     }
   }
 

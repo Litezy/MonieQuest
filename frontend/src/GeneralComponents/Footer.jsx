@@ -12,11 +12,11 @@ import { Apis, PostApi } from '../services/API';
 
 const Socials = [
   { href: 'https://www.facebook.com/profile.php?id=61571510583455', icon: RiFacebookFill },
-  { href: 'https://www.instagram.com/official_moniequest', icon: FaInstagram },
+  { href: 'https://www.instagram.com/the_moniequest', icon: FaInstagram },
   { href: 'https://x.com/TheMonieQuest', icon: FaXTwitter },
-  { href: 'https://www.youtube.com/@Official_MonieQuest', icon: FaYoutube },
+  { href: 'https://www.youtube.com/@TheMonieQuest', icon: FaYoutube },
   { href: 'http://t.me/Officialmoniequest', icon: FaTelegramPlane },
-  { href: 'https://www.tiktok.com/@official_moniequest', icon: FaTiktok },
+  { href: 'https://www.tiktok.com/@themoniequest', icon: FaTiktok },
   { href: 'https://www.linkedin.com/in/MonieQuest/', icon: FaLinkedin },
   { href: 'https://www.reddit.com/u/TimeConversation6102/s/fg3X4zMJht', icon: FaRedditAlien },
   { href: 'https://www.snapchat.com/add/moniequest?share_id=DmZEmXUC8rk&locale=en-US', icon: FaSnapchatGhost },
