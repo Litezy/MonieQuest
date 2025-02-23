@@ -83,10 +83,10 @@ const AdminSingleAirdrop = () => {
                     website_link: response.msg.website_link || '',
                 })
                 setLogo({
-                    img: `${imageurl}/airdrops/${response.msg.logo_image}` || null
+                    img: `${imageurl}/airdrops/${response.msg.gen_id}/${response.msg.logo_image}` || null
                 })
                 setBanner({
-                    img: `${imageurl}/airdrops/${response.msg.banner_image}` || null
+                    img: `${imageurl}/airdrops/${response.msg.gen_id}/${response.msg.banner_image}` || null
                 })
             }
         } catch (error) {

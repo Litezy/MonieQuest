@@ -90,7 +90,7 @@ exports.CreateAirdrop = async (req, res) => {
 
         const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
-        const filePath = './public/airdrops'
+        const filePath = `./public/airdrops/${gen_id}`
         const date = new Date()
         let logoImageName;
         let bannerImageName;
@@ -141,7 +141,7 @@ exports.UpdateAirdrop = async (req, res) => {
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
 
         const slugData = slug(title ? title : airdrop.title, '-')
-        const filePath = './public/airdrops'
+        const filePath = `./public/airdrops/${airdrop.gen_id}`
         const date = new Date()
         let logoImageName;
         let bannerImageName;
@@ -219,31 +219,6 @@ exports.UpdateAirdrop = async (req, res) => {
     }
 }
 
-exports.DeleteClosedAirdrops = async (req, res) => {
-    try {
-        const { airdrop_id } = req.body
-        if (!airdrop_id) return res.json({ status: 404, msg: `Provide an airdrop id` })
-
-        const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
-        if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
-
-        const airdropLogoPath = `./public/airdrops/${airdrop.logo_image}`
-        const airdropBannerPath = `./public/airdrops/${airdrop.banner_image}`
-        if (fs.existsSync(airdropLogoPath)) {
-            fs.unlinkSync(airdropLogoPath)
-        }
-        if (fs.existsSync(airdropBannerPath)) {
-            fs.unlinkSync(airdropBannerPath)
-        }
-
-        await airdrop.destroy()
-
-        return res.json({ status: 200, msg: 'Airdrop deleted successfully' })
-    } catch (error) {
-        return res.json({ status: 500, msg: error.message })
-    }
-}
-
 exports.AllAirdrops = async (req, res) => {
     try {
         const airdrops = await Airdrop.findAll({
@@ -308,13 +283,9 @@ exports.DeleteClosedAirdrop = async (req, res) => {
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
         if (airdrop.status !== 'closed') return res.json({ status: 404, msg: 'You can only delete an airdrop with a closed status' })
 
-        const LogoImgPath = `./public/airdrops/${airdrop.logo_image}`
-        if (fs.existsSync(LogoImgPath)) {
-            fs.unlinkSync(LogoImgPath)
-        }
-        const BannerImgPath = `./public/airdrops/${airdrop.banner_image}`
-        if (fs.existsSync(BannerImgPath)) {
-            fs.unlinkSync(BannerImgPath)
+        const airdropFolderPath = `./public/airdrops/${airdrop.gen_id}`
+        if (fs.existsSync(airdropFolderPath)) {
+            fs.rmSync(airdropFolderPath, { recursive: true, force: true })
         }
 
         await airdrop.destroy()
@@ -1496,7 +1467,6 @@ exports.creditGiftCustomer = async (req, res) => {
         ServerError(res, error)
     }
 }
-
 
 exports.getAdminTransHistory = async (req, res) => {
     try {

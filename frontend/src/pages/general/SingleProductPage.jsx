@@ -220,7 +220,7 @@ const SingleProductPage = () => {
                                     <div className='bg-primary border border-ash w-full h-fit p-5 mt-4 overflow-hidden'>
                                         <div className='grid grid-cols-2 items-center'>
                                             <div className='flex flex-col gap-2'>
-                                                <div className='text-xl font-bold'>Reviews</div>
+                                                <div className='text-xl font-bold'>Review</div>
                                                 <Rating
                                                     value={form.rating}
                                                     onChange={(event, newValue) => {
