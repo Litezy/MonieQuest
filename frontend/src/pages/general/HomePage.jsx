@@ -107,7 +107,7 @@ const HomePage = () => {
                   <Link to='/airdrops' onClick={MoveToTop}>
                     <FormButton title='Browse for Airdrops' className='!text-sm !rounded-md !py-3 !px-4 !w-fit' />
                   </Link>
-                  <Link to={`/airdrops?c=potential`} onClick={MoveToTop}>
+                  <Link to={`/airdrops?category=potential`} onClick={MoveToTop}>
                     <FormButton title='potential airdrops' className='!text-sm !capitalize !rounded-md !py-3 !px-6 !w-fit' />
                   </Link>
                 </div>

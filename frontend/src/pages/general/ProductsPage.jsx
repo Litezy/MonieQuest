@@ -26,10 +26,9 @@ const ProductsPage = () => {
   const active = Number(searchParams.get('page')) || 1
   const [currentPage, setCurrentPage] = useState(active)
   const productsPerPage = 12
-  const repeatedArr = Array(50).fill(products).flat() //for testing purpose
-  const totalPages = Math.ceil(repeatedArr.length / productsPerPage) //repeatedArr for products 
+  const totalPages = Math.ceil(products.length / productsPerPage)
   const startIndex = (currentPage - 1) * productsPerPage
-  const currentProducts = repeatedArr.slice(startIndex, startIndex + productsPerPage) //repeatedArr for products
+  const currentProducts = products.slice(startIndex, startIndex + productsPerPage)
 
 
   useEffect(() => {

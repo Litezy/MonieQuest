@@ -10,33 +10,39 @@ import YouTubeComp from '../../GeneralComponents/YouTubeComp'
 
 
 const SingleAirdropPage = () => {
-  const { id } = useParams()
+  const { id, category } = useParams()
+  const [categoryAirdrops, setCategoryAirdrops] = useState([])
   const [singleAirdrop, setSingleAirdrop] = useState({})
   const [dataLoading, setDataLoading] = useState(true)
 
   useEffect(() => {
-    const FetchSingleAirdrop = async () => {
+    const FetchCategoryAirdrops = async () => {
       try {
-        const response = await GetApi(`${Apis.admin.single_airdrop}/${id}`)
+        const response = await GetApi(`${Apis.admin.category_airdrops}/${category}`)
         if (response.status === 200) {
-          setSingleAirdrop(response.msg)
+          const data = response.msg
+          setCategoryAirdrops(data)
+          const currentAirdrop = data.find((item) => item.id === parseInt(id))
+          setSingleAirdrop(currentAirdrop)
         }
-
       } catch (error) {
         //
       } finally {
         setDataLoading(false)
       }
     }
-    FetchSingleAirdrop()
+    FetchCategoryAirdrops()
   }, [])
 
+  const currentIndex = categoryAirdrops.findIndex((item) => item.id === parseInt(id))
+  const prevAirdrop = currentIndex > 0 ? categoryAirdrops[currentIndex - 1] : null
+  const nextAirdrop = currentIndex < categoryAirdrops.length - 1 ? categoryAirdrops[currentIndex + 1] : null
 
   return (
     <PageLayout>
       <div className='w-full bg-dark py-20'>
         <div className='md:w-5/6 w-11/12 mx-auto text-gray-200'>
-          {dataLoading ?
+          {dataLoading || Object.values(singleAirdrop).length === 0 ?
             <div className='flex flex-col gap-14'>
               <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
                 <div className='flex items-center gap-2'>
@@ -57,7 +63,7 @@ const SingleAirdropPage = () => {
                 </div>
               </div>
               <div className='grid lg:grid-cols-5 grid-cols-1 gap-8'>
-                <div className='lg:col-span-3 col-span-1 flex flex-col gap-4'>
+                <div className='lg:col-span-3 col-span-1 flex flex-col gap-2'>
                   <div>
                     {new Array(4).fill(0).map((_, i) => (
                       <div key={i} className='w-full h-1 rounded-full bg-slate-400 animate-pulse mt-2'></div>
@@ -69,19 +75,19 @@ const SingleAirdropPage = () => {
                     ))}
                   </div>
                 </div>
-                <div className='lg:col-span-2 col-span-1 w-full h-52 bg-slate-400 animate-pulse'></div>
+                <div className='lg:col-span-2 col-span-1 w-full h-64 bg-slate-400 animate-pulse'></div>
               </div>
               <div className='grid lg:grid-cols-6 grid-cols-1 gap-8'>
                 <div className='lg:col-span-2 col-span-1'>
                   <div className='grid grid-cols-2 gap-4'>
-                    {new Array(2).fill(0).map((_, i) => (
+                    {new Array(4).fill(0).map((_, i) => (
                       <div key={i} className='w-full h-24 rounded-md bg-slate-400 animate-pulse'></div>
                     ))}
                   </div>
                 </div>
-                <div className='lg:col-span-4 col-span-1 w-full h-64 bg-slate-400 animate-pulse rounded-md'></div>
+                <div className='lg:col-span-4 col-span-1 w-full h-96 bg-slate-400 animate-pulse rounded-md'></div>
               </div>
-              <div className='w-full h-32 bg-slate-400 animate-pulse rounded-md'></div>
+              <div className='w-full h-36 bg-slate-400 animate-pulse rounded-md'></div>
             </div>
             :
             <div className='flex flex-col gap-14'>
