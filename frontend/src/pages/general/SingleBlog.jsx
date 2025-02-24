@@ -209,7 +209,7 @@ const SingleBlog = () => {
                                     <div className="text-sky-400 text-sm flex items-center gap-2">
                                         <div className="">blogs</div>
                                         <div className=""><IoChevronForwardSharp /></div>
-                                        <div className=" lowercase">{singleBlog?.feature}</div>
+                                        <div className=" lowercase">{singleBlog?.feature === 'personal_finance' ? 'personal finance' : singleBlog.feature}</div>
                                     </div>
                                 </div>
                                 <div className="flex items-start poppins flex-col gap-12 mt-10 text-gray-400">
@@ -248,15 +248,15 @@ const SingleBlog = () => {
                         </div>
 
                         <div className="w-full my-10">
-                            <div className="poppins text-lg font-bold mb-5 ">Comments</div>
+                            <div className="poppins text-lg font-bold mb-5">Comments</div>
                             {Object.values(singleBlog).length !== 0 && singleBlog.blog_comments.length > 0 ?
                                 <div className='flex flex-col gap-5'>
                                     <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-5">
-                                        {singleBlog.blog_comments.slice(0, 10).map((item, i) => (
+                                        {singleBlog.blog_comments.slice(0, 8).map((item, i) => (
                                             <Comments key={i} item={item} />
                                         ))}
                                     </div>
-                                    {singleBlog.blog_comments.length > 10 &&
+                                    {singleBlog.blog_comments.length > 8 &&
                                         <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/${singleBlog.slug}/comments`} onClick={MoveToTop}>
                                             <button className="w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
                                         </Link>
