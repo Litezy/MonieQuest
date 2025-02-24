@@ -2,13 +2,42 @@ import React, { useCallback, useEffect, useState } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import { NextButton, PrevButton, usePrevNextButtons } from './EmblaButtons'
-import { HomeTestimonials } from '../utils/pageUtils'
+import { Apis, AuthGetApi, imageurl } from '../services/API'
 
 export default function Testimonials(props) {
     const { slides, options } = props
     const [emblaRef, emblaApi] = useEmblaCarousel(options, [
         Autoplay({ playOnInit: true, delay: 3000 })
     ])
+    const [data, setData] = useState([])
+    const localName = 'Testimonials';
+
+const fetchTestimonials = async () => {
+    try {
+        const res = await AuthGetApi(Apis.user.get_testimonials);
+        if (res.status !== 200) return;
+        const data = res.data;
+        localStorage.setItem(localName, JSON.stringify(data));
+        setData(data);
+        return data;
+    } catch (error) {
+        console.error("Fetch Error:", error);
+    }
+};
+
+useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem(localName));
+    if (storedData && storedData.length > 0) {
+        setData(storedData);
+    } else {
+        localStorage.setItem(localName,JSON.stringify([]))
+        fetchTestimonials();
+    }
+}, []);
+
+
+    
+
     const [isPlaying, setIsPlaying] = useState(true)
 
     const {
@@ -17,6 +46,7 @@ export default function Testimonials(props) {
         onPrevButtonClick,
         onNextButtonClick
     } = usePrevNextButtons(emblaApi)
+
 
     const onButtonAutoplayClick = useCallback(
         (callback) => {
@@ -57,12 +87,13 @@ export default function Testimonials(props) {
         <div className="embla">
             <div className="embla__viewport" ref={emblaRef}>
                 <div className="embla__container">
-                    {HomeTestimonials.map((item, index) => (
+                    {data.map((item, index) => (
                         <div className="embla__slide border border-[grey] px-5 pt-5 lg:p-10 text-zinc-300" key={index}>
                             <div className="">
-                                <img src={item.img} alt="" className="size-28 object-cover border-4 border-white shadow-2xl rounded-full" />
+                                <img src={`${imageurl}/testimonials/${item.gen_id}/${item.image}`}
+                                    alt={`${item.firstname} image`} className="size-28 object-cover border-4 border-white shadow-2xl rounded-full" />
                             </div>
-                            <div className="font-bold text-xl  lg:text-2xl pt-10">{item.user}</div>
+                            <div className="font-bold text-xl  lg:text-2xl pt-10">{item.firstname} {item.lastname}</div>
                             <div className="pt-5 pb-10 lg:text-lg text-sm md:w-full w-3/4">{item.content}</div>
                         </div>
                     ))}

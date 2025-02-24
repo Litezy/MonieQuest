@@ -69,7 +69,7 @@ const AdminPageLayout = ({ children }) => {
                         <img src={user.image ? `${imageurl}/profiles/${user.image}` : avatar} alt='user_profile' className='size-14 object-cover rounded-full border-2 border-ash'></img>
                         <div className='text-xl text-center font-bold capitalize text-gray-200'>{user?.surname}  {user?.first_name}</div>
                     </div>
-                    <div className="flex mt-10 pb-10 flex-col items-start px-5 gap-4 h-[65vh] overflow-y-auto scroll">
+                    <div className="flex mt-10 pb-16 flex-col items-start px-5 gap-4 h-[65vh] overflow-y-auto scroll">
                         {pagelinks.map((link, i) => {
                             return (
                                 <Link onClick={MoveToTop} to={link.url}

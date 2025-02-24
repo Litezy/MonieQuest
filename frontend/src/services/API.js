@@ -27,6 +27,7 @@ const user_urls = {
     add_carousel_image: user + 'add-carousel-image',
     get_carousel_images: user + 'get-carousel-images',
     delete_carousel_image: user + 'delete-carousel-image',
+    get_testimonials:user + 'get_testimonials'
 }
 
 const notification = 'api/notification/'
@@ -51,7 +52,8 @@ const trans_url = {
     single_giftcard_order: transaction + 'single_giftcard_history',
     request_withdrawal: transaction + 'request_withdrawal',
     latest_withdrawals: transaction + 'latest_withdrawals',
-    all_trans: transaction + 'get_alltrans'
+    all_trans: transaction + 'get_alltrans',
+    
 }
 
 const admin = 'api/admin/'
@@ -95,7 +97,9 @@ const admin_urls = {
     credit_gift_customer: admin + 'credit_gift_customer',
     get_trans_history: admin + 'get_trans_history',
     get_bank_withdrawals: admin + 'get_bank_withdrawals',
-    get_single_withdrawal: admin + 'get_single_withdrawal'
+    get_single_withdrawal: admin + 'get_single_withdrawal',
+    create_testimonial: admin + 'create_testimonial',
+    update_testimonial: admin + 'update_testimonial',
 }
 
 const products = 'api/product/'
@@ -144,6 +148,15 @@ export const AuthGetApi = async (endpoint) => {
 export const AuthPutApi = async (endpoint, data) => {
     const token = Cookies.get(CookieName)
     const response = await axios.put(`${URL}/${endpoint}`, data, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response.data
+}
+export const AuthPatchApi = async (endpoint, data) => {
+    const token = Cookies.get(CookieName)
+    const response = await axios.patch(`${URL}/${endpoint}`, data, {
         headers: {
             Authorization: `Bearer ${token}`
         }
