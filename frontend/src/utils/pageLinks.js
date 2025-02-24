@@ -63,6 +63,8 @@ import AdminAllProducts from "../pages/authadmin/AdminAllProducts";
 import AdminSingleProduct from "../pages/authadmin/AdminSingleProduct";
 import BlogComments from "../pages/general/BlogComments";
 import FeatureBlogs from "../pages/general/FeatureBlogs";
+import AdminTestimonials from "../pages/authadmin/AdminTestimonials";
+import AdminEditTestimonial from "../pages/authadmin/AdminEditTestimonial";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -136,4 +138,6 @@ export const AdminPagesLinks = [
     { path: '/admin/blogs/create', component: AdminCreateBlogs },
     { path: '/admin/blogs/:id/:slug', component: AdminSingleBlog },
     { path: '/admin/transactions_history', component: AdminTransHistory },
+    { path: '/admin/testimonials', component: AdminTestimonials },
+    { path: '/admin/testimonials/:id', component: AdminEditTestimonial },
 ]

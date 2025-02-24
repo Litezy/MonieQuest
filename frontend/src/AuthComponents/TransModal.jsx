@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { currencies } from './AuthUtils'
 import moment from 'moment'
-import { useAtom } from 'jotai'
-import { UTILS } from '../services/store'
 
 const TransModal = ({ trans }) => {
     

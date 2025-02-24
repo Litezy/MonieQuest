@@ -222,6 +222,7 @@ input[type=number]:focus {
 /* embla components */
 .embla {
   max-width: 48rem;
+  /* width: 40rem; */
   margin: auto;
   --slide-height: 19rem;
   --slide-spacing: 1rem;
@@ -230,6 +231,7 @@ input[type=number]:focus {
 
 .embla__viewport {
   overflow: hidden;
+  width: 100%;
 }
 
 .embla__container {
@@ -342,11 +344,22 @@ input[type=number]:focus {
 .pageBg {
   background-image: url('./assets/images/airdrop.jpg');
   width: 100%;
-  height: fit-content;
-  background-position: center;
+  height: 100%;
+  background-attachment: fixed;
+  background-position: center top;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
 }
+
+
+@media (max-width: 768px) {
+  .pageBg {
+    background-size: contain;
+    background-attachment: scroll;
+    background-position: center;
+  }
+}
+
 
 .edge {
   height: 0;

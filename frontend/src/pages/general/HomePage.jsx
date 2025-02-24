@@ -62,19 +62,22 @@ const HomePage = () => {
   return (
     <PageLayout>
       <div className='pb-20 w-full bg-dark'>
-        <div className='pageBg overflow-hidden'>
+        <div className='pageBg overflow-hidden  md:pb-24  md:w-full'>
           <div className='w-full h-full  md:pt-16 pb-10 pt-12 px-4'>
             <div className="w-11/12 mx-auto">
-              <div className='md:text-4xl text-3xl  mb-5 font-extrabold text-white text-center lg:w-3/5 w-5/6 mx-auto '><span className='text-lightgreen'>Get paid</span> for participating in Airdrops</div>
-              <div className="text-lg text-white font-bold text-center">Our platform ensures you are always ahead in the crypto space and maximizing your earnings.</div>
-              <div className="w-fit mx-auto px-5 pb-5 rounded-md shadow-lg bg-[#212134ea]/30 flex items-center justify-center ">
-              <div className='flex  flex-col gap-2 items-center justify-center mt-4  text-sm text-white font-bold text-center'>
-                
-                <div className="text-lg">The simplest and fastest way of making money online.</div>
+              <div className='md:text-4xl text-3xl capitalize mb-5 font-extrabold text-white text-center lg:w-3/5 w-5/6 mx-auto '><span className='text-lightgreen'>Get paid</span> for participating in Airdrops</div>
+
+              <div className="flex items-center text-lg  font-bold text-white  flex-col gap-2">
+                <div className="">Our platform ensures you are always ahead in the crypto space and maximizing your earnings.</div>
+
+
                 <div className="text-lg">With over <span className='text-lightgreen font-bold '>500 updates</span> available, you could earn up to <span className='text-lightgreen font-bold'>$2,000</span> per month by just participating.</div>
 
+                <div className="text-lg">The simplest and fastest way of making money online.</div>
+
                 <div className="text-lg md:text-xl lg:text-2xl ">Also trade your <span className='text-lightgreen font-bold'>Coins</span> and <span className='text-lightgreen font-bold'>Gift Cards</span> with us today</div>
-              </div>
+
+
               </div>
             </div>
           </div>

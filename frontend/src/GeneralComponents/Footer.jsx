@@ -8,6 +8,7 @@ import { Link, useLocation } from 'react-router-dom';
 import FormInput from '../utils/FormInput';
 import { ErrorAlert, MoveToTop, SuccessAlert } from '../utils/pageUtils';
 import ButtonLoader from './ButtonLoader';
+import flag from '../assets/svg/gb.svg'
 import { Apis, PostApi } from '../services/API';
 
 const Socials = [
@@ -89,6 +90,11 @@ const Footer = () => {
                 <div className='flex items-center gap-2'>
                   <LuPhone />
                   <span className='text-ash'>09087654327</span>
+                </div>
+                <div className="flex items-center gap-2">Our UK contact</div>
+                <div className='flex items-center gap-2'>
+                <img src={flag} alt="UK Flag"  className='h-8 w-8'/>
+                  <span className='text-ash'>+44-7438-903660</span>
                 </div>
               </div>
               <div className='flex flex-col gap-4 mt-4 text-sm text-white font-medium'>

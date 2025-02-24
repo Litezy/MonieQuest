@@ -11,6 +11,7 @@ import { IoNotificationsSharp } from 'react-icons/io5';
 import { CiMenuKebab } from 'react-icons/ci';
 import { AiFillDollarCircle } from "react-icons/ai";
 import { GoHistory } from 'react-icons/go';
+import { MdReviews } from "react-icons/md";
 
 const mainIcons = [
     {
@@ -47,6 +48,12 @@ const mainIcons = [
 
 const extraIcons = [
     {
+        name: 'testimonials',
+        symbol: MdReviews,
+        url: '/admin/testimonials',
+        main: '/testimonials'
+    },
+    {
         name: 'airdrops',
         symbol: AiFillDollarCircle,
         url: '/admin/airdrops/create',
@@ -69,6 +76,7 @@ const extraIcons = [
         symbol: GoHistory,
         url: '/admin/transactions_history'
     },
+   
     {
         name: 'profile',
         symbol: RiUser3Fill,

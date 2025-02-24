@@ -9,6 +9,7 @@ const Blog = require('../models').blogs
 const BuyCrypto = require('../models').exchangeBuys
 const Wallet = require('../models').wallets
 const SellCrypto = require('../models').exchangeSells
+const Testimonial = require('../models').testimonials
 const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
@@ -17,6 +18,7 @@ const { webName, webURL, ServerError, nairaSign, dollarSign } = require('../util
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
+const path = require('path');
 const fs = require('fs')
 const moment = require('moment')
 const { Op } = require('sequelize')
@@ -1548,6 +1550,89 @@ exports.getSingleWithdrawal = async (req, res) => {
         })
         if (!findWithdrawal) return res.json({ status: 404, msg: "Withdrawal ID not found" })
         return res.json({ status: 200, msg: 'fetch success', data: findWithdrawal })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.CreateTestimonial = async (req, res) => {
+    try {
+        const { firstname, lastname, title, content } = req.body
+        const reqFields = [firstname, lastname, title, content]
+        if (reqFields.some((field) => !field)) return res.json({ status: 400, msg: "All fields are required" })
+        const slugData = slug(firstname, '-').toLowerCase();
+        const genId = otpGenerator.generate(5, { specialChars: false, upperCaseAlphabets: false, lowerCaseAlphabets: false })
+        const filePath = `./public/testimonials/${genId}`
+        if (!fs.existsSync(filePath)) {
+            fs.mkdirSync(filePath, { recursive: true })
+        }
+        let imageName;
+        const image = req?.files?.image
+        if (!image) return res.json({ status: 400, msg: 'Image is required' })
+        if (!image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
+        imageName = `${slugData}-image.jpg`
+        await image.mv(`${filePath}/${imageName}`)
+        await Testimonial.create({ firstname, lastname,gen_id:genId, title, content, image: imageName })
+        return res.json({status:200, msg:'Testimonial created successfully'})
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.UpdateTestimonial = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { firstname, lastname, title, content } = req.body;
+
+        const testimonial = await Testimonial.findByPk(id);
+        if (!testimonial) return res.json({ status: 404, msg: 'Testimonial not found' });
+        let imageName = testimonial.image; 
+        const image = req?.files?.image;
+
+        if (image) {
+            if (!image.mimetype.startsWith('image/')) {
+                return res.json({ status: 400, msg: 'Invalid image format (jpg, jpeg, png, svg allowed)' });
+            }
+
+            const slugData = slug(firstname || testimonial.firstname, '-').toLowerCase();
+            imageName = `${slugData}-image.jpg`;
+            const filePath = `./public/testimonials/${testimonial.gen_id}`;
+
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath, { recursive: true });
+            }
+
+            const oldImagePath = path.join(filePath, testimonial.image);
+            if (fs.existsSync(oldImagePath)) {
+                fs.unlinkSync(oldImagePath);
+            }
+            await image.mv(`${filePath}/${imageName}`);
+        }
+
+        await testimonial.update({
+            firstname: firstname || testimonial.firstname,
+            lastname: lastname || testimonial.lastname,
+            title: title || testimonial.title,
+            content: content || testimonial.content,
+            image: imageName,
+        });
+
+        return res.json({ status: 200, msg: 'Testimonial updated successfully', data: testimonial });
+
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
+
+exports.getTestimonials = async (req, res) => {
+    try {
+        const testis = await Testimonial.findAll({
+            order: [[`createdAt`, 'DESC']]
+        })
+        if (!testis) return res.json({ status: 404, msg: 'No testimonial found' })
+        return res.json({ status: 200, msg: 'fetch success',data:testis })
+
     } catch (error) {
         ServerError(res, error)
     }
