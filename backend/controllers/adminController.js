@@ -477,20 +477,20 @@ exports.getDashboardInfos = async (req, res) => {
         const totalBlogs = await Blog.count();
         const totalProducts = await Product.count();
         const totalProductOrders = await ProductOrder.count();
-        const totalProductsRevenue = await ProductOrder.sum('amount_paid', { where: { status: 'paid' } });
+        const productOrderRevenue = await ProductOrder.sum('amount_paid', { where: { status: 'paid' } });
         const totalCryptoBuys = await BuyCrypto.count();
-        const totalCryptoBuysPaidAmount = await BuyCrypto.sum('amount', { where: { status: 'paid' } });
+        const paidCryptoBuys = await BuyCrypto.sum('amount', { where: { status: 'paid' } });
         const completedCryptoBuys = await BuyCrypto.sum('amount', { where: { status: 'completed' } });
-        const totalCryptoBuysUnpaidAmount = await BuyCrypto.sum('amount', { where: { status: 'unpaid' } });
+        const unpaidCryptoBuys = await BuyCrypto.sum('amount', { where: { status: 'unpaid' } });
         const totalCryptoSells = await SellCrypto.count();
-        const totalCryptoSellsCompleted = await SellCrypto.sum('amount', { where: { status: 'completed' } });
-        const totalCryptoSellsPending = await SellCrypto.sum('amount', { where: { status: 'pending' } });
+        const completedCryptoSells = await SellCrypto.sum('amount', { where: { status: 'completed' } });
+        const pendingCryptoSells = await SellCrypto.sum('amount', { where: { status: 'pending' } });
         const totalGiftcardSells = await GiftCard.count();
-        const totalGiftcardsSellsCompleted = await GiftCard.sum('amount', { where: { status: 'completed' } });
-        const totalGiftcardsSellsPending = await GiftCard.sum('amount', { where: { status: 'pending' } });
+        const completedGiftcardSells = await GiftCard.sum('amount', { where: { status: 'completed' } });
+        const pendingGiftcardSells = await GiftCard.sum('amount', { where: { status: 'pending' } });
         const totalWithdrawals = await Bank_Withdrawals.count();
-        const totalWithdrawalCompletedAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'completed' } });
-        const totalWithdrawalPendingAmount = await Bank_Withdrawals.sum('amount', { where: { status: 'pending' } });
+        const completedWithdrawals = await Bank_Withdrawals.sum('amount', { where: { status: 'completed' } });
+        const pendingWithdrawals = await Bank_Withdrawals.sum('amount', { where: { status: 'pending' } });
 
         const data = [
             { title: 'Total Users', value: totalUsers.length, color: 'red' },
@@ -498,20 +498,20 @@ exports.getDashboardInfos = async (req, res) => {
             { title: 'Total Airdrops', value: totalAirdrops, color: 'green' },
             { title: 'Total Products', value: totalProducts, color: 'orange' },
             { title: ' Product Orders', value: totalProductOrders, color: 'lime', },
-            { title: 'Product Revenue', value: totalProductsRevenue ? totalProductsRevenue : 0, color: 'gray', naira: true },
+            { title: 'Product Order Revenue', value: productOrderRevenue ? productOrderRevenue : 0, color: 'gray', naira: true },
             { title: ' Crypto Buy Orders', value: totalCryptoBuys, color: 'green' },
-            { title: 'Paid Buys value', value: totalCryptoBuysPaidAmount || 0, color: 'blue', cur: true },
-            { title: 'Unpaid Buys value', value: totalCryptoBuysUnpaidAmount || 0, color: 'amber', cur: true },
-            { title: 'Completed Buys Value', value: completedCryptoBuys || 0, color: 'amber', cur: true },
+            { title: 'Paid Buys value', value: paidCryptoBuys || 0, color: 'blue', cur: true },
+            { title: 'Unpaid Buys value', value: unpaidCryptoBuys || 0, color: 'amber', cur: true },
+            { title: 'Completed Buys Value', value: completedCryptoBuys || 0, color: 'teal', cur: true },
             { title: 'Crypto Sell Orders', value: totalCryptoSells, color: 'red' },
-            { title: 'Pending  Sells value', value: totalCryptoSellsPending || 0, color: 'purple', cur: true },
-            { title: 'Completed Sells value ', value: totalCryptoSellsCompleted || 0, color: 'orange', cur: true },
+            { title: 'Pending Sells value', value: pendingCryptoSells || 0, color: 'purple', cur: true },
+            { title: 'Completed Sells value', value: completedCryptoSells || 0, color: 'orange', cur: true },
             { title: 'Giftcard Sell Orders', value: totalGiftcardSells, color: 'pink' },
-            { title: 'Pending Giftcard orders value', value: totalGiftcardsSellsPending || 0, color: 'blue', cur: true },
-            { title: 'Completed Giftcard orders value', value: totalGiftcardsSellsCompleted || 0, color: 'lime', cur: true },
+            { title: 'Pending Giftcard orders value', value: pendingGiftcardSells || 0, color: 'blue', cur: true },
+            { title: 'Completed Giftcard orders value', value: completedGiftcardSells || 0, color: 'lime', cur: true },
             { title: 'withdrawal requests', value: totalWithdrawals, color: 'teal' },
-            { title: 'Pending withdrawals value', value: totalWithdrawalPendingAmount || 0, color: 'gray', naira: true },
-            { title: 'Completed withdrawals value', value: totalWithdrawalCompletedAmount || 0, color: 'amber', naira: true },
+            { title: 'Pending withdrawals value', value: pendingWithdrawals || 0, color: 'gray', naira: true },
+            { title: 'Completed withdrawals value', value: completedWithdrawals || 0, color: 'amber', naira: true },
         ];
 
         return res.json({ status: 200, msg: 'fetch success', data });
