@@ -10,7 +10,6 @@ const AirdropCarousel = ({ array, feature }) => {
     const [atStart, setAtStart] = useState(true);
     const [atEnd, setAtEnd] = useState(false);
     const scrollAmount = 500
-    const repeatedArr = Array(10).fill(array).flat() //testing purpose
 
     useEffect(() => {
         const container = containerRef.current;
@@ -56,7 +55,7 @@ const AirdropCarousel = ({ array, feature }) => {
                     </div>
                 </div>
                 <div ref={containerRef} className='overflow-x-auto whitespace-nowrap scroll-smooth flex gap-4 airdrop-container scrollsdown'>
-                    {repeatedArr.map((item, i) => (
+                    {array.map((item, i) => (
                         <AirdropDiv key={i} item={item} className={`flex-none`} />
                     ))}
                 </div>

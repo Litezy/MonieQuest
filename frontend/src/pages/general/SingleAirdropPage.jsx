@@ -1,42 +1,54 @@
 import React, { useEffect, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FaXTwitter } from 'react-icons/fa6'
 import { SiTelegram } from 'react-icons/si'
 import { LuArrowRightLeft } from 'react-icons/lu'
 import { RxExternalLink } from "react-icons/rx";
 import { Apis, GetApi, imageurl } from '../../services/API'
 import YouTubeComp from '../../GeneralComponents/YouTubeComp'
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { MoveToTop } from '../../utils/pageUtils'
 
 
 const SingleAirdropPage = () => {
-  const { id } = useParams()
+  const { id, category } = useParams()
+  const [categoryAirdrops, setCategoryAirdrops] = useState([])
   const [singleAirdrop, setSingleAirdrop] = useState({})
   const [dataLoading, setDataLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const FetchSingleAirdrop = async () => {
+    const FetchCategoryAirdrops = async () => {
+      setDataLoading(true)
       try {
-        const response = await GetApi(`${Apis.admin.single_airdrop}/${id}`)
+        const response = await GetApi(`${Apis.admin.category_airdrops}/${category}`)
         if (response.status === 200) {
-          setSingleAirdrop(response.msg)
+          const data = response.msg
+          setCategoryAirdrops(data)
+          const currentAirdrop = data.find((item) => item.id === parseInt(id))
+          setSingleAirdrop(currentAirdrop)
         }
-
       } catch (error) {
         //
       } finally {
         setDataLoading(false)
       }
     }
-    FetchSingleAirdrop()
-  }, [])
+    FetchCategoryAirdrops()
+  }, [id])
 
+  const sortedAirdrops = [...categoryAirdrops].sort((a, b) => a.id - b.id)
+  const currentIndex = sortedAirdrops.findIndex((item) => item.id === parseInt(id))
+  const prevAirdrop = currentIndex > 0 ? sortedAirdrops[currentIndex - 1] : null
+  const nextAirdrop = currentIndex < sortedAirdrops.length - 1 ? sortedAirdrops[currentIndex + 1] : null
+  console.log(prevAirdrop, nextAirdrop)
 
   return (
     <PageLayout>
       <div className='w-full bg-dark py-20'>
         <div className='md:w-5/6 w-11/12 mx-auto text-gray-200'>
-          {dataLoading ?
+          {dataLoading || Object.values(singleAirdrop).length === 0 ?
             <div className='flex flex-col gap-14'>
               <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
                 <div className='flex items-center gap-2'>
@@ -57,7 +69,7 @@ const SingleAirdropPage = () => {
                 </div>
               </div>
               <div className='grid lg:grid-cols-5 grid-cols-1 gap-8'>
-                <div className='lg:col-span-3 col-span-1 flex flex-col gap-4'>
+                <div className='lg:col-span-3 col-span-1 flex flex-col gap-2'>
                   <div>
                     {new Array(4).fill(0).map((_, i) => (
                       <div key={i} className='w-full h-1 rounded-full bg-slate-400 animate-pulse mt-2'></div>
@@ -69,19 +81,19 @@ const SingleAirdropPage = () => {
                     ))}
                   </div>
                 </div>
-                <div className='lg:col-span-2 col-span-1 w-full h-52 bg-slate-400 animate-pulse'></div>
+                <div className='lg:col-span-2 col-span-1 w-full h-64 bg-slate-400 animate-pulse'></div>
               </div>
               <div className='grid lg:grid-cols-6 grid-cols-1 gap-8'>
                 <div className='lg:col-span-2 col-span-1'>
                   <div className='grid grid-cols-2 gap-4'>
-                    {new Array(2).fill(0).map((_, i) => (
+                    {new Array(4).fill(0).map((_, i) => (
                       <div key={i} className='w-full h-24 rounded-md bg-slate-400 animate-pulse'></div>
                     ))}
                   </div>
                 </div>
-                <div className='lg:col-span-4 col-span-1 w-full h-64 bg-slate-400 animate-pulse rounded-md'></div>
+                <div className='lg:col-span-4 col-span-1 w-full h-96 bg-slate-400 animate-pulse rounded-md'></div>
               </div>
-              <div className='w-full h-32 bg-slate-400 animate-pulse rounded-md'></div>
+              <div className='w-full h-36 bg-slate-400 animate-pulse rounded-md'></div>
             </div>
             :
             <div className='flex flex-col gap-14'>
@@ -161,9 +173,33 @@ const SingleAirdropPage = () => {
                   </div>
                 </div>
               </div>
-              <div className='bg-secondary border border-ash rounded-md w-full h-fit p-4 text-sm italic'>
-                <p><span className='font-bold'>Disclaimer:</span> All content & airdrop guides are for educational and informational purposes only. It is not financial advice or endorsement for the projects and airdrops. Conduct thorough research before making any deposits or investment decisions (Do Your Own Research). Farming airdrops comes with a set of risks, so make sure your knowledge about online security is up to date.</p>
-                <p className='pt-4'>At MonieQuest we vet the projects with all the public available information, to make sure all our published crypto airdrops display the correct details.</p>
+              <div className='flex flex-col gap-8'>
+                <div className='bg-secondary border border-ash rounded-md w-full h-fit p-4 text-sm italic'>
+                  <p><span className='font-bold'>Disclaimer:</span> All content & airdrop guides are for educational and informational purposes only. It is not financial advice or endorsement for the projects and airdrops. Conduct thorough research before making any deposits or investment decisions (Do Your Own Research). Farming airdrops comes with a set of risks, so make sure your knowledge about online security is up to date.</p>
+                  <p className='pt-4'>At MonieQuest we vet the projects with all the public available information, to make sure all our published crypto airdrops display the correct details.</p>
+                </div>
+                <div className='flex justify-between gap-4'>
+                  <div className='flex gap-2 items-center text-gray-300'>
+                    <button
+                      onClick={() => { navigate(`/airdrops/${prevAirdrop?.category}/${prevAirdrop?.id}/${prevAirdrop?.slug}`); MoveToTop() }}
+                      disabled={!prevAirdrop}
+                      className={`w-7 h-7 border border-gray-300 rounded-full flex items-center justify-center ${!prevAirdrop ? 'cursor-default' : 'cursor-pointer hover:text-lightgreen hover:border-lightgreen'}`}
+                    >
+                      <IoIosArrowBack />
+                    </button>
+                    <div className='text-sm capitalize'>previous airdrop</div>
+                  </div>
+                  <div className='flex gap-2 items-center text-gray-300'>
+                    <button
+                      onClick={() => { navigate(`/airdrops/${nextAirdrop?.category}/${nextAirdrop?.id}/${nextAirdrop?.slug}`); MoveToTop() }}
+                      disabled={!nextAirdrop}
+                      className={`w-7 h-7 border border-gray-300 rounded-full flex items-center justify-center ${!nextAirdrop ? 'cursor-default' : 'cursor-pointer hover:text-lightgreen hover:border-lightgreen'}`}
+                    >
+                      <IoIosArrowForward />
+                    </button>
+                    <div className='text-sm capitalize'>next airdrop</div>
+                  </div>
+                </div>
               </div>
             </div>
           }

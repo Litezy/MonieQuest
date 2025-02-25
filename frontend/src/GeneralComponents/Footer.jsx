@@ -91,10 +91,12 @@ const Footer = () => {
                   <LuPhone />
                   <span className='text-ash'>09087654327</span>
                 </div>
-                <div className="flex items-center gap-2">Our UK contact</div>
-                <div className='flex items-center gap-2'>
-                <img src={flag} alt="UK Flag"  className='h-8 w-8'/>
-                  <span className='text-ash'>+44-7438-903660</span>
+                <div className='flex flex-col gap-1 mt-2'>
+                  <div>Our UK contact</div>
+                  <div className='flex items-center gap-2'>
+                    <img src={flag} alt="UK Flag" className='h-8 w-8' />
+                    <span className='text-ash'>+44-7438-903660</span>
+                  </div>
                 </div>
               </div>
               <div className='flex flex-col gap-4 mt-4 text-sm text-white font-medium'>

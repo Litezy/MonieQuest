@@ -16,7 +16,7 @@ const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche',
 
 const AirdropsPage = () => {
   const [params] = useSearchParams()
-  const filCategory = params.get('c')
+  const filCategory = params.get('category')
   const [staticData, setStaticData] = useState([])
   const [airdrops, setAirdrops] = useState([])
   const [search, setSearch] = useState('')

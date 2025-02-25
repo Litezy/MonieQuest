@@ -291,7 +291,7 @@ const CreateProduct = () => {
             <SlClock className='text-8xl' />
             <div className='text-center'>Thank you for your submission! Our team is currently reviewing your demo video. Please allow up to 2 days for us to assess it. We’ll reach out to you via WhatsApp or phone with our feedback soon.</div>
             <Link to="/user/products/all">
-              <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-16 rounded-lg outline-none uppercase font-bold'>go to all tools</button>
+              <button className='bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-fit h-fit py-3 px-10 rounded-lg outline-none uppercase font-bold'>see all products submitted</button>
             </Link>
           </div>
         }
