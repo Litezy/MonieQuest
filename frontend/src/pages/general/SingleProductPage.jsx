@@ -231,6 +231,7 @@ const SingleProductPage = () => {
                                                             color: 'gray'
                                                         }
                                                     }}
+                                                    readOnly={form.submit ? true : false}
                                                 />
                                             </div>
                                             <div className='w-fit relative'>

@@ -13,16 +13,16 @@ import { MdReviews } from "react-icons/md";
 
 export const pagelinks = [
     { label: 'dashboard', url: '/admin/dashboard', icon: MdDashboard },
-    { label: 'users', url: '/admin/all_users', icon: FaUsers },
+    { label: 'users', main: '/all_users', url: '/admin/all_users', icon: FaUsers },
     { label: 'crypto exchange', main: '/exchange', url: '/admin/exchange/buy_orders', icon: MdCurrencyExchange },
-    { label: 'gift cards', url: '/admin/giftcards/orders', main: '/giftcards', icon: HiGift },
+    { label: 'gift cards', main: '/giftcards', url: '/admin/giftcards/orders', icon: HiGift },
     { label: 'products', main: '/products', url: '/admin/products/orders', icon: CgToolbox },
     { label: 'airdrops', main: '/airdrops', url: '/admin/airdrops/create', icon: AiFillDollarCircle },
     { label: 'blogs', main: '/blogs', url: '/admin/blogs/create', icon: FaBloggerB },
-    { label: 'bank withdrawals', url: '/admin/bank_withdrawals', main: '/bank_withdrawals', icon: BiMoneyWithdraw },
+    { label: 'bank withdrawals', main: '/bank_withdrawals', url: '/admin/bank_withdrawals', icon: BiMoneyWithdraw },
     { label: 'transaction history', url: '/admin/transactions_history', icon: GoHistory },
     { label: 'profile', url: '/admin/profile', icon: RiUserFill },
     { label: 'notifications', url: '/admin/notifications', icon: IoNotificationsSharp },
     { label: 'leaderboard', url: '/admin/leaderboard', icon: MdLeaderboard },
-    { label: 'testimonials', url: '/admin/testimonials', main:`admin/testimonials`, icon: MdReviews },
+    { label: 'testimonials', main: '/testimonials', url: '/admin/testimonials', icon: MdReviews },
 ]

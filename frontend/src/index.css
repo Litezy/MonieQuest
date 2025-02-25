@@ -351,7 +351,6 @@ input[type=number]:focus {
   background-size: contain;
 }
 
-
 @media (max-width: 768px) {
   .pageBg {
     background-size: contain;
@@ -359,7 +358,6 @@ input[type=number]:focus {
     background-position: center;
   }
 }
-
 
 .edge {
   height: 0;
