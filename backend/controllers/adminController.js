@@ -1622,8 +1622,7 @@ exports.UpdateTestimonial = async (req, res) => {
     } catch (error) {
         ServerError(res, error);
     }
-};
-
+}
 
 exports.getTestimonials = async (req, res) => {
     try {

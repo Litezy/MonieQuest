@@ -242,7 +242,7 @@ const HomePage = () => {
 
               </div>
               <div className="w-full ml-auto mt-10">
-                <Link to={`/faqs`} className='w-fit px-4 py-2 rounded-xl bg-ash '>view more</Link>
+                <Link to={`/faqs`} onClick={MoveToTop} className='w-fit px-4 py-2 rounded-xl bg-ash '>view more</Link>
               </div>
             </div>
           </div>

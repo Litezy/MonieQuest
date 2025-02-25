@@ -640,6 +640,7 @@ exports.getUserData = async (req, res) => {
         ServerError(res, error)
     }
 }
+
 exports.AddCarouselImage = async (req, res) => {
     try {
         const slugData = slug('carousel-image', '-')
