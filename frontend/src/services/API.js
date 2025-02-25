@@ -100,6 +100,8 @@ const admin_urls = {
     get_single_withdrawal: admin + 'get_single_withdrawal',
     create_testimonial: admin + 'create_testimonial',
     update_testimonial: admin + 'update_testimonial',
+    single_testimonial: admin +'single_testimonial',
+    delete_testimonial: admin +'delete_testimonial',
 }
 
 const products = 'api/product/'
@@ -154,9 +156,9 @@ export const AuthPutApi = async (endpoint, data) => {
     })
     return response.data
 }
-export const AuthPatchApi = async (endpoint, data) => {
+export const AuthDeleteApi = async (endpoint) => {
     const token = Cookies.get(CookieName)
-    const response = await axios.patch(`${URL}/${endpoint}`, data, {
+    const response = await axios.delete(`${URL}/${endpoint}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }

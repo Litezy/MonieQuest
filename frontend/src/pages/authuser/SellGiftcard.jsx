@@ -71,28 +71,6 @@ const SellGiftcard = () => {
     }
 
 
-    const changeCurrency = () => {
-        if (selectedCurr.name === 'USD' && selectedCurr.symbol === '$') {
-            setSelectedCurr({
-                name: currencies[1].name,
-                symbol: currencies[1].symbol
-            })
-            const amt = cards.amount.replace(/,/g, '')
-            const newAmnt = amt * rate
-            setCards({ ...cards, amount: newAmnt.toLocaleString() })
-            console.log(cards.amount)
-        } else {
-            setSelectedCurr({
-                name: currencies[0].name,
-                symbol: currencies[0].symbol
-            })
-            const amt = cards.amount.replace(/,/g, '')
-            const newAmnt = amt / rate
-            console.log(cards.amount)
-            setCards({ ...cards, amount: newAmnt.toLocaleString() })
-        }
-    }
-
     const checkCode = () => {
         if (!selectedCard || !selectedCard.brand) {
             return ErrorAlert("Please select a gift card brand ");
@@ -193,7 +171,8 @@ const SellGiftcard = () => {
             brand: cards.brand,
             amount: cards.amount,
             code: cards.code,
-            pin: cards.pin
+            pin: cards.pin,
+            rate:rate
         }
         // return console.log(formdata)
         try {

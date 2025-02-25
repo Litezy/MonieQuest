@@ -50,7 +50,7 @@ const SingleSellOrder = () => {
             console.log(error)
         }
     }
-    const rate = utils?.exchange_sell_rate
+    const rate = data?.rate
     const handleCopy = (type, val) => {
         navigator.clipboard.writeText(type)
             .then(() => { SuccessAlert(`${val} copied successfully'`) })

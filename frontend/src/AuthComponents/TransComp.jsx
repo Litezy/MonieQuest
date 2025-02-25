@@ -49,7 +49,7 @@ const TransComp = ({ trans }) => {
                             {trans.brand && <div className="w-[0.5px] h-5 bg-gray-400"></div>}
                             {trans.brand && <div className={`text-red-600 capitalize`}>sell</div>}
                         </div>
-                        <div className="flex flex-col items-start gap-1 text-xs md:text-base">
+                        <div className="flex flex-col items-start gap-1 text-sm">
                         <div className="">{moment(trans.createdAt).format('ddd')} {moment(trans.createdAt).format('DD-MM-YYYY')}</div>
                             <div className="">{moment(trans.createdAt).format('hh:mm a')}</div>
                         </div>

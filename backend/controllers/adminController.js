@@ -535,15 +535,18 @@ exports.getAllUserDetails = async (req, res) => {
             ],
             order: [['createdAt', 'DESC']]
         })
-        const all_user_banks = await Bank.findAll({
+        const findAdmins = await User.findAll({ where: { role: 'admin' } })
+        const adminIds = findAdmins.map(admin => admin.id)
+        const all_user_banks = await Bank.findAll({where:{user: { [Op.notIn]: adminIds} },
             attributes: [`id`, `user`, `bank_name`, 'account_number', 'account_name'],
             include: [
                 {
                     model: User, as: 'user_bank',
-                    attributes: [`first_name`, 'surname']
+                    attributes: [`first_name`, 'surname','role']
                 }
             ]
         })
+         
         const submittedUsers = await Kyc.findAll({
             where: { status: 'processing' },
             include: [
@@ -1216,8 +1219,8 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
 
         if (tag === 'success') {
             if (!amount) return res.json({ status: 400, msg: "Amount is missing" })
-            findUserWallet.balance = parseFloat(findUserWallet.balance) + parseFloat(amount)
-            findUserWallet.total_deposit = parseFloat(findUserWallet.total_deposit) + parseFloat(amount)
+            findUserWallet.balance = parseFloat(findUserWallet.balance || 0) + parseFloat(amount)
+            findUserWallet.total_deposit = parseFloat(findUserWallet.total_deposit || 0) + parseFloat(amount)
             findSell.status = 'completed'
             await findUserWallet.save()
             await findSell.save()
@@ -1227,11 +1230,13 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                 content: `Hi dear, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked paid. Kindly check your  new balance.`,
                 url: '/user/dashboard',
             })
+            const formattedAmount = parseInt(findSell?.amount).toLocaleString("en-US");
+
             await Mailing({
                 subject: `Crypto Credit Alert`,
                 eTitle: `Credit Alert`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked paid with the sum of ${nairaSign}${findSell?.amount?.toLocaleString()}} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading with us.</div>
+                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked paid with the sum of ${nairaSign}${formattedAmount} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading with us.</div>
                 `,
                 account: user
             })
@@ -1251,7 +1256,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                         subject: 'Order Completed',
                         eTitle: `Crypto Sell Order `,
                         eBody: `
-                     <div>Hello Admin, you have completed the crypto sell order payment  with the ID of ${findSell?.order_no} today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updatedAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have completed the crypto sell order payment  with the ID of ${findSell?.order_no} and amount of ${nairaSign}${formattedAmount} today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updatedAt).format('h:mm')}.</div> 
                     `,
                         account: ele,
                     })
@@ -1372,23 +1377,23 @@ exports.creditGiftCustomer = async (req, res) => {
 
         if (tag === 'success') {
             //credit the customer
-            findUserWallet.balance = parseFloat(findUserWallet.balance) + parseFloat(amount)
-            findUserWallet.total_deposit = parseFloat(findUserWallet.deposit) + parseFloat(amount)
+            findUserWallet.balance = parseFloat(findUserWallet.balance || 0) + parseFloat(amount)
+            findUserWallet.total_deposit = parseFloat(findUserWallet.total_deposit || 0) + parseFloat(amount);
             order.status = 'completed'
             await order.save()
             await findUserWallet.save()
-
             await Notification.create({
                 user: findUser.id,
                 title: `Balance Credit`,
                 content: `Hi dear, Your Gift-Card order with the ID of ${order?.order_no} has been marked paid. Kindly check your  new balance.`,
                 url: '/user/dashboard',
             })
+            const formattedAmount = parseInt(amount).toLocaleString("en-US");
             await Mailing({
                 subject: `Gift-Card Credit Alert`,
                 eTitle: `Credit Alert`,
                 eBody: `
-                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked paid with the sum of ${nairaSign}${amount?.toLocaleString()}} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading.</div>
+                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked paid with the sum of ${nairaSign}${formattedAmount} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading.</div>
                 `,
                 account: findUser
             })
@@ -1407,7 +1412,7 @@ exports.creditGiftCustomer = async (req, res) => {
                         subject: 'Order Completed',
                         eTitle: `Gift-Card Order`,
                         eBody: `
-                     <div>Hello Admin, you have completed the giftcard order payment with the ID of ${order?.order_no} and the sum of ${nairaSign}${amount?.toLocaleString()}} today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have completed the giftcard order payment with the ID of ${order?.order_no} and the sum of ${nairaSign}${formattedAmount} today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm')}.</div> 
                     `,
                         account: ele,
                     })
@@ -1558,7 +1563,7 @@ exports.getSingleWithdrawal = async (req, res) => {
 exports.CreateTestimonial = async (req, res) => {
     try {
         const { firstname, lastname, title, content } = req.body
-        const reqFields = [firstname, lastname, title, content]
+        const reqFields = [firstname, title, content]
         if (reqFields.some((field) => !field)) return res.json({ status: 400, msg: "All fields are required" })
         const slugData = slug(firstname, '-').toLowerCase();
         const genId = otpGenerator.generate(5, { specialChars: false, upperCaseAlphabets: false, lowerCaseAlphabets: false })
@@ -1572,8 +1577,8 @@ exports.CreateTestimonial = async (req, res) => {
         if (!image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
         imageName = `${slugData}-image.jpg`
         await image.mv(`${filePath}/${imageName}`)
-        await Testimonial.create({ firstname, lastname,gen_id:genId, title, content, image: imageName })
-        return res.json({status:200, msg:'Testimonial created successfully'})
+        await Testimonial.create({ firstname, lastname: lastname || null, gen_id: genId, title, content, image: imageName })
+        return res.json({ status: 201, msg: 'Testimonial created successfully' })
     } catch (error) {
         ServerError(res, error)
     }
@@ -1586,7 +1591,7 @@ exports.UpdateTestimonial = async (req, res) => {
 
         const testimonial = await Testimonial.findByPk(id);
         if (!testimonial) return res.json({ status: 404, msg: 'Testimonial not found' });
-        let imageName = testimonial.image; 
+        let imageName = testimonial.image;
         const image = req?.files?.image;
 
         if (image) {
@@ -1610,19 +1615,37 @@ exports.UpdateTestimonial = async (req, res) => {
         }
 
         await testimonial.update({
-            firstname: firstname || testimonial.firstname,
-            lastname: lastname || testimonial.lastname,
-            title: title || testimonial.title,
-            content: content || testimonial.content,
+            firstname: firstname ? firstname : testimonial.firstname,
+            lastname: lastname ? lastname : lastname === '' ? null : testimonial.lastname,
+            title: title ? title : testimonial.title,
+            content: content ? content : testimonial.content,
             image: imageName,
         });
+
 
         return res.json({ status: 200, msg: 'Testimonial updated successfully', data: testimonial });
 
     } catch (error) {
         ServerError(res, error);
     }
-}
+};
+exports.deleteTestimonial = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) return res.json({ status: 400, msg: "ID missing from request" })
+        const testimonial = await Testimonial.findByPk(id);
+        if (!testimonial) return res.json({ status: 404, msg: 'Testimonial not found' });
+        const filePath = `./public/testimonials/${testimonial.gen_id}`;
+        if (fs.existsSync(filePath)) {
+            fs.rmSync(filePath, { recursive: true, force: true });
+        }
+        await testimonial.destroy()
+        return res.json({ status: 200, msg: 'Testimonial deleted successfully' });
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
 
 exports.getTestimonials = async (req, res) => {
     try {
@@ -1630,8 +1653,20 @@ exports.getTestimonials = async (req, res) => {
             order: [[`createdAt`, 'DESC']]
         })
         if (!testis) return res.json({ status: 404, msg: 'No testimonial found' })
-        return res.json({ status: 200, msg: 'fetch success',data:testis })
+        return res.json({ status: 200, msg: 'fetch success', data: testis })
 
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getSingleTestimonial = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 400, msg: 'ID missing from request' })
+        const testimonial = await Testimonial.findOne({ where: { id } })
+        if (!testimonial) return res.json({ status: 404, msg: "Testimonial ID not found" })
+        return res.json({ status: 200, msg: "fetch success", data: testimonial })
     } catch (error) {
         ServerError(res, error)
     }

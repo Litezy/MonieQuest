@@ -1,26 +1,75 @@
-import React from 'react'
-import { imageurl } from '../services/API'
-import { FaQuoteLeft,FaQuoteRight } from "react-icons/fa";
+import React, { useState } from 'react'
+import { Apis, AuthDeleteApi, AuthGetApi, imageurl } from '../services/API'
+import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import ModalLayout from '../utils/ModalLayout';
+import Loader from '../GeneralComponents/Loader';
+import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
 
-const TestimonialDiv = ({ item }) => {
+const TestimonialDiv = ({ item, setMonitor }) => {
+
+
+    const [loading, setLoading] = useState(false)
+    const [del, setDel] = useState(false)
+    const [id, setId] = useState('')
+
+    const selectDelete = (id) => {
+        setDel(true)
+        setId(id)
+    }
+    const deleteTestimonial = async () => {
+        setDel(false)
+        setLoading(true)
+        try {
+            const res = await AuthDeleteApi(`${Apis.admin.delete_testimonial}/${id}`)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            setMonitor((prev) => !prev)
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            SuccessAlert(res.msg)
+            setLoading(false)
+        } catch (error) {
+            console.log(`something went wrong in deleting testimonial`, error)
+        } finally { setLoading(false) }
+    }
     return (
-        <div className='w-full max-h-72 h-72 border border-primary rounded-md p-2'>
+
+        <div className='w-full md:max-h-72 md:h-72 border border-primary rounded-md p-2'>
+
+            {loading &&
+                <ModalLayout>
+                    <Loader title={`deleting testimonial`} />
+                </ModalLayout>
+            }
+            {del &&
+                <ModalLayout setModal={setDel} clas={`lg:w-[50%] w-10/12 mx-auto`}>
+                    <div className="p-5  bg-white text-dark shadow-xl rounded-md">
+                        <div className="text-base text-center mb-3">Are you sure you want to delete testimonial</div>
+                        <div className="flex items-center justify-between">
+                            <button onClick={() => setDel(false)} className='px-3 text-sm md:text-base py-2 bg-red-500 text-white rounded-md'>Cancel</button>
+                            <button onClick={deleteTestimonial} className='px-3 text-sm md:text-base py-2 bg-green-500 text-white rounded-md'>Confirm Delete</button>
+                        </div>
+
+                    </div>
+                </ModalLayout>
+            }
             <div className="flex items-center gap-2 w-full">
                 <img src={`${imageurl}/testimonials/${item.gen_id}/${item.image}`} alt={`${item.firstname} image`}
                     className='w-20 h-20 rounded-full' />
                 <div className="flex flex-col gap-2">
-                    <div className="">{item.firstname} {item.lastname}</div>
-                    <div className="px-3 py-1 rounded-md bg-primary">{item.title}</div>
+                    <div className="capitalize">{item.firstname} {item.lastname}</div>
+                    <div className="px-2 text-sm md:text-base py-1 rounded-md bg-primary capitalize">{item.title}</div>
                 </div>
                 <div className="w-fit ml-auto">
                     <Link to={`/admin/testimonials/${item.id}`} className='px-4 rounded-md py-1 bg-lightgreen'>Edit</Link>
                 </div>
             </div>
             <div className="mt-5 w-11/12 mx-auto relative">
-                <div className="absolute top-0 left-0"><FaQuoteLeft/></div>
-                <div className="px-5 mx-auto">Earning and growing money in the digital space can be complicated, but MonieQuest makes it straightforward. I love how it brings together different productivity tools and opportunities in one place. Definitely worth checking out!</div>
-                <div className="absolute bottom-0 right-0"><FaQuoteRight/></div>
+                <div className="absolute top-0 left-0"><FaQuoteLeft /></div>
+                <div className="px-5 mx-auto">{item.content}</div>
+                <div className="absolute bottom-0 right-0"><FaQuoteRight /></div>
+            </div>
+            <div className="mt-5 w-fit ml-auto">
+                <button onClick={() => selectDelete(item?.id)} type='button' className='px-4 py-1 rounded-md text-white bg-red-600'>Delete</button>
             </div>
         </div>
     )

@@ -133,7 +133,7 @@ const AdminFooter = () => {
                     </div>
                 </div>
                 {view &&
-                    <div className='absolute -top-12 right-0 bg-secondary border border-primary px-4 flex items-center justify-around gap-2 rounded-full'>
+                    <div className='absolute overflow-x-auto w-full -top-12 right-0 bg-secondary border border-primary px-4 flex items-center justify-around gap-2 rounded-full'>
                         {extraIcons.map((item, i) => (
                             <div key={i} className='flex items-center py-4 relative'>
                                 {pathName === item.url || pathName.includes(item.main) ?

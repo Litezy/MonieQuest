@@ -57,13 +57,15 @@ const formsal = () => {
             setShow(true)
             setForms({
                 ...forms,
-                bank: bankAcc.account_name, accountNumber: bankAcc.account_number, accountName: bankAcc.bank_name
+                accountName: bankAcc.account_name, accountNumber: bankAcc.account_number, bank: bankAcc.bank_name
             })
+            console.log(bankAcc,forms)
         } else {
             return ErrorAlert('No bank account added')
         }
 
     }
+   
 
     const handleAmount = (e) => {
         const input = e.target;
@@ -99,6 +101,7 @@ const formsal = () => {
 
     const submitRequest = async (e) => {
         e.preventDefault()
+        // return console.log(forms)
         setConfirm(false)
         const convertAmt = forms.amount.replace(/,/g, '')
         const formdata = {
@@ -213,7 +216,7 @@ const formsal = () => {
                                     <div className="text-lightgreen">Bank Name</div>
                                     {show ?
                                         <div className="w-full">
-                                            <FormInput value={bankAcc.account_name} />
+                                            <FormInput read={true} value={bankAcc.bank_name} />
                                         </div> :
                                         <div className="w-full">
                                             <SelectComp
@@ -233,7 +236,7 @@ const formsal = () => {
                         </div>
 
                         <div className="text-xl w-11/12 mx-auto mt-5 md:text-2xl font-bold text-gray-300 ">Latest Bank Transactions <span className='text-yellow-300'>(On Hold)</span></div>
-                        <div className="w-11/12 mx-auto text-sm ">NB: successful transactions can be found in <Link to={`/user/transactions_history`} className='text-blue-600'>Transactions History</Link></div>
+                        <div className="w-11/12 mx-auto text-sm ">NB: on hold and transactions can be found in <Link to={`/user/transactions_history`} className='text-blue-600'>Transactions History</Link></div>
                         <div className="mt-5 w-11/12 mx-auto">
                             {records && records.length > 0 ? records.map((trans, i) => {
                                 return (
