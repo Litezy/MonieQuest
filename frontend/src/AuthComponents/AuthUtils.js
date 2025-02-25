@@ -26,7 +26,7 @@ export const coinNames = [
     'DOGE',
     'Litecoin',
     'USDT',
-    'USDT',
+    'USDC',
 ];
 
 export const coinDetails = [
