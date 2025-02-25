@@ -48,12 +48,6 @@ const mainIcons = [
 
 const extraIcons = [
     {
-        name: 'testimonials',
-        symbol: MdReviews,
-        url: '/admin/testimonials',
-        main: '/testimonials'
-    },
-    {
         name: 'airdrops',
         symbol: AiFillDollarCircle,
         url: '/admin/airdrops/create',
@@ -76,7 +70,12 @@ const extraIcons = [
         symbol: GoHistory,
         url: '/admin/transactions_history'
     },
-   
+    {
+        name: 'testimonials',
+        symbol: MdReviews,
+        url: '/admin/testimonials',
+        main: '/testimonials'
+    },
     {
         name: 'profile',
         symbol: RiUser3Fill,

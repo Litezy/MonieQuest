@@ -437,13 +437,13 @@ const AdminProfile = () => {
                                         <label className='cursor-pointer'>
                                             {carouselImage.img ?
                                                 <div className='relative'>
-                                                    <img src={carouselImage.img} alt={carouselImage.img} className='w-60 h-56 object-cover object-center'></img>
+                                                    <img src={carouselImage.img} alt={carouselImage.img} className='w-60 md:h-56 h-44 object-cover object-center'></img>
                                                     <div className="absolute top-0 -right-3 main font-bold">
                                                         <FaEdit className='text-2xl text-lightgreen' />
                                                     </div>
                                                 </div>
                                                 :
-                                                <div className='w-60 h-56 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
+                                                <div className='w-60 md:h-56 h-44 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
                                                     <div className='bg-secondary rounded-full p-4'><FiUploadCloud /></div>
                                                     <span>click to add image</span>
                                                 </div>
