@@ -54,7 +54,7 @@ const AdminCryptoSellOrders = () => {
                                     </td>
 
                                     <td className="px-3 py-3">
-                                        {currencies[1].symbol}{item?.amount.toLocaleString()}
+                                        {currencies[0].symbol}{item?.amount.toLocaleString()}
                                     </td>
                                     <td className="px-3 py-3">
                                         <Link to={`${item?.id}`}

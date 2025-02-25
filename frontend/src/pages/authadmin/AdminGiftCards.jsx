@@ -28,10 +28,10 @@ const AdminGiftCards = () => {
                 <div className=" text-lg font-bold w-full text-center my-5 capitalize">See Latest Giftcards Sell Orders below</div>
                 <div className='relative overflow-x-auto rounded-md'>
                     <table className="w-full text-sm text-left rtl:text-right">
-                        <thead className=" bg-primary text-base poppins ">
+                        <thead className=" bg-primary text-sm md:text-base poppins ">
                             <tr>
                                 {Topheaders.map((item, i) => (
-                                    <th key={i} scope="col" className="px-3 text-lightgreen py-3">{item}</th>
+                                    <th key={i} scope="col" className="px-3 truncate text-lightgreen py-3">{item}</th>
                                 ))}
 
                             </tr>

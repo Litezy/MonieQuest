@@ -65,6 +65,7 @@ import BlogComments from "../pages/general/BlogComments";
 import FeatureBlogs from "../pages/general/FeatureBlogs";
 import AdminTestimonials from "../pages/authadmin/AdminTestimonials";
 import AdminEditTestimonial from "../pages/authadmin/AdminEditTestimonial";
+import AdminCreateTestimonial from "../pages/authadmin/AdminCreateTestimonial";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -140,4 +141,5 @@ export const AdminPagesLinks = [
     { path: '/admin/transactions_history', component: AdminTransHistory },
     { path: '/admin/testimonials', component: AdminTestimonials },
     { path: '/admin/testimonials/:id', component: AdminEditTestimonial },
+    { path: '/admin/testimonials/create', component: AdminCreateTestimonial },
 ]

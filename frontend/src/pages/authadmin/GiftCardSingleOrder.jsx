@@ -31,7 +31,7 @@ const GiftCardSingleOrder = () => {
     const green = `text-lightgreen`
     const statuses = [`Yes`, `No`]
     const navigate = useNavigate()
-    const rate = utils?.giftcard_rate
+    
 
 
 
@@ -50,6 +50,7 @@ const GiftCardSingleOrder = () => {
         fetchGiftCardOrder()
     }, [])
 
+    const rate = data?.rate
     const [inNaira, setInNaira] = useState('')
     useEffect(() => {
         if (data?.amount && data?.amount !== '0') {

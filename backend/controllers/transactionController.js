@@ -18,8 +18,8 @@ const Wallet = require('../models').wallets
 
 exports.BuyCrypto = async (req, res) => {
     try {
-        const { crypto_currency, type, amount, wallet_address, network, wallet_exp } = req.body
-        if (!crypto_currency || !type || !amount || !wallet_address || !network) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
+        const { crypto_currency, type, rate, amount, wallet_address, network, wallet_exp } = req.body
+        if (!crypto_currency || !type || !amount || !rate || !wallet_address || !network) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
         const findUser = await User.findOne({ where: { id: req.user } })
         if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
         const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
@@ -28,6 +28,7 @@ exports.BuyCrypto = async (req, res) => {
             type,
             amount,
             network,
+            rate,
             wallet_address,
             wallet_exp,
             userid: req.user,
@@ -74,8 +75,8 @@ exports.BuyCrypto = async (req, res) => {
 
 exports.SellCrypto = async (req, res) => {
     try {
-        const { crypto_currency, type, amount, trans_hash, network } = req.body
-        if (!crypto_currency || !type || !amount || !trans_hash || !network) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
+        const { crypto_currency, type, rate, amount, trans_hash, network } = req.body
+        if (!crypto_currency || !type || !amount || !rate || !trans_hash || !network) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
         const findUser = await User.findOne({ where: { id: req.user } })
         if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
         const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
@@ -84,6 +85,7 @@ exports.SellCrypto = async (req, res) => {
             type,
             amount,
             network,
+            rate,
             trans_hash,
             userid: req.user,
             order_no: orderId
@@ -130,13 +132,13 @@ exports.SellCrypto = async (req, res) => {
 exports.SellGift = async (req, res) => {
     try {
 
-        const { brand, amount, code, pin } = req.body
-        if (!brand || !amount || !code) return res.json({ status: 400, msg: "Incomplete request, fill all required fields." })
+        const { brand, amount, code, pin, rate } = req.body
+        if (!brand || !amount || !code || !rate) return res.json({ status: 400, msg: "Incomplete request, fill all required fields." })
         const findUser = await User.findOne({ where: { id: req.user } })
         if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
         const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
         const newsell = await GiftCardSell.create({
-            brand, amount, code, pin, userid: req.user, order_no: orderId
+            brand, amount, code, pin, userid: req.user, order_no: orderId, rate
         })
         await Notify.create({
             user: req.user, title: 'giftcard sell order', content: `Your giftcard sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.  `, url: `/user/transactions_history`
@@ -359,10 +361,8 @@ exports.requestWithdrawal = async (req, res) => {
         }
         if (amount > findUserWallet.balance) return res.json({ status: 400, msg: `Insufficient funds` })
         if (isNaN(amount)) return res.json({ status: 400, msg: 'Please input a valid number' })
-        const newamt = parseFloat(findUserWallet.balance) - parseFloat(amount)
-        const newtotal = parseFloat(findUserWallet.total_outflow) + parseFloat(amount)
-        findUserWallet.total_outflow = newtotal
-        findUserWallet.balance = newamt
+        findUserWallet.balance = parseFloat(findUserWallet.balance) - parseFloat(amount)
+        findUserWallet.total_outflow = parseFloat(findUserWallet.total_outflow || 0) + parseFloat(amount)
         await findUserWallet.save()
         const nanoid = customAlphabet(blockAndNum, 15)
         const transId = nanoid()

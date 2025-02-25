@@ -54,7 +54,7 @@ const AdminCryptoBuyOrders = () => {
                                     </td>
 
                                     <td className="px-3 py-3">
-                                        {currencies[1].symbol}{item?.amount.toLocaleString()}
+                                        {currencies[0].symbol}{item?.amount.toLocaleString()}
                                     </td>
                                     <td className={`${item.status === 'paid' ? "text-green-300":"text-yellow-300" } px-3 py-3 capitalize`}>
                                         {item?.status}

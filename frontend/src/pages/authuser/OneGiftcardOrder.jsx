@@ -91,7 +91,10 @@ const OneGiftcardOrder = () => {
                                         <FormInput value={data?.code} className={`${green} uppercase`} />
                                     </div>
                                 </div>
-
+                                <div className="w-full">
+                                    <div className="text-sm">Rate:</div>
+                                    <FormInput value={`${data?.rate}/${currencies[0].symbol}`} className={`${green}`} />
+                                </div>
 
 
                             </div>
@@ -105,10 +108,11 @@ const OneGiftcardOrder = () => {
                                     <div className="text-sm">Giftcard amount in NGN:</div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-full">
-                                            <FormInput value={naira} className={`${green}`} />
+                                            <FormInput value={`${currencies[1].symbol}${naira}`} className={`${green}`} />
                                         </div>
                                     </div>
                                 </div>
+                               
                                 <div className="w-full">
                                     <div className="text-sm">Status:</div>
                                     <FormInput value={data?.status} className={`${data?.status === 'paid' ? green : 'text-yellow-300'}`} />

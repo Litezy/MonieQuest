@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import Loader from '../../GeneralComponents/Loader';
 import { Apis, AuthGetApi, AuthPostApi } from '../../services/API';
 import ExchangeLayout from '../../AuthComponents/ExchangeLayout';
+import { useAtom } from 'jotai';
+import { UTILS } from '../../services/store';
 
 
 const BuyCrypto = () => {
@@ -17,7 +19,8 @@ const BuyCrypto = () => {
     const [loading, setLoading] = useState(false)
     const [isPageLoading, setIsPageLoading] = useState(!navigator.onLine);
     const [modal, setModal] = useState(false)
-    const rate = 1715
+    const [utils] = useAtom(UTILS)
+   
     const [forms, setForms] = useState({
         amount: '',
         type: coinNames[0],
@@ -25,7 +28,7 @@ const BuyCrypto = () => {
         wallet_add: '',
         isExpired: 'No'
     })
-
+    const rate = utils?.exchange_buy_rate
     const handleChange = (e) => {
         setForms({
             ...forms,
@@ -49,9 +52,9 @@ const BuyCrypto = () => {
         name: currencies[0].name,
         symbol: currencies[0].symbol
     })
-    const limit = 2000
+    const limit = utils?.buy_max
     const nairaLimit = limit * rate
-    const minimum = 10
+    const minimum = utils?.buy_min
 
     const proceedFunc = () => {
         if (!forms.wallet_add) return ErrorAlert(`Please input your wallet address`)
@@ -110,7 +113,8 @@ const BuyCrypto = () => {
             wallet_address: forms.wallet_add,
             network: forms.network,
             amount: forms.amount,
-            wallet_exp: forms.isExpired
+            wallet_exp: forms.isExpired,
+            rate:rate
         };
         // return console.log(formdata)
         try {

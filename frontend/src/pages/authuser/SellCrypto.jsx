@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import Loader from '../../GeneralComponents/Loader';
 import ExchangeLayout from '../../AuthComponents/ExchangeLayout';
 import { Apis, AuthPostApi } from '../../services/API';
+import { useAtom } from 'jotai';
+import { UTILS } from '../../services/store';
 
 
 const SellCrypto = () => {
@@ -20,7 +22,7 @@ const SellCrypto = () => {
     const [modal, setModal] = useState(false)
     const [isPageLoading, setIsPageLoading] = useState(!navigator.onLine)
     const [loading, setLoading] = useState(false)
-    const rate = 1690
+    const [utils] = useAtom(UTILS)
     const [forms, setForms] = useState({
         amount: '',
         trans_hash: '',
@@ -54,9 +56,10 @@ const SellCrypto = () => {
         symbol: currencies[0].symbol
     })
 
-    const limit = 2500
+    const rate = utils?.exchange_sell_rate
+    const limit = utils?.sell_max
     const nairaLimit = limit * rate
-    const minimum = 10
+    const minimum = utils?.sell_min
     const submit = (e) => {
         e.preventDefault()
         if (!forms.amount) return ErrorAlert('amount is required')
@@ -108,7 +111,8 @@ const SellCrypto = () => {
             crypto_currency: forms.crypto,
             type: 'sell',
             trans_hash: forms.trans_hash,
-            network: forms.network
+            network: forms.network,
+            rate:rate
         }
 
         try {

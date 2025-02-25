@@ -58,20 +58,22 @@ const UserBanks = ({}) => {
                 </div>
 
                 <AnimateHeight
-                  duration={300}
+                  duration={300} 
                   height={activeIndex === index ? 'auto' : 0}
                 >
+                  <div className="flex flex-col gap-2">
                   <div className="flex w-full items-center gap-10 lg:flex-row justify-between">
-                    <div className="lg:w-[45%]">Holder's Fullname:</div>
+                    <div className="lg:w-[45%] md:text-base text-sm">Holder's Fullname:</div>
                     <FormInput read={true} value={item?.account_name} />
                   </div>
                   <div className="flex w-full items-center gap-10 lg:flex-row justify-between">
-                    <div className="lg:w-[45%]">Bank Name:</div>
+                    <div className="lg:w-[45%] md:text-base  text-sm">Bank Name:</div>
                     <FormInput read={true} value={item?.bank_name} />
                   </div>
-                  <div className="flex w-full items-center gap-10 lg:flex-row justify-between">
-                    <div className="lg:w-[45%]">Bank Account No:</div>
+                  <div className="flex w-full items-center gap-10` lg:flex-row justify-between">
+                    <div className="lg:w-[45%] md:text-base  text-sm">Bank Account No:</div>
                     <FormInput read={true} value={item?.account_number} />
+                  </div>
                   </div>
                 </AnimateHeight>
               </div>
