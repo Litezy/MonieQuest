@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import PageLayout from '../../GeneralComponents/PageLayout'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FaXTwitter } from 'react-icons/fa6'
 import { SiTelegram } from 'react-icons/si'
 import { LuArrowRightLeft } from 'react-icons/lu'
 import { RxExternalLink } from "react-icons/rx";
 import { Apis, GetApi, imageurl } from '../../services/API'
 import YouTubeComp from '../../GeneralComponents/YouTubeComp'
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { MoveToTop } from '../../utils/pageUtils'
 
 
 const SingleAirdropPage = () => {
@@ -14,9 +16,11 @@ const SingleAirdropPage = () => {
   const [categoryAirdrops, setCategoryAirdrops] = useState([])
   const [singleAirdrop, setSingleAirdrop] = useState({})
   const [dataLoading, setDataLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const FetchCategoryAirdrops = async () => {
+      setDataLoading(true)
       try {
         const response = await GetApi(`${Apis.admin.category_airdrops}/${category}`)
         if (response.status === 200) {
@@ -32,11 +36,13 @@ const SingleAirdropPage = () => {
       }
     }
     FetchCategoryAirdrops()
-  }, [])
+  }, [id])
 
-  const currentIndex = categoryAirdrops.findIndex((item) => item.id === parseInt(id))
-  const prevAirdrop = currentIndex > 0 ? categoryAirdrops[currentIndex - 1] : null
-  const nextAirdrop = currentIndex < categoryAirdrops.length - 1 ? categoryAirdrops[currentIndex + 1] : null
+  const sortedAirdrops = [...categoryAirdrops].sort((a, b) => a.id - b.id)
+  const currentIndex = sortedAirdrops.findIndex((item) => item.id === parseInt(id))
+  const prevAirdrop = currentIndex > 0 ? sortedAirdrops[currentIndex - 1] : null
+  const nextAirdrop = currentIndex < sortedAirdrops.length - 1 ? sortedAirdrops[currentIndex + 1] : null
+  console.log(prevAirdrop, nextAirdrop)
 
   return (
     <PageLayout>
@@ -167,9 +173,33 @@ const SingleAirdropPage = () => {
                   </div>
                 </div>
               </div>
-              <div className='bg-secondary border border-ash rounded-md w-full h-fit p-4 text-sm italic'>
-                <p><span className='font-bold'>Disclaimer:</span> All content & airdrop guides are for educational and informational purposes only. It is not financial advice or endorsement for the projects and airdrops. Conduct thorough research before making any deposits or investment decisions (Do Your Own Research). Farming airdrops comes with a set of risks, so make sure your knowledge about online security is up to date.</p>
-                <p className='pt-4'>At MonieQuest we vet the projects with all the public available information, to make sure all our published crypto airdrops display the correct details.</p>
+              <div className='flex flex-col gap-8'>
+                <div className='bg-secondary border border-ash rounded-md w-full h-fit p-4 text-sm italic'>
+                  <p><span className='font-bold'>Disclaimer:</span> All content & airdrop guides are for educational and informational purposes only. It is not financial advice or endorsement for the projects and airdrops. Conduct thorough research before making any deposits or investment decisions (Do Your Own Research). Farming airdrops comes with a set of risks, so make sure your knowledge about online security is up to date.</p>
+                  <p className='pt-4'>At MonieQuest we vet the projects with all the public available information, to make sure all our published crypto airdrops display the correct details.</p>
+                </div>
+                <div className='flex justify-between gap-4'>
+                  <div className='flex gap-2 items-center text-gray-300'>
+                    <button
+                      onClick={() => { navigate(`/airdrops/${prevAirdrop?.category}/${prevAirdrop?.id}/${prevAirdrop?.slug}`); MoveToTop() }}
+                      disabled={!prevAirdrop}
+                      className={`w-7 h-7 border border-gray-300 rounded-full flex items-center justify-center ${!prevAirdrop ? 'cursor-default' : 'cursor-pointer hover:text-lightgreen hover:border-lightgreen'}`}
+                    >
+                      <IoIosArrowBack />
+                    </button>
+                    <div className='text-sm capitalize'>previous airdrop</div>
+                  </div>
+                  <div className='flex gap-2 items-center text-gray-300'>
+                    <button
+                      onClick={() => { navigate(`/airdrops/${nextAirdrop?.category}/${nextAirdrop?.id}/${nextAirdrop?.slug}`); MoveToTop() }}
+                      disabled={!nextAirdrop}
+                      className={`w-7 h-7 border border-gray-300 rounded-full flex items-center justify-center ${!nextAirdrop ? 'cursor-default' : 'cursor-pointer hover:text-lightgreen hover:border-lightgreen'}`}
+                    >
+                      <IoIosArrowForward />
+                    </button>
+                    <div className='text-sm capitalize'>next airdrop</div>
+                  </div>
+                </div>
               </div>
             </div>
           }
