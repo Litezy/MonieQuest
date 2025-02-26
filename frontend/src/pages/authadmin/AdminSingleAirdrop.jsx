@@ -27,7 +27,7 @@ const blockchains = ['Abstract', 'Algorand', 'ApeChain', 'Abitrum', 'Avalanche',
 const AdminSingleAirdrop = () => {
     const { id } = useParams()
     const [dataLoading, setDataLoading] = useState(true)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState({ status: false, desc: '' })
     const [singleAirdrop, setSingleAirdrop] = useState({})
     const [modal, setModal] = useState(false)
     const [form, setForm] = useState({
@@ -146,7 +146,7 @@ const AdminSingleAirdrop = () => {
         formbody.append('twitter_link', form.twitter_link)
         formbody.append('website_link', form.website_link)
 
-        setLoading(true)
+        setLoading({ status: true, desc: 'updating' })
         try {
             const response = await AuthPutApi(Apis.admin.update_airdrop, formbody)
             if (response.status === 200) {
@@ -158,12 +158,13 @@ const AdminSingleAirdrop = () => {
         } catch (error) {
             ErrorAlert(`${error.message}`)
         } finally {
-            setLoading(false)
+            setLoading({ status: false, desc: '' })
         }
     }
 
     const DeleteAirdrop = async () => {
-        setLoading(true)
+        setModal(false)
+        setLoading({ status: true, desc: 'deleting' })
         try {
             const response = await AuthPostApi(Apis.admin.delete_closed_airdrop, { airdrop_id: singleAirdrop.id })
             if (response.status === 200) {
@@ -175,14 +176,14 @@ const AdminSingleAirdrop = () => {
         } catch (error) {
             ErrorAlert(`${error.message}`)
         } finally {
-            setLoading(false)
+            setLoading({ status: false, desc: '' })
         }
     }
 
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
-                {loading && <Loader title={`submitting`} />}
+                {loading.status && <Loader title={loading.desc} />}
                 <Link to='/admin/airdrops/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
                     back to all airdrops
                 </Link>

@@ -21,8 +21,8 @@ export const pagelinks = [
     { label: 'blogs', main: '/blogs', url: '/admin/blogs/create', icon: FaBloggerB },
     { label: 'bank withdrawals', main: '/bank_withdrawals', url: '/admin/bank_withdrawals', icon: BiMoneyWithdraw },
     { label: 'transaction history', url: '/admin/transactions_history', icon: GoHistory },
+    { label: 'testimonials', main: '/testimonials', url: '/admin/testimonials', icon: MdReviews },
     { label: 'profile', url: '/admin/profile', icon: RiUserFill },
     { label: 'notifications', url: '/admin/notifications', icon: IoNotificationsSharp },
     { label: 'leaderboard', url: '/admin/leaderboard', icon: MdLeaderboard },
-    { label: 'testimonials', main: '/testimonials', url: '/admin/testimonials', icon: MdReviews },
 ]

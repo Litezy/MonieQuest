@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import FormInput from '../../utils/FormInput'
 import { BiSolidEditAlt } from 'react-icons/bi'
 import FormButton from '../../utils/FormButton'
-import ModalLayout from '../../utils/ModalLayout'
 import Loader from '../../GeneralComponents/Loader'
 
 const AdminEditTestimonial = () => {
@@ -77,7 +76,7 @@ const AdminEditTestimonial = () => {
 
     const submitEdit = async (e) => {
         e.preventDefault()
-        const isFormFilled = Object.values(forms).filter(([key]) => key!== 'lastname').every(([_, val]) => val !== '');
+        const isFormFilled = Object.values(forms).filter(([key]) => key !== 'lastname').every(([_, val]) => val !== '');
         if (!isFormFilled) return ErrorAlert(`Please fill out all fields`)
         const formdata = new FormData()
         formdata.append('firstname', forms.firstname)
@@ -103,14 +102,10 @@ const AdminEditTestimonial = () => {
     return (
         <AdminPageLayout>
             {loading.status && loading.val === 'load' &&
-                <ModalLayout>
-                    <Loader title={`loading`} />
-                </ModalLayout>
+                <Loader title={`loading`} />
             }
             {loading.status && loading.val === 'update' &&
-                <ModalLayout>
-                    <Loader title={`saving changes`} />
-                </ModalLayout>
+                <Loader title={`saving changes`} />
             }
             {!loading.status && loading.val === '' && <div className="w-11/12 mx-auto">
                 <Link className='px-3 py-1.5 rounded-md bg-ash text-white'

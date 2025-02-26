@@ -167,7 +167,7 @@ const AdminSingleProduct = () => {
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
-                {loading && <Loader title={`submitting`} />}
+                {loading && <Loader title={`updating`} />}
                 <Link to='/admin/products/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
                     back to all products
                 </Link>
