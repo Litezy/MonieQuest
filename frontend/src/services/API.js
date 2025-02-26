@@ -27,7 +27,7 @@ const user_urls = {
     add_carousel_image: user + 'add-carousel-image',
     get_carousel_images: user + 'get-carousel-images',
     delete_carousel_image: user + 'delete-carousel-image',
-    get_testimonials:user + 'get_testimonials'
+    get_testimonials: user + 'get_testimonials'
 }
 
 const notification = 'api/notification/'
@@ -53,7 +53,7 @@ const trans_url = {
     request_withdrawal: transaction + 'request_withdrawal',
     latest_withdrawals: transaction + 'latest_withdrawals',
     all_trans: transaction + 'get_alltrans',
-    
+
 }
 
 const admin = 'api/admin/'
@@ -100,8 +100,8 @@ const admin_urls = {
     get_single_withdrawal: admin + 'get_single_withdrawal',
     create_testimonial: admin + 'create_testimonial',
     update_testimonial: admin + 'update_testimonial',
-    single_testimonial: admin +'single_testimonial',
-    delete_testimonial: admin +'delete_testimonial',
+    single_testimonial: admin + 'single_testimonial',
+    delete_testimonial: admin + 'delete_testimonial',
 }
 
 const products = 'api/product/'
@@ -147,6 +147,16 @@ export const AuthGetApi = async (endpoint) => {
     return response.data
 }
 
+export const AuthPostApi = async (endpoint, data) => {
+    const token = Cookies.get(CookieName)
+    const response = await axios.post(`${URL}/${endpoint}`, data, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response.data
+}
+
 export const AuthPutApi = async (endpoint, data) => {
     const token = Cookies.get(CookieName)
     const response = await axios.put(`${URL}/${endpoint}`, data, {
@@ -156,6 +166,7 @@ export const AuthPutApi = async (endpoint, data) => {
     })
     return response.data
 }
+
 export const AuthDeleteApi = async (endpoint) => {
     const token = Cookies.get(CookieName)
     const response = await axios.delete(`${URL}/${endpoint}`, {
@@ -166,13 +177,4 @@ export const AuthDeleteApi = async (endpoint) => {
     return response.data
 }
 
-export const AuthPostApi = async (endpoint, data) => {
-    const token = Cookies.get(CookieName)
-    const response = await axios.post(`${URL}/${endpoint}`, data, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-    return response.data
-}
 

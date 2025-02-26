@@ -19,7 +19,7 @@ const features = [
 const AdminSingleBlog = () => {
     const { id } = useParams()
     const [dataLoading, setDataLoading] = useState(true)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState({ status: false, desc: '' })
     const [singleBlog, setSingleBlog] = useState({})
     const [modal, setModal] = useState(false)
     const navigate = useNavigate()
@@ -142,7 +142,6 @@ const AdminSingleBlog = () => {
         if (!form.title || !form.feature || !form.main_header_title || !form.main_header_content ||
             !form.first_paragraph_title || !form.first_paragraph_content || !form.second_paragraph_title || !form.second_paragraph_content || !form.extras_title ||
             !form.extras_content || !form.conclusion) return ErrorAlert('Enter all required fields')
-z
         const formbody = new FormData()
         formbody.append('blog_id', singleBlog.id)
         formbody.append('image', blogImage.image)
@@ -160,7 +159,7 @@ z
         formbody.append('second_paragraph_image', secondImg.image)
         formbody.append('extras_image', extrasImg.image)
 
-        setLoading(true)
+        setLoading({ status: true, desc: 'updating' })
         try {
             const response = await AuthPutApi(Apis.admin.update_blog, formbody)
             if (response.status === 200) {
@@ -173,7 +172,7 @@ z
         } catch (error) {
             ErrorAlert(`${error.message}`)
         } finally {
-            setLoading(false)
+            setLoading({ status: false, desc: '' })
         }
     }
 
@@ -191,7 +190,6 @@ z
             }
             FetchSingleBlog()
             SuccessAlert(res.msg)
-            // await new Promise((resolve) => setTimeout(resolve, 2000))
         } catch (error) {
             ErrorAlert(`${error.message}`)
         } finally {
@@ -200,7 +198,8 @@ z
     }
 
     const DeleteBlog = async () => {
-        setLoading(true)
+        setModal(false)
+        setLoading({ status: true, desc: 'deleting' })
         try {
             const response = await AuthPostApi(Apis.admin.delete_blog, { blog_id: singleBlog.id })
             if (response.status === 200) {
@@ -212,7 +211,7 @@ z
         } catch (error) {
             ErrorAlert(`${error.message}`)
         } finally {
-            setLoading(false)
+            setLoading({ status: false, desc: '' })
         }
     }
 
@@ -220,7 +219,7 @@ z
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
-                {loading && <Loader title={`submitting`} />}
+                {loading.status && <Loader title={loading.desc} />}
                 <Link to='/admin/blogs/all' className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer">
                     back to all blogs
                 </Link>

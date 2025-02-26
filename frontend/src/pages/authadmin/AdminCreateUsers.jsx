@@ -80,8 +80,8 @@ const AdminCreateUsers = () => {
                     </div>
                     <div className="my-5 text-center poppins font-semibold">Create new user by entering the following details</div>
                     <form onSubmit={createUser} className='shadow-xl w-full p-2 rounded-lg relative'>
-                        <div className="flex items-start flex-col   lg:flex-row gap-10">
-                            <div className="flex flex-col items-start lg:w-3/4  w-full gap-4">
+                        <div className="grid md:grid-cols-2 grid-cols-1 md:flex-row md:gap-10 gap-4">
+                            <div className="flex flex-col items-start w-full gap-4">
                                 <div className="w-full">
                                     <FormInput label='First Name' name={`firstname`} value={forms.firstname} onChange={handleChange} />
                                 </div>
@@ -92,7 +92,7 @@ const AdminCreateUsers = () => {
                                     <FormInput label='Phone No' type='phone' name={`phone`} value={forms.phone} onChange={handleChange} />
                                 </div>
                             </div>
-                            <div className="flex flex-col items-start lg:w-3/4  w-full gap-4">
+                            <div className="flex flex-col items-start w-full gap-4">
                                 <div className="w-full">
                                     <FormInput label='Email Address:' type='email' name={`email`} value={forms.email} onChange={handleChange} />
                                 </div>

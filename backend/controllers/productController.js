@@ -56,7 +56,7 @@ exports.SubmitProduct = async (req, res) => {
         await Notification.create({
             user: req.user,
             title: `Product submitted`,
-            content: `Your product submitted with the id (#${product.gen_id}) has been successfully submitted. Our team will go through it and check if it meets our requirements, you'll get a response from us soon.`,
+            content: `Your product with the ID (#${product.gen_id}) has been successfully submitted. Our team will go through it and check if it meets our requirements, you'll get a response from us soon.`,
             url: '/user/products/all',
         })
 
@@ -67,7 +67,7 @@ exports.SubmitProduct = async (req, res) => {
                 await Notification.create({
                     user: ele.id,
                     title: `Product submission alert`,
-                    content: `Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the id (#${product.gen_id}), please confirm if it meets the requirements.`,
+                    content: `Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the ID (#${product.gen_id}), please confirm if it meets the requirements.`,
                     url: '/admin/products/all',
                 })
 
@@ -75,7 +75,7 @@ exports.SubmitProduct = async (req, res) => {
                     subject: 'Product Submission Alert',
                     eTitle: `New product submitted`,
                     eBody: `
-                     <div>Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the id (#${product.gen_id}), today ${moment(product.createdAt).format('DD-MM-yyyy')} / ${moment(product.createdAt).format('h:mm')}. Confirm if it meets the requirements <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                     <div>Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the ID (#${product.gen_id}), today ${moment(product.createdAt).format('DD-MM-yyyy')} / ${moment(product.createdAt).format('h:mm')}. Confirm if it meets the requirements <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
                     `,
                     account: ele
                 })
@@ -170,7 +170,7 @@ exports.ProductOrder = async (req, res) => {
             subject: 'New Order Placed',
             eTitle: `Order placed`,
             eBody: `
-             <div>You have successfully placed an order with the id (#${productOrder.gen_id}) for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm A')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
+             <div>You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm A')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
             `,
             account: buyer
         })
@@ -182,7 +182,7 @@ exports.ProductOrder = async (req, res) => {
                 await Notification.create({
                     user: ele.id,
                     title: `Product order alert`,
-                    content: `Hello Admin, a new product order with the id (#${productOrder.gen_id}) has been placed for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid} payment made via bank transfer, kindly confirm this transaction.`,
+                    content: `Hello Admin, a new product order with the ID (#${productOrder.gen_id}) has been placed for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} payment made via bank transfer, kindly confirm this transaction.`,
                     url: '/admin/products/orders',
                 })
 
