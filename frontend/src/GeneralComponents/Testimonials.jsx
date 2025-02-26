@@ -29,9 +29,13 @@ useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem(localName));
     if (storedData && storedData.length > 0) {
         setData(storedData);
-    } else {
-        localStorage.setItem(localName,JSON.stringify([]))
+        fetchTestimonials()
+    } 
+    else if(storedData && storedData.length !== data.length){
         fetchTestimonials();
+    }
+    else {
+        localStorage.setItem(localName,JSON.stringify([]))
     }
 }, []);
 

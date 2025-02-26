@@ -32,7 +32,7 @@ const AdminLeaderboards = () => {
             <div className='w-11/12 mx-auto'>
                 <div className="flex justify-center w-full  items-center gap-3 mb-10">
                     <BiSolidToTop className='text-3xl text-lightgreen' />
-                    <div className="text-2xl font-bold ">Top Traders on MonieQuest</div>
+                    <div className="md:text-2xl text-xl font-bold ">Top Traders on MonieQuest</div>
                 </div>
 
                 {dataLoading && new Array(3).fill().map((_, i) => (
