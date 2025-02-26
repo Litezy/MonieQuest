@@ -145,6 +145,11 @@ exports.ProductOrder = async (req, res) => {
         const { bank_id, email_address, total_price, total_discount, amount_paid, products } = req.body
         if (!email_address || !total_price || total_discount === '' || !amount_paid || !products || products.length < 1) return res.json({ status: 404, msg: `Incomplete request found` })
         if (isNaN(total_price) || isNaN(total_discount) || isNaN(amount_paid)) return res.json({ status: 404, msg: `Prices must be in numbers` })
+
+        const unlistedProducts = await Product.findAll({ where: { listing: 'unlisted' } })
+        const foundInCart = unlistedProducts.some(ele => products.some(item => item.id === ele.id))
+        if (foundInCart) return res.json({ status: 404, msg: `Product(s) in your cart are no longer listed for purchase, kindly re-add them and try again` })
+
         if (!bank_id) return res.json({ status: 404, msg: `Please make payment before continuing` })
         const adminBank = await Bank.findOne({ where: { id: bank_id } })
         if (!adminBank) return res.json({ status: 404, msg: `Please make payment before continuing` })
