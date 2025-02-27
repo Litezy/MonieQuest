@@ -63,29 +63,30 @@ const AdminSingleBlog = () => {
         try {
             const response = await AuthGetApi(`${Apis.admin.single_blog}/${id}`)
             if (response.status === 200) {
-                setSingleBlog(response.msg)
+                const data = response.msg
+                setSingleBlog(data)
                 setForm({
-                    title: response.msg.title || '',
-                    feature: response.msg.feature || features[0],
-                    main_header_title: response.msg.main_header_title || '',
-                    main_header_content: response.msg.main_header_content || '',
-                    first_paragraph_title: response.msg.first_paragraph_title || '',
-                    first_paragraph_content: response.msg.first_paragraph_content || '',
-                    second_paragraph_title: response.msg.second_paragraph_title || '',
-                    second_paragraph_content: response.msg.second_paragraph_content || '',
-                    extras_title: response.msg.extras_title || '',
-                    extras_content: response.msg.extras_content || '',
-                    conclusion: response.msg.conclusion || ''
+                    title: data.title || '',
+                    feature: data.feature || features[0],
+                    main_header_title: data.main_header_title || '',
+                    main_header_content: data.main_header_content || '',
+                    first_paragraph_title: data.first_paragraph_title || '',
+                    first_paragraph_content: data.first_paragraph_content || '',
+                    second_paragraph_title: data.second_paragraph_title || '',
+                    second_paragraph_content: data.second_paragraph_content || '',
+                    extras_title: data.extras_title || '',
+                    extras_content: data.extras_content || '',
+                    conclusion: data.conclusion || ''
                 })
 
                 setBlogImage({
-                    img: response.msg.image ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.image}` : null
+                    img: data.image ? `${imageurl}/blogs/${data.gen_id}/${data.image}` : null
                 })
                 setSecondImg({
-                    img: response.msg.second_paragraph_image ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.second_paragraph_image}` : null,
+                    img: data.second_paragraph_image ? `${imageurl}/blogs/${data.gen_id}/${data.second_paragraph_image}` : null,
                 })
                 setExtrasImg({
-                    img: response.msg.extras_image ? `${imageurl}/blogs/${response.msg.gen_id}/${response.msg.extras_image}` : null
+                    img: data.extras_image ? `${imageurl}/blogs/${data.gen_id}/${data.extras_image}` : null
                 })
 
             }

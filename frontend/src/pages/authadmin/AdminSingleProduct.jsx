@@ -58,24 +58,25 @@ const AdminSingleProduct = () => {
         try {
             const response = await AuthGetApi(`${Apis.admin.single_product}/${id}`)
             if (response.status === 200) {
-                setSingleProduct(response.msg)
+                const data = response.msg
+                setSingleProduct(data)
                 setForm({
                     ...form,
-                    title: response.msg.title,
-                    category: JSON.parse(response.msg.category) || [],
-                    blockchain: response.msg.blockchain || '',
-                    price: response.msg.price || '',
-                    about: response.msg.about || '',
-                    feature1: response.msg.feature1 || '',
-                    feature2: response.msg.feature2 || '',
-                    status: response.msg.status || '',
-                    listing: response.msg.listing || '',
-                    discount_percentage: response.msg.discount_percentage || '',
-                    discount_duration: response.msg.discount_duration || '',
-                    discount_duration_type: response.msg.discount_duration_type || durationTypes[0]
+                    title: data.title,
+                    category: JSON.parse(data.category) || [],
+                    blockchain: data.blockchain || '',
+                    price: data.price || '',
+                    about: data.about || '',
+                    feature1: data.feature1 || '',
+                    feature2: data.feature2 || '',
+                    status: data.status || '',
+                    listing: data.listing || '',
+                    discount_percentage: data.discount_percentage || '',
+                    discount_duration: data.discount_duration || '',
+                    discount_duration_type: data.discount_duration_type || durationTypes[0]
                 })
                 setProductImage({
-                    img: `${imageurl}/products/${response.msg.image}` || null
+                    img: `${imageurl}/products/${data.image}` || null
                 })
             }
         } catch (error) {

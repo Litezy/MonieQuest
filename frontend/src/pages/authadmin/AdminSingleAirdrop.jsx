@@ -67,26 +67,27 @@ const AdminSingleAirdrop = () => {
         try {
             const response = await AuthGetApi(`${Apis.admin.single_airdrop}/${id}`)
             if (response.status === 200) {
-                setSingleAirdrop(response.msg)
+                const data = response.msg
+                setSingleAirdrop(data)
                 setForm({
-                    title: response.msg.title || '',
-                    category: response.msg.category || categories[0],
-                    blockchain: response.msg.blockchain || blockchains[0],
-                    kyc: response.msg.kyc || kyces[0],
-                    type: response.msg.type || '',
-                    about: response.msg.about || '',
-                    status: response.msg.status || statuses[0],
-                    referral_link: response.msg.referral_link || '',
-                    video_guide_link: response.msg.video_guide_link || '',
-                    twitter_link: response.msg.twitter_link || '',
-                    telegram_link: response.msg.telegram_link || '',
-                    website_link: response.msg.website_link || '',
+                    title: data.title || '',
+                    category: data.category || categories[0],
+                    blockchain: data.blockchain || blockchains[0],
+                    kyc: data.kyc || kyces[0],
+                    type: data.type || '',
+                    about: data.about || '',
+                    status: data.status || statuses[0],
+                    referral_link: data.referral_link || '',
+                    video_guide_link: data.video_guide_link || '',
+                    twitter_link: data.twitter_link || '',
+                    telegram_link: data.telegram_link || '',
+                    website_link: data.website_link || '',
                 })
                 setLogo({
-                    img: `${imageurl}/airdrops/${response.msg.gen_id}/${response.msg.logo_image}` || null
+                    img: `${imageurl}/airdrops/${data.gen_id}/${data.logo_image}` || null
                 })
                 setBanner({
-                    img: `${imageurl}/airdrops/${response.msg.gen_id}/${response.msg.banner_image}` || null
+                    img: `${imageurl}/airdrops/${data.gen_id}/${data.banner_image}` || null
                 })
             }
         } catch (error) {

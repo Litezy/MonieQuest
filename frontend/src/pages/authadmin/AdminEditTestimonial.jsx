@@ -92,8 +92,8 @@ const AdminEditTestimonial = () => {
         try {
             const res = await AuthPutApi(`${Apis.admin.update_testimonial}/${id}`, formdata)
             if (res.status !== 200) return ErrorAlert(res.msg)
-            SuccessAlert(res.msg)
             await new Promise((resolve) => setTimeout(resolve, 2000))
+            SuccessAlert(res.msg)
         } catch (error) {
             console.log(`Error updating details`, error)
         } finally { setLoading({ status: false, val: '' }) }
