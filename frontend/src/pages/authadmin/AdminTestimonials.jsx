@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import TestimonialDiv from '../../AdminComponents/TestimonialDiv'
 import { Apis, AuthGetApi } from '../../services/API'
@@ -9,9 +9,8 @@ const AdminTestimonials = () => {
 
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState([])
-    const [monitor, setMonitor] = useState(false)
 
-    const fetchTestimonials = async () => {
+    const fetchTestimonials = useCallback(async () => {
         setLoading(true)
         try {
             const res = await AuthGetApi(Apis.user.get_testimonials);
@@ -22,11 +21,11 @@ const AdminTestimonials = () => {
         } catch (error) {
             console.error("Fetch Error:", error);
         } finally { setLoading(false) }
-    };
+    }, [])
 
     useEffect(() => {
         fetchTestimonials()
-    }, [monitor]);
+    }, [fetchTestimonials]);
     return (
         <AdminPageLayout>
             {loading ?
@@ -39,7 +38,7 @@ const AdminTestimonials = () => {
                     <div className="mt-10 capitalize">below are current testimonials on monieQuest</div>
                     <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
                         {data && data.length > 0 ? data.map((item, i) => (
-                            <TestimonialDiv setMonitor={setMonitor} item={item} key={i} />
+                            <TestimonialDiv fetchTestimonials={fetchTestimonials} item={item} key={i} />
                         )) :
                             <div className="">No testimonials uploaded </div>
                         }

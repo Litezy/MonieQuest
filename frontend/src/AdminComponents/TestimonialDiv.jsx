@@ -6,7 +6,7 @@ import ModalLayout from '../utils/ModalLayout';
 import Loader from '../GeneralComponents/Loader';
 import { ErrorAlert, SuccessAlert } from '../utils/pageUtils';
 
-const TestimonialDiv = ({ item, setMonitor }) => {
+const TestimonialDiv = ({ item, fetchTestimonials }) => {
     const [loading, setLoading] = useState(false)
     const [del, setDel] = useState(false)
 
@@ -16,7 +16,7 @@ const TestimonialDiv = ({ item, setMonitor }) => {
         try {
             const res = await AuthDeleteApi(`${Apis.admin.delete_testimonial}/${id}`)
             if (res.status !== 200) return ErrorAlert(res.msg)
-            setMonitor((prev) => !prev)
+            fetchTestimonials()
             await new Promise((resolve) => setTimeout(resolve, 2000))
             SuccessAlert(res.msg)
         } catch (error) {
