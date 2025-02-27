@@ -198,7 +198,7 @@ const SingleAirdropPage = () => {
                     </div>}
                     {nextAirdrop !== null && <div
                       onClick={() => { navigate(`/airdrops/${nextAirdrop?.category}/${nextAirdrop?.id}/${nextAirdrop?.slug}`); MoveToTop() }}
-                      className='flex gap-2 cursor-pointer items-center text-gray-300'>
+                      className='flex gap-2 cursor-pointer items-center text-gray-300 ml-auto'>
                       <button
                         disabled={!nextAirdrop}
                         className='w-7 h-7 border border-gray-300 rounded-full flex items-center justify-center cursor-pointer hover:text-lightgreen hover:border-lightgreen'
