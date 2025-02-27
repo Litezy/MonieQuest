@@ -50,7 +50,7 @@ const TestimonialDiv = ({ item, fetchTestimonials }) => {
                     <div className="px-2 text-sm md:text-base py-1 rounded-md bg-primary capitalize">{item.title}</div>
                 </div>
                 <div className="w-fit ml-auto">
-                    <Link to={`/admin/testimonials/${item.id}`} className='px-4 rounded-md py-1 bg-lightgreen/90'>Edit</Link>
+                    <Link to={`/admin/utilities/testimonials/${item.id}`} className='px-4 rounded-md py-1 bg-lightgreen/90'>Edit</Link>
                 </div>
             </div>
             <div className="mt-5 w-11/12 mx-auto relative">

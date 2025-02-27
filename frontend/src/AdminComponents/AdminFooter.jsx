@@ -71,10 +71,10 @@ const extraIcons = [
         url: '/admin/transactions_history'
     },
     {
-        name: 'testimonials',
+        name: 'utilities',
         symbol: MdReviews,
-        url: '/admin/testimonials',
-        main: '/testimonials'
+        url: '/admin/utilities',
+        main: '/utilities'
     },
     {
         name: 'profile',

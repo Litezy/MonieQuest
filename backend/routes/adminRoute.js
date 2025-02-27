@@ -1,4 +1,4 @@
-const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops, AllRelatedBlogsExceptCurrent, CommentOnBlog, AllBlogComments, DeleteSingleBlogImages, getAdminTransHistory, getBankWithdrawals, DeleteClosedAirdrop, getSingleWithdrawal, DeleteBlog, CreateTestimonial, UpdateTestimonial, getSingleTestimonial, deleteTestimonial } = require('../controllers/adminController')
+const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops, AllRelatedBlogsExceptCurrent, CommentOnBlog, AllBlogComments, DeleteSingleBlogImages, getAdminTransHistory, getBankWithdrawals, DeleteClosedAirdrop, getSingleWithdrawal, DeleteBlog, CreateTestimonial, UpdateTestimonial, getSingleTestimonial, deleteTestimonial, addOrUpdateCryptos, getCryptos } = require('../controllers/adminController')
 const { AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -46,6 +46,8 @@ router.post('/create_testimonial', AdminMiddleware,CreateTestimonial)
 router.put('/update_testimonial/:id', AdminMiddleware,UpdateTestimonial)
 router.get('/single_testimonial/:id', AdminMiddleware,getSingleTestimonial)
 router.delete('/delete_testimonial/:id', AdminMiddleware,deleteTestimonial)
+router.post('/create_update_delete_cryptos', AdminMiddleware,addOrUpdateCryptos)
+router.get('/get_cryptos',getCryptos)
 
 
 module.exports = router

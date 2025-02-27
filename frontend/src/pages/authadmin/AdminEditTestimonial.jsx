@@ -109,7 +109,7 @@ const AdminEditTestimonial = () => {
             }
             {!loading.status && loading.val === '' && <div className="w-11/12 mx-auto">
                 <Link className='px-3 py-1.5 rounded-md bg-ash text-white'
-                    to={`/admin/testimonials`}>back to testimonials</Link>
+                    to={`/admin/utilities/testimonials`}>back to testimonials</Link>
 
                 <form onSubmit={submitEdit} className='w-full border border-primary rounded-md p-5 mt-10'>
                     <div className="flex  flex-col lg:flex-row gap-2 w-full justify-between">

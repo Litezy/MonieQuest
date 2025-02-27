@@ -21,7 +21,8 @@ const slug = require('slug')
 const path = require('path');
 const fs = require('fs')
 const moment = require('moment')
-const { Op } = require('sequelize')
+const CryptoModel = require('../models').cryptos
+const { Op, json } = require('sequelize')
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -102,7 +103,7 @@ exports.CreateAirdrop = async (req, res) => {
         const bannerImage = req.files.banner_image
         if (!logoImage.mimetype.startsWith('image/') || !bannerImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
         if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive:true})
+            fs.mkdirSync(filePath, { recursive: true })
         }
         logoImageName = `${slugData + 'logo'}-${date.getTime()}.jpg`
         await logoImage.mv(`${filePath}/${logoImageName}`)
@@ -537,16 +538,17 @@ exports.getAllUserDetails = async (req, res) => {
         })
         const findAdmins = await User.findAll({ where: { role: 'admin' } })
         const adminIds = findAdmins.map(admin => admin.id)
-        const all_user_banks = await Bank.findAll({where:{user: { [Op.notIn]: adminIds} },
+        const all_user_banks = await Bank.findAll({
+            where: { user: { [Op.notIn]: adminIds } },
             attributes: [`id`, `user`, `bank_name`, 'account_number', 'account_name'],
             include: [
                 {
                     model: User, as: 'user_bank',
-                    attributes: [`first_name`, 'surname','role']
+                    attributes: [`first_name`, 'surname', 'role']
                 }
             ]
         })
-         
+
         const submittedUsers = await Kyc.findAll({
             where: { status: 'processing' },
             include: [
@@ -1667,6 +1669,59 @@ exports.getSingleTestimonial = async (req, res) => {
         const testimonial = await Testimonial.findOne({ where: { id } })
         if (!testimonial) return res.json({ status: 404, msg: "Testimonial ID not found" })
         return res.json({ status: 200, msg: "fetch success", data: testimonial })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.addOrUpdateCryptos = async (req, res) => {
+    try {
+        const { name, network, wallet_add, symbol, tag, id } = req.body;
+        const reqFields = [name, wallet_add, network, symbol];
+        const tags = ['create', 'update', 'delete'];
+
+        if (!tag) return res.json({ status: 400, msg: "Tag not found" });
+        if (!tags.includes(tag)) return res.json({ status: 400, msg: "Invalid Tag Found" });
+        if (tag === 'create') {
+            if (reqFields.some((field) => !field)) return res.json({ status: 400, msg: "All fields are required" });
+            const findName = await CryptoModel.findOne({ where: { name } })
+            if (findName) return res.json({ status: 400, msg: 'Crypto wallet already added' })
+            const newCrypto = await CryptoModel.create({ name, wallet_add, symbol, network });
+            return res.json({ status: 201, msg: `${name} wallet created successfully`, data: newCrypto });
+        } else if (tag === 'update') {
+            if (!id) return res.json({ status: 400, msg: 'Crypto ID missing from request' });
+            const findCrypto = await CryptoModel.findOne({ where: { id } });
+            if (!findCrypto) return res.json({ status: 404, msg: "Crypto ID not found" });
+            const findName = await CryptoModel.findOne({ where: { name } })
+            if (findName && findName.name !== findCrypto.name) return res.json({ status: 400, msg: 'Crypto wallet already exist' })
+
+            const updates = {};
+            if (name) updates.name = name;
+            if (wallet_add) updates.wallet_add = wallet_add;
+            if (network) updates.network = network;
+            if (symbol) updates.symbol = symbol;
+
+            if (Object.keys(updates).length === 0) return res.json({ status: 400, msg: "No fields provided to update" });
+
+            await CryptoModel.update(updates, { where: { id } });
+            return res.json({ status: 200, msg: `${name || findCrypto.name} wallet updated successfully` });
+        } else {
+            if (!id) return res.json({ status: 400, msg: 'Crypto ID missing from request' });
+            const findCrypto = await CryptoModel.findOne({ where: { id } });
+            if (!findCrypto) return res.json({ status: 404, msg: "Crypto ID not found" });
+            await findCrypto.destroy();
+            return res.json({ status: 200, msg: `${findCrypto.name} wallet deleted successfully` });
+        }
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
+exports.getCryptos = async (req, res) => {
+    try {
+        const cryptos = await CryptoModel.findAll({})
+        if (!cryptos) return res.json({ status: 404, msg: 'No cryptos found' })
+        return res.json({ status: 200, msg: 'fetch success', data: cryptos });
     } catch (error) {
         ServerError(res, error)
     }

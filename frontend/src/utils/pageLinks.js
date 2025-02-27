@@ -66,6 +66,8 @@ import FeatureBlogs from "../pages/general/FeatureBlogs";
 import AdminTestimonials from "../pages/authadmin/AdminTestimonials";
 import AdminEditTestimonial from "../pages/authadmin/AdminEditTestimonial";
 import AdminCreateTestimonial from "../pages/authadmin/AdminCreateTestimonial";
+import AdminUtils from "../pages/authadmin/AdminUtils";
+import AdminUpdateCryptos from "../pages/authadmin/AdminUpdateCryptos";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -139,7 +141,9 @@ export const AdminPagesLinks = [
     { path: '/admin/blogs/create', component: AdminCreateBlogs },
     { path: '/admin/blogs/:id/:slug', component: AdminSingleBlog },
     { path: '/admin/transactions_history', component: AdminTransHistory },
-    { path: '/admin/testimonials', component: AdminTestimonials },
-    { path: '/admin/testimonials/:id', component: AdminEditTestimonial },
-    { path: '/admin/testimonials/create', component: AdminCreateTestimonial },
+    { path: '/admin/utilities/testimonials', component: AdminTestimonials },
+    { path: '/admin/utilities/testimonials/:id', component: AdminEditTestimonial },
+    { path: '/admin/utilities/testimonials/create', component: AdminCreateTestimonial },
+    { path: '/admin/utilities', component: AdminUtils },
+    { path: '/admin/utilities/update_cryptos', component: AdminUpdateCryptos},
 ]

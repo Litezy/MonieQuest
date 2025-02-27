@@ -102,6 +102,8 @@ const admin_urls = {
     update_testimonial: admin + 'update_testimonial',
     single_testimonial: admin + 'single_testimonial',
     delete_testimonial: admin + 'delete_testimonial',
+    crud_crypto: admin + 'create_update_delete_cryptos',
+    get_cryptos: admin + "get_cryptos"
 }
 
 const products = 'api/product/'
