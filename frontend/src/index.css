@@ -183,6 +183,15 @@ input[type=number]:focus {
   }
 }
 
+.loaderimg{
+  animation: l4 1s infinite linear ;
+}
+@keyframes l4 {
+  to {
+    transform: rotate(1turn)
+  }
+}
+
 /* button loader component css */
 .button_loader {
   width: 40px;
@@ -218,6 +227,7 @@ input[type=number]:focus {
     transform: rotate(1turn)
   }
 }
+
 
 /* embla components */
 .embla {
@@ -344,7 +354,7 @@ input[type=number]:focus {
 .pageBg {
   background-image: url('./assets/images/airdrop.jpg');
   width: 100%;
-  height: 400%;
+  height: 100%;
   background-attachment: fixed;
   background-position: center top;
   background-repeat: no-repeat;
@@ -353,7 +363,10 @@ input[type=number]:focus {
 
 @media (max-width: 768px) {
   .pageBg {
-    background-size: contain;
+    background-image: url('./assets/images/mobile.jpg');
+    width: 100%;
+    height: 100%;
+    background-size: cover;
     background-attachment: scroll;
     background-position: center;
   }

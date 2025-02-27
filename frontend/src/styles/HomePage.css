@@ -9,20 +9,21 @@
     position: relative;
     overflow: hidden;
   }
-  .glowing-text {
+  /* .glowing-text {
     font-family: 'Orbitron', sans-serif;
     text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
-  }
+  } */
   .text-gradient {
-    background: linear-gradient(60deg, #00ff99, #00ccff);
+    /* Softer gradient with muted tones, less vibrant */
+    background: linear-gradient(60deg, #66cc99, #66b3ff);
     -webkit-background-clip: text;
     color: transparent;
   }
-  .glow-button {
-    background: linear-gradient(90deg, #00ff99, #00ccff);
-    /* box-shadow: 0 0 10px #00ff99, inset 0 0 5px #00ff99; */
+  
+  /* .glow-button {
+    background: linear-gradient(90deg, #66cc99, #66b3ff);
     transition: transform 0.2s ease;
-  }
+  } */
   .glow-button:hover {
     transform: scale(1.05);
   }
@@ -31,18 +32,17 @@
   .airdrop-card {
     background: #1e1e2f;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 255, 153, 0.2);
+    /* box-shadow: 0 4px 15px rgba(0, 255, 153, 0.2); */
     transition: transform 0.3s ease;
   }
   .airdrop-card:hover {
     transform: translateY(-5px);
+    transition: all 0.5s ease-in-out;
   }
-  .neon-title {
-    text-shadow: 0 0 5px #00ff99;
-  }
+  
   .pulse-button {
-    background: linear-gradient(90deg, #00ff99, #00ccff);
-    animation: pulse 2s infinite;
+    /* background: linear-gradient(90deg, #00ff99, #00ccff); */
+    animation: pulse 3s infinite;
   }
   @keyframes pulse {
     0% { box-shadow: 0 0 5px #00ff99; }
@@ -50,7 +50,7 @@
     100% { box-shadow: 0 0 5px #00ff99; }
   }
   .animate-shimmer {
-    background: linear-gradient(90deg, #333, #444, #333);
+    /* background: linear-gradient(90deg, #333, #444, #333); */
     background-size: 200px 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -61,7 +61,7 @@
   .how-it-works {
     background: linear-gradient(45deg, rgba(0, 255, 153, 0.1), rgba(0, 204, 255, 0.1));
     border: 1px solid rgba(0, 255, 153, 0.3);
-    box-shadow: 0 0 20px rgba(0, 255, 153, 0.2);
+    /* box-shadow: 0 0 20px rgba(0, 255, 153, 0.2); */
     border-radius: 12px;
     position: sticky;
     top: 20px;

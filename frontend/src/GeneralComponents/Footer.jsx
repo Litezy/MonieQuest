@@ -96,6 +96,7 @@ const Footer = () => {
                   <div className='flex items-center gap-2'>
                     <img src={flag} alt="UK Flag" className='h-8 w-8' />
                     <span className='text-ash'>+44-7438-903660</span>
+                    <span>(WhatsApp Only)</span>
                   </div>
                 </div>
               </div>

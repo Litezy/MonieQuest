@@ -102,7 +102,7 @@ exports.CreateAirdrop = async (req, res) => {
         const bannerImage = req.files.banner_image
         if (!logoImage.mimetype.startsWith('image/') || !bannerImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
         if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath)
+            fs.mkdirSync(filePath, { recursive:true})
         }
         logoImageName = `${slugData + 'logo'}-${date.getTime()}.jpg`
         await logoImage.mv(`${filePath}/${logoImageName}`)
