@@ -48,10 +48,10 @@ const AdminCryptoBuyOrders = () => {
                                         <th scope="row" className="px-6 text-white py-4 font-medium  whitespace-nowrap ">
                                             {item?.id}
                                         </th>
-                                        <td className="px-3 py-3">
+                                        <td className="px-3 py-3 truncate">
                                             {item?.crypto_buyer?.first_name}  {item?.crypto_buyer?.surname}
                                         </td>
-                                        <td className="px-3 py-3">
+                                        <td className="px-3 py-3 truncate">
                                             {item?.crypto_currency}
                                         </td>
                                         <td className="px-3 py-3">

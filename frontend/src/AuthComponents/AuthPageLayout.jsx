@@ -7,7 +7,7 @@ import avatar from '../assets/images/avatar.svg'
 import { ErrorAlert, MoveToTop, SuccessAlert } from '../utils/pageUtils'
 import { Apis, AuthGetApi, AuthPostApi, imageurl } from '../services/API'
 import { useAtom } from 'jotai'
-import { BANK, PROFILE, UTILS, WALLET } from '../services/store'
+import { BANK, CRYPTOS, PROFILE, UTILS, WALLET } from '../services/store'
 
 
 
@@ -16,6 +16,7 @@ const AuthPageLayout = ({ children }) => {
   const [, setWallet] = useAtom(WALLET)
   const [, setBank] = useAtom(BANK)
   const [, setUtils] = useAtom(UTILS)
+  const [, setCryptos] = useAtom(CRYPTOS)
   const navigate = useNavigate()
   const location = useLocation()
   const pathName = location.pathname
@@ -35,6 +36,17 @@ const AuthPageLayout = ({ children }) => {
         //
       }
     }
+    const fetchCryptos = async () => {
+      try {
+          const res = await AuthGetApi(Apis.admin.get_cryptos)
+          if (res.status !== 200) return;
+          const data = res.data
+          setCryptos(data)
+      } catch (error) {
+          console.log(`Sorry something went wrong in fetch cryptos data`, error)
+      }
+  }
+  fetchCryptos()
     FetchWalletBankAndUtils()
   }, [])
 

@@ -57,7 +57,7 @@ const AdminCreateTestimonial = () => {
             if (res.status !== 201) return ErrorAlert(res.msg)
             SuccessAlert(res.msg)
             await new Promise((resolve) => setTimeout(resolve, 2000))
-            navigate('/admin/testimonials')
+            navigate('/admin/utilities/testimonials')
         } catch (error) {
             console.log(`Error updating details`, error)
         } finally { setLoading(false) }

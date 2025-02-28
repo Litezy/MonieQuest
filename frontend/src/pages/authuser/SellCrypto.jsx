@@ -12,7 +12,7 @@ import Loader from '../../GeneralComponents/Loader';
 import ExchangeLayout from '../../AuthComponents/ExchangeLayout';
 import { Apis, AuthPostApi } from '../../services/API';
 import { useAtom } from 'jotai';
-import { UTILS } from '../../services/store';
+import { CRYPTOS, UTILS } from '../../services/store';
 
 
 const SellCrypto = () => {
@@ -23,6 +23,7 @@ const SellCrypto = () => {
     const [isPageLoading, setIsPageLoading] = useState(!navigator.onLine)
     const [loading, setLoading] = useState(false)
     const [utils] = useAtom(UTILS)
+    const [cryptos] = useAtom(CRYPTOS)
     const [forms, setForms] = useState({
         amount: '',
         trans_hash: '',
@@ -160,8 +161,26 @@ const SellCrypto = () => {
         }
 
     }
+
+    const SelectCrypto = (e) => {
+        const { value } = e.target;
+        const crypto = cryptos.find((coin) => coin.name === String(value));
+        if (crypto) {
+            setForms((prevForms) => ({
+                ...prevForms,
+                crypto: crypto.name,
+                network: crypto.network,
+                wallet_add: crypto.wallet_add
+            }));
+        } else {
+            setForms({ ...forms, network: '', wallet_add: '' });
+            console.error("Selected crypto not found.");
+        }
+    };
+    
     return (
         <ExchangeLayout>
+            
             <div className='w-full'>
                 {loading &&
                     <Loader title={`processing`} />
@@ -230,12 +249,16 @@ const SellCrypto = () => {
                                 {/* <div className="text-center font-bold text-red-500 w-full">Sell Crypto</div> */}
                                 <div className="flex items-start gap-2 flex-col w-full">
                                     <div className="font-bold text-lg">Crypto Currency:</div>
-                                    <select onChange={handleCoins} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
-                                        {coinDetails.map((coin, i) => {
-                                            return (
-                                                <option value={coin.network} key={i} className="outline-none">{coin.network}</option>
-                                            )
-                                        })}
+                                    <select onChange={SelectCrypto} className='bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4'>
+                                        <option value="" disabled selected>
+                                            -- select --
+                                        </option>
+                                        {cryptos &&
+                                            cryptos.map((coin, i) => (
+                                                <option value={coin.name} key={i} className="outline-none">
+                                                    {coin.name}
+                                                </option>
+                                            ))}
                                     </select>
                                     <div className="w- text-red-600 text-sm">Please Note: you can only sell a minimum of $10 a nd maximum of $2,500 and an additional
                                         fee of $2 (₦3,400) is added</div>

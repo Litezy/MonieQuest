@@ -17,7 +17,6 @@ const AdminPageLayout = ({ children }) => {
     const [, setUserSubmittedKycs] = useAtom(USER_SUB_KYCS)
     const [, setUserBanks] = useAtom(USERBANKS)
     const [, setUserVerifiedKycs] = useAtom(USER_VER_KYCS)
-    const [, setUtils] = useAtom(UTILS)
     const location = useLocation()
     const pathName = location.pathname
     const active = 'text-lightgreen rounded-sm bg-[#1e333c]'
@@ -46,16 +45,17 @@ const AdminPageLayout = ({ children }) => {
                 setUserSubmittedKycs(data[2].data)
                 setUserVerifiedKycs(data[3].data)
             } catch (error) {
-               console.log(error)
+                console.log(error)
             }
         }
+      
         FetchBankAndUtils()
         fetchAllUsers()
     }, [])
-    
 
- 
-    
+
+
+
 
     return (
         <div className='w-full'>

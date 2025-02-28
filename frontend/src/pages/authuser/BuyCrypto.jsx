@@ -10,7 +10,7 @@ import Loader from '../../GeneralComponents/Loader';
 import { Apis, AuthGetApi, AuthPostApi } from '../../services/API';
 import ExchangeLayout from '../../AuthComponents/ExchangeLayout';
 import { useAtom } from 'jotai';
-import { UTILS } from '../../services/store';
+import { CRYPTOS, PROFILE, UTILS } from '../../services/store';
 
 
 const BuyCrypto = () => {
@@ -20,15 +20,18 @@ const BuyCrypto = () => {
     const [isPageLoading, setIsPageLoading] = useState(!navigator.onLine);
     const [modal, setModal] = useState(false)
     const [utils] = useAtom(UTILS)
-   
+    const [user] = useAtom(PROFILE)
+    const [cryptos] = useAtom(CRYPTOS)
+
     const [forms, setForms] = useState({
         amount: '',
-        type: coinNames[0],
         network: '',
         wallet_add: '',
         isExpired: 'No'
     })
     const rate = utils?.exchange_buy_rate
+    const verified = user?.kyc_verified
+    // console.log(verified)
     const handleChange = (e) => {
         setForms({
             ...forms,
@@ -47,6 +50,7 @@ const BuyCrypto = () => {
     }
 
 
+    // console.log(cryptos)
 
     const [selectedCurr, setSelectedCurr] = useState({
         name: currencies[0].name,
@@ -55,6 +59,7 @@ const BuyCrypto = () => {
     const limit = utils?.buy_max
     const nairaLimit = limit * rate
     const minimum = utils?.buy_min
+    const kyc_threshhold = utils?.kyc_threshold
 
     const proceedFunc = () => {
         if (!forms.wallet_add) return ErrorAlert(`Please input your wallet address`)
@@ -62,9 +67,9 @@ const BuyCrypto = () => {
     }
     const submit = (e) => {
         e.preventDefault()
+        if (!forms.crypto) return ErrorAlert('crypto currency is required')
         if (!forms.amount) return ErrorAlert('amount is required')
         if (forms.amount < minimum) return ErrorAlert('amount is too small')
-        if (!forms.type) return ErrorAlert('coin type is required')
         if (selectedCurr.name !== 'USD' && selectedCurr.symbol !== '$') {
             const amt = forms.amount.replace(/,/g, '')
             const newamt = amt * rate
@@ -73,7 +78,11 @@ const BuyCrypto = () => {
         }
         if (selectedCurr.name === 'USD' && selectedCurr.symbol === '$') {
             const amt = forms.amount.replace(/,/g, '')
-            if (amt > limit) return ErrorAlert(`Sorry, you can't buy above $2,000`)
+            if (amt > kyc_threshhold) {
+                if (verified === 'false') {
+                    return ErrorAlert(`Please complete your kyc to be able to trade this amount!`)
+                }
+            }
         }
         setScreen(2)
     }
@@ -105,18 +114,20 @@ const BuyCrypto = () => {
     const confirmAndBuy = async (e) => {
         e.preventDefault();
         setModal(false);
-        setLoading(true);
+        
 
         const formdata = {
-            crypto_currency: forms.type,
+            crypto_currency: forms.crypto,
             type: 'buy',
             wallet_address: forms.wallet_add,
             network: forms.network,
             amount: forms.amount,
             wallet_exp: forms.isExpired,
-            rate:rate
+            rate: rate
         };
+
         // return console.log(formdata)
+        setLoading(true);
         try {
             const response = await AuthPostApi(Apis.transaction.buy_crypto, formdata);
             if (response.status !== 201) {
@@ -153,14 +164,22 @@ const BuyCrypto = () => {
         };
     }, []);
 
-    useEffect(() => {
-        if (forms.type) {
-            const staticData = [{network: "--select--"} ];
-            const filteredNetworks = coinDetails.filter((name) => name.name.includes(forms.type))
-            const newArr = staticData.concat(filteredNetworks)
-            setSelected(newArr);
+
+
+    const SelectCrypto = (e) => {
+        const { value } = e.target;
+        const crypto = cryptos.find((coin) => coin.name === String(value));
+        if (crypto) {
+            setForms((prevForms) => ({
+                ...prevForms,
+                crypto: crypto.name,
+                network: crypto.network,
+            }));
+        } else {
+            console.error("Selected crypto not found.");
         }
-    }, [forms.type])
+    };
+
 
     return (
         <ExchangeLayout>
@@ -190,12 +209,16 @@ const BuyCrypto = () => {
                                 {/* <div className="text-center font-bold text-green-500 w-full">Buy Buy</div> */}
                                 <div className="flex items-start gap-2 flex-col w-full">
                                     <div className="font-bold text-lg">Crypto Currency:</div>
-                                    <select onChange={(e) => setForms({ ...forms, type: e.target.value })} className="bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4">
-                                        {coinNames.map((coin, i) => {
-                                            return (
-                                                <option value={coin} key={i} className="outline-none">{coin}</option>
-                                            )
-                                        })}
+                                    <select onChange={SelectCrypto} className='bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4'>
+                                        <option value="" disabled selected>
+                                            -- select --
+                                        </option>
+                                        {cryptos &&
+                                            cryptos.map((coin, i) => (
+                                                <option value={coin.name} key={i} className="outline-none">
+                                                    {coin.name}
+                                                </option>
+                                            ))}
                                     </select>
                                     <div className="text-red-500 text-sm">Please Note: you can only buy a minimum of $5 a nd maximum of $2,000 and an additional
                                         fee of $2 (₦3,400) is added</div>
@@ -262,22 +285,7 @@ const BuyCrypto = () => {
                                 <div className="flex w-full items-start gap-2 flex-col  ">
                                     <div className="font-bold text-lg">Network</div>
                                     <div className="w-full ">
-                                        <select
-                                            name="network"
-                                            value={forms.network || ""}
-                                            onChange={(e) => setForms({ ...forms, network: e.target.value })}
-                                            className="w-full bg-dark rounded-md"
-                                        >
-                                            {selected.length > 0 ? (
-                                                selected.map((item, i) => (
-                                                    <option key={i} value={item.network}>
-                                                        {item.network}
-                                                    </option>
-                                                ))
-                                            ) : (
-                                                <option value="">--select--</option>
-                                            )}
-                                        </select>
+                                        <FormInput read={true} value={forms.network} />
 
                                         <div className="text-red-600 mt-1 text-sm">Please ensure that the network you select matches the wallet address provided to prevent any loss of funds.</div>
 
