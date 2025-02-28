@@ -5,52 +5,46 @@ import { NextButton, PrevButton, usePrevNextButtons } from './EmblaButtons'
 import { Apis, AuthGetApi, imageurl } from '../services/API'
 
 export default function Testimonials(props) {
+    const [data, setData] = useState([])
+    const localName = 'Testimonials';
+
+    const fetchTestimonials = async () => {
+        try {
+            const res = await AuthGetApi(Apis.user.get_testimonials);
+            if (res.status !== 200) return;
+            const data = res.data;
+            localStorage.setItem(localName, JSON.stringify(data));
+            setData(data);
+            return data;
+        } catch (error) {
+            console.error("Fetch Error:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchTestimonials()
+        const storedData = JSON.parse(localStorage.getItem(localName));
+        if (storedData) {
+            setData(storedData)
+        }
+        else {
+            localStorage.setItem(localName, JSON.stringify([]))
+        }
+    }, [])
+
+    // embla slider
+
     const { slides, options } = props
     const [emblaRef, emblaApi] = useEmblaCarousel(options, [
         Autoplay({ playOnInit: true, delay: 3000 })
     ])
-    const [data, setData] = useState([])
-    const localName = 'Testimonials';
-
-const fetchTestimonials = async () => {
-    try {
-        const res = await AuthGetApi(Apis.user.get_testimonials);
-        if (res.status !== 200) return;
-        const data = res.data;
-        localStorage.setItem(localName, JSON.stringify(data));
-        setData(data);
-        return data;
-    } catch (error) {
-        console.error("Fetch Error:", error);
-    }
-};
-
-useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem(localName));
-    if (storedData && storedData.length > 0) {
-        setData(storedData);
-        fetchTestimonials()
-    } 
-    else if(storedData && storedData.length !== data.length){
-        fetchTestimonials();
-    }
-    else {
-        localStorage.setItem(localName,JSON.stringify([]))
-    }
-}, []);
-
-
-    
-
     const [isPlaying, setIsPlaying] = useState(true)
-
     const {
         prevBtnDisabled,
         nextBtnDisabled,
         onPrevButtonClick,
         onNextButtonClick
     } = usePrevNextButtons(emblaApi)
-
 
     const onButtonAutoplayClick = useCallback(
         (callback) => {

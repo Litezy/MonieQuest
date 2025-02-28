@@ -16,8 +16,8 @@ const TestimonialDiv = ({ item, fetchTestimonials }) => {
         try {
             const res = await AuthDeleteApi(`${Apis.admin.delete_testimonial}/${id}`)
             if (res.status !== 200) return ErrorAlert(res.msg)
-            fetchTestimonials()
             await new Promise((resolve) => setTimeout(resolve, 2000))
+            fetchTestimonials()
             SuccessAlert(res.msg)
         } catch (error) {
             console.log(`something went wrong in deleting testimonial`, error)

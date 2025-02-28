@@ -55,7 +55,6 @@ const AdminCreateTestimonial = () => {
         try {
             const res = await AuthPostApi(`${Apis.admin.create_testimonial}`, formdata)
             if (res.status !== 201) return ErrorAlert(res.msg)
-            SuccessAlert(res.msg)
             await new Promise((resolve) => setTimeout(resolve, 2000))
             navigate('/admin/utilities/testimonials')
         } catch (error) {
@@ -72,7 +71,7 @@ const AdminCreateTestimonial = () => {
 
                 <div className="w-11/12 mx-auto">
                     <Link className='px-3 py-1.5 rounded-md bg-ash text-white'
-                        to={`/admin/testimonials`}>back to testimonials</Link>
+                        to={`/admin/utilities/testimonials`}>back to testimonials</Link>
 
                     <form onSubmit={createTestimonial} className='w-full border border-primary rounded-md p-5 mt-10'>
                         <div className="flex  flex-col lg:flex-row gap-2 w-full  justify-between">

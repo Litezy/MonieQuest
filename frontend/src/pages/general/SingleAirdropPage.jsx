@@ -190,7 +190,7 @@ const SingleAirdropPage = () => {
                       className='flex cursor-pointer gap-2 items-center text-gray-300'>
                       <button
                         disabled={!prevAirdrop}
-                        className={`w-7 h-7 border border-gray-300 rounded-full flex items-center justify-center ${!prevAirdrop ? 'cursor-default' : 'cursor-pointer hover:text-lightgreen hover:border-lightgreen'}`}
+                        className='w-7 h-7 border border-gray-300 rounded-full flex items-center justify-center cursor-pointer hover:text-lightgreen hover:border-lightgreen'
                       >
                         <IoIosArrowBack />
                       </button>
@@ -198,14 +198,14 @@ const SingleAirdropPage = () => {
                     </div>}
                     {nextAirdrop !== null && <div
                       onClick={() => { navigate(`/airdrops/${nextAirdrop?.category}/${nextAirdrop?.id}/${nextAirdrop?.slug}`); MoveToTop() }}
-                      className='flex gap-2 cursor-pointer items-center text-gray-300'>
+                      className='flex gap-2 cursor-pointer items-center text-gray-300 ml-auto'>
                       <button
                         disabled={!nextAirdrop}
-                        className={`w-7 h-7 border border-gray-300 rounded-full flex items-center justify-center ${!nextAirdrop ? 'cursor-default' : 'cursor-pointer hover:text-lightgreen hover:border-lightgreen'}`}
+                        className='w-7 h-7 border border-gray-300 rounded-full flex items-center justify-center cursor-pointer hover:text-lightgreen hover:border-lightgreen'
                       >
                         <IoIosArrowForward />
                       </button>
-                      <div className='text-sm capitalize text-lightgreen'>next airdrop</div>
+                      <div className='text-sm capitalize'>next airdrop</div>
                     </div>}
                   </div>
                 </div>

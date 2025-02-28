@@ -39,7 +39,7 @@ const HomePage = () => {
 
   const handleQuestions = (i) => {
     setFaq(faq === i ? '' : i);
-  };
+  }
 
   return (
     <PageLayout>
@@ -113,7 +113,6 @@ const HomePage = () => {
                       </Link>
                     </div>
                   )}
-                  {/* Repeat similar enhancements for other categories */}
                   {featuredAirdrops.length > 0 && (
                     <div className="flex flex-col gap-2">
                       <h3 className="text-lightgreen font-bold text-xl neon-title">Featured Airdrops</h3>
@@ -127,8 +126,59 @@ const HomePage = () => {
                       </Link>
                     </div>
                   )}
-                  {/* Add similar blocks for NFT, New, Potential, Earn Crypto */}
-                  <div className="max-w-[18rem] h-fit bg-primary p-4 how-it-works sticky">
+                  {newAirdrops.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <h3 className="text-lightgreen font-bold text-xl neon-title">New Airdrops</h3>
+                      <div className="flex flex-col gap-4">
+                        {newAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} className="airdrop-card" />
+                        ))}
+                      </div>
+                      <Link to="/airdrops/new" onClick={MoveToTop}>
+                        <FormButton title="Show More New Airdrops" className="!text-sm !capitalize !rounded-md !py-4 pulse-button" />
+                      </Link>
+                    </div>
+                  )}
+                  {NFTAirdrops.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <h3 className="text-lightgreen font-bold text-xl neon-title">NFT Airdrops</h3>
+                      <div className="flex flex-col gap-4">
+                        {NFTAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} className="airdrop-card" />
+                        ))}
+                      </div>
+                      <Link to="/airdrops/NFT" onClick={MoveToTop}>
+                        <FormButton title="Show More NFT Airdrops" className="!text-sm !capitalize !rounded-md !py-4 pulse-button" />
+                      </Link>
+                    </div>
+                  )}
+                  {potentialAirdrops.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <h3 className="text-lightgreen font-bold text-xl neon-title">Potential Airdrops</h3>
+                      <div className="flex flex-col gap-4">
+                        {potentialAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} className="airdrop-card" />
+                        ))}
+                      </div>
+                      <Link to="/airdrops/potential" onClick={MoveToTop}>
+                        <FormButton title="Show More Potential Airdrops" className="!text-sm !capitalize !rounded-md !py-4 pulse-button" />
+                      </Link>
+                    </div>
+                  )}
+                  {earnCryptoAirdrops.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <h3 className="text-lightgreen font-bold text-xl neon-title">Earn Crypto Airdrops</h3>
+                      <div className="flex flex-col gap-4">
+                        {earnCryptoAirdrops.slice(0, 2).map((item, i) => (
+                          <AirdropDiv key={i} item={item} className="airdrop-card" />
+                        ))}
+                      </div>
+                      <Link to="/airdrops/earn_crypto" onClick={MoveToTop}>
+                        <FormButton title="Show More Earn Crypto Airdrops" className="!text-sm !capitalize !rounded-md !py-4 pulse-button" />
+                      </Link>
+                    </div>
+                  )}
+                  <div className="max-w-[18rem] h-fit bg-primary p-4 how-it-works">
                     <div className="font-bold text-center text-white">How it Works for Airdrop Farmers</div>
                     <div className="flex flex-col gap-4 mt-6 pb-4">
                       <div className="flex flex-col gap-2">
@@ -175,12 +225,12 @@ const HomePage = () => {
               <p className="text-center text-semi-white md:text-lg text-sm font-semibold md:w-3/4 mx-auto mt-4">Below are some frequently asked questions. For more, see all <Link to="/faqs" className="text-lightgreen">FAQs</Link></p>
               <div className="flex flex-col md:gap-10 gap-7 mt-10">
                 {examplefaqs.map((item, i) => (
-                  <div className={`w-full h-fit flex flex-col gap-4 faq-item ${faq === i ? 'active' : ''}`} key={i}>
+                  <div className={`w-full h-fit flex flex-col gap-4 faq-item ${faq === i ? 'active p-2' : ''}`} key={i}>
                     <div onClick={() => handleQuestions(i)} className="flex justify-between gap-4 items-center w-full h-fit cursor-pointer md:text-2xl text-lg font-bold">
                       <span className="text-zinc-400">{item.title}</span>
                       <div className="md:text-2xl text-lg text-lightgreen faq-icon">{faq !== i ? <FiPlus /> : <FiMinus />}</div>
                     </div>
-                    <div className={`md:text-base text-sm border-b pb-2 ${faq === i ? 'block slide-down' : 'hidden'}`}>{item.desc}</div>
+                    <div className={`md:text-base text-sm ${faq === i ? 'block slide-down' : 'hidden'}`}>{item.desc}</div>
                   </div>
                 ))}
               </div>
