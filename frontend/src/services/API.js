@@ -4,7 +4,7 @@ import { CookieName } from '../utils/pageUtils'
 
 
 export let URL;
-export let profileImg;
+export let imageurl;
 
 if(window.location.origin.includes('addvercelurl')) {
     URL = import.meta.env.VITE_LIVE_API_URL
