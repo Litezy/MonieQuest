@@ -3,7 +3,7 @@ import ModalLayout from '../utils/ModalLayout'
 import moment from 'moment'
 import { GoArrowDownLeft } from 'react-icons/go'
 import { currencies } from './AuthUtils'
-import WithdrawModal from './WIthdrawModal'
+import WithdrawModal from './WithdrawModal'
 
 const WithdrawComp = ({ trans }) => {
     const [modal, setModal] = useState(false)

@@ -6,7 +6,7 @@ import { CookieName } from '../utils/pageUtils'
 export let URL;
 export let imageurl;
 
-if(window.location.origin.includes('addvercelurl')) {
+if(window.location.origin.includes('https://moniequest.vercel.app/')) {
     URL = import.meta.env.VITE_LIVE_API_URL
     imageurl = import.meta.env.VITE_LIVE_API_URL
  }
