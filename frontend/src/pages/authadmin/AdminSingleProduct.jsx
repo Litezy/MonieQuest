@@ -152,8 +152,9 @@ const AdminSingleProduct = () => {
         try {
             const response = await AuthPutApi(Apis.admin.update_product, formbody, { category: form.category })
             if (response.status === 200) {
-                SuccessAlert(response.msg)
                 FetchSingleProduct()
+                await new Promise((resolve) => setTimeout(resolve, 2000))
+                SuccessAlert(response.msg)
             } else {
                 ErrorAlert(response.msg)
             }

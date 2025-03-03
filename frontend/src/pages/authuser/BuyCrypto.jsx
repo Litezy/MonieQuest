@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TbSwitch2 } from "react-icons/tb";
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import FormInput from '../../utils/FormInput';
-import { blockchainNetworks, coinDetails, coinNames, currencies, instructions } from '../../AuthComponents/AuthUtils';
+import { currencies, instructions } from '../../AuthComponents/AuthUtils';
 import ModalLayout from '../../utils/ModalLayout';
 import { BsInfoCircleFill } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +22,7 @@ const BuyCrypto = () => {
     const [utils] = useAtom(UTILS)
     const [user] = useAtom(PROFILE)
     const [cryptos] = useAtom(CRYPTOS)
+    const navigate = useNavigate()
 
     const [forms, setForms] = useState({
         amount: '',
@@ -31,13 +32,14 @@ const BuyCrypto = () => {
     })
     const rate = utils?.exchange_buy_rate
     const verified = user?.kyc_verified
-    // console.log(verified)
+
     const handleChange = (e) => {
         setForms({
             ...forms,
             [e.target.name]: e.target.value
         })
     }
+
     const handleAmount = (e) => {
         const rawValue = e.target.value.replace(/,/g, '');
         if (!isNaN(rawValue)) {
@@ -48,9 +50,6 @@ const BuyCrypto = () => {
             });
         }
     }
-
-
-    // console.log(cryptos)
 
     const [selectedCurr, setSelectedCurr] = useState({
         name: currencies[0].name,
@@ -65,6 +64,7 @@ const BuyCrypto = () => {
         if (!forms.wallet_add) return ErrorAlert(`Please input your wallet address`)
         setModal(true)
     }
+
     const submit = (e) => {
         e.preventDefault()
         if (!forms.crypto) return ErrorAlert('crypto currency is required')
@@ -87,7 +87,6 @@ const BuyCrypto = () => {
         setScreen(2)
     }
 
-
     const [inNaira, setInNaira] = useState('')
     useEffect(() => {
         if (forms.amount) {
@@ -95,10 +94,8 @@ const BuyCrypto = () => {
             setInNaira(naira.toLocaleString())
         }
     }, [forms.amount, rate])
-    const [selected, setSelected] = useState([])
 
 
-    const navigate = useNavigate()
     const fetchOrders = async () => {
         try {
             const res = await AuthGetApi(Apis.transaction.crypto_order_history)
@@ -111,10 +108,10 @@ const BuyCrypto = () => {
             console.log(error)
         }
     }
+
     const confirmAndBuy = async (e) => {
         e.preventDefault();
         setModal(false);
-        
 
         const formdata = {
             crypto_currency: forms.crypto,
@@ -126,7 +123,6 @@ const BuyCrypto = () => {
             rate: rate
         };
 
-        // return console.log(formdata)
         setLoading(true);
         try {
             const response = await AuthPostApi(Apis.transaction.buy_crypto, formdata);
@@ -146,8 +142,6 @@ const BuyCrypto = () => {
             setLoading(false);
         }
     };
-
-
 
     useEffect(() => {
         const handleOnline = () => {
@@ -206,7 +200,6 @@ const BuyCrypto = () => {
                     {screen === 1 &&
                         <div className="w-full  lg:w-2/3 mx-auto flex items-center justify-center">
                             <div className="flex w-full  mx-auto mt-5 items-start gap-5 flex-col">
-                                {/* <div className="text-center font-bold text-green-500 w-full">Buy Buy</div> */}
                                 <div className="flex items-start gap-2 flex-col w-full">
                                     <div className="font-bold text-lg">Crypto Currency:</div>
                                     <select onChange={SelectCrypto} className='bg-dark w-full text-white border border-gray-300 rounded-md py-2 px-4'>
@@ -304,7 +297,6 @@ const BuyCrypto = () => {
                                                         ...prevForms,
                                                         wallet_add: text,
                                                     }));
-                                                    // console.log('Pasted data:', text);
                                                 })
 
                                             }

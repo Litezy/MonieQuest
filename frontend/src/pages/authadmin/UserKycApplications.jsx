@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { IoReturnUpBackOutline } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
 import KycModal from '../../AdminComponents/KycModal'
 import moment from 'moment'
 import ModalLayout from '../../utils/ModalLayout'
-import { Apis, AuthGetApi } from '../../services/API'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { useAtom } from 'jotai'
 import { USER_SUB_KYCS } from '../../services/store'
@@ -22,7 +21,6 @@ const UserKycApplications = () => {
         "View details",
     ]
 
-
     const filterSelect = (val) => {
         setSelected(val)
         setModal(true)
@@ -31,7 +29,6 @@ const UserKycApplications = () => {
     return (
         <AdminPageLayout>
             <div className="w-11/12 mx-auto">
-
                 {modal &&
                     <ModalLayout setModal={setModal} clas={`w-11/12 mx-auto lg:w-3/4`}>
                         <KycModal data={selected} setModal={setModal} />
@@ -83,8 +80,6 @@ const UserKycApplications = () => {
 
                         </tbody>
                     </table>
-
-
                 </div>
             </div>
         </AdminPageLayout>

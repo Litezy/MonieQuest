@@ -94,6 +94,7 @@ const CreateProduct = () => {
     try {
       const response = await AuthPostApi(Apis.product.submit_product, formbody)
       if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         setScreen(3)
       } else {
         ErrorAlert(response.msg)

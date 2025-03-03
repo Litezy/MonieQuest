@@ -165,8 +165,8 @@ const AdminSingleBlog = () => {
             const response = await AuthPutApi(Apis.admin.update_blog, formbody)
             if (response.status === 200) {
                 FetchSingleBlog()
+                await new Promise((resolve) => setTimeout(resolve, 2000))
                 SuccessAlert(response.msg)
-                // await new Promise((resolve) => setTimeout(resolve, 2000))
             } else {
                 ErrorAlert(response.msg)
             }
@@ -179,7 +179,7 @@ const AdminSingleBlog = () => {
 
     const deleteImg = async (val) => {
         const data = { tag: val }
-        setLoading(true)
+        setLoading({ status: true, desc: 'deleting image' })
         try {
             const res = await AuthPostApi(`${Apis.admin.delete_single_blogimg}/${id}`, data)
             if (res.status !== 200) return ErrorAlert(res.msg)
@@ -190,20 +190,22 @@ const AdminSingleBlog = () => {
                 setExtrasImg({ img: null, image: null });
             }
             FetchSingleBlog()
+            await new Promise((resolve) => setTimeout(resolve, 2000))
             SuccessAlert(res.msg)
         } catch (error) {
             ErrorAlert(`${error.message}`)
         } finally {
-            setLoading(false)
+            setLoading({ status: false, desc: '' })
         }
     }
 
     const DeleteBlog = async () => {
         setModal(false)
-        setLoading({ status: true, desc: 'deleting' })
+        setLoading({ status: true, desc: 'deleting blog' })
         try {
             const response = await AuthPostApi(Apis.admin.delete_blog, { blog_id: singleBlog.id })
             if (response.status === 200) {
+                await new Promise((resolve) => setTimeout(resolve, 2000))
                 SuccessAlert(response.msg)
                 navigate(`/admin/blogs/all`)
             } else {

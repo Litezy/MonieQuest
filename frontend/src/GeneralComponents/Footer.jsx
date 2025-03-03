@@ -60,6 +60,7 @@ const Footer = () => {
     try {
       const response = await PostApi(Apis.user.subscribe, formbody)
       if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         SuccessAlert(response.msg)
         setForm({
           email: '',

@@ -59,13 +59,13 @@ const formsal = () => {
                 ...forms,
                 accountName: bankAcc.account_name, accountNumber: bankAcc.account_number, bank: bankAcc.bank_name
             })
-            console.log(bankAcc,forms)
+            console.log(bankAcc, forms)
         } else {
             return ErrorAlert('No bank account added')
         }
 
     }
-   
+
 
     const handleAmount = (e) => {
         const input = e.target;
@@ -101,7 +101,6 @@ const formsal = () => {
 
     const submitRequest = async (e) => {
         e.preventDefault()
-        // return console.log(forms)
         setConfirm(false)
         const convertAmt = forms.amount.replace(/,/g, '')
         const formdata = {
@@ -120,7 +119,7 @@ const formsal = () => {
             setForms({ accountName: "", accountNumber: '', amount: '', bank: "" })
             setWallet(res.wallet)
             FetchLatestTrans()
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            await new Promise((resolve) => setTimeout(resolve, 2000))
             setShowModal(true)
             setLoading(false)
         } catch (error) {

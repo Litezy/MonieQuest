@@ -11,7 +11,6 @@ import Loader from '../../GeneralComponents/Loader'
 import { FaRegUser } from "react-icons/fa";
 
 const AdminCreateTestimonial = () => {
-
     const imgref = useRef(null)
     const [forms, setForms] = useState({
         firstname: '',
@@ -66,7 +65,7 @@ const AdminCreateTestimonial = () => {
         <AdminPageLayout>
             {loading ?
                 <ModalLayout>
-                    <Loader title={`creating testimonial`} />
+                    <Loader title={`creating`} />
                 </ModalLayout> :
 
                 <div className="w-11/12 mx-auto">

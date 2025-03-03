@@ -11,9 +11,7 @@ import { Link } from 'react-router-dom'
 const VerifiedUsers = () => {
     const [modal, setModal] = useState()
     const [selected, setSelected] = useState({})
-    const [users,] = useAtom(USER_VER_KYCS)
-
-
+    const [users] = useAtom(USER_VER_KYCS)
 
     const TableHeaders = [
         "User ID",
@@ -28,7 +26,6 @@ const VerifiedUsers = () => {
         setModal(true)
     }
 
-    // useEffect(()=>{if(modal)return console.log(selected.data)},[modal])
     return (
         <AdminPageLayout>
             <div className="w-11/12 mx-auto ">
@@ -88,8 +85,6 @@ const VerifiedUsers = () => {
 
                         </tbody>
                     </table>
-
-
                 </div>
             </div>
         </AdminPageLayout>

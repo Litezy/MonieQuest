@@ -43,6 +43,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
         try {
             const response = await GetApi(Apis.product.get_admin_bank)
             if (response.status === 200) {
+                await new Promise((resolve) => setTimeout(resolve, 2000))
                 setAdminBank(response.msg)
                 setScreen(2)
             } else {
@@ -69,6 +70,7 @@ const CartComponent = ({ cartItems, setCartItems, dataLoading }) => {
         try {
             const response = await PostApi(Apis.product.place_product_order, formbody)
             if (response.status === 200) {
+                await new Promise((resolve) => setTimeout(resolve, 2000))
                 setScreen(3)
             } else {
                 ErrorAlert(response.msg)

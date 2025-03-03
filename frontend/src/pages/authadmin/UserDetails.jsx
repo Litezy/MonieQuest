@@ -1,5 +1,5 @@
 import moment from 'moment'
-import React, { useState } from 'react'
+import React from 'react'
 import { IoReturnUpBackOutline } from 'react-icons/io5'
 import { currencies } from '../../AuthComponents/AuthUtils'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
@@ -8,7 +8,6 @@ import { useAtom } from 'jotai'
 import { USERDETAILS } from '../../services/store'
 
 const UserDetails = () => {
-
     const [data] = useAtom(USERDETAILS)
 
     return (
@@ -24,7 +23,7 @@ const UserDetails = () => {
 
                 <div className="relative overflow-x-auto rounded-md mt-10">
                     <table className="w-full text-sm text-center">
-                        <thead className=" bg-primary text-sm poppins ">
+                        <thead className=" bg-primary text-sm poppins">
                             <tr>
                                 <th scope="col" className="px-3 py-3">
                                     ID
@@ -84,8 +83,6 @@ const UserDetails = () => {
                             }
                         </tbody>
                     </table>
-
-
                 </div>
             </div>
         </AdminPageLayout>

@@ -12,7 +12,6 @@ import { Apis, AuthGetApi } from '../../services/API'
 import { currencies } from '../../AuthComponents/AuthUtils'
 
 const AdminSingleWithdrawal = () => {
-
     const { id } = useParams()
     const [forms, setForms] = useState({ sent_money: '', ref: '' })
     const [screen, setScreen] = useState(1)
@@ -20,7 +19,6 @@ const AdminSingleWithdrawal = () => {
     const [data, setData] = useState({})
     const green = `text-lightgreen`
    
-
 
     const fetchWithdrawal = async () => {
         setLoading({status:true,val:"load"})

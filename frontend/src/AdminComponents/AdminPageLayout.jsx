@@ -13,6 +13,7 @@ import { BANK, PROFILE, USER_SUB_KYCS, USER_VER_KYCS, USERBANKS, USERDETAILS, UT
 const AdminPageLayout = ({ children }) => {
     const [user] = useAtom(PROFILE)
     const [, setBank] = useAtom(BANK)
+    const [, setUtils] = useAtom(UTILS)
     const [, setUserDetails] = useAtom(USERDETAILS)
     const [, setUserSubmittedKycs] = useAtom(USER_SUB_KYCS)
     const [, setUserBanks] = useAtom(USERBANKS)
@@ -48,13 +49,10 @@ const AdminPageLayout = ({ children }) => {
                 console.log(error)
             }
         }
-      
+
         FetchBankAndUtils()
         fetchAllUsers()
     }, [])
-
-
-
 
 
     return (

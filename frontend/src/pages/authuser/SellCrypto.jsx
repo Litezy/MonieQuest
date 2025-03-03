@@ -28,14 +28,13 @@ const SellCrypto = () => {
         amount: '',
         trans_hash: '',
         symbol: '',
-        crypto:"",
+        crypto: "",
         network: '',
         wallet_add: ''
     })
-
     const [active, setActive] = useState(tags[0])
-    const [selectedCoin, setSelectedCoin] = useState({})
     const [confirm, setConfirm] = useState(false)
+
     const handleAmount = (e) => {
         const rawValue = e.target.value.replace(/,/g, '');
         if (!isNaN(rawValue)) {
@@ -52,15 +51,16 @@ const SellCrypto = () => {
             ...forms, [e.target.name]: e.target.value
         })
     }
+
     const [selectedCurr, setSelectedCurr] = useState({
         name: currencies[0].name,
         symbol: currencies[0].symbol
     })
-
     const rate = utils?.exchange_sell_rate
     const limit = utils?.sell_max
     const nairaLimit = limit * rate
     const minimum = utils?.sell_min
+
     const submit = (e) => {
         e.preventDefault()
         if (!forms.amount) return ErrorAlert('amount is required')
@@ -76,10 +76,8 @@ const SellCrypto = () => {
             if (amt > limit) return ErrorAlert(`Sorry, you can't sell above ${currencies[0].symbol}${limit.toLocaleString()}`)
         }
 
-        // return console.log(forms)
         setModal(true)
     }
-
 
     const [inNaira, setInNaira] = useState('')
     useEffect(() => {
@@ -102,6 +100,7 @@ const SellCrypto = () => {
         setModal(false)
         setScreen(2)
     }
+    
     const confirmOrder = async () => {
         if (!forms.trans_hash) return ErrorAlert(`Please input your transaction hash as proof of transfer`)
         if (forms.trans_hash.length < 64) return ErrorAlert(`Please input a valid transaction hash.`)
@@ -113,7 +112,7 @@ const SellCrypto = () => {
             type: 'sell',
             trans_hash: forms.trans_hash,
             network: forms.network,
-            rate:rate
+            rate: rate
         }
 
         try {
@@ -133,7 +132,6 @@ const SellCrypto = () => {
         }
 
     }
-
 
     useEffect(() => {
         const handleOnline = () => {
@@ -177,10 +175,10 @@ const SellCrypto = () => {
             console.error("Selected crypto not found.");
         }
     };
-    
+
     return (
         <ExchangeLayout>
-            
+
             <div className='w-full'>
                 {loading &&
                     <Loader title={`processing`} />

@@ -15,9 +15,7 @@ import { useAtom } from 'jotai';
 import { UTILS } from '../../services/store';
 
 
-
 const SingleSellOrder = () => {
-
     const { id } = useParams()
     const green = 'text-lightgreen'
     const [data, setData] = useState({})
@@ -27,7 +25,6 @@ const SingleSellOrder = () => {
         setLoading(true)
         try {
             const res = await AuthGetApi(`${Apis.admin.single_sell}/${id}`)
-            // console.log(res)
             if (res.status !== 200) return ErrorAlert(res.msg)
             const data = res.data
             setData(data)
@@ -50,6 +47,7 @@ const SingleSellOrder = () => {
             console.log(error)
         }
     }
+
     const rate = data?.rate
     const handleCopy = (type, val) => {
         navigator.clipboard.writeText(type)
@@ -80,6 +78,7 @@ const SingleSellOrder = () => {
         const newAmt = formatVal * rate
         setForms({ ...forms, amount: newAmt?.toLocaleString() })
     }
+
     const handleMsg = (e) => {
         setForms({ ...forms, message: e.target.value })
     }
@@ -88,8 +87,6 @@ const SingleSellOrder = () => {
         setApplyAmt(true)
         handleChange()
     }
-
-
 
     const submitOrder = async (e) => {
         e.preventDefault()
@@ -101,10 +98,10 @@ const SingleSellOrder = () => {
             const res = await AuthPostApi(`${Apis.admin.confirm_sell}/${id}`, data)
             console.log(res)
             if (res.status !== 200) return ErrorAlert(res.msg)
-            SuccessAlert(res.msg)
             setForms({ message: "", amount: "" })
             fetchSells()
             await new Promise((resolve) => setTimeout(resolve, 2000))
+            SuccessAlert(res.msg)
             afterLoad()
         } catch (error) {
             console.log(error)
@@ -133,6 +130,8 @@ const SingleSellOrder = () => {
             setLoading(false)
         }
     }
+
+    
     return (
         <AdminPageLayout>
 

@@ -151,8 +151,9 @@ const AdminSingleAirdrop = () => {
         try {
             const response = await AuthPutApi(Apis.admin.update_airdrop, formbody)
             if (response.status === 200) {
-                SuccessAlert(response.msg)
                 FetchSingleAirdrop()
+                await new Promise((resolve) => setTimeout(resolve, 2000))
+                SuccessAlert(response.msg)
             } else {
                 ErrorAlert(response.msg)
             }
@@ -169,6 +170,7 @@ const AdminSingleAirdrop = () => {
         try {
             const response = await AuthPostApi(Apis.admin.delete_closed_airdrop, { airdrop_id: singleAirdrop.id })
             if (response.status === 200) {
+                await new Promise((resolve) => setTimeout(resolve, 2000))
                 SuccessAlert(response.msg)
                 navigate(`/admin/airdrops/all`)
             } else {

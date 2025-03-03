@@ -110,8 +110,9 @@ const Profile = () => {
     try {
       const response = await AuthPutApi(Apis.user.update_profile, formbody)
       if (response.status === 200) {
-        SuccessAlert(response.msg)
         setUser(response.user)
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        SuccessAlert(response.msg)
         setForm({
           ...form,
           old_password: '',
@@ -143,8 +144,9 @@ const Profile = () => {
     try {
       const response = await AuthPostApi(Apis.user.create_update_bank, formbody)
       if (response.status === 200) {
-        SuccessAlert(response.msg)
         setBank(response.bank)
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        SuccessAlert(response.msg)
       } else {
         ErrorAlert(response.msg)
       }

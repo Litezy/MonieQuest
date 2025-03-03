@@ -13,9 +13,7 @@ import Lottie from 'react-lottie';
 import { Apis, AuthGetApi, AuthPostApi } from '../../services/API';
 
 
-
 const SingleBuyOrder = () => {
-
     const { id } = useParams()
     const green = 'text-lightgreen'
     const [loading, setLoading] = useState(false)
@@ -25,7 +23,6 @@ const SingleBuyOrder = () => {
         setLoading(true)
         try {
             const res = await AuthGetApi(`${Apis.admin.single_buy}/${id}`)
-            // console.log(res)
             if (res.status !== 200) return ErrorAlert(res.msg)
             const data = res.data
             setData(data)
@@ -39,6 +36,7 @@ const SingleBuyOrder = () => {
     useEffect(() => {
         fetchBuyID()
     }, [])
+
     const fetchBuys = async () => {
         try {
             const res = await AuthGetApi(Apis.admin.cryptobuy_orders)
@@ -53,12 +51,12 @@ const SingleBuyOrder = () => {
             .then(() => { SuccessAlert(`${val} copied successfully'`) })
             .catch(() => { console.log(`failed to copy ${val}`) })
     }
+
     const [forms, setForms] = useState({
         confirmed: '',
         sent_crypto: '',
         msg: ""
     })
-
     const statuses = ["Yes", "No"]
     const [screen, setScreen] = useState(1)
     const [failed, setFailed] = useState(false)
@@ -70,7 +68,6 @@ const SingleBuyOrder = () => {
         setForms({ ...forms, msg: e.target.value })
     }
 
-
     const submitOrder = async (e) => {
         e.preventDefault()
         if (forms.confirmed !== 'Yes' || forms.sent_crypto !== 'Yes') return ErrorAlert('Please confirm that you have received the funds and sent crypto')
@@ -79,9 +76,9 @@ const SingleBuyOrder = () => {
         try {
             const res = await AuthPostApi(`${Apis.admin.confirm_buy}/${id}`, data)
             if (res.status !== 200) return ErrorAlert(res.msg)
-            SuccessAlert(res.msg)
             fetchBuys()
             await new Promise((resolve) => setTimeout(resolve, 2000))
+            SuccessAlert(res.msg)
             afterLoad()
         } catch (error) {
             console.log(error)
@@ -99,22 +96,20 @@ const SingleBuyOrder = () => {
             const res = await AuthPostApi(`${Apis.admin.confirm_buy}/${id}`, data)
             // console.log(res)
             if (res.status !== 200) return ErrorAlert(res.msg)
-            SuccessAlert(res.msg)
             fetchBuys()
             setFailed(false)
             await new Promise((resolve) => setTimeout(resolve, 2000))
+            SuccessAlert(res.msg)
             afterLoad()
         } catch (error) {
             console.log(error)
         } finally {
             setLoading(false)
         }
-
     }
 
     return (
         <AdminPageLayout>
-
             {loading &&
                 <Loader title={`closing order`} />
             }

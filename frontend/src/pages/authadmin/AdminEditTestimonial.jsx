@@ -55,8 +55,6 @@ const AdminEditTestimonial = () => {
         }
     }, [data])
 
-
-    // console.log(image.img)
     const handleChange = (e) => {
         setForms({ ...forms, [e.target.name]: e.target.value })
     }
@@ -72,7 +70,6 @@ const AdminEditTestimonial = () => {
             image: file
         })
     }
-
 
     const submitEdit = async (e) => {
         e.preventDefault()

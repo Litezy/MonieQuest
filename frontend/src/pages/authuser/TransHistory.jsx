@@ -25,10 +25,10 @@ const TransHistory = () => {
     fetchTrans()
   }, []);
 
-
   useEffect(() => {
     setTransactions(transData)
   }, [transData])
+
   const filterTrans = () => {
     const mainData = transData
     if (searchValue.length > 1) {

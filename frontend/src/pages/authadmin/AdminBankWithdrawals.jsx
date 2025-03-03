@@ -8,8 +8,6 @@ import moment from 'moment'
 
 const AdminBankWithdrawals = () => {
     const [loading, setLoading] = useState(false)
-    const [searchValue, setSearchValue] = useState('')
-    const [staticData, setStaticData] = useState([])
     const [records, setRecords] = useState([])
 
 
@@ -20,7 +18,6 @@ const AdminBankWithdrawals = () => {
             if (res.status !== 200) return ErrorAlert(res.msg)
             const data = res.data
             setRecords(data)
-            setStaticData(data)
         } catch (error) {
             console.log(error)
         } finally { setLoading(false) }
@@ -31,15 +28,6 @@ const AdminBankWithdrawals = () => {
 
     const Topheaders = [`ID`, 'FullName', 'Date', 'Amount', 'Details']
 
-    const filterTrans = () => {
-        const mainData = staticData
-        if (searchValue.length > 1) {
-            const filtered = mainData.filter(trans => String(trans.tag).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.type).toLowerCase().startsWith(searchValue.toLocaleLowerCase()) || String(trans.trans_id).toLowerCase().startsWith(searchValue.toLocaleLowerCase()))
-            setRecords(filtered)
-        } else {
-            setRecords(mainData)
-        }
-    }
     return (
         <AdminPageLayout>
             <div className='w-full'>

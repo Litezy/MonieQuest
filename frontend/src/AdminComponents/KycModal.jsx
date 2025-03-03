@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { IoReturnUpBackOutline } from 'react-icons/io5'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Loader from '../GeneralComponents/Loader'
 import ModalLayout from '../utils/ModalLayout'
 import { Apis, AuthPutApi, imageurl } from '../services/API'
@@ -30,10 +30,10 @@ const KycModal = ({ data, setModal }) => {
         try {
             const response = await AuthPutApi(Apis.admin.update_kyc, formdata)
             if (response.status !== 200) return ErrorAlert(response.msg)
+            await new Promise((resolve) => setTimeout(resolve, 2000))
             SuccessAlert(response.msg)
             setSubKycs(response.data?.submitted)
             setForm({ msg: '' })
-            await new Promise((resolve) => setTimeout(resolve, 3000))
             setLoading(false)
             setModal(false)
         } catch (error) {
@@ -51,10 +51,10 @@ const KycModal = ({ data, setModal }) => {
         try {
             const response = await AuthPutApi(Apis.admin.update_kyc, formdata)
             if (response.status !== 200) return ErrorAlert(response.msg)
+            await new Promise((resolve) => setTimeout(resolve, 2000))
             SuccessAlert(response.msg)
             setVerifiedKycs(response.data?.verified)
             setForm({ msg: '' })
-            await new Promise((resolve) => setTimeout(resolve, 3000))
             setModal(false)
             navigate(`/admin/all_users/submitted_kycs`)
         } catch (error) {

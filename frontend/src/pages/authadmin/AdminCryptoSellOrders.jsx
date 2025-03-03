@@ -13,7 +13,6 @@ const AdminCryptoSellOrders = () => {
         setLoading(true)
         try {
             const res = await AuthGetApi(Apis.admin.cryptosell_orders)
-            // console.log(res)
             if (res.status !== 200) return;
             const data = await res.data
             setData(data)
@@ -27,6 +26,7 @@ const AdminCryptoSellOrders = () => {
     useEffect(() => {
         fetchSells()
     }, [])
+    
     return (
         <AdminExchangeLayout>
             <div className='w-11/12 mx-auto'>

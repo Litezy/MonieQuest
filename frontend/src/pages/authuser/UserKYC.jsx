@@ -43,20 +43,21 @@ const UserKYC = () => {
         try {
             const response = await AuthGetApi(Apis.user.user_kyc)
             if (response.status !== 200) return;
-            setKyc(response.msg)
+            const data = response.msg
+            setKyc(data)
             setForms({
-                address: response.msg.address,
-                date_of_birth: response.msg.date_of_birth,
-                id_type: response.msg.id_type,
-                id_number: response.msg.id_number,
+                address: data.address || '',
+                date_of_birth: data.date_of_birth || '',
+                id_type: data.id_type || '',
+                id_number: data.id_number || '',
             })
             setfrontImg({
                 ...frontimg,
-                img: `${imageurl}/identities/${response.msg.front_image}`
+                img: `${imageurl}/identities/${data.front_image}` || null
             })
             setbackImg({
                 ...backimg,
-                img: `${imageurl}/identities/${response.msg.back_image}`
+                img: `${imageurl}/identities/${data.back_image}` || null
             })
         } catch (error) {
             //
@@ -80,6 +81,7 @@ const UserKYC = () => {
             image: file
         })
     }
+
     const handleImageBack = (e) => {
         const file = e.target.files[0]
         if (!file.type.startsWith(`image/`)) {
@@ -118,6 +120,7 @@ const UserKYC = () => {
             const response = await AuthPostApi(Apis.user.create_update_kyc, formbody)
             if (response.status === 200) {
                 FetchKYC()
+                await new Promise((resolve) => setTimeout(resolve, 2000))
                 setScreen(2)
             } else {
                 ErrorAlert(response.msg)
@@ -135,7 +138,7 @@ const UserKYC = () => {
             <div className=' w-11/12 mx-auto'>
                 {screen === 1 &&
                     <div>
-                        <Link to={'/user/profile'} className="w-fit  rounded-md px-5 py-2 bg-ash text-white mr-auto cursor-pointer ">
+                        <Link to={'/user/profile'} className="w-fit rounded-md px-5 py-2 bg-ash text-white cursor-pointer ">
                             back to profile
                         </Link>
                         {loading && <Loader title={`submitting`} />}

@@ -22,7 +22,7 @@ const ProductsOrdersModal = ({ selected }) => {
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                         <div>Transaction Date</div>
-                        <div className="capitalize ">{moment(selected?.createdAt).format('Do MMM YYYY')} / {moment(selected?.createdAt).format('h:mm')}</div>
+                        <div className="capitalize ">{moment(selected?.createdAt).format('Do MMM YYYY')} / {moment(selected?.createdAt).format('h:mma')}</div>
                     </div>
                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                         <div>Transaction ID</div>

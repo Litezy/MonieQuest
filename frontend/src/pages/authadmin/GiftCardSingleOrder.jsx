@@ -33,8 +33,6 @@ const GiftCardSingleOrder = () => {
     const navigate = useNavigate()
     
 
-
-
     const fetchGiftCardOrder = async () => {
         try {
             const res = await AuthGetApi(`${Apis.admin.get_single_giftcard_order}/${id}`)
@@ -87,9 +85,7 @@ const GiftCardSingleOrder = () => {
             console.log(error)
         } finally {
             setLoading({ status: false, param: '' })
-
         }
-
     }
 
     const afterLoad = () => {
@@ -151,7 +147,7 @@ const GiftCardSingleOrder = () => {
             }, 2000)
         }
     }
-    // console.log(data?.status)
+
     return (
         <AdminPageLayout>
             {

@@ -119,6 +119,7 @@ const AdminCreateBlogs = () => {
         try {
             const response = await AuthPostApi(Apis.admin.create_blog, formbody)
             if (response.status === 200) {
+                await new Promise((resolve) => setTimeout(resolve, 2000))
                 setScreen(2)
             } else {
                 ErrorAlert(response.msg)
@@ -133,7 +134,7 @@ const AdminCreateBlogs = () => {
     return (
         <BlogsLayout>
             <div className='w-11/12 mx-auto'>
-                {loading && <Loader title={`submitting`} />}
+                {loading && <Loader title={`creating`} />}
                 {screen === 1 &&
                     <div className='flex flex-col gap-10'>
                         <div className='flex flex-col gap-2'>

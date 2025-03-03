@@ -12,14 +12,12 @@ const AdminUpdateCryptos = () => {
     const [loading, setLoading] = useState({ status: false, val: '' })
     const [data, setData] = useState([])
 
-
     const fetchCryptos = async () => {
         setLoading({ status: true, val: 'fetch' })
         try {
             const res = await AuthGetApi(Apis.admin.get_cryptos)
             if (res.status !== 200) return;
             const data = res.data
-            // console.log(data)
             setData(data)
         } catch (error) {
             console.log(`failed to fetch cryptos data`, error)
@@ -34,12 +32,10 @@ const AdminUpdateCryptos = () => {
     const [forms, setForms] = useState({
         name: '', network: '', wallet_add: '', symbol: ''
     })
-
     const [add, setAdd] = useState(false)
     const [update, setUpdate] = useState(false)
     const [del, setDel] = useState(false)
     const [selected, setSelected] = useState({})
-
 
 
     useEffect(() => {
@@ -51,10 +47,11 @@ const AdminUpdateCryptos = () => {
         })
     }, [update])
 
-    const addCrypto = ()=>{
-        setForms({name: '', network: '', wallet_add: '', symbol: ''})
+    const addCrypto = () => {
+        setForms({ name: '', network: '', wallet_add: '', symbol: '' })
         setAdd(true)
     }
+
     const handleChange = (e) => {
         const { name, value } = e.target
         if (name === 'name') {
@@ -217,7 +214,7 @@ const AdminUpdateCryptos = () => {
                             <div className="text-center">Are you sure you want to delete wallet?</div>
                             <div className="flex w-full items-center justify-between ">
                                 <button onClick={() => setDel(false)} className='px-4 py-1.5 rounded-md bg-red-600 text-white'>cancel</button>
-                                <button onClick={()=> crudCrypto('delete')} type='button' className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm delete</button>
+                                <button onClick={() => crudCrypto('delete')} type='button' className='px-4 py-1.5 rounded-md bg-green-600 text-white'>confirm delete</button>
                             </div>
                         </div>
                     </div>

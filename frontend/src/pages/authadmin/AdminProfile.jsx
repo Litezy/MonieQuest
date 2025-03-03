@@ -163,8 +163,9 @@ const AdminProfile = () => {
         try {
             const response = await AuthPutApi(Apis.user.update_profile, formbody)
             if (response.status === 200) {
-                SuccessAlert(response.msg)
                 setUser(response.user)
+                await new Promise((resolve) => setTimeout(resolve, 2000))
+                SuccessAlert(response.msg)
                 setForm({
                     ...form,
                     old_password: '',
@@ -196,8 +197,9 @@ const AdminProfile = () => {
         try {
             const response = await AuthPostApi(Apis.user.create_update_bank, formbody)
             if (response.status === 200) {
-                SuccessAlert(response.msg)
                 setBank(response.bank)
+                await new Promise((resolve) => setTimeout(resolve, 2000))
+                SuccessAlert(response.msg)
             } else {
                 ErrorAlert(response.msg)
             }
@@ -230,8 +232,9 @@ const AdminProfile = () => {
         try {
             const response = await AuthPutApi(Apis.admin.update_utils, formbody)
             if (response.status === 200) {
-                SuccessAlert(response.msg)
                 setUtils(response.utils)
+                await new Promise((resolve) => setTimeout(resolve, 2000))
+                SuccessAlert(response.msg)
             } else {
                 ErrorAlert(response.msg)
             }
@@ -254,8 +257,9 @@ const AdminProfile = () => {
         try {
             const response = await AuthPostApi(Apis.user.add_carousel_image, formbody)
             if (response.status === 200) {
-                SuccessAlert(response.msg)
                 FetchCarouselImages()
+                await new Promise((resolve) => setTimeout(resolve, 2000))
+                SuccessAlert(response.msg)
                 setCarouselImage({
                     img: null,
                     image: null
@@ -279,8 +283,9 @@ const AdminProfile = () => {
         try {
             const response = await AuthPostApi(Apis.user.delete_carousel_image, { id: id })
             if (response.status === 200) {
-                SuccessAlert(response.msg)
                 FetchCarouselImages()
+                await new Promise((resolve) => setTimeout(resolve, 2000))
+                SuccessAlert(response.msg)
             } else {
                 ErrorAlert(response.msg)
             }

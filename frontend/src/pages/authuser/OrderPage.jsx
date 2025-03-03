@@ -81,7 +81,7 @@ const OrderPage = () => {
                 ErrorAlert(res.msg)
             }
             fetchOrders()
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             SuccessAlert(res.msg)
             naviagate(`/user/exchange/orders`)
         } catch (error) {

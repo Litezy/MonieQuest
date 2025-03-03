@@ -6,9 +6,9 @@ import ExchangeLayout from '../../AuthComponents/ExchangeLayout'
 
 const BuyOrdersHistory = () => {
     const [data, setData] = useState([])
+    
     const fetchOrders = useCallback(async () => {
         const res = await AuthGetApi(Apis.transaction.crypto_order_history)
-
         if (res.status !== 200) {
             console.log(res.msg)
             return;
@@ -19,6 +19,7 @@ const BuyOrdersHistory = () => {
     useEffect(() => {
         fetchOrders()
     }, [])
+
     return (
         <ExchangeLayout>
             <div className="w-11/12 mx-auto">

@@ -6,7 +6,6 @@ import Loader from '../../GeneralComponents/Loader'
 import { Link } from 'react-router-dom'
 
 const AdminTestimonials = () => {
-
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState([])
 
@@ -26,6 +25,7 @@ const AdminTestimonials = () => {
     useEffect(() => {
         fetchTestimonials()
     }, [fetchTestimonials]);
+    
     return (
         <AdminPageLayout>
             {loading ?

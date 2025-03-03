@@ -45,6 +45,7 @@ const OneGiftcardOrder = () => {
 
     }, [naira, data?.amount])
     const green = 'text-lightgreen text-base lg:text-lg'
+    
     return (
         <AuthPageLayout>
             <div className="w-11/12 mx-auto">

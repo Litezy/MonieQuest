@@ -27,7 +27,6 @@ const SellGiftcard = () => {
     })
     const [utils] = useAtom(UTILS)
     const rate = utils?.giftcard_rate
-    // console.log(utils)
     const [carderror, setCarderror] = useState({
         status: false,
         msg: '',
@@ -69,7 +68,6 @@ const SellGiftcard = () => {
             });
         }
     }
-
 
     const checkCode = () => {
         if (!selectedCard || !selectedCard.brand) {
@@ -179,7 +177,7 @@ const SellGiftcard = () => {
             const res = await AuthPostApi(Apis.transaction.sell_giftcard, formdata)
             if (res.status !== 201) return ErrorAlert(res.msg)
             setCards({ ...cards, type: '', amount: '', code: '', pin: '', has_pin: 'no' })
-            await new Promise((resolve) => setTimeout(resolve, 3000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             SuccessAlert(res.msg)
             navigate('/user/giftcards/orders');
         } catch (error) {
@@ -189,7 +187,6 @@ const SellGiftcard = () => {
         }
 
     }
-
 
     useEffect(() => {
         const handleOnline = () => {
@@ -205,6 +202,8 @@ const SellGiftcard = () => {
             window.removeEventListener('offline', handleOffline);
         };
     }, []);
+
+
     return (
         <Giftcards>
             <div className='w-11/12 mx-auto lg:w-8/12 mt-5 lg:mt-10'>

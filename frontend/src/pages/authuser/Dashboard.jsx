@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ImagesCarousel from '../../GeneralComponents/ImagesCarousel';
 import iconImg from '../../assets/images/db_icon.png'
 import TradingChart from '../../AuthComponents/TradingChart';
@@ -12,25 +12,20 @@ import { Apis, AuthGetApi } from '../../services/API';
 
 const Dashboard = () => {
   const [wallet] = useAtom(WALLET)
-  const [allCarouselImages,setAllCarouselImages] = useState('')
+  const [allCarouselImages, setAllCarouselImages] = useState('')
   const [, setCharts] = useAtom(USER_CHARTS)
 
-  const fetchChartData = useCallback(async () => {
-    try {
-      const res = await AuthGetApi(Apis.user.get_user_charts);
-      if (res.status !== 200) return;
-      setCharts(res.data);
-    } catch (error) {
-      console.log(error);
+
+  useEffect(() => {
+    const FetchChartData = async () => {
+      try {
+        const res = await AuthGetApi(Apis.user.get_user_charts);
+        if (res.status !== 200) return;
+        setCharts(res.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, []);
-  
-
-  useEffect(() => {
-    fetchChartData()
-  }, [fetchChartData])
-
-  useEffect(() => {
     const FetchCarouselImages = async () => {
       try {
         const response = await AuthGetApi(Apis.user.get_carousel_images)
@@ -38,9 +33,11 @@ const Dashboard = () => {
           setAllCarouselImages(response.msg)
         }
       } catch (error) {
-        //
+        console.log(error)
       }
     }
+
+    FetchChartData()
     FetchCarouselImages()
   }, [])
 
@@ -81,7 +78,7 @@ const Dashboard = () => {
         </div>
         <div className='grid lg:grid-cols-2 grid-cols-1 gap-6 mt-12 lg:h-[25rem] overflow-hidden'>
           <TrendingCoins />
-          <TradingChart/>
+          <TradingChart />
         </div>
       </div>
     </AuthPageLayout>

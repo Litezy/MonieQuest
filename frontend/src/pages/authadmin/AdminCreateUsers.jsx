@@ -12,7 +12,6 @@ import { USERDETAILS } from '../../services/store'
 import PasswordInputField from '../../utils/PasswordInputField'
 
 const AdminCreateUsers = () => {
-
     const [forms, setForms] = useState({
         firstname: '',
         lastname: '',
@@ -52,12 +51,11 @@ const AdminCreateUsers = () => {
         setLoading(true)
         try {
             const res = await AuthPostApi(Apis.admin.create_user, formdata)
-
             if (res.status !== 201) return ErrorAlert(res.msg)
-            SuccessAlert(res.msg)
             setForms({ firstname: "", lastname: '', password: '', phone: '', confirm_password: "", email: "" })
             setUserDetails(res.data)
-            await new Promise((resolve) => setTimeout(resolve, 3000))
+            SuccessAlert(res.msg)
+            await new Promise((resolve) => setTimeout(resolve, 2000))
             navigate(`/admin/all_users/user_details`)
         } catch (error) {
             console.log(error)
@@ -65,6 +63,7 @@ const AdminCreateUsers = () => {
             setLoading(false)
         }
     }
+
     return (
         <AdminPageLayout>
             <div className='mx-auto w-11/12'>

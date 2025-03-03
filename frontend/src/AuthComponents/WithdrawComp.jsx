@@ -7,6 +7,7 @@ import WithdrawModal from './WIthdrawModal'
 
 const WithdrawComp = ({ trans }) => {
     const [modal, setModal] = useState(false)
+    
     return (
         <div className='w-full mb-5'>
             {modal &&
