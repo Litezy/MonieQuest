@@ -34,6 +34,7 @@ const ContactPage = () => {
     try {
       const response = await PostApi(Apis.user.contact, formbody)
       if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         SuccessAlert(response.msg)
         setForm({
           full_name: '',

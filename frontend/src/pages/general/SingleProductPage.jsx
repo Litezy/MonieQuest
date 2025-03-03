@@ -91,11 +91,12 @@ const SingleProductPage = () => {
             try {
                 const response = await PutApi(Apis.product.add_rating, formbody)
                 if (response.status === 200) {
+                    FetchSingleProduct()
+                    await new Promise((resolve) => setTimeout(resolve, 2000))
                     setForm({ ...form, submit: true })
                     const currentData = JSON.parse(localStorage.getItem('ratingData'))
                     currentData.push(response.msg)
                     localStorage.setItem('ratingData', JSON.stringify(currentData))
-                    FetchSingleProduct()
                 } else {
                     ErrorAlert(response.msg)
                 }

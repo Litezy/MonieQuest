@@ -1,8 +1,6 @@
 import img from '../../assets/images/404.svg'
 import { Link } from 'react-router-dom'
 
-
-
 export default function Notfound() {
     return (
         <div className='w-11/12 mx-auto'>
