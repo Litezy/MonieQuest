@@ -42,8 +42,8 @@ const SingleAirdropPage = () => {
   const currentIndex = sortedAirdrops.findIndex((item) => item.id === parseInt(id))
   const prevAirdrop = currentIndex > 0 ? sortedAirdrops[currentIndex - 1] : null
   const nextAirdrop = currentIndex < sortedAirdrops.length - 1 ? sortedAirdrops[currentIndex + 1] : null
-  // console.log(prevAirdrop, nextAirdrop)
 
+  
   return (
     <PageLayout>
       <div className='w-full bg-dark md:py-20 py-10'>
@@ -98,7 +98,7 @@ const SingleAirdropPage = () => {
             </div>
             :
             <>
-              <Link to={'/airdrops'} className="text-white  px-4 py-1.5 rounded-md bg-ash w-fit">back to airdrops</Link>
+              <Link to={'/airdrops'} className="text-white px-4 py-1.5 rounded-full bg-ash w-fit">back to airdrops</Link>
               <div className='flex flex-col gap-14 md:mt-10 mt-5'>
                 <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
                   <div className='flex items-center gap-2'>

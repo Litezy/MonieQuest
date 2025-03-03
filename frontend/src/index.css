@@ -379,8 +379,8 @@ input[type=number]:focus {
   border-right: 10.1px solid transparent;
   border-bottom: 13.1px solid #C82726;
   position: absolute;
-  top: 1.32rem;
-  left: -0.69rem;
+  top: 1.4rem;
+  left: -0.65rem;
   transform: rotate(40deg);
   z-index: -2;
 }

@@ -132,7 +132,7 @@ const ForgotPassword = () => {
       <div className='w-11/12 mx-auto py-24'>
         <div className='flex items-center justify-center max-w-md mx-auto relative'>
           <div className='w-full h-full flex flex-col'>
-            <div className="flex items-center justify-center w-full ">
+            <div className="flex items-center justify-center w-full">
               <img src={logo} className='w-52' alt="logo alt" />
             </div>
             <div className='text-3xl font-bold text-center text-zinc-300'>Forgot password</div>

@@ -357,7 +357,7 @@ exports.UpdateProduct = async (req, res) => {
                     await Notification.create({
                         user: product.user,
                         title: `Product submitted approved`,
-                        content: `After thorough review by our admins your product submitted with the id (#${product.gen_id}) has been approved, you'll be contacted soon for payment.`,
+                        content: `After thorough review by our admins your product submitted with the ID (#${product.gen_id}) has been approved, you'll be contacted soon for payment.`,
                         url: '/user/products/all',
                     })
                     await Mailing({
@@ -375,7 +375,7 @@ exports.UpdateProduct = async (req, res) => {
                     await Notification.create({
                         user: product.user,
                         title: `Product submitted declined`,
-                        content: `After review by our admins, your product submitted with the id (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
+                        content: `After review by our admins, your product submitted with the ID (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
                         url: '/user/products/all',
                         status: 'failed'
                     })
