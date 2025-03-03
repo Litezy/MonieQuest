@@ -38,6 +38,7 @@ const LoginPage = () => {
     try {
       const response = await PostApi(Apis.user.login, formbody)
       if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         Cookies.set(CookieName, response.token)
         const decoded = decodeToken(response.token)
         const findRole = UserRoles.find(item => item.role === decoded.role)

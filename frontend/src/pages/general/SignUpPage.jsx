@@ -49,6 +49,7 @@ const SignUpPage = () => {
     try {
       const response = await PostApi(Apis.user.signup, formbody)
       if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         navigate(`/verify-account?v=${form.email}`)
       } else {
         ErrorAlert(response.msg)

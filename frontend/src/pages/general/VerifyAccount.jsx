@@ -9,7 +9,6 @@ import { Apis, AuthPostApi, PostApi } from '../../services/API';
 import Loader from '../../GeneralComponents/Loader';
 
 
-
 const VerifyAccount = () => {
     const [loading, setLoading] = useState({ status: false, val: "resending" })
     const [params] = useSearchParams()

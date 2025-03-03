@@ -41,6 +41,7 @@ const ForgotPassword = () => {
     try {
       const response = await PostApi(Apis.user.send_otp, { email: form.email })
       if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         SuccessAlert(response.msg)
         setScreen(2)
         setCountDown(40)
@@ -86,6 +87,7 @@ const ForgotPassword = () => {
     try {
       const response = await PostApi(Apis.user.verify_otp, formbody)
       if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         setScreen(3)
       } else {
         ErrorAlert(response.msg)
@@ -114,6 +116,7 @@ const ForgotPassword = () => {
     try {
       const response = await PostApi(Apis.user.change_password, formbody)
       if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         setScreen(4)
       } else {
         ErrorAlert(response.msg)

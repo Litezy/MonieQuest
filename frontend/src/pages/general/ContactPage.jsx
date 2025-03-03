@@ -34,6 +34,7 @@ const ContactPage = () => {
     try {
       const response = await PostApi(Apis.user.contact, formbody)
       if (response.status === 200) {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
         SuccessAlert(response.msg)
         setForm({
           full_name: '',
@@ -64,7 +65,7 @@ const ContactPage = () => {
               <img src={contactImg} alt='contact image' className='w-auto h-auto'></img>
             </div>
             <div className='w-full h-fit rounded-xl b text-white py-8 md:px-8 px-5 relative bg-gradient-to-br from-primary to-ash'>
-              {loading && <Loading />}
+              {loading && <Loading className={`!bg-[#0c191bc7]`} />}
               <div className='md:text-4xl text-3xl font-bold text-center mt-4'>Send us a message</div>
               <div className='md:w-3/5 text-center mx-auto mt-2'>Your email address will not be published. Required fields are marked.</div>
               <form className='flex flex-col gap-6 mt-8' onSubmit={SubmitForm}>

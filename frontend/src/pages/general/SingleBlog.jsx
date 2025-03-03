@@ -13,7 +13,6 @@ import BlogDiv from '../../GeneralComponents/BlogDiv';
 import Loading from '../../GeneralComponents/Loading';
 
 
-
 const SingleBlog = () => {
     const { feature, id } = useParams()
     const [singleBlog, setSingleBlog] = useState({})
@@ -82,6 +81,7 @@ const SingleBlog = () => {
             const response = await PostApi(Apis.admin.add_comment, formbody)
             if (response.status === 200) {
                 FetchSingleBlog()
+                await new Promise((resolve) => setTimeout(resolve, 2000))
                 SuccessAlert(response.msg)
                 setForm({
                     username: '',
