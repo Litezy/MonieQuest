@@ -8,6 +8,7 @@ export let imageurl;
 
 if (import.meta.env.VITE_ENV === 'production') {
     URL = import.meta.env.VITE_LIVE_API_URL
+    console.log(URL)
     imageurl = import.meta.env.VITE_LIVE_API_URL
 } else {
     URL = import.meta.env.VITE_API_URL
