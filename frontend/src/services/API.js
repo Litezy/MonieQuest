@@ -2,8 +2,20 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { CookieName } from '../utils/pageUtils'
 
-export const URL = import.meta.env.VITE_API_URL
-export const imageurl = import.meta.env.VITE_API_URL
+
+export let URL;
+export let profileImg;
+
+if(window.location.origin.includes('addvercelurl')) {
+    URL = import.meta.env.VITE_LIVE_API_URL
+    imageurl = import.meta.env.VITE_LIVE_API_URL
+ }
+
+if(window.location.origin.includes('localhost')) {
+    URL = import.meta.env.VITE_API_URL
+    imageurl = import.meta.env.VITE_API_URL
+}
+
 
 
 const user = 'api/user/'

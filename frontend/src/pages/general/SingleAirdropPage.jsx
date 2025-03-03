@@ -171,7 +171,7 @@ const SingleAirdropPage = () => {
                       </div>
                     </div>
                     <div className='flex flex-col gap-4 mt-8'>
-                      <div className='text-xl font-bold'>Referral link to earn</div>
+                      <div className='text-xl font-bold'>Code/Website</div>
                       <a target="_blank" rel="noopener noreferrer" href={singleAirdrop?.referral_link} className='w-full bg-primary py-2 px-4 flex items-center justify-between'>
                         <div className='text-lightgreen underline'>{singleAirdrop?.referral_link}</div>
                         <RxExternalLink className='text-lg' />
