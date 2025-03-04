@@ -21,11 +21,18 @@ const SignUpPage = () => {
     confirm_password: '',
     referral_id: ''
   })
+
   const formHandler = e => {
     setForm({
       ...form,
       [e.target.name]: e.target.value
     })
+  }
+
+  const handlePhoneNum = (e) => {
+    let value = e.target.value
+    const formatVal = value.replace(/\D/g, '')
+    setForm({ ...form, phone: formatVal })
   }
 
   const CreateAccount = async (e) => {
@@ -80,7 +87,7 @@ const SignUpPage = () => {
               </div>
               <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
                 <FormInput label='Email address' placeholder='example@gmail.com' name='email' value={form.email} onChange={formHandler} type='email' />
-                <FormInput label='Phone number' placeholder='Phone number' name='phone' value={form.phone} onChange={formHandler} />
+                <FormInput label='Phone number' placeholder='Phone number' name='phone' value={form.phone} onChange={handlePhoneNum} />
               </div>
               <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
                 <PasswordInputField label='Password' placeholder='password' name='password' value={form.password} onChange={formHandler} />

@@ -11,18 +11,19 @@ import { Apis, PostApi } from '../../services/API'
 import Loader from '../../GeneralComponents/Loader'
 
 const LoginPage = () => {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     email: '',
     password: '',
   })
+
   const formHandler = e => {
     setForm({
       ...form,
       [e.target.name]: e.target.value
     })
   }
-  const navigate = useNavigate()
 
   const LoginAccount = async (e) => {
     e.preventDefault()

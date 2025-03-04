@@ -12,12 +12,13 @@
   -webkit-text-size-adjust: 100%;
 }
 
-body {
+html, body {
   overflow-x: hidden;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
   font-family: "Nunito Sans", "Nunito";
+  background-color: #141523;
 }
 
 .poppins {
@@ -183,9 +184,10 @@ input[type=number]:focus {
   }
 }
 
-.loaderimg{
-  animation: l4 1s infinite linear ;
+.loaderimg {
+  animation: l4 1s infinite linear;
 }
+
 @keyframes l4 {
   to {
     transform: rotate(1turn)

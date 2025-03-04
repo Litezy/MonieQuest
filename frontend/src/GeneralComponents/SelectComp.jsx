@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -10,7 +10,7 @@ const SelectComp = ({ title, options, style, value, handleChange, width = 120, s
     <div>
       <FormControl variant='filled'
         sx={{ m: 1, minWidth: width, bgcolor: style?.bg, borderRadius: style?.rounded }}
-        size={size ? 'small' : 'medium'} 
+        size={size ? 'small' : 'medium'}
       >
         <InputLabel>{title}</InputLabel>
         <Select
@@ -18,6 +18,10 @@ const SelectComp = ({ title, options, style, value, handleChange, width = 120, s
           onChange={handleChange}
           sx={{ color: style?.color, fontSize: style?.font }}
           hiddenLabel={title ? false : true}
+          MenuProps={{
+            disablePortal: true,
+            disableScrollLock: true,
+          }}
         >
           {options.map((ele, i) => (
             <MenuItem value={ele} key={i}>{ele}</MenuItem>

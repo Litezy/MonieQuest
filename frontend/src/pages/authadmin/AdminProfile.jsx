@@ -77,6 +77,12 @@ const AdminProfile = () => {
         })
     }
 
+    const handlePhoneNum = (e) => {
+        let value = e.target.value
+        const formatVal = value.replace(/\D/g, '')
+        setForm({ ...form, phone_number: formatVal })
+    }
+
     const handleAccNum = (e) => {
         let value = e.target.value
         const formatVal = value.replace(/\D/g, '')
@@ -349,7 +355,7 @@ const AdminProfile = () => {
                                     <MdEmail className='absolute top-11 right-3 text-xl text-gray-400' />
                                 </div>
                                 <div className='relative'>
-                                    <FormInput label='Phone number' placeholder='Phone number' name='phone_number' value={form.phone_number} onChange={formHandler} className='!pl-4 !pr-10' />
+                                    <FormInput label='Phone number' placeholder='Phone number' name='phone_number' value={form.phone_number} onChange={handlePhoneNum} className='!pl-4 !pr-10' />
                                     <BiSolidPhoneCall className='absolute top-11 right-3 text-xl text-gray-400' />
                                 </div>
                             </div>

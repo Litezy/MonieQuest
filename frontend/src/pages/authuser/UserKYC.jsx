@@ -38,6 +38,17 @@ const UserKYC = () => {
         })
     }
 
+    useEffect(() => {
+        //doing this so the date input isn't empty on mobile devices (iphone mostly)
+        if (!forms.date_of_birth) {
+            const today = new Date().toISOString().split("T")[0]
+            setForms({
+                ...forms,
+                date_of_birth: today
+            })
+        }
+    }, [])
+
     const FetchKYC = useCallback(async () => {
         setDataLoading(true)
         try {
@@ -160,8 +171,8 @@ const UserKYC = () => {
                                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                             </svg>
                                         </div>
-                                        <input name='date_of_birth' value={forms.date_of_birth} onChange={handleChange} datepicker="true" datepicker-buttons="true" datepicker-autoselect-today="true" type="date" className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Select date" />
+                                        <input name='date_of_birth' value={forms.date_of_birth} onChange={handleChange} datepicker="true" datepicker-buttons="true" datepicker-autoselect-today="true" type="date" className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date"
+                                        />
                                     </div>
                                 </div>
                                 <div className="flex flex-col w-full gap-2">
@@ -185,7 +196,7 @@ const UserKYC = () => {
                                 <div className="w-full">
                                     <h1 className='text-lightgreen text-center text-lg font-bold'>Upload Front ID Image</h1>
                                     <div className="md:h-64 h-48 w-full mt-4">
-                                        <label className={`${frontimg.img ? '' : 'border-2 border-black'} w-full  h-full border-dashed flex cursor-pointer items-center justify-center `}>
+                                        <label className={`${frontimg.img ? '' : 'border-2 border-ash'} w-full  h-full border-dashed flex cursor-pointer items-center justify-center `}>
                                             {frontimg.img ?
                                                 <div className="relative w-full h-full">
                                                     <div className="absolute top-0 -right-3 main font-bold">
@@ -202,7 +213,7 @@ const UserKYC = () => {
                                 <div className="w-full">
                                     <h1 className='text-lightgreen text-center text-lg font-bold'>Upload Back ID Image</h1>
                                     <div className="md:h-64 h-48 w-full mt-4">
-                                        <label className={`${backimg.img ? '' : 'border-2 border-black border-dashed'} w-full h-full flex cursor-pointer items-center justify-center `}>
+                                        <label className={`${backimg.img ? '' : 'border-2 border-ash border-dashed'} w-full h-full flex cursor-pointer items-center justify-center `}>
                                             {backimg.img ?
                                                 <div className="relative w-full h-full">
                                                     <div className="absolute top-0 -right-3 main font-bold">

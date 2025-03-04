@@ -38,15 +38,15 @@ const AuthPageLayout = ({ children }) => {
     }
     const fetchCryptos = async () => {
       try {
-          const res = await AuthGetApi(Apis.admin.get_cryptos)
-          if (res.status !== 200) return;
-          const data = res.data
-          setCryptos(data)
+        const res = await AuthGetApi(Apis.admin.get_cryptos)
+        if (res.status !== 200) return;
+        const data = res.data
+        setCryptos(data)
       } catch (error) {
-          console.log(`Sorry something went wrong in fetch cryptos data`, error)
+        console.log(`Sorry something went wrong in fetch cryptos data`, error)
       }
-  }
-  fetchCryptos()
+    }
+    fetchCryptos()
     FetchWalletBankAndUtils()
   }, [])
 
@@ -97,7 +97,7 @@ const AuthPageLayout = ({ children }) => {
             })}
             <a
               target="_blank"
-              href="corporate@moniequest.com?subject=Hello&body=I%20am%20looking%20to%20contact%20support."
+              href={`mailto:corporate@moniequest.com?subject=Contact%20support`}
               className="text-sm px-3 py-2 mb-2 rounded-md bg-ash text-white"
             >
               Not Seeing What You Need? Tap and Contact Support Now!

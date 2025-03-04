@@ -35,7 +35,7 @@ exports.CreateAccount = async (req, res) => {
         const profileImage = req?.files?.image
         const filePath = './public/profiles'
         if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath,{recursive:true})
+            fs.mkdirSync(filePath, { recursive: true })
         }
         let imageName;
         if (profileImage) {
@@ -54,26 +54,20 @@ exports.CreateAccount = async (req, res) => {
             password,
         })
 
-        if (user.id !== 1) {
-            await Wallet.create({
-                user: user.id
-            })
+        await Wallet.create({
+            user: user.id
+        })
 
-            await Notification.create({
-                user: user.id,
-                title: `welcome ${first_name}`,
-                content: `Welcome to ${webName} family, get ready for some amazing deals and updates with us.`,
-                url: '/user/dashboard',
-            })
-        } else {
+        await Notification.create({
+            user: user.id,
+            title: `welcome ${first_name}`,
+            content: `Welcome to ${webName} family, get ready for some amazing deals and updates with us.`,
+            url: '/user/dashboard',
+        })
+
+        const utils = await Util.findOne({})
+        if (!utils) {
             await Util.create({})
-
-            await Notification.create({
-                user: user.id,
-                title: `welcome admin`,
-                content: `Getting started? how about a quick look around.`,
-                url: '/admin/dashboard',
-            })
         }
 
         const admins = await User.findAll({ where: { role: 'admin' } })

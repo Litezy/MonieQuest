@@ -42,7 +42,7 @@ const Blogs = () => {
         <PageLayout>
             <div className='pb-20 bg-dark w-full text-gray-200'>
                 <div className='pageBg'>
-                    <div className='w-full h-full bg-[#212134ea] py-10'>
+                    <div className='w-full h-full bg-[#212134cc] py-10'>
                         <div className='md:text-4xl text-3xl capitalize font-bold text-white text-center'>crypto blog news</div>
                     </div>
                 </div>
