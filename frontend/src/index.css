@@ -18,6 +18,7 @@ html, body {
   padding: 0;
   margin: 0;
   font-family: "Nunito Sans", "Nunito";
+  background-color: #141523;
 }
 
 .poppins {
@@ -42,15 +43,6 @@ input[type='number'] {
 input[type=number]:focus {
   outline: none;
   appearance: none;
-}
-
-input[type="date"]::before {
-  content: attr(placeholder);
-  color: gray;
-}
-
-input[type="date"]:valid::before {
-  display: none;
 }
 
 .ipt::placeholder {

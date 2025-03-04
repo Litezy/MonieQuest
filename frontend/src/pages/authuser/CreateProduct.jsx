@@ -45,6 +45,22 @@ const CreateProduct = () => {
     })
   }
 
+  const handleAmount = (e) => {
+    let value = e.target.value
+    const formatVal = value.replace(/\D/g, '')
+    const formattedPrice = Number(formatVal).toLocaleString()
+    setForm({ ...form, price: formattedPrice })
+  }
+
+  const PrefillBank = () => {
+    setForm({
+      ...form,
+      bank_name: bank.bank_name,
+      account_name: bank.account_name,
+      account_number: bank.account_number
+    })
+  }
+
   const handleUpload = (event) => {
     const file = event.target.files[0]
     if (!file.type.startsWith('image/')) {
@@ -54,15 +70,6 @@ const CreateProduct = () => {
     setProductImage({
       img: URL.createObjectURL(file),
       image: file
-    })
-  }
-
-  const PrefillBank = () => {
-    setForm({
-      ...form,
-      bank_name: bank.bank_name,
-      account_name: bank.account_name,
-      account_number: bank.account_number
     })
   }
 
@@ -208,10 +215,6 @@ const CreateProduct = () => {
                       <div className='text-sm'>{item}</div>
                     </div>
                   ))}
-                  {/* <div className='flex flex-col mt-2'>
-                    <div className='text-sm text-lightgreen'>Other? Specify Your Tool or eBook Category:</div>
-                    <FormInput formtype='textarea' placeholder='Explain what your tool can do here...' name='alt_category' value={form.alt_category} onChange={formHandler} className='!w-72 !h-24 !rounded-none' />
-                  </div> */}
                 </div>
               </div>
               <div className='flex gap-2'>
@@ -222,7 +225,7 @@ const CreateProduct = () => {
                   <div className='grid grid-cols-6 w-full h-fit items-center'>
                     <div className='col-span-1 h-full flex items-center justify-center border border-gray-400 uppercase text-xs'>ngn</div>
                     <div className='col-span-5'>
-                      <FormInput placeholder='Amount' name='price' value={form.price} onChange={formHandler} className='!rounded-none' />
+                      <FormInput placeholder='Amount' name='price' value={form.price} onChange={handleAmount} className='!rounded-none' />
                     </div>
                   </div>
                 </div>

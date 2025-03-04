@@ -9,7 +9,7 @@ const TermsPage = () => {
     <PageLayout>
       <div className='bg-dark w-full'>
         <div className='pageBg'>
-          <div className='w-full h-full bg-[#212134ea] py-10'>
+          <div className='w-full h-full bg-[#212134cc] py-10'>
             <div className='md:text-4xl text-3xl font-bold text-white text-center'>Our Terms of service</div>
           </div>
         </div>

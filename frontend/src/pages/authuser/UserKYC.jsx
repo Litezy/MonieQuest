@@ -38,6 +38,17 @@ const UserKYC = () => {
         })
     }
 
+    useEffect(() => {
+        //doing this so the date input isn't empty on mobile devices (iphone mostly)
+        if (!forms.date_of_birth) {
+            const today = new Date().toISOString().split("T")[0]
+            setForms({
+                ...forms,
+                date_of_birth: today
+            })
+        }
+    }, [])
+
     const FetchKYC = useCallback(async () => {
         setDataLoading(true)
         try {
@@ -161,8 +172,6 @@ const UserKYC = () => {
                                             </svg>
                                         </div>
                                         <input name='date_of_birth' value={forms.date_of_birth} onChange={handleChange} datepicker="true" datepicker-buttons="true" datepicker-autoselect-today="true" type="date" className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date"
-                                            onFocus={(e) => (e.target.type = "date")}
-                                            onBlur={(e) => (e.target.type = e.target.value ? "date" : "text")}
                                         />
                                     </div>
                                 </div>
