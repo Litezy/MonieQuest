@@ -125,8 +125,8 @@
     transition: all 0.3s ease;
   }
   .faq-item.active {
-    background: rgba(0, 255, 153, 0.1);
-    box-shadow: 0 0 10px rgba(0, 255, 153, 0.3);
+    background: #171828;
+    /* box-shadow: 0 0 10px rgba(0, 255, 153, 0.3); */
   }
   .faq-icon {
     transition: transform 0.3s ease;
