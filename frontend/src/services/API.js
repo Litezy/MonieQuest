@@ -6,12 +6,10 @@ import { CookieName } from '../utils/pageUtils'
 export let URL;
 export let imageurl;
 
-if(window.location.origin.includes('https://moniequest.vercel.app')) {
+if (import.meta.env.VITE_ENV === 'production') {
     URL = import.meta.env.VITE_LIVE_API_URL
     imageurl = import.meta.env.VITE_LIVE_API_URL
- }
-
-if(window.location.origin.includes('localhost')) {
+} else {
     URL = import.meta.env.VITE_API_URL
     imageurl = import.meta.env.VITE_API_URL
 }
