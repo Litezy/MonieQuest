@@ -158,7 +158,7 @@ exports.UpdateAirdrop = async (req, res) => {
                 fs.unlinkSync(currentImagePath)
             }
             if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath)
+                fs.mkdirSync(filePath, { recursive: true })
             }
             logoImageName = `${slugData + 'logo'}-${date.getTime()}.jpg`
             await logoImage.mv(`${filePath}/${logoImageName}`)

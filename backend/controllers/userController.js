@@ -344,7 +344,7 @@ exports.UpdateProfile = async (req, res) => {
                 fs.unlinkSync(currentImagePath)
             }
             if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath)
+                fs.mkdirSync(filePath, { recursive: true })
             }
             imageName = `${slugData}-${date.getTime()}.jpg`
             await profileImage.mv(`${filePath}/${imageName}`)
@@ -442,7 +442,7 @@ exports.CreateUpdateKYC = async (req, res) => {
             const backImage = req.files.back_image
             if (!frontImage.mimetype.startsWith('image/') || !backImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
             if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath)
+                fs.mkdirSync(filePath, { recursive: true })
             }
             frontImageName = `${slugData + 'frontid'}-${date.getTime()}.jpg`
             await frontImage.mv(`${filePath}/${frontImageName}`)
@@ -514,7 +514,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                     fs.unlinkSync(currentImagePath)
                 }
                 if (!fs.existsSync(filePath)) {
-                    fs.mkdirSync(filePath)
+                    fs.mkdirSync(filePath, { recursive: true })
                 }
                 backImageName = `${slugData + 'backid'}-${date.getTime()}.jpg`
                 await backImage.mv(`${filePath}/${backImageName}`)
@@ -652,7 +652,7 @@ exports.AddCarouselImage = async (req, res) => {
         const image = req.files.image
         if (!image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
         if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath)
+            fs.mkdirSync(filePath, { recursive: true })
         }
         imageName = `${slugData}-${date.getTime()}.jpg`
         await image.mv(`${filePath}/${imageName}`)
