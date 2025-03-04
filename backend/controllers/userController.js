@@ -35,7 +35,7 @@ exports.CreateAccount = async (req, res) => {
         const profileImage = req?.files?.image
         const filePath = './public/profiles'
         if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath)
+            fs.mkdirSync(filePath,{recursive:true})
         }
         let imageName;
         if (profileImage) {

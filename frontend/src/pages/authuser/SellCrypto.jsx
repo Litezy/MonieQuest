@@ -258,8 +258,7 @@ const SellCrypto = () => {
                                                 </option>
                                             ))}
                                     </select>
-                                    <div className="w- text-red-600 text-sm">Please Note: you can only sell a minimum of $10 a nd maximum of $2,500 and an additional
-                                        fee of $2 (₦3,400) is added</div>
+                                    <div className="w- text-red-600 text-xs">Please Note: you can only buy a minimum of $10 and maximum of $5,000. verify your account to increase limit</div>
                                 </div>
                                 <div className="flex w-full items-start gap-2 flex-col  ">
                                     <div className="font-bold text-lg">Amount:</div>
