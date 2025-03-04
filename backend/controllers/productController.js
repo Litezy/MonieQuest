@@ -56,7 +56,7 @@ exports.SubmitProduct = async (req, res) => {
         await Notification.create({
             user: req.user,
             title: `Product submitted`,
-            content: `Your product with the ID (#${product.gen_id}) has been successfully submitted. Our team will go through it and check if it meets our requirements, you'll get a response from us soon.`,
+            content: `Your product with the ID (#${product.gen_id}) has been successfully submitted. Our team will evaluate if it meets our requirements, you'll get a response from us soon.`,
             url: '/user/products/all',
         })
 
@@ -153,7 +153,7 @@ exports.ProductOrder = async (req, res) => {
         if (!bank_id) return res.json({ status: 404, msg: `Please make payment before continuing` })
         const adminBank = await Bank.findOne({ where: { id: bank_id } })
         if (!adminBank) return res.json({ status: 404, msg: `Please make payment before continuing` })
-        if (adminBank.user !== 1) return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
+        if (adminBank.user !== 'admin') return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
 
         const productsArray = Array.isArray(products) ? products : [products]
         const gen_id = `mq` + otpGenerator.generate(13, { specialChars: false, upperCaseAlphabets: false })

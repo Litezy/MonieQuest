@@ -17,6 +17,7 @@ const AdminProductsOrders = () => {
     const [selected, setSelected] = useState({})
     const [search, setSearch] = useState('')
     const [datatLoading, setDataLoading] = useState(true)
+    const [visibleCount, setVisibleCount] = useState(5)
 
     useEffect(() => {
         const FetchProductOrders = async () => {
@@ -90,29 +91,34 @@ const AdminProductsOrders = () => {
                             </ModalLayout>
                         }
                         {productOrders.length > 0 ?
-                            <div className='flex flex-col gap-5'>
-                                {productOrders.map((item, i) => (
-                                    <div key={i}>
-                                        <div onClick={() => { setModal(true); setSelected(item) }} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2">
-                                            <div className="flex items-start gap-2 lg:gap-5 w-fit lg:w-full">
-                                                <div className="w-fit px-4 py-4 rounded-full bg-primary">
-                                                    <GoArrowUpRight className='text-lightgreen' />
-                                                </div>
-                                                <div className="flex items-start flex-col gap-1">
-                                                    <div><span className='font-bold'>ID:</span> {item?.gen_id}</div>
-                                                    <div className="flex flex-col items-start gap-1 text-xs md:text-sm">
-                                                        <div className="">{moment(item.createdAt).format('ddd')} {moment(item.createdAt).format('DD-MM-YYYY')}</div>
-                                                        <div className="">{moment(item.createdAt).format('hh:mm a')}</div>
+                            <div className='flex flex-col gap-8'>
+                                <div className='flex flex-col gap-5'>
+                                    {productOrders.slice(0, visibleCount).map((item, i) => (
+                                        <div key={i}>
+                                            <div onClick={() => { setModal(true); setSelected(item) }} className="w-full flex items-center cursor-pointer lg:grid lg:grid-cols-3 justify-between border-b-primary pb-1 border-b mt-2">
+                                                <div className="flex items-start gap-2 lg:gap-5 w-fit lg:w-full">
+                                                    <div className="w-fit px-4 py-4 rounded-full bg-primary">
+                                                        <GoArrowUpRight className='text-lightgreen' />
+                                                    </div>
+                                                    <div className="flex items-start flex-col gap-1">
+                                                        <div><span className='font-bold'>ID:</span> {item?.gen_id}</div>
+                                                        <div className="flex flex-col items-start gap-1 text-xs md:text-sm">
+                                                            <div className="">{moment(item.createdAt).format('ddd')} {moment(item.createdAt).format('DD-MM-YYYY')}</div>
+                                                            <div className="">{moment(item.createdAt).format('hh:mm a')}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className={`flex items-center text-sm justify-center lg:w-full rounded-md text-lightgreen/90`}>{item?.status}</div>
-                                            <div className=" font-bold lg:w-full flex items-center justify-center text-lightgreen">
-                                                {currencySign[1]}{item?.amount_paid && item.amount_paid.toLocaleString()}
+                                                <div className={`flex items-center text-sm justify-center lg:w-full rounded-md text-lightgreen/90`}>{item?.status}</div>
+                                                <div className=" font-bold lg:w-full flex items-center justify-center text-lightgreen">
+                                                    {currencySign[1]}{item?.amount_paid && item.amount_paid.toLocaleString()}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
+                                {visibleCount < productOrders.length &&
+                                    <button onClick={() => setVisibleCount(visibleCount + 5)} className='md:w-1/2 w-full h-fit py-2 px-14 text-sm md:text-base flex items-center justify-center text-center rounded-md bg-ash hover:bg-primary cursor-pointer mx-auto'>See previous orders</button>
+                                }
                             </div>
                             :
                             <div className="text-gray-400 text-center">No record found...</div>
