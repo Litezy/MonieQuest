@@ -24,6 +24,12 @@ const TestimonialDiv = ({ item, fetchTestimonials }) => {
         } finally { setLoading(false) }
     }
 
+    const optimizeImageUrl = (url) => {
+        if (!url || !url.includes('cloudinary.com')) return url; // Return unchanged if not Cloudinary
+        const parts = url.split('/upload/');
+        return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; // Insert transformations
+    };
+
     return (
 
         <div className='w-full h-fit border border-primary rounded-md p-2'>
@@ -43,7 +49,7 @@ const TestimonialDiv = ({ item, fetchTestimonials }) => {
                 </ModalLayout>
             }
             <div className="flex items-center gap-2 w-full">
-                <img src={`${imageurl}/testimonials/${item.gen_id}/${item.image}`} alt={`${item.firstname} image`}
+                <img src={optimizeImageUrl(item.image)} alt={`${item.firstname} image`}
                     className='w-20 h-20 rounded-full object-cover object-center' />
                 <div className="flex flex-col gap-2">
                     <div className="capitalize">{item.firstname} {item.lastname}</div>

@@ -14,7 +14,7 @@ const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
 const Comment = require('../models').comments
-const { webName, webURL, ServerError, nairaSign, dollarSign } = require('../utils/utils')
+const { webName, webURL, ServerError, nairaSign, dollarSign, UploadImage } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
@@ -1567,20 +1567,19 @@ exports.CreateTestimonial = async (req, res) => {
         const { firstname, lastname, title, content } = req.body
         const reqFields = [firstname, title, content]
         if (reqFields.some((field) => !field)) return res.json({ status: 400, msg: "All fields are required" })
-        const slugData = slug(firstname, '-').toLowerCase();
-        const genId = otpGenerator.generate(5, { specialChars: false, upperCaseAlphabets: false, lowerCaseAlphabets: false })
-        const filePath = `./public/testimonials/${genId}`
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true })
-        }
-        let imageName;
         const image = req?.files?.image
         if (!image) return res.json({ status: 400, msg: 'Image is required' })
         if (!image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-        imageName = `${slugData}-image.jpg`
-        await image.mv(`${filePath}/${imageName}`)
-        await Testimonial.create({ firstname, lastname: lastname || null, gen_id: genId, title, content, image: imageName })
-        return res.json({ status: 201, msg: 'Testimonial created successfully' })
+            const  url  = await UploadImage(image, 'testimonials'); 
+        // console.log(`from controller`,url)
+       const newUser = await Testimonial.create({
+          firstname,
+          lastname: lastname || null,
+          title,
+          content,
+          image:url,
+    })
+        return res.json({ status: 201, msg: 'Testimonial created successfully',newUser })
     } catch (error) {
         ServerError(res, error)
     }

@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
-import AdminSummary from '../../AdminComponents/AdminSummary'
-import { Apis, AuthGetApi } from '../../services/API'
-import { useAtom } from 'jotai'
-import { USERS } from '../../services/store'
 import { Link } from 'react-router-dom'
 
 const AdminAllUsers = () => {
@@ -26,7 +22,7 @@ const AdminAllUsers = () => {
                         {userHeaders.map((item, i) => (
                             <Link to={item.url} className="h-20 w-full flex items-center p-5 rounded-md justify-between bg-white" key={i}>
                                 <div className="text-base text-dark font-bold">{item.title}</div>
-                                <div onClick={() => { setActive(item.id) }}
+                                <div
                                     className="px-5 py-2 rounded-lg bg-primary w-fit text-white cursor-pointer">
                                     view more
                                 </div>

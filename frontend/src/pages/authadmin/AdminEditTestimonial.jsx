@@ -38,6 +38,7 @@ const AdminEditTestimonial = () => {
         } finally { setLoading({ status: false, val: '' }) }
     }
 
+    // console.log(data)
     useEffect(() => {
         fetchSingleTestimonial()
     }, [])

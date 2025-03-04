@@ -3,6 +3,7 @@ const express = require('express')
 const http = require('http')
 const fileUpload = require('express-fileupload')
 const cors = require('cors')
+const cloudinary = require('cloudinary').v2
 
 const app = express()
 const port = process.env.PORT
@@ -14,9 +15,18 @@ app.use(cors({
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     credentials: true
 }))
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 app.use(express.json())
 app.use(fileUpload())
-app.use(express.static('public'))
+const isprod = process.env.NODE_ENV === 'production'
+if (!isprod) {
+    app.use(express.static('public'))
+}
 
 app.use('/api/user', require('./routes/userRoute'))
 app.use('/api/notification', require('./routes/notificationRoute'))
