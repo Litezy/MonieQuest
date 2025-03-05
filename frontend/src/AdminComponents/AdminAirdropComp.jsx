@@ -5,6 +5,7 @@ import { MoveToTop } from '../utils/pageUtils'
 
 const AdminAirdropComp = ({ item }) => {
     return (
+        
         <div className='w-full h-fit relative text-semi-white rounded-lg shadow_auth'>
             <div className='md:px-4 px-3 py-3 bg-secondary text-sm rounded-t-lg flex justify-between items-center text-lightgreen'>
                 <div>{moment(item?.createdAt).format('DD-MM-yyyy')} / {moment(item?.createdAt).format('h:mm')}</div>
