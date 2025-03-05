@@ -7,7 +7,7 @@ const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
-const { webURL, nairaSign } = require('../utils/utils')
+const { webURL, nairaSign, GlobalImageUploads } = require('../utils/utils')
 const moment = require('moment')
 
 
@@ -22,24 +22,18 @@ exports.SubmitProduct = async (req, res) => {
         const categoryArray = Array.isArray(category) ? category : [category]
         const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
-        const filePath = './public/products'
-        const date = new Date()
-        let imageName;
 
         if (!req.files) return res.json({ status: 404, msg: `Upload product image` })
         const productImage = req.files.image
         if (!productImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true })
-        }
-        imageName = `${slugData}-${date.getTime()}.jpg`
-        await productImage.mv(`${filePath}/${imageName}`)
+        const imageToUpload = [{field:'product_image',file:productImage}]
+         const newImage = await GlobalImageUploads(imageToUpload,'products',gen_id)
 
         const product = await Product.create({
             user: req.user,
             slug: slugData,
             gen_id: gen_id,
-            image: imageName,
+            image: newImage.product_image,
             title,
             category: categoryArray,
             price,

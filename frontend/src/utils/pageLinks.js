@@ -139,7 +139,7 @@ export const AdminPagesLinks = [
     { path: '/admin/airdrops/:id/:slug', component: AdminSingleAirdrop },
     { path: '/admin/blogs/all', component: AdminAllBlogs },
     { path: '/admin/blogs/create', component: AdminCreateBlogs },
-    { path: '/admin/blogs/:id/:slug', component: AdminSingleBlog },
+    { path: '/admin/blogs/:id', component: AdminSingleBlog },
     { path: '/admin/transactions_history', component: AdminTransHistory },
     { path: '/admin/utilities/testimonials', component: AdminTestimonials },
     { path: '/admin/utilities/testimonials/:id', component: AdminEditTestimonial },

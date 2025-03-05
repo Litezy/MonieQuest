@@ -24,7 +24,7 @@ exports.ServerError = (res, error) => {
 
 
 
-exports.UploadImage = async (image, subfolder) => {
+exports.GlobalUploadImage = async (image, subfolder, folder_Id) => {
     const isProduction = process.env.NODE_ENV === 'production';
     const baseURI = `http://localhost:${process.env.PORT}`;
 
@@ -32,9 +32,8 @@ exports.UploadImage = async (image, subfolder) => {
     const fileName = `file_${date.getTime()}`;
 
     if (isProduction) {
-        // Production: Upload to Cloudinary
         try {
-            const folder = `moniequest/${subfolder}`; // e.g., moniequest/testimonials
+            const folder = `moniequest/${subfolder}/${folder_Id}`;
             const result = await new Promise((resolve, reject) => {
                 const stream = cloudinary.uploader.upload_stream(
                     { folder: folder, public_id: fileName, resource_type: 'image' },
@@ -53,62 +52,198 @@ exports.UploadImage = async (image, subfolder) => {
             throw error;
         }
     } else {
-        const filePath = path.join('public', subfolder);
+        const filePath = path.join('public', subfolder, folder_Id);
         if (!fs.existsSync(filePath)) {
             fs.mkdirSync(filePath, { recursive: true });
         }
         const fullPath = path.join(filePath, `${fileName}.jpg`);
         await image.mv(fullPath);
-        const url = `${baseURI}/${subfolder}/${fileName}.jpg`; 
+        const url = `${baseURI}/${subfolder}/${fileName}.jpg`;
         return url;
     }
 }
 
 
+exports.GlobalDeleteImage = async (imageUrl,folder,folder_id) => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    if (!imageUrl || typeof imageUrl !== 'string') return;
 
-exports.DeleteImage = async (image) => {
-    const splitImage = image.split('/')
-    const folder = splitImage[splitImage.length - 2]
-    const getimage = splitImage[splitImage.length - 1]
+    if (isProduction) {
+        try {
+            const publicId = imageUrl.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, '');
+            await cloudinary.uploader.destroy(publicId);
+            console.log(`Deleted from Cloudinary: ${publicId}`);
+        } catch (error) {
+            console.error(`Cloudinary delete error for ${imageUrl}:`, error);
+        }
+    } else {
+        const filePath = imageUrl.replace(`http://localhost:${process.env.PORT}/`, 'public/');
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            console.log(`Deleted locally: ${filePath}`);
+        }
+    }
 
-    const filePath = `./public/${folder}/${getimage}`
-    if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath)
+    // Delete local folder (if exists)
+    if (!isProduction && folder && folder_id) {
+        const blogFolderPath = `./public/${folder}/${folder_id}`;
+        if (fs.existsSync(blogFolderPath)) {
+            fs.rmSync(blogFolderPath, { recursive: true, force: true });
+            console.log(`Deleted local folder: ${blogFolderPath}`);
+        }
     }
 }
 
 
-// router.delete('/delete/:id', async (req, res) => {
-//     try {
-//         const { id } = req.params
-//         const book = await Book.findByPk(id)
-//         if (!book) return res.json({ status: 404, message: 'not found' })
-//         DeleteImage(book.image)
-
-//         await book.destroy();
-
-//         return res.json({ status: 200, message: 'deleted' })
-//     } catch (error) {
-//         return res.json({ status: 500, message: Error: ${ error } })
-//     }
-// })
 
 
-// router.post('/add', async (req, res) => {
-//     try {
-//         const { name } = req.body
-//         const image = req.files?.image
 
-//         const { fileName, folder } = UploadImage(image, "profiles")
 
-//         const item = await Book.create({
-//             name,
-//             image: ${ URI } / ${ folder } / ${ fileName }
-//         })
+exports.GlobalImageUploads = async (images, subfolder, folderId) => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const baseURI = `http://localhost:${process.env.PORT}`;
+    const date = new Date();
+    const timestamp = date.getTime();
 
-// return res.json({ status: 200, msg: item })
+    // Ensure images is an array of { field, file } objects
+    const imageEntries = Array.isArray(images) ? images : [];
+    const validImages = imageEntries.filter(item => 
+        item && 
+        typeof item.field === 'string' && 
+        item.file && 
+        item.file.data && 
+        item.file.mimetype
+    );
 
-//     } catch (error) {
-//     return res.json({ status: 500, message: Error: ${ error } })
-//     }
-// })
+    if (validImages.length === 0) return {}; 
+
+    const uploadedUrls = {};
+    for (const { field, file } of validImages) {
+        const fileName = `${subfolder}_${timestamp}_${field}`; 
+        if (isProduction) {
+            try {
+                const folder = `moniequest/${subfolder}/${folderId}`;
+                const result = await new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        { folder: folder, public_id: fileName, resource_type: 'image' },
+                        (error, result) => {
+                            if (error) reject(error);
+                            else resolve(result);
+                        }
+                    );
+                    stream.end(file.data);
+                });
+                uploadedUrls[field] = result.secure_url;
+                // console.log(`Uploaded to Cloudinary: ${field} - ${result.secure_url}`);
+            } catch (error) {
+                console.error(`Cloudinary upload error for ${field}:`, error);
+                throw error;
+            }
+        } else {
+            const filePath = path.join('public', subfolder, folderId);
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath, { recursive: true });
+            }
+            const fullPath = path.join(filePath, `${fileName}.jpg`);
+            console.log(`Saving ${field} locally to:`, fullPath);
+            await file.mv(fullPath);
+            uploadedUrls[field] = `${baseURI}/${subfolder}/${folderId}/${fileName}.jpg`;
+            console.log(`Local URL for ${field}:`, uploadedUrls[field]);
+        }
+    }
+
+    return uploadedUrls;
+};
+
+
+
+
+exports.UploadBlogImages = async (image1, image2, image3, subfolder, blog_id) => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const baseURI = `http://localhost:${process.env.PORT}`;
+    const date = new Date();
+    const timestamp = date.getTime();
+    const images = [
+        { field: 'first_image', file: image1 },
+        { field: 'second_image', file: image2 },
+        { field: 'extras_image', file: image3 }
+    ].filter(item => item.file && item.file.data && item.file.mimetype);
+
+    const uploadedUrls = {};
+    for (let i = 0; i < images.length; i++) {
+        const { field, file } = images[i];
+        const fileName = `blog_${timestamp}_${field}`;
+
+        if (isProduction) {
+            try {
+                const folder = `moniequest/${subfolder}/${blog_id}`;
+                const result = await new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        { folder: folder, public_id: fileName, resource_type: 'image' },
+                        (error, result) => {
+                            if (error) reject(error);
+                            else resolve(result);
+                        }
+                    );
+                    stream.end(file.data);
+                });
+                uploadedUrls[field] = result.secure_url;
+                // console.log(`Uploaded to Cloudinary: ${field} - ${result.secure_url}`);
+            } catch (error) {
+                console.error(`Cloudinary upload error for ${field}:`, error);
+                throw error;
+            }
+        } else {
+            const filePath = path.join('public', subfolder, blog_id);
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath, { recursive: true });
+            }
+            const fullPath = path.join(filePath, `${fileName}.jpg`);
+            console.log(`Saving ${field} locally to:`, fullPath);
+            await file.mv(fullPath);
+            uploadedUrls[field] = `${baseURI}/${subfolder}/${blog_id}/${fileName}.jpg`;
+            console.log(`Local URL for ${field}:`, uploadedUrls[field]);
+        }
+    }
+    return uploadedUrls;
+};
+
+
+
+exports.DeleteBlogImages = async (images, blog_Id) => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    for (const imageUrl of images) {
+        if (!imageUrl) continue;
+
+        if (isProduction) {
+            try {
+                const publicId = imageUrl.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, '');
+                await cloudinary.uploader.destroy(publicId);
+                console.log(`Deleted from Cloudinary: ${publicId}`);
+            } catch (error) {
+                console.error(`Cloudinary delete error for ${imageUrl}:`, error);
+            }
+        } else {
+            // Local: Convert URL to path and delete
+            const filePath = imageUrl.replace(`http://localhost:${process.env.PORT}/`, 'public/');
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+                console.log(`Deleted locally: ${filePath}`);
+            }
+        }
+    }
+
+    // Delete local folder (if exists)
+    if (!isProduction && blog_Id) {
+        const blogFolderPath = `./public/blogs/${blog_Id}`;
+        if (fs.existsSync(blogFolderPath)) {
+            fs.rmSync(blogFolderPath, { recursive: true, force: true });
+            console.log(`Deleted local folder: ${blogFolderPath}`);
+        }
+    }
+};
+
+
+
+
+

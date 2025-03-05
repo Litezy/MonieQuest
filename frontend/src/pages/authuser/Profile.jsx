@@ -41,7 +41,7 @@ const Profile = () => {
     account_name: '',
   })
   const [profile, setProfile] = useState({
-    img: user.image ? `${imageurl}/profiles/${user.image}` : avatar,
+    img: user.image ? user.image : avatar,
     image: null
   })
   const imgref = useRef()

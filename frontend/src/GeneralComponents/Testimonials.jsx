@@ -33,7 +33,7 @@ export default function Testimonials(props) {
     }, [])
 
     // embla slider
-    console.log(`${imageurl}/testimonials/${data[0]?.gen_id}/${data[0]?.image}`)
+    // console.log(`${imageurl}/testimonials/${data[0]?.gen_id}/${data[0]?.image}`)
 
     const { slides, options } = props
     const [emblaRef, emblaApi] = useEmblaCarousel(options, [

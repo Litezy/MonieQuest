@@ -53,7 +53,7 @@ const AdminProfile = () => {
         leaderboard_reward: ''
     })
     const [profile, setProfile] = useState({
-        img: user.image ? `${imageurl}/profiles/${user.image}` : avatar,
+        img: user.image ? user.image : avatar,
         image: null
     })
     const [carouselImage, setCarouselImage] = useState({
@@ -438,7 +438,7 @@ const AdminProfile = () => {
                                         <div className={`grid ${allCarouselImages.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-3`}>
                                             {allCarouselImages.map((item, i) => (
                                                 <div key={i} className='relative'>
-                                                    <img src={`${imageurl}/carousels/${item.image}`} alt='carousel image' className='w-40 h-32 object-cover object-center border-2 border-ash rounded-md'></img>
+                                                    <img src={item.image} alt='carousel image' className='w-40 h-32 object-cover object-center border-2 border-ash rounded-md'></img>
                                                     <div className='bg-red-700 hover:bg-red-500 py-1 px-2 rounded-md cursor-pointer text-xs absolute top-1 right-1' onClick={() => DeleteCarouselImage(item.id)}>delete</div>
                                                 </div>
                                             ))}

@@ -10,7 +10,7 @@ const BlogComp = ({ item }) => {
                 <div>{moment(item?.createdAt).format('DD-MM-yyyy')} / {moment(item?.createdAt).format('h:mm')}</div>
                 <div className='flex md:gap-3 gap-2 items-center'>
                     <div>ID: {item?.gen_id}</div>
-                    <Link to={`/admin/blogs/${item.id}/${item.slug}`} onClick={MoveToTop}>
+                    <Link to={`/admin/blogs/${item.id}`} onClick={MoveToTop}>
                         <button className='outline-none w-fit h-fit bg-ash py-2 md:px-4 px-3 text-xs rounded-md text-white font-medium'>View</button>
                     </Link>
                 </div>

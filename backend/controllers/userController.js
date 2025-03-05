@@ -13,7 +13,7 @@ const GiftCard = require('../models').giftCards
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const otpGenerator = require('otp-generator')
-const { webName, webShort, webURL, ServerError } = require('../utils/utils')
+const { webName, webShort, webURL, ServerError, GlobalDeleteImage, GlobalImageUploads } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const slug = require('slug')
 
@@ -29,26 +29,12 @@ exports.CreateAccount = async (req, res) => {
         if (findEmail) return res.json({ status: 404, msg: `Email address already exists` })
         const findPhone = await User.findOne({ where: { phone_number } })
         if (findPhone) return res.json({ status: 404, msg: `Phone number used, try a different one` })
-
-        const slugData = slug(first_name, '-')
-        const date = new Date()
-        const profileImage = req?.files?.image
-        const filePath = './public/profiles'
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true })
-        }
-        let imageName;
-        if (profileImage) {
-            if (profileImage.size >= 1000000) return res.json({ status: 404, msg: `Image size too large, file must not exceed 1mb` })
-            if (!profileImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            imageName = `${slugData}-${date.getTime()}.jpg`
-            await profileImage.mv(`${filePath}/${imageName}`)
-        }
-
+      const uniqueId = otpGenerator.generate(6,{specialChars:false,lowerCaseAlphabets:false })
         const user = await User.create({
-            image: profileImage ? imageName : null,
+            image: null,
             first_name,
             surname,
+            unique_Id:uniqueId,
             email,
             phone_number,
             password,
@@ -322,27 +308,18 @@ exports.UpdateProfile = async (req, res) => {
         if (surname) {
             user.surname = surname
         }
-
-        const slugData = slug(first_name ? first_name : user.first_name, '-')
-        const date = new Date()
+        
         const profileImage = req?.files?.image
-        let imageName;
-        const filePath = './public/profiles'
-        const currentImagePath = `${filePath}/${user.image}`
-
         if (profileImage) {
             if (profileImage.size >= 1000000) res.json({ status: 404, msg: `Image size too large, file must not exceed 1mb` })
             if (!profileImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath, { recursive: true })
-            }
-            imageName = `${slugData}-${date.getTime()}.jpg`
-            await profileImage.mv(`${filePath}/${imageName}`)
-            user.image = imageName
+               if(user.image){
+                await GlobalDeleteImage(user.image)
+               }
+               const imageToUpload = [ {field:'profile_avatar',file:profileImage}]
+               const newProfileImage = await GlobalImageUploads(imageToUpload,'profiles',user.unique_Id)
+               user.image = newProfileImage.profile_avatar
+            
         }
 
         await user.save()
@@ -637,22 +614,16 @@ exports.getUserData = async (req, res) => {
 
 exports.AddCarouselImage = async (req, res) => {
     try {
-        const slugData = slug('carousel-image', '-')
-        const filePath = './public/carousels'
-        const date = new Date()
-        let imageName;
-
         if (!req.files) return res.json({ status: 404, msg: `Upload an image` })
         const image = req.files.image
         if (!image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true })
-        }
-        imageName = `${slugData}-${date.getTime()}.jpg`
-        await image.mv(`${filePath}/${imageName}`)
-
+            
+       const carousel_Id = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false})
+        const imageToUpload = [{field:'carousel',file:image}]
+        const newImage = await GlobalImageUploads(imageToUpload,'carousels',carousel_Id)
         await CarouselImage.create({
-            image: imageName
+            image: newImage.carousel,
+            unique_Id:carousel_Id
         })
 
         return res.json({ status: 200, msg: 'Carousel image added successfully' })
@@ -677,16 +648,10 @@ exports.DeleteCarouselImage = async (req, res) => {
     try {
         const { id } = req.body
         if (!id) return res.json({ status: 404, msg: `Provide a carousel image id` })
-
         const singleCarousel = await CarouselImage.findOne({ where: { id } })
         if (!singleCarousel) return res.json({ status: 404, msg: 'Carousel Image not found' })
-        const imagePath = `./public/carousels/${singleCarousel.image}`
-        if (fs.existsSync(imagePath)) {
-            fs.unlinkSync(imagePath)
-        }
-
+         await GlobalDeleteImage(singleCarousel.image)
         await singleCarousel.destroy()
-
         return res.json({ status: 200, msg: 'Carousel image deleted successfully' })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })

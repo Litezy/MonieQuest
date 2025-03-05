@@ -38,7 +38,7 @@ const AdminEditTestimonial = () => {
         } finally { setLoading({ status: false, val: '' }) }
     }
 
-    // console.log(data)
+   
     useEffect(() => {
         fetchSingleTestimonial()
     }, [])
@@ -52,7 +52,7 @@ const AdminEditTestimonial = () => {
                 title: data?.title || '',
                 content: data?.content || '',
             })
-            setImage({ ...image, img: `${imageurl}/testimonials/${data?.gen_id}/${data?.image}` })
+            setImage({ ...image, img: data?.image })
         }
     }, [data])
 

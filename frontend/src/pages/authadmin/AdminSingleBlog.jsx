@@ -80,13 +80,13 @@ const AdminSingleBlog = () => {
                 })
 
                 setBlogImage({
-                    img: data.image ? `${imageurl}/blogs/${data.gen_id}/${data.image}` : null
+                    img: data.image ? data?.image : null
                 })
                 setSecondImg({
-                    img: data.second_paragraph_image ? `${imageurl}/blogs/${data.gen_id}/${data.second_paragraph_image}` : null,
+                    img: data.second_paragraph_image ? data?.second_paragraph_image : null,
                 })
                 setExtrasImg({
-                    img: data.extras_image ? `${imageurl}/blogs/${data.gen_id}/${data.extras_image}` : null
+                    img: data.extras_image ? data.extras_image : null
                 })
 
             }
@@ -139,7 +139,6 @@ const AdminSingleBlog = () => {
 
     const Submit = async (e) => {
         e.preventDefault()
-
         if (!form.title || !form.feature || !form.main_header_title || !form.main_header_content ||
             !form.first_paragraph_title || !form.first_paragraph_content || !form.second_paragraph_title || !form.second_paragraph_content || !form.extras_title ||
             !form.extras_content || !form.conclusion) return ErrorAlert('Enter all required fields')

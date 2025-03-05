@@ -4,6 +4,7 @@ module.exports = (sequelize,DataTypes) =>{
         lastname:{type: DataTypes.STRING, allowNull:true},
         firstname:{type: DataTypes.STRING, allowNull:false},
         title:{type: DataTypes.STRING, allowNull:false},
+        unique_Id:{type: DataTypes.STRING, allowNull:false},
         content:{type: DataTypes.TEXT, allowNull:false},
     })
 }

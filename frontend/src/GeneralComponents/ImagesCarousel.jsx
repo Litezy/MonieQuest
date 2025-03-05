@@ -1,7 +1,6 @@
 "use client";
 import React from 'react'
 import { Carousel } from "flowbite-react";
-import { imageurl } from '../services/API';
 
 const theme = {
     "control": {
@@ -18,7 +17,7 @@ const ImagesCarousel = ({ array }) => {
             {array.length > 0 ?
                 <Carousel theme={theme}>
                     {array.map((item, i) => (
-                        <img key={i} src={`${imageurl}/carousels/${item.image}`} alt="carousel image" className='w-full h-full object-cover' />
+                        <img key={i} src={item.image} alt="carousel image" className='w-full h-full object-cover' />
                     ))}
                 </Carousel>
                 :

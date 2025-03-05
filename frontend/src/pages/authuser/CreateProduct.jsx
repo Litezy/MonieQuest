@@ -75,10 +75,10 @@ const CreateProduct = () => {
 
   const Submit = async (e) => {
     e.preventDefault()
-
     if (form.category.length < 1) return ErrorAlert('Choose a category')
     if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2 || !form.video_link || !form.contact_detail || !form.bank_name || !form.account_name || !form.account_number) return ErrorAlert('Enter all fields')
-    if (isNaN(form.price)) return ErrorAlert('Price amount must be a number')
+    const amt = parseInt(form.price.replace(/,/g, ''))
+    if (isNaN(amt)) return ErrorAlert('Price amount must be a number')
     if (!productImage.image) return ErrorAlert('Upload profit tool image')
 
     const formbody = new FormData()
@@ -87,7 +87,7 @@ const CreateProduct = () => {
     form.category.forEach(ele => {
       formbody.append('category', ele)
     })
-    formbody.append('price', parseFloat(form.price))
+    formbody.append('price', parseFloat(amt))
     formbody.append('about', form.about)
     formbody.append('feature1', form.feature1)
     formbody.append('feature2', form.feature2)

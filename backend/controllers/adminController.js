@@ -14,7 +14,7 @@ const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
 const Comment = require('../models').comments
-const { webName, webURL, ServerError, nairaSign, dollarSign, UploadImage } = require('../utils/utils')
+const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, DeleteBlogImages, GlobalDeleteImage, GlobalUploadImage, GlobalImageUploads } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
@@ -93,29 +93,22 @@ exports.CreateAirdrop = async (req, res) => {
 
         const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
-        const filePath = `./public/airdrops/${gen_id}`
-        const date = new Date()
-        let logoImageName;
-        let bannerImageName;
 
         if (!req.files || !req.files.logo_image || !req.files.banner_image) return res.json({ status: 404, msg: `Upload airdrop logo and banner images` })
-        const logoImage = req.files.logo_image
-        const bannerImage = req.files.banner_image
+        const logoImage = req?.files?.logo_image
+        const bannerImage = req?.files?.banner_image
         if (!logoImage.mimetype.startsWith('image/') || !bannerImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true })
-        }
-        logoImageName = `${slugData + 'logo'}-${date.getTime()}.jpg`
-        await logoImage.mv(`${filePath}/${logoImageName}`)
-        bannerImageName = `${slugData + 'banner'}-${date.getTime()}.jpg`
-        await bannerImage.mv(`${filePath}/${bannerImageName}`)
-
-        await Airdrop.create({
+        const imagesToUpload = [
+            { field: 'logo', file: logoImage },
+            { field: 'banner', file: bannerImage },
+        ]
+        const UploadedImages = await GlobalImageUploads(imagesToUpload, 'airdrops', gen_id)
+        const newAirdrop = await Airdrop.create({
             user: req.user,
             slug: slugData,
             gen_id: gen_id,
-            logo_image: logoImageName,
-            banner_image: bannerImageName,
+            logo_image: UploadedImages.logo,
+            banner_image: UploadedImages.banner,
             title,
             category,
             kyc,
@@ -129,7 +122,7 @@ exports.CreateAirdrop = async (req, res) => {
             website_link: website_link || null
         })
 
-        return res.json({ status: 200, msg: 'Airdrop created successfully' })
+        return res.json({ status: 200, msg: 'Airdrop created successfully', data: newAirdrop })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }
@@ -151,31 +144,25 @@ exports.UpdateAirdrop = async (req, res) => {
         const logoImage = req?.files?.logo_image
         const bannerImage = req?.files?.banner_image
 
+        let newlogoimg
         if (logoImage) {
             if (!logoImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            const currentImagePath = `${filePath}/${airdrop.logo_image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
+            if (airdrop.logo_image) {
+                GlobalDeleteImage(airdrop.logo_image)
             }
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath, { recursive: true })
-            }
-            logoImageName = `${slugData + 'logo'}-${date.getTime()}.jpg`
-            await logoImage.mv(`${filePath}/${logoImageName}`)
-            airdrop.logo_image = logoImageName
+            const imageToUpload = [{ field: 'logo', file: logoImage }]
+            const newLogoImage = await GlobalImageUploads(imageToUpload, 'airdrops', airdrop.gen_id)
+            airdrop.logo_image = newLogoImage.logo
+
         }
         if (bannerImage) {
             if (!bannerImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            const currentImagePath = `${filePath}/${airdrop.banner_image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
+            if (airdrop.banner_image) {
+                GlobalDeleteImage(airdrop.banner_image)
             }
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath)
-            }
-            bannerImageName = `${slugData + 'banner'}-${date.getTime()}.jpg`
-            await bannerImage.mv(`${filePath}/${bannerImageName}`)
-            airdrop.banner_image = bannerImageName
+            const imageToUpload = [{ field: 'banner', file: bannerImage }]
+            const newBannerImage = await GlobalImageUploads(imageToUpload, 'airdrops', airdrop.gen_id)
+            airdrop.banner_image = newBannerImage.banner
         }
         if (title) {
             airdrop.title = title
@@ -310,23 +297,16 @@ exports.UpdateProduct = async (req, res) => {
         if (!user) return res.json({ status: 404, msg: 'User not found' })
 
         const slugData = slug(title ? title : product.title, '-')
-        const filePath = './public/products'
-        const date = new Date()
-        let imageName;
         const productImage = req?.files?.image
 
         if (productImage) {
             if (!productImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            const currentImagePath = `${filePath}/${product.image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
+            if (product.image) {
+                await GlobalDeleteImage(product.image)
             }
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath)
-            }
-            imageName = `${slugData}-${date.getTime()}.jpg`
-            await productImage.mv(`${filePath}/${imageName}`)
-            product.image = imageName
+            const imageToUpload = [{ field: 'product_image', file: productImage }]
+            const newImage = await GlobalImageUploads(imageToUpload, 'products', product.gen_id)
+            product.image = newImage.product_image
         }
         if (title) {
             product.title = title
@@ -700,54 +680,37 @@ exports.CreateBlog = async (req, res) => {
         if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
 
         const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
-        const slugData = slug(title, '-')
-        const filePath = `./public/blogs/${gen_id}`
-        const date = new Date()
-        let blogImageName;
-        let secondParImageName;
-        let extrasImageName;
+
 
         if (!req.files || !req.files.image) return res.json({ status: 404, msg: `Upload blog image` })
-        const blogImage = req.files.image
+        const blogImage = req.files?.image
         const secondImage = req.files?.second_paragraph_image
         const extrasImage = req.files?.extras_image
         const isValidImage = (file) => file && !file.mimetype.startsWith('image/')
         if (isValidImage(blogImage) || (secondImage && isValidImage(secondImage)) || (extrasImage && isValidImage(extrasImage))) return res.json({ status: 400, msg: `File error, upload valid images format(jpg, jpeg, png, svg)` })
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true })
-        }
-        blogImageName = `${slugData + 'main'} -${date.getTime()}.jpg`
-        secondParImageName = secondImage ? `${slugData + 'second'}-${date.getTime()}.jpg` : null
-        extrasImageName = extrasImage ? `${slugData + 'extras'}-${date.getTime()}.jpg` : null
-        await blogImage.mv(`${filePath}/${blogImageName}`)
-        if (secondImage) {
-            await secondImage.mv(`${filePath}/${secondParImageName}`)
-        }
-        if (extrasImage) {
-            await extrasImage.mv(`${filePath}/${extrasImageName}`)
-        }
 
-        await Blog.create({
+        const imageUrls = await UploadBlogImages(blogImage, secondImage, extrasImage, 'blogs', gen_id)
+        //   return res.json({status:200, msg:imageUrls})
+        const blog = await Blog.create({
             user: req.user,
-            slug: slugData,
-            gen_id: gen_id,
-            image: blogImageName,
             title,
             feature,
+            gen_id,
             main_header_title,
             main_header_content,
             first_paragraph_title,
             first_paragraph_content,
             second_paragraph_title,
             second_paragraph_content,
-            second_paragraph_image: secondParImageName,
             extras_title,
             extras_content,
-            extras_image: extrasImageName,
+            image: imageUrls.first_image,
+            second_paragraph_image: imageUrls.second_image || null,
+            extras_image: imageUrls.extras_image || null,
             conclusion
         })
 
-        return res.json({ status: 200, msg: 'Blog created successfully' })
+        return res.json({ status: 200, msg: 'Blog created successfully', blog })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }
@@ -755,121 +718,111 @@ exports.CreateBlog = async (req, res) => {
 
 exports.UpdateBlog = async (req, res) => {
     try {
-        const { title, blog_id, feature, main_header_title, main_header_content, first_paragraph_title, first_paragraph_content, second_paragraph_title, second_paragraph_content, extras_title, extras_content, conclusion } = req.body;
-        if (!blog_id) return res.json({ status: 400, msg: `Blog id is required` })
-        const blog = await Blog.findOne({ where: { id: blog_id } })
-        if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
+        const {
+            title, blog_id, feature, main_header_title, main_header_content,
+            first_paragraph_title, first_paragraph_content, second_paragraph_title,
+            second_paragraph_content, extras_title, extras_content, conclusion
+        } = req.body;
 
-        const filePath = `./public/blogs/${blog.gen_id}`
-        if (!fs.existsSync(filePath)) {
-            fs.mkdirSync(filePath, { recursive: true })
-        }
-        const slugData = slug(title ? title : blog.title, '-')
-        const date = new Date()
-        let blogImageName;
-        let secondImageName;
-        let extrasImageName;
-        const blogImage = req?.files?.image
-        const secondImage = req?.files?.second_paragraph_image
-        const extrasImage = req?.files?.extras_image
+        if (!blog_id) return res.json({ status: 400, msg: 'Blog ID is required' });
 
-        if (blogImage) {
-            if (!blogImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format(jpg, jpeg, png, svg)` })
-            const currentImagePath = `${filePath}/${blog.image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
-            blogImageName = `${slugData + 'main'}-${date.getTime()}.jpg`
-            await blogImage.mv(`${filePath}/${blogImageName}`)
-            blog.image = blogImageName
-        }
-        if (secondImage) {
-            if (!secondImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format(jpg, jpeg, png, svg)` })
-            const currentImagePath = `${filePath}/${blog.second_paragraph_image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
-            secondImageName = `${slugData + 'second'}-${date.getTime()}.jpg`
-            await secondImage.mv(`${filePath}/${secondImageName}`)
-            blog.second_paragraph_image = secondImageName
-        }
-        if (extrasImage) {
-            if (!extrasImage.mimetype.startsWith('image/'))
-                return res.json({ status: 404, msg: `File error, upload a valid image format(jpg, jpeg, png, svg)` })
-            const currentImagePath = `${filePath}/${blog.extras_image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
-            extrasImageName = `${slugData + 'extras'}-${date.getTime()}.jpg`
-            await extrasImage.mv(`${filePath}/${extrasImageName}`)
-            blog.extras_image = extrasImageName
-        }
+        const blog = await Blog.findOne({ where: { id: blog_id } });
+        if (!blog) return res.json({ status: 404, msg: 'Blog not found' });
 
+        let image1 = blog?.image;
+        let image2 = blog?.second_paragraph_image;
+        let image3 = blog?.extras_image;
+        let newFeature;
 
-        if (title) {
-            blog.title = title
-        }
+        // Image handling
+        const blogImage = req?.files?.image || null;
+        const secondImage = req?.files?.second_paragraph_image || null;
+        const extrasImage = req?.files?.extras_image || null;
+
+        // Validate feature if provided
         if (feature) {
-            const featureArray = ["airdrop", "trading", "personal_finance"]
-            if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
-            blog.feature = feature
-        }
-        if (main_header_title) {
-            blog.main_header_title = main_header_title
-        }
-        if (main_header_content) {
-            blog.main_header_content = main_header_content
-        }
-        if (first_paragraph_title) {
-            blog.first_paragraph_title = first_paragraph_title
-        }
-        if (first_paragraph_content) {
-            blog.first_paragraph_content = first_paragraph_content
-        }
-        if (second_paragraph_title) {
-            blog.second_paragraph_title = second_paragraph_title
-        }
-        if (second_paragraph_content) {
-            blog.second_paragraph_content = second_paragraph_content
-        }
-        if (extras_title) {
-            blog.extras_title = extras_title
-        }
-        if (extras_content) {
-            blog.extras_content = extras_content
-        }
-        if (conclusion) {
-            blog.conclusion = conclusion
+            const featureArray = ["airdrop", "trading", "personal_finance"];
+            if (!featureArray.includes(feature)) return res.json({ status: 400, msg: 'Invalid blog feature provided' });
+            newFeature = feature;
         }
 
-        await blog.save()
+        // Handle image updates or removals
+        // Image 1 (main image)
+        let updatedUrls = {};
+        if (blogImage || secondImage || extrasImage) {
+            if ((blogImage && !blogImage.mimetype.startsWith('image/')) ||
+                (secondImage && !secondImage.mimetype.startsWith('image/')) ||
+                (extrasImage && !extrasImage.mimetype.startsWith('image/'))) return res.json({ status: 400, msg: 'Invalid files found, must be valid images (jpg, jpeg, png, svg)' });
 
-        return res.json({ status: 200, msg: 'Blog updated successfully' })
+            updatedUrls = await UploadBlogImages(blogImage, secondImage, extrasImage, 'blogs', blog.gen_id);
+            console.log(updatedUrls)
+
+            if (blogImage) {
+                if (blog.image) await GlobalDeleteImage(blog.image);
+                image1 = updatedUrls.first_image;
+            }
+
+            // Image 2 (second paragraph)
+            if (secondImage) {
+                if (blog.second_paragraph_image) await GlobalDeleteImage(blog.second_paragraph_image);
+                image2 = updatedUrls.second_image;
+            }
+
+            // Image 3 (extras)
+            if (extrasImage) {
+                if (blog.extras_image) await GlobalDeleteImage(blog.extras_image);
+                image3 = updatedUrls.extras_image;
+            }
+        }
+
+        const updateData = {
+            title: title || blog.title,
+            feature: newFeature || blog.feature,
+            main_header_title: main_header_title || blog.main_header_title,
+            main_header_content: main_header_content || blog.main_header_content,
+            first_paragraph_title: first_paragraph_title || blog.first_paragraph_title,
+            first_paragraph_content: first_paragraph_content || blog.first_paragraph_content,
+            second_paragraph_title: second_paragraph_title || blog.second_paragraph_title,
+            second_paragraph_content: second_paragraph_content || blog.second_paragraph_content,
+            extras_title: extras_title || blog.extras_title,
+            extras_content: extras_content || blog.extras_content,
+            conclusion: conclusion || blog.conclusion,
+            image: image1,
+            second_paragraph_image: image2,
+            extras_image: image3
+        };
+        // console.log('Updating blog with:', updateData);
+        await blog.update(updateData);
+
+        return res.json({ status: 200, msg: 'Blog updated successfully', blog: updateData });
     } catch (error) {
-        return res.json({ status: 400, msg: error.message })
+        console.error('Error updating blog:', error);
+        return res.json({ status: 500, msg: 'Server error', error: error.message });
     }
-}
+};
 
 exports.DeleteBlog = async (req, res) => {
     try {
-        const { blog_id } = req.body
-        if (!blog_id) return res.json({ status: 404, msg: `Provide a blog id` })
+        const { blog_id } = req.body;
+        if (!blog_id) return res.json({ status: 400, msg: 'Provide a blog id' }); // Changed to 400 for bad request
 
-        const blog = await Blog.findOne({ where: { id: blog_id } })
-        if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
+        const blog = await Blog.findOne({ where: { id: blog_id } });
+        if (!blog) return res.json({ status: 404, msg: 'Blog not found' });
 
-        const blogFolderPath = `./public/blogs/${blog.gen_id}`
-        if (fs.existsSync(blogFolderPath)) {
-            fs.rmSync(blogFolderPath, { recursive: true, force: true })
-        }
+        const imagesToDelete = [
+            blog.image,
+            blog.second_paragraph_image,
+            blog.extras_image
+        ].filter(url => url);
+        DeleteBlogImages(imagesToDelete, blog.gen_id)
+        await blog.destroy();
 
-        await blog.destroy()
-
-        return res.json({ status: 200, msg: 'Blog deleted successfully' })
+        return res.json({ status: 200, msg: 'Blog deleted successfully' });
     } catch (error) {
-        return res.json({ status: 500, msg: error.message })
+        console.error('Error deleting blog:', error);
+        return res.json({ status: 500, msg: 'Server error', error: error.message });
     }
-}
+};
 
 exports.AllBlogs = async (req, res) => {
     try {
@@ -925,21 +878,14 @@ exports.DeleteSingleBlogImages = async (req, res) => {
         const filePath = `./public/blogs/${findImage.gen_id}`;
 
         if (tag === 'paragraph') {
-            const currentImagePath = `${filePath}/${findImage.second_paragraph_image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
+            await GlobalDeleteImage(findImage.second_paragraph_image)
             findImage.second_paragraph_image = null
             await findImage.save()
-
             return res.json({ status: 200, msg: "Second paragraph image successfully deleted", data: findImage })
 
         }
         if (tag === 'extras') {
-            const currentImagePath = `${filePath}/${findImage.extras_image}`
-            if (fs.existsSync(currentImagePath)) {
-                fs.unlinkSync(currentImagePath)
-            }
+            await GlobalDeleteImage(findImage.extras_image)
             findImage.extras_image = null
             await findImage.save()
 
@@ -1570,16 +1516,19 @@ exports.CreateTestimonial = async (req, res) => {
         const image = req?.files?.image
         if (!image) return res.json({ status: 400, msg: 'Image is required' })
         if (!image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            const  url  = await UploadImage(image, 'testimonials'); 
+        const gen_id = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false })
+        const imageToUpload = [{ field: 'testimonial', file: image }]
+        const url = await GlobalImageUploads(imageToUpload, 'testimonials', gen_id)
         // console.log(`from controller`,url)
-       const newUser = await Testimonial.create({
-          firstname,
-          lastname: lastname || null,
-          title,
-          content,
-          image:url,
-    })
-        return res.json({ status: 201, msg: 'Testimonial created successfully',newUser })
+        const newUser = await Testimonial.create({
+            firstname,
+            lastname: lastname || null,
+            title,
+            unique_Id: gen_id,
+            content,
+            image: url.testimonial,
+        })
+        return res.json({ status: 201, msg: 'Testimonial created successfully', newUser })
     } catch (error) {
         ServerError(res, error)
     }
@@ -1592,27 +1541,18 @@ exports.UpdateTestimonial = async (req, res) => {
 
         const testimonial = await Testimonial.findByPk(id);
         if (!testimonial) return res.json({ status: 404, msg: 'Testimonial not found' });
-        let imageName = testimonial.image;
         const image = req?.files?.image;
-
+        
+        let url = {}
         if (image) {
             if (!image.mimetype.startsWith('image/')) {
                 return res.json({ status: 400, msg: 'Invalid image format (jpg, jpeg, png, svg allowed)' });
             }
-
-            const slugData = slug(firstname || testimonial.firstname, '-').toLowerCase();
-            imageName = `${slugData}-image.jpg`;
-            const filePath = `./public/testimonials/${testimonial.gen_id}`;
-
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath, { recursive: true });
+            if (testimonial.image) {
+                await GlobalDeleteImage(testimonial.image)
             }
-
-            const oldImagePath = path.join(filePath, testimonial.image);
-            if (fs.existsSync(oldImagePath)) {
-                fs.unlinkSync(oldImagePath);
-            }
-            await image.mv(`${filePath}/${imageName}`);
+            const imageToUpload = [{ field: 'testimonial', file: image }]
+             url = await GlobalImageUploads(imageToUpload, 'testimonials', testimonial.unique_Id)
         }
 
         await testimonial.update({
@@ -1620,7 +1560,7 @@ exports.UpdateTestimonial = async (req, res) => {
             lastname: lastname ? lastname : lastname === '' ? null : testimonial.lastname,
             title: title ? title : testimonial.title,
             content: content ? content : testimonial.content,
-            image: imageName,
+            image:url.testimonial
         });
 
 
@@ -1636,10 +1576,7 @@ exports.deleteTestimonial = async (req, res) => {
         if (!id) return res.json({ status: 400, msg: "ID missing from request" })
         const testimonial = await Testimonial.findByPk(id);
         if (!testimonial) return res.json({ status: 404, msg: 'Testimonial not found' });
-        const filePath = `./public/testimonials/${testimonial.gen_id}`;
-        if (fs.existsSync(filePath)) {
-            fs.rmSync(filePath, { recursive: true, force: true });
-        }
+        await GlobalDeleteImage(testimonial.image,'testimonials',testimonial.unique_Id)
         await testimonial.destroy()
         return res.json({ status: 200, msg: 'Testimonial deleted successfully' });
     } catch (error) {
