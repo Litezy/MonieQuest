@@ -175,7 +175,7 @@ const SingleProductPage = () => {
                                 </div>
                                 <div>
                                     <div className='bg-primary border border-ash w-full h-fit p-5 flex flex-col gap-4'>
-                                        <div className='flex justify-between gap-4'>
+                                        <div className='flex flex-col md:flex-row md:justify-between gap-2'>
                                             {singleProduct?.discount_percentage && singleProduct?.price ?
                                                 <div className='flex gap-4 items-center'>
                                                     <div className='text-sm text-red-600'>-{singleProduct.discount_percentage}%</div>

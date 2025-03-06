@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { FaXTwitter } from 'react-icons/fa6'
 import { SiTelegram } from 'react-icons/si'
 import { LuArrowRightLeft } from 'react-icons/lu'
+import { FaLongArrowAltLeft } from "react-icons/fa";
 import { RxExternalLink } from "react-icons/rx";
 import { Apis, GetApi, imageurl } from '../../services/API'
 import YouTubeComp from '../../GeneralComponents/YouTubeComp'
@@ -43,7 +44,7 @@ const SingleAirdropPage = () => {
   const prevAirdrop = currentIndex > 0 ? sortedAirdrops[currentIndex - 1] : null
   const nextAirdrop = currentIndex < sortedAirdrops.length - 1 ? sortedAirdrops[currentIndex + 1] : null
 
-  
+
   return (
     <PageLayout>
       <div className='w-full bg-dark md:py-20 py-10'>
@@ -98,7 +99,11 @@ const SingleAirdropPage = () => {
             </div>
             :
             <>
-              <Link to={'/airdrops'} className="text-white px-4 py-1.5 rounded-full bg-ash w-fit">back to airdrops</Link>
+              <Link to={`/airdrops`}
+                className="flex mb-5 w-fit px-4 py-1 rounded-2xl items-center gap-2 bg-ash">
+                <FaLongArrowAltLeft className='text-white text-2xl' />
+                <div>back to all</div>
+              </Link>
               <div className='flex flex-col gap-14 md:mt-10 mt-5'>
                 <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
                   <div className='flex items-center gap-2'>

@@ -34,9 +34,8 @@ const BlogComments = () => {
                     <div className="w-full p-5 rounded-md">
                         <Link to={`/blogs/${feature}/${id}/${slug}`}
                             className="flex mb-5 w-fit px-4 py-1 rounded-2xl items-center gap-2 bg-ash">
-                            <FaLongArrowAltLeft
-                                className='text-white text-2xl ' />
-                            <div className="">back</div>
+                            <FaLongArrowAltLeft className='text-white text-2xl' />
+                            <div>back</div>
                         </Link>
                         <div className="mt-10 mb-5 poppins font-bold text-xl">All comments</div>
                         <div className="ml-5 lg:ml-10">
