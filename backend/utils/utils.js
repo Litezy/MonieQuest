@@ -64,42 +64,65 @@ exports.GlobalUploadImage = async (image, subfolder, folder_Id) => {
 }
 
 
-exports.GlobalDeleteImage = async (imageUrl, folder, folder_id) => {
+exports.GlobalDeleteImage = async (imageUrl, subfolder, folderId) => {
     const isProduction = process.env.NODE_ENV === 'production';
     if (!imageUrl || typeof imageUrl !== 'string') return;
-
     if (isProduction) {
         try {
+            // Extract publicId from after 'upload/'
             const parts = imageUrl.split('/');
-            const publicIdIndex = parts.findIndex(part => part === 'upload') + 2; // After 'upload/v<version>'
-            const publicId = parts.slice(publicIdIndex).join('/').replace(/\.[^/.]+$/, '');
+            const uploadIndex = parts.findIndex(part => part === 'upload') + 2;
+            const publicId = parts.slice(uploadIndex).join('/').replace(/\.[^/.]+$/, '');
+            // console.log(`Derived publicId: ${publicId}`);
 
-            const result = await cloudinary.uploader.destroy(publicId);
-            if (result.result === 'ok') {
-                console.log(`Deleted from Cloudinary: ${publicId}`);
+            // Delete the individual file
+            const destroyResult = await cloudinary.uploader.destroy(publicId);
+            if (destroyResult.result === 'ok') {
+                console.log(`Deleted file from Cloudinary: ${publicId}`);
             } else {
-                console.log(`Cloudinary deletion failed: ${JSON.stringify(result)}`);
+                console.log(`Cloudinary file deletion failed: ${JSON.stringify(destroyResult)}`);
+            }
+
+            // Delete the subfolder (folderId) if empty
+            if (subfolder && folderId) {
+                const folderPath = `moniequest/${subfolder}/${folderId}`;
+                const resources = await cloudinary.api.resources({
+                    resource_type: 'image',
+                    type: 'upload',
+                    prefix: folderPath,
+                    max_results: 1 // Check if any assets remain
+                });
+
+                if (resources.resources.length === 0) {
+                    await cloudinary.api.delete_folder(folderPath);
+                    console.log(`Deleted Cloudinary subfolder: ${folderPath}`);
+                } else {
+                    console.log(`Subfolder ${folderPath} not deleted: still contains assets`);
+                }
             }
         } catch (error) {
             console.error(`Cloudinary delete error for ${imageUrl}:`, error);
+            throw error;
         }
     } else {
         const filePath = imageUrl.replace(`http://localhost:${process.env.PORT}/`, 'public/');
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
             console.log(`Deleted locally: ${filePath}`);
+        } else {
+            console.log(`Local file not found: ${filePath}`);
         }
-    }
 
-    // Delete local folder (if exists)
-    if (!isProduction && folder && folder_id) {
-        const blogFolderPath = `./public/${folder}/${folder_id}`;
-        if (fs.existsSync(blogFolderPath)) {
-            fs.rmSync(blogFolderPath, { recursive: true, force: true });
-            console.log(`Deleted local folder: ${blogFolderPath}`);
+        // Delete local subfolder if empty
+        if (subfolder && folderId) {
+            const folderPath = path.join('public', subfolder, folderId);
+            if (fs.existsSync(folderPath) && fs.readdirSync(folderPath).length === 0) {
+                fs.rmSync(folderPath, { recursive: true, force: true });
+                console.log(`Deleted local subfolder: ${folderPath}`);
+            }
         }
     }
-}
+};
 
 exports.GlobalDeleteSingleImage = async (imageUrl) => {
     const isProduction = process.env.NODE_ENV === 'production';
@@ -254,9 +277,16 @@ exports.DeleteBlogImages = async (images, blog_Id) => {
 
         if (isProduction) {
             try {
-                const publicId = imageUrl.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, '');
-                await cloudinary.uploader.destroy(publicId);
-                console.log(`Deleted from Cloudinary: ${publicId}`);
+                const parts = imageUrl.split('/');
+                const publicIdIndex = parts.findIndex(part => part === 'upload') + 2; 
+                const publicId = parts.slice(publicIdIndex).join('/').replace(/\.[^/.]+$/, '');
+
+                const result = await cloudinary.uploader.destroy(publicId);
+                if (result.result === 'ok') {
+                    console.log(`Deleted from Cloudinary: ${publicId}`);
+                } else {
+                    console.log(`Cloudinary deletion failed: ${JSON.stringify(result)}`);
+                }
             } catch (error) {
                 console.error(`Cloudinary delete error for ${imageUrl}:`, error);
             }
