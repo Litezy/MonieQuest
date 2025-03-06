@@ -166,6 +166,12 @@ const AdminSingleProduct = () => {
 
     }
 
+    const optimizeImageUrl = (url) => {
+        if (!url || !url.includes('cloudinary.com')) return url; // Return unchanged if not Cloudinary
+        const parts = url.split('/upload/');
+        return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; // Insert transformations
+    };
+
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
@@ -191,7 +197,7 @@ const AdminSingleProduct = () => {
                             <label className='cursor-pointer w-full'>
                                 {productImage.img ?
                                     <div className='relative'>
-                                        <img src={productImage.img} alt={productImage.img} className='w-full h-72 object-cover object-center'></img>
+                                        <img src={optimizeImageUrl(productImage.img)} alt={`product image`} className='w-full h-72 object-cover object-center'></img>
                                         <div className="absolute top-0 -right-3 main font-bold">
                                             <FaEdit className='text-2xl text-lightgreen' />
                                         </div>

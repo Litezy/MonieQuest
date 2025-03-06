@@ -183,6 +183,11 @@ const AdminSingleAirdrop = () => {
         }
     }
 
+    const optimizeImageUrl = (url) => {
+        if (!url || !url.includes('cloudinary.com')) return url; // Return unchanged if not Cloudinary
+        const parts = url.split('/upload/');
+        return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; // Insert transformations
+    };
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
@@ -220,7 +225,7 @@ const AdminSingleAirdrop = () => {
                                     <label className='cursor-pointer'>
                                         {logo.img ?
                                             <div className='relative w-fit'>
-                                                <img src={logo.img} alt={logo.img} className='md:size-20 size-16 rounded-full object-cover'></img>
+                                                <img src={optimizeImageUrl(logo.img)} alt={logo.img} className='md:size-20 size-16 rounded-full object-cover'></img>
                                                 <div className="absolute top-0 -right-2 main font-bold">
                                                     <FaEdit className='text-xl text-lightgreen' />
                                                 </div>
@@ -238,7 +243,7 @@ const AdminSingleAirdrop = () => {
                                     <label className='cursor-pointer w-full'>
                                         {banner.img ?
                                             <div className='relative'>
-                                                <img src={banner.img} alt={banner.img} className='w-full h-72 object-cover object-center'></img>
+                                                <img src={optimizeImageUrl(banner.img)} alt={banner.img} className='w-full h-72 object-cover object-center'></img>
                                                 <div className="absolute top-0 -right-3 main font-bold">
                                                     <FaEdit className='text-2xl text-lightgreen' />
                                                 </div>

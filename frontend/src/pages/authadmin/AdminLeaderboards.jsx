@@ -65,7 +65,7 @@ const AdminLeaderboards = () => {
                                     (
                                         <tr key={i} className="bg-dark truncate text-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-500">
                                             <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
-                                                {item.id}
+                                                {item.unique_Id}
                                             </th>
                                             <td className="px-6 py-4">
                                                 {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}

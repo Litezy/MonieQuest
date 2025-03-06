@@ -304,6 +304,12 @@ const AdminProfile = () => {
         }
     }
 
+    const optimizeImageUrl = (url) => {
+        if (!url || !url.includes('cloudinary.com')) return url; // Return unchanged if not Cloudinary
+        const parts = url.split('/upload/');
+        return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; // Insert transformations
+    };
+
 
     return (
         <AdminPageLayout>
@@ -319,7 +325,7 @@ const AdminProfile = () => {
                     <div className='flex md:flex-row flex-col justify-between'>
                         <div className='flex flex-col gap-4 -mt-20'>
                             <div className='relative w-fit'>
-                                <img src={profile.img} className='h-44 w-44 object-cover border-8 border-[#141523] bg-primary rounded-full'></img>
+                                <img src={optimizeImageUrl(profile.img)} className='h-44 w-44 object-cover border-8 border-[#141523] bg-primary rounded-full'></img>
                                 <label>
                                     <div className='bg-primary rounded-full w-fit h-fit p-2 text-xl absolute bottom-4 right-0 border border-secondary cursor-pointer text-lightgreen'>
                                         <BiSolidEditAlt />

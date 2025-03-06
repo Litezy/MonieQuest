@@ -14,7 +14,7 @@ const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
 const Comment = require('../models').comments
-const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, DeleteBlogImages, GlobalDeleteImage, GlobalUploadImage, GlobalImageUploads } = require('../utils/utils')
+const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, DeleteBlogImages, GlobalDeleteImage, GlobalUploadImage, GlobalImageUploads, GlobalDeleteMultiImages } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
@@ -135,16 +135,10 @@ exports.UpdateAirdrop = async (req, res) => {
 
         const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
-
-        const slugData = slug(title ? title : airdrop.title, '-')
-        const filePath = `./public/airdrops/${airdrop.gen_id}`
-        const date = new Date()
-        let logoImageName;
-        let bannerImageName;
+       
         const logoImage = req?.files?.logo_image
         const bannerImage = req?.files?.banner_image
 
-        let newlogoimg
         if (logoImage) {
             if (!logoImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
             if (airdrop.logo_image) {
@@ -273,10 +267,8 @@ exports.DeleteClosedAirdrop = async (req, res) => {
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
         if (airdrop.status !== 'closed') return res.json({ status: 404, msg: 'You can only delete an airdrop with a closed status' })
 
-        const airdropFolderPath = `./public/airdrops/${airdrop.gen_id}`
-        if (fs.existsSync(airdropFolderPath)) {
-            fs.rmSync(airdropFolderPath, { recursive: true, force: true })
-        }
+        const imagesToDelete = [airdrop.logo_image,airdrop.banner_image]
+        await GlobalDeleteMultiImages(imagesToDelete,'airdrops',airdrop.gen_id)
 
         await airdrop.destroy()
 
@@ -814,7 +806,7 @@ exports.DeleteBlog = async (req, res) => {
             blog.second_paragraph_image,
             blog.extras_image
         ].filter(url => url);
-        DeleteBlogImages(imagesToDelete, blog.gen_id)
+        GlobalDeleteMultiImages(imagesToDelete,'blogs', blog.gen_id)
         await blog.destroy();
 
         return res.json({ status: 200, msg: 'Blog deleted successfully' });

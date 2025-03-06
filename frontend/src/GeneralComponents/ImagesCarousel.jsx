@@ -10,6 +10,11 @@ const theme = {
         "base": "flex h-full snap-mandatory overflow-y-hidden overflow-x-scroll scroll-smooth",
     }
 }
+const optimizeImageUrl = (url) => {
+    if (!url || !url.includes('cloudinary.com')) return url;
+    const parts = url.split('/upload/');
+    return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`;
+};
 
 const ImagesCarousel = ({ array }) => {
     return (
@@ -17,7 +22,7 @@ const ImagesCarousel = ({ array }) => {
             {array.length > 0 ?
                 <Carousel theme={theme}>
                     {array.map((item, i) => (
-                        <img key={i} src={item.image} alt="carousel image" className='w-full h-full object-cover' />
+                        <img key={i} src={optimizeImageUrl(item.image)} alt="carousel image" className='w-full h-full object-cover' />
                     ))}
                 </Carousel>
                 :

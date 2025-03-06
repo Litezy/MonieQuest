@@ -551,7 +551,7 @@ exports.getLeaderboard = async (req, res) => {
     try {
         const all_users = await User.findAll({
             where: { role: 'user' },
-            attributes: ['id', 'first_name', 'createdAt'],
+            attributes: ['id', 'first_name', 'createdAt','unique_Id'],
             include: { model: Wallet, as: 'user_wallets', attributes: ['total_deposit'], },
             order: [[{ model: Wallet, as: 'user_wallets' }, 'total_deposit', 'DESC']]
         })

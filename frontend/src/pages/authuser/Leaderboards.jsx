@@ -58,6 +58,9 @@ const Leaderboards = () => {
                                             <th scope="col" className="text-start px-7 text-2xl">
                                                 #
                                             </th>
+                                            <th scope="col" className=" px-6 py-3">
+                                                User ID
+                                            </th>
                                             <th scope="col" className="px-6 py-3">
                                                 <div className="">Name</div>
                                             </th>
@@ -75,6 +78,9 @@ const Leaderboards = () => {
                                                         <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
                                                             <img src={logo} className='w-10' alt="winner_" />
                                                         </th>
+                                                        <td className="px-6 py-4">
+                                                            {item.unique_Id}
+                                                        </td>
                                                         <td className="px-6 py-4">
                                                             {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}
                                                         </td>

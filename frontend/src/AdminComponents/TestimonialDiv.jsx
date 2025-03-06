@@ -25,9 +25,9 @@ const TestimonialDiv = ({ item, fetchTestimonials }) => {
     }
 
     const optimizeImageUrl = (url) => {
-        if (!url || !url.includes('cloudinary.com')) return url; // Return unchanged if not Cloudinary
+        if (!url || !url.includes('cloudinary.com')) return url; 
         const parts = url.split('/upload/');
-        return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; // Insert transformations
+        return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; 
     };
 
     return (
