@@ -3,8 +3,8 @@ import Cookies from 'js-cookie'
 import { CookieName } from '../utils/pageUtils'
 
 
-export let URL = import.meta.env.VITE_API_URL;
-export let imageurl =import.meta.env.VITE_API_URL;
+export let URL = import.meta.env.VITE_LIVE_API_URL;
+export let imageurl =import.meta.env.VITE_LIVE_API_URL;
 
 // if (import.meta.env.VITE_ENV === 'production') {
 //     URL = import.meta.env.VITE_LIVE_API_URL

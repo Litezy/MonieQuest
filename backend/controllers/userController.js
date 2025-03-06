@@ -10,10 +10,11 @@ const moment = require('moment')
 const BuyCrypto = require('../models').exchangeBuys
 const SellCrypto = require('../models').exchangeSells
 const GiftCard = require('../models').giftCards
+const cloudinary = require('cloudinary').v2
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const otpGenerator = require('otp-generator')
-const { webName, webShort, webURL, ServerError, GlobalDeleteImage, GlobalImageUploads } = require('../utils/utils')
+const { webName, webShort, webURL, ServerError, GlobalDeleteImage, GlobalImageUploads, GlobalDeleteSingleImage } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const slug = require('slug')
 
@@ -29,12 +30,12 @@ exports.CreateAccount = async (req, res) => {
         if (findEmail) return res.json({ status: 404, msg: `Email address already exists` })
         const findPhone = await User.findOne({ where: { phone_number } })
         if (findPhone) return res.json({ status: 404, msg: `Phone number used, try a different one` })
-      const uniqueId = otpGenerator.generate(6,{specialChars:false,lowerCaseAlphabets:false })
+        const uniqueId = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false })
         const user = await User.create({
             image: null,
             first_name,
             surname,
-            unique_Id:uniqueId,
+            unique_Id: uniqueId,
             email,
             phone_number,
             password,
@@ -308,18 +309,18 @@ exports.UpdateProfile = async (req, res) => {
         if (surname) {
             user.surname = surname
         }
-        
+
         const profileImage = req?.files?.image
         if (profileImage) {
             if (profileImage.size >= 1000000) res.json({ status: 404, msg: `Image size too large, file must not exceed 1mb` })
             if (!profileImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-               if(user.image){
+            if (user.image) {
                 await GlobalDeleteImage(user.image)
-               }
-               const imageToUpload = [ {field:'profile_avatar',file:profileImage}]
-               const newProfileImage = await GlobalImageUploads(imageToUpload,'profiles',user.unique_Id)
-               user.image = newProfileImage.profile_avatar
-            
+            }
+            const imageToUpload = [{ field: 'profile_avatar', file: profileImage }]
+            const newProfileImage = await GlobalImageUploads(imageToUpload, 'profiles', user.unique_Id)
+            user.image = newProfileImage.profile_avatar
+
         }
 
         await user.save()
@@ -613,24 +614,54 @@ exports.getUserData = async (req, res) => {
 }
 
 exports.AddCarouselImage = async (req, res) => {
-    try {
-        if (!req.files) return res.json({ status: 404, msg: `Upload an image` })
-        const image = req.files.image
-        if (!image.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-            
-       const carousel_Id = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false})
-        const imageToUpload = [{field:'carousel',file:image}]
-        const newImage = await GlobalImageUploads(imageToUpload,'carousels',carousel_Id)
-        await CarouselImage.create({
-            image: newImage.carousel,
-            unique_Id:carousel_Id
-        })
+    const isProduction = process.env.NODE_ENV === 'production';
+    const baseURI = `http://localhost:${process.env.PORT}`;
 
-        return res.json({ status: 200, msg: 'Carousel image added successfully' })
+    try {
+        if (!req.files || !req.files.image) return res.json({ status: 400, msg: 'Upload an image' });
+        const image = req.files.image;
+        if (!image.mimetype.startsWith('image/')) return res.json({ status: 400, msg: 'File error, upload a valid image format (jpg, jpeg, png, svg)' });
+
+        const date = new Date();
+        const fileName = `file_${date.getTime()}`;
+        let url;
+
+        if (isProduction) {
+            const folder = 'moniequest/carousels';
+            try {
+                const result = await new Promise((resolve, reject) => {
+                    const stream = cloudinary.uploader.upload_stream(
+                        { folder: folder, public_id: fileName, resource_type: 'image' },
+                        (error, result) => {
+                            if (error) reject(error);
+                            else resolve(result);
+                        }
+                    );
+                    stream.end(image.data);
+                });
+                url = result.secure_url;
+                console.log(`Uploaded to Cloudinary: ${url}`);
+            } catch (error) {
+                console.error('Cloudinary upload error:', error);
+                throw error;
+            }
+        } else {
+            const filePath = path.join('public', 'carousels');
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath, { recursive: true });
+            }
+            const fullPath = path.join(filePath, `${fileName}.jpg`);
+            await image.mv(fullPath);
+            url = `${baseURI}/carousels/${fileName}.jpg`;
+            console.log(`Uploaded locally: ${url}`);
+        }
+
+        await CarouselImage.create({ image: url });
+        return res.json({ status: 200, msg: 'Carousel image added successfully', image: url });
     } catch (error) {
-        return res.json({ status: 500, msg: error.message })
+        ServerError(res,error)
     }
-}
+};
 
 exports.GetCarouselImages = async (req, res) => {
     try {
@@ -650,7 +681,7 @@ exports.DeleteCarouselImage = async (req, res) => {
         if (!id) return res.json({ status: 404, msg: `Provide a carousel image id` })
         const singleCarousel = await CarouselImage.findOne({ where: { id } })
         if (!singleCarousel) return res.json({ status: 404, msg: 'Carousel Image not found' })
-         await GlobalDeleteImage(singleCarousel.image)
+        await GlobalDeleteSingleImage(singleCarousel.image)
         await singleCarousel.destroy()
         return res.json({ status: 200, msg: 'Carousel image deleted successfully' })
     } catch (error) {

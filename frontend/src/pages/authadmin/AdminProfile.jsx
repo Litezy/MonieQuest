@@ -433,7 +433,7 @@ const AdminProfile = () => {
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>add carousel images</div>
                             <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden'>
-                                {loading.sub3 && <Loading />}
+                                {loading.sub3 && <Loader />}
                                 <div className='flex md:flex-row flex-col gap-4 md:items-start items-center'>
                                     {allCarouselImages.length > 0 &&
                                         <div className={`grid ${allCarouselImages.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-3`}>

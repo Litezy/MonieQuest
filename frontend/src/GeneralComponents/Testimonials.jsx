@@ -89,7 +89,7 @@ export default function Testimonials(props) {
                     {data.map((item, index) => (
                         <div className="embla__slide border border-[grey] px-5 pt-5 lg:p-10 text-zinc-300" key={index}>
                             <div className="">
-                                <img src={`$item.image}`}
+                                <img src={item.image}
                                     alt={`${item.firstname} image`} className="size-28 object-cover border-4 border-white shadow-2xl rounded-full" />
                             </div>
                             <div className="font-bold text-xl  lg:text-2xl pt-10">{item.firstname} {item.lastname}</div>
