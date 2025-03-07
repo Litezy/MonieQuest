@@ -178,7 +178,7 @@ const Hiring = () => {
                             {Hire.map((item, i) => (
                                 <div key={i} className='flex flex-col gap-2'>
                                     <div className="w-full overflow-x-auto scrollsdown cursor-all-scroll">
-                                        <div className='w-fit font-semibold ml-2 truncate'>{item}</div>
+                                        <div className='w-fit text-sm md:text-lg font-semibold ml-2 truncate'>{item}</div>
                                     </div>
                                     <div className='flex items-center relative'>
                                         <div className='w-[6%] z-20'>
