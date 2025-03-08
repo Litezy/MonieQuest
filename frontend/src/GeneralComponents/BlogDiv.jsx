@@ -3,16 +3,15 @@ import { FaUser } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { PiArrowUpRight } from "react-icons/pi";
 import { MoveToTop } from '../utils/pageUtils';
-import { imageurl } from '../services/API';
 import moment from 'moment';
 
 const BlogDiv = ({ item, className }) => {
 
     return (
         <div className={`w-full  bg-black rounded-xl p-2 min-h-24  ${className} `}>
-            <Link className='h-full flex items-start flex-col justify-between' to={`/blogs/${item.feature}/${item.id}/${item.slug}`} onClick={MoveToTop} >
+            <Link className='h-full flex items-start flex-col justify-between' to={`/blogs/${item.feature}/${item.id}`} onClick={MoveToTop} >
                 <div className="w-full">
-                    <img src={`${imageurl}/blogs/${item.gen_id}/${item?.image}`} alt="blog image" className="w-full rounded-xl h-40 object-cover " />
+                    <img src={item?.image} alt="blog image" className="w-full rounded-xl h-40 object-cover " />
                 </div>
                 <div className="mt-2 flex items-start flex-col justify-between gap-3">
                     <div className="text-sm text-gray-400 "><span className='capitalize'>{item?.feature === 'personal_finance' ? 'personal finance' : item?.feature}</span> article</div>

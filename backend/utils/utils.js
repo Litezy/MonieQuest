@@ -214,7 +214,6 @@ exports.GlobalDeleteSingleImage = async (imageUrl) => {
         const filePath = imageUrl.replace(`http://localhost:${process.env.PORT}/`, 'public/');
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
-            // console.log(`Deleted locally: ${filePath}`);
         }
     }
 

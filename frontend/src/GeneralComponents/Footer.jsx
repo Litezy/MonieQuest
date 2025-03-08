@@ -16,7 +16,7 @@ const Socials = [
   { href: 'https://www.instagram.com/the_moniequest', icon: FaInstagram },
   { href: 'https://x.com/TheMonieQuest', icon: FaXTwitter },
   { href: 'https://www.youtube.com/@TheMonieQuest', icon: FaYoutube },
-  { href: 'http://t.me/Officialmoniequest', icon: FaTelegramPlane },
+  { href: 'http://t.me/MonieQuest', icon: FaTelegramPlane },
   { href: 'https://www.tiktok.com/@themoniequest', icon: FaTiktok },
   { href: 'https://www.linkedin.com/in/MonieQuest/', icon: FaLinkedin },
   { href: 'https://www.reddit.com/u/TimeConversation6102/s/fg3X4zMJht', icon: FaRedditAlien },

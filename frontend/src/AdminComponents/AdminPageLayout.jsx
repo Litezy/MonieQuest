@@ -58,7 +58,7 @@ const AdminPageLayout = ({ children }) => {
         const parts = url.split('/upload/');
         return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; 
     };
-
+// console.log(user)
     return (
         <div className='w-full'>
             <div className="flex w-full bg-[#1d1e30]">
