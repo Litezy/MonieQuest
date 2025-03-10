@@ -6,6 +6,7 @@ import { GoHistory } from "react-icons/go";
 import { RiUser3Fill } from 'react-icons/ri'
 import { IoNotificationsSharp } from "react-icons/io5";
 import { BiMoneyWithdraw } from "react-icons/bi";
+import { FiLogOut } from "react-icons/fi";
 
 
 
@@ -135,6 +136,7 @@ export const links = [
     { label: 'profile', main: '/profile', url: '/user/profile', icon: RiUser3Fill },
     { label: 'notifications', url: '/user/notifications', icon: IoNotificationsSharp },
     { label: 'leaderboard', url: '/user/leaderboard', icon: MdLeaderboard },
+    { label: 'logout',  icon: FiLogOut },
 ]
 export const blockchainNetworks = [
     { value: "", label: "--select--" },

@@ -23,6 +23,7 @@ import { Apis, AuthPostApi, AuthPutApi, imageurl } from '../../services/API';
 
 const Profile = () => {
   const [user, setUser] = useAtom(PROFILE)
+  // console.log(user)
   const [bank, setBank] = useAtom(BANK)
   const [loading, setLoading] = useState({
     main: false,
@@ -168,7 +169,7 @@ const Profile = () => {
     if (!url || !url.includes('cloudinary.com')) return url; // Return unchanged if not Cloudinary
     const parts = url.split('/upload/');
     return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; // Insert transformations
-};
+  };
 
   return (
     <AuthPageLayout>
@@ -230,6 +231,9 @@ const Profile = () => {
           <form className='flex flex-col gap-8 mt-16' onSubmit={Submit}>
             <div className='flex flex-col gap-5'>
               <div className='text-xl capitalize font-medium text-lightgreen'>personal details</div>
+              {user?.google === 'true' && user?.password === null &&
+                <div className="text-xs w-fit px-3 py-1 bg-ash rounded-sm">You signed up with your Google details, Kindly update your account by setting up a new password and phone number.</div>
+              }
               <div className='grid md:grid-cols-2 grid-cols-1 gap-6'>
                 <div className='relative'>
                   <FormInput label='First name' placeholder='Your first name' name='first_name' value={form.first_name} onChange={formHandler} className='!pl-4 !pr-10' />
@@ -251,10 +255,18 @@ const Profile = () => {
             </div>
             <div className='flex flex-col gap-5'>
               <div className='text-xl capitalize font-medium text-lightgreen'>password & security</div>
-              <div className='grid md:grid-cols-2 grid-cols-1 gap-6'>
-                <PasswordInputField label='Old password' placeholder='Enter old password' name='old_password' value={form.old_password} onChange={formHandler} className={{ icon: '!text-gray-400' }} />
-                <PasswordInputField label='New password' placeholder='Create new password' name='new_password' value={form.new_password} onChange={formHandler} className={{ icon: '!text-gray-400' }} />
-              </div>
+              {user?.google === 'true' && user?.password === null ?
+                <>
+                  <div className="w-11/12 md:w-2/4">
+                    <PasswordInputField label='New password' placeholder='Create new password' name='new_password' value={form.new_password} onChange={formHandler} className={{ icon: '!text-gray-400' }} />
+                  </div>
+                </>
+
+                :
+                <div className='grid md:grid-cols-2 grid-cols-1 gap-6'>
+                  <PasswordInputField label='Old password' placeholder='Enter old password' name='old_password' value={form.old_password} onChange={formHandler} className={{ icon: '!text-gray-400' }} />
+                  <PasswordInputField label='New password' placeholder='Create new password' name='new_password' value={form.new_password} onChange={formHandler} className={{ icon: '!text-gray-400' }} />
+                </div>}
             </div>
             <div className='grid md:grid-cols-2 grid-cols-1'>
               <FormButton title='Save changes' />

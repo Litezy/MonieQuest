@@ -90,7 +90,7 @@ const Footer = () => {
                 </div>
                 <div className='flex items-center gap-2'>
                   <LuPhone />
-                  <span className='text-ash'>09087654327</span>
+                  <span className='text-ash'>+2348106149391</span>
                 </div>
                 <div className='flex flex-col gap-1 mt-2'>
                   <div>Our UK contact</div>
@@ -116,7 +116,7 @@ const Footer = () => {
                 <div className='text-lightgreen md:text-base text-sm text-center'>Don't miss out on the latest Airdrops</div>
                 <div className='md:text-4xl text-2xl text-center'>Be the first to know</div>
                 <div className='text-base text-center'>Join our 2.5k MQ Squad and gain access to the latest
-                  Contact our Nigerian Local Team @08186890156 Airdrops, best Crypto rewards and must know tips
+                  Airdrops, best Crypto rewards and must know tips
                   to stay ahead in the crypto world!</div>
               </div>
               <form className='flex flex-col gap-3 mt-6' onSubmit={SubmitForm}>

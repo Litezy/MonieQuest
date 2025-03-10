@@ -8,6 +8,7 @@ import { MdCurrencyExchange, MdDashboard, MdLeaderboard } from "react-icons/md";
 import { RiUserFill } from 'react-icons/ri'
 import { GoHistory } from "react-icons/go";
 import { MdReviews } from "react-icons/md";
+import { FiLogOut } from "react-icons/fi";
 
 
 
@@ -25,4 +26,5 @@ export const pagelinks = [
     { label: 'profile', url: '/admin/profile', icon: RiUserFill },
     { label: 'notifications', url: '/admin/notifications', icon: IoNotificationsSharp },
     { label: 'leaderboard', url: '/admin/leaderboard', icon: MdLeaderboard },
+    { label: 'logout', icon: FiLogOut },
 ]

@@ -368,7 +368,7 @@ input[type=number]:focus {
     background-image: url('./assets/images/mobile.jpg');
     width: 100%;
     height: fit-content;
-    background-size: cover;
+    background-size: contain;
     background-attachment: scroll;
     background-position: center;
   }

@@ -12,7 +12,7 @@ const AboutPage = () => {
           </div>
         </div>
         <div className="flex w-11/12 text-lg  text-gray-300 mx-auto mt-5 items-start flex-col gap-8">
-          <div className="">At MoneyQuest, we empower individuals to explore new opportunities for earning and growth in the cryptocurrency and digital finance world. From completing surveys and participating in airdrops to redeeming gift cards and utilizing profit-enhancing tools, our platform bridges the gap between effort and reward.</div>
+          <div className="">At MonieQuest, we empower individuals to explore new opportunities for earning and growth in the cryptocurrency and digital finance world. From completing surveys and participating in airdrops to redeeming gift cards and utilizing profit-enhancing tools, our platform bridges the gap between effort and reward.</div>
           <div className="flex items-start flex-col gap-1">
             <div className="">Our Mision</div>
             <div className="">To provide a trustworthy, user-centric platform where individuals can earn, grow, and thrive. We aim to simplify access to digital financial opportunities while inspiring innovation and productivity through cutting-edge tools and resources.</div>
@@ -33,7 +33,7 @@ const AboutPage = () => {
             })}
             </div>
           </div>
-          <div className="">Join MoneyQuest today and unlock a world of possibilities at your fingertips.</div>
+          <div className="">Join MonieQuest today and unlock a world of possibilities at your fingertips.</div>
         </div>
       </div>
     </PageLayout>

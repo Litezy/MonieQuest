@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 import { CookieName } from '../utils/pageUtils'
 
 
-export let URL = import.meta.env.VITE_API_URL;
+export let URL = import.meta.env.VITE_LIVE_API_URL;
 export let imageurl =import.meta.env.VITE_API_URL;
 
 // if (import.meta.env.VITE_ENV === 'production') {
@@ -18,6 +18,7 @@ export let imageurl =import.meta.env.VITE_API_URL;
 const user = 'api/user/'
 const user_urls = {
     signup: user + 'create-account',
+    continue_with_google: user + 'continue_with_google',
     verify_email: user + 'verify-email',
     login: user + 'login-account',
     profile: user + 'profile',
