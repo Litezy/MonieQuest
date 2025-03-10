@@ -105,7 +105,6 @@ exports.continueWithGoogle = async (req, res) => {
     try {
         const { email, first_name, surname, image } = req.body;
         if (!email) return res.json({ status: 400, msg: "Email is missing" });
-
         const findUser = await User.findOne({ where: { email } });
         if (!findUser) {
             const reqFields = [email, first_name, surname];
