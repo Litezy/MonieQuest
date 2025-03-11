@@ -25,5 +25,8 @@
     "otp-generator": "^4.0.1",
     "sequelize": "^6.37.5",
     "slug": "^8.2.3"
+  },
+  "devDependencies": {
+    "@ljharb/tsconfig": "^0.3.2"
   }
 }
