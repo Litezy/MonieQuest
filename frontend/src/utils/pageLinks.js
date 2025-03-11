@@ -68,6 +68,8 @@ import AdminEditTestimonial from "../pages/authadmin/AdminEditTestimonial";
 import AdminCreateTestimonial from "../pages/authadmin/AdminCreateTestimonial";
 import AdminUtils from "../pages/authadmin/AdminUtils";
 import AdminUpdateCryptos from "../pages/authadmin/AdminUpdateCryptos";
+import AdminFilterBlogs from "../pages/authadmin/AdminFilterBlogs";
+import AdminFilterComments from "../pages/authadmin/AdminFilterComments";
 
 export const GeneralPagesLinks = [
     { path: '*', component: Notfound },
@@ -88,8 +90,8 @@ export const GeneralPagesLinks = [
     { path: '/faqs', component: FAQS },
     { path: '/privacy_policy', component: PrivacyPolicy },
     { path: '/we_are_hiring', component: Hiring },
-    { path: '/blogs/:feature/:id/:slug', component: SingleBlog },
-    { path: '/blogs/:feature/:id/:slug/comments', component: BlogComments },
+    { path: '/blogs/:feature/:id/', component: SingleBlog },
+    { path: '/blogs/:feature/:id/comments', component: BlogComments },
     { path: '/blogs/:feature', component: FeatureBlogs },
 ]
 
@@ -146,4 +148,6 @@ export const AdminPagesLinks = [
     { path: '/admin/utilities/testimonials/create', component: AdminCreateTestimonial },
     { path: '/admin/utilities', component: AdminUtils },
     { path: '/admin/utilities/update_cryptos', component: AdminUpdateCryptos},
+    { path: '/admin/utilities/filter_blogs', component: AdminFilterBlogs},
+    { path: '/admin/utilities/filter_blogs/:id', component: AdminFilterComments},
 ]

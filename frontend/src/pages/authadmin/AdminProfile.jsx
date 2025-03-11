@@ -305,9 +305,9 @@ const AdminProfile = () => {
     }
 
     const optimizeImageUrl = (url) => {
-        if (!url || !url.includes('cloudinary.com')) return url; // Return unchanged if not Cloudinary
+        if (!url || !url.includes('cloudinary.com')) return url; 
         const parts = url.split('/upload/');
-        return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; // Insert transformations
+        return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; 
     };
 
 
@@ -333,7 +333,7 @@ const AdminProfile = () => {
                                     <input ref={imgref} type="file" onChange={handleProfileUpload} hidden />
                                 </label>
                             </div>
-                            <div className='text-2xl font-bold capitalize'>{user?.surname} {user?.first_name}</div>
+                            <div className='text-2xl font-bold capitalize'>{user?.first_name}  {user?.surname}</div>
                             <div className='flex gap-1 items-center text-sm'>
                                 <div className='capitalize'>admin / moderator</div>
                                 <MdOutlineAdminPanelSettings className='text-lightgreen text-lg' />

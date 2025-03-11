@@ -3,8 +3,9 @@ exports.webShort = 'MQ'
 require('dotenv').config()
 const path = require('path')
 const fs = require('fs')
-exports.webURL = 'https://moniequest.vercel.app/'
+exports.webURL = 'https://moniequest-front.vercel.app/'
 const cloudinary = require('cloudinary').v2
+const axios = require('axios')
 
 exports.Socials = {
     fb: 'https://www.facebook.com/profile.php?id=61571510583455',
@@ -214,7 +215,6 @@ exports.GlobalDeleteSingleImage = async (imageUrl) => {
         const filePath = imageUrl.replace(`http://localhost:${process.env.PORT}/`, 'public/');
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
-            // console.log(`Deleted locally: ${filePath}`);
         }
     }
 
@@ -368,6 +368,55 @@ exports.DeleteBlogImages = async (images, blog_Id) => {
         if (fs.existsSync(blogFolderPath)) {
             fs.rmSync(blogFolderPath, { recursive: true, force: true });
             console.log(`Deleted local folder: ${blogFolderPath}`);
+        }
+    }
+};
+
+
+
+
+exports.GoogleImageUpload = async (imageUrl, subfolder, folder_Id) => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const baseURI = `http://localhost:${process.env.PORT}`;
+
+    const date = new Date();
+    const fileName = `file_${date.getTime()}`;
+
+    if (isProduction) {
+        try {
+            const folder = `moniequest/${subfolder}/${folder_Id}`;
+            const result = await cloudinary.uploader.upload(imageUrl, {
+                folder: folder,
+                public_id: fileName,
+                resource_type: 'image'
+            });
+
+            return result.secure_url; 
+        } catch (error) {
+            console.error('Cloudinary upload error:', error);
+            throw error;
+        }
+    } else {
+        // Local storage (for development mode)
+        try {
+            const filePath = path.join("public", subfolder, folder_Id);
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath, { recursive: true });
+            }
+
+            // **Download Image from URL**
+            const response = await axios({
+                url: imageUrl,
+                responseType: "arraybuffer", // Get raw image data
+            });
+
+            const fullPath = path.join(filePath, `${fileName}.jpg`);
+            fs.writeFileSync(fullPath, Buffer.from(response.data)); // Store image locally
+
+            return `${baseURI}/${subfolder}/${folder_Id}/${fileName}.jpg`;
+        } catch (error) {
+            console.error("Local image storage error:", error);
+            throw error;
         }
     }
 };

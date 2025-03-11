@@ -1,5 +1,5 @@
 const { getTestimonials } = require('../controllers/adminController')
-const { CreateAccount, LoginAccount, GetProfile, SendOTP, VerifyOtp, ChangePasswordOnRequest, Contacts, UpdateProfile, VerifyEmail, CreateUpdateBankAccount, CreateUpdateKYC, UserKYC, GetWalletBankAndUtils, getLeaderboard, SubscribeToPlatform, AddCarouselImage, GetCarouselImages, DeleteCarouselImage, getUserData } = require('../controllers/userController')
+const { CreateAccount, LoginAccount, GetProfile, SendOTP, VerifyOtp, ChangePasswordOnRequest, Contacts, UpdateProfile, VerifyEmail, CreateUpdateBankAccount, CreateUpdateKYC, UserKYC, GetWalletBankAndUtils, getLeaderboard, SubscribeToPlatform, AddCarouselImage, GetCarouselImages, DeleteCarouselImage, getUserData, continueWithGoogle } = require('../controllers/userController')
 const { AllMiddleware, UserMiddleware, AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -24,5 +24,6 @@ router.get('/get-carousel-images', AllMiddleware, GetCarouselImages)
 router.post('/delete-carousel-image', AdminMiddleware, DeleteCarouselImage)
 router.get('/get_user_data',UserMiddleware, getUserData)
 router.get('/get_testimonials', getTestimonials)
+router.post('/continue_with_google',  continueWithGoogle)
 
 module.exports = router

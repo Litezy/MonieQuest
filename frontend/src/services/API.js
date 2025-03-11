@@ -4,7 +4,7 @@ import { CookieName } from '../utils/pageUtils'
 
 
 export let URL = import.meta.env.VITE_LIVE_API_URL;
-export let imageurl =import.meta.env.VITE_LIVE_API_URL;
+export let imageurl =import.meta.env.VITE_API_URL;
 
 // if (import.meta.env.VITE_ENV === 'production') {
 //     URL = import.meta.env.VITE_LIVE_API_URL
@@ -18,6 +18,7 @@ export let imageurl =import.meta.env.VITE_LIVE_API_URL;
 const user = 'api/user/'
 const user_urls = {
     signup: user + 'create-account',
+    continue_with_google: user + 'continue_with_google',
     verify_email: user + 'verify-email',
     login: user + 'login-account',
     profile: user + 'profile',
@@ -112,7 +113,10 @@ const admin_urls = {
     single_testimonial: admin + 'single_testimonial',
     delete_testimonial: admin + 'delete_testimonial',
     crud_crypto: admin + 'create_update_delete_cryptos',
-    get_cryptos: admin + "get_cryptos"
+    get_cryptos: admin + "get_cryptos",
+    make_admin: admin + 'make_admin',
+    blogs_with_comments:admin + 'blogs_with_comments',
+    delete_comment: admin + 'delete_comment'
 }
 
 const products = 'api/product/'

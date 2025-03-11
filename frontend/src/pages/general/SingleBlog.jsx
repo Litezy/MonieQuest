@@ -10,7 +10,7 @@ import avatar from '../../assets/images/avatar.svg'
 import moment from 'moment';
 import { ErrorAlert, MoveToSection, MoveToTop, SuccessAlert, } from '../../utils/pageUtils';
 import BlogDiv from '../../GeneralComponents/BlogDiv';
-import Loading from '../../GeneralComponents/Loading';
+import Loader from '../../GeneralComponents/Loader';
 
 
 const SingleBlog = () => {
@@ -179,7 +179,7 @@ const SingleBlog = () => {
                         <div className="w-full flex items-start lg:gap-6 gap-10 flex-col lg:flex-row">
                             <div className="lg:w-[30%] w-full">
                                 <div className="flex items-start flex-col gap-12">
-                                    <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.image}`} alt="blog image" className="w-full rounded-xl max-h-52 object-cover object-center " />
+                                    <img src={singleBlog?.image} alt="blog image" className="w-full rounded-xl max-h-52 object-cover object-center " />
                                     <div className="w-full flex items-start flex-col gap-2">
                                         <div className="poppins font-bold text-2xl">Table of contents</div>
                                         {parapgraphs.map((item, i) => {
@@ -193,7 +193,7 @@ const SingleBlog = () => {
                             <div className="lg:w-[70%] w-full">
                                 <div className="flex items-start w-full justify-between">
                                     <div className="flex items-start gap-2">
-                                        <img src={singleBlog?.blog_user?.image ? `${imageurl}/profiles/${singleBlog?.blog_user?.image}` : avatar} loading='lazy' alt="blog" className=" rounded-full h-10 w-10 object-cover " />
+                                        <img src={singleBlog?.blog_user?.image ? singleBlog?.blog_user?.image : avatar} loading='lazy' alt="blog" className=" rounded-full h-10 w-10 object-cover " />
                                         <div className="flex items-start flex-col gap-1 text-sm">
                                             <div className="poppins capitalize">{singleBlog?.blog_user?.first_name} {singleBlog?.blog_user?.surname}</div>
                                             <div className="text-xs poppins text-gray-400">Updated on {moment(singleBlog?.updatedAt).format('D MMM YYYY hh:mm a')}</div>
@@ -227,7 +227,7 @@ const SingleBlog = () => {
                                             <div className="">{singleBlog?.second_paragraph_content}</div>
                                         </div>
                                         {singleBlog?.second_paragraph_image && <div className="flex items-center justify-center" id='second'>
-                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.second_paragraph_image}`} alt="second image" className="w-auto rounded-xl md:max-h-[20rem] object-cover object-center" />
+                                            <img src={singleBlog?.second_paragraph_image} alt="second image" className="w-auto rounded-xl md:max-h-[20rem] object-cover object-center" />
                                         </div>}
                                     </div>
                                     <div className='flex flex-col gap-8'>
@@ -236,7 +236,7 @@ const SingleBlog = () => {
                                             <div className="">{singleBlog?.extras_content}</div>
                                         </div>
                                         {singleBlog?.extras_image && <div className="flex items-center justify-center" id='second'>
-                                            <img src={`${imageurl}/blogs/${singleBlog?.gen_id}/${singleBlog?.extras_image}`} alt="extras image" className="w-auto rounded-xl md:max-h-[20rem] object-cover object-center " />
+                                            <img src={singleBlog?.extras_image} alt="extras image" className="w-auto rounded-xl md:max-h-[20rem] object-cover object-center " />
                                         </div>}
                                     </div>
                                 </div>
@@ -256,8 +256,8 @@ const SingleBlog = () => {
                                             <Comments key={i} item={item} />
                                         ))}
                                     </div>
-                                    {singleBlog.blog_comments.length > 8 &&
-                                        <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/${singleBlog.slug}/comments`} onClick={MoveToTop}>
+                                    {singleBlog.blog_comments.length > 1 &&
+                                        <Link to={`/blogs/${singleBlog.feature}/${singleBlog.id}/comments`} onClick={MoveToTop}>
                                             <button className="w-fit px-4 py-1 rounded-md bg-ash text-white">see all comments</button>
                                         </Link>
                                     }
@@ -267,7 +267,7 @@ const SingleBlog = () => {
                             }
                         </div>
                         <form className="lg:w-5/6 w-full p-4 rounded-md bg-primary relative" onSubmit={SubmitComment}>
-                            {loading && <Loading />}
+                            {loading && <Loader />}
                             <div className="text-lg mont">Leave a comment</div>
                             <div className="flex mt-4 flex-col gap-5 w-full lg:w-11/12">
                                 <div className="flex items-center flex-col lg:flex-row gap-5">

@@ -3,15 +3,23 @@ import { Link, useNavigate } from 'react-router-dom'
 import PasswordInputField from '../../utils/PasswordInputField'
 import FormInput from '../../utils/FormInput'
 import FormButton from '../../utils/FormButton'
-import { ErrorAlert, MoveToTop } from '../../utils/pageUtils'
+import { CookieName, ErrorAlert, MoveToTop, UserRoles } from '../../utils/pageUtils'
 import logo from '../../assets/images/logo.png'
 import { Apis, PostApi } from '../../services/API'
 import Loader from '../../GeneralComponents/Loader'
+import GoogleSignInButton from '../../GeneralComponents/GoogleSignInButton'
+import { jwtDecode } from 'jwt-decode'
+import { decodeToken } from 'react-jwt'
+import Cookies from 'js-cookie'
+import ModalLayout from '../../utils/ModalLayout'
+
+
 
 const SignUpPage = () => {
   const [check, setCheck] = useState(false)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
   const [form, setForm] = useState({
     first_name: '',
     surname: '',
@@ -69,9 +77,43 @@ const SignUpPage = () => {
   }
 
 
+ 
+  const handleSuccess = async (user) => {
+    const formbody = {
+      email: user.email,
+      first_name: user.first_name,
+      surname: user.lastname,
+      image: user.image,
+    };
+    setGoogleLoading(true);
+    try {
+      const res = await PostApi(Apis.user.continue_with_google, formbody);
+      if (res.status !== 201 && res.status !== 200) return ErrorAlert(res.msg);
+      const token = res.token;
+      Cookies.set(CookieName, token);
+      const decodedToken = decodeToken(token);
+      const findRole = UserRoles.find(item => item.role === decodedToken.role);
+      if (findRole) return navigate(`${findRole.url}`);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    } catch (error) {
+      console.log(`Failed to sign up with google: ${error.message}`);
+      ErrorAlert(`Failed to sign up with google: ${error.message}`);
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
+  const handleFailure = (error) => {
+    console.error("Google Sign-in failed:", error);
+  };
   return (
     <div className="w-full bg-dark h-screen overflow-y-auto">
       {loading && <Loader />}
+      {googleLoading &&
+        <ModalLayout setModal={setGoogleLoading}>
+          <Loader title='please wait' />
+        </ModalLayout>
+      }
       <div className='w-11/12 mx-auto py-10'>
         <div className='flex items-center justify-center max-w-xl mx-auto relative'>
           <div className='w-full h-full flex flex-col text-zinc-300'>
@@ -98,7 +140,14 @@ const SignUpPage = () => {
                   <input type='checkbox' value={check} checked={check} onChange={event => { setCheck(event.target.checked) }} className='outline-none'></input>
                   <span>I agree to MonieQuest <Link to='/terms_of_service' onClick={MoveToTop} className='text-lightgreen'>Terms and Conditions</Link> and <Link to='/privacy_policy' onClick={MoveToTop} className='text-lightgreen'>Privacy Policy</Link></span>
                 </div>
-                <FormButton title='Sign up' className='!w-5/6' />
+                <FormButton title='Sign up' className='!py-3' />
+                <div className="text-center text-sm text-white my-1 ">OR</div>
+                <div className=" w-full flex items-center justify-center">
+                  <GoogleSignInButton text='Continue with Google'
+                    onSuccess={handleSuccess}
+                    onFailure={handleFailure}
+                  />
+                </div>
                 <Link className='text-sm text-lightgreen underline' to={'/'}>Go Back Home</Link>
               </div>
             </form>

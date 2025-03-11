@@ -16,7 +16,7 @@ const Socials = [
   { href: 'https://www.instagram.com/the_moniequest', icon: FaInstagram },
   { href: 'https://x.com/TheMonieQuest', icon: FaXTwitter },
   { href: 'https://www.youtube.com/@TheMonieQuest', icon: FaYoutube },
-  { href: 'http://t.me/Officialmoniequest', icon: FaTelegramPlane },
+  { href: 'http://t.me/MonieQuest', icon: FaTelegramPlane },
   { href: 'https://www.tiktok.com/@themoniequest', icon: FaTiktok },
   { href: 'https://www.linkedin.com/in/MonieQuest/', icon: FaLinkedin },
   { href: 'https://www.reddit.com/u/TimeConversation6102/s/fg3X4zMJht', icon: FaRedditAlien },
@@ -26,7 +26,6 @@ const Socials = [
 ]
 
 const pageLinks = [
-  { path: 'about us', url: '/about' },
   { path: 'contact us', url: '/contact' },
   { path: 'FAQS', url: '/faqs' },
   { path: 'terms & conditions', url: '/terms_of_service' },
@@ -90,7 +89,7 @@ const Footer = () => {
                 </div>
                 <div className='flex items-center gap-2'>
                   <LuPhone />
-                  <span className='text-ash'>09087654327</span>
+                  <span className='text-ash'>+2348106149391</span>
                 </div>
                 <div className='flex flex-col gap-1 mt-2'>
                   <div>Our UK contact</div>
@@ -116,7 +115,7 @@ const Footer = () => {
                 <div className='text-lightgreen md:text-base text-sm text-center'>Don't miss out on the latest Airdrops</div>
                 <div className='md:text-4xl text-2xl text-center'>Be the first to know</div>
                 <div className='text-base text-center'>Join our 2.5k MQ Squad and gain access to the latest
-                  Contact our Nigerian Local Team @08186890156 Airdrops, best Crypto rewards and must know tips
+                  Airdrops, best Crypto rewards and must know tips
                   to stay ahead in the crypto world!</div>
               </div>
               <form className='flex flex-col gap-3 mt-6' onSubmit={SubmitForm}>

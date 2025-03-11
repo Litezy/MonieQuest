@@ -14,7 +14,7 @@ const cloudinary = require('cloudinary').v2
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const otpGenerator = require('otp-generator')
-const { webName, webShort, webURL, ServerError, GlobalDeleteImage, GlobalImageUploads, GlobalDeleteSingleImage } = require('../utils/utils')
+const { webName, webShort, webURL, ServerError, GlobalDeleteImage, GlobalImageUploads, GlobalDeleteSingleImage, GoogleImageUpload } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const slug = require('slug')
 
@@ -32,7 +32,6 @@ exports.CreateAccount = async (req, res) => {
         if (findPhone) return res.json({ status: 404, msg: `Phone number used, try a different one` })
         const uniqueId = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false })
         const user = await User.create({
-            image: null,
             first_name,
             surname,
             unique_Id: uniqueId,
@@ -48,7 +47,7 @@ exports.CreateAccount = async (req, res) => {
         await Notification.create({
             user: user.id,
             title: `welcome ${first_name}`,
-            content: `Welcome to ${webName} family, get ready for some amazing deals and updates with us.`,
+            content: `Welcome to ${webName} family, get ready for some amazing deals and updates from us.`,
             url: '/user/dashboard',
         })
 
@@ -101,6 +100,87 @@ exports.CreateAccount = async (req, res) => {
     }
 }
 
+
+exports.continueWithGoogle = async (req, res) => {
+    try {
+        const { email, first_name, surname, image } = req.body;
+        if (!email) return res.json({ status: 400, msg: "Email is missing" });
+        const findUser = await User.findOne({ where: { email } });
+        if (!findUser) {
+            const reqFields = [email, first_name, surname];
+            if (reqFields.some((field) => !field)) return res.json({ status: 400, msg: "All fields are required" });
+
+            const gen_id = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false });
+            let uploadImage;
+            if (image) {
+                uploadImage = await GoogleImageUpload(image, 'profiles', gen_id);
+            }
+
+            const newUser = await User.create({
+                first_name,
+                surname,
+                email,
+                image: uploadImage ? uploadImage : null,
+                unique_Id: gen_id,
+                email_verified: 'true',
+                role: 'user',
+                google: 'true'
+            });
+
+            await Wallet.create({ user: newUser.id });
+            await Notification.create({
+                user: newUser.id,
+                title: `Welcome ${first_name}`,
+                content: `Welcome to ${webName} family, get ready for some amazing deals and updates from us.`,
+                url: '/user/dashboard',
+            });
+
+            const utils = await Util.findOne({});
+            if (!utils) {
+                await Util.create({});
+            }
+
+            Mailing({
+                subject: `Welcome To ${webName}`,
+                eTitle: `Welcome ${first_name}`,
+                eBody: `
+                    <div>Welcome to ${webName} family, get ready for some amazing deals and updates with us right <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">here</a>.</div>
+                `,
+                account: newUser,
+            });
+
+            const admins = await User.findAll({ where: { role: 'admin' } });
+            if (admins) {
+                admins.map(async (ele) => {
+                    await Notification.create({
+                        user: ele.id,
+                        title: `${newUser.first_name} ${newUser.surname} joins ${webShort}`,
+                        content: `Hello Admin, you have a new user as ${newUser.first_name} ${newUser.surname} joins the platform via Google sign up.`,
+                        url: '/admin/all_users',
+                    });
+
+                    Mailing({
+                        subject: 'New User Alert',
+                        eTitle: `New user joins ${webShort}`,
+                        eBody: `
+                            <div>Hello Admin, you have a new user as ${newUser.first_name} ${newUser.surname} joins ${webName} today via Google sign up; ${moment(newUser.createdAt).format('DD-MM-yyyy')} / ${moment(newUser.createdAt).format('h:mm A')}.</div>
+                        `,
+                        account: ele,
+                    });
+                });
+            }
+
+            const token = jwt.sign({ id: newUser.id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '15h' });
+            return res.json({ status: 201, msg: 'User created successfully', token });
+        } else {
+            const token = jwt.sign({ id: findUser.id, role: findUser.role }, process.env.JWT_SECRET, { expiresIn: '15h' });
+            return res.json({ status: 200, msg: 'User logged in successfully', token });
+        }
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
 exports.VerifyEmail = async (req, res) => {
     try {
         const { email, code } = req.body
@@ -118,7 +198,7 @@ exports.VerifyEmail = async (req, res) => {
             subject: `Welcome To ${webName}`,
             eTitle: `Welcome ${findAccount.first_name}`,
             eBody: `
-             <div>Welcome to ${webName} family, Welcome to ${webName} family, get ready for some amazing deals and updates with us right <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">here</a>.</div>
+             <div>Welcome to ${webName} family, get ready for some amazing deals and updates with us right <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">here</a>.</div>
             `,
             account: findAccount,
         })
@@ -299,7 +379,7 @@ exports.UpdateProfile = async (req, res) => {
             if (!new_password) return res.json({ status: 404, msg: `Create a new password` })
         }
         if (new_password) {
-            if (!old_password) return res.json({ status: 404, msg: `Enter your old password` })
+            if (!old_password && user.password !== null) return res.json({ status: 404, msg: `Enter your old password` })
             if (new_password.length < 6) return res.json({ status: 404, msg: `New Password must be at least six characters long` })
             user.password = new_password
         }
@@ -551,7 +631,7 @@ exports.getLeaderboard = async (req, res) => {
     try {
         const all_users = await User.findAll({
             where: { role: 'user' },
-            attributes: ['id', 'first_name', 'createdAt','unique_Id'],
+            attributes: ['id', 'first_name', 'createdAt', 'unique_Id'],
             include: { model: Wallet, as: 'user_wallets', attributes: ['total_deposit'], },
             order: [[{ model: Wallet, as: 'user_wallets' }, 'total_deposit', 'DESC']]
         })
@@ -659,7 +739,7 @@ exports.AddCarouselImage = async (req, res) => {
         await CarouselImage.create({ image: url });
         return res.json({ status: 200, msg: 'Carousel image added successfully', image: url });
     } catch (error) {
-        ServerError(res,error)
+        ServerError(res, error)
     }
 };
 

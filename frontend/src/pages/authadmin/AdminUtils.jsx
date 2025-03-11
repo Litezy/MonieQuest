@@ -6,6 +6,7 @@ const AdminUtils = () => {
     const links = [
         { path: 'Update Cryptocurrencies', url: '/admin/utilities/update_cryptos' },
         { path: 'Testimonials', url: '/admin/utilities/testimonials' },
+        { path: 'Filter Comments', url: '/admin/utilities/filter_blogs' },
     ]
 
     return (

@@ -2,6 +2,9 @@ import { toast } from 'sonner'
 import customer1 from '../assets/images/customer1.jfif'
 import animationData from '../utils/lottie.json'
 
+
+
+
 export const CookieName = 'moniequestweb001'
 export const UserRoles = [
     {
@@ -137,25 +140,25 @@ export const services = [
     `MonieQuest is not responsible for losses due to user errors or external factors`,
     `These terms and any separate agreements will be governed by and construed in accordance with the laws of Nigeria`,
     `We may terminate or suspend your account immediately, without prior notice or liability, for any reason, including without limitation if you breach these terms.`,
-    `Using some of the services on Moneyquest Website may incur fees. These fees and charges are outlined clearly within our platform. By using any services that have fees, you agree to pay these charges.`,
-    `MoneyQuest reserves the right to revise terms. Continued use of the service constitutes acceptance of updated terms.`
+    `Using some of the services on MonieQuest Website may incur fees. These fees and charges are outlined clearly within our platform. By using any services that have fees, you agree to pay these charges.`,
+    `MonieQuest reserves the right to revise terms. Continued use of the service constitutes acceptance of updated terms.`
 ]
 
 export const generalfaqs = [
     {
-        title: 'Q1: What is MoneyQuest?',
-        desc: `MoneyQuest is a platform that enables users to earn money by engaging in simple tasks such as participating in airdrops, completing surveys, and exploring special offers. We connect users with trustworthy, value-added earning opportunities in the cryptocurrency world.`
+        title: 'Q1: What is MonieQuest?',
+        desc: `MonieQuest is a platform that enables users to earn money by engaging in simple tasks such as participating in airdrops, completing surveys, and exploring special offers. We connect users with trustworthy, value-added earning opportunities in the cryptocurrency world.`
     },
     {
-        title: 'Q2: How do I get started with MoneyQuest?',
-        desc: `MoneyQuest is publicly accessible to everyone without the need for registration. Simply visit our homepage to explore available airdrops and projects. You can start earning immediately by participating in these opportunities. However, for other features like the Exchange and Profit Tools, you'll need to create an account.`
+        title: 'Q2: How do I get started with MonieQuest?',
+        desc: `MonieQuest is publicly accessible to everyone without the need for registration. Simply visit our homepage to explore available airdrops and projects. You can start earning immediately by participating in these opportunities. However, for other features like the Exchange and Profit Tools, you'll need to create an account.`
     },
     {
-        title: 'Q3: Is MoneyQuest free to use?',
-        desc: `Yes, joining and using MoneyQuest is completely free.`
+        title: 'Q3: Is MonieQuest free to use?',
+        desc: `Yes, joining and using MonieQuest is completely free.`
     },
     {
-        title: 'Q4: How do I earn through MoneyQuest?',
+        title: 'Q4: How do I earn through MonieQuest?',
         desc: `You can earn by participating in airdrops, completing surveys, and engaging with special offers listed on our platform.`
     },
     {
@@ -163,7 +166,7 @@ export const generalfaqs = [
         desc: `To withdraw earnings from cryptocurrency airdrops, claim your tokens (manually or automatically), ensure they're in a compatible wallet, and transfer them to an exchange that supports the token. Convert the tokens into your desired currency through trading and withdraw the funds following the exchange's procedures, keeping in mind tax obligations and token volatility.`
     },
     {
-        title: 'Q6: How does MoneyQuest protect my personal information?',
+        title: 'Q6: How does MonieQuest protect my personal information?',
         desc: `We implement robust security measures, including encryption and secure servers, to protect your personal data. For more details, please refer to our Privacy Policy.`
     },
     {
@@ -175,11 +178,11 @@ export const generalfaqs = [
         desc: `You can update your account details by logging in and navigating to the 'Account Settings' section.`
     },
     {
-        title: 'Q9: How can I contact MoneyQuest support?',
+        title: 'Q9: How can I contact MonieQuest support?',
         desc: `For assistance, visit the 'Contact Us' page on our website or email our support team at support@moniequest.com.`
     },
     {
-        title: 'Q10: Where can I find more information about using MoneyQuest?',
+        title: 'Q10: Where can I find more information about using MonieQuest?',
         desc: `Our website features a comprehensive Help Center with articles and guides to assist you.`
     },
 ]
@@ -249,20 +252,20 @@ export const airdropsfaqs = [
 
 export const exchangefaqs = [
     {
-        title: `Q1: What services does MoneyQuest Exchange offer?`,
-        desc: `MoneyQuest Exchange allows you to redeem gift cards, buy and sell cryptocurrency, and perform other financial transactions securely.`
+        title: `Q1: What services does MonieQuest Exchange offer?`,
+        desc: `MonieQuest Exchange allows you to redeem gift cards, buy and sell cryptocurrency, and perform other financial transactions securely.`
     },
     {
-        title: `Q2: How do I buy cryptocurrency on MoneyQuest Exchange?`,
+        title: `Q2: How do I buy cryptocurrency on MonieQuest Exchange?`,
         desc: `After logging into your account, navigate to the 'Buy Crypto' section, select your desired cryptocurrency, enter the amount, and complete the purchase using your preferred payment method.`
     },
     {
-        title: `Q3: What gift cards can I redeem on MoneyQuest Exchange?`,
+        title: `Q3: What gift cards can I redeem on MonieQuest Exchange?`,
         desc: `We offer a wide range of gift cards from popular retailers and services. The available options are listed in the 'Redeem Gift Cards' section of our platform.
 `
     },
     {
-        title: `Q4: Are there any fees for transactions on MoneyQuest Exchange?`,
+        title: `Q4: Are there any fees for transactions on MonieQuest Exchange?`,
         desc: `Transaction fees vary depending on the service. Detailed information about fees is provided during the transaction process and in our Terms and Conditions.
 `
     },
@@ -307,7 +310,7 @@ export const profitfaqs = [
 export const examplefaqs = [
     {
         title: 'What is MonieQuest?',
-        desc: `MoneyQuest is a platform that enables users to earn money by engaging in simple tasks such as participating in airdrops, completing surveys, and exploring special offers. We connect users with trustworthy, value-added earning opportunities in the cryptocurrency world.`
+        desc: `MonieQuest is a platform that enables users to earn money by engaging in simple tasks such as participating in airdrops, completing surveys, and exploring special offers. We connect users with trustworthy, value-added earning opportunities in the cryptocurrency world.`
     },
     {
         title: 'What is a crypto airdrop?',

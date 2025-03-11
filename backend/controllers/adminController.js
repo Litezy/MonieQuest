@@ -14,7 +14,7 @@ const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
 const Comment = require('../models').comments
-const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, DeleteBlogImages, GlobalDeleteImage, GlobalUploadImage, GlobalImageUploads, GlobalDeleteMultiImages } = require('../utils/utils')
+const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, DeleteBlogImages, GlobalDeleteImage, GlobalUploadImage, GlobalImageUploads, GlobalDeleteMultiImages, GoogleImageUpload } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
@@ -135,7 +135,7 @@ exports.UpdateAirdrop = async (req, res) => {
 
         const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
-       
+
         const logoImage = req?.files?.logo_image
         const bannerImage = req?.files?.banner_image
 
@@ -267,8 +267,8 @@ exports.DeleteClosedAirdrop = async (req, res) => {
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
         if (airdrop.status !== 'closed') return res.json({ status: 404, msg: 'You can only delete an airdrop with a closed status' })
 
-        const imagesToDelete = [airdrop.logo_image,airdrop.banner_image]
-        await GlobalDeleteMultiImages(imagesToDelete,'airdrops',airdrop.gen_id)
+        const imagesToDelete = [airdrop.logo_image, airdrop.banner_image]
+        await GlobalDeleteMultiImages(imagesToDelete, 'airdrops', airdrop.gen_id)
 
         await airdrop.destroy()
 
@@ -806,7 +806,7 @@ exports.DeleteBlog = async (req, res) => {
             blog.second_paragraph_image,
             blog.extras_image
         ].filter(url => url);
-        GlobalDeleteMultiImages(imagesToDelete,'blogs', blog.gen_id)
+        GlobalDeleteMultiImages(imagesToDelete, 'blogs', blog.gen_id)
         await blog.destroy();
 
         return res.json({ status: 200, msg: 'Blog deleted successfully' });
@@ -1534,7 +1534,7 @@ exports.UpdateTestimonial = async (req, res) => {
         const testimonial = await Testimonial.findByPk(id);
         if (!testimonial) return res.json({ status: 404, msg: 'Testimonial not found' });
         const image = req?.files?.image;
-        
+
         let url = {}
         if (image) {
             if (!image.mimetype.startsWith('image/')) {
@@ -1544,7 +1544,7 @@ exports.UpdateTestimonial = async (req, res) => {
                 await GlobalDeleteImage(testimonial.image)
             }
             const imageToUpload = [{ field: 'testimonial', file: image }]
-             url = await GlobalImageUploads(imageToUpload, 'testimonials', testimonial.unique_Id)
+            url = await GlobalImageUploads(imageToUpload, 'testimonials', testimonial.unique_Id)
         }
 
         await testimonial.update({
@@ -1552,7 +1552,7 @@ exports.UpdateTestimonial = async (req, res) => {
             lastname: lastname ? lastname : lastname === '' ? null : testimonial.lastname,
             title: title ? title : testimonial.title,
             content: content ? content : testimonial.content,
-            image:url.testimonial
+            image: url.testimonial
         });
 
 
@@ -1568,7 +1568,7 @@ exports.deleteTestimonial = async (req, res) => {
         if (!id) return res.json({ status: 400, msg: "ID missing from request" })
         const testimonial = await Testimonial.findByPk(id);
         if (!testimonial) return res.json({ status: 404, msg: 'Testimonial not found' });
-        await GlobalDeleteImage(testimonial.image,'testimonials',testimonial.unique_Id)
+        await GlobalDeleteImage(testimonial.image, 'testimonials', testimonial.unique_Id)
         await testimonial.destroy()
         return res.json({ status: 200, msg: 'Testimonial deleted successfully' });
     } catch (error) {
@@ -1654,3 +1654,52 @@ exports.getCryptos = async (req, res) => {
         ServerError(res, error)
     }
 }
+
+exports.makeUserAdmin = async (req, res) => {
+    try {
+        const { id } = req.body
+        if (!id) return res.json({ status: 400, msg: 'ID is required' })
+        const findUser = await User.findOne({ where: { id } })
+        if (!findUser) return res.json({ status: 404, msg: 'User not found' })
+        findUser.role = 'admin'
+        await findUser.save()
+        const allusers = await User.findAll({ where: { role: { [Op.ne]: 'admin' } } })
+        return res.json({ status: 200, msg: `${findUser.first_name} is now an admin and would be excluded from the user's list`, data: allusers })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getBlogsWithComments = async (req, res) => {
+    try {
+        const blogs = await Blog.findAll({
+            include: [
+                {
+                    model: Comment,
+                    as: 'blog_comments',
+                    order: [['createdAt', 'DESC']]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+        if (!blogs) return res.json({ status: 404, msg: 'No blog found' })
+        const filterBlogs = blogs.filter((blog) => blog.blog_comments.length > 0)
+        return res.json({ status: 200, msg: 'fetch success', data: filterBlogs })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.deleteComment = async (req, res) => {
+    try {
+        const { id } = req.body
+        if (!id) return res.json({ status: 400, msg: 'ID is required' })
+        const findComment = await Comment.findOne({ where: { id } })
+        if (!findComment) return res.json({ status: 404, msg: 'Comment not found' })
+        await findComment.destroy()
+        return res.json({ status: 200, msg: 'Comment deleted successfully' })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
