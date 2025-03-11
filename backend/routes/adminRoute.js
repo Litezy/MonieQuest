@@ -1,4 +1,4 @@
-const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops, AllRelatedBlogsExceptCurrent, CommentOnBlog, AllBlogComments, DeleteSingleBlogImages, getAdminTransHistory, getBankWithdrawals, DeleteClosedAirdrop, getSingleWithdrawal, DeleteBlog, CreateTestimonial, UpdateTestimonial, getSingleTestimonial, deleteTestimonial, addOrUpdateCryptos, getCryptos, makeUserAdmin, getBlogsWithComments, deleteComment } = require('../controllers/adminController')
+const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops, AllRelatedBlogsExceptCurrent, CommentOnBlog, AllBlogComments, DeleteSingleBlogImages, getAdminTransHistory, getBankWithdrawals, DeleteClosedAirdrop, getSingleWithdrawal, DeleteBlog, CreateTestimonial, UpdateTestimonial, getSingleTestimonial, deleteTestimonial, addOrUpdateCryptos, getCryptos, makeUserAdmin, getBlogsWithComments, deleteComment, createTools, getAllTools, deleteTool } = require('../controllers/adminController')
 const { AdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -51,6 +51,9 @@ router.get('/get_cryptos',getCryptos)
 router.post('/make_admin', AdminMiddleware, makeUserAdmin)
 router.get('/blogs_with_comments', AdminMiddleware, getBlogsWithComments)
 router.post('/delete_comment', AdminMiddleware, deleteComment)
+router.post('/create_tool', AdminMiddleware, createTools)
+router.get('/get_tools', AdminMiddleware, getAllTools)
+router.post('/delete_tool/:id', AdminMiddleware, deleteTool)
 
 
 module.exports = router

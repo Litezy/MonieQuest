@@ -23,6 +23,7 @@ const fs = require('fs')
 const moment = require('moment')
 const CryptoModel = require('../models').cryptos
 const { Op, json } = require('sequelize')
+const Tools = require('../models').tools
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -1703,3 +1704,38 @@ exports.deleteComment = async (req, res) => {
     }
 }
 
+
+exports.createTools = async (req, res) => {
+    try {
+        const { name, features } = req.body
+        if (!name || !features) return res.json({ status: 400, msg: "All fields are required" })
+        const featuresArray = Array.isArray(features) ? features : [features]
+        const newTool = await Tools.create({ name, features: featuresArray})
+        return res.json({ status: 201, msg: 'Tool created successfully', data: newTool })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.getAllTools = async (req, res) => {
+    try {
+        const all_tools = await Tools.findAll({})
+        if (!all_tools) return res.json({ status: 404, msg: "No tools found" })
+        return res.json({ status: 200, msg: "fetch success", data: all_tools })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.deleteTool = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 400, msg: "ID is missing" })
+        const findTool = await Tools.findOne({ where: { id } })
+        if (!findTool) return res.json({ status: 404, msg: "Tool ID not found" })
+        await findTool.destroy()
+        return res.json({ status: 200, msg: "Tool deleted successfully" })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}

@@ -34,6 +34,7 @@ db.subscribers = require(`./subscriberModel`)(sequelize, DataTypes)
 db.carouselImages = require(`./carouselImageModel`)(sequelize, DataTypes)
 db.testimonials = require(`./testimonialModel`)(sequelize, DataTypes)
 db.cryptos = require(`./cryptosModel`)(sequelize, DataTypes)
+db.tools = require(`./toolsModel`)(sequelize, DataTypes)
 
 
 //One to Many relationships

@@ -13,7 +13,7 @@ const moment = require('moment')
 
 exports.SubmitProduct = async (req, res) => {
     try {
-        const { title, category, price, about, feature1, feature2, video_link, contact_detail, bank_name, account_number, account_name } = req.body
+        const { title, category,other, price, about, feature1, feature2, video_link, contact_detail, bank_name, account_number, account_name } = req.body
         if (!title || !category || category.length < 1 || !price || !about || !feature1 || !feature2 || !video_link || !contact_detail | !bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
         if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
         const user = await User.findOne({ where: { id: req.user } })
@@ -35,6 +35,7 @@ exports.SubmitProduct = async (req, res) => {
             gen_id: gen_id,
             image: newImage.product_image,
             title,
+            other,
             category: categoryArray,
             price,
             about,

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         feature1: { type: DataTypes.TEXT },
         feature2: { type: DataTypes.TEXT },
         bank_name: { type: DataTypes.STRING },
+        other: { type: DataTypes.STRING,allowNull:true },
         account_number: { type: DataTypes.STRING },
         account_name: { type: DataTypes.STRING },
         video_link: { type: DataTypes.STRING },
