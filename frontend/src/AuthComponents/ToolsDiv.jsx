@@ -12,7 +12,7 @@ const ToolsDiv = ({ item,handleCategory,array }) => {
     return (
         <div className='w-full'>
             <div onClick={()=>handleCategory(item.title)} className="flex cursor-pointer items-center gap-2 mb-1">
-                <div className={`w-3 h-3 rounded-full ${array.includes(item.title) ? 'bg-lightgreen' : 'bg-zinc-100'}  `}></div>
+                <div className={`w-4 h-4 rounded-full ${array.includes(item.title) ? 'bg-lightgreen' : 'bg-zinc-100'}  `}></div>
                 <div className="">{item.title}</div>
             </div>
             <div className="flex flex-col gap-1">
