@@ -204,7 +204,7 @@ const BuyCrypto = () => {
                                                 </option>
                                             ))}
                                     </select>
-                                    <div className="text-red-600 text-xs">Please Note: you can only buy a minimum of ${forms.minimum} and maximum of ${forms.limit}. verify your account to increase limit</div>
+                                    <div className="text-red-600 text-xs">Please Note: you can only buy a minimum of ${forms.minimum} and maximum of ${forms.limit.toLocaleString()}. verify your account to increase limit</div>
                                 </div>
                                 <div className="flex w-full items-start gap-2 flex-col  ">
                                     <div className="font-bold text-lg">Amount:</div>
