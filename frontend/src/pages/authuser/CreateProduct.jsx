@@ -270,13 +270,13 @@ const CreateProduct = () => {
                     <label className='cursor-pointer'>
                       {productImage.img ?
                         <div className='relative'>
-                          <img src={productImage.img} alt={productImage.img} className='h-56 w-full object-cover object-center'></img>
+                          <img src={productImage.img} alt={productImage.img} className='h-60 w-full object-cover object-center'></img>
                           <div className="absolute top-0 -right-3 main font-bold">
                             <FaEdit className='text-2xl text-lightgreen' />
                           </div>
                         </div>
                         :
-                        <div className='w-full h-56 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
+                        <div className='w-full h-60 border border-dashed rounded-xl flex flex-col gap-2 items-center justify-center'>
                           <div className='bg-primary rounded-full p-4'><FiUploadCloud /></div>
                           <span>click to add image</span>
                         </div>

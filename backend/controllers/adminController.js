@@ -28,20 +28,20 @@ const Tools = require('../models').tools
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max, leaderboard_reward } = req.body
+        const { exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, leaderboard_reward } = req.body
         const utils = await Util.findOne({})
         if (!utils) {
-            if (!exchange_buy_rate || !exchange_sell_rate || !kyc_threshold || !bank_withdraw_min || !giftcard_rate || !buy_min || !buy_max || !sell_min || !sell_max || !leaderboard_reward) return res.json({ status: 404, msg: `Incomplete request found` })
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (!exchange_buy_rate || !exchange_sell_rate || !kyc_threshold || !bank_withdraw_min || !giftcard_rate || !leaderboard_reward) return res.json({ status: 404, msg: `Incomplete request found` })
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
 
             const newUtils = await Util.create({
-                exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, buy_min, buy_max, sell_min, sell_max, leaderboard_reward
+                exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, leaderboard_reward
             })
 
             return res.json({ status: 200, msg: 'Rate(s) created successfully', utils: newUtils })
         }
         else {
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
             if (exchange_buy_rate) {
                 utils.exchange_buy_rate = exchange_buy_rate
             }
@@ -56,18 +56,6 @@ exports.UpdateUtils = async (req, res) => {
             }
             if (giftcard_rate) {
                 utils.giftcard_rate = giftcard_rate
-            }
-            if (buy_min) {
-                utils.buy_min = buy_min
-            }
-            if (buy_max) {
-                utils.buy_max = buy_max
-            }
-            if (sell_min) {
-                utils.sell_min = sell_min
-            }
-            if (sell_max) {
-                utils.sell_max = sell_max
             }
             if (leaderboard_reward) {
                 utils.leaderboard_reward = leaderboard_reward
@@ -337,7 +325,7 @@ exports.UpdateProduct = async (req, res) => {
                         subject: `Product submitted Approved`,
                         eTitle: `Product submitted approved`,
                         eBody: `
-                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the id (#${product.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the ID (#${product.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: user
                     })
@@ -1563,6 +1551,7 @@ exports.UpdateTestimonial = async (req, res) => {
         ServerError(res, error);
     }
 };
+
 exports.deleteTestimonial = async (req, res) => {
     try {
         const { id } = req.params;
@@ -1576,7 +1565,6 @@ exports.deleteTestimonial = async (req, res) => {
         ServerError(res, error);
     }
 };
-
 
 exports.getTestimonials = async (req, res) => {
     try {
@@ -1605,17 +1593,18 @@ exports.getSingleTestimonial = async (req, res) => {
 
 exports.addOrUpdateCryptos = async (req, res) => {
     try {
-        const { name, network, wallet_add, symbol, tag, id } = req.body;
-        const reqFields = [name, wallet_add, network, symbol];
+        const { name, network, wallet_add, symbol, buy_min, buy_max, sell_min, sell_max, tag, id } = req.body;
+        const reqFields = [name, wallet_add, network, symbol, buy_min, buy_max, sell_min, sell_max];
         const tags = ['create', 'update', 'delete'];
 
         if (!tag) return res.json({ status: 400, msg: "Tag not found" });
         if (!tags.includes(tag)) return res.json({ status: 400, msg: "Invalid Tag Found" });
         if (tag === 'create') {
             if (reqFields.some((field) => !field)) return res.json({ status: 400, msg: "All fields are required" });
+            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
             const findName = await CryptoModel.findOne({ where: { name } })
             if (findName) return res.json({ status: 400, msg: 'Crypto wallet already added' })
-            const newCrypto = await CryptoModel.create({ name, wallet_add, symbol, network });
+            const newCrypto = await CryptoModel.create({ name, wallet_add, symbol, network, buy_min, buy_max, sell_min, sell_max });
             return res.json({ status: 201, msg: `${name} wallet created successfully`, data: newCrypto });
         } else if (tag === 'update') {
             if (!id) return res.json({ status: 400, msg: 'Crypto ID missing from request' });
@@ -1623,12 +1612,17 @@ exports.addOrUpdateCryptos = async (req, res) => {
             if (!findCrypto) return res.json({ status: 404, msg: "Crypto ID not found" });
             const findName = await CryptoModel.findOne({ where: { name } })
             if (findName && findName.name !== findCrypto.name) return res.json({ status: 400, msg: 'Crypto wallet already exist' })
+            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
 
             const updates = {};
             if (name) updates.name = name;
             if (wallet_add) updates.wallet_add = wallet_add;
             if (network) updates.network = network;
             if (symbol) updates.symbol = symbol;
+            if (buy_min) updates.buy_min = buy_min;
+            if (buy_max) updates.buy_max = buy_max;
+            if (sell_min) updates.sell_min = sell_min;
+            if (sell_max) updates.sell_max = sell_max;
 
             if (Object.keys(updates).length === 0) return res.json({ status: 400, msg: "No fields provided to update" });
 
@@ -1702,7 +1696,9 @@ exports.deleteComment = async (req, res) => {
     } catch (error) {
         ServerError(res, error)
     }
-} 
+}
+
+
 
  
 exports.createTools = async (req, res) => {
@@ -1710,7 +1706,7 @@ exports.createTools = async (req, res) => {
         const { name, features } = req.body
         if (!name || !features) return res.json({ status: 400, msg: "All fields are required" })
         const featuresArray = Array.isArray(features) ? features : [features]
-        const newTool = await Tools.create({ name, features: featuresArray})
+        const newTool = await Tools.create({ name, features: featuresArray })
         return res.json({ status: 201, msg: 'Tool created successfully', data: newTool })
     } catch (error) {
         ServerError(res, error)

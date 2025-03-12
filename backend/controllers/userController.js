@@ -17,6 +17,7 @@ const otpGenerator = require('otp-generator')
 const { webName, webShort, webURL, ServerError, GlobalDeleteImage, GlobalImageUploads, GlobalDeleteSingleImage, GoogleImageUpload } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const slug = require('slug')
+const path = require('path');
 
 
 exports.CreateAccount = async (req, res) => {
@@ -99,7 +100,6 @@ exports.CreateAccount = async (req, res) => {
         return res.json({ status: 500, msg: error.message })
     }
 }
-
 
 exports.continueWithGoogle = async (req, res) => {
     try {
@@ -739,7 +739,7 @@ exports.AddCarouselImage = async (req, res) => {
         await CarouselImage.create({ image: url });
         return res.json({ status: 200, msg: 'Carousel image added successfully', image: url });
     } catch (error) {
-        ServerError(res, error)
+        return res.json({ status: 500, msg: error.message })
     }
 };
 
