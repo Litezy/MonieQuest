@@ -1334,7 +1334,7 @@ exports.creditGiftCustomer = async (req, res) => {
                 subject: `Gift-Card Credit Alert`,
                 eTitle: `Credit Alert`,
                 eBody: `
-                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked paid with the sum of ${nairaSign}${formattedAmount} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading.</div>
+                  <div>Hello ${findUser.first_name}, Your Gift-Card order with the ID of ${order?.order_no} has been marked paid with the sum of ${nairaSign}${formattedAmount} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading with us!</div>
                 `,
                 account: findUser
             })
@@ -1702,9 +1702,9 @@ exports.deleteComment = async (req, res) => {
     } catch (error) {
         ServerError(res, error)
     }
-}
+} 
 
-
+ 
 exports.createTools = async (req, res) => {
     try {
         const { name, features } = req.body
@@ -1714,7 +1714,7 @@ exports.createTools = async (req, res) => {
         return res.json({ status: 201, msg: 'Tool created successfully', data: newTool })
     } catch (error) {
         ServerError(res, error)
-    }
+    } 
 }
 
 exports.getAllTools = async (req, res) => {

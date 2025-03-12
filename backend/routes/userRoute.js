@@ -26,4 +26,5 @@ router.get('/get_user_data',UserMiddleware, getUserData)
 router.get('/get_testimonials', getTestimonials)
 router.post('/continue_with_google',  continueWithGoogle)
 
+
 module.exports = router

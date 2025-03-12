@@ -52,7 +52,7 @@ router.post('/make_admin', AdminMiddleware, makeUserAdmin)
 router.get('/blogs_with_comments', AdminMiddleware, getBlogsWithComments)
 router.post('/delete_comment', AdminMiddleware, deleteComment)
 router.post('/create_tool', AdminMiddleware, createTools)
-router.get('/get_tools', AdminMiddleware, getAllTools)
+router.get('/get_tools',  getAllTools)
 router.post('/delete_tool/:id', AdminMiddleware, deleteTool)
 
 

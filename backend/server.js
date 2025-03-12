@@ -10,7 +10,7 @@ const port = process.env.PORT
 const server = http.createServer(app)
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174', 'https://moniequest.vercel.app'],
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'https://moniequest.vercel.app','https://moniequest-front.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     credentials: true
