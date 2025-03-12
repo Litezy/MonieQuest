@@ -9,6 +9,7 @@ const ToolsDiv = ({ item, handleCategory, array }) => {
         duration: 1000,
         easing: "easeInOutQuad",
     });
+    
     return (
         <div className='w-full'>
             <div onClick={() => handleCategory(item.name)} className="flex cursor-pointer items-center gap-2 mb-1">
