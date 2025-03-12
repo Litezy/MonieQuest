@@ -3,16 +3,16 @@ import Cookies from 'js-cookie'
 import { CookieName } from '../utils/pageUtils'
 
 
-export let  URL = import.meta.env.VITE_API_URL
+export let URL;
 export let imageurl;
 
-// if (import.meta.env.VITE_ENV === 'production') {
-//     URL = import.meta.env.VITE_LIVE_API_URL
-//     imageurl = import.meta.env.VITE_LIVE_API_URL
-// } else {
-   
-//     imageurl = import.meta.env.VITE_API_URL
-// }
+if (import.meta.env.VITE_ENV === 'production') {
+    URL = import.meta.env.VITE_LIVE_API_URL
+    imageurl = import.meta.env.VITE_LIVE_API_URL
+} else {
+    URL = import.meta.env.VITE_API_URL
+    imageurl = import.meta.env.VITE_API_URL
+}
 
 
 const user = 'api/user/'
