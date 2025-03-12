@@ -223,9 +223,8 @@ const AdminSingleProduct = () => {
                                         {form.category.length > 0 &&
                                             <>
                                                 {form.category.map((item, i) => (
-                                                    <div key={i} className='flex gap-2 items-center w-fit h-fit p-2 bg-ash text-white rounded-xl text-sm'>
-                                                        <div>{item}</div>
-                                                        <div className={`${form.category.includes(item) ? 'bg-lightgreen' : 'bg-white'} h-3.5 w-3.5 rounded-full cursor-pointer`} onClick={() => addRemoveCategory(item)}></div>
+                                                    <div key={i} className='w-fit h-fit p-2 bg-ash text-white rounded-xl text-sm'>
+                                                        {item}
                                                     </div>
                                                 ))}
                                             </>
