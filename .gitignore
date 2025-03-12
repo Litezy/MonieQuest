@@ -1,7 +1,7 @@
 node_modules/
 .env
-banckend/public
-banckend/node_modules/
+backend/public
+backend/node_modules/
 banckend/.env
 frontend/.env
 frontend/node_modules/
