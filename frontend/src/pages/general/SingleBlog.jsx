@@ -232,7 +232,7 @@ const SingleBlog = () => {
                                     </div>
                                     <div className='flex flex-col gap-8'>
                                         <div className="flex items-start gap-2 flex-col" id='second'>
-                                            <div className="text-white font-bold capitalize leading-[33px] poppins  text-2xl">{singleBlog?.second_paragraph_title}.</div>
+                                            <div className="text-white font-bold capitalize leading-[33px] poppins  text-2xl">{singleBlog?.second_paragraph_title}</div>
                                             <div className="">{singleBlog?.second_paragraph_content}</div>
                                         </div>
                                         {singleBlog?.second_paragraph_image && <div className="flex items-center justify-center" id='second'>
