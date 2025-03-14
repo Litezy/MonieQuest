@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { SlClock } from "react-icons/sl";
 import { FiUploadCloud } from 'react-icons/fi'
 import { Link } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { FaEdit } from 'react-icons/fa';
 import FormInput from '../../utils/FormInput';
 import { useAtom } from 'jotai';
 import { BANK, TOOLS } from '../../services/store';
-import { Apis, AuthGetApi, AuthPostApi } from '../../services/API';
+import { Apis, AuthPostApi } from '../../services/API';
 import ProductsLayout from '../../AuthComponents/ProductsLayout';
 import ToolsDiv from '../../AuthComponents/ToolsDiv';
 
@@ -54,7 +54,7 @@ const CreateProduct = () => {
   }
 
   const PrefillBank = () => {
-    if (!Object.entries(bank).key > 0) return ErrorAlert(`You haven't linked any bank to your account`)
+    if (Object.values(bank).length === 0) return ErrorAlert(`You haven't linked any bank to your account`)
     setForm({
       ...form,
       bank_name: bank.bank_name,
