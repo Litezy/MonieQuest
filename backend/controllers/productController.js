@@ -13,7 +13,7 @@ const moment = require('moment')
 
 exports.SubmitProduct = async (req, res) => {
     try {
-        const { title, category,other, price, about, feature1, feature2, video_link, contact_detail, bank_name, account_number, account_name } = req.body
+        const { title, category, other, price, about, feature1, feature2, video_link, contact_detail, bank_name, account_number, account_name } = req.body
         if (!title || !category || category.length < 1 || !price || !about || !feature1 || !feature2 || !video_link || !contact_detail | !bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
         if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
         const user = await User.findOne({ where: { id: req.user } })
@@ -26,8 +26,8 @@ exports.SubmitProduct = async (req, res) => {
         if (!req.files) return res.json({ status: 404, msg: `Upload product image` })
         const productImage = req.files.image
         if (!productImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-        const imageToUpload = [{field:'product_image',file:productImage}]
-         const newImage = await GlobalImageUploads(imageToUpload,'products',gen_id)
+        const imageToUpload = [{ field: 'product_image', file: productImage }]
+        const newImage = await GlobalImageUploads(imageToUpload, 'products', gen_id)
 
         const product = await Product.create({
             user: req.user,
@@ -148,7 +148,9 @@ exports.ProductOrder = async (req, res) => {
         if (!bank_id) return res.json({ status: 404, msg: `Please make payment before continuing` })
         const adminBank = await Bank.findOne({ where: { id: bank_id } })
         if (!adminBank) return res.json({ status: 404, msg: `Please make payment before continuing` })
-        if (adminBank.user !== 'admin') return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
+        const user = await User.findOne({ where: { id: adminBank.user } })
+        if (!user) return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
+        if (user.role !== 'admin') return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
 
         const productsArray = Array.isArray(products) ? products : [products]
         const gen_id = `mq` + otpGenerator.generate(13, { specialChars: false, upperCaseAlphabets: false })

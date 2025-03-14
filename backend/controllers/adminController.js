@@ -661,7 +661,7 @@ exports.CreateBlog = async (req, res) => {
         if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
 
         const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
-
+        const slugData = slug(title, '-')
 
         if (!req.files || !req.files.image) return res.json({ status: 404, msg: `Upload blog image` })
         const blogImage = req.files?.image
@@ -671,12 +671,13 @@ exports.CreateBlog = async (req, res) => {
         if (isValidImage(blogImage) || (secondImage && isValidImage(secondImage)) || (extrasImage && isValidImage(extrasImage))) return res.json({ status: 400, msg: `File error, upload valid images format(jpg, jpeg, png, svg)` })
 
         const imageUrls = await UploadBlogImages(blogImage, secondImage, extrasImage, 'blogs', gen_id)
-        //   return res.json({status:200, msg:imageUrls})
+
         const blog = await Blog.create({
             user: req.user,
             title,
             feature,
             gen_id,
+            slug: slugData,
             main_header_title,
             main_header_content,
             first_paragraph_title,
@@ -706,7 +707,6 @@ exports.UpdateBlog = async (req, res) => {
         } = req.body;
 
         if (!blog_id) return res.json({ status: 400, msg: 'Blog ID is required' });
-
         const blog = await Blog.findOne({ where: { id: blog_id } });
         if (!blog) return res.json({ status: 404, msg: 'Blog not found' });
 
@@ -786,7 +786,6 @@ exports.DeleteBlog = async (req, res) => {
     try {
         const { blog_id } = req.body;
         if (!blog_id) return res.json({ status: 400, msg: 'Provide a blog id' }); // Changed to 400 for bad request
-
         const blog = await Blog.findOne({ where: { id: blog_id } });
         if (!blog) return res.json({ status: 404, msg: 'Blog not found' });
 
@@ -795,7 +794,15 @@ exports.DeleteBlog = async (req, res) => {
             blog.second_paragraph_image,
             blog.extras_image
         ].filter(url => url);
-        GlobalDeleteMultiImages(imagesToDelete, 'blogs', blog.gen_id)
+        await GlobalDeleteMultiImages(imagesToDelete, 'blogs', blog.gen_id)
+
+        const blogComments = await Comment.findAll({ where: { blog: blog.id } })
+        if (blogComments) {
+            for (const ele of blogComments) {
+                await ele.destroy()
+            }
+        }
+
         await blog.destroy();
 
         return res.json({ status: 200, msg: 'Blog deleted successfully' });
@@ -1698,9 +1705,6 @@ exports.deleteComment = async (req, res) => {
     }
 }
 
-
-
- 
 exports.createTools = async (req, res) => {
     try {
         const { name, features } = req.body
@@ -1710,7 +1714,7 @@ exports.createTools = async (req, res) => {
         return res.json({ status: 201, msg: 'Tool created successfully', data: newTool })
     } catch (error) {
         ServerError(res, error)
-    } 
+    }
 }
 
 exports.getAllTools = async (req, res) => {

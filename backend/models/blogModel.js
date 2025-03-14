@@ -1,9 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('blog', {
         user: { type: DataTypes.INTEGER },
+        gen_id: { type: DataTypes.STRING },
+        slug: { type: DataTypes.STRING },
         image: { type: DataTypes.TEXT },
         title: { type: DataTypes.TEXT('long') },
-        gen_id: { type: DataTypes.STRING },
         feature: { type: DataTypes.STRING },
         main_header_title: { type: DataTypes.TEXT('long') },
         main_header_content: { type: DataTypes.TEXT('long') },
@@ -14,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         second_paragraph_image: { type: DataTypes.TEXT, allowNull: true },
         extras_title: { type: DataTypes.TEXT('long') },
         extras_content: { type: DataTypes.TEXT('long') },
-        extras_image: { type:DataTypes.TEXT, allowNull: true },
+        extras_image: { type: DataTypes.TEXT, allowNull: true },
         conclusion: { type: DataTypes.TEXT('long') },
     });
 }
