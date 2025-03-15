@@ -3,6 +3,7 @@ const express = require('express')
 const http = require('http')
 const fileUpload = require('express-fileupload')
 const cors = require('cors')
+const compression = require('compression')
 const cloudinary = require('cloudinary').v2
 
 const app = express()
@@ -10,11 +11,24 @@ const port = process.env.PORT
 const server = http.createServer(app)
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174', 'https://moniequest.vercel.app','https://moniequest-front.vercel.app'],
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'https://moniequest.vercel.app', 'https://moniequest-front.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     credentials: true
 }))
+
+app.use(
+    compression({
+        level: 6,
+        threshold: 100 * 1000,
+        filter: (req, res) => {
+            if (req.headers['x-no-compression']) {
+                return false
+            }
+            return compression.filter(req, res)
+        }
+    })
+)
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
