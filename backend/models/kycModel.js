@@ -1,6 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('kyc', {
         user: { type: DataTypes.INTEGER },
+        gen_id: { type: DataTypes.STRING },
         front_image: { type: DataTypes.STRING },
         back_image: { type: DataTypes.STRING },
         id_type: { type: DataTypes.STRING },

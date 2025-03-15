@@ -479,12 +479,7 @@ exports.CreateUpdateKYC = async (req, res) => {
 
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 404, msg: 'User not found' })
-
-        const slugData = slug(user.first_name, '-')
-        const date = new Date()
-        const filePath = './public/identities'
-        let frontImageName;
-        let backImageName;
+        const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
 
         const kyc = await Kyc.findOne({ where: { user: req.user } })
         if (!kyc) {
@@ -493,18 +488,17 @@ exports.CreateUpdateKYC = async (req, res) => {
             const frontImage = req.files.front_image
             const backImage = req.files.back_image
             if (!frontImage.mimetype.startsWith('image/') || !backImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload valid images format (jpg, jpeg, png, svg)` })
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath, { recursive: true })
-            }
-            frontImageName = `${slugData + 'frontid'}-${date.getTime()}.jpg`
-            await frontImage.mv(`${filePath}/${frontImageName}`)
-            backImageName = `${slugData + 'backid'}-${date.getTime()}.jpg`
-            await backImage.mv(`${filePath}/${backImageName}`)
+            const imagesToUpload = [
+                { field: 'front_image', file: frontImage },
+                { field: 'back_image', file: backImage },
+            ]
+            const UploadedImages = await GlobalImageUploads(imagesToUpload, 'identities', gen_id)
 
             const kyc = await Kyc.create({
                 user: req.user,
-                front_image: frontImageName,
-                back_image: backImageName,
+                gen_id: gen_id,
+                front_image: UploadedImages.front_image,
+                back_image: UploadedImages.back_image,
                 id_type,
                 id_number,
                 address,
@@ -548,29 +542,21 @@ exports.CreateUpdateKYC = async (req, res) => {
             const backImage = req?.files?.back_image
             if (frontImage) {
                 if (!frontImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-                const currentImagePath = `${filePath}/${kyc.front_image}`
-                if (fs.existsSync(currentImagePath)) {
-                    fs.unlinkSync(currentImagePath)
+                if (kyc.front_image) {
+                    await GlobalDeleteImage(kyc.front_image)
                 }
-                if (!fs.existsSync(filePath)) {
-                    fs.mkdirSync(filePath)
-                }
-                frontImageName = `${slugData + 'frontid'}-${date.getTime()}.jpg`
-                await frontImage.mv(`${filePath}/${frontImageName}`)
-                kyc.front_image = frontImageName
+                const imageToUpload = [{ field: 'front_image', file: frontImage }]
+                const newUpload = await GlobalImageUploads(imageToUpload, 'identities', kyc.gen_id)
+                kyc.front_image = newUpload.front_image
             }
             if (backImage) {
                 if (!backImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
-                const currentImagePath = `${filePath}/${kyc.back_image}`
-                if (fs.existsSync(currentImagePath)) {
-                    fs.unlinkSync(currentImagePath)
+                if (kyc.back_image) {
+                    await GlobalDeleteImage(kyc.back_image)
                 }
-                if (!fs.existsSync(filePath)) {
-                    fs.mkdirSync(filePath, { recursive: true })
-                }
-                backImageName = `${slugData + 'backid'}-${date.getTime()}.jpg`
-                await backImage.mv(`${filePath}/${backImageName}`)
-                kyc.back_image = backImageName
+                const imageToUpload = [{ field: 'back_image', file: backImage }]
+                const newUpload = await GlobalImageUploads(imageToUpload, 'identities', kyc.gen_id)
+                kyc.back_image = newUpload.back_image
             }
 
             kyc.id_type = id_type

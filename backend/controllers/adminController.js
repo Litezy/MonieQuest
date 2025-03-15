@@ -131,7 +131,7 @@ exports.UpdateAirdrop = async (req, res) => {
         if (logoImage) {
             if (!logoImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
             if (airdrop.logo_image) {
-                GlobalDeleteImage(airdrop.logo_image)
+                await GlobalDeleteImage(airdrop.logo_image)
             }
             const imageToUpload = [{ field: 'logo', file: logoImage }]
             const newLogoImage = await GlobalImageUploads(imageToUpload, 'airdrops', airdrop.gen_id)
@@ -141,7 +141,7 @@ exports.UpdateAirdrop = async (req, res) => {
         if (bannerImage) {
             if (!bannerImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
             if (airdrop.banner_image) {
-                GlobalDeleteImage(airdrop.banner_image)
+                await GlobalDeleteImage(airdrop.banner_image)
             }
             const imageToUpload = [{ field: 'banner', file: bannerImage }]
             const newBannerImage = await GlobalImageUploads(imageToUpload, 'airdrops', airdrop.gen_id)
@@ -700,11 +700,7 @@ exports.CreateBlog = async (req, res) => {
 
 exports.UpdateBlog = async (req, res) => {
     try {
-        const {
-            title, blog_id, feature, main_header_title, main_header_content,
-            first_paragraph_title, first_paragraph_content, second_paragraph_title,
-            second_paragraph_content, extras_title, extras_content, conclusion
-        } = req.body;
+        const { title, blog_id, feature, main_header_title, main_header_content, first_paragraph_title, first_paragraph_content, second_paragraph_title, second_paragraph_content, extras_title, extras_content, conclusion } = req.body;
 
         if (!blog_id) return res.json({ status: 400, msg: 'Blog ID is required' });
         const blog = await Blog.findOne({ where: { id: blog_id } });
@@ -731,9 +727,7 @@ exports.UpdateBlog = async (req, res) => {
         // Image 1 (main image)
         let updatedUrls = {};
         if (blogImage || secondImage || extrasImage) {
-            if ((blogImage && !blogImage.mimetype.startsWith('image/')) ||
-                (secondImage && !secondImage.mimetype.startsWith('image/')) ||
-                (extrasImage && !extrasImage.mimetype.startsWith('image/'))) return res.json({ status: 400, msg: 'Invalid files found, must be valid images (jpg, jpeg, png, svg)' });
+            if ((blogImage && !blogImage.mimetype.startsWith('image/')) || (secondImage && !secondImage.mimetype.startsWith('image/')) || (extrasImage && !extrasImage.mimetype.startsWith('image/'))) return res.json({ status: 400, msg: 'Invalid files found, must be valid images (jpg, jpeg, png, svg)' });
 
             updatedUrls = await UploadBlogImages(blogImage, secondImage, extrasImage, 'blogs', blog.gen_id);
             console.log(updatedUrls)
@@ -863,7 +857,6 @@ exports.DeleteSingleBlogImages = async (req, res) => {
         if (!tagArray.includes(tag)) return res.json({ status: 404, msg: `Invalid tag provided` })
         const findImage = await Blog.findOne({ where: { id } })
         if (!findImage) return res.json({ status: 404, msg: 'Blog images not found' })
-        const filePath = `./public/blogs/${findImage.gen_id}`;
 
         if (tag === 'paragraph') {
             await GlobalDeleteImage(findImage.second_paragraph_image)
@@ -876,7 +869,6 @@ exports.DeleteSingleBlogImages = async (req, res) => {
             await GlobalDeleteImage(findImage.extras_image)
             findImage.extras_image = null
             await findImage.save()
-
             return res.json({ status: 200, msg: "Extras image successfully deleted", data: findImage })
         }
     } catch (error) {
