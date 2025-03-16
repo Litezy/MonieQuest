@@ -132,7 +132,7 @@ const AdminSingleAirdrop = () => {
     const Submit = async (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.category || !form.about || !form.blockchain || !form.type || !form.video_guide_link || !form.referral_link) return ErrorAlert('Enter all required fields')
+        if (!form.title || !form.category || !form.about || !form.blockchain || !form.type || !form.format || !form.level || !form.video_guide_link || !form.referral_link) return ErrorAlert('Enter all required fields')
 
         const formbody = new FormData()
         formbody.append('airdrop_id', singleAirdrop.id)
