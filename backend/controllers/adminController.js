@@ -285,7 +285,6 @@ exports.UpdateProduct = async (req, res) => {
         const user = await User.findOne({ where: { id: product.user } })
         if (!user) return res.json({ status: 404, msg: 'User not found' })
 
-        const slugData = slug(title ? title : product.title, '-')
         const productImage = req?.files?.image
 
         if (productImage) {
