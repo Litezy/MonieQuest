@@ -248,7 +248,7 @@ const AdminSingleProduct = () => {
                                                 {tools.map((item, i) => (
                                                     <div key={i} className='flex gap-2 items-center w-fit h-fit p-2 bg-ash text-white rounded-xl text-sm'>
                                                         <div>{item.name}</div>
-                                                        <div className={`${form.category.includes(item.name) ? 'bg-lightgreen' : 'bg-white'} h-3.5 w-3.5 rounded-full cursor-pointer`} onClick={() => addRemoveCategory(item.name)}></div>
+                                                        <div className={`${form.category.includes(item.name) ? 'bg-lightgreen' : 'bg-white'} h-4 w-4 rounded-full cursor-pointer`} onClick={() => addRemoveCategory(item.name)}></div>
                                                     </div>
                                                 ))}
                                             </>
