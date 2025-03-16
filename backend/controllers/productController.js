@@ -35,7 +35,7 @@ exports.SubmitProduct = async (req, res) => {
             gen_id: gen_id,
             image: newImage.product_image,
             title,
-            other,
+            other: other ? other : null,
             category: categoryArray,
             price,
             about,
