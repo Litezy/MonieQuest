@@ -73,8 +73,8 @@ exports.UpdateUtils = async (req, res) => {
 
 exports.CreateAirdrop = async (req, res) => {
     try {
-        const { title, category, kyc, blockchain, type, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
-        if (!title || !category || !blockchain || !type || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
+        const { title, category, kyc, blockchain, type, format, level, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
+        if (!title || !category || !blockchain || !type || !format || !level || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
         const categoryArray = ["featured", "deFi", "new", "NFT", "potential", "earn_crypto"]
         if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
         const kycArray = ['required', "unrequired"]
@@ -103,6 +103,8 @@ exports.CreateAirdrop = async (req, res) => {
             kyc,
             blockchain,
             type,
+            format,
+            level,
             referral_link,
             about,
             video_guide_link,
@@ -119,7 +121,7 @@ exports.CreateAirdrop = async (req, res) => {
 
 exports.UpdateAirdrop = async (req, res) => {
     try {
-        const { airdrop_id, status, title, category, kyc, blockchain, type, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
+        const { airdrop_id, status, title, category, kyc, blockchain, type, format, level, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
         if (!airdrop_id) return res.json({ status: 404, msg: `Airdrop id is required` })
 
         const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
@@ -165,6 +167,12 @@ exports.UpdateAirdrop = async (req, res) => {
         }
         if (type) {
             airdrop.type = type
+        }
+        if (format) {
+            airdrop.format = format
+        }
+        if (level) {
+            airdrop.level = level
         }
         if (about) {
             airdrop.about = about

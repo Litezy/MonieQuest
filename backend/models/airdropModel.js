@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
         blockchain: { type: DataTypes.STRING },
         kyc: { type: DataTypes.STRING, defaultValue: 'required' },
         type: { type: DataTypes.STRING },
+        format: { type: DataTypes.STRING },
+        level: { type: DataTypes.STRING },
         referral_link: { type: DataTypes.STRING },
         status: { type: DataTypes.STRING, defaultValue: 'open' },
         about: { type: DataTypes.TEXT },
