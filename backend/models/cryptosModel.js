@@ -8,5 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         buy_max: { type: DataTypes.FLOAT, allowNull: false },
         sell_min: { type: DataTypes.FLOAT, allowNull: false },
         sell_max: { type: DataTypes.FLOAT, allowNull: false },
+        gas_fee: { type: DataTypes.FLOAT, allowNull: false },
     })
 }

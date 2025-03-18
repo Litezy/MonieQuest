@@ -6,7 +6,7 @@ import { CookieName } from '../utils/pageUtils'
 export let URL;
 export let imageurl;
 
-if (import.meta.env.VITE_ENV === 'production') {
+if (window.location.origin.includes('moniequest')) {
     URL = import.meta.env.VITE_LIVE_API_URL
     imageurl = import.meta.env.VITE_LIVE_API_URL
 } else {
@@ -118,7 +118,8 @@ const admin_urls = {
     delete_comment: admin + 'delete_comment',
     create_tool: admin + 'create_tool',
     get_tools: admin + 'get_tools',
-    delete_tool: admin + 'delete_tool'
+    delete_tool: admin + 'delete_tool',
+    get_subs: admin + 'get_subs'
 }
 
 const products = 'api/product/'
