@@ -1598,18 +1598,18 @@ exports.getSingleTestimonial = async (req, res) => {
 
 exports.addOrUpdateCryptos = async (req, res) => {
     try {
-        const { name, network, wallet_add, symbol, buy_min, buy_max, sell_min, sell_max, tag, id } = req.body;
-        const reqFields = [name, wallet_add, network, symbol, buy_min, buy_max, sell_min, sell_max];
+        const { name, network, wallet_add, symbol, buy_min, buy_max, sell_min, sell_max, gas_fee, tag, id } = req.body;
+        const reqFields = [name, wallet_add, network, symbol, buy_min, buy_max, sell_min, sell_max, gas_fee];
         const tags = ['create', 'update', 'delete'];
 
         if (!tag) return res.json({ status: 400, msg: "Tag not found" });
         if (!tags.includes(tag)) return res.json({ status: 400, msg: "Invalid Tag Found" });
         if (tag === 'create') {
             if (reqFields.some((field) => !field)) return res.json({ status: 400, msg: "All fields are required" });
-            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(gas_fee)) return res.json({ status: 404, msg: `Enter valid numbers` })
             const findName = await CryptoModel.findOne({ where: { name } })
             if (findName) return res.json({ status: 400, msg: 'Crypto wallet already added' })
-            const newCrypto = await CryptoModel.create({ name, wallet_add, symbol, network, buy_min, buy_max, sell_min, sell_max });
+            const newCrypto = await CryptoModel.create({ name, wallet_add, symbol, network, buy_min, buy_max, sell_min, sell_max, gas_fee });
             return res.json({ status: 201, msg: `${name} wallet created successfully`, data: newCrypto });
         } else if (tag === 'update') {
             if (!id) return res.json({ status: 400, msg: 'Crypto ID missing from request' });
@@ -1617,7 +1617,7 @@ exports.addOrUpdateCryptos = async (req, res) => {
             if (!findCrypto) return res.json({ status: 404, msg: "Crypto ID not found" });
             const findName = await CryptoModel.findOne({ where: { name } })
             if (findName && findName.name !== findCrypto.name) return res.json({ status: 400, msg: 'Crypto wallet already exist' })
-            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(gas_fee)) return res.json({ status: 404, msg: `Enter valid numbers` })
 
             const updates = {};
             if (name) updates.name = name;
@@ -1628,6 +1628,7 @@ exports.addOrUpdateCryptos = async (req, res) => {
             if (buy_max) updates.buy_max = buy_max;
             if (sell_min) updates.sell_min = sell_min;
             if (sell_max) updates.sell_max = sell_max;
+            if (gas_fee) updates.gas_fee = gas_fee;
 
             if (Object.keys(updates).length === 0) return res.json({ status: 400, msg: "No fields provided to update" });
 
