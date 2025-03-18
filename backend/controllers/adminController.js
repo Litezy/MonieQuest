@@ -24,6 +24,7 @@ const moment = require('moment')
 const CryptoModel = require('../models').cryptos
 const { Op, json } = require('sequelize')
 const Tools = require('../models').tools
+const Subscriber = require('../models').subscribers
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -1760,6 +1761,17 @@ exports.deleteTool = async (req, res) => {
         if (!findTool) return res.json({ status: 404, msg: "Tool ID not found" })
         await findTool.destroy()
         return res.json({ status: 200, msg: "Tool deleted successfully" })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+
+exports.getSubscribers = async (req, res) => {
+    try {
+        const allsubs = await Subscriber.findAll({})
+        if (!allsubs.length > 0) return res.json({ status: 404, msg: 'No subscriber found' })
+        return res.json({ status: 200, msg: "fetch success", data: allsubs })
     } catch (error) {
         ServerError(res, error)
     }
