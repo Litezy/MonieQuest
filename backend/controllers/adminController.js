@@ -494,7 +494,6 @@ exports.getDashboardInfos = async (req, res) => {
 exports.getAllUserDetails = async (req, res) => {
     try {
         const all_users = await User.findAll({
-            where: { role: 'user' },
             attributes: [`id`, `first_name`, 'surname', `kyc_verified`, 'email', 'role', 'createdAt'],
             include: [
                 {
@@ -1656,16 +1655,42 @@ exports.getCryptos = async (req, res) => {
     }
 }
 
-exports.makeUserAdmin = async (req, res) => {
+exports.AssignRole = async (req, res) => {
     try {
         const { id } = req.body
         if (!id) return res.json({ status: 400, msg: 'ID is required' })
         const findUser = await User.findOne({ where: { id } })
         if (!findUser) return res.json({ status: 404, msg: 'User not found' })
-        findUser.role = 'admin'
-        await findUser.save()
-        const allusers = await User.findAll({ where: { role: { [Op.ne]: 'admin' } } })
-        return res.json({ status: 200, msg: `${findUser.first_name} is now an admin and would be excluded from the user's list`, data: allusers })
+        if (findUser.role === 'user') {
+            findUser.role = 'admin'
+            await findUser.save()
+            const allusers = await User.findAll({
+                attributes: [`id`, `first_name`, 'surname', `kyc_verified`, 'email', 'role', 'createdAt'],
+                include: [
+                    {
+                        model: Wallet, as: 'user_wallets',
+                        attributes: [`balance`]
+                    }
+                ],
+                order: [['createdAt', 'DESC']]
+            })
+            return res.json({ status: 200, msg: `${findUser.first_name} is now an admin`, data: allusers })
+        }
+        if (findUser.role === 'admin') {
+            findUser.role = 'user'
+            await findUser.save()
+            const allusers = await User.findAll({
+                attributes: [`id`, `first_name`, 'surname', `kyc_verified`, 'email', 'role', 'createdAt'],
+                include: [
+                    {
+                        model: Wallet, as: 'user_wallets',
+                        attributes: [`balance`]
+                    }
+                ],
+                order: [['createdAt', 'DESC']]
+            })
+            return res.json({ status: 200, msg: `${findUser.first_name} is now a user`, data: allusers })
+        }
     } catch (error) {
         ServerError(res, error)
     }

@@ -113,7 +113,7 @@ const admin_urls = {
     delete_testimonial: admin + 'delete_testimonial',
     crud_crypto: admin + 'create_update_delete_cryptos',
     get_cryptos: admin + "get_cryptos",
-    make_admin: admin + 'make_admin',
+    assign_role: admin + 'assign_role',
     blogs_with_comments: admin + 'blogs_with_comments',
     delete_comment: admin + 'delete_comment',
     create_tool: admin + 'create_tool',

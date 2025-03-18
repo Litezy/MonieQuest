@@ -132,13 +132,13 @@ exports.SellCrypto = async (req, res) => {
 exports.SellGift = async (req, res) => {
     try {
 
-        const { brand, amount, code, pin, rate } = req.body
-        if (!brand || !amount || !code || !rate) return res.json({ status: 400, msg: "Incomplete request, fill all required fields." })
+        const { brand, amount, code, pin, rate,country } = req.body
+        if (!brand || !amount || !code || !rate || !country) return res.json({ status: 400, msg: "Incomplete request, fill all required fields." })
         const findUser = await User.findOne({ where: { id: req.user } })
         if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
         const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
         const newsell = await GiftCardSell.create({
-            brand, amount, code, pin, userid: req.user, order_no: orderId, rate
+            brand, amount, code, pin, userid: req.user,country, order_no: orderId, rate
         })
         await Notify.create({
             user: req.user, title: 'giftcard sell order', content: `Your giftcard sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.  `, url: `/user/transactions_history`

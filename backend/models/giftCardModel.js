@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         amount: { type: DataTypes.FLOAT, allowNull: false },
         code: { type: DataTypes.TEXT, allowNull: false },
         order_no: { type: DataTypes.TEXT, allowNull: false },
+        country: { type: DataTypes.STRING, allowNull: false },
         pin: { type: DataTypes.TEXT, allowNull: true },
         userid: { type: DataTypes.INTEGER },
         rate:{type: DataTypes.STRING, allowNull:false},
