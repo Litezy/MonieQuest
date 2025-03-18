@@ -1198,7 +1198,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
 
                 })
             }
-            return res.json({ status: 200, msg: 'Buy order closed and successfully confirmed' })
+            return res.json({ status: 200, msg: 'Sell order closed and successfully confirmed' })
         }
 
         else if (tag === 'failed') {
@@ -1240,7 +1240,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
 
                 })
             }
-            return res.json({ status: 200, msg: 'Buy order closed and successfully marked as failed' })
+            return res.json({ status: 200, msg: 'Sell order closed and successfully marked as failed' })
         }
         else {
             return res.json({ status: 404, msg: 'Invalid Tag' })
