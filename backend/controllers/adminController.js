@@ -74,7 +74,8 @@ exports.UpdateUtils = async (req, res) => {
 
 exports.CreateAirdrop = async (req, res) => {
     try {
-        const { title, category, kyc, blockchain, type, format, level, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
+        const { title, category, steps, kyc, blockchain, type, format, level, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
+        const stepsArray = steps ? JSON.parse(steps) : [];
         if (!title || !category || !blockchain || !type || !format || !level || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
         const categoryArray = ["featured", "deFi", "new", "NFT", "potential", "earn_crypto"]
         if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
@@ -102,6 +103,7 @@ exports.CreateAirdrop = async (req, res) => {
             title,
             category,
             kyc,
+            steps: stepsArray,
             blockchain,
             type,
             format,
@@ -122,12 +124,12 @@ exports.CreateAirdrop = async (req, res) => {
 
 exports.UpdateAirdrop = async (req, res) => {
     try {
-        const { airdrop_id, status, title, category, kyc, blockchain, type, format, level, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
+        const { airdrop_id, steps, status, title, category, kyc, blockchain, type, format, level, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
         if (!airdrop_id) return res.json({ status: 404, msg: `Airdrop id is required` })
 
         const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
-
+        const stepsArray = steps ? JSON.parse(steps) : [];
         const logoImage = req?.files?.logo_image
         const bannerImage = req?.files?.banner_image
 
@@ -183,6 +185,9 @@ exports.UpdateAirdrop = async (req, res) => {
         }
         if (video_guide_link) {
             airdrop.video_guide_link = video_guide_link
+        }
+        if (steps) {
+            airdrop.steps = stepsArray;
         }
         if (status) {
             const statusArray = ["open", "closed"]
@@ -1730,6 +1735,7 @@ exports.deleteComment = async (req, res) => {
         ServerError(res, error)
     }
 }
+
 
 exports.createTools = async (req, res) => {
     try {
