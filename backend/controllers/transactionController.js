@@ -7,7 +7,7 @@ const { customAlphabet } = require('nanoid');
 const otp = require('otp-generator')
 const Mailing = require('../config/emailDesign')
 const blockAndNum = 'abcdefghijklmnopqrstuvwxyz0123456789'
-const momemt = require('moment')
+const moment = require('moment')
 const GiftCardSell = require('../models').giftCards
 const BankWithdrawal = require('../models').withdrawals
 const Wallet = require('../models').wallets
@@ -47,13 +47,13 @@ exports.BuyCrypto = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        const findAdmins = await User.findAll({ where: { role: 'admin' } })
         if (findAdmins.length > 0) {
             findAdmins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,
-                    title: `'New Crypto Buy Order`,
+                    title: `New Crypto Buy Order`,
                     content: `Hi Admin, You have a crypto buy order with the ID: ${orderId}. pending payments`,
                     url: '/admin/exchange/buy_orders',
                 })
@@ -104,13 +104,13 @@ exports.SellCrypto = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        const findAdmins = await User.findAll({ where: { role: 'admin' } })
         if (findAdmins.length > 0) {
             findAdmins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,
-                    title: `'New Crypto Sell Order`,
+                    title: `New Crypto Sell Order`,
                     content: `Hi Admin, You have a crypto sell order with the ID: ${orderId}.`,
                     url: '/admin/exchange/sell_orders',
                 })
@@ -154,13 +154,13 @@ exports.SellGift = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        const findAdmins = await User.findAll({ where: { role: 'admin' } })
         if (findAdmins.length > 0) {
             findAdmins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,
-                    title: `'New Giftcard Sell Order`,
+                    title: `New Giftcard Sell Order`,
                     content: `Hi Admin, You have a giftcard sell order with the ID: ${orderId}.`,
                     url: '/admin/giftcards/orders',
                 })
@@ -271,13 +271,13 @@ exports.completeABuyPayment = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        const findAdmins = await User.findAll({ where: { role: 'admin' } })
         if (findAdmins.length > 0) {
             findAdmins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,
-                    title: `'crypto buy Order marked paid`,
+                    title: `Crypto buy Order marked paid`,
                     content: `Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been marked paid, kindly confirm from your bank and release crypto for user ${findUser.first_name}.`,
                     url: '/admin/exchange/buy_orders',
                 })
@@ -321,7 +321,7 @@ exports.cancelOrder = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        const findAdmins = await User.findAll({ where: { role: 'admin' } })
         if (findAdmins.length > 0) {
             findAdmins.map(async admin => {
 
@@ -385,7 +385,7 @@ exports.requestWithdrawal = async (req, res) => {
             `,
             account: user,
         })
-        const findAdmins = User.findAll({ where: { role: 'admin' } })
+        const findAdmins = await User.findAll({ where: { role: 'admin' } })
         if (findAdmins.length > 0) {
             findAdmins.map(async admin => {
 
