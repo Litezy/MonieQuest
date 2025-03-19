@@ -76,8 +76,8 @@ exports.BuyCrypto = async (req, res) => {
 
 exports.SellCrypto = async (req, res) => {
     try {
-        const { crypto_currency, type, rate, amount, gas_fee, trans_hash, network } = req.body
-        if (!crypto_currency || !type || !amount || !gas_fee || !rate || !trans_hash || !network) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
+        const { crypto_currency, type, rate, amount, trans_hash, network } = req.body
+        if (!crypto_currency || !type || !amount || !rate || !trans_hash || !network) return res.json({ status: 400, msg: 'Incomplete request, make sure all fields are filled.' })
         const findUser = await User.findOne({ where: { id: req.user } })
         if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
         const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
@@ -85,7 +85,6 @@ exports.SellCrypto = async (req, res) => {
             crypto_currency,
             type,
             amount,
-            gas_fee,
             network,
             rate,
             trans_hash,
@@ -373,7 +372,7 @@ exports.requestWithdrawal = async (req, res) => {
         const formattedAmt = amount.toLocaleString()
 
         await Notify.create({
-            user: req.user, title: 'Withdrawal Request', content: `You placed a bank withdrawal of ${nairaSign}${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `, url: `/user/bank_withdrawal`
+            user: req.user, title: 'Withdrawal Request', content: `You placed a bank withdrawal of NGN${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `, url: `/user/bank_withdrawal`
         })
         await Mailing({
             subject: 'Bank Withdrawal ',

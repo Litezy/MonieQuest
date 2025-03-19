@@ -4,7 +4,6 @@ module.exports = (sequelize,DataTypes) =>{
         type:{type: DataTypes.STRING, allowNull:false,defaultValue:'sell'},
         trans_hash:{type: DataTypes.STRING, allowNull:false},
         amount:{type: DataTypes.FLOAT, allowNull:false},
-        gas_fee: { type: DataTypes.FLOAT, allowNull: false },
         order_no:{type: DataTypes.STRING, allowNull:false},
         network:{type: DataTypes.TEXT, allowNull:false},
         tag:{type: DataTypes.TEXT, allowNull:false,defaultValue:'crypto'},
