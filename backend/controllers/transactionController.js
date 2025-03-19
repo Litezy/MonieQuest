@@ -132,12 +132,12 @@ exports.SellCrypto = async (req, res) => {
 
 exports.SellGift = async (req, res) => {
     try {
-
         const { brand, amount, code, pin, rate, country } = req.body
         if (!brand || !amount || !code || !rate || !country) return res.json({ status: 400, msg: "Incomplete request, fill all required fields." })
         const findUser = await User.findOne({ where: { id: req.user } })
         if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
         const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
+       if(isNaN(amount)) return res.json({status:400, msg:"Amount must be a number"})
         const newsell = await GiftCardSell.create({
             brand, amount, code, pin, userid: req.user, country, order_no: orderId, rate
         })
