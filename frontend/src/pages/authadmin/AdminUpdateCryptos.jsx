@@ -73,9 +73,12 @@ const AdminUpdateCryptos = () => {
             const formatWords = value.toUpperCase()
             setForms({ ...forms, symbol: formatWords })
         }
+        else if (name === 'wallet_add') {
+            setForms({ ...forms, wallet_add: value })
+        }
         else {
-            setForms({ ...forms, [e.target.name]: value })
-
+            const formatVal = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
+            setForms({ ...forms, [e.target.name]: formatVal })
         }
     }
 

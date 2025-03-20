@@ -12,6 +12,7 @@ import { FiUploadCloud } from 'react-icons/fi';
 import { Apis, AuthGetApi, AuthPutApi, imageurl } from '../../services/API';
 import { useAtom } from 'jotai';
 import { TOOLS } from '../../services/store';
+import { MdDelete } from 'react-icons/md';
 
 const statuses = [
     "pending", "approved", "declined"
@@ -34,8 +35,7 @@ const AdminSingleProduct = () => {
         category: [],
         price: '',
         about: '',
-        feature1: '',
-        feature2: '',
+        features: [],
         status: '',
         other: '',
         listing: '',
@@ -55,10 +55,18 @@ const AdminSingleProduct = () => {
             [event.target.name]: event.target.value
         })
     }
+
+    const handleNums = (e) => {
+        let value = e.target.value
+        const formatVal = value.replace(/\D/g, '')
+        setForm({ ...form, [e.target.name]: formatVal })
+    }
+
     const FetchSingleProduct = useCallback(async () => {
         try {
             const response = await AuthGetApi(`${Apis.admin.single_product}/${id}`)
             if (response.status === 200) {
+                console.log(response.msg)
                 const data = response.msg
                 setSingleProduct(data)
                 setForm({
@@ -68,8 +76,7 @@ const AdminSingleProduct = () => {
                     blockchain: data.blockchain || '',
                     price: data.price || '',
                     about: data.about || '',
-                    feature1: data.feature1 || '',
-                    feature2: data.feature2 || '',
+                    features: JSON.parse(data.features) || [],
                     status: data.status || '',
                     listing: data.listing || '',
                     other: data.other || '',
@@ -129,7 +136,7 @@ const AdminSingleProduct = () => {
     const Submit = async (e) => {
         e.preventDefault()
 
-        if (!form.title || !form.price || !form.about || !form.feature1 || !form.feature2) return ErrorAlert('Enter all required fields')
+        if (!form.title || !form.price || !form.about || form.features.length < 1) return ErrorAlert('Enter all required fields')
         if (isNaN(form.price) || isNaN(form.discount_percentage) || isNaN(form.discount_duration)) return ErrorAlert('Price, discount percentage and discount duration must be valid numbers')
 
         const formbody = new FormData()
@@ -141,8 +148,9 @@ const AdminSingleProduct = () => {
         })
         formbody.append('price', parseFloat(form.price))
         formbody.append('about', form.about)
-        formbody.append('feature1', form.feature1)
-        formbody.append('feature2', form.feature2)
+        form.features.forEach(ele => {
+            formbody.append('features', ele)
+        })
         formbody.append('status', form.status)
         formbody.append('listing', form.listing)
         formbody.append('discount_percentage', form.discount_percentage && parseFloat(form.discount_percentage))
@@ -151,7 +159,7 @@ const AdminSingleProduct = () => {
 
         setLoading(true)
         try {
-            const response = await AuthPutApi(Apis.admin.update_product, formbody, { category: form.category })
+            const response = await AuthPutApi(Apis.admin.update_product, formbody)
             if (response.status === 200) {
                 FetchSingleProduct()
                 await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -171,6 +179,29 @@ const AdminSingleProduct = () => {
         if (!url || !url.includes('cloudinary.com')) return url; // Return unchanged if not Cloudinary
         const parts = url.split('/upload/');
         return `${parts[0]}/upload/q_auto,f_webp/${parts[1]}`; // Insert transformations
+    };
+
+    const addFeature = () => {
+        setForm(prevForm => ({
+            ...prevForm,
+            features: [...prevForm.features, ""]
+        }));
+    };
+
+    const handleFeatureChange = (index, value) => {
+        setForm(prevForm => {
+            const updatedFeatures = [...prevForm.features];
+            updatedFeatures[index] = value;
+            return { ...prevForm, features: updatedFeatures };
+        });
+    };
+
+    const removeFeature = (index) => {
+        setForm(prevForm => {
+            const updatedFeatures = [...prevForm.features];
+            updatedFeatures.splice(index, 1);
+            return { ...prevForm, features: updatedFeatures };
+        });
     };
 
     return (
@@ -260,22 +291,35 @@ const AdminSingleProduct = () => {
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>price ({currencySign[1]}):</div>
-                                    <FormInput placeholder='Price' name='price' value={form.price} onChange={formHandler} />
+                                    <FormInput placeholder='Price' name='price' value={form.price} onChange={handleNums} />
                                 </div>
                                 <div className='flex flex-col gap-2'>
                                     <div className='text-lightgreen capitalize font-medium'>about:</div>
                                     <FormInput formtype='textarea' placeholder='About tool' name='about' value={form.about} onChange={formHandler} />
                                 </div>
                             </div>
-                            <div className='flex flex-col gap-6'>
-                                <div className='flex flex-col gap-2'>
-                                    <div className='text-lightgreen capitalize font-medium'>feature 1:</div>
-                                    <FormInput formtype='textarea' placeholder='Enter tool feature' name='feature1' value={form.feature1} onChange={formHandler} className='!h-20' />
+                            <div className="flex flex-col gap-2">
+                                <label className="font-medium text-lightgreen">*Features:</label>
+                                <div className='flex flex-col gap-3'>
+                                    {form.features.map((item, index) => (
+                                        <div key={index} className="flex items-center gap-2 w-full">
+                                            <div className="w-full">
+                                                <FormInput
+                                                    formtype='textarea'
+                                                    label={`feature ${index + 1}`}
+                                                    value={item}
+                                                    onChange={(e) => handleFeatureChange(index, e.target.value)}
+                                                    className={`!h-20`}
+                                                ></FormInput>
+                                            </div>
+                                            <div onClick={() => removeFeature(index)} className="bg-red-500 cursor-pointer p-2 rounded-full">
+                                                <MdDelete className="text-white" />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                                <div className='flex flex-col gap-2'>
-                                    <div className='text-lightgreen capitalize font-medium'>feature 2:</div>
-                                    <FormInput formtype='textarea' placeholder='Enter tool feature' name='feature2' value={form.feature2} onChange={formHandler} className='!h-20' />
-                                </div>
+                                <button type="button" className="bg-ash text-white px-4 py-2 rounded mt-2" onClick={addFeature}
+                                >Add Feature</button>
                             </div>
                             <div className="w-full h-fit px-5 text-dark py-5 bg-[#fafafa] rounded-md flex items-center justify-between flex-col gap-4">
                                 <div className='flex flex-col gap-1 w-full'>
@@ -326,12 +370,12 @@ const AdminSingleProduct = () => {
                                     <div className='grid md:grid-cols-2 grid-cols-1 gap-4 items-center'>
                                         <div className='flex flex-col gap-2'>
                                             <div className='text-lightgreen capitalize font-medium'>discount percentage (%):</div>
-                                            <FormInput placeholder='Discount' name='discount_percentage' value={form.discount_percentage} onChange={formHandler} />
+                                            <FormInput placeholder='Discount' name='discount_percentage' value={form.discount_percentage} onChange={handleNums} />
                                         </div>
                                         <div className='flex flex-col gap-1'>
                                             <div className='text-lightgreen capitalize font-medium'>duration:</div>
                                             <div className='flex items-center'>
-                                                <FormInput name='discount_duration' value={form.discount_duration} onChange={formHandler} className='!w-14 !px-3' />
+                                                <FormInput name='discount_duration' value={form.discount_duration} onChange={handleNums} className='!w-14 !px-3' />
                                                 <SelectComp options={durationTypes} width={150} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.discount_duration_type} handleChange={(e) => setForm({ ...form, discount_duration_type: e.target.value })} />
                                             </div>
                                         </div>

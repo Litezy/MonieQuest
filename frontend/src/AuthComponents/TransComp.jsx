@@ -14,8 +14,6 @@ const TransComp = ({ trans }) => {
         let newAmount;
         if (trans.type === 'buy') {
             newAmount = trans?.amount + trans?.gas_fee
-        } else if (trans.type === 'sell') {
-            newAmount = trans?.amount 
         } else {
             newAmount = trans?.amount
         }

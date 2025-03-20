@@ -89,7 +89,7 @@ const AdminSingleAirdrop = () => {
                     twitter_link: data.twitter_link || '',
                     telegram_link: data.telegram_link || '',
                     website_link: data.website_link || '',
-                    steps: typeof data.steps === 'string' ? JSON.parse(data.steps) : (Array.isArray(data.steps) ? data.steps : []),
+                    steps: JSON.parse(data.steps) || []
                 })
                 setLogo({
                     img: data?.logo_image || null
@@ -136,9 +136,9 @@ const AdminSingleAirdrop = () => {
     const Submit = async (e) => {
         e.preventDefault()
 
+        if (form.steps.length === 0) return ErrorAlert(`Add at least one step to this airdrop`)
         if (!form.title || !form.category || !form.about || !form.blockchain || !form.type || !form.format || !form.level || !form.video_guide_link || !form.referral_link) return ErrorAlert('Enter all required fields')
 
-        // return console.log('steps', JSON.stringify(form.steps))
         const formbody = new FormData()
         formbody.append('airdrop_id', singleAirdrop.id)
         formbody.append('logo_image', logo.image)
@@ -157,7 +157,9 @@ const AdminSingleAirdrop = () => {
         formbody.append('telegram_link', form.telegram_link)
         formbody.append('twitter_link', form.twitter_link)
         formbody.append('website_link', form.website_link)
-        formbody.append('steps', JSON.stringify(form.steps));
+        form.steps.forEach(ele => {
+            formbody.append('steps', ele)
+        })
 
         setLoading({ status: true, desc: 'updating' })
         try {
@@ -209,7 +211,6 @@ const AdminSingleAirdrop = () => {
         }));
     };
 
-   
     const handleStepChange = (index, value) => {
         setForm(prevForm => {
             const updatedSteps = [...prevForm.steps];
@@ -218,7 +219,6 @@ const AdminSingleAirdrop = () => {
         });
     };
 
-  
     const removeStep = (index) => {
         setForm(prevForm => {
             const updatedSteps = [...prevForm.steps];
@@ -322,36 +322,28 @@ const AdminSingleAirdrop = () => {
                                 </div>
                             </div>
                             <div className='flex flex-col gap-6 '>
-                                <div className="flex flex-col gap-4">
-                                    <label className="font-medium text-lightgreen">Steps:</label>
-                                    {form.steps.map((step, index) => (
-                                        <div key={index} className="flex items-center gap-3 w-full">
-                                            <div className="w-full">
-                                                <textarea
-                                                    className='w-full min-h-20 md:min-h-32 rounded-md overflow-auto bg-dark text-white resize-none'
-                                                    label={`step ${index + 1}`}
-                                                    value={step}
-                                                    onChange={(e) => handleStepChange(index, e.target.value)}
-                                                ></textarea>
+                                <div className="flex flex-col gap-2">
+                                    <label className="font-medium text-lightgreen">*Steps:</label>
+                                    <div className='flex flex-col gap-3'>
+                                        {form.steps.map((step, index) => (
+                                            <div key={index} className="flex items-center gap-2 w-full">
+                                                <div className="w-full">
+                                                    <FormInput
+                                                        formtype='textarea'
+                                                        label={`step ${index + 1}`}
+                                                        value={step}
+                                                        onChange={(e) => handleStepChange(index, e.target.value)}
+                                                        className={`!h-20`}
+                                                    ></FormInput>
+                                                </div>
+                                                <div onClick={() => removeStep(index)} className="bg-red-500 cursor-pointer p-2 rounded-full">
+                                                    <MdDelete className="text-white " />
+                                                </div>
                                             </div>
-                                            <div
-                                                onClick={() => removeStep(index)}
-                                                className="bg-red-500 cursor-pointer p-2 rounded-full">
-
-                                                <MdDelete
-                                                    className="text-xl text-white "
-
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                    <button
-                                        type="button"
-                                        className="bg-ash text-white px-4 py-2 rounded mt-2"
-                                        onClick={addStep}
-                                    >
-                                        Add Step
-                                    </button>
+                                        ))}
+                                    </div>
+                                    <button type="button" className="bg-ash text-white px-4 py-2 rounded mt-2" onClick={addStep}
+                                    >Add Step</button>
                                 </div>
 
                                 <div className='flex flex-col gap-2'>

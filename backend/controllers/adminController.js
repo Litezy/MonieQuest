@@ -75,13 +75,13 @@ exports.UpdateUtils = async (req, res) => {
 exports.CreateAirdrop = async (req, res) => {
     try {
         const { title, category, steps, kyc, blockchain, type, format, level, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
-        const stepsArray = steps ? JSON.parse(steps) : [];
-        if (!title || !category || !blockchain || !type || !format || !level || !referral_link || !about || !video_guide_link) return res.json({ status: 404, msg: `Incomplete request found` })
+        if (!title || !category || !blockchain || !type || !format || !level || !referral_link || !about || !video_guide_link || !steps || steps.length < 1) return res.json({ status: 404, msg: `Incomplete request found` })
         const categoryArray = ["featured", "deFi", "new", "NFT", "potential", "earn_crypto"]
         if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
         const kycArray = ['required', "unrequired"]
         if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid kyc value provided` })
 
+        const stepsArray = Array.isArray(steps) ? steps : [steps]
         const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
 
@@ -94,6 +94,7 @@ exports.CreateAirdrop = async (req, res) => {
             { field: 'banner', file: bannerImage },
         ]
         const UploadedImages = await GlobalImageUploads(imagesToUpload, 'airdrops', gen_id)
+
         const newAirdrop = await Airdrop.create({
             user: req.user,
             slug: slugData,
@@ -129,7 +130,6 @@ exports.UpdateAirdrop = async (req, res) => {
 
         const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
-        const stepsArray = steps ? JSON.parse(steps) : [];
         const logoImage = req?.files?.logo_image
         const bannerImage = req?.files?.banner_image
 
@@ -187,7 +187,8 @@ exports.UpdateAirdrop = async (req, res) => {
             airdrop.video_guide_link = video_guide_link
         }
         if (steps) {
-            airdrop.steps = stepsArray;
+            const stepsArray = Array.isArray(steps) ? steps : [steps]
+            airdrop.steps = stepsArray
         }
         if (status) {
             const statusArray = ["open", "closed"]
@@ -283,7 +284,7 @@ exports.DeleteClosedAirdrop = async (req, res) => {
 
 exports.UpdateProduct = async (req, res) => {
     try {
-        const { product_id, title, category, price, about, feature1, feature2, status, listing, discount_percentage, discount_duration, discount_duration_type } = req.body
+        const { product_id, title, category, price, about, features, status, listing, discount_percentage, discount_duration, discount_duration_type } = req.body
         if (!product_id) return res.json({ status: 404, msg: `Product id is required` })
 
         const product = await Product.findOne({ where: { id: product_id } })
@@ -316,11 +317,9 @@ exports.UpdateProduct = async (req, res) => {
         if (about) {
             product.about = about
         }
-        if (feature1) {
-            product.feature1 = feature1
-        }
-        if (feature2) {
-            product.feature2 = feature2
+        if (features) {
+            const featuresArray = Array.isArray(features) ? features : [features]
+            product.features = featuresArray
         }
         if (status) {
             const statusArray = ["pending", "approved", "declined"]

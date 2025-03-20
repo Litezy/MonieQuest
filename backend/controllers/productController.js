@@ -13,14 +13,15 @@ const moment = require('moment')
 
 exports.SubmitProduct = async (req, res) => {
     try {
-        const { title, category, other, price, about, feature1, feature2, video_link, contact_detail, bank_name, account_number, account_name } = req.body
+        const { title, category, other, price, about, features, video_link, contact_detail, bank_name, account_number, account_name } = req.body
         if (!category && !other) return res.json({ status: 404, msg: `Choose or specify your product category` })
-        if (!title || !price || !about || !feature1 || !feature2 || !video_link || !contact_detail || !bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
+        if (!title || !price || !about || !features || features.length < 1 || !video_link || !contact_detail || !bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
         if (isNaN(price)) return res.json({ status: 404, msg: `Price amount must be a number` })
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 404, msg: 'User not found' })
 
         const categoryArray = category ? Array.isArray(category) ? category : [category] : null
+        const featuresArray = Array.isArray(features) ? features : [features]
         const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
         const slugData = slug(title, '-')
 
@@ -40,8 +41,7 @@ exports.SubmitProduct = async (req, res) => {
             category: categoryArray,
             price,
             about,
-            feature1,
-            feature2,
+            features: featuresArray,
             video_link,
             contact_detail,
             bank_name,
