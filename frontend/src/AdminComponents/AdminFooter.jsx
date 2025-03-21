@@ -162,7 +162,7 @@ const AdminFooter = () => {
                 </div>
                 {view &&
                     <div className='absolute overflow-x-auto w-full -top-12 right-0 bg-secondary border border-primary px-4 flex items-center justify-around gap-2 rounded-full scrollsdown'>
-                        {extraIcons.slice(0, extraIcons.length - 1).map((item, i) => (
+                        {extraIcons.slice(0, -1).map((item, i) => (
                             <div key={i} className='flex items-center py-4 relative'>
                                 {pathName === item.url || pathName.includes(item.main) ?
                                     <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full"></div>
@@ -177,7 +177,7 @@ const AdminFooter = () => {
                                 </Link>
                             </div>
                         ))}
-                        {extraIcons.slice(extraIcons.length - 1, extraIcons.length).map((item, i) => (
+                        {extraIcons.slice(-1).map((item, i) => (
                             <div key={i} className='flex items-center py-4 relative'>
                                 <button  onClick={()=> setLogOutModal(true)}
                                     className={` group-hover:text-lightgreen px-2 text-white/60 hover:text-lightgreen cursor-pointer flex flex-col gap-1 items-center`}>
