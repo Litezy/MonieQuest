@@ -48,7 +48,7 @@ const GiftCardOrders = () => {
                                 </div>
                             </div>
                             <div className='flex justify-center items-center'>
-                                <div className='md:w-12 w-10 h-2 rounded-full bg-slate-400'></div>
+                                <div className='md:w-16 w-12 h-2 rounded-full bg-slate-400'></div>
                             </div>
                             <div className='flex justify-center items-center'>
                                 <div className='md:w-16 w-12 h-2 rounded-full bg-slate-400'></div>
