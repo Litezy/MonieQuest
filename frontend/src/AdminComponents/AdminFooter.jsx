@@ -9,7 +9,7 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 import { CookieName, MoveToTop } from '../utils/pageUtils';
 import { IoNotificationsSharp } from 'react-icons/io5';
 import { CiMenuKebab } from 'react-icons/ci';
-import { AiFillDollarCircle } from "react-icons/ai";
+import { ImCoinDollar } from "react-icons/im";
 import { GoHistory } from 'react-icons/go';
 import { MdReviews } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
@@ -52,7 +52,7 @@ const mainIcons = [
 const extraIcons = [
     {
         name: 'airdrops',
-        symbol: AiFillDollarCircle,
+        symbol: ImCoinDollar,
         url: '/admin/airdrops/create',
         main: '/airdrops'
     },
