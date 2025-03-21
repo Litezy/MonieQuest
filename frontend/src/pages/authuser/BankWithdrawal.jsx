@@ -40,7 +40,7 @@ const formsal = () => {
         } catch (error) {
             console.log(error)
         } finally {
-            // setDataLoading(false)
+            setDataLoading(false)
         }
     })
 
@@ -260,14 +260,17 @@ const formsal = () => {
                                     </div>
                                 </div>
                                 :
-                                <></>
-                            }
-                            {records && records.length > 0 ? records.map((trans, i) => {
-                                return (
-                                    <WithdrawComp key={i} trans={trans} />
-                                )
-                            }) :
-                                <div className="">No transations on hold!</div>
+                                <>
+                                    {records && records.length > 0 ?
+                                        records.map((trans, i) => {
+                                            return (
+                                                <WithdrawComp key={i} trans={trans} />
+                                            )
+                                        })
+                                        :
+                                        <div className="">No transations on hold!</div>
+                                    }
+                                </>
                             }
                         </div>
                     </div></>}
