@@ -9,7 +9,7 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 import { CookieName, MoveToTop } from '../utils/pageUtils';
 import { IoNotificationsSharp } from 'react-icons/io5';
 import { CiMenuKebab } from 'react-icons/ci';
-import { FaCircleDollarToSlot } from "react-icons/fa6";
+import { AiFillDollarCircle } from "react-icons/ai";
 import { GoHistory } from 'react-icons/go';
 import { MdReviews } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
@@ -52,7 +52,7 @@ const mainIcons = [
 const extraIcons = [
     {
         name: 'airdrops',
-        symbol: FaCircleDollarToSlot,
+        symbol: AiFillDollarCircle,
         url: '/admin/airdrops/create',
         main: '/airdrops'
     },
@@ -158,13 +158,13 @@ const AdminFooter = () => {
                 {view &&
                     <div className='absolute overflow-x-auto w-full -top-12 right-0 bg-secondary border border-primary px-4 flex items-center justify-around gap-2 rounded-full scrollsdown'>
                         {extraIcons.map((item, i) => (
-                            <div key={i} className='flex items-center py-4 relative'>
+                            <div key={i} className='!flex items-center py-4 relative'>
                                 {pathName === item.url || pathName.includes(item.main) ?
                                     <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full"></div>
                                     : <></>
                                 }
                                 <Link to={item.url} onClick={MoveToTop}
-                                    className={` group-hover:text-lightgreen px-2  ${pathName === item.url || pathName.includes(item.main) ? active : nonactive} cursor-pointer flex flex-col gap-1 items-center`}>
+                                    className={`px-2  ${pathName === item.url || pathName.includes(item.main) ? active : nonactive} cursor-pointer flex flex-col gap-1 items-center`}>
                                     <div className='relative'>
                                         {item.name === 'notifications' && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}
                                         <div className="text-[1.5rem]">{<item.symbol />}</div>
@@ -173,7 +173,7 @@ const AdminFooter = () => {
                             </div>
                         ))}
                         <button onClick={() => setLogOutModal(true)}
-                            className={` group-hover:text-lightgreen px-2 text-white/60 hover:text-lightgreen cursor-pointer flex flex-col gap-1 items-center`}>
+                            className={`px-2 text-white/60 hover:text-lightgreen cursor-pointer flex flex-col gap-1 items-center`}>
                             <div className="text-[1.5rem]"><FiLogOut /></div>
                         </button>
                     </div>
