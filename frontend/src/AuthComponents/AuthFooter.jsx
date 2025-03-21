@@ -159,9 +159,7 @@ const AuthFooter = () => {
                             <div key={i} className='flex items-center py-4 relative'>
                                 <button onClick={() => setLogOutModal(true)}
                                     className={` group-hover:text-lightgreen px-2 text-white/60 hover:text-lightgreen cursor-pointer flex flex-col gap-1 items-center`}>
-                                    <div className='relative'>
-                                        <div className="text-[1.5rem]">{<item.symbol />}</div>
-                                    </div>
+                                    <div className="text-[1.5rem]">{<item.symbol />}</div>
                                 </button>
                             </div>
                         ))}
