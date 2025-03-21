@@ -51,16 +51,16 @@ const mainIcons = [
 
 const extraIcons = [
     {
-        name: 'airdrops',
-        symbol: ImCoinDollar,
-        url: '/admin/airdrops/create',
-        main: '/airdrops'
-    },
-    {
         name: 'blogs',
         symbol: FaBloggerB,
         url: '/admin/blogs/create',
         main: '/blogs'
+    },
+    {
+        name: 'airdrops',
+        symbol: ImCoinDollar,
+        url: '/admin/airdrops/create',
+        main: '/airdrops'
     },
     {
         name: 'bank withdrawals',
@@ -128,7 +128,6 @@ const AdminFooter = () => {
                                 <button onClick={() => setLogOutModal(false)} className='px-4 py-2 bg-red-500 text-white rounded-md'>Cancel</button>
                                 <button onClick={LogoutAdmin} className='px-4 py-2 bg-green-500 text-white rounded-md'>Confirm</button>
                             </div>
-
                         </div>
                     </ModalLayout>
                 </div>
@@ -179,7 +178,7 @@ const AdminFooter = () => {
                         ))}
                         {extraIcons.slice(-1).map((item, i) => (
                             <div key={i} className='flex items-center py-4 relative'>
-                                <button  onClick={()=> setLogOutModal(true)}
+                                <button onClick={() => setLogOutModal(true)}
                                     className={` group-hover:text-lightgreen px-2 text-white/60 hover:text-lightgreen cursor-pointer flex flex-col gap-1 items-center`}>
                                     <div className='relative'>
                                         {item.name === 'notifications' && <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-red-600 z-40"></div>}

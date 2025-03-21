@@ -109,7 +109,6 @@ const AuthFooter = () => {
                                 <button onClick={() => setLogOutModal(false)} className='px-4 py-2 bg-red-500 text-white rounded-md'>Cancel</button>
                                 <button onClick={LogoutUser} className='px-4 py-2 bg-green-500 text-white rounded-md'>Confirm</button>
                             </div>
-
                         </div>
                     </ModalLayout>
                 </div>
