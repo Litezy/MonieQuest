@@ -1,6 +1,6 @@
 import { BiMoneyWithdraw } from "react-icons/bi";
 import { HiGift } from "react-icons/hi2";
-import { AiFillDollarCircle } from "react-icons/ai";
+import { FaCircleDollarToSlot } from "react-icons/fa6";
 import { CgToolbox } from "react-icons/cg";
 import { FaUsers, FaBloggerB } from "react-icons/fa";
 import { IoNotificationsSharp } from "react-icons/io5";
@@ -18,7 +18,7 @@ export const pagelinks = [
     { label: 'crypto exchange', main: '/exchange', url: '/admin/exchange/buy_orders', icon: MdCurrencyExchange },
     { label: 'gift cards', main: '/giftcards', url: '/admin/giftcards/orders', icon: HiGift },
     { label: 'products', main: '/products', url: '/admin/products/orders', icon: CgToolbox },
-    { label: 'airdrops', main: '/airdrops', url: '/admin/airdrops/create', icon: AiFillDollarCircle },
+    { label: 'airdrops', main: '/airdrops', url: '/admin/airdrops/create', icon: FaCircleDollarToSlot },
     { label: 'blogs', main: '/blogs', url: '/admin/blogs/create', icon: FaBloggerB },
     { label: 'bank withdrawals', main: '/bank_withdrawals', url: '/admin/bank_withdrawals', icon: BiMoneyWithdraw },
     { label: 'transaction history', url: '/admin/transactions_history', icon: GoHistory },
