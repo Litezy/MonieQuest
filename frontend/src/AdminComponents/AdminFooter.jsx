@@ -9,7 +9,7 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 import { CookieName, MoveToTop } from '../utils/pageUtils';
 import { IoNotificationsSharp } from 'react-icons/io5';
 import { CiMenuKebab } from 'react-icons/ci';
-import { ImCoinDollar } from "react-icons/im";
+import { AiFillDollarCircle } from "react-icons/ai";
 import { GoHistory } from 'react-icons/go';
 import { MdReviews } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
@@ -51,16 +51,16 @@ const mainIcons = [
 
 const extraIcons = [
     {
+        name: 'airdrops',
+        symbol: AiFillDollarCircle,
+        url: '/admin/airdrops/create',
+        main: '/airdrops'
+    },
+    {
         name: 'blogs',
         symbol: FaBloggerB,
         url: '/admin/blogs/create',
         main: '/blogs'
-    },
-    {
-        name: 'airdrops',
-        symbol: ImCoinDollar,
-        url: '/admin/airdrops/create',
-        main: '/airdrops'
     },
     {
         name: 'bank withdrawals',
@@ -94,10 +94,6 @@ const extraIcons = [
         name: 'leaderboard',
         symbol: MdLeaderboard,
         url: '/admin/leaderboard',
-    },
-    {
-        name: 'logout',
-        symbol: FiLogOut,
     },
 ]
 
@@ -161,7 +157,7 @@ const AdminFooter = () => {
                 </div>
                 {view &&
                     <div className='absolute overflow-x-auto w-full -top-12 right-0 bg-secondary border border-primary px-4 flex items-center justify-around gap-2 rounded-full scrollsdown'>
-                        {extraIcons.slice(0, -1).map((item, i) => (
+                        {extraIcons.map((item, i) => (
                             <div key={i} className='flex items-center py-4 relative'>
                                 {pathName === item.url || pathName.includes(item.main) ?
                                     <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full"></div>
@@ -176,14 +172,10 @@ const AdminFooter = () => {
                                 </Link>
                             </div>
                         ))}
-                        {extraIcons.slice(-1).map((item, i) => (
-                            <div key={i} className='flex items-center py-4 relative'>
-                                <button onClick={() => setLogOutModal(true)}
-                                    className={` group-hover:text-lightgreen px-2 text-white/60 hover:text-lightgreen cursor-pointer flex flex-col gap-1 items-center`}>
-                                    <div className="text-[1.5rem]">{<item.symbol />}</div>
-                                </button>
-                            </div>
-                        ))}
+                        <button onClick={() => setLogOutModal(true)}
+                            className={` group-hover:text-lightgreen px-2 text-white/60 hover:text-lightgreen cursor-pointer flex flex-col gap-1 items-center`}>
+                            <div className="text-[1.5rem]"><FiLogOut /></div>
+                        </button>
                     </div>
                 }
             </div>

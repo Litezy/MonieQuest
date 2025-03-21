@@ -70,11 +70,6 @@ const extraIcons = [
         symbol: MdLeaderboard,
         url: '/user/leaderboard',
     },
-
-    {
-        name: 'logout',
-        symbol: FiLogOut,
-    },
 ]
 
 const emailSupport = {
@@ -140,7 +135,7 @@ const AuthFooter = () => {
                 </div>
                 {view &&
                     <div className='absolute -top-12 overflow-x-auto  right-0 bg-secondary border border-primary px-4 flex items-center justify-around gap-2 rounded-full'>
-                        {extraIcons.slice(0, -1).map((item, i) => (
+                        {extraIcons.map((item, i) => (
                             <div key={i} className='flex items-center py-4 relative'>
                                 {pathName === item.url || pathName.includes(item.main) ?
                                     <div className="bg-lightgreen absolute top-0 w-full h-1 rounded-b-full"></div>
@@ -155,14 +150,10 @@ const AuthFooter = () => {
                                 </Link>
                             </div>
                         ))}
-                        {extraIcons.slice(-1).map((item, i) => (
-                            <div key={i} className='flex items-center py-4 relative'>
-                                <button onClick={() => setLogOutModal(true)}
-                                    className={` group-hover:text-lightgreen px-2 text-white/60 hover:text-lightgreen cursor-pointer flex flex-col gap-1 items-center`}>
-                                    <div className="text-[1.5rem]">{<item.symbol />}</div>
-                                </button>
-                            </div>
-                        ))}
+                        <button onClick={() => setLogOutModal(true)}
+                            className={` group-hover:text-lightgreen px-2 text-white/60 hover:text-lightgreen cursor-pointer flex flex-col gap-1 items-center`}>
+                            <div className="text-[1.5rem]"><FiLogOut /></div>
+                        </button>
                         <a
                             href={emailSupport.url}
                             target="_blank"
