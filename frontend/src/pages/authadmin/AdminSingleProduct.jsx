@@ -65,7 +65,6 @@ const AdminSingleProduct = () => {
     const FetchSingleProduct = useCallback(async () => {
         try {
             const response = await AuthGetApi(`${Apis.admin.single_product}/${id}`)
-            console.log(response.msg)
             if (response.status === 200) {
                 const data = response.msg
                 setSingleProduct(data)

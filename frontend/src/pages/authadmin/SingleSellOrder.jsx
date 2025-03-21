@@ -62,9 +62,8 @@ const SingleSellOrder = () => {
     }
 
     const handleChange = () => {
-        const amt = data?.amount
-        const newAmt = amt * data?.rate
-        setForms({ ...forms, amount: newAmt?.toLocaleString() })
+        const amt = parseFloat(data?.amount) * parseFloat(data?.rate)
+        setForms({ ...forms, amount: amt?.toLocaleString() })
     }
 
     const handleMsg = (e) => {

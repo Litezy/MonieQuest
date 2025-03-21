@@ -8,9 +8,9 @@ const TransModal = ({ trans }) => {
     useEffect(() => {
         let newAmount;
         if (trans.type === 'buy') {
-            newAmount = trans?.amount + trans?.gas_fee
+            newAmount = parseFloat(trans?.amount) + parseFloat(trans?.gas_fee)
         } else {
-            newAmount = trans?.amount
+            newAmount = parseFloat(trans?.amount)
         }
         const naira = newAmount * trans?.rate
         setInNaira(naira.toLocaleString())
