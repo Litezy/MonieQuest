@@ -296,11 +296,43 @@ const AdminSingleProduct = () => {
                                     <div className='text-lightgreen capitalize font-medium'>about:</div>
                                     <FormInput formtype='textarea' placeholder='About tool' name='about' value={form.about} onChange={formHandler} />
                                 </div>
+                                <div className="w-full h-fit px-5 text-dark py-5 bg-[#fafafa] rounded-md flex items-center justify-between flex-col gap-4">
+                                    <div className='flex flex-col gap-1 w-full'>
+                                        <div className="flex items-center justify-between gap-4">
+                                            <div className="">Bank Name:</div>
+                                            <div className="">{singleProduct?.bank_name}</div>
+                                        </div>
+                                        <div className="flex items-center justify-between gap-4">
+                                            <div className="">Account number:</div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="">{singleProduct?.account_number}</div>
+                                                <FaCopy onClick={() => copyFunction(singleProduct?.account_number)} className='text-ash text-sm cursor-pointer' />
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-between gap-4">
+                                            <div className="">Account name:</div>
+                                            <div className="">{singleProduct?.account_name}</div>
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-col gap-1 w-full border-t pt-2'>
+                                        <div className="flex items-center justify-between gap-4">
+                                            <div className="">Video link / URL:</div>
+                                            <a href={singleProduct?.video_link} target="_blank" rel="noopener noreferrer" className="underline hover:text-ash">{singleProduct?.video_link}</a>
+                                        </div>
+                                        <div className="flex items-center justify-between gap-4">
+                                            <div className="">Contact Details:</div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="">{singleProduct?.contact_detail}</div>
+                                                <FaCopy onClick={() => copyFunction(singleProduct?.contact_detail)} className='text-ash text-sm cursor-pointer' />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <label className="font-medium text-lightgreen">*Features:</label>
                                 <div className='flex flex-col gap-3'>
-                                    {form.features.map((item, index) => (
+                                    {form.features.length > 0 && form.features.map((item, index) => (
                                         <div key={index} className="flex items-center gap-2 w-full">
                                             <div className="w-full">
                                                 <FormInput
@@ -320,38 +352,6 @@ const AdminSingleProduct = () => {
                                 <button type="button" className="bg-ash text-white px-4 py-2 rounded mt-2" onClick={addFeature}
                                 >Add Feature</button>
                             </div>
-                            <div className="w-full h-fit px-5 text-dark py-5 bg-[#fafafa] rounded-md flex items-center justify-between flex-col gap-4">
-                                <div className='flex flex-col gap-1 w-full'>
-                                    <div className="flex items-center justify-between gap-4">
-                                        <div className="">Bank Name:</div>
-                                        <div className="">{singleProduct?.bank_name}</div>
-                                    </div>
-                                    <div className="flex items-center justify-between gap-4">
-                                        <div className="">Account number:</div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="">{singleProduct?.account_number}</div>
-                                            <FaCopy onClick={() => copyFunction(singleProduct?.account_number)} className='text-ash text-sm cursor-pointer' />
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center justify-between gap-4">
-                                        <div className="">Account name:</div>
-                                        <div className="">{singleProduct?.account_name}</div>
-                                    </div>
-                                </div>
-                                <div className='flex flex-col gap-1 w-full border-t pt-2'>
-                                    <div className="flex items-center justify-between gap-4">
-                                        <div className="">Video link / URL:</div>
-                                        <a href={singleProduct?.video_link} target="_blank" rel="noopener noreferrer" className="underline">{singleProduct?.video_link}</a>
-                                    </div>
-                                    <div className="flex items-center justify-between gap-4">
-                                        <div className="">Contact Details:</div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="">{singleProduct?.contact_detail}</div>
-                                            <FaCopy onClick={() => copyFunction(singleProduct?.contact_detail)} className='text-ash text-sm cursor-pointer' />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div className='flex flex-col gap-6'>
                                 <div className='flex flex-col'>
                                     <div className='text-lightgreen capitalize font-medium'>status:</div>
@@ -361,22 +361,22 @@ const AdminSingleProduct = () => {
                                     <div className='text-lightgreen capitalize font-medium'>list product for purchase:</div>
                                     <SelectComp options={listOptions} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.listing} handleChange={(e) => setForm({ ...form, listing: e.target.value })} />
                                 </div>
-                                <div className='flex flex-col gap-2'>
-                                    <div className='flex gap-1 items-center text-lightgreen '>
-                                        <div className='capitalize font-medium'>add a discount</div>
-                                        <RiDiscountPercentFill />
+                            </div>
+                            <div className='flex flex-col gap-2'>
+                                <div className='flex gap-1 items-center text-lightgreen '>
+                                    <div className='capitalize font-medium'>add a discount</div>
+                                    <RiDiscountPercentFill />
+                                </div>
+                                <div className='grid md:grid-cols-2 grid-cols-1 gap-4 items-center'>
+                                    <div className='flex flex-col gap-2'>
+                                        <div className='text-lightgreen capitalize font-medium'>discount percentage (%):</div>
+                                        <FormInput placeholder='Discount' name='discount_percentage' value={form.discount_percentage} onChange={handleNums} />
                                     </div>
-                                    <div className='grid md:grid-cols-2 grid-cols-1 gap-4 items-center'>
-                                        <div className='flex flex-col gap-2'>
-                                            <div className='text-lightgreen capitalize font-medium'>discount percentage (%):</div>
-                                            <FormInput placeholder='Discount' name='discount_percentage' value={form.discount_percentage} onChange={handleNums} />
-                                        </div>
-                                        <div className='flex flex-col gap-1'>
-                                            <div className='text-lightgreen capitalize font-medium'>duration:</div>
-                                            <div className='flex items-center'>
-                                                <FormInput name='discount_duration' value={form.discount_duration} onChange={handleNums} className='!w-14 !px-3' />
-                                                <SelectComp options={durationTypes} width={150} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.discount_duration_type} handleChange={(e) => setForm({ ...form, discount_duration_type: e.target.value })} />
-                                            </div>
+                                    <div className='flex flex-col gap-1'>
+                                        <div className='text-lightgreen capitalize font-medium'>duration:</div>
+                                        <div className='flex items-center'>
+                                            <FormInput name='discount_duration' value={form.discount_duration} onChange={handleNums} className='!w-14 !px-3' />
+                                            <SelectComp options={durationTypes} width={150} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem' }} value={form.discount_duration_type} handleChange={(e) => setForm({ ...form, discount_duration_type: e.target.value })} />
                                         </div>
                                     </div>
                                 </div>

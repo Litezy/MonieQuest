@@ -8,7 +8,7 @@ const BuyOrdersHistory = () => {
     const [data, setData] = useState([])
     const [dataLoading, setDataLoading] = useState(true)
 
-    const fetchOrders = useCallback(async () => {
+    const fetchOrders = async () => {
         try {
             const res = await AuthGetApi(Apis.transaction.crypto_order_history)
             if (res.status !== 200) {
@@ -22,7 +22,7 @@ const BuyOrdersHistory = () => {
         } finally {
             setDataLoading(false)
         }
-    })
+    }
     useEffect(() => {
         fetchOrders()
     }, [])
@@ -55,11 +55,13 @@ const BuyOrdersHistory = () => {
                         </div>
                         :
                         <>
-                            {data ? data.map((trans, i) => {
-                                return (
-                                    <OrderComp key={i} trans={trans} />
-                                )
-                            }) :
+                            {data.length > 0 ?
+                                data.map((trans, i) => {
+                                    return (
+                                        <OrderComp key={i} trans={trans} />
+                                    )
+                                })
+                                :
                                 <div className="">No orders found</div>
                             }
                         </>
