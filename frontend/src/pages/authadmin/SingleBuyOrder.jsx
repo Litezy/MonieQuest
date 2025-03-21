@@ -127,7 +127,7 @@ const SingleBuyOrder = () => {
                     <div className="w-11/12 mx-auto mt-2">
                         <Link to={`/admin/exchange/buy_orders`} className="w-fit px-4 py-1.5 rounded-md bg-ash">back to orders</Link>
                     </div>
-                    <div className="mt-5 md:mt-10  mont">
+                    <div className="mt-5 mont">
 
                         <div className="w-full text-center capitalize font-bold poppins">Review Order Number <span className={`${green}`}>{data?.order_no}</span></div>
 
