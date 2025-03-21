@@ -18,6 +18,7 @@ const AdminAllAirdrops = () => {
         const FetchAllAirdrops = async () => {
             try {
                 const response = await AuthGetApi(Apis.admin.all_airdrops)
+                console.log(response.msg)
                 if (response.status === 200) {
                     setStaticData(response.msg)
                     setAirdrops(response.msg)

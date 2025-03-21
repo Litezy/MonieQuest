@@ -124,7 +124,7 @@ exports.AddRating = async (req, res) => {
 
 exports.GetAdminBankAccount = async (req, res) => {
     try {
-        const mainAdmin = await User.findOne({ where: { role: 'admin', id: 1 } })
+        const mainAdmin = await User.findOne({ where: { role: 'admin' }, order: [['id', 'ASC']] })
         if (!mainAdmin) return res.json({ status: 404, msg: 'Admin not found' })
 
         const adminBankAccount = await Bank.findOne({ where: { user: mainAdmin.id } })
