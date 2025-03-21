@@ -76,7 +76,7 @@ const AdminProductsOrders = () => {
                         </div>
                     </div>
                     :
-                    <div>
+                    <div className='mt-6'>
                         {modal &&
                             <ModalLayout clas={`w-11/12 mx-auto lg:w-1/2 scroll rounded-md`} setModal={setModal}>
                                 <div className="w-full p-5 lg:p-10 bg-primary">
@@ -88,7 +88,7 @@ const AdminProductsOrders = () => {
                             </ModalLayout>
                         }
                         {productOrders.length > 0 ?
-                            <div className='flex flex-col gap-8 mt-6'>
+                            <div className='flex flex-col gap-8'>
                                 <div className='flex flex-col gap-5'>
                                     {productOrders.slice(0, visibleCount).map((item, i) => (
                                         <div key={i}>
