@@ -14,7 +14,7 @@ const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
 const Comment = require('../models').comments
-const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, DeleteBlogImages, GlobalDeleteImage, GlobalUploadImage, GlobalImageUploads, GlobalDeleteMultiImages, GoogleImageUpload } = require('../utils/utils')
+const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, DeleteBlogImages, GlobalDeleteImage, GlobalUploadImage, GlobalImageUploads, GlobalDeleteMultiImages, GoogleImageUpload, GlobalDeleteSingleImage } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
@@ -24,6 +24,7 @@ const moment = require('moment')
 const CryptoModel = require('../models').cryptos
 const { Op, json } = require('sequelize')
 const Tools = require('../models').tools
+const Card = require('../models').cards
 const Subscriber = require('../models').subscribers
 
 
@@ -1781,3 +1782,151 @@ exports.getSubscribers = async (req, res) => {
         ServerError(res, error)
     }
 }
+
+
+//Add giftcards
+exports.AddGiftCard = async (req, res) => {
+    try {
+        const { name, rate, regrex } = req.body;
+        if (!name || !rate || !regrex) {
+            return res.json({ status: 400, msg: 'All fields required' });
+        }
+
+        const findCard = await Card.findOne({ where: { name } });
+        if (findCard) {
+            return res.json({ status: 400, msg: "Card already added to list" });
+        }
+
+        const Image_ID = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false });
+        if (!req?.files) {
+            return res.json({ status: 400, msg: 'Upload giftcard image' });
+        }
+
+        const image = req?.files?.image;
+        if (!image.mimetype.startsWith('image/')) {
+            return res.json({ status: 404, msg: `File error, upload valid image format (jpg, jpeg, png, svg)` });
+        }
+
+        const imageToUpload = [{ field: 'card_image', file: image }];
+        const imageurl = await GlobalImageUploads(imageToUpload, 'giftcards', Image_ID);
+
+        const newRegrex = Number(regrex);
+        if (isNaN(newRegrex) || newRegrex <= 0) {
+            return res.json({ status: 400, msg: "Invalid regrex value. Must be a positive number." });
+        }
+
+        const newcard = await Card.create({
+            name,
+            rate,
+            gen_id: Image_ID,
+            image: imageurl.card_image,
+            regrex: newRegrex
+        });
+
+        return res.json({ status: 200, msg: 'Gift card created successfully', data: newcard });
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
+
+
+exports.getAllGiftCards = async (req, res) => {
+    try {
+        const allcards = await Card.findAll({
+            order: [['createdAt', 'DESC']]
+        })
+        if (!allcards) return res.json({ status: 404, msg: 'No card found' })
+        return res.json({ status: 200, msg: 'fetch success', data: allcards })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+
+exports.UpdateGiftCard = async (req, res) => {
+    try {
+        const { id, name, rate, regrex } = req.body;
+        if (!id) return res.json({ status: 400, msg: "ID missing" });
+
+        const findCard = await Card.findOne({ where: { id } });
+        if (!findCard) return res.json({ status: 400, msg: "Card ID not found" });
+
+        let updatedFields = {};
+
+        if (req.files) {
+            if (findCard.image) await GlobalDeleteSingleImage(findCard.image);
+            const image = req?.files?.image;
+            if (!image.mimetype.startsWith("image/"))
+                return res.json({
+                    status: 404,
+                    msg: "File error, upload a valid image format (jpg, jpeg, png, svg)",
+                });
+
+            const imageToUpload = [{ field: "card_image", file: image }];
+            const imageurl = await GlobalImageUploads(imageToUpload, "giftcards", findCard.gen_id);
+
+            findCard.image = imageurl.card_image;
+            updatedFields.image = findCard.image;
+        }
+
+        if (name && name !== findCard.name) {
+            findCard.name = name;
+            updatedFields.name = name;
+        }
+
+        if (rate && rate !== findCard.rate) {
+            findCard.rate = rate;
+            updatedFields.rate = rate;
+        }
+
+        if (regrex) {
+            const newRegrex = Number(regrex);
+            if (isNaN(newRegrex) || newRegrex <= 0) {
+                return res.json({ status: 400, msg: "Invalid regrex value. Must be a positive number." });
+            }
+            findCard.regrex = newRegrex; 
+            updatedFields.regrex = newRegrex;
+        }
+
+        if (Object.keys(updatedFields).length === 0) {
+            return res.json({ status: 200, msg: "No changes detected" });
+        }
+
+        await findCard.save();
+
+        return res.json({
+            status: 200,
+            msg: `${findCard.name} Gift card updated successfully`,
+            updatedFields,
+        });
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
+
+
+exports.DeleteGiftCard = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) return res.json({ status: 400, msg: "ID missing" });
+
+        const findCard = await Card.findOne({ where: { id } });
+        if (!findCard) return res.json({ status: 404, msg: "Card ID not found" });
+
+        if (findCard.image) {
+            await GlobalDeleteImage(findCard.image, 'giftcards', findCard.gen_id);
+        }
+        await findCard.destroy();
+
+        return res.json({
+            status: 200,
+            msg: `${findCard.name} gift card deleted successfully`,
+        });
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
+
