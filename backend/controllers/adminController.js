@@ -1395,7 +1395,7 @@ exports.creditGiftCustomer = async (req, res) => {
                     })
 
                     Mailing({
-                        subject: 'Order Completed',
+                        subject: 'Gift-Card Order Failed`',
                         eTitle: `Gift-Card Order`,
                         eBody: `
                      <div>Hello Admin, you have marked failed to the giftcard order payment with the ID of ${order?.order_no}  today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm a')}.</div> 
