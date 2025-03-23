@@ -331,14 +331,14 @@ exports.UpdateProduct = async (req, res) => {
                     await Notification.create({
                         user: product.user,
                         title: `Product submitted approved`,
-                        content: `After thorough review by our admins your product submitted with the ID (#${product.gen_id}) has been approved, you'll be contacted soon for payment.`,
+                        content: `After thorough review by our admins your product submitted with the ID (${product.gen_id}) has been approved, you'll be contacted soon for payment.`,
                         url: '/user/products/all',
                     })
                     await Mailing({
                         subject: `Product submitted Approved`,
                         eTitle: `Product submitted approved`,
                         eBody: `
-                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the ID (#${product.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the ID (${product.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: user
                     })
@@ -349,7 +349,7 @@ exports.UpdateProduct = async (req, res) => {
                     await Notification.create({
                         user: product.user,
                         title: `Product submitted declined`,
-                        content: `After review by our admins, your product submitted with the ID (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
+                        content: `After review by our admins, your product submitted with the ID (${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail.`,
                         url: '/user/products/all',
                         status: 'failed'
                     })
@@ -357,7 +357,7 @@ exports.UpdateProduct = async (req, res) => {
                         subject: `Product submitted Declined`,
                         eTitle: `Product submitted declined`,
                         eBody: `
-                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the id (#${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the ID (${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: user
                     })
@@ -1057,7 +1057,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                 subject: `Crypto buy Credit Alert`,
                 eTitle: `Credit Alert`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked paid with ${dollarSign}${findBuy.amount?.toLocaleString()}} worth of ${findBuy.crypto_currency} sent to the wallet address ending in ****${findBuy?.wallet_address.slice(-5)}. Kindly verify this transaction by checking your <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">wallet</a>. Thank you for trading with us.
+                  <div>Hello ${user.first_name}, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked paid with ${dollarSign}${findBuy.amount?.toLocaleString()}} worth of ${findBuy.crypto_currency} sent to the wallet address ending in ****${findBuy?.wallet_address.slice(-5)}. Kindly verify this transaction by checking your <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">wallet</a>. Thank you for trading with us.
                 `,
                 account: user
             })
@@ -1077,7 +1077,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                         subject: 'Order Completed',
                         eTitle: `Crypto Buy Order `,
                         eBody: `
-                     <div>Hello Admin, you have completed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${moment(findBuy.updatedAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have completed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${moment(findBuy.updatedAt).format('h:mm a')}.</div> 
                     `,
                         account: ele,
                     })
@@ -1101,7 +1101,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                 subject: `Crypto Buy Failed`,
                 eTitle: `Failed Transaction`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findBuy?.order_no} has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try <a href='${webURL}/user/exchange/buy' style="text-decoration: underline; color: #00fe5e">again</a>. Thank you for trading with us.</div>
+                  <div>Hello ${user.first_name}, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try <a href='${webURL}/user/exchange/buy' style="text-decoration: underline; color: #00fe5e">again</a>. Thank you for trading with us.</div>
                 `,
                 account: user
             })
@@ -1121,7 +1121,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                         subject: 'Order Failed',
                         eTitle: `Crypto Buy Order Failed `,
                         eBody: `
-                     <div>Hello Admin, you have failed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${moment(findBuy.updatedAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have failed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${moment(findBuy.updatedAt).format('h:mm a')}.</div> 
                     `,
                         account: ele,
                     })
@@ -1196,7 +1196,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                         subject: 'Order Completed',
                         eTitle: `Crypto Sell Order `,
                         eBody: `
-                     <div>Hello Admin, you have completed the crypto sell order payment  with the ID of ${findSell?.order_no} and amount of ${nairaSign}${formattedAmount} today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updatedAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have completed the crypto sell order payment  with the ID of ${findSell?.order_no} and amount of ${nairaSign}${formattedAmount} today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updatedAt).format('h:mm a')}.</div> 
                     `,
                         account: ele,
                     })
@@ -1238,7 +1238,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                         subject: 'Order Failed',
                         eTitle: `Crypto Sell Order Failed`,
                         eBody: `
-                     <div>Hello Admin, you have marked the crypto sell order payment  with the ID of ${findSell?.order_no} as failed today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updateddAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have marked the crypto sell order payment  with the ID of ${findSell?.order_no} as failed today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updateddAt).format('h:mm a')}.</div> 
                     `,
                         account: ele,
                     })
@@ -1352,7 +1352,7 @@ exports.creditGiftCustomer = async (req, res) => {
                         subject: 'Order Completed',
                         eTitle: `Gift-Card Order`,
                         eBody: `
-                     <div>Hello Admin, you have completed the giftcard order payment with the ID of ${order?.order_no} and the sum of ${nairaSign}${formattedAmount} today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have completed the giftcard order payment with the ID of ${order?.order_no} and the sum of ${nairaSign}${formattedAmount} today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm a')}.</div> 
                     `,
                         account: ele,
                     })
@@ -1398,7 +1398,7 @@ exports.creditGiftCustomer = async (req, res) => {
                         subject: 'Order Completed',
                         eTitle: `Gift-Card Order`,
                         eBody: `
-                     <div>Hello Admin, you have marked failed to the giftcard order payment with the ID of ${order?.order_no}  today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm')}.</div> 
+                     <div>Hello Admin, you have marked failed to the giftcard order payment with the ID of ${order?.order_no}  today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm a')}.</div> 
                     `,
                         account: ele,
                     })
@@ -1495,6 +1495,111 @@ exports.getSingleWithdrawal = async (req, res) => {
         })
         if (!findWithdrawal) return res.json({ status: 404, msg: "Withdrawal ID not found" })
         return res.json({ status: 200, msg: 'fetch success', data: findWithdrawal })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.closeAndConfirmWithdrawal = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { tag, message } = req.body
+        if (!id || !tag) return res.json({ status: 400, msg: 'ID or Tag missing from request' })
+        const findWithdrawal = await Bank_Withdrawals.findOne({ where: { id } })
+        if (!findWithdrawal) return res.json({ status: 404, msg: 'Withdrawal ID not found' })
+        if (findWithdrawal.status === 'completed') return res.json({ status: 400, msg: 'Withdrawal already completed' })
+        const user = await User.findOne({ where: { id: findWithdrawal.userid } })
+        if (!user) return res.json({ status: 401, msg: 'Account owner not found' })
+
+        if (tag === 'success') {
+            findWithdrawal.status = 'completed'
+            await findWithdrawal.save()
+            await Notification.create({
+                user: user.id,
+                title: `Withdrawal request completed`,
+                content: `Your withdrawal request with the ID of (${findWithdrawal?.trans_id}) has been marked paid. Kindly check your new balance in your provided bank account.`,
+                url: '/user/transactions_history',
+            })
+            await Mailing({
+                subject: `Withdrawal Request Completed`,
+                eTitle: `Account credited`,
+                eBody: `
+                  <div>Hello ${user.first_name}, Your withdrawal request of ${findWithdrawal?.amount?.toLocaleString()} with the ID (${findWithdrawal?.trans_id}) has been marked paid. Kindly check your new balance in your provided bank account. See more details on this transaction <a href='${webURL}/user/transactions_history' style="text-decoration: underline; color: #00fe5e">here</a>
+                `,
+                account: user
+            })
+
+            const admins = await User.findAll({ where: { role: 'admin' } })
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `Withdrawal request completed`,
+                        content: `You have completed the withdrawal requested payment with the ID of (${findWithdrawal?.trans_id})`,
+                        url: '/admin/transactions_history',
+                    })
+
+                    Mailing({
+                        subject: `Withdrawal Request Completed`,
+                        eTitle: `Withdrawal requested completed`,
+                        eBody: `
+                     <div>Hello Admin, you have completed the withdrawal request payment with the ID of $(${findWithdrawal?.trans_id}) today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${moment(findWithdrawal.updatedAt).format('h:mm a')}.</div> 
+                    `,
+                        account: ele,
+                    })
+
+                })
+            }
+            return res.json({ status: 200, msg: 'Withdrawal request closed and confirmed' })
+        }
+        else if (tag === 'failed') {
+            if (!message) return res.json({ status: 400, msg: "Failed message is required" })
+            findWithdrawal.status = 'failed'
+            await findWithdrawal.save()
+
+            await Notification.create({
+                user: user.id,
+                title: `Withdrawal request failed`,
+                content: `Your withdrawal request with the ID of (${findWithdrawal?.trans_id}) has been marked failed. Kindly check your email to learn more.`,
+                url: '/user/transactions_history',
+            })
+            await Mailing({
+                subject: `Withdrawal Request Failed`,
+                eTitle: `Failed Transaction`,
+                eBody: `
+                  <div>Hello ${user.first_name}, Your withdrawal request of ${findWithdrawal?.amount?.toLocaleString()} with the ID (${findWithdrawal?.trans_id}) has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try <a href='${webURL}/user/bank_withdrawal' style="text-decoration: underline; color: #00fe5e">again</a>. Thank you for trading with us.</div>
+                `,
+                account: user
+            })
+
+            const admins = await User.findAll({ where: { role: 'admin' } })
+            if (admins) {
+                admins.map(async ele => {
+
+                    await Notification.create({
+                        user: ele.id,
+                        title: `Withdrawal request failed`,
+                        content: `You have failed the withdrawal request with the ID of (#${findWithdrawal?.trans_id})`,
+                        url: '/admin/transactions_history',
+                    })
+
+                    Mailing({
+                        subject: 'Withdrawal Request Failed',
+                        eTitle: `Withdrawal request failed `,
+                        eBody: `
+                     <div>Hello Admin, you have failed the withdrawal request payment with the ID of $(${findWithdrawal?.trans_id}) today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${moment(findWithdrawal.updatedAt).format('h:mm a')}.</div> 
+                    `,
+                        account: ele,
+                    })
+
+                })
+            }
+            return res.json({ status: 200, msg: 'Withdrawal request closed and marked as failed' })
+        }
+        else {
+            return res.json({ status: 404, msg: 'Invalid Tag' })
+        }
     } catch (error) {
         ServerError(res, error)
     }
@@ -1736,7 +1841,6 @@ exports.deleteComment = async (req, res) => {
     }
 }
 
-
 exports.createTools = async (req, res) => {
     try {
         const { name, features } = req.body
@@ -1772,7 +1876,6 @@ exports.deleteTool = async (req, res) => {
     }
 }
 
-
 exports.getSubscribers = async (req, res) => {
     try {
         const allsubs = await Subscriber.findAll({})
@@ -1783,8 +1886,6 @@ exports.getSubscribers = async (req, res) => {
     }
 }
 
-
-//Add giftcards
 exports.AddGiftCard = async (req, res) => {
     try {
         const { name, rate, regrex } = req.body;
@@ -1829,8 +1930,6 @@ exports.AddGiftCard = async (req, res) => {
     }
 };
 
-
-
 exports.getAllGiftCards = async (req, res) => {
     try {
         const allcards = await Card.findAll({
@@ -1842,7 +1941,6 @@ exports.getAllGiftCards = async (req, res) => {
         ServerError(res, error)
     }
 }
-
 
 exports.UpdateGiftCard = async (req, res) => {
     try {
@@ -1885,7 +1983,7 @@ exports.UpdateGiftCard = async (req, res) => {
             if (isNaN(newRegrex) || newRegrex <= 0) {
                 return res.json({ status: 400, msg: "Invalid regrex value. Must be a positive number." });
             }
-            findCard.regrex = newRegrex; 
+            findCard.regrex = newRegrex;
             updatedFields.regrex = newRegrex;
         }
 
@@ -1904,8 +2002,6 @@ exports.UpdateGiftCard = async (req, res) => {
         ServerError(res, error);
     }
 };
-
-
 
 exports.DeleteGiftCard = async (req, res) => {
     try {

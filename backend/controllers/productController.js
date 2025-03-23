@@ -52,7 +52,7 @@ exports.SubmitProduct = async (req, res) => {
         await Notification.create({
             user: req.user,
             title: `Product submitted`,
-            content: `Your product with the ID (#${product.gen_id}) has been successfully submitted. Our team will evaluate if it meets our requirements, you'll get a response from us soon.`,
+            content: `Your product with the ID (${product.gen_id}) has been successfully submitted. Our team will evaluate if it meets our requirements, you'll get a response from us soon.`,
             url: '/user/products/all',
         })
 
@@ -63,7 +63,7 @@ exports.SubmitProduct = async (req, res) => {
                 await Notification.create({
                     user: ele.id,
                     title: `Product submission alert`,
-                    content: `Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the ID (#${product.gen_id}), please confirm if it meets the requirements.`,
+                    content: `Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the ID (${product.gen_id}), please confirm if it meets the requirements.`,
                     url: '/admin/products/all',
                 })
 
@@ -71,7 +71,7 @@ exports.SubmitProduct = async (req, res) => {
                     subject: 'Product Submission Alert',
                     eTitle: `New product submitted`,
                     eBody: `
-                     <div>Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the ID (#${product.gen_id}), today ${moment(product.createdAt).format('DD-MM-yyyy')} / ${moment(product.createdAt).format('h:mm')}. Confirm if it meets the requirements <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                     <div>Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the ID (${product.gen_id}), today ${moment(product.createdAt).format('DD-MM-yyyy')} / ${moment(product.createdAt).format('h:mm a')}. Confirm if it meets the requirements <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
                     `,
                     account: ele
                 })
