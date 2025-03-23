@@ -44,12 +44,11 @@ const AdminSingleWithdrawal = () => {
         e.preventDefault()
         if (forms.sent_money === 'No' || !forms.sent_money) return ErrorAlert(`Please confirm money have been paid`)
         if (!forms.ref || forms.ref.length < 10) return ErrorAlert(`Please input a valid transaction number`)
-        const data = { tag: 'success' }
+        const data = { tag: 'success', reference_id: forms.ref }
         setLoading({ status: true, val: 'close' })
         try {
             const res = await AuthPostApi(`${Apis.admin.confirm_withdrawal}/${id}`, data)
             if (res.status !== 200) return ErrorAlert(res.msg)
-            fetchWithdrawal()
             await new Promise((resolve) => setTimeout(resolve, 2000))
             SuccessAlert(res.msg)
             setForms({ ref: '', sent_money: '' })
@@ -69,7 +68,6 @@ const AdminSingleWithdrawal = () => {
         try {
             const res = await AuthPostApi(`${Apis.admin.confirm_withdrawal}/${id}`, data)
             if (res.status !== 200) return ErrorAlert(res.msg)
-            fetchWithdrawal()
             await new Promise((resolve) => setTimeout(resolve, 2000))
             SuccessAlert(res.msg)
             setScreen(2)

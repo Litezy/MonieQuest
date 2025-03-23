@@ -1503,7 +1503,7 @@ exports.getSingleWithdrawal = async (req, res) => {
 exports.closeAndConfirmWithdrawal = async (req, res) => {
     try {
         const { id } = req.params
-        const { tag, message } = req.body
+        const { tag, reference_id, message } = req.body
         if (!id || !tag) return res.json({ status: 400, msg: 'ID or Tag missing from request' })
         const findWithdrawal = await Bank_Withdrawals.findOne({ where: { id } })
         if (!findWithdrawal) return res.json({ status: 404, msg: 'Withdrawal ID not found' })
@@ -1512,6 +1512,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
         if (!user) return res.json({ status: 401, msg: 'Account owner not found' })
 
         if (tag === 'success') {
+            findWithdrawal.reference_id = reference_id
             findWithdrawal.status = 'completed'
             await findWithdrawal.save()
             await Notification.create({
@@ -1580,7 +1581,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                     await Notification.create({
                         user: ele.id,
                         title: `Withdrawal request failed`,
-                        content: `You have failed the withdrawal request with the ID of (#${findWithdrawal?.trans_id})`,
+                        content: `You have failed the withdrawal request with the ID of (${findWithdrawal?.trans_id})`,
                         url: '/admin/transactions_history',
                     })
 
@@ -1588,7 +1589,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                         subject: 'Withdrawal Request Failed',
                         eTitle: `Withdrawal request failed `,
                         eBody: `
-                     <div>Hello Admin, you have failed the withdrawal request payment with the ID of $(${findWithdrawal?.trans_id}) today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${moment(findWithdrawal.updatedAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have failed the withdrawal request payment with the ID of (${findWithdrawal?.trans_id}) today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${moment(findWithdrawal.updatedAt).format('h:mm a')}.</div> 
                     `,
                         account: ele,
                     })
