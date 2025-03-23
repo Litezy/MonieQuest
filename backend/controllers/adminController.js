@@ -1525,7 +1525,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                 subject: `Withdrawal Request Completed`,
                 eTitle: `Account credited`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your withdrawal request of ${findWithdrawal?.amount?.toLocaleString()} with the ID (${findWithdrawal?.trans_id}) has been marked paid. Kindly check your new balance in your provided bank account. See more details on this transaction <a href='${webURL}/user/transactions_history' style="text-decoration: underline; color: #00fe5e">here</a>
+                  <div>Hello ${user.first_name}, Your withdrawal request of ${nairaSign}${findWithdrawal?.amount?.toLocaleString()} with the ID (${findWithdrawal?.trans_id}) has been marked paid. Kindly check your new balance in your provided bank account. See more details on this transaction <a href='${webURL}/user/transactions_history' style="text-decoration: underline; color: #00fe5e">here</a>
                 `,
                 account: user
             })
@@ -1569,7 +1569,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                 subject: `Withdrawal Request Failed`,
                 eTitle: `Failed Transaction`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your withdrawal request of ${findWithdrawal?.amount?.toLocaleString()} with the ID (${findWithdrawal?.trans_id}) has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try <a href='${webURL}/user/bank_withdrawal' style="text-decoration: underline; color: #00fe5e">again</a>. Thank you for trading with us.</div>
+                  <div>Hello ${user.first_name}, Your withdrawal request of ${nairaSign}${findWithdrawal?.amount?.toLocaleString()} with the ID (${findWithdrawal?.trans_id}) has been marked failed with the following reason(s) '${message}'. Kindly get back to your account to and try <a href='${webURL}/user/bank_withdrawal' style="text-decoration: underline; color: #00fe5e">again</a>. Thank you for trading with us.</div>
                 `,
                 account: user
             })
