@@ -119,25 +119,28 @@ exports.CreateAirdrop = async (req, res) => {
         })
 
         const admin = await User.findOne({ where: { id: req.user } })
-        if (admin.role !== 'super admin') {
-            const superAdmin = await User.findOne({ where: { role: 'super admin' } })
-            if (superAdmin) {
-                await Notification.create({
-                    user: superAdmin.id,
-                    title: `Airdrop creation alert`,
-                    content: `A new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}) has just been created by the admin ${admin.first_name}.`,
-                    url: '/admin/airdrops/all',
-                })
+        const superAdmin = await User.findOne({ where: { role: 'super admin' } })
+        if (superAdmin) {
+            await Notification.create({
+                user: superAdmin.id,
+                title: `Airdrop creation alert`,
+                content: admin.role !== 'super admin' ? `A new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}) has just been created by the admin ${admin.first_name}.` : `You just created a new airdrop with the ID (${newAirdrop.gen_id}).`,
+                url: '/admin/airdrops/all',
+            })
 
-                await Mailing({
-                    subject: 'Airdrop Creation Alert',
-                    eTitle: `New airdrop created`,
-                    eBody: `
-                     <div>Hello Admin, A new airdrop  (${newAirdrop.title}) with the ID  (${newAirdrop.gen_id}) has just been created by the admin ${admin.first_name} today; ${moment(newAirdrop.createdAt).format('DD-MM-yyyy')} / ${moment(newAirdrop.createdAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
-                    `,
-                    account: superAdmin,
-                })
-            }
+            await Mailing({
+                subject: 'Airdrop Creation Alert',
+                eTitle: `New airdrop created`,
+                eBody: admin.role !== 'super admin' ?
+                    `
+                     <div>Hello Admin, A new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}) has just been created by the admin ${admin.first_name} today; ${moment(newAirdrop.createdAt).format('DD-MM-yyyy')} / ${moment(newAirdrop.createdAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                    `
+                    :
+                    `<div>Hello Admin, you just created a new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}) today; ${moment(newAirdrop.createdAt).format('DD-MM-yyyy')} / ${moment(newAirdrop.createdAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                    `
+                ,
+                account: superAdmin,
+            })
         }
 
 
@@ -226,25 +229,27 @@ exports.UpdateAirdrop = async (req, res) => {
         await airdrop.save()
 
         const admin = await User.findOne({ where: { id: req.user } })
-        if (admin.role !== 'super admin') {
-            const superAdmin = await User.findOne({ where: { role: 'super admin' } })
-            if (superAdmin) {
-                await Notification.create({
-                    user: superAdmin.id,
-                    title: `Airdrop update alert`,
-                    content: `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated by the admin ${admin.first_name}.`,
-                    url: '/admin/airdrops/all',
-                })
+        const superAdmin = await User.findOne({ where: { role: 'super admin' } })
+        if (superAdmin) {
+            await Notification.create({
+                user: superAdmin.id,
+                title: `Airdrop update alert`,
+                content: admin.role !== 'super admin' ? `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated by the admin ${admin.first_name}.` : `You just updated ${airdrop.title} airdrop with the ID (${airdrop.gen_id})`,
+                url: '/admin/airdrops/all',
+            })
 
-                await Mailing({
-                    subject: 'Airdrop Update Alert',
-                    eTitle: `${airdrop.title} airdrop updated`,
-                    eBody: `
-                     <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated by the admin ${admin.first_name} today; ${moment(airdrop.createdAt).format('DD-MM-yyyy')} / ${moment(airdrop.createdAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+            await Mailing({
+                subject: 'Airdrop Update Alert',
+                eTitle: `${airdrop.title} airdrop updated`,
+                eBody: admin.role !== 'super admin' ?
+                    `
+                 <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated by the admin ${admin.first_name} today; ${moment(airdrop.updatedAt).format('DD-MM-yyyy')} / ${moment(airdrop.updatedAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                `
+                    :
+                    `<div>Hello Admin, you just updated ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) today; ${moment(airdrop.updatedAt).format('DD-MM-yyyy')} / ${moment(airdrop.updatedAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
                     `,
-                    account: superAdmin,
-                })
-            }
+                account: superAdmin,
+            })
         }
 
         return res.json({ status: 200, msg: 'Airdrop updated successfully' })
@@ -323,25 +328,28 @@ exports.DeleteClosedAirdrop = async (req, res) => {
         await airdrop.destroy()
 
         const admin = await User.findOne({ where: { id: req.user } })
-        if (admin.role !== 'super admin') {
-            const superAdmin = await User.findOne({ where: { role: 'super admin' } })
-            if (superAdmin) {
-                await Notification.create({
-                    user: superAdmin.id,
-                    title: `Airdrop deletion alert`,
-                    content: `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted by the admin ${admin.first_name}.`,
-                    url: '/admin/airdrops/all',
-                })
+        const superAdmin = await User.findOne({ where: { role: 'super admin' } })
+        if (superAdmin) {
+            await Notification.create({
+                user: superAdmin.id,
+                title: `Airdrop deletion alert`,
+                content: admin.role !== 'super admin' ? `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted by the admin ${admin.first_name}.` : `You just deleted ${airdrop.title} airdrop with the ID (${airdrop.gen_id})`,
+                url: '/admin/airdrops/all',
+            })
 
-                await Mailing({
-                    subject: 'Airdrop Deletion Alert',
-                    eTitle: `${airdrop.title} airdrop deleted`,
-                    eBody: `
-                     <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted by the admin ${admin.first_name} today; ${moment(airdrop.createdAt).format('DD-MM-yyyy')} / ${moment(airdrop.createdAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
-                    `,
-                    account: superAdmin,
-                })
-            }
+            await Mailing({
+                subject: 'Airdrop Deletion Alert',
+                eTitle: `${airdrop.title} airdrop deleted`,
+                eBody: admin.role !== 'super admin' ?
+                    `
+                     <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted by the admin ${admin.first_name} today; ${moment(airdrop.updatedAt).format('DD-MM-yyyy')} / ${moment(airdrop.updatedAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                    `
+                    :
+                    `<div>Hello Admin, you just deleted ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) today; ${moment(airdrop.updatedAt).format('DD-MM-yyyy')} / ${moment(airdrop.updatedAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                    `
+                ,
+                account: superAdmin,
+            })
         }
 
         return res.json({ status: 200, msg: 'Airdrop deleted successfully' })
