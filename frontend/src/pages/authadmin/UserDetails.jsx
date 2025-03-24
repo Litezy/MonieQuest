@@ -5,13 +5,14 @@ import { currencies } from '../../AuthComponents/AuthUtils'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link } from 'react-router-dom'
 import { useAtom } from 'jotai'
-import { USERDETAILS } from '../../services/store'
+import { PROFILE, USERDETAILS } from '../../services/store'
 import ModalLayout from '../../utils/ModalLayout'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import { Apis, AuthPostApi } from '../../services/API'
 import Loader from '../../GeneralComponents/Loader'
 
 const UserDetails = () => {
+    const [user] = useAtom(PROFILE)
     const [data, setData] = useAtom(USERDETAILS)
     const [loading, setLoading] = useState(false)
     const [selectedUser, setSelectedUser] = useState({})
@@ -110,9 +111,9 @@ const UserDetails = () => {
                                 <th scope="col" className="px-3 py-3 truncate">
                                     Date Joined
                                 </th>
-                                <th scope="col" className="px-3 py-3 truncate">
+                                {user.role === 'super admin' &&<th scope="col" className="px-3 py-3 truncate">
                                     Change Role
-                                </th>
+                                </th>}
 
                             </tr>
                         </thead>
@@ -141,9 +142,9 @@ const UserDetails = () => {
                                     <td className="px-3 py-3 truncate">
                                         {moment(item.createdAt).format(`DD-MM-YYYY hh:mm a`)}
                                     </td>
-                                    <td className="px-3 py-3 truncate">
+                                    {user.role === 'super admin' && <td className="px-3 py-3 truncate">
                                         <button onClick={() => {setModal(true); setSelectedUser(item)}} className='text-center w-full bg-ash text-white rounded-md py-1.5'>Proceed</button>
-                                    </td>
+                                    </td>}
                                 </tr>
                             )) :
                                 <tr className=" w-full truncate text-lg font-semibold">

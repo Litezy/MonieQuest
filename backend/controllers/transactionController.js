@@ -8,12 +8,10 @@ const otp = require('otp-generator')
 const Mailing = require('../config/emailDesign')
 const blockAndNum = 'abcdefghijklmnopqrstuvwxyz0123456789'
 const moment = require('moment')
+const { Op } = require('sequelize')
 const GiftCardSell = require('../models').giftCards
 const BankWithdrawal = require('../models').withdrawals
 const Wallet = require('../models').wallets
-
-
-
 
 
 exports.BuyCrypto = async (req, res) => {
@@ -47,9 +45,9 @@ exports.BuyCrypto = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = await User.findAll({ where: { role: 'admin' } })
-        if (findAdmins.length > 0) {
-            findAdmins.map(async admin => {
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        if (admins.length > 0) {
+            admins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,
@@ -103,9 +101,9 @@ exports.SellCrypto = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = await User.findAll({ where: { role: 'admin' } })
-        if (findAdmins.length > 0) {
-            findAdmins.map(async admin => {
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        if (admins.length > 0) {
+            admins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,
@@ -153,9 +151,9 @@ exports.SellGift = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = await User.findAll({ where: { role: 'admin' } })
-        if (findAdmins.length > 0) {
-            findAdmins.map(async admin => {
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        if (admins.length > 0) {
+            admins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,
@@ -270,9 +268,10 @@ exports.completeABuyPayment = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = await User.findAll({ where: { role: 'admin' } })
-        if (findAdmins.length > 0) {
-            findAdmins.map(async admin => {
+
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        if (admins.length > 0) {
+            admins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,
@@ -290,7 +289,6 @@ exports.completeABuyPayment = async (req, res) => {
                 })
             })
         }
-
 
         return res.json({ status: 200, msg: "payment status updated successfully" })
     } catch (error) {
@@ -320,9 +318,10 @@ exports.cancelOrder = async (req, res) => {
             `,
             account: findUser,
         })
-        const findAdmins = await User.findAll({ where: { role: 'admin' } })
-        if (findAdmins.length > 0) {
-            findAdmins.map(async admin => {
+
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        if (admins.length > 0) {
+            admins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,
@@ -384,9 +383,10 @@ exports.requestWithdrawal = async (req, res) => {
             `,
             account: user,
         })
-        const findAdmins = await User.findAll({ where: { role: 'admin' } })
-        if (findAdmins.length > 0) {
-            findAdmins.map(async admin => {
+
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        if (admins.length > 0) {
+            admins.map(async admin => {
 
                 await Notify.create({
                     user: admin.id,

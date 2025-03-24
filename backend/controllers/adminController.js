@@ -22,7 +22,7 @@ const path = require('path');
 const fs = require('fs')
 const moment = require('moment')
 const CryptoModel = require('../models').cryptos
-const { Op, json } = require('sequelize')
+const { Op } = require('sequelize')
 const Tools = require('../models').tools
 const Card = require('../models').cards
 const Subscriber = require('../models').subscribers
@@ -1062,7 +1062,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                 account: user
             })
 
-            const admins = await User.findAll({ where: { role: 'admin' } })
+            const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
             if (admins) {
                 admins.map(async ele => {
 
@@ -1106,7 +1106,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                 account: user
             })
 
-            const admins = await User.findAll({ where: { role: 'admin' } })
+            const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
             if (admins) {
                 admins.map(async ele => {
 
@@ -1151,7 +1151,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
         if (findSell.status === 'completed') return res.json({ status: 400, msg: 'Order already completed' })
         const user = await User.findOne({ where: { id: findSell.userid } })
         if (!user) return res.json({ status: 401, msg: 'Account owner not found' })
-        const admins = await User.findAll({ where: { role: 'admin' } })
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
         const findUserWallet = await Wallet.findOne({ where: { user: user.id } })
         if (!findUserWallet) {
             await Wallet.create({ user: user.id })
@@ -1337,7 +1337,7 @@ exports.creditGiftCustomer = async (req, res) => {
                 `,
                 account: findUser
             })
-            const admins = await User.findAll({ where: { role: 'admin' } })
+            const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
             if (admins) {
                 admins.map(async ele => {
 
@@ -1383,7 +1383,7 @@ exports.creditGiftCustomer = async (req, res) => {
                 `,
                 account: findUser
             })
-            const admins = await User.findAll({ where: { role: 'admin' } })
+            const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
             if (admins) {
                 admins.map(async ele => {
 
@@ -1530,7 +1530,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                 account: user
             })
 
-            const admins = await User.findAll({ where: { role: 'admin' } })
+            const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
             if (admins) {
                 admins.map(async ele => {
 
@@ -1574,7 +1574,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                 account: user
             })
 
-            const admins = await User.findAll({ where: { role: 'admin' } })
+            const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
             if (admins) {
                 admins.map(async ele => {
 
@@ -1772,6 +1772,8 @@ exports.AssignRole = async (req, res) => {
     try {
         const { id } = req.body
         if (!id) return res.json({ status: 400, msg: 'ID is required' })
+        const admin = await User.findOne({ where: { user: req.user } })
+        if (admin.role !== 'super admin') return res.json({ status: 400, msg: 'Unauthorized command' })
         const findUser = await User.findOne({ where: { id } })
         if (!findUser) return res.json({ status: 404, msg: 'User not found' })
         if (findUser.role === 'user') {

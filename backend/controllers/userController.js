@@ -18,6 +18,7 @@ const { webName, webShort, webURL, ServerError, GlobalDeleteImage, GlobalImageUp
 const Mailing = require('../config/emailDesign')
 const slug = require('slug')
 const path = require('path');
+const { Op } = require('sequelize')
 
 
 exports.CreateAccount = async (req, res) => {
@@ -57,7 +58,7 @@ exports.CreateAccount = async (req, res) => {
             await Util.create({})
         }
 
-        const admins = await User.findAll({ where: { role: 'admin' } })
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
         if (admins) {
             admins.map(async ele => {
 
@@ -149,7 +150,7 @@ exports.continueWithGoogle = async (req, res) => {
                 account: newUser,
             });
 
-            const admins = await User.findAll({ where: { role: 'admin' } });
+            const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
             if (admins) {
                 admins.map(async (ele) => {
                     await Notification.create({
@@ -310,7 +311,7 @@ exports.Contacts = async (req, res) => {
         const { full_name, email, message } = req.body
         if (!email || !message) return res.json({ status: 404, msg: `Incomplete request found` })
 
-        const admins = await User.findAll({ where: { role: 'admin' } })
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
         if (admins) {
             admins.map(async ele => {
 
@@ -512,7 +513,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                 url: '/user/profile/kyc',
             })
 
-            const admins = await User.findAll({ where: { role: 'admin' } })
+            const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
             if (admins) {
                 admins.map(async ele => {
 
@@ -573,7 +574,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                 url: '/user/profile/kyc',
             })
 
-            const admins = await User.findAll({ where: { role: 'admin' } })
+            const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
             if (admins) {
                 admins.map(async ele => {
 

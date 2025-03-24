@@ -9,6 +9,7 @@ const slug = require('slug')
 const fs = require('fs')
 const { webURL, nairaSign, GlobalImageUploads } = require('../utils/utils')
 const moment = require('moment')
+const { Op } = require('sequelize')
 
 
 exports.SubmitProduct = async (req, res) => {
@@ -56,7 +57,7 @@ exports.SubmitProduct = async (req, res) => {
             url: '/user/products/all',
         })
 
-        const admins = await User.findAll({ where: { role: 'admin' } })
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
         if (admins) {
             admins.map(async ele => {
 
@@ -124,7 +125,7 @@ exports.AddRating = async (req, res) => {
 
 exports.GetAdminBankAccount = async (req, res) => {
     try {
-        const mainAdmin = await User.findOne({ where: { role: 'admin' }, order: [['id', 'ASC']] })
+        const mainAdmin = await User.findOne({ where: { role: 'super admin' } })
         if (!mainAdmin) return res.json({ status: 404, msg: 'Admin not found' })
 
         const adminBankAccount = await Bank.findOne({ where: { user: mainAdmin.id } })
@@ -178,7 +179,7 @@ exports.ProductOrder = async (req, res) => {
             account: buyer
         })
 
-        const admins = await User.findAll({ where: { role: 'admin' } })
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
         if (admins) {
             admins.map(async ele => {
 
