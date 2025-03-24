@@ -68,7 +68,7 @@ exports.SubmitProduct = async (req, res) => {
                     url: '/admin/products/all',
                 })
 
-                Mailing({
+                await Mailing({
                     subject: 'Product Submission Alert',
                     eTitle: `New product submitted`,
                     eBody: `
@@ -170,7 +170,7 @@ exports.ProductOrder = async (req, res) => {
         const buyer = {
             email: productOrder.email_address
         }
-        Mailing({
+        await Mailing({
             subject: 'New Order Placed',
             eTitle: `Order placed`,
             eBody: `
@@ -190,7 +190,7 @@ exports.ProductOrder = async (req, res) => {
                     url: '/admin/products/orders',
                 })
 
-                Mailing({
+                await Mailing({
                     subject: 'Product Order Alert',
                     eTitle: `Product order placed`,
                     eBody: `

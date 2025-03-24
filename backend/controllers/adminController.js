@@ -14,7 +14,7 @@ const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
 const Comment = require('../models').comments
-const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, DeleteBlogImages, GlobalDeleteImage, GlobalUploadImage, GlobalImageUploads, GlobalDeleteMultiImages, GoogleImageUpload, GlobalDeleteSingleImage } = require('../utils/utils')
+const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, GlobalDeleteImage, GlobalImageUploads, GlobalDeleteMultiImages, GlobalDeleteSingleImage } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
@@ -118,6 +118,29 @@ exports.CreateAirdrop = async (req, res) => {
             website_link: website_link || null
         })
 
+        const admin = await User.findOne({ where: { id: req.user } })
+        if (admin.role !== 'super admin') {
+            const superAdmin = await User.findOne({ where: { role: 'super admin' } })
+            if (superAdmin) {
+                await Notification.create({
+                    user: superAdmin.id,
+                    title: `Airdrop creation alert`,
+                    content: `A new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}) has just been created by the admin ${admin.first_name}.`,
+                    url: '/admin/airdrops/all',
+                })
+
+                await Mailing({
+                    subject: 'Airdrop Creation Alert',
+                    eTitle: `New airdrop created`,
+                    eBody: `
+                     <div>Hello Admin, A new airdrop  (${newAirdrop.title}) with the ID  (${newAirdrop.gen_id}) has just been created by the admin ${admin.first_name} today; ${moment(newAirdrop.createdAt).format('DD-MM-yyyy')} / ${moment(newAirdrop.createdAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                    `,
+                    account: superAdmin,
+                })
+            }
+        }
+
+
         return res.json({ status: 200, msg: 'Airdrop created successfully', data: newAirdrop })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
@@ -202,6 +225,28 @@ exports.UpdateAirdrop = async (req, res) => {
 
         await airdrop.save()
 
+        const admin = await User.findOne({ where: { id: req.user } })
+        if (admin.role !== 'super admin') {
+            const superAdmin = await User.findOne({ where: { role: 'super admin' } })
+            if (superAdmin) {
+                await Notification.create({
+                    user: superAdmin.id,
+                    title: `Airdrop update alert`,
+                    content: `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated by the admin ${admin.first_name}.`,
+                    url: '/admin/airdrops/all',
+                })
+
+                await Mailing({
+                    subject: 'Airdrop Update Alert',
+                    eTitle: `${airdrop.title} airdrop updated`,
+                    eBody: `
+                     <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated by the admin ${admin.first_name} today; ${moment(airdrop.createdAt).format('DD-MM-yyyy')} / ${moment(airdrop.createdAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                    `,
+                    account: superAdmin,
+                })
+            }
+        }
+
         return res.json({ status: 200, msg: 'Airdrop updated successfully' })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
@@ -276,6 +321,28 @@ exports.DeleteClosedAirdrop = async (req, res) => {
         await GlobalDeleteMultiImages(imagesToDelete, 'airdrops', airdrop.gen_id)
 
         await airdrop.destroy()
+
+        const admin = await User.findOne({ where: { id: req.user } })
+        if (admin.role !== 'super admin') {
+            const superAdmin = await User.findOne({ where: { role: 'super admin' } })
+            if (superAdmin) {
+                await Notification.create({
+                    user: superAdmin.id,
+                    title: `Airdrop deletion alert`,
+                    content: `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted by the admin ${admin.first_name}.`,
+                    url: '/admin/airdrops/all',
+                })
+
+                await Mailing({
+                    subject: 'Airdrop Deletion Alert',
+                    eTitle: `${airdrop.title} airdrop deleted`,
+                    eBody: `
+                     <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted by the admin ${admin.first_name} today; ${moment(airdrop.createdAt).format('DD-MM-yyyy')} / ${moment(airdrop.createdAt).format('h:mm a')}. See more details <a href='${webURL}/admin/aidrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                    `,
+                    account: superAdmin,
+                })
+            }
+        }
 
         return res.json({ status: 200, msg: 'Airdrop deleted successfully' })
     } catch (error) {
@@ -1073,7 +1140,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                         url: '/admin/transactions_history',
                     })
 
-                    Mailing({
+                    await Mailing({
                         subject: 'Order Completed',
                         eTitle: `Crypto Buy Order `,
                         eBody: `
@@ -1117,7 +1184,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                         url: '/admin/transactions_history',
                     })
 
-                    Mailing({
+                    await Mailing({
                         subject: 'Order Failed',
                         eTitle: `Crypto Buy Order Failed `,
                         eBody: `
@@ -1192,7 +1259,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                         url: '/admin/transactions_history',
                     })
 
-                    Mailing({
+                    await Mailing({
                         subject: 'Order Completed',
                         eTitle: `Crypto Sell Order `,
                         eBody: `
@@ -1234,7 +1301,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                         url: '/admin/transactions_history',
                     })
 
-                    Mailing({
+                    await Mailing({
                         subject: 'Order Failed',
                         eTitle: `Crypto Sell Order Failed`,
                         eBody: `
@@ -1348,7 +1415,7 @@ exports.creditGiftCustomer = async (req, res) => {
                         url: '/admin/transactions_history',
                     })
 
-                    Mailing({
+                    await Mailing({
                         subject: 'Order Completed',
                         eTitle: `Gift-Card Order`,
                         eBody: `
@@ -1394,7 +1461,7 @@ exports.creditGiftCustomer = async (req, res) => {
                         url: '/admin/transactions_history',
                     })
 
-                    Mailing({
+                    await Mailing({
                         subject: 'Gift-Card Order Failed`',
                         eTitle: `Gift-Card Order`,
                         eBody: `
@@ -1541,7 +1608,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                         url: '/admin/transactions_history',
                     })
 
-                    Mailing({
+                    await Mailing({
                         subject: `Withdrawal Request Completed`,
                         eTitle: `Withdrawal requested completed`,
                         eBody: `
@@ -1585,7 +1652,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                         url: '/admin/transactions_history',
                     })
 
-                    Mailing({
+                    await Mailing({
                         subject: 'Withdrawal Request Failed',
                         eTitle: `Withdrawal request failed `,
                         eBody: `
@@ -1772,7 +1839,7 @@ exports.AssignRole = async (req, res) => {
     try {
         const { id } = req.body
         if (!id) return res.json({ status: 400, msg: 'ID is required' })
-        const admin = await User.findOne({ where: { user: req.user } })
+        const admin = await User.findOne({ where: { id: req.user } })
         if (admin.role !== 'super admin') return res.json({ status: 400, msg: 'Unauthorized command' })
         const findUser = await User.findOne({ where: { id } })
         if (!findUser) return res.json({ status: 404, msg: 'User not found' })
@@ -1807,7 +1874,7 @@ exports.AssignRole = async (req, res) => {
             return res.json({ status: 200, msg: `${findUser.first_name} is now a user`, data: allusers })
         }
     } catch (error) {
-        ServerError(res, error)
+        return res.json({ status: 400, msg: error.message })
     }
 }
 

@@ -69,7 +69,7 @@ exports.CreateAccount = async (req, res) => {
                     url: '/admin/all_users',
                 })
 
-                Mailing({
+                await Mailing({
                     subject: 'New User Alert',
                     eTitle: `New user joins ${webShort}`,
                     eBody: `
@@ -83,7 +83,7 @@ exports.CreateAccount = async (req, res) => {
 
         const otp = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
 
-        Mailing({
+        await Mailing({
             subject: 'Email Verification Code',
             eTitle: `Your email verification code`,
             eBody: `
@@ -141,7 +141,7 @@ exports.continueWithGoogle = async (req, res) => {
                 await Util.create({});
             }
 
-            Mailing({
+            await Mailing({
                 subject: `Welcome To ${webName}`,
                 eTitle: `Welcome ${first_name}`,
                 eBody: `
@@ -160,7 +160,7 @@ exports.continueWithGoogle = async (req, res) => {
                         url: '/admin/all_users',
                     });
 
-                    Mailing({
+                    await Mailing({
                         subject: 'New User Alert',
                         eTitle: `New user joins ${webShort}`,
                         eBody: `
@@ -195,7 +195,7 @@ exports.VerifyEmail = async (req, res) => {
         findAccount.email_verified = 'true'
         await findAccount.save()
 
-        Mailing({
+        await Mailing({
             subject: `Welcome To ${webName}`,
             eTitle: `Welcome ${findAccount.first_name}`,
             eBody: `
@@ -248,7 +248,7 @@ exports.SendOTP = async (req, res) => {
 
         const otp = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
 
-        Mailing({
+        await Mailing({
             subject: 'Email Verification Code',
             eTitle: `Your email verification code`,
             eBody: `
@@ -315,7 +315,7 @@ exports.Contacts = async (req, res) => {
         if (admins) {
             admins.map(async ele => {
 
-                Mailing({
+                await Mailing({
                     subject: `Contact From ${webName} User`,
                     eTitle: `${webName} user sends message`,
                     eBody: `
