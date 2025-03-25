@@ -403,7 +403,7 @@ exports.UpdateProduct = async (req, res) => {
                         url: '/user/products/all',
                     })
                     await Mailing({
-                        subject: `Product submitted Approved`,
+                        subject: `Product Submitted Approved`,
                         eTitle: `Product submitted approved`,
                         eBody: `
                           <div>Hello ${user.first_name}, After thorough review by our admins your product submitted (${product.title}) with the ID (${product.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
