@@ -324,7 +324,7 @@ exports.DeleteClosedAirdrop = async (req, res) => {
         await airdrop.destroy()
 
         const admin = await User.findOne({ where: { id: req.user } })
-        if(!admin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (!admin) return res.json({ status: 400, msg: 'Admin not found' })
         const superAdmin = await User.findOne({ where: { role: 'super admin' } })
         if (superAdmin) {
             await Notification.create({
@@ -1859,7 +1859,7 @@ exports.AssignRole = async (req, res) => {
             })
             return res.json({ status: 200, msg: `${findUser.first_name} is now an admin`, data: allusers })
         }
-        if (findUser.role === 'admin') {
+        else if (findUser.role === 'admin') {
             findUser.role = 'user'
             await findUser.save()
             const allusers = await User.findAll({
@@ -1873,6 +1873,8 @@ exports.AssignRole = async (req, res) => {
                 order: [['createdAt', 'DESC']]
             })
             return res.json({ status: 200, msg: `${findUser.first_name} is now a user`, data: allusers })
+        } else {
+            return res.json({ status: 400, msg: `You can't change a super admin role` })
         }
     } catch (error) {
         return res.json({ status: 400, msg: error.message })

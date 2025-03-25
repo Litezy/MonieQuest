@@ -23,10 +23,10 @@ const UserDetails = () => {
     const handleFilter = (e) => {
         const { value } = e.target;
         if (!value) {
-            setFilteredData(data); 
+            setFilteredData(data);
             return;
         }
-    
+
         const filtered = data.filter(
             (val) =>
                 val.first_name.toLowerCase().startsWith(value.toLowerCase()) ||
@@ -34,8 +34,8 @@ const UserDetails = () => {
         );
         setFilteredData(filtered);
     };
-    
-    const makeAdmin = async () => {
+
+    const ChangeRole = async () => {
         if (!selectedUser?.id) return ErrorAlert(`User ID missing`);
         const data = { id: selectedUser?.id }
         setModal(false)
@@ -44,6 +44,7 @@ const UserDetails = () => {
             const response = await AuthPostApi(Apis.admin.assign_role, data)
             if (response.status !== 200) return ErrorAlert(response.msg)
             setData(response.data)
+            setFilteredData(response.data)
             await new Promise((resolve) => setTimeout(resolve, 2000))
             SuccessAlert(response.msg)
         } catch (error) {
@@ -62,14 +63,14 @@ const UserDetails = () => {
 
                         <div className="flex items-center justify-between">
                             <button onClick={() => setModal(false)} className='px-4 py-2 bg-red-500 text-white rounded-md'>Cancel</button>
-                            <button onClick={makeAdmin} className='px-4 py-2 bg-green-500 text-white rounded-md'>Confirm</button>
+                            <button onClick={ChangeRole} className='px-4 py-2 bg-green-500 text-white rounded-md'>Confirm</button>
                         </div>
 
                     </div>
                 </ModalLayout>
             }
             {
-                loading && <Loader title={`performing operation`} />
+                loading && <Loader title={`processing`} />
             }
             <div className='w-11/12 mx-auto '>
                 <div className="w-full flex items-center text-white justify-between">
@@ -111,7 +112,7 @@ const UserDetails = () => {
                                 <th scope="col" className="px-3 py-3 truncate">
                                     Date Joined
                                 </th>
-                                {user.role === 'super admin' &&<th scope="col" className="px-3 py-3 truncate">
+                                {user.role === 'super admin' && <th scope="col" className="px-3 py-3 truncate">
                                     Change Role
                                 </th>}
 
@@ -143,7 +144,7 @@ const UserDetails = () => {
                                         {moment(item.createdAt).format(`DD-MM-YYYY hh:mm a`)}
                                     </td>
                                     {user.role === 'super admin' && <td className="px-3 py-3 truncate">
-                                        <button onClick={() => {setModal(true); setSelectedUser(item)}} className='text-center w-full bg-ash text-white rounded-md py-1.5'>Proceed</button>
+                                        <button onClick={() => { setModal(true); setSelectedUser(item) }} className='text-center w-full bg-ash text-white rounded-md py-1.5'>Proceed</button>
                                     </td>}
                                 </tr>
                             )) :
