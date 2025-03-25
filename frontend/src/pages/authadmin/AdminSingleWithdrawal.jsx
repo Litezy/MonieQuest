@@ -84,6 +84,20 @@ const AdminSingleWithdrawal = () => {
             .catch((error) => { console.log(`failed to copy account number`, error) })
     }
 
+    const prefillRef = async () => {
+        try {
+            const clipboardText = await navigator.clipboard.readText(); 
+            setForms((prevForms) => ({
+                ...prevForms,
+                ref: clipboardText, 
+            }));
+            SuccessAlert('Reference number pasted successfully');
+        } catch (error) {
+            console.error('Failed to read from clipboard:', error);
+            ErrorAlert('Failed to paste reference number');
+        }
+    };
+
     return (
         <AdminPageLayout>
 
@@ -131,7 +145,7 @@ const AdminSingleWithdrawal = () => {
                                         <div className="w-full">
                                             <FormInput value={forms.ref} name={`ref`} onChange={handleChange} className={`${green}`} />
                                         </div>
-                                        <p className={`${green} cursor-pointer`}>paste</p>
+                                        <p onClick={prefillRef} className={`${green} cursor-pointer`}>paste</p>
                                     </div>
                                 </div>
                             }

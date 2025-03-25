@@ -58,7 +58,7 @@ router.post('/delete_tool/:id', AdminMiddleware, deleteTool)
 router.get('/get_subs', AdminMiddleware, getSubscribers)
 router.post('/add_giftcard', AdminMiddleware, AddGiftCard)
 router.post('/update_giftcard', AdminMiddleware, UpdateGiftCard)
-router.get('/get_giftcards', AdminMiddleware, getAllGiftCards)
+router.get('/get_giftcards',  getAllGiftCards)
 router.post('/delete_giftcard/:id', AdminMiddleware, DeleteGiftCard)
 
 

@@ -1365,6 +1365,8 @@ exports.creditGiftCustomer = async (req, res) => {
         const { id } = req.params
         const { amount, tag, message } = req.body
         if (!id || !tag) return res.json({ status: 400, msg: "ID, Amount or Tag missing from request" })
+        const tagsVal = ['success', 'failed']
+        if (!tagsVal.includes(tag)) return res.json({ status: 400, msg: "Invalid Tag found" })
         const order = await GiftCard.findOne({
             where: { id },
             include: [
@@ -1486,7 +1488,7 @@ exports.creditGiftCustomer = async (req, res) => {
 exports.getAdminTransHistory = async (req, res) => {
     try {
         const cryptoBuys = await BuyCrypto.findAll({
-            where: { status: [`unpaid`, `paid`, 'completed'] },
+            where: { status: [`unpaid`, `paid`, 'completed', 'failed'] },
             include: [
                 {
                     model: User, as: 'crypto_buyer',
@@ -1495,7 +1497,7 @@ exports.getAdminTransHistory = async (req, res) => {
             ]
         })
         const cryptoSells = await SellCrypto.findAll({
-            where: { status: [`pending`, 'completed'] },
+            where: { status: [`pending`, 'completed', 'failed'] },
             include: [
                 {
                     model: User, as: 'crypto_seller',
@@ -1504,7 +1506,7 @@ exports.getAdminTransHistory = async (req, res) => {
             ]
         })
         const giftSells = await GiftCard.findAll({
-            where: { status: [`pending`, 'completed'] },
+            where: { status: [`pending`, 'completed', 'failed'] },
             include: [
                 {
                     model: User, as: 'gift_seller',
@@ -1513,7 +1515,7 @@ exports.getAdminTransHistory = async (req, res) => {
             ]
         })
         const bankWithdrawals = await Bank_Withdrawals.findAll({
-            where: { status: [`pending`, 'completed'] },
+            where: { status: [`pending`, 'completed', 'failed'] },
             include: [
                 {
                     model: User, as: 'user_withdrawal',
@@ -1579,7 +1581,10 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
         const user = await User.findOne({ where: { id: findWithdrawal.userid } })
         if (!user) return res.json({ status: 401, msg: 'Account owner not found' })
 
+        const tags = ['success', 'failed']
+        if (!tags.includes(tag)) return res.json({ status: 400, msg: "Invalid Tag found" })
         if (tag === 'success') {
+            if(!reference_id) return res.json({status:400, msg:"Transaction refrence/number missing"})
             findWithdrawal.reference_id = reference_id
             findWithdrawal.status = 'completed'
             await findWithdrawal.save()
@@ -1613,7 +1618,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                         subject: `Withdrawal Request Completed`,
                         eTitle: `Withdrawal requested completed`,
                         eBody: `
-                     <div>Hello Admin, you have completed the withdrawal request payment with the ID of $(${findWithdrawal?.trans_id}) today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${moment(findWithdrawal.updatedAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have completed the withdrawal request payment with the ID of ${findWithdrawal?.trans_id} today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${moment(findWithdrawal.updatedAt).format('h:mm a')}.</div> 
                     `,
                         account: ele,
                     })
@@ -1622,7 +1627,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
             }
             return res.json({ status: 200, msg: 'Withdrawal request closed and confirmed' })
         }
-        else if (tag === 'failed') {
+        else {
             if (!message) return res.json({ status: 400, msg: "Failed message is required" })
             findWithdrawal.status = 'failed'
             await findWithdrawal.save()
@@ -1665,9 +1670,6 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                 })
             }
             return res.json({ status: 200, msg: 'Withdrawal request closed and marked as failed' })
-        }
-        else {
-            return res.json({ status: 404, msg: 'Invalid Tag' })
         }
     } catch (error) {
         ServerError(res, error)
