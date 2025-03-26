@@ -173,7 +173,7 @@ const formsal = () => {
                             <div className='flex flex-col gap-1'>
                                 <div className='flex gap-1 items-center'>
                                     <div className='md:size-3.5 size-3 bg-lightgreen rounded-full'></div>
-                                    <div className='md:text-sm text-xs capitalize font-medium'>total deposit</div>
+                                    <div className='md:text-sm text-xs capitalize font-medium'>total inflow</div>
                                 </div>
                                 <div className='font-bold'>{currencies[1].symbol}{Object.values(wallet).length !== 0 ? <span>{wallet.total_deposit.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} </span> : <span>0.00</span>}</div>
                             </div>
