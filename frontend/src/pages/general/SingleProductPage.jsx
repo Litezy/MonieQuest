@@ -190,13 +190,13 @@ const SingleProductPage = () => {
                                             }
                                             {singleProduct?.discount_endDate && <div className='text-sm italic text-lightgreen'>Discount ends {moment(new Date(singleProduct?.discount_endDate)).format('Do MMMM')}</div>}
                                         </div>
-                                        <p className='text-sm whitespace-pre-line'>{singleProduct?.about.replace(/\\n|\/n/g, '\n')}</p>
+                                        <p className='whitespace-pre-line'>{singleProduct?.about.replace(/\\n|\/n/g, '\n')}</p>
                                         <div className='flex flex-col gap-2'>
                                             <div className='uppercase font-bold'>key features:</div>
                                             {features.length > 0 && features.map((item, i) => (
-                                                <div key={i} className='flex gap-2 items-baseline'>
+                                                <div key={i} className='flex gap-2 items-baseline text-sm'>
                                                     <div className='w-[3%]'>
-                                                        <GiCheckMark className='text-lightgreen text-sm' />
+                                                        <GiCheckMark className='text-lightgreen' />
                                                     </div>
                                                     <div className='w-[97%] whitespace-pre-line'>{item.replace(/\\n|\/n/g, '\n')}</div>
                                                 </div>
