@@ -702,10 +702,11 @@ exports.CreateUser = async (req, res) => {
         if (findEmail) return res.json({ status: 404, msg: `Email address already exists` })
         const findPhone = await User.findOne({ where: { phone_number } })
         if (findPhone) return res.json({ status: 404, msg: `Phone number used, try a different one` })
-
+        const uniqueId = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false })
         const user = await User.create({
             first_name,
             surname,
+            unique_Id: uniqueId,
             email,
             phone_number,
             password,
@@ -1584,7 +1585,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
         const tags = ['success', 'failed']
         if (!tags.includes(tag)) return res.json({ status: 400, msg: "Invalid Tag found" })
         if (tag === 'success') {
-            if(!reference_id) return res.json({status:400, msg:"Transaction refrence/number missing"})
+            if (!reference_id) return res.json({ status: 400, msg: "Transaction refrence/number missing" })
             findWithdrawal.reference_id = reference_id
             findWithdrawal.status = 'completed'
             await findWithdrawal.save()
