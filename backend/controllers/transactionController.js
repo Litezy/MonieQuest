@@ -162,10 +162,10 @@ exports.SellGift = async (req, res) => {
                     url: '/admin/giftcards/orders',
                 })
                 await Mailing({
-                    subject: 'New Crypto Buy Order',
+                    subject: 'New Giftcard Sell Order',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                     <div>Hi Admin, You have a crypto sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newsell.createdAt).format('DD-MM-yyyy')} / ${moment(newsell.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, You have a giftcard sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newsell.createdAt).format('DD-MM-yyyy')} / ${moment(newsell.createdAt).format('h:mm')}.</div> 
                     `,
                     account: admin,
                 })
@@ -339,7 +339,6 @@ exports.cancelOrder = async (req, res) => {
                 })
             })
         }
-
 
         return res.json({ status: 200, msg: "Order successfully canceled" })
     } catch (error) {

@@ -403,13 +403,35 @@ exports.UpdateProduct = async (req, res) => {
                         url: '/user/products/all',
                     })
                     await Mailing({
-                        subject: `Product submitted Approved`,
+                        subject: `Product Submitted Approved`,
                         eTitle: `Product submitted approved`,
                         eBody: `
-                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the ID (${product.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted (${product.title}) with the ID (${product.gen_id}) has been approved, you'll be contacted soon for payment. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: user
                     })
+
+                    const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+                    if (admins) {
+                        admins.map(async ele => {
+
+                            await Notification.create({
+                                user: ele.id,
+                                title: `Product submitted approved`,
+                                content: `The Product submitted with the ID (${product.gen_id}) have been successfully approved.`,
+                                url: '/admin/products/all',
+                            })
+                            await Mailing({
+                                subject: 'Product Submitted Approved',
+                                eTitle: `Product Approval`,
+                                eBody: `
+                                <div>Hello Admin, The Product submitted with the ID (${product.gen_id}) have been successfully approved, today ${moment(product.updatedAt).format('DD-MM-yyyy')} / ${moment(product.updatedAt).format('h:mm A')}. See more details <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                               `,
+                                account: ele
+                            })
+
+                        })
+                    }
                 }
             }
             if (product.status !== 'declined') {
@@ -422,13 +444,35 @@ exports.UpdateProduct = async (req, res) => {
                         status: 'failed'
                     })
                     await Mailing({
-                        subject: `Product submitted Declined`,
+                        subject: `Product Submitted Declined`,
                         eTitle: `Product submitted declined`,
                         eBody: `
-                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted with the ID (${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello ${user.first_name}, After thorough review by our admins your product submitted (${product.title}) with the ID (${product.gen_id}) has been declined, reasons for disapproval would be sent to you via your contact detail. You can check current status <a href='${webURL}/user/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: user
                     })
+
+                    const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+                    if (admins) {
+                        admins.map(async ele => {
+
+                            await Notification.create({
+                                user: ele.id,
+                                title: `Product submitted declined`,
+                                content: `The Product submitted with the ID (${product.gen_id}) have been successfully declined.`,
+                                url: '/admin/products/all',
+                            })
+                            await Mailing({
+                                subject: 'Product Submitted Declined',
+                                eTitle: `Product Declined`,
+                                eBody: `
+                                <div>Hello Admin, The Product submitted with the ID (${product.gen_id}) have been successfully declined, today ${moment(product.updatedAt).format('DD-MM-yyyy')} / ${moment(product.updatedAt).format('h:mm A')}. See more details <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                               `,
+                                account: ele
+                            })
+
+                        })
+                    }
                 }
             }
             product.status = status
