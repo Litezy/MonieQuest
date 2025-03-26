@@ -197,15 +197,15 @@ const formsal = () => {
                             <div onClick={prefillBank} className="mb-5 w-fit px-5 py-2 rounded-md cursor-pointer bg-ash text-white">Use linked account</div>
                             <div className="grid md:grid-cols-2 grid-cols-1 gap-5 lg:gap-10 mb-5">
                                 <div className="flex w-full flex-col items-start gap-2">
-                                    <div className="text-lightgreen">Account Name</div>
-                                    <div className="w-full">
-                                        <FormInput placeholder={`account name`} name={`accountName`} value={forms.accountName} onChange={handleChange} />
-                                    </div>
-                                </div>
-                                <div className="flex w-full flex-col items-start gap-2">
                                     <div className="text-lightgreen">Amount ({currencies[1].symbol})</div>
                                     <div className="w-full">
                                         <FormInput placeholder={`amount`} name={`amounnt`} value={forms.amount} onChange={handleAmount} />
+                                    </div>
+                                </div>
+                                <div className="flex w-full flex-col items-start gap-2">
+                                    <div className="text-lightgreen">Account Name</div>
+                                    <div className="w-full">
+                                        <FormInput placeholder={`account name`} name={`accountName`} value={forms.accountName} onChange={handleChange} />
                                     </div>
                                 </div>
                                 <div className="flex w-full flex-col items-start gap-2">

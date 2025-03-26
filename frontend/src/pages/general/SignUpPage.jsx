@@ -132,7 +132,7 @@ const SignUpPage = () => {
                 <FormInput label='Phone number' placeholder='Phone number' name='phone' value={form.phone} onChange={handlePhoneNum} />
               </div>
               <div className='grid md:grid-cols-2 grid-cols-1 gap-5'>
-                <PasswordInputField label='Password' placeholder='password' name='password' value={form.password} onChange={formHandler} />
+                <PasswordInputField label='Password' placeholder='Password' name='password' value={form.password} onChange={formHandler} />
                 <PasswordInputField label='Confirm password' placeholder='Confirm password' name='confirm_password' value={form.confirm_password} onChange={formHandler} />
               </div>
               <div className='flex flex-col gap-5 items-center'>
