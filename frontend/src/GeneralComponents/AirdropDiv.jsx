@@ -6,20 +6,20 @@ import { imageurl } from '../services/API'
 
 const AirdropDiv = ({ item, className }) => {
     return (
-        <Link to={`/airdrops/${item.category}/${item.id}/${item.slug}`} onClick={MoveToTop} className={`h-fit w-72 bg-primary hover:bg-[#2f2f47] border hover:border-bg-green border-ash rounded-md p-4 text-white text-wrap`}>
+        <Link to={`/airdrops/${item.category}/${item.id}/${item.slug}`} onClick={MoveToTop} className={`h-fit w-72 bg-primary hover:bg-[#2f2f47] border hover:border-bg-green border-ash rounded-md p-4 text-white text-wrap overflow-hidden ${className}`}>
             <div className='flex flex-col gap-4'>
                 <div className='flex items-center gap-2'>
                     <img alt='airdrop logo' src={item.logo_image} className='w-14 h-14 rounded-full object-cover'></img>
                     <div className='flex flex-col gap-1'>
                         <div className='capitalize text-lg font-bold'>{item?.title}</div>
                         <div className='flex items-center gap-2'>
-                            {item.twitter_link && <div className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
+                            {item?.twitter_link && <div className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
                                 <FaXTwitter />
                             </div>}
-                            {item.telegram_link && <div className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
+                            {item?.telegram_link && <div className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
                                 <FaTelegram />
                             </div>}
-                            {item.website_link && <div className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
+                            {item?.website_link && <div className='w-fit h-fit p-1.5 rounded-full border border-gray-600 text-xs flex items-center justify-center'>
                                 <FaGlobe />
                             </div>}
                         </div>
