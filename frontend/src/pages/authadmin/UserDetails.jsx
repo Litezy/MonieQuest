@@ -10,6 +10,8 @@ import ModalLayout from '../../utils/ModalLayout'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import { Apis, AuthPostApi } from '../../services/API'
 import Loader from '../../GeneralComponents/Loader'
+import FormInput from '../../utils/FormInput'
+import { CiSearch } from 'react-icons/ci'
 
 const UserDetails = () => {
     const [user] = useAtom(PROFILE)
@@ -30,7 +32,8 @@ const UserDetails = () => {
         const filtered = data.filter(
             (val) =>
                 val.first_name.toLowerCase().startsWith(value.toLowerCase()) ||
-                val.surname.toLowerCase().startsWith(value.toLowerCase())
+                val.surname.toLowerCase().startsWith(value.toLowerCase()) ||
+                val.email.toLowerCase().startsWith(value.toLowerCase())
         );
         setFilteredData(filtered);
     };
@@ -83,10 +86,11 @@ const UserDetails = () => {
                     <div className="text-lg font-semibold">User Details</div>
                 </div>
                 <div className="my-5 text-xl font-bold text-center">Below are Users Details on MonieQuest</div>
-
-                <div className="py-2 w-full md:w-1/2 flex items-start md:items-center gap-2 flex-col md:flex-row">
-                    <div className="">Search Users</div>
-                    <input type="text" className='rounded-md bg-transparent outline-none focus:outline-none focus-within:outline-none focus:ring-0 text-white w-3/4 border-gray-400 focus:border-gray-400' onChange={(e) => handleFilter(e)} />
+                <div className="w-full lg:w-2/3 mx-auto relative">
+                    <FormInput placeholder='Search by FullName and Email' className="!rounded-lg" onChange={(e) => handleFilter(e)} />
+                    <div className="absolute top-3 right-3">
+                        <CiSearch className='text-xl cursor-pointer text-white' />
+                    </div>
                 </div>
 
                 <div className="relative overflow-x-auto rounded-md mt-10">
