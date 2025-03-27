@@ -6,7 +6,7 @@ import { imageurl } from '../services/API'
 
 const AirdropDiv = ({ item, className }) => {
     return (
-        <Link to={`/airdrops/${item.category}/${item.id}/${item.slug}`} onClick={MoveToTop} className={`h-fit w-72 bg-primary hover:bg-[#2f2f47] border hover:border-bg-green border-ash rounded-md p-4 text-white ${className}`}>
+        <Link to={`/airdrops/${item.category}/${item.id}/${item.slug}`} onClick={MoveToTop} className={`h-fit w-72 bg-primary hover:bg-[#2f2f47] border hover:border-bg-green border-ash rounded-md p-4 text-white text-wrap`}>
             <div className='flex flex-col gap-4'>
                 <div className='flex items-center gap-2'>
                     <img alt='airdrop logo' src={item.logo_image} className='w-14 h-14 rounded-full object-cover'></img>
@@ -28,7 +28,7 @@ const AirdropDiv = ({ item, className }) => {
                 <div className='flex justify-between gap-4 pb-2'>
                     <div className='flex flex-col gap-2 capitalize text-[0.8rem]'>
                         <div className='font-bold'>{item?.format}</div>
-                        <div className='text-xs'>${item?.level}</div>
+                        <div className='text-xs'>{item?.level}</div>
                     </div>
                     <div className='flex flex-col gap-2 capitalize text-[0.8rem]'>
                         <div className='font-bold'>{item?.type}</div>
