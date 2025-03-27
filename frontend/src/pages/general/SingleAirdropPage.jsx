@@ -195,10 +195,10 @@ const SingleAirdropPage = () => {
                     <div className='w-full h-fit border border-ash bg-secondary rounded-md py-8'>
                       <div className='flex flex-col gap-4'>
                         <div className='text-xl font-bold px-4'>Video guide on <span className='capitalize text-lightgreen'>{singleAirdrop?.title} airdrop</span></div>
-                        {singleAirdrop?.video_guide_link.includes(`https://www.youtube.com`) ?
+                        {singleAirdrop?.video_guide_link && singleAirdrop?.video_guide_link.includes(`https://www.youtube.com`) ?
                           <YouTubeComp videoId={singleAirdrop?.video_guide_link} title={singleAirdrop?.title} />
                           :
-                          <div className="capitalize w-11/12 mx-auto">No steps video provided for this airdrop!</div>
+                          <div className="capitalize w-11/12 mx-auto">No video guide provided for this airdrop!</div>
                         }
                       </div>
                     </div>
