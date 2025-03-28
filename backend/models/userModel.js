@@ -12,5 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         kyc_verified: { type: DataTypes.STRING, defaultValue: 'false' },
         resetcode: { type: DataTypes.STRING, allowNull: true },
         google: { type: DataTypes.STRING, allowNull: false, defaultValue: 'false' },
+        airdrop_permit: { type: DataTypes.STRING, allowNull: true, defaultValue: 'false' },
+        blog_permit: { type: DataTypes.STRING, defaultValue: 'false' },
+        product_permit: { type: DataTypes.STRING, defaultValue: 'false' },
+        giftcard_permit: { type: DataTypes.STRING, defaultValue: 'false' },
+        exchange_permit: { type: DataTypes.STRING, defaultValue: 'false' },
     })
 }

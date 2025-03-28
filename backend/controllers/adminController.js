@@ -2146,3 +2146,53 @@ exports.DeleteGiftCard = async (req, res) => {
 };
 
 
+exports.ChangeAdminPermissions = async (req, res) => {
+    try {
+        const { id, role, tag } = req.body;
+        if (!id || !role || !tag) {
+            return res.status(400).json({ msg: "Incomplete request to assign permission" });
+        }
+
+        const roles = ["airdrop", "blog", "exchange", "giftcard", "product"];
+        if (!roles.includes(role)) {
+            return res.status(400).json({ msg: "Invalid role found" });
+        }
+
+        const tags = ["grant", "remove"];
+        if (!tags.includes(tag)) {
+            return res.status(400).json({ msg: "Invalid action found" });
+        }
+
+        // Find admin
+        const findAdmin = await User.findOne({ where: { id } });
+        if (!findAdmin) {
+            return res.status(404).json({ msg: "No Admin with that ID" });
+        }
+        if (findAdmin.role !== "admin") {
+            return res.status(400).json({ msg: "Only admins can be assigned permissions" });
+        }
+
+        // Mapping role to permission fields
+        const rolePermissions = {
+            airdrop: "airdrop_permit",
+            blog: "blog_permit",
+            exchange: "exchange_permit",
+            giftcard: "giftcard_permit",
+            product: "product_permit"
+        };
+
+        // Update permission
+        findAdmin[rolePermissions[role]] = tag === "grant" ? 'true':'false';
+        await findAdmin.save();
+
+        return res.json({
+            status:200,
+            msg: `You have successfully ${tag === "grant" ? "assigned" : "removed"} ${role} permission to ${findAdmin.first_name}`
+        });
+
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
+

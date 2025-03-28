@@ -10,6 +10,7 @@ import ModalLayout from '../../utils/ModalLayout'
 import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import { Apis, AuthPostApi } from '../../services/API'
 import Loader from '../../GeneralComponents/Loader'
+import { BsToggle2Off,BsToggle2On } from "react-icons/bs";
 
 const UserDetails = () => {
     const [user] = useAtom(PROFILE)
@@ -53,9 +54,29 @@ const UserDetails = () => {
             setLoading(false)
         }
     }
-    const nums = [2, 4, 5, 9]
-    const sum = nums.reduce((a, b) => a + b)
-    console.log(sum)
+    const [role,setRole] = useState({
+        airdrop:false,exchange:false,giftcard:false,blog:false,product:false
+    })
+
+  const changeRole = (role)=>{
+   let assingedRole ;
+    if(role === 'airdrop'){
+        assingedRole ='airdrop'
+    }
+    else if(role === 'exchange'){
+        assingedRole = 'exchange'
+    }
+    else if(role === 'giftcard'){
+        assingedRole = 'giftcard'
+    }
+    else if(role === 'blog'){
+        assingedRole = 'blog'
+    }
+    else if(role === 'product'){
+        assingedRole = 'product'
+    }
+    console.log(assingedRole)
+  }
     return (
         <AdminPageLayout>
 
