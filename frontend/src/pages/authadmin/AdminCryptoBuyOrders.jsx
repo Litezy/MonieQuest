@@ -83,7 +83,7 @@ const AdminCryptoBuyOrders = () => {
                     </div>
                     :
                     <div className="w-full ">
-                        <div className="mt-10 w-11/12 mx-auto">
+                        <div className="mt-5 w-11/12 mx-auto">
                             {new Array(2).fill(0).map((_, i) => {
                                 return (
                                     <div key={i} className="flex animate-pulse mb-5 items-start gap-1 flex-col">
