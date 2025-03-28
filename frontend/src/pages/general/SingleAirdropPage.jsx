@@ -176,7 +176,7 @@ const SingleAirdropPage = () => {
                   </div>
                   <div className='lg:col-span-4 col-span-1'>
                     <div className="w-full flex items-start flex-col gap-4 mb-8 bg-secondary border border-ash px-4 py-6 rounded-md">
-                      <div className="text-xl font-bold">Step by step  guide on <span className='capitalize text-lightgreen'>{singleAirdrop?.title}</span></div>
+                      <div className="text-xl font-bold">Step by step  guide on <span className='capitalize text-lightgreen'>{singleAirdrop?.title} airdrop</span></div>
                       <div className="flex items-start flex-col">
                         {steps.map((item, i) => (
                           <div
@@ -194,11 +194,11 @@ const SingleAirdropPage = () => {
                     </div>
                     <div className='w-full h-fit border border-ash bg-secondary rounded-md py-8'>
                       <div className='flex flex-col gap-4'>
-                        <div className='text-xl font-bold px-4'>Step by step video guide on <span className='capitalize text-lightgreen'>{singleAirdrop?.title}</span></div>
-                        {singleAirdrop?.video_guide_link.includes(`https://www.youtube.com`) ?
+                        <div className='text-xl font-bold px-4'>Video guide on <span className='capitalize text-lightgreen'>{singleAirdrop?.title} airdrop</span></div>
+                        {singleAirdrop?.video_guide_link && singleAirdrop?.video_guide_link.includes(`https://www.youtube.com`) ?
                           <YouTubeComp videoId={singleAirdrop?.video_guide_link} title={singleAirdrop?.title} />
                           :
-                          <div className="capitalize w-11/12 mx-auto">No steps video provided for this airdrop!</div>
+                          <div className="capitalize w-11/12 mx-auto">No video guide provided for this airdrop!</div>
                         }
                       </div>
                     </div>

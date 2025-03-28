@@ -308,7 +308,7 @@ const AdminAddGiftcards = () => {
                                     </tr>
                                 )) :
                                     <tr className=" w-full text-lg  font-semibold ">
-                                        <td colSpan='5' className='text-center py-2'>No giftcard  added  </td>
+                                        <td colSpan='7' className='text-center py-2'>No giftcard  added  </td>
                                     </tr>
                                 }
 

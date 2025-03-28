@@ -76,7 +76,7 @@ exports.UpdateUtils = async (req, res) => {
 exports.CreateAirdrop = async (req, res) => {
     try {
         const { title, category, steps, kyc, blockchain, type, format, level, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
-        if (!title || !category || !blockchain || !type || !format || !level || !referral_link || !about || !video_guide_link || !steps || steps.length < 1) return res.json({ status: 404, msg: `Incomplete request found` })
+        if (!title || !category || !blockchain || !type || !format || !level || !referral_link || !about || !steps || steps.length < 1) return res.json({ status: 404, msg: `Incomplete request found` })
         const categoryArray = ["featured", "deFi", "new", "NFT", "potential", "earn_crypto"]
         if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
         const kycArray = ['required', "unrequired"]
@@ -112,7 +112,7 @@ exports.CreateAirdrop = async (req, res) => {
             level,
             referral_link,
             about,
-            video_guide_link,
+            video_guide_link: video_guide_link || null,
             twitter_link: twitter_link || null,
             telegram_link: telegram_link || null,
             website_link: website_link || null
@@ -208,9 +208,6 @@ exports.UpdateAirdrop = async (req, res) => {
         if (referral_link) {
             airdrop.referral_link = referral_link
         }
-        if (video_guide_link) {
-            airdrop.video_guide_link = video_guide_link
-        }
         if (steps) {
             const stepsArray = Array.isArray(steps) ? steps : [steps]
             airdrop.steps = stepsArray
@@ -220,6 +217,7 @@ exports.UpdateAirdrop = async (req, res) => {
             if (!statusArray.includes(status)) return res.json({ status: 404, msg: `Invalid status provided` })
             airdrop.status = status
         }
+        airdrop.video_guide_link = video_guide_link || null
         airdrop.twitter_link = twitter_link || null
         airdrop.telegram_link = telegram_link || null
         airdrop.website_link = website_link || null
