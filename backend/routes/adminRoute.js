@@ -1,4 +1,4 @@
-const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops, AllRelatedBlogsExceptCurrent, CommentOnBlog, AllBlogComments, DeleteSingleBlogImages, getAdminTransHistory, getBankWithdrawals, DeleteClosedAirdrop, getSingleWithdrawal, DeleteBlog, CreateTestimonial, UpdateTestimonial, getSingleTestimonial, deleteTestimonial, addOrUpdateCryptos, getCryptos, getBlogsWithComments, deleteComment, createTools, getAllTools, deleteTool, AssignRole, getSubscribers, AddGiftCard, UpdateGiftCard, DeleteGiftCard, getAllGiftCards, closeAndConfirmWithdrawal, ChangeAdminPermissions } = require('../controllers/adminController')
+const { UpdateUtils, CreateAirdrop, AllAirdrops, SingleAirdrop, UpdateAirdrop, CategoryAirdrops, UpdateKyc, getDashboardInfos, getAllUserDetails, CreateUser, CreateBlog, UpdateBlog, AllBlogs, SingleBlog, FeatureBlogs, getCryptoBuysOrders, getCryptoSellsOrders, getSingleBuyOrder, getSingleSellOrder, closeAndConfirmBuyOrder, closeAndConfirmSellOrder, getGiftCardOrders, getSingleGiftCardOrder, creditGiftCustomer, UpdateProduct, SingleProduct, AllListedProducts, AllProductOrders, AllProducts, AllOpenAirdrops, AllRelatedBlogsExceptCurrent, CommentOnBlog, AllBlogComments, DeleteSingleBlogImages, getAdminTransHistory, getBankWithdrawals, DeleteClosedAirdrop, getSingleWithdrawal, DeleteBlog, CreateTestimonial, UpdateTestimonial, getSingleTestimonial, deleteTestimonial, addOrUpdateCryptos, getCryptos, getBlogsWithComments, deleteComment, createTools, getAllTools, deleteTool, AssignRole, getSubscribers, AddGiftCard, UpdateGiftCard, DeleteGiftCard, getAllGiftCards, closeAndConfirmWithdrawal, ChangeAdminPermissions, AddCardCategory, UpdateCardCategory, getSingleGiftCard, deleteCategory } = require('../controllers/adminController')
 const { AdminMiddleware, SuperAdminMiddleware } = require('../middleware/auth')
 
 const router = require('express').Router()
@@ -61,6 +61,10 @@ router.post('/update_giftcard', AdminMiddleware, UpdateGiftCard)
 router.get('/get_giftcards',  getAllGiftCards)
 router.post('/delete_giftcard/:id', AdminMiddleware, DeleteGiftCard)
 router.post('/switch_permissions',SuperAdminMiddleware,ChangeAdminPermissions)
+router.get('/get_single_card/:id',AdminMiddleware,getSingleGiftCard)
+router.post('/addcard_category',AdminMiddleware,AddCardCategory)
+router.post('/updatecard_category',AdminMiddleware,UpdateCardCategory)
+router.post('/deletecard_category/:id',AdminMiddleware,deleteCategory)
 
 
 

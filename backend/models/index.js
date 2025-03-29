@@ -35,6 +35,7 @@ db.carouselImages = require(`./carouselImageModel`)(sequelize, DataTypes)
 db.testimonials = require(`./testimonialModel`)(sequelize, DataTypes)
 db.cryptos = require(`./cryptosModel`)(sequelize, DataTypes)
 db.tools = require(`./toolsModel`)(sequelize, DataTypes)
+db.cardCategory = require(`./cardCategoryModel`)(sequelize, DataTypes)
 db.cards = require(`./cardModel`)(sequelize, DataTypes)
 
 
@@ -49,6 +50,7 @@ db.users.hasOne(db.kyc, { foreignKey: 'user', as: "user_kycs" })
 db.users.hasMany(db.products, { foreignKey: 'user', as: "user_products" })
 db.users.hasMany(db.blogs, { foreignKey: 'user', as: "user_blogs" })
 db.blogs.hasMany(db.comments, { foreignKey: 'blog', as: "blog_comments" })
+db.cards.hasMany(db.cardCategory, { foreignKey: 'card_id', as: "card_categories" })
 
 // One to One relationships
 db.exchangeBuys.belongsTo(db.users, { foreignKey: 'userid', as: "crypto_buyer" })
@@ -61,6 +63,7 @@ db.kyc.belongsTo(db.users, { foreignKey: 'user', as: "user_kyc" })
 db.products.belongsTo(db.users, { foreignKey: 'user', as: "product_user" })
 db.blogs.belongsTo(db.users, { foreignKey: 'user', as: "blog_user" })
 db.comments.belongsTo(db.blogs, { foreignKey: 'blog', as: "blog_comments" })
+db.cardCategory.belongsTo(db.cards, { foreignKey: 'card_id', as: "card_category" })
 
 db.sequelize.sync({ force: false })
 .then(() => console.log(`Connection has been established successfully on ${isproduction ? 'online db' : 'local db'} `))

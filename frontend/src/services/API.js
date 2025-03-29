@@ -125,6 +125,10 @@ const admin_urls = {
     update_giftcard:admin + 'update_giftcard',
     get_giftcards: admin +'get_giftcards',
     delete_giftcard:admin + 'delete_giftcard',
+    addcard_category:admin + 'addcard_category',
+    updatecard_category:admin + 'updatecard_category',
+    get_single_card:admin + 'get_single_card',
+    deletecard_category:admin + 'deletecard_category'
 }
 
 const products = 'api/product/'

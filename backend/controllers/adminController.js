@@ -25,6 +25,7 @@ const CryptoModel = require('../models').cryptos
 const { Op } = require('sequelize')
 const Tools = require('../models').tools
 const Card = require('../models').cards
+const CardCategory = require('../models').cardCategory
 const Subscriber = require('../models').subscribers
 
 
@@ -2075,40 +2076,31 @@ exports.getSubscribers = async (req, res) => {
 
 exports.AddGiftCard = async (req, res) => {
     try {
-        const { name, rate, regrex } = req.body;
-        if (!name || !rate || !regrex) {
-            return res.json({ status: 400, msg: 'All fields required' });
+        const { name, } = req.body;
+        if (!name) {
+            return res.json({ status: 400, msg: 'Giftcard Name missing' });
         }
-
         const findCard = await Card.findOne({ where: { name } });
         if (findCard) {
             return res.json({ status: 400, msg: "Card already added to list" });
         }
-
         const Image_ID = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false });
         if (!req?.files) {
             return res.json({ status: 400, msg: 'Upload giftcard image' });
         }
 
         const image = req?.files?.image;
+        if (image.size >= 1000000) res.json({ status: 404, msg: `Image size too large, file must not exceed 1mb` })
         if (!image.mimetype.startsWith('image/')) {
             return res.json({ status: 404, msg: `File error, upload valid image format (jpg, jpeg, png, svg)` });
         }
 
         const imageToUpload = [{ field: 'card_image', file: image }];
         const imageurl = await GlobalImageUploads(imageToUpload, 'giftcards', Image_ID);
-
-        const newRegrex = Number(regrex);
-        if (isNaN(newRegrex) || newRegrex <= 0) {
-            return res.json({ status: 400, msg: "Invalid regrex value. Must be a positive number." });
-        }
-
         const newcard = await Card.create({
             name,
-            rate,
             gen_id: Image_ID,
             image: imageurl.card_image,
-            regrex: newRegrex
         });
 
         return res.json({ status: 200, msg: 'Gift card created successfully', data: newcard });
@@ -2117,9 +2109,91 @@ exports.AddGiftCard = async (req, res) => {
     }
 };
 
+exports.AddCardCategory = async (req, res) => {
+    try {
+        const user = req.user
+        if (user.role === 'admin' && user.giftcard_permit === 'false') return res.json({ status: 400, msg: "You are not authorized to perform this action" })
+        const { id, country, regrex, currency, card_pic, min_value, max_value, rate } = req.body
+        if (!id) return res.json({ status: 400, msg: 'Card ID missing' })
+        const reqFields = [country, currency, card_pic, min_value, max_value, rate]
+        if (reqFields.some(field => field === undefined || field === null || field === '')) return res.json({ status: 400, msg: "All fields are required except for regrex" })
+        const findCard = await Card.findOne({ where: { id } })
+        if (!findCard) return res.json({ status: 404, msg: "Card ID not found" })
+        if (isNaN(min_value) || min_value < 0) return res.json({ status: 400, msg: 'Min value must be a positive number' })
+        if (isNaN(max_value) || max_value < 0) return res.json({ status: 400, msg: 'Max value must be a positive number' })
+        if (isNaN(rate) || rate < 0) return res.json({ status: 400, msg: 'Rate value must be a positive number' })
+        const newCategory = await CardCategory.create({
+            country, card_id: id, currency, card_pic, min_value, max_value, rate, regrex
+        })
+        return res.json({ status: 200, msg: 'Category created successfully', data: newCategory })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+
+exports.UpdateCardCategory = async (req, res) => {
+    try {
+        const user = req.user;
+        if (user.role === 'admin' && user.giftcard_permit === 'false') {
+            return res.json({ status: 400, msg: "You are not authorized to perform this action" });
+        }
+
+        const { id, country, regrex, currency, card_pic, min_value, max_value, rate } = req.body;
+        if (!id) return res.json({ status: 400, msg: 'Card Category ID is required' });
+
+        const findCategory = await CardCategory.findOne({ where: { id } });
+        if (!findCategory) return res.json({ status: 404, msg: "Card Category not found" });
+
+        // Validate numeric fields
+        if (min_value && (isNaN(min_value) || min_value < 0)) {
+            return res.json({ status: 400, msg: 'Min value must be a positive number' });
+        }
+        if (max_value && (isNaN(max_value) || max_value < 0)) {
+            return res.json({ status: 400, msg: 'Max value must be a positive number' });
+        }
+        if (rate && (isNaN(rate) || rate < 0)) {
+            return res.json({ status: 400, msg: 'Rate value must be a positive number' });
+        }
+
+        // Update fields if provided
+        if (country !== undefined) findCategory.country = country;
+        if (regrex !== undefined) findCategory.regrex = regrex;  // Allow null or empty values
+        if (currency !== undefined) findCategory.currency = currency;
+        if (card_pic !== undefined) findCategory.card_pic = card_pic; // Boolean check
+        if (min_value !== undefined) findCategory.min_value = min_value;
+        if (max_value !== undefined) findCategory.max_value = max_value;
+        if (rate !== undefined) findCategory.rate = rate;
+
+
+        await findCategory.save();
+
+        return res.json({ status: 200, msg: 'Card Category updated successfully', data: findCategory });
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
+exports.deleteCategory = async (req, res) => {
+    try {
+        const { id } = req.params
+        if (!id) return res.json({ status: 400, msg: "ID missing from request" })
+        const findCategory = await CardCategory.findOne({ where: { id } })
+        if (!findCategory) return res.json({ status: 404, msg: "Category ID not found" })
+        await findCategory.destroy()
+        return res.json({ status: 200, msg: "Category deleted successfully" })
+    } catch (error) {
+
+    }
+}
 exports.getAllGiftCards = async (req, res) => {
     try {
         const allcards = await Card.findAll({
+            include: [
+                {
+                    model: CardCategory, as: 'card_categories'
+                }
+            ],
             order: [['createdAt', 'DESC']]
         })
         if (!allcards) return res.json({ status: 404, msg: 'No card found' })
@@ -2128,10 +2202,29 @@ exports.getAllGiftCards = async (req, res) => {
         ServerError(res, error)
     }
 }
+exports.getSingleGiftCard = async (req, res) => {
+    const { id } = req.params
+    if (!id) return res.json({ status: 400, msg: "ID missing" })
+    try {
+        const card = await Card.findOne({
+            where: { id },
+            include: [
+                {
+                    model: CardCategory, as: 'card_categories'
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+        if (!card) return res.json({ status: 404, msg: 'No card found' })
+        return res.json({ status: 200, msg: 'fetch success', data: card })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
 
 exports.UpdateGiftCard = async (req, res) => {
     try {
-        const { id, name, rate, regrex } = req.body;
+        const { id, name, } = req.body;
         if (!id) return res.json({ status: 400, msg: "ID missing" });
 
         const findCard = await Card.findOne({ where: { id } });
@@ -2142,6 +2235,10 @@ exports.UpdateGiftCard = async (req, res) => {
         if (req.files) {
             if (findCard.image) await GlobalDeleteSingleImage(findCard.image);
             const image = req?.files?.image;
+            if (image.size >= 1000000) res.json({
+                status: 404,
+                msg: `Image size too large, file must not exceed 1mb`
+            })
             if (!image.mimetype.startsWith("image/"))
                 return res.json({
                     status: 404,
@@ -2158,20 +2255,6 @@ exports.UpdateGiftCard = async (req, res) => {
         if (name && name !== findCard.name) {
             findCard.name = name;
             updatedFields.name = name;
-        }
-
-        if (rate && rate !== findCard.rate) {
-            findCard.rate = rate;
-            updatedFields.rate = rate;
-        }
-
-        if (regrex) {
-            const newRegrex = Number(regrex);
-            if (isNaN(newRegrex) || newRegrex <= 0) {
-                return res.json({ status: 400, msg: "Invalid regrex value. Must be a positive number." });
-            }
-            findCard.regrex = newRegrex;
-            updatedFields.regrex = newRegrex;
         }
 
         if (Object.keys(updatedFields).length === 0) {
@@ -2200,6 +2283,12 @@ exports.DeleteGiftCard = async (req, res) => {
 
         if (findCard.image) {
             await GlobalDeleteImage(findCard.image, 'giftcards', findCard.gen_id);
+        }
+
+        // Delete associated categories
+        const findCategories = await CardCategory.findAll({ where: { card_id: id } });
+        if (findCategories.length > 0) {
+            await CardCategory.destroy({ where: { card_id: id } });
         }
         await findCard.destroy();
 
