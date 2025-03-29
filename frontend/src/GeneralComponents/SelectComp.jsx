@@ -14,12 +14,7 @@ const SelectComp = ({ title, options, style, name, value, handleChange, width = 
       >
         <InputLabel>{title}</InputLabel>
         <Select
-<<<<<<< HEAD
           value={options.includes(value) ? value : ""}
-=======
-          name={name}
-          value={value}
->>>>>>> e228508472a1192032d9337f9e081a1735e2e6b9
           onChange={handleChange}
           sx={{ color: style?.color, fontSize: style?.font }}
           hiddenLabel={title ? false : true}

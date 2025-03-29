@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import AdminPageLayout from '../../AdminComponents/AdminPageLayout'
 import { Link, useParams } from 'react-router-dom'
 import { Apis, AuthGetApi, AuthPostApi } from '../../services/API'
-import { ErrorAlert } from '../../utils/pageUtils'
+import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils'
 import Loader from '../../GeneralComponents/Loader'
 import FormInput from '../../utils/FormInput'
 import SelectComp from '../../GeneralComponents/SelectComp'
@@ -207,11 +207,36 @@ const AdminManageSingleCard = () => {
 
     }
 
+
+    const updateCard = async () => {
+        if (!forms.name) return ErrorAlert('Please fill in the card name and rate')
+        if (!cardImage.img) return ErrorAlert('Please upload giftcard image')
+        const formdata = new FormData()
+        formdata.append('name', forms.name)
+        formdata.append('id', id)
+        if (cardImage.image) {
+            formdata.append('image', cardImage.image)
+        }
+        setLoading({ status: true, val: 'update-card' })
+        try {
+            const res = await AuthPostApi(Apis.admin.update_giftcard, formdata)
+            if (res.status !== 200) return ErrorAlert(res.msg)
+            fetchSingleCard()
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+            SuccessAlert(res.msg)
+        } catch (error) {
+            console.log(`error in updating giftcard`, error)
+        } finally { setLoading({ status: false, val: '' }) }
+    }
+
     return (
         <AdminPageLayout>
             <div className='w-full'>
                 {loading.status && loading.val === 'loading' &&
                     <Loader title={`loading data`} />
+                }
+                {loading.status && loading.val === 'update-card' &&
+                    <Loader title={`updating card`} />
                 }
                 {loading.status && loading.val === 'category' &&
                     <Loader title={`adding category`} />
@@ -380,7 +405,7 @@ const AdminManageSingleCard = () => {
                                 </div>
                             </div>
                             <div className="w-11/12 mx-auto  ">
-                                <FormButton type='button' onClick={() => crudCard('update')} title={`Update Card`} />
+                                <FormButton type='button' onClick={updateCard} title={`Update Card`} />
                             </div>
                         </div>
                     </div>
