@@ -74,10 +74,10 @@ const SellCrypto = () => {
     const submit = (e) => {
         e.preventDefault()
         const amt = forms.amount.replace(/,/g, '')
-        if (!forms.amount) return ErrorAlert('amount is required')
+        if (!forms.amount) return ErrorAlert('Enter an amount')
         if (amt < forms.minimum) return ErrorAlert(`Minimum ${forms.crypto} sell amount is $${forms.minimum}`)
-        if (!forms.network) return ErrorAlert('coin network is required')
-        if (amt > forms.limit) return ErrorAlert(`Sorry, you can't sell above $${forms.limit.toLocaleString()}`)
+        if (!forms.network) return ErrorAlert('Crypto network is required')
+        if (amt > forms.limit) return ErrorAlert(`Sorry, you can't sell above $${forms.limit.toLocaleString()} worth of ${forms.crypto} `)
         setModal(true)
     }
 
@@ -239,7 +239,7 @@ const SellCrypto = () => {
                                                 </option>
                                             ))}
                                     </select>
-                                    {forms.crypto && <div className="text-red-600 text-xs">Please Note: you can only sell a minimum of ${forms.minimum} and maximum of ${forms.limit.toLocaleString()} of {forms.crypto}. {user?.kyc_verified === 'false' ? 'verify your account to increase limit' : ''}</div>}
+                                    {forms.crypto && <div className="text-red-600 text-xs">Please Note: you can only sell a minimum of ${forms.minimum} and maximum of ${forms.limit.toLocaleString()} of {forms.crypto}. {user?.kyc_verified === 'false' ? 'Verify your account to increase limit.' : ''}</div>}
                                 </div>
                                 <div className="flex w-full items-start gap-2 flex-col  ">
                                     <div className="font-bold text-lg">Amount:</div>
@@ -251,7 +251,7 @@ const SellCrypto = () => {
                                     </div>
 
                                 </div>
-                               
+
                                 <div className="flex item-center text-sm justify-between w-full">
                                     <div>Amount in Naira</div>
                                     <div>₦{inNaira}</div>

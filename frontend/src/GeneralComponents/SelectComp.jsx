@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const SelectComp = ({ title, options, style, value, handleChange, width = 120, size = true }) => {
+const SelectComp = ({ title, options, style, name, value, handleChange, width = 120, size = true }) => {
 
   return (
     <div>
@@ -14,7 +14,12 @@ const SelectComp = ({ title, options, style, value, handleChange, width = 120, s
       >
         <InputLabel>{title}</InputLabel>
         <Select
+<<<<<<< HEAD
           value={options.includes(value) ? value : ""}
+=======
+          name={name}
+          value={value}
+>>>>>>> e228508472a1192032d9337f9e081a1735e2e6b9
           onChange={handleChange}
           sx={{ color: style?.color, fontSize: style?.font }}
           hiddenLabel={title ? false : true}
