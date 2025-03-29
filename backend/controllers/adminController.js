@@ -81,6 +81,11 @@ exports.CreateAirdrop = async (req, res) => {
         if (!categoryArray.includes(category)) return res.json({ status: 404, msg: `Invalid category provided` })
         const kycArray = ['required', "unrequired"]
         if (!kycArray.includes(kyc)) return res.json({ status: 404, msg: `Invalid kyc value provided` })
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.airdrop_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to create airdrops' })
+        }
 
         const stepsArray = Array.isArray(steps) ? steps : [steps]
         const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false, })
@@ -118,14 +123,12 @@ exports.CreateAirdrop = async (req, res) => {
             website_link: website_link || null
         })
 
-        const admin = await User.findOne({ where: { id: req.user } })
-        if (!admin) return res.json({ status: 400, msg: 'Admin not found' })
         const superAdmin = await User.findOne({ where: { role: 'super admin' } })
         if (superAdmin) {
             await Notification.create({
                 user: superAdmin.id,
                 title: `Airdrop creation alert`,
-                content: admin.role !== 'super admin' ? `A new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}) has just been created by the admin ${admin.first_name}.` : `You just created a new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}).`,
+                content: findAdmin.role !== 'super admin' ? `A new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}) has just been created by the admin ${findAdmin.first_name}.` : `You just created a new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}).`,
                 url: '/admin/airdrops/all',
             })
 
@@ -152,6 +155,12 @@ exports.UpdateAirdrop = async (req, res) => {
     try {
         const { airdrop_id, steps, status, title, category, kyc, blockchain, type, format, level, referral_link, about, video_guide_link, twitter_link, telegram_link, website_link } = req.body
         if (!airdrop_id) return res.json({ status: 404, msg: `Airdrop id is required` })
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.airdrop_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update airdrops' })
+        }
 
         const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
@@ -224,14 +233,12 @@ exports.UpdateAirdrop = async (req, res) => {
 
         await airdrop.save()
 
-        const admin = await User.findOne({ where: { id: req.user } })
-        if (!admin) return res.json({ status: 400, msg: 'Admin not found' })
         const superAdmin = await User.findOne({ where: { role: 'super admin' } })
         if (superAdmin) {
             await Notification.create({
                 user: superAdmin.id,
                 title: `Airdrop update alert`,
-                content: admin.role !== 'super admin' ? `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated by the admin ${admin.first_name}.` : `You just updated ${airdrop.title} airdrop with the ID (${airdrop.gen_id})`,
+                content: findAdmin.role !== 'super admin' ? `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated by the admin ${findAdmin.first_name}.` : `You just updated ${airdrop.title} airdrop with the ID (${airdrop.gen_id})`,
                 url: '/admin/airdrops/all',
             })
 
@@ -312,6 +319,12 @@ exports.DeleteClosedAirdrop = async (req, res) => {
         const { airdrop_id } = req.body
         if (!airdrop_id) return res.json({ status: 404, msg: `Provide an airdrop id` })
 
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.airdrop_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to delete airdrops' })
+        }
+
         const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
         if (airdrop.status !== 'closed') return res.json({ status: 404, msg: 'You can only delete an airdrop with a closed status' })
@@ -321,14 +334,12 @@ exports.DeleteClosedAirdrop = async (req, res) => {
 
         await airdrop.destroy()
 
-        const admin = await User.findOne({ where: { id: req.user } })
-        if (!admin) return res.json({ status: 400, msg: 'Admin not found' })
         const superAdmin = await User.findOne({ where: { role: 'super admin' } })
         if (superAdmin) {
             await Notification.create({
                 user: superAdmin.id,
                 title: `Airdrop deletion alert`,
-                content: admin.role !== 'super admin' ? `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted by the admin ${admin.first_name}.` : `You just deleted ${airdrop.title} airdrop with the ID (${airdrop.gen_id})`,
+                content: findAdmin.role !== 'super admin' ? `${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted by the admin ${findAdmin.first_name}.` : `You just deleted ${airdrop.title} airdrop with the ID (${airdrop.gen_id})`,
                 url: '/admin/airdrops/all',
             })
 
@@ -353,6 +364,12 @@ exports.UpdateProduct = async (req, res) => {
     try {
         const { product_id, title, category, price, about, features, status, listing, discount_percentage, discount_duration, discount_duration_type } = req.body
         if (!product_id) return res.json({ status: 404, msg: `Product id is required` })
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.product_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update products' })
+        }
 
         const product = await Product.findOne({ where: { id: product_id } })
         if (!product) return res.json({ status: 404, msg: 'Product not found' })
@@ -587,21 +604,30 @@ exports.getDashboardInfos = async (req, res) => {
             { title: ' Product Orders', value: totalProductOrders, color: 'lime', },
             { title: 'Product Order Revenue', value: productOrderRevenue ? productOrderRevenue : 0, color: 'gray', naira: true },
             { title: ' Crypto Buy Orders', value: totalCryptoBuys, color: 'green' },
-            { title: 'Paid Buys value', value: paidCryptoBuys || 0, color: 'blue', cur: true },
-            { title: 'Unpaid Buys value', value: unpaidCryptoBuys || 0, color: 'amber', cur: true },
+            { title: 'Paid Buys Value', value: paidCryptoBuys || 0, color: 'blue', cur: true },
+            { title: 'Unpaid Buys Value', value: unpaidCryptoBuys || 0, color: 'amber', cur: true },
             { title: 'Completed Buys Value', value: completedCryptoBuys || 0, color: 'teal', cur: true },
             { title: 'Crypto Sell Orders', value: totalCryptoSells, color: 'red' },
-            { title: 'Pending Sells value', value: pendingCryptoSells || 0, color: 'purple', cur: true },
-            { title: 'Completed Sells value', value: completedCryptoSells || 0, color: 'orange', cur: true },
+            { title: 'Pending Sells Value', value: pendingCryptoSells || 0, color: 'purple', cur: true },
+            { title: 'Completed Sells Value', value: completedCryptoSells || 0, color: 'orange', cur: true },
             { title: 'Giftcard Sell Orders', value: totalGiftcardSells, color: 'pink' },
-            { title: 'Pending Giftcard orders value', value: pendingGiftcardSells || 0, color: 'blue', cur: true },
-            { title: 'Completed Giftcard orders value', value: completedGiftcardSells || 0, color: 'lime', cur: true },
-            { title: 'withdrawal requests', value: totalWithdrawals, color: 'teal' },
-            { title: 'Pending withdrawals value', value: pendingWithdrawals || 0, color: 'gray', naira: true },
-            { title: 'Completed withdrawals value', value: completedWithdrawals || 0, color: 'amber', naira: true },
+            { title: 'Pending Giftcard Orders Value', value: pendingGiftcardSells || 0, color: 'blue', cur: true },
+            { title: 'Completed Giftcard Orders Value', value: completedGiftcardSells || 0, color: 'lime', cur: true },
+            { title: 'Withdrawal Requests', value: totalWithdrawals, color: 'teal' },
+            { title: 'Pending Withdrawals Value', value: pendingWithdrawals || 0, color: 'gray', naira: true },
+            { title: 'Completed Withdrawals Value', value: completedWithdrawals || 0, color: 'amber', naira: true },
         ];
 
-        return res.json({ status: 200, msg: 'fetch success', data });
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        const excludedTitles = ["Product Order Revenue", "Paid Buys Value", "Unpaid Buys Value", "Completed Buys Value", "Pending Sells Value", "Completed Sells Value", "Pending Giftcard Orders Value", "Completed Giftcard Orders Value", "Pending Withdrawals Value", "Completed Withdrawals Value"]
+        let fetchResult;
+        if (findAdmin.role === 'super admin') {
+            fetchResult = data
+        } else {
+            fetchResult = data.filter(item => !excludedTitles.includes(item.title))
+        }
+
+        return res.json({ status: 200, msg: 'fetch success', data: fetchResult });
     } catch (error) {
         ServerError(res, error);
     }
@@ -783,6 +809,12 @@ exports.CreateBlog = async (req, res) => {
         const featureArray = ["airdrop", "trading", "personal_finance"]
         if (!featureArray.includes(feature)) return res.json({ status: 404, msg: `Invalid blog feature provided` })
 
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.blog_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to create blogs' })
+        }
+
         const gen_id = `01` + otpGenerator.generate(8, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
         const slugData = slug(title, '-')
 
@@ -824,6 +856,12 @@ exports.CreateBlog = async (req, res) => {
 exports.UpdateBlog = async (req, res) => {
     try {
         const { title, blog_id, feature, main_header_title, main_header_content, first_paragraph_title, first_paragraph_content, second_paragraph_title, second_paragraph_content, extras_title, extras_content, conclusion } = req.body;
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.blog_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update blogs' })
+        }
 
         if (!blog_id) return res.json({ status: 400, msg: 'Blog ID is required' });
         const blog = await Blog.findOne({ where: { id: blog_id } });
@@ -897,14 +935,20 @@ exports.UpdateBlog = async (req, res) => {
         console.error('Error updating blog:', error);
         return res.json({ status: 500, msg: 'Server error', error: error.message });
     }
-};
+}
 
 exports.DeleteBlog = async (req, res) => {
     try {
         const { blog_id } = req.body;
-        if (!blog_id) return res.json({ status: 400, msg: 'Provide a blog id' }); // Changed to 400 for bad request
+        if (!blog_id) return res.json({ status: 400, msg: 'Provide a blog id' })
         const blog = await Blog.findOne({ where: { id: blog_id } });
         if (!blog) return res.json({ status: 404, msg: 'Blog not found' });
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.blog_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to delete blogs' })
+        }
 
         const imagesToDelete = [
             blog.image,
@@ -927,7 +971,7 @@ exports.DeleteBlog = async (req, res) => {
         console.error('Error deleting blog:', error);
         return res.json({ status: 500, msg: 'Server error', error: error.message });
     }
-};
+}
 
 exports.AllBlogs = async (req, res) => {
     try {
@@ -980,6 +1024,12 @@ exports.DeleteSingleBlogImages = async (req, res) => {
         if (!tagArray.includes(tag)) return res.json({ status: 404, msg: `Invalid tag provided` })
         const findImage = await Blog.findOne({ where: { id } })
         if (!findImage) return res.json({ status: 404, msg: 'Blog images not found' })
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.blog_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to delete blog images' })
+        }
 
         if (tag === 'paragraph') {
             await GlobalDeleteImage(findImage.second_paragraph_image)
@@ -1153,6 +1203,11 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
         const user = await User.findOne({ where: { id: findBuy.userid } })
         if (!user) return res.json({ status: 401, msg: 'Account owner not found' })
 
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.exchange_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update exchange orders' })
+        }
 
         //if successful
         if (tag === 'success') {
@@ -1267,6 +1322,13 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
         if (!findUserWallet) {
             await Wallet.create({ user: user.id })
         }
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.exchange_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update exchange orders' })
+        }
+
 
         if (tag === 'success') {
             if (!amount) return res.json({ status: 400, msg: "Amount is missing" })
@@ -1428,6 +1490,13 @@ exports.creditGiftCustomer = async (req, res) => {
             await Wallet.create({ user: findUser.id })
         }
 
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.giftcard_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update gift-card orders' })
+        }
+
+
         if (tag === 'success') {
             //credit the customer
             findUserWallet.balance = parseFloat(findUserWallet.balance || 0) + parseFloat(amount)
@@ -1473,7 +1542,7 @@ exports.creditGiftCustomer = async (req, res) => {
                 })
             }
 
-            return res.json({ status: 200, msg: 'customer credited successfully' })
+            return res.json({ status: 200, msg: 'Customer credited successfully' })
         }
         else if (tag === 'failed') {
             if (!message) return res.json({ status: 400, msg: "Failed message is required" })
@@ -1519,7 +1588,7 @@ exports.creditGiftCustomer = async (req, res) => {
                 })
             }
 
-            return res.json({ status: 200, msg: 'transaction marked as failed successfully' })
+            return res.json({ status: 200, msg: 'Transaction marked as failed successfully' })
         } else {
             return res.json({ status: 404, msg: "Invalid Tag" })
         }
@@ -2143,12 +2212,11 @@ exports.DeleteGiftCard = async (req, res) => {
     }
 };
 
-
 exports.ChangeAdminPermissions = async (req, res) => {
     try {
         const { id, role, tag } = req.body;
         if (!id || !role || !tag) {
-            return res.status(400).json({ msg: "Incomplete request to assign permission" });
+            return res.status(400).json({ msg: "Incomplete request to assign or remove permissions" });
         }
 
         const roles = ["airdrop", "blog", "exchange", "giftcard", "product"];
@@ -2180,11 +2248,11 @@ exports.ChangeAdminPermissions = async (req, res) => {
         };
 
         // Update permission
-        findAdmin[rolePermissions[role]] = tag === "grant" ? 'true':'false';
+        findAdmin[rolePermissions[role]] = tag === "grant" ? 'true' : 'false';
         await findAdmin.save();
 
         return res.json({
-            status:200,
+            status: 200,
             msg: `You have successfully ${tag === "grant" ? "assigned" : "removed"} ${role} permission to ${findAdmin.first_name}`
         });
 

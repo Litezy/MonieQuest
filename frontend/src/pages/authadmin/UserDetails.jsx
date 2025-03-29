@@ -12,7 +12,7 @@ import { Apis, AuthPostApi } from '../../services/API'
 import Loader from '../../GeneralComponents/Loader'
 import FormInput from '../../utils/FormInput'
 import { CiSearch } from 'react-icons/ci'
-import { BsToggle2Off,BsToggle2On } from "react-icons/bs";
+import { BsToggle2Off, BsToggle2On } from "react-icons/bs";
 
 const UserDetails = () => {
     const [user] = useAtom(PROFILE)
@@ -57,34 +57,34 @@ const UserDetails = () => {
             setLoading(false)
         }
     }
-    const [role,setRole] = useState({
-        airdrop:false,exchange:false,giftcard:false,blog:false,product:false
+    const [role, setRole] = useState({
+        airdrop: false, exchange: false, giftcard: false, blog: false, product: false
     })
 
-  const changeRole = (role)=>{
-   let assingedRole ;
-    if(role === 'airdrop'){
-        assingedRole ='airdrop'
+    const changeRole = (role) => {
+        let assingedRole;
+        if (role === 'airdrop') {
+            assingedRole = 'airdrop'
+        }
+        else if (role === 'exchange') {
+            assingedRole = 'exchange'
+        }
+        else if (role === 'giftcard') {
+            assingedRole = 'giftcard'
+        }
+        else if (role === 'blog') {
+            assingedRole = 'blog'
+        }
+        else if (role === 'product') {
+            assingedRole = 'product'
+        }
+        console.log(assingedRole)
     }
-    else if(role === 'exchange'){
-        assingedRole = 'exchange'
-    }
-    else if(role === 'giftcard'){
-        assingedRole = 'giftcard'
-    }
-    else if(role === 'blog'){
-        assingedRole = 'blog'
-    }
-    else if(role === 'product'){
-        assingedRole = 'product'
-    }
-    console.log(assingedRole)
-  }
     return (
         <AdminPageLayout>
 
             {modal &&
-                <ModalLayout setModal={setModal} clas={`lg:w-[50%] w-10/12 mx-auto`}>
+                <ModalLayout setModal={setModal} clas={`lg:w-1/2 w-10/12 mx-auto`}>
                     <div className="p-5  bg-white text-dark shadow-xl rounded-md">
                         <div className="text-base text-center mb-3">Are you sure you want to change {selectedUser?.first_name} {selectedUser?.surname}'s role?</div>
 
@@ -143,6 +143,9 @@ const UserDetails = () => {
                                 {user.role === 'super admin' && <th scope="col" className="px-3 py-3 truncate">
                                     Change Role
                                 </th>}
+                                {user.role === 'super admin' && <th scope="col" className="px-3 py-3 truncate">
+                                    Permissions
+                                </th>}
 
                             </tr>
                         </thead>
@@ -173,6 +176,9 @@ const UserDetails = () => {
                                     </td>
                                     {user.role === 'super admin' && <td className="px-3 py-3 truncate">
                                         <button onClick={() => { setModal(true); setSelectedUser(item) }} className='text-center w-full bg-ash text-white rounded-md py-1.5'>Proceed</button>
+                                    </td>}
+                                    {user.role === 'super admin' && <td className="px-3 py-3 truncate">
+                                        <button onClick={() => { setSelectedUser(item) }} className='text-center w-full bg-ash text-white rounded-md py-1.5'>View</button>
                                     </td>}
                                 </tr>
                             )) :
