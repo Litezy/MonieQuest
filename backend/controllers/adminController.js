@@ -636,7 +636,9 @@ exports.getDashboardInfos = async (req, res) => {
 exports.getAllUserDetails = async (req, res) => {
     try {
         const all_users = await User.findAll({
-            attributes: [`id`, `first_name`, 'surname', `kyc_verified`, 'email', 'role', 'createdAt'],
+            attributes: {
+                exclude: [`password`, `image`, `resetcode`],
+            },
             include: [
                 {
                     model: Wallet, as: 'user_wallets',
@@ -1954,42 +1956,33 @@ exports.AssignRole = async (req, res) => {
     try {
         const { id } = req.body
         if (!id) return res.json({ status: 400, msg: 'ID is required' })
-        const admin = await User.findOne({ where: { id: req.user } })
-        if (admin.role !== 'super admin') return res.json({ status: 400, msg: 'Unauthorized command' })
         const findUser = await User.findOne({ where: { id } })
         if (!findUser) return res.json({ status: 404, msg: 'User not found' })
         if (findUser.role === 'user') {
             findUser.role = 'admin'
             await findUser.save()
-            const allusers = await User.findAll({
-                attributes: [`id`, `first_name`, 'surname', `kyc_verified`, 'email', 'role', 'createdAt'],
-                include: [
-                    {
-                        model: Wallet, as: 'user_wallets',
-                        attributes: [`balance`]
-                    }
-                ],
-                order: [['createdAt', 'DESC']]
-            })
-            return res.json({ status: 200, msg: `${findUser.first_name} is now an admin`, data: allusers })
         }
         else if (findUser.role === 'admin') {
             findUser.role = 'user'
             await findUser.save()
-            const allusers = await User.findAll({
-                attributes: [`id`, `first_name`, 'surname', `kyc_verified`, 'email', 'role', 'createdAt'],
-                include: [
-                    {
-                        model: Wallet, as: 'user_wallets',
-                        attributes: [`balance`]
-                    }
-                ],
-                order: [['createdAt', 'DESC']]
-            })
-            return res.json({ status: 200, msg: `${findUser.first_name} is now a user`, data: allusers })
         } else {
             return res.json({ status: 400, msg: `You can't change a super admin role` })
         }
+
+        const allusers = await User.findAll({
+            attributes: {
+                exclude: [`password`, `image`, `resetcode`],
+            },
+            include: [
+                {
+                    model: Wallet, as: 'user_wallets',
+                    attributes: [`balance`]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: `${findUser.first_name} is now ${findUser.role === 'admin' ? 'an admin' : 'a user'} `, data: allusers })
     } catch (error) {
         return res.json({ status: 400, msg: error.message })
     }
@@ -2214,47 +2207,33 @@ exports.DeleteGiftCard = async (req, res) => {
 
 exports.ChangeAdminPermissions = async (req, res) => {
     try {
-        const { id, role, tag } = req.body;
-        if (!id || !role || !tag) {
-            return res.status(400).json({ msg: "Incomplete request to assign or remove permissions" });
-        }
+        const { id, airdrop_permit, blog_permit, product_permit, exchange_permit, giftcard_permit } = req.body
+        if (!id) return res.json({status: 404, msg: "Incomplete request" })
+        const findAdmin = await User.findOne({ where: { id } })
+        if (!findAdmin) return res.json({status: 404, msg: "Invalid ID provided" })
+        if (findAdmin.role !== "admin") return res.json({status: 404, msg: "Only admins can be assigned permissions" })
 
-        const roles = ["airdrop", "blog", "exchange", "giftcard", "product"];
-        if (!roles.includes(role)) {
-            return res.status(400).json({ msg: "Invalid role found" });
-        }
+        findAdmin.airdrop_permit = airdrop_permit || findAdmin.airdrop_permit
+        findAdmin.blog_permit = blog_permit || findAdmin.blog_permit
+        findAdmin.product_permit = product_permit || findAdmin.product_permit
+        findAdmin.exchange_permit = exchange_permit || findAdmin.exchange_permit
+        findAdmin.giftcard_permit = giftcard_permit || findAdmin.giftcard_permit
+        await findAdmin.save()
 
-        const tags = ["grant", "remove"];
-        if (!tags.includes(tag)) {
-            return res.status(400).json({ msg: "Invalid action found" });
-        }
+        const allusers = await User.findAll({
+            attributes: {
+                exclude: [`password`, `image`, `resetcode`],
+            },
+            include: [
+                {
+                    model: Wallet, as: 'user_wallets',
+                    attributes: [`balance`]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
 
-        // Find admin
-        const findAdmin = await User.findOne({ where: { id } });
-        if (!findAdmin) {
-            return res.status(404).json({ msg: "No Admin with that ID" });
-        }
-        if (findAdmin.role !== "admin") {
-            return res.status(400).json({ msg: "Only admins can be assigned permissions" });
-        }
-
-        // Mapping role to permission fields
-        const rolePermissions = {
-            airdrop: "airdrop_permit",
-            blog: "blog_permit",
-            exchange: "exchange_permit",
-            giftcard: "giftcard_permit",
-            product: "product_permit"
-        };
-
-        // Update permission
-        findAdmin[rolePermissions[role]] = tag === "grant" ? 'true' : 'false';
-        await findAdmin.save();
-
-        return res.json({
-            status: 200,
-            msg: `You have successfully ${tag === "grant" ? "assigned" : "removed"} ${role} permission to ${findAdmin.first_name}`
-        });
+        return res.json({ status: 200, msg: `You have successfully updated ${findAdmin.first_name} permissions`, data: allusers });
 
     } catch (error) {
         ServerError(res, error);

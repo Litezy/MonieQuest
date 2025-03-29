@@ -152,7 +152,7 @@ exports.ProductOrder = async (req, res) => {
         if (!adminBank) return res.json({ status: 404, msg: `Please make payment before continuing` })
         const user = await User.findOne({ where: { id: adminBank.user } })
         if (!user) return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
-        if (user.role !== 'admin') return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
+        if (user.role !== 'super admin') return res.json({ status: 404, msg: `Please pay to the correct bank address provided` })
 
         const productsArray = Array.isArray(products) ? products : [products]
         const gen_id = `mq` + otpGenerator.generate(13, { specialChars: false, upperCaseAlphabets: false })

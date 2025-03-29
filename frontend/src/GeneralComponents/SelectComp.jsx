@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const SelectComp = ({ title, options, style, value, handleChange, width = 120, size = true }) => {
+const SelectComp = ({ title, options, style, name, value, handleChange, width = 120, size = true }) => {
 
   return (
     <div>
@@ -14,6 +14,7 @@ const SelectComp = ({ title, options, style, value, handleChange, width = 120, s
       >
         <InputLabel>{title}</InputLabel>
         <Select
+          name={name}
           value={value}
           onChange={handleChange}
           sx={{ color: style?.color, fontSize: style?.font }}
