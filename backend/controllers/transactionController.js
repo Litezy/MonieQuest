@@ -1,4 +1,4 @@
-const { ServerError, nairaSign } = require('../utils/utils')
+const { ServerError, nairaSign, GlobalImageUploads } = require('../utils/utils')
 const User = require('../models').users
 const CryptoBuyModel = require(`../models`).exchangeBuys
 const CryptoSellModel = require(`../models`).exchangeSells
@@ -130,18 +130,74 @@ exports.SellCrypto = async (req, res) => {
 
 exports.SellGift = async (req, res) => {
     try {
-        const { brand, amount, code, pin, rate, country } = req.body
-        if (!brand || !amount || !code || !rate || !country) return res.json({ status: 400, msg: "Incomplete request, fill all required fields." })
-        const findUser = await User.findOne({ where: { id: req.user } })
-        if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' })
-        const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false })
-       if(isNaN(amount)) return res.json({status:400, msg:"Amount must be a number"})
+        const { brand, amount, code, pin, rate, country, currency, tag } = req.body;
+        const images = req?.files?.images; // Assuming you're using multer or similar for file uploads
+        const tags = ['image', 'code'];
+
+        // Basic validations
+        if (!tags.includes(tag)) return res.json({ status: 400, msg: `Invalid tag found` });
+        if (!brand || !amount || !currency || !rate || !country) return res.json({ status: 400, msg: "Incomplete request, fill all required fields." });
+        if (isNaN(amount)) return res.json({ status: 400, msg: "Amount must be a number" });
+
+        // Check user
+        const findUser = await User.findOne({ where: { id: req.user } });
+        if (!findUser) return res.json({ status: 401, msg: 'Account not authorized' });
+
+        // Handle image uploads if tag is 'image'
+        const orderId = otp.generate(6, { specialChars: false, lowerCaseAlphabets: false });
+        let imageUrls = [];
+        if (tag === 'image') {
+            if (!images || images.length === 0) {
+                return res.json({ status: 400, msg: "Please upload at least one image" });
+            }
+
+            // Validate image sizes (2MB max)
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            for (const image of images) {
+                if (image.size > maxSize) {
+                    return res.json({ status: 400, msg: `Image ${image.originalname} exceeds 2MB limit` });
+                }
+                if (!image.mimetype.startsWith('image/')) {
+                    return res.json({ status: 404, msg: `File error, upload valid image format (jpg, jpeg, png, svg)` });
+                }
+            }
+
+            const imagesToUpload = images.map((image, index) => ({
+                field: `card_image_${index}`,
+                file: image
+            }));
+
+            imageUrls = await GlobalImageUploads(imagesToUpload, 'giftcardOrders', orderId);
+        } else if (tag === 'code') {
+            // Validate e-code fields
+            if (!code) return res.json({ status: 400, msg: "Giftcard code is required" });
+            if (pin && pin.length < 4) return res.json({ status: 400, msg: "PIN must be at least 4 digits" });
+        }
+
+
+        // Create the sell order
         const newsell = await GiftCardSell.create({
-            brand, amount, code, pin, userid: req.user, country, order_no: orderId, rate
-        })
+            brand,
+            amount,
+            code: tag === 'code' ? code : null,
+            pin: tag === 'code' ? pin : null,
+            images: tag === 'image' ? Object.values(imageUrls) : null,
+            userid: req.user,
+            country,
+            order_no: orderId,
+            rate,
+            currency,
+            type: tag
+        });
+
+        // Notification and email logic (unchanged)
         await Notify.create({
-            user: req.user, title: 'giftcard sell order', content: `Your giftcard sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.  `, url: `/user/transactions_history`
-        })
+            user: req.user,
+            title: 'giftcard sell order',
+            content: `Your giftcard sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.`,
+            url: `/user/transactions_history`
+        });
+
         await Mailing({
             subject: 'Giftcard Sell Order',
             eTitle: `Order ID: ${orderId} Processing`,
@@ -150,17 +206,18 @@ exports.SellGift = async (req, res) => {
              <div style="margin-top: 1.5rem">Your giftcard sell order with the ID: ${orderId} is currently being processed. Once the transaction is confirmed, your account balance will be updated accordingly. Thank you for trading with us.</div>
             `,
             account: findUser,
-        })
-        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        });
+
+        // Admin notifications (unchanged)
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } });
         if (admins.length > 0) {
             admins.map(async admin => {
-
                 await Notify.create({
                     user: admin.id,
                     title: `New Giftcard Sell Order`,
                     content: `Hi Admin, You have a giftcard sell order with the ID: ${orderId}.`,
                     url: '/admin/giftcards/orders',
-                })
+                });
                 await Mailing({
                     subject: 'New Giftcard Sell Order',
                     eTitle: `From User ${findUser.first_name}`,
@@ -168,16 +225,20 @@ exports.SellGift = async (req, res) => {
                      <div>Hi Admin, You have a giftcard sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newsell.createdAt).format('DD-MM-yyyy')} / ${moment(newsell.createdAt).format('h:mm')}.</div> 
                     `,
                     account: admin,
-                })
-            })
-
+                });
+            });
         }
-        return res.json({ status: 201, msg: 'Giftcard sell order created successfully', data: newsell, user: findUser })
+
+        return res.json({
+            status: 201,
+            msg: 'Giftcard sell order created successfully',
+            data: newsell,
+        });
 
     } catch (error) {
-        ServerError(res, error)
+        ServerError(res, error);
     }
-}
+};
 
 exports.getGiftCardTransactions = async (req, res) => {
     try {
