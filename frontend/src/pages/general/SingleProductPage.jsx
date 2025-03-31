@@ -49,7 +49,7 @@ const SingleProductPage = () => {
                 setSingleProduct(response.msg)
             }
         } catch (error) {
-            console.log(`error in fetch product`,error)
+            console.log(`error in fetch product`, error)
         } finally {
             setDataLoading(false)
         }
@@ -118,11 +118,7 @@ const SingleProductPage = () => {
                             <div className='flex md:flex-row md:justify-between flex-col gap-6 md:items-end'>
                                 <div className='flex flex-col gap-4'>
                                     <div className='w-48 h-4 rounded-full bg-slate-400 animate-pulse'></div>
-                                    <div className='flex gap-2'>
-                                        {new Array(3).fill(0).map((_, i) => (
-                                            <div key={i} className='w-16 h-2 rounded-full bg-slate-400 animate-pulse'></div>
-                                        ))}
-                                    </div>
+                                    <div className='w-32 h-2 rounded-full bg-slate-400 animate-pulse'></div>
                                 </div>
                                 <div className='w-60 h-2 rounded-full bg-slate-400 animate-pulse'></div>
                             </div>
@@ -150,7 +146,7 @@ const SingleProductPage = () => {
                                     {categories.length > 0 &&
                                         <div className='flex md:flex-row flex-col gap-1 text-sm'>
                                             {categories.map((ele, i) => (
-                                                <div key={i} className=''>{ele}{i === categories.length - 1 ? '.' : ','}</div>
+                                                <div key={i} className=''>{ele}{i !== categories.length - 1 && ','}</div>
                                             ))}
                                         </div>
                                     }
@@ -198,7 +194,7 @@ const SingleProductPage = () => {
                                                     <div className='w-[3%]'>
                                                         <GiCheckMark className='text-lightgreen' />
                                                     </div>
-                                                    <div className='w-[97%] whitespace-pre-line'>{item.replace(/\\n|\/n/g, '\n')}</div>
+                                                    <div className='w-[97%] whitespace-pre-line'>{item?.replace(/\\n|\/n/g, '\n')}</div>
                                                 </div>
                                             ))}
                                         </div>
