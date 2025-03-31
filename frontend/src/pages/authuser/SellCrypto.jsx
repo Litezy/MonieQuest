@@ -34,11 +34,12 @@ const SellCrypto = () => {
         wallet_add: '',
         minimum: '',
         limit: '',
-        gas_fee: ''
+        kyc_limit: ''
     })
     const [active, setActive] = useState(tags[0])
     const [confirm, setConfirm] = useState(false)
     const rate = utils?.exchange_sell_rate
+    const verified = user?.kyc_verified
 
     const handleAmount = (e) => {
         const rawValue = e.target.value.replace(/,/g, '');
@@ -77,7 +78,11 @@ const SellCrypto = () => {
         if (!forms.amount) return ErrorAlert('Enter an amount')
         if (amt < forms.minimum) return ErrorAlert(`Minimum ${forms.crypto} sell amount is $${forms.minimum}`)
         if (!forms.network) return ErrorAlert('Crypto network is required')
-        if (amt > forms.limit) return ErrorAlert(`Sorry, you can't sell above $${forms.limit.toLocaleString()} worth of ${forms.crypto} `)
+        if (verified === 'false') {
+            if (amt > forms.limit) return ErrorAlert(`Please complete your KYC verification to be able to trade this amount`)
+        } else {
+            if (amt > forms.kyc_limit) return ErrorAlert(`Sorry, you can't buy above $${forms.kyc_limit.toLocaleString()} worth of ${forms.crypto} `)
+        }
         setModal(true)
     }
 
@@ -151,6 +156,7 @@ const SellCrypto = () => {
                 wallet_add: crypto.wallet_add,
                 minimum: crypto.sell_min,
                 limit: crypto.sell_max,
+                kyc_limit: crypto.kyc_sellmax,
             }));
         } else {
             setForms({ ...forms, network: '', wallet_add: '' });
@@ -239,7 +245,7 @@ const SellCrypto = () => {
                                                 </option>
                                             ))}
                                     </select>
-                                    {forms.crypto && <div className="text-red-600 text-xs">Please Note: you can only sell a minimum of ${forms.minimum} and maximum of ${forms.limit.toLocaleString()} of {forms.crypto}. {user?.kyc_verified === 'false' ? 'Verify your account to increase limit.' : ''}</div>}
+                                    {forms.crypto && <div className="text-red-600 text-xs">Please Note: you can only sell a minimum of ${forms.minimum} and maximum of {user?.kyc_verified === 'false' ? `$${forms.limit.toLocaleString()}` : `$${forms.kyc_limit.toLocaleString()}`} of {forms.crypto}. {user?.kyc_verified === 'false' ? 'Verify your account to increase limit.' : ''}</div>}
                                 </div>
                                 <div className="flex w-full items-start gap-2 flex-col  ">
                                     <div className="font-bold text-lg">Amount:</div>

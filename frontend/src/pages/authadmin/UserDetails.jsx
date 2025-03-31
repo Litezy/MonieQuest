@@ -159,7 +159,7 @@ const UserDetails = () => {
                             {permissions.map((item, i) => (
                                 <div key={i} className='flex flex-col'>
                                     <div className='capitalize font-medium'>{item.title}:</div>
-                                    <SelectComp options={actions} width={200} style={{ bg: '#212134', color: 'lightgrey', font: '0.85rem', rounded: '0.2rem' }} name={item.name} value={item.value} handleChange={handleChange} />
+                                    <SelectComp options={actions} width={200} style={{ bg: '#ffff', color: 'grey', font: '0.85rem', rounded: '0.2rem' }} name={item.name} value={item.value} handleChange={handleChange} />
                                 </div>
                             ))}
                         </div>

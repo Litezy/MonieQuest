@@ -14,6 +14,7 @@ const SelectComp = ({ title, options, style, name, value, handleChange, width = 
       >
         <InputLabel>{title}</InputLabel>
         <Select
+          name={name}
           value={options.includes(value) ? value : ""}
           onChange={handleChange}
           sx={{ color: style?.color, fontSize: style?.font }}

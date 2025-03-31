@@ -31,11 +31,11 @@ const Subscriber = require('../models').subscribers
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, leaderboard_reward } = req.body
+        const { exchange_buy_rate, exchange_sell_rate, bank_withdraw_min, giftcard_rate, leaderboard_reward } = req.body
         const utils = await Util.findOne({})
         if (!utils) {
-            if (!exchange_buy_rate || !exchange_sell_rate || !kyc_threshold || !bank_withdraw_min || !giftcard_rate || !leaderboard_reward) return res.json({ status: 404, msg: `Incomplete request found` })
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (!exchange_buy_rate || !exchange_sell_rate || !bank_withdraw_min || !giftcard_rate || !leaderboard_reward) return res.json({ status: 404, msg: `Incomplete request found` })
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
 
             const newUtils = await Util.create({
                 exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, leaderboard_reward
@@ -44,15 +44,12 @@ exports.UpdateUtils = async (req, res) => {
             return res.json({ status: 200, msg: 'Rate(s) created successfully', utils: newUtils })
         }
         else {
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(kyc_threshold) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
             if (exchange_buy_rate) {
                 utils.exchange_buy_rate = exchange_buy_rate
             }
             if (exchange_sell_rate) {
                 utils.exchange_sell_rate = exchange_sell_rate
-            }
-            if (kyc_threshold) {
-                utils.kyc_threshold = kyc_threshold
             }
             if (bank_withdraw_min) {
                 utils.bank_withdraw_min = bank_withdraw_min
@@ -1895,18 +1892,18 @@ exports.getSingleTestimonial = async (req, res) => {
 
 exports.addOrUpdateCryptos = async (req, res) => {
     try {
-        const { name, network, wallet_add, symbol, buy_min, buy_max, sell_min, sell_max, gas_fee, tag, id } = req.body;
-        const reqFields = [name, wallet_add, network, symbol, buy_min, buy_max, sell_min, sell_max, gas_fee];
+        const { name, network, wallet_add, symbol, buy_min, buy_max, sell_min, sell_max, gas_fee, kyc_buymax, kyc_sellmax, tag, id } = req.body;
+        const reqFields = [name, wallet_add, network, symbol, buy_min, buy_max, sell_min, sell_max, gas_fee, kyc_buymax, kyc_sellmax];
         const tags = ['create', 'update', 'delete'];
 
         if (!tag) return res.json({ status: 400, msg: "Tag not found" });
         if (!tags.includes(tag)) return res.json({ status: 400, msg: "Invalid Tag Found" });
         if (tag === 'create') {
             if (reqFields.some((field) => !field)) return res.json({ status: 400, msg: "All fields are required" });
-            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(gas_fee)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(kyc_buymax) || isNaN(kyc_sellmax) || isNaN(gas_fee)) return res.json({ status: 404, msg: `Enter valid numbers` })
             const findName = await CryptoModel.findOne({ where: { name } })
             if (findName) return res.json({ status: 400, msg: 'Crypto wallet already added' })
-            const newCrypto = await CryptoModel.create({ name, wallet_add, symbol, network, buy_min, buy_max, sell_min, sell_max, gas_fee });
+            const newCrypto = await CryptoModel.create({ name, wallet_add, symbol, network, buy_min, buy_max, sell_min, sell_max, gas_fee, kyc_buymax, kyc_sellmax });
             return res.json({ status: 201, msg: `${name} wallet created successfully`, data: newCrypto });
         } else if (tag === 'update') {
             if (!id) return res.json({ status: 400, msg: 'Crypto ID missing from request' });
@@ -1914,8 +1911,8 @@ exports.addOrUpdateCryptos = async (req, res) => {
             if (!findCrypto) return res.json({ status: 404, msg: "Crypto ID not found" });
             const findName = await CryptoModel.findOne({ where: { name } })
             if (findName && findName.name !== findCrypto.name) return res.json({ status: 400, msg: 'Crypto wallet already exist' })
-            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(gas_fee)) return res.json({ status: 404, msg: `Enter valid numbers` })
-
+            if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(kyc_buymax) || isNaN(kyc_sellmax) || isNaN(gas_fee)) return res.json({ status: 404, msg: `Enter valid numbers` })
+                
             const updates = {};
             if (name) updates.name = name;
             if (wallet_add) updates.wallet_add = wallet_add;
@@ -1926,6 +1923,8 @@ exports.addOrUpdateCryptos = async (req, res) => {
             if (sell_min) updates.sell_min = sell_min;
             if (sell_max) updates.sell_max = sell_max;
             if (gas_fee) updates.gas_fee = gas_fee;
+            if (kyc_buymax) updates.kyc_buymax = kyc_buymax;
+            if (kyc_sellmax) updates.kyc_sellmax = kyc_sellmax;
 
             if (Object.keys(updates).length === 0) return res.json({ status: 400, msg: "No fields provided to update" });
 
@@ -2067,41 +2066,6 @@ exports.getSubscribers = async (req, res) => {
     }
 }
 
-exports.AddGiftCard = async (req, res) => {
-    try {
-        const { name, } = req.body;
-        if (!name) {
-            return res.json({ status: 400, msg: 'Giftcard Name missing' });
-        }
-        const findCard = await Card.findOne({ where: { name } });
-        if (findCard) {
-            return res.json({ status: 400, msg: "Card already added to list" });
-        }
-        const Image_ID = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false });
-        if (!req?.files) {
-            return res.json({ status: 400, msg: 'Upload giftcard image' });
-        }
-
-        const image = req?.files?.image;
-        if (image.size >= 1000000) res.json({ status: 404, msg: `Image size too large, file must not exceed 1mb` })
-        if (!image.mimetype.startsWith('image/')) {
-            return res.json({ status: 404, msg: `File error, upload valid image format (jpg, jpeg, png, svg)` });
-        }
-
-        const imageToUpload = [{ field: 'card_image', file: image }];
-        const imageurl = await GlobalImageUploads(imageToUpload, 'giftcards', Image_ID);
-        const newcard = await Card.create({
-            name,
-            gen_id: Image_ID,
-            image: imageurl.card_image,
-        });
-
-        return res.json({ status: 200, msg: 'Gift card created successfully', data: newcard });
-    } catch (error) {
-        ServerError(res, error);
-    }
-};
-
 exports.AddCardCategory = async (req, res) => {
     try {
         const user = req.user
@@ -2123,7 +2087,6 @@ exports.AddCardCategory = async (req, res) => {
         ServerError(res, error)
     }
 }
-
 
 exports.UpdateCardCategory = async (req, res) => {
     try {
@@ -2179,6 +2142,42 @@ exports.deleteCategory = async (req, res) => {
 
     }
 }
+
+exports.AddGiftCard = async (req, res) => {
+    try {
+        const { name, } = req.body;
+        if (!name) {
+            return res.json({ status: 400, msg: 'Giftcard Name missing' });
+        }
+        const findCard = await Card.findOne({ where: { name } });
+        if (findCard) {
+            return res.json({ status: 400, msg: "Card already added to list" });
+        }
+        const Image_ID = otpGenerator.generate(6, { specialChars: false, lowerCaseAlphabets: false });
+        if (!req?.files) {
+            return res.json({ status: 400, msg: 'Upload giftcard image' });
+        }
+
+        const image = req?.files?.image;
+        if (image.size >= 1000000) res.json({ status: 404, msg: `Image size too large, file must not exceed 1mb` })
+        if (!image.mimetype.startsWith('image/')) {
+            return res.json({ status: 404, msg: `File error, upload valid image format (jpg, jpeg, png, svg)` });
+        }
+
+        const imageToUpload = [{ field: 'card_image', file: image }];
+        const imageurl = await GlobalImageUploads(imageToUpload, 'giftcards', Image_ID);
+        const newcard = await Card.create({
+            name,
+            gen_id: Image_ID,
+            image: imageurl.card_image,
+        });
+
+        return res.json({ status: 200, msg: 'Gift card created successfully', data: newcard });
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
 exports.getAllGiftCards = async (req, res) => {
     try {
         const allcards = await Card.findAll({
@@ -2195,6 +2194,7 @@ exports.getAllGiftCards = async (req, res) => {
         ServerError(res, error)
     }
 }
+
 exports.getSingleGiftCard = async (req, res) => {
     const { id } = req.params
     if (!id) return res.json({ status: 400, msg: "ID missing" })
@@ -2297,10 +2297,10 @@ exports.DeleteGiftCard = async (req, res) => {
 exports.ChangeAdminPermissions = async (req, res) => {
     try {
         const { id, airdrop_permit, blog_permit, product_permit, exchange_permit, giftcard_permit } = req.body
-        if (!id) return res.json({status: 404, msg: "Incomplete request" })
+        if (!id) return res.json({ status: 404, msg: "Incomplete request" })
         const findAdmin = await User.findOne({ where: { id } })
-        if (!findAdmin) return res.json({status: 404, msg: "Invalid ID provided" })
-        if (findAdmin.role !== "admin") return res.json({status: 404, msg: "Only admins can be assigned permissions" })
+        if (!findAdmin) return res.json({ status: 404, msg: "Invalid ID provided" })
+        if (findAdmin.role !== "admin") return res.json({ status: 404, msg: "Only admins can be assigned permissions" })
 
         findAdmin.airdrop_permit = airdrop_permit || findAdmin.airdrop_permit
         findAdmin.blog_permit = blog_permit || findAdmin.blog_permit
