@@ -102,7 +102,10 @@ const SingleAirdropPage = () => {
                     ))}
                   </div>
                 </div>
-                <div className='lg:col-span-4 col-span-1 w-full h-96 bg-slate-400 animate-pulse rounded-md'></div>
+                <div className='lg:col-span-4 col-span-1 flex flex-col gap-8'>
+                  <div className='w-full h-64 bg-slate-400 animate-pulse rounded-md'></div>
+                  <div className='w-full h-96 bg-slate-400 animate-pulse rounded-md'></div>
+                </div>
               </div>
               <div className='w-full h-36 bg-slate-400 animate-pulse rounded-md'></div>
             </div>
