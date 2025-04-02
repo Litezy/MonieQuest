@@ -5,7 +5,7 @@ import { currencies } from '../../AuthComponents/AuthUtils'
 import { Apis, AuthGetApi } from '../../services/API'
 
 const AdminGiftCards = () => {
-    const Topheaders = ['FullName', 'Gift-Brand', 'Code', 'Pin', `Amount`, 'Details']
+    const Topheaders = ['FullName', 'Gift-Brand', 'Type', 'Pin', `Amount`, 'Details']
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
 
@@ -15,6 +15,7 @@ const AdminGiftCards = () => {
             const res = await AuthGetApi(Apis.admin.get_giftcard_orders)
             const data = res.data
             setData(data)
+            // console.log(data)
         } catch (error) {
             console.log(error)
         } finally {
@@ -26,6 +27,7 @@ const AdminGiftCards = () => {
         fetchGiftOrders()
     }, [])
 
+    const imagesArray = data?.images ? JSON.parse(data.images) : [] 
     return (
         <AdminPageLayout>
             <div className='w-11/12 mx-auto'>
@@ -51,7 +53,7 @@ const AdminGiftCards = () => {
                                             {item?.brand}
                                         </td>
                                         <td className="px-3 py-3">
-                                            {item?.code}
+                                            {item?.code ? 'Code':'Image'}
                                         </td>
                                         <td className="px-3 py-3">
                                             {item?.pin ? item?.pin :'n/a'}

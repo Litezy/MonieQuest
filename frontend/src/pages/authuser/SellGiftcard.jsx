@@ -203,27 +203,27 @@ const SellGiftcard = () => {
             if (!validTags.includes(tag)) {
                 return ErrorAlert('Invalid gift card type specified');
             }
-    
+
             // Validate required fields
             if (!cards.brand || cards.brand === '--Select Brand--') {
                 return ErrorAlert('Please select a gift card brand');
             }
-    
+
             if (!cards.amount || isNaN(Number(cards.amount.replace(/,/g, '')))) {
                 return ErrorAlert('Please enter a valid amount');
             }
-    
+
             // Type-specific validations
             if (tag === 'code' && !cards.code) {
                 return ErrorAlert('Gift card code is required');
             }
-    
+
             if (tag === 'image' && (!cards.images || cards.images.length === 0)) {
                 return ErrorAlert('Please upload at least one image of your gift card');
             }
-    
+
             setLoading({ status: true, param: 'confirmed' });
-    
+
             // Prepare FormData
             const formData = new FormData();
             formData.append('brand', cards.brand);
@@ -232,26 +232,26 @@ const SellGiftcard = () => {
             formData.append('country', selectedCategory?.country || '');
             formData.append('currency', selectedCategory?.currency || '');
             formData.append('tag', tag);
-    
+
             // Handle files or codes based on type
             if (tag === 'image') {
                 // Validate and append images
                 const MAX_SIZE = 2 * 1024 * 1024; // 2MB
                 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-    
+
                 cards.images?.forEach((image) => {
                     if (!(image instanceof File)) {
                         throw new Error('Invalid file format');
                     }
-    
+
                     if (image.size > MAX_SIZE) {
                         throw new Error(`Image ${image.name} exceeds 2MB limit`);
                     }
-    
+
                     if (!ALLOWED_TYPES.includes(image.type)) {
                         throw new Error(`Unsupported image format: ${image.type}`);
                     }
-    
+
                     formData.append('images', image);
                 });
             } else {
@@ -261,28 +261,28 @@ const SellGiftcard = () => {
                     formData.append('pin', cards.pin);
                 }
             }
-    
+
             // Submit data
             const res = await AuthPostApi(Apis.transaction.sell_giftcard, formData);
-            
+
             if (res.status !== 201) {
                 throw new Error(res.msg || 'Failed to process gift card');
             }
-    
+
             // Reset form state
             resetFormState();
-    
+
             // Show success and redirect
             SuccessAlert(res.msg || 'Gift card submitted successfully');
             navigate('/user/giftcards/orders');
-    
+
         } catch (error) {
             ErrorAlert(error.message || 'An error occurred while submitting your gift card');
         } finally {
             setLoading({ status: false, param: '' });
         }
     };
-    
+
     // Helper function to reset form state
     const resetFormState = () => {
         setCards({
@@ -330,6 +330,16 @@ const SellGiftcard = () => {
 
     handleOutsideClicks(brandRef, () => setSelectBrand(false));
     handleOutsideClicks(categoryRef, () => setSelectCategory(false));
+
+    useEffect(() => {
+        if (cards.has_pin === 'no') {
+            setCards({
+                ...cards,
+                pin: ''
+            })
+        }
+    }, [cards.has_pin])
+
     return (
         <Giftcards>
             <div className='w-11/12 mx-auto lg:w-8/12 mt-5 lg:mt-10'>
@@ -470,6 +480,7 @@ const SellGiftcard = () => {
                                         border={false}
                                         value={cards.amount}
                                         onChange={handleAmount}
+                                        className={`!h-9`}
                                         placeholder={selectedCategory?.currency}
                                     />
                                 </div>
