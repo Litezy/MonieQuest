@@ -31,20 +31,20 @@ const Subscriber = require('../models').subscribers
 
 exports.UpdateUtils = async (req, res) => {
     try {
-        const { exchange_buy_rate, exchange_sell_rate, bank_withdraw_min, giftcard_rate, leaderboard_reward } = req.body
+        const { exchange_buy_rate, exchange_sell_rate, bank_withdraw_min, leaderboard_reward } = req.body
         const utils = await Util.findOne({})
         if (!utils) {
-            if (!exchange_buy_rate || !exchange_sell_rate || !bank_withdraw_min || !giftcard_rate || !leaderboard_reward) return res.json({ status: 404, msg: `Incomplete request found` })
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (!exchange_buy_rate || !exchange_sell_rate || !bank_withdraw_min || !leaderboard_reward) return res.json({ status: 404, msg: `Incomplete request found` })
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(bank_withdraw_min) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
 
             const newUtils = await Util.create({
-                exchange_buy_rate, exchange_sell_rate, kyc_threshold, bank_withdraw_min, giftcard_rate, leaderboard_reward
+                exchange_buy_rate, exchange_sell_rate, bank_withdraw_min, leaderboard_reward
             })
 
             return res.json({ status: 200, msg: 'Rate(s) created successfully', utils: newUtils })
         }
         else {
-            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(bank_withdraw_min) || isNaN(giftcard_rate) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
+            if (isNaN(exchange_buy_rate) || isNaN(exchange_sell_rate) || isNaN(bank_withdraw_min) || isNaN(leaderboard_reward)) return res.json({ status: 404, msg: `Enter valid numbers` })
             if (exchange_buy_rate) {
                 utils.exchange_buy_rate = exchange_buy_rate
             }
@@ -54,16 +54,13 @@ exports.UpdateUtils = async (req, res) => {
             if (bank_withdraw_min) {
                 utils.bank_withdraw_min = bank_withdraw_min
             }
-            if (giftcard_rate) {
-                utils.giftcard_rate = giftcard_rate
-            }
             if (leaderboard_reward) {
                 utils.leaderboard_reward = leaderboard_reward
             }
 
             await utils.save()
 
-            return res.json({ status: 200, msg: 'Rate(s) updated successfully', utils: utils })
+            return res.json({ status: 200, msg: 'Rate(s) updated successfully'})
         }
 
     } catch (error) {
