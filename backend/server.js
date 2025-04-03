@@ -36,16 +36,19 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload())
 const isprod = process.env.NODE_ENV === 'production'
 if (!isprod) {
     app.use(express.static('public'))
 }
 
+
 app.use('/api/user', require('./routes/userRoute'))
 app.use('/api/notification', require('./routes/notificationRoute'))
 app.use('/api/transactions', require('./routes/transactionRoutes'))
 app.use('/api/admin', require('./routes/adminRoute'))
 app.use('/api/product', require('./routes/productRoute'))
+app.use('/api/paystack', require('./routes/paystackRoutes'))
 
 server.listen(port, () => console.log(`Server running on http://localhost:${port}`))

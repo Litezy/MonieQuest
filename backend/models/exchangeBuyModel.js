@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         type: { type: DataTypes.STRING, allowNull: false, defaultValue: 'buy' },
         wallet_address: { type: DataTypes.STRING, allowNull: false },
         amount: { type: DataTypes.FLOAT, allowNull: false },
+        amount_in_naira: { type: DataTypes.FLOAT, allowNull: true },
         gas_fee: { type: DataTypes.FLOAT, allowNull: false },
         network: { type: DataTypes.STRING, allowNull: false },
         tag: { type: DataTypes.TEXT, allowNull: false, defaultValue: 'crypto' },
@@ -11,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         wallet_exp: { type: DataTypes.STRING, allowNull: true },
         rate: { type: DataTypes.FLOAT, allowNull: false },
         userid: { type: DataTypes.INTEGER, },
-        status: { type: DataTypes.TEXT, defaultValue: 'unpaid' }
+        status: { type: DataTypes.STRING, defaultValue: 'unpaid' },
+        reference: { type: DataTypes.STRING, allowNull:true }
     })
 }

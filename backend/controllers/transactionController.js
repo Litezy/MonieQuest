@@ -409,8 +409,8 @@ exports.cancelOrder = async (req, res) => {
 
 exports.requestWithdrawal = async (req, res) => {
     try {
-        const { bank_name, account_number, bank_user, amount } = req.body
-        if (!bank_name || !account_number || !bank_user || !amount) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
+        const { bank_name, account_number, bank_holder, amount, bank_code } = req.body
+        if (!bank_name || !account_number || !bank_holder || !amount || !bank_code) return res.json({ status: 400, msg: "Incomplete request, fill all fields" })
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
         const findUserWallet = await Wallet.findOne({ where: { user: user ? user.id : req.user } })
@@ -426,7 +426,7 @@ exports.requestWithdrawal = async (req, res) => {
         await findUserWallet.save()
         const nanoid = customAlphabet(blockAndNum, 15)
         const transId = nanoid()
-        const withdrawal = await BankWithdrawal.create({ bank_name, trans_id: transId, userid: req.user, account_number, bank_user, amount })
+        const withdrawal = await BankWithdrawal.create({ bank_name, trans_id: transId, userid: req.user, account_number, bank_holder, amount,bank_code })
 
         const formattedAmt = amount.toLocaleString()
 
