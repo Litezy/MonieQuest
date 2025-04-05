@@ -236,7 +236,6 @@ exports.SellGift = async (req, res) => {
     }
 };
 
-
 exports.getGiftCardTransactions = async (req, res) => {
     try {
         const user = await User.findOne({ where: { id: req.user } })

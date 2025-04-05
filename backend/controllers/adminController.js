@@ -27,6 +27,7 @@ const Tools = require('../models').tools
 const Card = require('../models').cards
 const CardCategory = require('../models').cardCategory
 const Subscriber = require('../models').subscribers
+var cron = require('node-cron');
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -170,7 +171,6 @@ exports.UpdateAirdrop = async (req, res) => {
             const imageToUpload = [{ field: 'logo', file: logoImage }]
             const newLogoImage = await GlobalImageUploads(imageToUpload, 'airdrops', airdrop.gen_id)
             airdrop.logo_image = newLogoImage.logo
-
         }
         if (bannerImage) {
             if (!bannerImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
@@ -2327,5 +2327,23 @@ exports.ChangeAdminPermissions = async (req, res) => {
         ServerError(res, error);
     }
 };
+
+cron.schedule('0 * * * *', async () => {
+
+    const products = await Product.findAll({ where: { discount_endDate: { [Op.not]: null } } })
+
+    if (products && products.length > 0) {
+        for (const ele of products) {
+            if (moment().isSameOrAfter(new Date(ele.discount_endDate))) {
+                ele.discount_percentage = null
+                ele.discount_duration = null
+                ele.discount_duration_type = null
+                ele.discount_endDate = null
+                await ele.save()
+            }
+        }
+    }
+})
+
 
 

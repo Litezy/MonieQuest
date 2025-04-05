@@ -147,6 +147,7 @@ const paystack_urls = {
     buy_crypto: paystack + 'initialize_buy_payment',
     admin_transfer: paystack + "admin_transfer"
 }
+
 export const Apis = {
     user: user_urls,
     notification: notification_urls,
