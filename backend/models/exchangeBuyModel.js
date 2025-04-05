@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         rate: { type: DataTypes.FLOAT, allowNull: false },
         userid: { type: DataTypes.INTEGER, },
         status: { type: DataTypes.STRING, defaultValue: 'unpaid' },
-        reference: { type: DataTypes.STRING, allowNull:true }
+        trans_hash: { type: DataTypes.STRING, allowNull: true },
+        reference: { type: DataTypes.STRING, allowNull: true }
     })
 }

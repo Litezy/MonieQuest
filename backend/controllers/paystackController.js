@@ -4,6 +4,7 @@ const BankWithdraw = require('../models').withdrawals
 const Wallet = require('../models').wallets
 const User = require('../models').users;
 const { ServerError } = require('../utils/utils');
+require('dotenv').config();
 const secret = process.env.PAYSTACK_SECRET;
 const axios = require('axios');
 const otpGenerator = require('otp-generator');
@@ -304,3 +305,40 @@ exports.adminTransfer = async (req, res) => {
         });
     }
 };
+
+exports.checkAccount = async (req, res) => {
+    try {
+        const { account_number, bank } = req.body
+        if (!account_number || !bank) return res.json({ status: 404, msg: "Incomplete request " })
+        const banksResponse = await axios.get("https://api.paystack.co/bank", {
+            headers: {
+                Authorization: `Bearer ${secret}`,
+                "Content-Type": "application/json"
+            }
+        });
+        const banks = banksResponse.data.data;
+        const userbank = banks.find(b => b.name.toLowerCase() === bank.toLowerCase());
+
+        if (!userbank) {
+            return res.json({ status: 404, msg: "Bank not supported" });
+        }
+        try {
+            const Verifyresponse = await axios.get('https://api.paystack.co/bank/resolve', {
+                params: {
+                    account_number: account_number,
+                    bank_code: userbank.code
+                },
+                headers: {
+                    Authorization: `Bearer ${secret}`
+                }
+            });
+            return res.json({ status: 200, msg: "Account verified", data: Verifyresponse.data.data });
+        } catch (error) {
+            console.error('Verification failed:', error.response?.data || error.message);
+            return res.json({ status: 404, msg: "Account not found", data: error.response?.data || error.message });
+        }
+    } catch (error) {
+        return res.json({ status: 500, msg: "Error", data: error.response?.data || error.message });
+
+    }
+}

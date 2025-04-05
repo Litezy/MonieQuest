@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import FormInput from '../../utils/FormInput';
 import { currencies } from '../../AuthComponents/AuthUtils';
-import { currencySign, ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
+import { ErrorAlert, SuccessAlert } from '../../utils/pageUtils';
 import { SlClock } from 'react-icons/sl';
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../../GeneralComponents/Loader';
@@ -164,6 +164,18 @@ const SellGiftcard = () => {
         if (amountError.status) {
             return ErrorAlert(amountError.message);
         }
+        // Image validations
+        if (!cards.images || cards.images.length === 0) {
+            return ErrorAlert('Please upload at least one image of your gift card');
+        }
+
+        // Optional: Validate image sizes/types
+        const maxSize = 2 * 1024 * 1024; // 2MB
+        for (const image of cards.images) {
+            if (image.size && image.size > maxSize) {
+                return ErrorAlert(`Image ${image.name} exceeds 2MB limit`);
+            }
+        }
 
         // Conditional validations based on card type
         if (selectedCategory?.card_pic !== 'true') {
@@ -174,37 +186,22 @@ const SellGiftcard = () => {
             if (cards.has_pin === 'yes' && !cards.pin) {
                 return ErrorAlert('Giftcard pin is missing');
             }
-        } else {
-            // Image validations
-            if (!cards.images || cards.images.length === 0) {
-                return ErrorAlert('Please upload at least one image of your gift card');
-            }
-
-            // Optional: Validate image sizes/types
-            const maxSize = 2 * 1024 * 1024; // 2MB
-            for (const image of cards.images) {
-                if (image.size && image.size > maxSize) {
-                    return ErrorAlert(`Image ${image.name} exceeds 2MB limit`);
-                }
-            }
         }
         setLoading({ status: true, param: 'check' });
         setTimeout(() => {
             setLoading({ status: false, param: '' });
             setScreen(2);
-        }, 2000);
+        }, 1000);
     };
 
     // Confirm and send the order
     const confirmSend = async (tag) => {
         try {
-            // Validate tag
             const validTags = ['image', 'code'];
             if (!validTags.includes(tag)) {
                 return ErrorAlert('Invalid gift card type specified');
             }
 
-            // Validate required fields
             if (!cards.brand || cards.brand === '--Select Brand--') {
                 return ErrorAlert('Please select a gift card brand');
             }
@@ -213,18 +210,20 @@ const SellGiftcard = () => {
                 return ErrorAlert('Please enter a valid amount');
             }
 
-            // Type-specific validations
             if (tag === 'code' && !cards.code) {
                 return ErrorAlert('Gift card code is required');
             }
 
-            if (tag === 'image' && (!cards.images || cards.images.length === 0)) {
+            if (tag === 'code' && cards.has_pin === 'yes' && !cards.pin) {
+                return ErrorAlert('Gift card pin is required');
+            }
+
+            if (!cards.images || cards.images.length === 0) {
                 return ErrorAlert('Please upload at least one image of your gift card');
             }
 
             setLoading({ status: true, param: 'confirmed' });
 
-            // Prepare FormData
             const formData = new FormData();
             formData.append('brand', cards.brand);
             formData.append('amount', cards.amount.replace(/,/g, ''));
@@ -233,46 +232,42 @@ const SellGiftcard = () => {
             formData.append('currency', selectedCategory?.currency || '');
             formData.append('tag', tag);
 
-            // Handle files or codes based on type
-            if (tag === 'image') {
-                // Validate and append images
-                const MAX_SIZE = 2 * 1024 * 1024; // 2MB
-                const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+            const MAX_SIZE = 2 * 1024 * 1024;
+            const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-                cards.images?.forEach((image) => {
-                    if (!(image instanceof File)) {
-                        throw new Error('Invalid file format');
-                    }
+            // Wrap in array if only one file exists
+            const imageArray = Array.isArray(cards.images) ? cards.images : [cards.images];
 
-                    if (image.size > MAX_SIZE) {
-                        throw new Error(`Image ${image.name} exceeds 2MB limit`);
-                    }
+            imageArray.forEach((image) => {
+                if (!(image instanceof File)) {
+                    throw new Error('Invalid file format');
+                }
 
-                    if (!ALLOWED_TYPES.includes(image.type)) {
-                        throw new Error(`Unsupported image format: ${image.type}`);
-                    }
+                if (image.size > MAX_SIZE) {
+                    throw new Error(`Image ${image.name} exceeds 2MB limit`);
+                }
 
-                    formData.append('images', image);
-                });
-            } else {
-                // Append code details
+                if (!ALLOWED_TYPES.includes(image.type)) {
+                    throw new Error(`Unsupported image format: ${image.type}`);
+                }
+
+                formData.append('images', image); 
+
+            });
+            if (tag === 'code') {
                 formData.append('code', cards.code);
                 if (cards.has_pin === 'yes' && cards.pin) {
                     formData.append('pin', cards.pin);
                 }
             }
 
-            // Submit data
             const res = await AuthPostApi(Apis.transaction.sell_giftcard, formData);
 
             if (res.status !== 201) {
                 throw new Error(res.msg || 'Failed to process gift card');
             }
 
-            // Reset form state
             resetFormState();
-
-            // Show success and redirect
             SuccessAlert(res.msg || 'Gift card submitted successfully');
             navigate('/user/giftcards/orders');
 
@@ -282,6 +277,7 @@ const SellGiftcard = () => {
             setLoading({ status: false, param: '' });
         }
     };
+
 
     // Helper function to reset form state
     const resetFormState = () => {
@@ -339,6 +335,7 @@ const SellGiftcard = () => {
             })
         }
     }, [cards.has_pin])
+
 
     return (
         <Giftcards>
@@ -515,130 +512,130 @@ const SellGiftcard = () => {
                             <div>{selectedCategory?.rate || '--'}/{selectedCategory?.currency}</div>
                         </div>
 
-                        <>
-                            {/* Conditional Rendering based on card_pic */}
-                            {selectedCategory?.card_pic === 'true' ? (
-                                <>
-                                    {/* Image Upload Section */}
-                                    <div className="w-full">
-                                        {/* Upload Interface */}
-                                        <div className="border-2 cursor-pointer border-dashed border-gray-400 rounded-lg p-4 mb-4 text-center  hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                                            <input
-                                                type="file"
-                                                id="giftcard-upload"
-                                                className="hidden"
-                                                accept="image/*"
-                                                multiple
-                                                onChange={(e) => {
-                                                    const files = Array.from(e.target.files || []);
-                                                    setCards({ ...cards, images: [...(cards.images || []), ...files] });
-                                                }}
-                                            />
-                                            <label htmlFor="giftcard-upload" className="flex flex-col items-center justify-center">
-                                                <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                                </svg>
-                                                <p className="font-medium">Click to upload images</p>
-                                                <p className="text-sm text-gray-500">Upload clear pictures of your gift card</p>
-                                            </label>
-                                        </div>
+                        {/* Image Upload Section */}
+                        <div className="w-full">
+                            {/* Upload Interface */}
+                            <div className="mb-2 text-lightgreen font-semibold">Upload Giftcard Image(s)</div>
+                            <div className="border-2 cursor-pointer border-dashed border-gray-400 rounded-lg p-4 mb-4 text-center  hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                <input
+                                    type="file"
+                                    id="giftcard-upload"
+                                    className="hidden"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={(e) => {
+                                        const files = Array.from(e.target.files || []);
+                                        setCards({ ...cards, images: [...(cards.images || []), ...files] });
+                                    }}
+                                />
+                                <label htmlFor="giftcard-upload" className="flex flex-col items-center justify-center">
+                                    <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <p className="font-medium">Click to upload images</p>
+                                    <p className="text-sm text-gray-500">Upload clear pictures of your gift card</p>
+                                </label>
+                            </div>
 
-                                        {/* Uploaded Images Preview */}
-                                        {cards.images?.length > 0 && (
-                                            <div className="w-full mb-4">
-                                                <h4 className="font-bold mb-2">Uploaded Images ({cards.images.length})</h4>
-                                                <div className="flex flex-wrap gap-2 w-full overflow-x-auto p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                                                    {cards.images.map((image, index) => (
-                                                        <div key={index} className="relative w-24 h-24 flex-shrink-0">
-                                                            <img
-                                                                src={image instanceof File ? URL.createObjectURL(image) : image}
-                                                                alt={`Giftcard ${index + 1}`}
-                                                                className="w-full h-full object-cover rounded border border-gray-300"
-                                                            />
-                                                            <button
-                                                                type="button"
-                                                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
-                                                                onClick={() => {
-                                                                    const updatedImages = [...cards.images];
-                                                                    updatedImages.splice(index, 1);
-                                                                    setCards({ ...cards, images: updatedImages });
-                                                                }}
-                                                            >
-                                                                ×
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                            {/* Uploaded Images Preview */}
+                            {cards.images?.length > 0 && (
+                                <div className="w-full mb-4">
+                                    <h4 className="font-bold mb-2">Uploaded Images ({cards.images.length})</h4>
+                                    <div className="flex flex-wrap gap-2 w-full overflow-x-auto p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                        {cards.images.map((image, index) => (
+                                            <div key={index} className="relative w-24 h-24 flex-shrink-0">
+                                                <img
+                                                    src={image instanceof File ? URL.createObjectURL(image) : image}
+                                                    alt={`Giftcard ${index + 1}`}
+                                                    className="w-full h-full object-cover rounded border border-gray-300"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                                                    onClick={() => {
+                                                        const updatedImages = [...cards.images];
+                                                        updatedImages.splice(index, 1);
+                                                        setCards({ ...cards, images: updatedImages });
+                                                    }}
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+
+
+                        {/* E-Code Input Section */}
+                        {selectedCategory?.card_pic !== 'true' &&
+                            <>
+                                <div className="flex items-start gap-2 w-full flex-col">
+                                    <div className="font-bold">Giftcard Code:</div>
+                                    <div className="w-full">
+                                        <input
+                                            className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 uppercase focus:border ${cardError.status ? `border-2 border-${cardError.color}` : 'border border-gray-400'
+                                                } bg-transparent w-full h-fit px-4 lg:text-sm text-base rounded-md`}
+                                            placeholder={`XXXX-XXXX-XXXX-XXXX`}
+                                            type="text"
+                                            onChange={(e) => {
+                                                let value = e.target.value.replace(/[^A-Za-z0-9]/g, '');
+                                                if (selectedCategory?.regrex) {
+                                                    const segmentSize = Number(selectedCategory.regrex);
+                                                    if (!isNaN(segmentSize) && segmentSize > 0) {
+                                                        value = value.match(new RegExp(`.{1,${segmentSize}}`, 'g'))?.join('-') || value;
+                                                    }
+                                                }
+                                                setCards({ ...cards, code: value });
+                                            }}
+                                            name="code"
+                                            value={cards.code}
+                                        />
+                                        {cardError.status && (
+                                            <div className={`text-${cardError.color} text-sm`}>
+                                                {cardError.msg}
                                             </div>
                                         )}
                                     </div>
-                                </>
-                            ) : (
-                                <>
-                                    {/* E-Code Input Section */}
-                                    <div className="flex items-start gap-2 w-full flex-col">
-                                        <div className="font-bold">Giftcard Code:</div>
-                                        <div className="w-full">
-                                            <input
-                                                className={`outline-none focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 uppercase focus:border ${cardError.status ? `border-2 border-${cardError.color}` : 'border border-gray-400'
-                                                    } bg-transparent w-full h-fit px-4 lg:text-sm text-base rounded-md`}
-                                                placeholder={`XXXX-XXXX-XXXX-XXXX`}
-                                                type="text"
-                                                onChange={(e) => {
-                                                    let value = e.target.value.replace(/[^A-Za-z0-9]/g, '');
-                                                    if (selectedCategory?.regrex) {
-                                                        const segmentSize = Number(selectedCategory.regrex);
-                                                        if (!isNaN(segmentSize) && segmentSize > 0) {
-                                                            value = value.match(new RegExp(`.{1,${segmentSize}}`, 'g'))?.join('-') || value;
-                                                        }
-                                                    }
-                                                    setCards({ ...cards, code: value });
-                                                }}
-                                                name="code"
-                                                value={cards.code}
-                                            />
-                                            {cardError.status && (
-                                                <div className={`text-${cardError.color} text-sm`}>
-                                                    {cardError.msg}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
+                                </div>
 
-                                    {/* PIN Selection - Only for e-codes */}
-                                    <div className="flex w-full gap-2">
-                                        <div>Has PIN?</div>
-                                        <select
-                                            onChange={(e) => setCards({ ...cards, has_pin: e.target.value })}
-                                            className='w-1/4 bg-secondary'
-                                            name="has_pin"
-                                            value={cards.has_pin}
-                                        >
-                                            <option value="yes">Yes</option>
-                                            <option value="no">No</option>
-                                        </select>
-                                    </div>
+                                {/* PIN Selection - Only for e-codes */}
+                                <div className="flex w-full gap-2">
+                                    <div>Has PIN?</div>
+                                    <select
+                                        onChange={(e) => setCards({ ...cards, has_pin: e.target.value })}
+                                        className='w-1/4 bg-secondary'
+                                        name="has_pin"
+                                        value={cards.has_pin}
+                                    >
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
 
-                                    {/* PIN Input (conditionally shown) */}
-                                    {cards.has_pin === 'yes' && (
-                                        <div className="flex items-center gap-2">
-                                            <div>Card PIN</div>
-                                            <input
-                                                type="text"
-                                                className="outline-none w-1/2 focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 bg-dark"
-                                                placeholder="XXXXX"
-                                                onChange={(e) => {
-                                                    const value = e.target.value.replace(/[^0-9]/g, '').substring(0, 5);
-                                                    setCards({ ...cards, pin: value });
-                                                }}
-                                                name="pin"
-                                                value={cards.pin}
-                                            />
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                        </>
+                                {/* PIN Input (conditionally shown) */}
+                                {cards.has_pin === 'yes' && (
+                                    <div className="flex items-center gap-2">
+                                        <div>Card PIN</div>
+                                        <input
+                                            type="text"
+                                            className="outline-none w-1/2 focus-within:outline-none focus:outline-none focus:ring-0 focus:border-gray-400 bg-dark"
+                                            placeholder="XXXXX"
+                                            onChange={(e) => {
+                                                const value = e.target.value.replace(/[^0-9]/g, '').substring(0, 5);
+                                                setCards({ ...cards, pin: value });
+                                            }}
+                                            name="pin"
+                                            value={cards.pin}
+                                        />
+                                    </div>
+                                )}
+                            </>
+                        }
+
+
 
                         {/* Continue Button */}
                         <div className="mt-5 w-full">
@@ -670,14 +667,13 @@ const SellGiftcard = () => {
                                         <div className="text-base">Country</div>
                                         <div className="font-bold text-lightgreen">{cards.country}</div>
                                     </div>
-                                    {selectedCategory.card_pic === 'true' ?
 
-                                        <>
-                                            <div className="flex items-center justify-between w-full">
-                                                <div className="text-base">GiftCard Images</div>
-                                                <div className="font-bold text-lightgreen uppercase">({cards.images?.length})</div>
-                                            </div>
-                                        </> :
+                                    <div className="flex items-center justify-between w-full">
+                                        <div className="text-base">GiftCard Images</div>
+                                        <div className="font-bold text-lightgreen uppercase">({cards.images?.length})</div>
+                                    </div>
+
+                                    {selectedCategory.card_pic !== 'true' &&
                                         <>
                                             <div className="flex items-center justify-between w-full">
                                                 <div className="text-base">GiftCard Code</div>

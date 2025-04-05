@@ -60,7 +60,7 @@ exports.UpdateUtils = async (req, res) => {
 
             await utils.save()
 
-            return res.json({ status: 200, msg: 'Rate(s) updated successfully'})
+            return res.json({ status: 200, msg: 'Rate(s) updated successfully' })
         }
 
     } catch (error) {
@@ -1189,7 +1189,7 @@ exports.getCryptoSellsOrders = async (req, res) => {
 exports.closeAndConfirmBuyOrder = async (req, res) => {
     try {
         const { id } = req.params
-        const { tag, message } = req.body
+        const { tag, message, trans_hash } = req.body
         if (!id || !tag) return res.json({ status: 400, msg: 'ID or Tag missing from request' })
         const findBuy = await BuyCrypto.findOne({
             where: { id },
@@ -1208,7 +1208,9 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
 
         //if successful
         if (tag === 'success') {
+            if (!trans_hash) return res.json({ status: 400, msg: "Transaction hash/ID missing" })
             findBuy.status = 'completed'
+            findBuy.trans_hash = trans_hash
             await findBuy.save()
             await Notification.create({
                 user: user.id,
@@ -1909,7 +1911,7 @@ exports.addOrUpdateCryptos = async (req, res) => {
             const findName = await CryptoModel.findOne({ where: { name } })
             if (findName && findName.name !== findCrypto.name) return res.json({ status: 400, msg: 'Crypto wallet already exist' })
             if (isNaN(buy_min) || isNaN(buy_max) || isNaN(sell_min) || isNaN(sell_max) || isNaN(kyc_buymax) || isNaN(kyc_sellmax) || isNaN(gas_fee)) return res.json({ status: 404, msg: `Enter valid numbers` })
-                
+
             const updates = {};
             if (name) updates.name = name;
             if (wallet_add) updates.wallet_add = wallet_add;

@@ -19,6 +19,7 @@ const Mailing = require('../config/emailDesign')
 const slug = require('slug')
 const path = require('path');
 const { Op } = require('sequelize')
+const verifyBankAccount = require('../utils/verifyAccount')
 
 
 exports.CreateAccount = async (req, res) => {
@@ -412,41 +413,52 @@ exports.UpdateProfile = async (req, res) => {
     }
 }
 
+
+
 exports.CreateUpdateBankAccount = async (req, res) => {
     try {
-        const { bank_name, account_number, account_name } = req.body
-        const bank = await Bank.findOne({ where: { user: req.user } })
+        const { bank_name, account_number } = req.body;
+
+        // Check required fields
+        if (!bank_name || !account_number) {
+            return res.json({ status: 404, msg: `Incomplete request found` });
+        }
+
+        // ✅ Verify account via Paystack
+        const result = await verifyBankAccount(account_number, bank_name);
+        if (!result.success) {
+            return res.json({ status: 400, msg: result.msg, error: result.error });
+        }
+
+        const { account_name } = result.data; // Paystack verified name
+
+        // Check if user already has a bank record
+        let bank = await Bank.findOne({ where: { user: req.user } });
 
         if (!bank) {
-            if (!bank_name || !account_number || !account_name) return res.json({ status: 404, msg: `Incomplete request found` })
-
-            await Bank.create({
+            // Create new bank record
+            bank = await Bank.create({
                 user: req.user,
                 bank_name,
                 account_number,
                 account_name
-            })
-        }
-        else {
-            if (bank_name) {
-                bank.bank_name = bank_name
-            }
-            if (account_number) {
-                bank.account_number = account_number
-            }
-            if (account_name) {
-                bank.account_name = account_name
-            }
-            await bank.save()
+            });
+        } else {
+            // Update existing record
+            bank.bank_name = bank_name;
+            bank.account_number = account_number;
+            bank.account_name = account_name;
+            await bank.save();
         }
 
-        const updated = await Bank.findOne({ where: { user: req.user } })
+        return res.json({ status: 200, msg: 'Bank account updated', bank });
 
-        return res.json({ status: 200, msg: 'Bank account updated', bank: updated })
     } catch (error) {
-        return res.json({ status: 500, msg: error.message })
+        console.error("Bank save error:", error.message);
+        return res.json({ status: 500, msg: error.message });
     }
-}
+};
+
 
 exports.GetWalletBankAndUtils = async (req, res) => {
     try {

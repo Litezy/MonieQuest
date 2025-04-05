@@ -271,10 +271,10 @@ exports.GlobalImageUploads = async (images, subfolder, folderId) => {
                 fs.mkdirSync(filePath, { recursive: true });
             }
             const fullPath = path.join(filePath, `${fileName}.jpg`);
-            console.log(`Saving ${field} locally to:`, fullPath);
+            // console.log(`Saving ${field} locally to:`, fullPath);
             await file.mv(fullPath);
             uploadedUrls[field] = `${baseURI}/${subfolder}/${folderId}/${fileName}.jpg`;
-            console.log(`Local URL for ${field}:`, uploadedUrls[field]);
+            // console.log(`Local URL for ${field}:`, uploadedUrls[field]);
         }
     }
 
