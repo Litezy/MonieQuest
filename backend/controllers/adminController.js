@@ -1895,6 +1895,12 @@ exports.addOrUpdateCryptos = async (req, res) => {
         const reqFields = [name, wallet_add, network, symbol, buy_min, buy_max, sell_min, sell_max, gas_fee, kyc_buymax, kyc_sellmax];
         const tags = ['create', 'update', 'delete'];
 
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.exchange_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to add, update or delete crypto' })
+        }
+
         if (!tag) return res.json({ status: 400, msg: "Tag not found" });
         if (!tags.includes(tag)) return res.json({ status: 400, msg: "Invalid Tag Found" });
         if (tag === 'create') {
@@ -2148,6 +2154,13 @@ exports.AddGiftCard = async (req, res) => {
         if (!name) {
             return res.json({ status: 400, msg: 'Giftcard Name missing' });
         }
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.giftcard_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to create gift-card' })
+        }
+
         const findCard = await Card.findOne({ where: { name } });
         if (findCard) {
             return res.json({ status: 400, msg: "Card already added to list" });
@@ -2219,6 +2232,12 @@ exports.UpdateGiftCard = async (req, res) => {
         const { id, name, } = req.body;
         if (!id) return res.json({ status: 400, msg: "ID missing" });
 
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.giftcard_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update gift-card' })
+        }
+
         const findCard = await Card.findOne({ where: { id } });
         if (!findCard) return res.json({ status: 400, msg: "Card ID not found" });
 
@@ -2269,6 +2288,12 @@ exports.DeleteGiftCard = async (req, res) => {
     try {
         const { id } = req.params;
         if (!id) return res.json({ status: 400, msg: "ID missing" });
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.giftcard_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to delete gift-card' })
+        }
 
         const findCard = await Card.findOne({ where: { id } });
         if (!findCard) return res.json({ status: 404, msg: "Card ID not found" });

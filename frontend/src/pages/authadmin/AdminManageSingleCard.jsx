@@ -368,7 +368,7 @@ const AdminManageSingleCard = () => {
                                     {Array.isArray(data?.card_categories) && data?.card_categories.length > 0 ?
 
                                         data?.card_categories.map((card, i) => (
-                                            <div className="flex justify-between items-center p-2 rounded-md border" key={i}>
+                                            <div className="flex md:justify-between md:flex-row flex-col gap-2 items-center p-2 rounded-md border" key={i}>
                                                 <div className="flex gap-1 items-center">
                                                     <div className="">{card?.country}</div>
                                                     <div className="">({card?.card_pic === 'true' ? 'card-pic' : 'E-code'})</div>
