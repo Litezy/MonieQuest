@@ -27,6 +27,7 @@ const AdminManageSingleCard = () => {
         image: null
     })
     const fetchSingleCard = async () => {
+        setLoading({ status: true, val: 'loading' })
         try {
             const res = await AuthGetApi(`${Apis.admin.get_single_card}/${id}`)
             if (res.status !== 200) return ErrorAlert(res.msg)
@@ -36,6 +37,8 @@ const AdminManageSingleCard = () => {
             setCardImage({ img: data?.image, image: null })
         } catch (error) {
             console.log(`error in fetching card`, error)
+        } finally {
+            setLoading({ status: false, val: '' })
         }
     }
 
