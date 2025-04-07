@@ -471,6 +471,7 @@ exports.UpdateProduct = async (req, res) => {
                                 title: `Product submitted declined`,
                                 content: `The Product submitted with the ID (${product.gen_id}) have been successfully declined.`,
                                 url: '/admin/products/all',
+                                status: 'failed'
                             })
                             await Mailing({
                                 subject: 'Product Submitted Declined',
@@ -689,6 +690,8 @@ exports.UpdateKyc = async (req, res) => {
     try {
         const { kyc_id, status, message } = req.body
         if (!kyc_id) return res.json({ status: 404, msg: 'KYC id is required' })
+        const statusArray = ["verified", "failed"]
+        if (!statusArray.includes(status)) return res.json({ status: 404, msg: `Invalid status provided` })
         const kyc = await Kyc.findOne({ where: { id: kyc_id } })
         if (!kyc) return res.json({ status: 404, msg: 'User KYC not found' })
         const kycUser = await User.findOne({ where: { id: kyc.user } })
@@ -726,6 +729,7 @@ exports.UpdateKyc = async (req, res) => {
                 content: message,
                 status: 'failed',
                 url: '/user/profile/kyc',
+                status: 'failed'
             })
 
             await Mailing({
@@ -1261,6 +1265,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                 title: `Credit Failed`,
                 content: `Hi dear, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked failed. Kindly check your email to learn more.`,
                 url: '/user/transactions_history',
+                status: 'failed'
             })
             await Mailing({
                 subject: `Crypto Buy Failed`,
@@ -1280,6 +1285,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                         title: `Crypto Buy Order Failed`,
                         content: `You have failed the crypto buy order payment  with the ID of ${findBuy?.order_no}`,
                         url: '/admin/transactions_history',
+                        status: 'failed'
                     })
 
                     await Mailing({
@@ -1387,6 +1393,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                 title: `Crypto Credit Failed`,
                 content: `Hi dear, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked failed. Kindly check email to learn more.`,
                 url: '/user/transactions_history',
+                status: 'failed'
             })
             await Mailing({
                 subject: `Crypto Credit Failed`,
@@ -1404,6 +1411,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                         title: `Crypto Sell Order Failed`,
                         content: `You have marked the crypto sell order payment  with the ID of ${findSell?.order_no} as failed and user has been notified.`,
                         url: '/admin/transactions_history',
+                        status: 'failed'
                     })
 
                     await Mailing({
@@ -1495,7 +1503,6 @@ exports.creditGiftCustomer = async (req, res) => {
             if (findAdmin.giftcard_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update gift-card orders' })
         }
 
-
         if (tag === 'success') {
             //credit the customer
             findUserWallet.balance = parseFloat(findUserWallet.balance || 0) + parseFloat(amount)
@@ -1555,6 +1562,7 @@ exports.creditGiftCustomer = async (req, res) => {
                 title: `Credit Failed`,
                 content: `Hi dear, Your Gift-Card order with the ID of ${order?.order_no} has been marked as failed. Kindly check your email to learn more.`,
                 url: '/user/transactions_history',
+                status: 'failed'
             })
             await Mailing({
                 subject: `Gift-Card Failed Transaction`,
@@ -1573,6 +1581,7 @@ exports.creditGiftCustomer = async (req, res) => {
                         title: `Gift-Card Order Failed`,
                         content: `You have marked failed to the giftcard order payment with the ID of ${order?.order_no}`,
                         url: '/admin/transactions_history',
+                        status: 'failed'
                     })
 
                     await Mailing({
@@ -1748,6 +1757,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                 title: `Withdrawal request failed`,
                 content: `Your withdrawal request with the ID of (${findWithdrawal?.trans_id}) has been marked failed. Kindly check your email to learn more.`,
                 url: '/user/transactions_history',
+                status: 'failed'
             })
             await Mailing({
                 subject: `Withdrawal Request Failed`,
@@ -1767,6 +1777,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                         title: `Withdrawal request failed`,
                         content: `You have failed the withdrawal request with the ID of (${findWithdrawal?.trans_id})`,
                         url: '/admin/transactions_history',
+                        status: 'failed'
                     })
 
                     await Mailing({
