@@ -63,7 +63,7 @@ const FeatureBlogs = () => {
                                 <div className="text-lg capitalize">Latest articles on {feature === 'personal_finance' ? "Personal Finance" : feature}</div>
                             </div>
                             {featureBlogs.length > 0 ?
-                                <div className="w-full grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+                                <div className="w-full grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-4">
                                     {featureBlogs.map((item, i) => (
                                         <BlogDiv key={i} item={item} />
                                     ))}
