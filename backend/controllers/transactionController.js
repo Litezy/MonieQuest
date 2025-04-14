@@ -158,7 +158,7 @@ exports.SellGift = async (req, res) => {
             if (image.size > maxSize) {
                 return res.json({ status: 400, msg: `Image ${image.name} exceeds 2MB limit` });
             }
-            if(!image.mimetype.startsWith(`image/`)) return res.json({status:400, msg:"Please upload a valid image type"})
+            if (!image.mimetype.startsWith(`image/`)) return res.json({ status: 400, msg: "Please upload a valid image type" })
         }
 
         const imagesToUpload = uploadedImages.map((image, index) => ({
@@ -166,20 +166,20 @@ exports.SellGift = async (req, res) => {
             file: image
         }));
 
-        imageUrls =  await GlobalImageUploads(imagesToUpload,'giftcardOrders',orderId)
+        imageUrls = await GlobalImageUploads(imagesToUpload, 'giftcardOrders', orderId)
         if (tag === 'code') {
             if (!code) return res.json({ status: 400, msg: "Giftcard code is required" });
             if (pin && pin.length < 4) return res.json({ status: 400, msg: "PIN must be at least 4 digits" });
         }
-    //    const imagesTo = JSON.stringify(imageUrls)
-    //     return res.json({ status: 200, msg: "Image upload successful", images:  imagesTo, })
+        //    const imagesTo = JSON.stringify(imageUrls)
+        //     return res.json({ status: 200, msg: "Image upload successful", images:  imagesTo, })
         // Fixed: Handle imageUrls properly based on its structure
         const newsell = await GiftCardSell.create({
             brand,
             amount,
             code: tag === 'code' ? code : null,
             pin: tag === 'code' ? pin : null,
-            images:  imageUrls ?  Object.values(imageUrls) : null,
+            images: imageUrls ? Object.values(imageUrls) : null,
             userid: req.user,
             country,
             order_no: orderId,
@@ -246,6 +246,19 @@ exports.getGiftCardTransactions = async (req, res) => {
         })
         if (!alltrans) return res.json({ status: 404, msg: 'No order history found' })
         return res.json({ status: 200, msg: "fetch success", data: alltrans })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.CompletedGiftCardTransactions = async (req, res) => {
+    try {
+        const completedTrans = await GiftCardSell.findAll({
+            where: { userid: req.user, status: 'completed' },
+            order: [['createdAt', 'DESC']]
+        })
+        if (!completedTrans) return res.json({ status: 404, msg: 'No completed gift-card transactions found' })
+        return res.json({ status: 200, msg: "fetch success", data: completedTrans })
     } catch (error) {
         ServerError(res, error)
     }

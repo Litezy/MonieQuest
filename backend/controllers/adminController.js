@@ -1453,6 +1453,24 @@ exports.getGiftCardOrders = async (req, res) => {
     }
 }
 
+exports.CompletedGiftCardOrders = async (req, res) => {
+    try {
+        const all_orders = await GiftCard.findAll({
+            where: { status: 'completed' },
+            include: [
+                {
+                    model: User, as: 'gift_seller',
+                    attributes: [`id`, `first_name`, `surname`]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+        return res.json({ status: 200, msg: "fetch success", data: all_orders })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
 exports.getSingleGiftCardOrder = async (req, res) => {
     try {
         const { id } = req.params
