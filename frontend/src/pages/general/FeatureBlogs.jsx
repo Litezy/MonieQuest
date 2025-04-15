@@ -65,7 +65,7 @@ const FeatureBlogs = () => {
                             {featureBlogs.length > 0 ?
                                 <div className="w-full grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-4">
                                     {featureBlogs.map((item, i) => (
-                                        <BlogDiv key={i} item={item} />
+                                        <BlogDiv key={i} item={item} className='md:!w-full !w-11/12 !mx-auto' />
                                     ))}
                                 </div>
                                 :

@@ -82,7 +82,7 @@ const Blogs = () => {
                                     {airdropBlogs.length > 0 &&
                                         <div className="flex flex-col gap-4">
                                             <div className="flex items-center md:gap-5 md:justify-normal justify-between">
-                                                <div className='flex gap-3 items-center'>
+                                                <div className='flex gap-3 items-center text-lightgreen font-medium'>
                                                     <div className="text-xl"><GiArrowScope /></div>
                                                     <div className="text-lg">Latest articles on Airdrops</div>
                                                 </div>
@@ -92,7 +92,7 @@ const Blogs = () => {
                                             </div>
                                             <div className="w-full grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-4">
                                                 {airdropBlogs.slice(0, 10).map((item, i) => (
-                                                    <BlogDiv key={i} item={item} />
+                                                    <BlogDiv key={i} item={item} className='md:!w-full !w-11/12 !mx-auto' />
                                                 ))}
                                             </div>
                                         </div>
@@ -100,7 +100,7 @@ const Blogs = () => {
                                     {tradingBlogs.length > 0 &&
                                         <div className="flex flex-col gap-4">
                                             <div className="flex items-center md:gap-5 md:justify-normal justify-between">
-                                                <div className='flex gap-3 items-center'>
+                                                <div className='flex gap-3 items-center text-lightgreen font-medium'>
                                                     <div className="text-xl"><GiArrowScope /></div>
                                                     <div className="text-lg">Latest articles on Trading</div>
                                                 </div>
@@ -110,7 +110,7 @@ const Blogs = () => {
                                             </div>
                                             <div className="w-full grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-4">
                                                 {tradingBlogs.slice(0, 10).map((item, i) => (
-                                                    <BlogDiv key={i} item={item} />
+                                                    <BlogDiv key={i} item={item} className='md:!w-full !w-11/12 !mx-auto' />
                                                 ))}
                                             </div>
                                         </div>
@@ -118,7 +118,7 @@ const Blogs = () => {
                                     {personalFinanceBlogs.length > 0 &&
                                         <div className="flex flex-col gap-4">
                                             <div className="flex items-center md:gap-5 md:justify-normal justify-between">
-                                                <div className='flex gap-3 items-center'>
+                                                <div className='flex gap-3 items-center text-lightgreen font-medium'>
                                                     <div className="text-xl"><GiArrowScope /></div>
                                                     <div className="text-lg">Latest articles on Personal Finance</div>
                                                 </div>
@@ -128,7 +128,7 @@ const Blogs = () => {
                                             </div>
                                             <div className="w-full grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-4">
                                                 {personalFinanceBlogs.slice(0, 10).map((item, i) => (
-                                                    <BlogDiv key={i} item={item} />
+                                                    <BlogDiv key={i} item={item} className='md:!w-full !w-11/12 !mx-auto' />
                                                 ))}
                                             </div>
                                         </div>
