@@ -174,10 +174,6 @@ exports.handleWebhook = async (req, res) => {
             return res.json({ status: 400, msg: "Invalid webhook data" });
         }
 
-        // console.log("Full webhook payload:", JSON.stringify(req.body, null, 2));
-        // console.log("Data object:", JSON.stringify(req.body.data, null, 2));
-        // console.log("Metadata:", JSON.stringify(req.body.data?.metadata, null, 2));
-
         const { event: eventType, data } = event;
         const { reference } = data;
         const narration = data?.metadata?.narration;
@@ -330,50 +326,50 @@ exports.InitializeProductBuyPayment = async (req, res) => {
 
         const data = response.data;
 
-        // await Mailing({
-        //     subject: 'New Order Placed',
-        //     eTitle: 'Order placed',
-        //     eBody: `
-        //        <div style="color: white;">
-        //            You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s). A total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} is to be made. If you didn’t proceed from the website to make payments, click the link below to continue: <a href="${data.data.authorization_url}" style="text-decoration: underline; color: #00fe5e">click here</a>
-        //              <br>
-        //            <span style="font-style: italic; margin-top: 10px; display: block; color: white;">Note:</span>
-        //              NB: If you did proceed from the website to make payments, kindly ignore this email. 
-        //            If you didn't, kindly follow the link above as it will expire in 20 minutes.
-        //         </div>`,
+        await Mailing({
+            subject: 'New Order Placed',
+            eTitle: 'Order placed',
+            eBody: `
+               <div style="color: white;">
+                   You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s). A total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} is to be made. If you didn’t proceed from the website to make payments, click the link below to continue: <a href="${data.data.authorization_url}" style="text-decoration: underline; color: #00fe5e">click here</a>
+                     <br>
+                   <span style="font-style: italic; margin-top: 10px; display: block; color: white;">Note:</span>
+                     NB: If you did proceed from the website to make payments, kindly ignore this email. 
+                   If you didn't, kindly follow the link above as it will expire in 20 minutes.
+                </div>`,
 
-        //     account: buyer
-        // });
+            account: buyer
+        });
 
         const formattedTime = formatToUserTimezone(productOrder.createdAt);
         const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } });
 
-        // if (admins && admins.length > 0) {
-        //     admins.map(async ele => {
-        //         await Notification.create({
-        //             user: ele.id,
-        //             title: 'Product order alert',
-        //             content: `Hello Admin, a new product order with ID (#${productOrder.gen_id}) for ${productsArray.length} product(s) totaling ${nairaSign}${productOrder.amount_paid.toLocaleString()} has been initialized. Order was placed on ${moment(productOrder.createdAt).format('DD-MM-yyyy')} at ${formattedTime}`,
-        //             url: '/admin/products/orders',
-        //         });
+        if (admins && admins.length > 0) {
+            admins.map(async ele => {
+                await Notification.create({
+                    user: ele.id,
+                    title: 'Product order alert',
+                    content: `Hello Admin, a new product order with ID (#${productOrder.gen_id}) for ${productsArray.length} product(s) totaling ${nairaSign}${productOrder.amount_paid.toLocaleString()} has been initialized. Order was placed on ${moment(productOrder.createdAt).format('DD-MM-yyyy')} at ${formattedTime}`,
+                    url: '/admin/products/orders',
+                });
 
-        //         await Mailing({
-        //             subject: 'Product Order Alert',
-        //             eTitle: 'Product order placed',
-        //             eBody: `
-        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">order ID:</span><span style="padding-left: 1rem">#${productOrder.gen_id}</span></div>
-        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">${productsArray.length}</span></div>
-        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">amount to be paid:</span><span style="padding-left: 1rem">${nairaSign}${productOrder.amount_paid.toLocaleString()}</span></div>
-        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment method:</span><span style="padding-left: 1rem">Paystack</span></div>
-        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment status:</span><span style="padding-left: 1rem">${productOrder.status}</span></div>
-        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">buyer's email:</span><span style="padding-left: 1rem">${productOrder.email_address}</span></div>
-        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">date:</span><span style="padding-left: 1rem">${moment(productOrder.createdAt).format('DD-MM-yyyy')}</span></div>
-        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">time:</span><span style="padding-left: 1rem">${formattedTime}</span></div>
-        //                 <div style="color:white ;margin-top: 1rem">See more details <a href='${webURL}/admin/products/orders' style="text-decoration: underline; color: #00fe5e">here</a></div>`,
-        //             account: ele
-        //         });
-        //     });
-        // }
+                await Mailing({
+                    subject: 'Product Order Alert',
+                    eTitle: 'Product order placed',
+                    eBody: `
+                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">order ID:</span><span style="padding-left: 1rem">#${productOrder.gen_id}</span></div>
+                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">${productsArray.length}</span></div>
+                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">amount to be paid:</span><span style="padding-left: 1rem">${nairaSign}${productOrder.amount_paid.toLocaleString()}</span></div>
+                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment method:</span><span style="padding-left: 1rem">Paystack</span></div>
+                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment status:</span><span style="padding-left: 1rem">${productOrder.status}</span></div>
+                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">buyer's email:</span><span style="padding-left: 1rem">${productOrder.email_address}</span></div>
+                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">date:</span><span style="padding-left: 1rem">${moment(productOrder.createdAt).format('DD-MM-yyyy')}</span></div>
+                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">time:</span><span style="padding-left: 1rem">${formattedTime}</span></div>
+                        <div style="color:white ;margin-top: 1rem">See more details <a href='${webURL}/admin/products/orders' style="text-decoration: underline; color: #00fe5e">here</a></div>`,
+                    account: ele
+                });
+            });
+        }
 
         return res.json({ status: 200, msg: "Product payment initialized", data });
 
