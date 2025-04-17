@@ -14,7 +14,7 @@ const cloudinary = require('cloudinary').v2
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const otpGenerator = require('otp-generator')
-const { webName, webShort, webURL, ServerError, GlobalDeleteImage, GlobalImageUploads, GlobalDeleteSingleImage, GoogleImageUpload } = require('../utils/utils')
+const { webName, webShort, webURL, ServerError, GlobalDeleteImage, GlobalImageUploads, GlobalDeleteSingleImage, GoogleImageUpload, formatToUserTimezone } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const slug = require('slug')
 const path = require('path');
@@ -60,6 +60,8 @@ exports.CreateAccount = async (req, res) => {
         }
 
         const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        const formattedTime = formatToUserTimezone(user.createdAt)
+
         if (admins) {
             admins.map(async ele => {
 
@@ -74,7 +76,7 @@ exports.CreateAccount = async (req, res) => {
                     subject: 'New User Alert',
                     eTitle: `New user joins ${webShort}`,
                     eBody: `
-                     <div>Hello Admin, you have a new user as ${user.first_name} ${user.surname} joins ${webName} today; ${moment(user.createdAt).format('DD-MM-yyyy')} / ${moment(user.createdAt).format('h:mm A')}.</div> 
+                     <div>Hello Admin, you have a new user as ${user.first_name} ${user.surname} joins ${webName} today; ${moment(user.createdAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                     account: ele,
                 })
@@ -152,6 +154,8 @@ exports.continueWithGoogle = async (req, res) => {
             });
 
             const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+            const formattedTime = formatToUserTimezone(newUser.createdAt)
+
             if (admins) {
                 admins.map(async (ele) => {
                     await Notification.create({
@@ -165,7 +169,7 @@ exports.continueWithGoogle = async (req, res) => {
                         subject: 'New User Alert',
                         eTitle: `New user joins ${webShort}`,
                         eBody: `
-                            <div>Hello Admin, you have a new user as ${newUser.first_name} ${newUser.surname} joins ${webName} today via Google sign up; ${moment(newUser.createdAt).format('DD-MM-yyyy')} / ${moment(newUser.createdAt).format('h:mm A')}.</div>
+                            <div>Hello Admin, you have a new user as ${newUser.first_name} ${newUser.surname} joins ${webName} today via Google sign up; ${moment(newUser.createdAt).format('DD-MM-yyyy')} / ${formattedTime}.</div>
                         `,
                         account: ele,
                     });
@@ -526,6 +530,8 @@ exports.CreateUpdateKYC = async (req, res) => {
             })
 
             const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+            const formattedTime = formatToUserTimezone(kyc.createdAt)
+
             if (admins) {
                 admins.map(async ele => {
 
@@ -540,7 +546,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                         subject: `KYC Submission Alert`,
                         eTitle: `New KYC uploaded`,
                         eBody: `
-                          <div>Hello Admin, ${user.first_name} ${user.surname} just submitted KYC details today ${moment(kyc.createdAt).format('DD-MM-yyyy')} / ${moment(kyc.createdAt).format('h:mm A')} verify authenticity <a href='${webURL}/admin/all_users' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello Admin, ${user.first_name} ${user.surname} just submitted KYC details today ${moment(kyc.createdAt).format('DD-MM-yyyy')} / ${formattedTime} verify authenticity <a href='${webURL}/admin/all_users' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: ele
                     })
@@ -587,6 +593,8 @@ exports.CreateUpdateKYC = async (req, res) => {
             })
 
             const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+            const formattedTime = formatToUserTimezone(kyc.updatedAt)
+
             if (admins) {
                 admins.map(async ele => {
 
@@ -601,7 +609,7 @@ exports.CreateUpdateKYC = async (req, res) => {
                         subject: `KYC Re-upload Alert`,
                         eTitle: `KYC re-uploaded`,
                         eBody: `
-                          <div>Hello Admin, ${user.first_name} ${user.surname} re-uploaded KYC details today ${moment(kyc.updatedAt).format('DD-MM-yyyy')} / ${moment(kyc.updatedAt).format('h:mm A')}  verify authenticity <a href='${webURL}/admin-controls/users' style="text-decoration: underline; color: #00fe5e">here</a></div>
+                          <div>Hello Admin, ${user.first_name} ${user.surname} re-uploaded KYC details today ${moment(kyc.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}  verify authenticity <a href='${webURL}/admin-controls/users' style="text-decoration: underline; color: #00fe5e">here</a></div>
                         `,
                         account: ele
                     })

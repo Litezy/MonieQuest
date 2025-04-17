@@ -14,7 +14,7 @@ const Kyc = require('../models').kyc
 const GiftCard = require('../models').giftCards
 const Bank_Withdrawals = require('../models').withdrawals
 const Comment = require('../models').comments
-const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, GlobalDeleteImage, GlobalImageUploads, GlobalDeleteMultiImages, GlobalDeleteSingleImage } = require('../utils/utils')
+const { webName, webURL, ServerError, nairaSign, dollarSign, UploadBlogImages, GlobalDeleteImage, GlobalImageUploads, GlobalDeleteMultiImages, GlobalDeleteSingleImage, formatToUserTimezone } = require('../utils/utils')
 const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
@@ -127,12 +127,13 @@ exports.CreateAirdrop = async (req, res) => {
                 url: '/admin/airdrops/all',
             })
 
+            const formattedTime = formatToUserTimezone(newAirdrop.createdAt)
             await Mailing({
                 subject: 'Airdrop Creation Alert',
                 eTitle: `New airdrop created`,
                 eBody:
                     `
-                     <div>Hello Admin, A new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}) has just been created today; ${moment(newAirdrop.createdAt).format('DD-MM-YYYY')} / ${moment(newAirdrop.createdAt).format('h:mm a')}. See more details <a href='${webURL}/admin/airdrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                     <div>Hello Admin, A new airdrop (${newAirdrop.title}) with the ID (${newAirdrop.gen_id}) has just been created today; ${moment(newAirdrop.createdAt).format('DD-MM-YYYY')} / ${formattedTime}. See more details <a href='${webURL}/admin/airdrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
                     `
                 ,
                 account: superAdmin,
@@ -237,12 +238,14 @@ exports.UpdateAirdrop = async (req, res) => {
                 url: '/admin/airdrops/all',
             })
 
+            const formattedTime = formatToUserTimezone(airdrop.updatedAt)
+
             await Mailing({
                 subject: 'Airdrop Update Alert',
                 eTitle: `${airdrop.title} airdrop updated`,
                 eBody:
                     `
-                 <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated today; ${moment(airdrop.updatedAt).format('DD-MM-YYYY')} / ${moment(airdrop.updatedAt).format('h:mm a')}. See more details <a href='${webURL}/admin/airdrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                 <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been updated today; ${moment(airdrop.updatedAt).format('DD-MM-YYYY')} / ${formattedTime}. See more details <a href='${webURL}/admin/airdrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
                 `,
                 account: superAdmin,
             })
@@ -338,12 +341,14 @@ exports.DeleteClosedAirdrop = async (req, res) => {
                 url: '/admin/airdrops/all',
             })
 
+            const deletionTime = formatToUserTimezone(new Date());
+
             await Mailing({
                 subject: 'Airdrop Deletion Alert',
                 eTitle: `${airdrop.title} airdrop deleted`,
                 eBody:
                     `
-                     <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted today; ${moment(airdrop.updatedAt).format('DD-MM-YYYY')} / ${moment(airdrop.updatedAt).format('h:mm a')}. See more details <a href='${webURL}/admin/airdrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                     <div>Hello Admin, ${airdrop.title} airdrop with the ID (${airdrop.gen_id}) has just been deleted today; ${moment(airdrop.updatedAt).format('DD-MM-YYYY')} / ${deletionTime}. See more details <a href='${webURL}/admin/airdrops/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
                     `,
                 account: superAdmin,
             })
@@ -420,6 +425,7 @@ exports.UpdateProduct = async (req, res) => {
                         `,
                         account: user
                     })
+                    const formattedTime = formatToUserTimezone(product.updatedAt)
 
                     const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
                     if (admins) {
@@ -435,7 +441,7 @@ exports.UpdateProduct = async (req, res) => {
                                 subject: 'Product Submitted Approved',
                                 eTitle: `Product Approval`,
                                 eBody: `
-                                <div>Hello Admin, The Product submitted with the ID (${product.gen_id}) have been successfully approved, today ${moment(product.updatedAt).format('DD-MM-yyyy')} / ${moment(product.updatedAt).format('h:mm A')}. See more details <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                                <div>Hello Admin, The Product submitted with the ID (${product.gen_id}) have been successfully approved, today ${moment(product.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}. See more details <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
                                `,
                                 account: ele
                             })
@@ -461,6 +467,7 @@ exports.UpdateProduct = async (req, res) => {
                         `,
                         account: user
                     })
+                    const formattedTime = formatToUserTimezone(product.updatedAt)
 
                     const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
                     if (admins) {
@@ -476,7 +483,7 @@ exports.UpdateProduct = async (req, res) => {
                                 subject: 'Product Submitted Declined',
                                 eTitle: `Product Declined`,
                                 eBody: `
-                                <div>Hello Admin, The Product submitted with the ID (${product.gen_id}) have been successfully declined, today ${moment(product.updatedAt).format('DD-MM-yyyy')} / ${moment(product.updatedAt).format('h:mm A')}. See more details <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                                <div>Hello Admin, The Product submitted with the ID (${product.gen_id}) have been successfully declined, today ${moment(product.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}. See more details <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
                                `,
                                 account: ele
                             })
@@ -1222,7 +1229,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                 subject: `Crypto buy Credit Alert`,
                 eTitle: `Credit Alert`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked paid with ${dollarSign}${findBuy.amount?.toLocaleString()}} worth of ${findBuy.crypto_currency} sent to the wallet address ending in ****${findBuy?.wallet_address.slice(-5)}. Kindly verify this transaction by checking your <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">wallet</a>. Thank you for trading with us.
+                  <div>Hello ${user.first_name}, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked paid with ${dollarSign}${findBuy.amount?.toLocaleString()} worth of ${findBuy.crypto_currency} sent to the wallet address ending in ****${findBuy?.wallet_address.slice(-5)}. Kindly verify this transaction by checking your <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">wallet</a>. Thank you for trading with us.
                 `,
                 account: user
             })
@@ -1237,12 +1244,13 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                         content: `You have completed the crypto buy order payment  with the ID of ${findBuy?.order_no}`,
                         url: '/admin/transactions_history',
                     })
+                    const formattedTime = formatToUserTimezone(findBuy.updatedAt)
 
                     await Mailing({
                         subject: 'Order Completed',
                         eTitle: `Crypto Buy Order `,
                         eBody: `
-                     <div>Hello Admin, you have completed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${moment(findBuy.updatedAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have completed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                         account: ele,
                     })
@@ -1281,12 +1289,13 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                         content: `You have failed the crypto buy order payment  with the ID of ${findBuy?.order_no}`,
                         url: '/admin/transactions_history',
                     })
+                    const formattedTime = formatToUserTimezone(findBuy.updatedAt)
 
                     await Mailing({
                         subject: 'Order Failed',
                         eTitle: `Crypto Buy Order Failed `,
                         eBody: `
-                     <div>Hello Admin, you have failed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${moment(findBuy.updatedAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have failed the crypto buy order payment  with the ID of ${findBuy?.order_no} today; ${moment(findBuy.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                         account: ele,
                     })
@@ -1342,13 +1351,14 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                 content: `Hi dear, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked paid. Kindly check your  new balance.`,
                 url: '/user/dashboard',
             })
-            const formattedAmount = parseInt(findSell?.amount).toLocaleString("en-US");
+            const newAmt = parseFloat(findSell.amount) * parseFloat(findSell.rate)
+            const formattedAmount = parseInt(newAmt).toLocaleString("en-US");
 
             await Mailing({
                 subject: `Crypto Credit Alert`,
                 eTitle: `Credit Alert`,
                 eBody: `
-                  <div>Hello ${user.first_name}, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked paid with the sum of ${nairaSign}${formattedAmount} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading with us.</div>
+                  <div>Hello ${user.first_name}, Your crypto sell order with the ID of ${findSell?.order_no} has been marked paid with the sum of ${nairaSign}${formattedAmount} credited to your balance. Kindly get back to your account to see your new <a href='${webURL}/user/dashboard' style="text-decoration: underline; color: #00fe5e">balance</a>. Thank you for trading with us.</div>
                 `,
                 account: user
             })
@@ -1363,12 +1373,13 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                         content: `You have completed the crypto sell order payment  with the ID of ${findSell?.order_no}`,
                         url: '/admin/transactions_history',
                     })
+                    const formattedTime = formatToUserTimezone(findSell.updatedAt)
 
                     await Mailing({
                         subject: 'Order Completed',
                         eTitle: `Crypto Sell Order `,
                         eBody: `
-                     <div>Hello Admin, you have completed the crypto sell order payment  with the ID of ${findSell?.order_no} and amount of ${nairaSign}${formattedAmount} today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updatedAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have completed the crypto sell order payment  with the ID of ${findSell?.order_no} and amount of ${nairaSign}${formattedAmount} today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                         account: ele,
                     })
@@ -1405,12 +1416,13 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                         content: `You have marked the crypto sell order payment  with the ID of ${findSell?.order_no} as failed and user has been notified.`,
                         url: '/admin/transactions_history',
                     })
+                    const formattedTime = formatToUserTimezone(findSell.updatedAt)
 
                     await Mailing({
                         subject: 'Order Failed',
                         eTitle: `Crypto Sell Order Failed`,
                         eBody: `
-                     <div>Hello Admin, you have marked the crypto sell order payment  with the ID of ${findSell?.order_no} as failed today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${moment(findSell.updateddAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have marked the crypto sell order payment  with the ID of ${findSell?.order_no} as failed today; ${moment(findSell.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                         account: ele,
                     })
@@ -1528,12 +1540,13 @@ exports.creditGiftCustomer = async (req, res) => {
                         content: `You have completed the giftcard order payment with the ID of ${order?.order_no}`,
                         url: '/admin/transactions_history',
                     })
+                    const formattedTime = formatToUserTimezone(order.updatedAt)
 
                     await Mailing({
                         subject: 'Order Completed',
                         eTitle: `Gift-Card Order`,
                         eBody: `
-                     <div>Hello Admin, you have completed the giftcard order payment with the ID of ${order?.order_no} and the sum of ${nairaSign}${formattedAmount} today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have completed the giftcard order payment with the ID of ${order?.order_no} and the sum of ${nairaSign}${formattedAmount} today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                         account: ele,
                     })
@@ -1574,12 +1587,13 @@ exports.creditGiftCustomer = async (req, res) => {
                         content: `You have marked failed to the giftcard order payment with the ID of ${order?.order_no}`,
                         url: '/admin/transactions_history',
                     })
+                    const formattedTime = formatToUserTimezone(order.updatedAt)
 
                     await Mailing({
                         subject: 'Gift-Card Order Failed`',
                         eTitle: `Gift-Card Order`,
                         eBody: `
-                     <div>Hello Admin, you have marked failed to the giftcard order payment with the ID of ${order?.order_no}  today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${moment(order.updateddAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have marked failed to the giftcard order payment with the ID of ${order?.order_no}  today; ${moment(order.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                         account: ele,
                     })
@@ -1724,12 +1738,13 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                         content: `You have completed the withdrawal requested payment with the ID of (${findWithdrawal?.trans_id})`,
                         url: '/admin/transactions_history',
                     })
+                    const formattedTime = formatToUserTimezone(findWithdrawal.updatedAt)
 
                     await Mailing({
                         subject: `Withdrawal Request Completed`,
                         eTitle: `Withdrawal requested completed`,
                         eBody: `
-                     <div>Hello Admin, you have completed the withdrawal request payment with the ID of ${findWithdrawal?.trans_id} today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${moment(findWithdrawal.updatedAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have completed the withdrawal request payment with the ID of ${findWithdrawal?.trans_id} today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                         account: ele,
                     })
@@ -1768,12 +1783,13 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                         content: `You have failed the withdrawal request with the ID of (${findWithdrawal?.trans_id})`,
                         url: '/admin/transactions_history',
                     })
+                    const formattedTime = formatToUserTimezone(newAirdrop.updatedAt)
 
                     await Mailing({
                         subject: 'Withdrawal Request Failed',
                         eTitle: `Withdrawal request failed `,
                         eBody: `
-                     <div>Hello Admin, you have failed the withdrawal request payment with the ID of (${findWithdrawal?.trans_id}) today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${moment(findWithdrawal.updatedAt).format('h:mm a')}.</div> 
+                     <div>Hello Admin, you have failed the withdrawal request payment with the ID of (${findWithdrawal?.trans_id}) today; ${moment(findWithdrawal.updatedAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                         account: ele,
                     })

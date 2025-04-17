@@ -6,6 +6,7 @@ const fs = require('fs')
 exports.webURL = 'https://moniequest-front.vercel.app/'
 const cloudinary = require('cloudinary').v2
 const axios = require('axios')
+const moment = require('moment-timezone') 
 
 exports.Socials = {
     fb: 'https://www.facebook.com/profile.php?id=61571510583455',
@@ -15,10 +16,26 @@ exports.Socials = {
 }
 
 exports.dollarSign = '$'
-exports.nairaSign = '₦'
+exports.nairaSign = '₦' 
 
-exports.ServerError = (res, error) => {
-    res.status(500).json({ error: error.message, stack: '`sorry something went wrong on our end' })
+
+
+
+exports.formatToUserTimezone = (dateInput = new Date(), format = 'hh:mm a') => {
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return moment(dateInput).tz(userTimezone).format(format);
+  }
+
+  exports.ServerError = (res, error) => {
+    if (!res) {
+        console.error("Response object is missing.");
+        return;
+    }
+    return res.json({
+        status: 500,
+        error: error.message,
+        stack: 'sorry something went wrong on our end'
+    });
 }
 
 

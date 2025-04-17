@@ -145,7 +145,8 @@ const products_urls = {
 const paystack = 'api/paystack/'
 const paystack_urls = {
     buy_crypto: paystack + 'initialize_buy_payment',
-    admin_transfer: paystack + "admin_transfer"
+    admin_transfer: paystack + "admin_transfer",
+    purchase_products: paystack + 'initialize_product_purchase',
 }
 export const Apis = {
     user: user_urls,

@@ -1,4 +1,4 @@
-const { ServerError, nairaSign, GlobalImageUploads } = require('../utils/utils')
+const { ServerError, nairaSign, GlobalImageUploads, formatToUserTimezone } = require('../utils/utils')
 const User = require('../models').users
 const CryptoBuyModel = require(`../models`).exchangeBuys
 const CryptoSellModel = require(`../models`).exchangeSells
@@ -44,7 +44,10 @@ exports.BuyCrypto = async (req, res) => {
              <div style="margin-top: 1.5rem">Your crypto buy order with the ID: ${orderId} has been created, kindly proceed with making payments to the bank details made available on the order. Thank you for choosing us.</div>
             `,
             account: findUser,
+
         })
+        const formattedTime = formatToUserTimezone(newbuy.createdAt)
+
         const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
         if (admins.length > 0) {
             admins.map(async admin => {
@@ -59,7 +62,7 @@ exports.BuyCrypto = async (req, res) => {
                     subject: 'New Crypto Buy Order',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                     <div>Hi Admin, You have a crypto buy order with the ID: ${orderId}, from user ${findUser.first_name} pending payments from user. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${moment(newbuy.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, You have a crypto buy order with the ID: ${orderId}, from user ${findUser.first_name} pending payments from user. ${moment(newbuy.createdAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                     account: admin,
                 })
@@ -87,7 +90,7 @@ exports.SellCrypto = async (req, res) => {
             rate,
             trans_hash,
             userid: req.user,
-            order_no: orderId
+            order_no: orderId 
         })
         await Notify.create({
             user: req.user, title: 'crypto sell order', content: `Your crypto sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.  `, url: `/user/transactions_history`
@@ -102,6 +105,8 @@ exports.SellCrypto = async (req, res) => {
             account: findUser,
         })
         const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        const formattedTime = formatToUserTimezone(newsell.createdAt)
+
         if (admins.length > 0) {
             admins.map(async admin => {
 
@@ -115,7 +120,7 @@ exports.SellCrypto = async (req, res) => {
                     subject: 'New Crypto Sell Order',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                     <div>Hi Admin, You have a crypto sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newsell.createdAt).format('DD-MM-yyyy')} / ${moment(newsell.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, You have a crypto sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newsell.createdAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                     account: admin,
                 })
@@ -206,6 +211,8 @@ exports.SellGift = async (req, res) => {
         });
 
         const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } });
+        const formattedTime = formatToUserTimezone(newsell.createdAt)
+
         if (admins.length > 0) {
             admins.map(async admin => {
                 await Notify.create({
@@ -218,7 +225,7 @@ exports.SellGift = async (req, res) => {
                     subject: 'New Giftcard Sell Order',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                        <div>Hi Admin, You have a giftcard sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newsell.createdAt).format('DD-MM-yyyy')} / ${moment(newsell.createdAt).format('h:mm')}.</div> 
+                        <div>Hi Admin, You have a giftcard sell order with the ID: ${orderId}, from user ${findUser.first_name}. ${moment(newsell.createdAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                     account: admin,
                 });
@@ -328,6 +335,8 @@ exports.completeABuyPayment = async (req, res) => {
         })
 
         const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        const formattedTime = formatToUserTimezone(findBuyId.createdAt)
+
         if (admins.length > 0) {
             admins.map(async admin => {
 
@@ -341,7 +350,7 @@ exports.completeABuyPayment = async (req, res) => {
                     subject: 'Crypto Buy Order Marked as Paid',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been marked paid, kindly confirm from your bank and release crypto for user ${findUser.first_name}. ${moment(findBuyId.createdAt).format('DD-MM-yyyy')} / ${moment(findBuyId.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been marked paid, kindly confirm from your bank and release crypto for user ${findUser.first_name}. ${moment(findBuyId.createdAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                     account: admin,
                 })
@@ -377,6 +386,8 @@ exports.cancelOrder = async (req, res) => {
             account: findUser,
         })
 
+        const formattedTime = formatToUserTimezone(findBuyId.createdAt)
+
         const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
         if (admins.length > 0) {
             admins.map(async admin => {
@@ -391,7 +402,7 @@ exports.cancelOrder = async (req, res) => {
                     subject: 'Crypto Buy Order canceled',
                     eTitle: `From User ${findUser.first_name}`,
                     eBody: `
-                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by user. ${moment(findBuyId.createdAt).format('DD-MM-yyyy')} / ${moment(findBuyId.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, The crypto buy order with the ID: ${findBuyId.order_no} has been canceled by user. ${moment(findBuyId.createdAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                     account: admin,
                 })
@@ -425,7 +436,7 @@ exports.requestWithdrawal = async (req, res) => {
         const transId = nanoid()
         const withdrawal = await BankWithdrawal.create({ bank_name, trans_id: transId, userid: req.user, account_number, bank_holder, amount, bank_code })
 
-        const formattedAmt = amount.toLocaleString()
+        const formattedAmt = parseInt(amount).toLocaleString("en-US");
 
         await Notify.create({
             user: req.user, title: 'Withdrawal Request', content: `You placed a bank withdrawal of NGN${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `, url: `/user/bank_withdrawal`
@@ -442,6 +453,8 @@ exports.requestWithdrawal = async (req, res) => {
         })
 
         const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
+        const formattedTime = formatToUserTimezone(withdrawal.createdAt)
+
         if (admins.length > 0) {
             admins.map(async admin => {
 
@@ -455,7 +468,7 @@ exports.requestWithdrawal = async (req, res) => {
                     subject: 'Bank Withdrawal Request',
                     eTitle: `From User ${user.first_name}`,
                     eBody: `
-                     <div>Hi Admin, A bank withdrawal request with the transaction ID of: ${transId} has been made, kindly review and credit customer ${user.first_name}. ${moment(withdrawal.createdAt).format('DD-MM-yyyy')} / ${moment(withdrawal.createdAt).format('h:mm')}.</div> 
+                     <div>Hi Admin, A bank withdrawal request with the transaction ID of: ${transId} has been made, kindly review and credit customer ${user.first_name}. ${moment(withdrawal.createdAt).format('DD-MM-yyyy')} / ${formattedTime}.</div> 
                     `,
                     account: admin,
                 })

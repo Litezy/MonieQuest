@@ -7,7 +7,7 @@ const Mailing = require('../config/emailDesign')
 const otpGenerator = require('otp-generator')
 const slug = require('slug')
 const fs = require('fs')
-const { webURL, nairaSign, GlobalImageUploads } = require('../utils/utils')
+const { webURL, nairaSign, GlobalImageUploads, formatToUserTimezone } = require('../utils/utils')
 const moment = require('moment')
 const { Op } = require('sequelize')
 
@@ -67,12 +67,14 @@ exports.SubmitProduct = async (req, res) => {
                     content: `Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the ID (${product.gen_id}), please confirm if it meets the requirements.`,
                     url: '/admin/products/all',
                 })
+                const formattedTime = formatToUserTimezone(product.createdAt)
+
 
                 await Mailing({
                     subject: 'Product Submission Alert',
                     eTitle: `New product submitted`,
                     eBody: `
-                     <div>Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the ID (${product.gen_id}), today ${moment(product.createdAt).format('DD-MM-yyyy')} / ${moment(product.createdAt).format('h:mm a')}. Confirm if it meets the requirements <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
+                     <div>Hello Admin, ${user.first_name} ${user.surname} just submitted a product with the ID (${product.gen_id}), today ${moment(product.createdAt).format('DD-MM-yyyy')} / ${formattedTime}. Confirm if it meets the requirements <a href='${webURL}/admin/products/all' style="text-decoration: underline; color: #00fe5e">here</a></div> 
                     `,
                     account: ele
                 })
@@ -170,11 +172,12 @@ exports.ProductOrder = async (req, res) => {
         const buyer = {
             email: productOrder.email_address
         }
+        const formattedTime = formatToUserTimezone(productOrder.createdAt)
         await Mailing({
             subject: 'New Order Placed',
             eTitle: `Order placed`,
             eBody: `
-             <div>You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${moment(productOrder.createdAt).format('h:mm A')}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
+             <div>You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} payment made via bank transfer, today ${moment(productOrder.createdAt).format('DD-MM-yyyy')} / ${formattedTime}. Payment is being verified, keep an eye on your email as we'll contact you from here.</div> 
             `,
             account: buyer
         })
@@ -190,6 +193,8 @@ exports.ProductOrder = async (req, res) => {
                     url: '/admin/products/orders',
                 })
 
+                const formattedTime = formatToUserTimezone(productOrder.createdAt)
+
                 await Mailing({
                     subject: 'Product Order Alert',
                     eTitle: `Product order placed`,
@@ -201,7 +206,7 @@ exports.ProductOrder = async (req, res) => {
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment status:</span><span style="padding-left: 1rem">${productOrder.status}</span></div>
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">buyer's email:</span><span style="padding-left: 1rem">${productOrder.email_address}</span></div>
                      <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">date:</span><span style="padding-left: 1rem">${moment(productOrder.createdAt).format('DD-MM-yyyy')}</span></div>
-                     <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">time:</span><span style="padding-left: 1rem">${moment(productOrder.createdAt).format('h:mm A')}</span></div>
+                     <div style="font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">time:</span><span style="padding-left: 1rem">${formattedTime}</span></div>
                      <div style="margin-top: 1rem">See more details of this transaction <a href='${webURL}/admin/products/orders' style="text-decoration: underline; color: #00fe5e">here</a></div>
                     `,
                     account: ele

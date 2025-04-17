@@ -80,7 +80,9 @@ const AdminFilterComments = () => {
                                 <div key={index} className="bg-white text-dark shadow-md rounded-md p-5 mt-3">
                                     <div className="flex items-start flex-col md:flex-row gap-2 justify-between">
                                         <div className="w-full md:w-5/6">
-                                            <h1 className="text-lg font-bold">{comment.username}</h1>
+                                            <h1 className="text-base">Username: <span className='text-lg font-bold'>{comment.username}</span></h1>
+                                            <h1 className="text-base">Email: <span className='text-lg font-bold'>{comment.email_address}</span></h1>
+                                            <h1 className="text-base">Phone Number: <span className='text-lg font-bold'>{comment.phone_number || 'not submmitted'}</span></h1>
                                             <p className="text-sm">{comment.content}</p>
                                         </div>
                                         <button onClick={() => { setModal(true); setCommentId(comment.id) }} className='w-fit px-4 py-1.5 bg-red-600 text-white rounded-md'>Delete</button>

@@ -3,15 +3,157 @@ const BuyCrypto = require('../models').exchangeBuys;
 const BankWithdraw = require('../models').withdrawals
 const Wallet = require('../models').wallets
 const User = require('../models').users;
-const { ServerError } = require('../utils/utils');
+const { ServerError, formatToUserTimezone, webURL } = require('../utils/utils');
 require('dotenv').config();
 const secret = process.env.PAYSTACK_SECRET;
 const axios = require('axios');
 const otpGenerator = require('otp-generator');
+const Product = require('../models').products
+const ProductOrder = require('../models').productOrders
 const { sequelize } = require('../models');
 const PAYSTACK_URL = 'https://api.paystack.co';
+const moment = require('moment');
+const Mailing = require('../config/emailDesign');
+const { Op } = require('sequelize');
+const Notification = require('../models').notifications
+
+const confirmOrDeclineProductPayment = async (status, reference) => {
+    try {
+        const productTransaction = await Product.findOne({ where: { reference } });
+        console.log(`details received`, status, reference)
+
+        if (!productTransaction) {
+            console.log('product reference not found')
+            return { success: false, msg: "Product transaction not found" };
+        }
+
+        if (productTransaction.status === "paid" || productTransaction.status === "failed") {
+            console.log('product already marked paid')
+            return { success: true, msg: `Transaction already marked as ${productTransaction.status}` };
+        }
+
+        if (status === "success") {
+            productTransaction.status = "paid";
+            await productTransaction.save();
+            console.log('product marked as paid and saved')
+            return { success: true, msg: "Product transaction marked as paid" };
+        }
+
+        else if (status === "failed") {
+            productTransaction.status = "failed";
+            await productTransaction.save();
+            console.log('product marked as paid and saved')
+            return { success: true, msg: "Product transaction marked as failed" };
+        }
 
 
+        else {
+            console.log('product status unknown')
+            return { success: false, msg: "Unknown status type passed" };
+        }
+
+    } catch (error) {
+        return { success: false, msg: "Internal server error", error: error.message };
+    }
+};
+
+// Handle Crypto Buy Payment
+const handleCryptoBuyPayment = async (status, reference, data) => {
+    try {
+        const { customer, amount } = data;
+        const newAmt = amount / 100;
+
+        let transaction = await BuyCrypto.findOne({ where: { reference } });
+
+        if (!transaction) {
+            transaction = await BuyCrypto.findOne({
+                where: { email: customer.email },
+                include: [{ model: User, as: 'crypto_buyer' }]
+            });
+
+            if (!transaction) {
+                console.log(`❌ Crypto transaction not found: ${reference}`);
+                return { success: false, msg: "Transaction not found" };
+            }
+        }
+
+        if (status === "success") {
+            if (transaction.status === "paid") {
+                console.log(`✅ Crypto transaction ${reference} already marked as paid.`);
+                return { success: true, msg: "Transaction already processed", data: transaction };
+            }
+
+            transaction.amount_in_naira = parseFloat(newAmt);
+            transaction.status = "paid";
+            await transaction.save();
+
+            console.log(`✅ Crypto transaction ${reference} updated successfully.`);
+            return { success: true, msg: "Crypto transaction marked as paid successfully", data: transaction };
+        } else {
+            transaction.status = "failed";
+            await transaction.save();
+            return { success: true, msg: "Crypto transaction failed", data: transaction };
+        }
+    } catch (error) {
+        console.error("Error handling crypto buy payment:", error);
+        return { success: false, msg: `Error processing crypto payment: ${error.message}` };
+    }
+};
+
+// Handle Bank Withdrawal
+const handleBankWithdrawal = async (status, reference, data) => {
+    try {
+        let withdrawal = await BankWithdraw.findOne({
+            where: { reference_id: reference },
+            include: [{ model: User, as: "user_withdrawal" }]
+        });
+
+        if (!withdrawal) {
+            return { success: false, msg: "Withdrawal transaction not found" };
+        }
+
+        if (status === "success") {
+            withdrawal.status = "completed";
+            withdrawal.transfer_status = 'completed';
+            await withdrawal.save();
+            return { success: true, msg: "Bank withdrawal approved", data: withdrawal };
+        } else {
+            try {
+                // Find the user's wallet
+                const findWallet = await Wallet.findOne({ where: { user: withdrawal?.user_withdrawal.id } });
+
+                if (!findWallet) {
+                    return { success: false, msg: "User wallet not found for reverse" };
+                }
+
+                // Start a database transaction
+                await sequelize.transaction(async (t) => {
+                    // Reverse the funds
+                    findWallet.total_outflow = parseFloat(findWallet.total_outflow || 0) - parseFloat(withdrawal?.amount);
+                    findWallet.balance = parseFloat(findWallet.balance || 0) + parseFloat(withdrawal.amount);
+                    await findWallet.save({ transaction: t });
+
+                    // Update withdrawal status
+                    withdrawal.status = "failed";
+                    await withdrawal.save({ transaction: t });
+                });
+
+                return { success: true, msg: "Bank withdrawal failed and funds reversed", data: withdrawal };
+            } catch (error) {
+                console.error("Error handling failed transfer:", error);
+                return { success: false, msg: `Error processing failed transfer: ${error.message}` };
+            }
+        }
+    } catch (error) {
+        console.error("Error handling bank withdrawal:", error);
+        return { success: false, msg: `Error processing bank withdrawal: ${error.message}` };
+    }
+};
+
+
+
+
+// Main webhook handler function
 exports.handleWebhook = async (req, res) => {
     try {
         // Generate hash using your secret key and request body
@@ -21,125 +163,59 @@ exports.handleWebhook = async (req, res) => {
 
         // Compare the hash with Paystack's signature
         if (hash !== req.headers['x-paystack-signature']) {
-            console.log("❌ Invalid Paystack Webhook Signature");
             return res.json({ status: 400, msg: "Invalid signature" });
         }
 
         const event = req.body;
-        console.log("✅ Webhook Event Received:", JSON.stringify(event, null, 2));
+        console.log(`received a webhook rn`)
 
         if (!event.data || !event.event) {
-            console.error("❌ Webhook payload is missing 'data' or 'event' field");
             return res.json({ status: 400, msg: "Invalid webhook data" });
         }
 
+        // console.log("Full webhook payload:", JSON.stringify(req.body, null, 2));
+        // console.log("Data object:", JSON.stringify(req.body.data, null, 2));
+        // console.log("Metadata:", JSON.stringify(req.body.data?.metadata, null, 2));
+
         const { event: eventType, data } = event;
-        const { status, reference, amount, customer } = data;
-        const newAmt = amount / 100;
+        const { reference } = data;
+        const narration = data?.metadata?.narration;
+        const status = eventType === "charge.success" ? "success" : "failed";
 
-        if (eventType === "charge.success") {
-            // ✅ Handle Successful Crypto Buy Payment
-            let transaction = await BuyCrypto.findOne({ where: { reference } });
+        console.log(`Webhook received with narration: ${narration}`);
+        console.log(`Product reference: ${reference}, Status: ${status}`);
 
-            if (!transaction) {
-                transaction = await BuyCrypto.findOne({
-                    where: { email: customer.email },
-                    include: [{ model: User, as: 'crypto_buyer' }]
-                });
+        // Handle based on narration type
+        if (narration === "product-purchase") {
+            console.log("Calling confirmOrDeclineProductPayment with:", status, reference);
+            const result = await confirmOrDeclineProductPayment(status, reference);
+            return res.json({ status: result.success ? 200 : 400, msg: result.msg });
+        } else if (narration === "p2p_buy") {
+            const result = await handleCryptoBuyPayment(status, reference, data);
+            return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
+        } else if (narration === "transfer") {
+            const result = await handleBankWithdrawal(status, reference, data);
+            return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
+        }
 
-                if (!transaction) {
-                    console.log(`❌ Crypto transaction not found: ${reference}`);
-                    return res.json({ status: 400, msg: "Transaction not found" });
-                }
-            }
-
-            if (transaction.status === "paid") {
-                console.log(`✅ Crypto transaction ${reference} already marked as paid.`);
-                return res.status(200).json({ msg: "Transaction already processed", data: transaction });
-            }
-
-            transaction.amount_in_naira = parseFloat(newAmt);
-            transaction.status = "paid";
-            await transaction.save();
-
-            console.log(`✅ Crypto transaction ${reference} updated successfully.`);
-            return res.json({ status: 200, msg: "Crypto transaction marked as paid successfully", data: transaction });
-
-        } else if (eventType === "charge.failed") {
-            // ❌ Handle Failed Crypto Buy Payment
-            let transaction = await BuyCrypto.findOne({ where: { reference } });
-
-            if (!transaction) {
-                console.log(`❌ Failed crypto transaction not found: ${reference}`);
-                return res.json({ status: 400, msg: "Failed transaction not found" });
-            }
-
-            transaction.status = "failed";
-            await transaction.save();
-            return res.json({ status: 200, msg: "Crypto transaction failed", data: transaction });
-
-        } else if (eventType === "transfer.success") {
-            // ✅ Handle Admin Approving Bank Withdrawal Request
-            let withdrawal = await BankWithdraw.findOne({ where: { reference_id: reference } });
-
-            if (!withdrawal) {
-                return res.json({ status: 400, msg: "Withdrawal transaction not found" });
-            }
-
-            withdrawal.status = "completed";
-            withdrawal.transfer_status = 'completed'
-            await withdrawal.save();
-            return res.json({ status: 200, msg: "Bank withdrawal approved", data: withdrawal });
-
-        } else if (eventType === "transfer.failed") {
-            try {
-                // Find the failed withdrawal
-                let withdrawal = await BankWithdraw.findOne({
-                    where: { reference_id: reference },
-                    include: [{ model: User, as: "user_withdrawal" }]
-                });
-
-                if (!withdrawal) {
-                    console.log(`Failed withdrawal transaction not found: ${reference}`);
-                    return res.json({ status: 400, msg: "Failed withdrawal transaction not found" });
-                }
-
-                // Find the user's wallet
-                const findWallet = await Wallet.findOne({ where: { user: withdrawal?.user_withdrawal.id } });
-
-                if (!findWallet) {
-                    return res.json({ status: 400, msg: "User wallet not found for reverse" });
-                }
-
-                // Start a database transaction
-                await sequelize.transaction(async (t) => {
-                    // Reverse the funds
-                    findWallet.total_outflow = parseFloat(findWallet.total_outflow || 0) - parseFloat(withdrawal?.amount)
-                    findWallet.balance = parseFloat(findWallet.balance || 0) + parseFloat(withdrawal.amount);
-                    await findWallet.save({ transaction: t });
-
-
-                    // Update withdrawal status
-                    withdrawal.status = "failed";
-                    await withdrawal.save({ transaction: t });
-                });
-
-                return res.json({ status: 200, msg: "Bank withdrawal failed and funds reversed", data: withdrawal });
-            } catch (error) {
-                console.error("Error handling failed transfer:", error);
-                return res.status(500).json({ msg: "Error processing failed transfer", error: error.message });
-            }
-
+        // If no narration match, fallback to event type handling
+        if (eventType === "charge.success" || eventType === "charge.failed") {
+            const result = await handleCryptoBuyPayment(status, reference, data);
+            return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
+        } else if (eventType === "transfer.success" || eventType === "transfer.failed") {
+            const result = await handleBankWithdrawal(status, reference, data);
+            return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
         } else {
             console.log(`⚠️ Unhandled event type: ${eventType}`);
             return res.json({ status: 400, msg: `Unhandled event type: ${eventType}` });
         }
-
     } catch (error) {
         console.error("Error processing webhook:", error.message);
         return res.json({ status: 500, msg: "Internal server error" });
     }
 };
+
+
 
 
 exports.InitializeCryptoBuyPayment = async (req, res) => {
@@ -168,11 +244,85 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
         const payload = {
             email: findOrder?.crypto_buyer?.email,
             amount: amount * 100,
-            reference: reference
+            reference: reference,
+            metadata: {
+                narration: 'p2p_buy'
+            }
         };
 
-        // Send request to Paystack
-        const response = await axios.post(`https://api.paystack.co/transaction/initialize`, payload, {
+        try {
+            // Send request to Paystack
+            const response = await axios.post(`https://api.paystack.co/transaction/initialize`, payload, {
+                headers: {
+                    Authorization: `Bearer ${secret}`,
+                    "Content-Type": 'application/json'
+                }
+            });
+
+            // Return response data if successful
+            return res.json({ status: 200, msg: 'Payment initialized', data: response.data });
+        } catch (error) {
+            // Handle Paystack API error
+            console.error('Error from Paystack:', error.response ? error.response.data : error.message);
+            return res.json({ status: 500, msg: "Error initializing payment", error: error.message });
+        }
+
+    } catch (error) {
+        // General error handler
+        ServerError(res, error);
+        console.error("Error initializing crypto payment:", error.message);
+    }
+};
+
+
+
+exports.InitializeProductBuyPayment = async (req, res) => {
+    try {
+        const { email_address, total_price, total_discount, products, amount_paid } = req.body;
+
+        if (!email_address || !total_price || !products || !amount_paid || products.length < 1) {
+            return res.json({ status: 400, msg: "Invalid payment request" });
+        }
+
+        if (isNaN(total_price) || isNaN(total_discount) || isNaN(amount_paid)) {
+            return res.json({ status: 404, msg: "Prices must be in numbers" });
+        }
+
+        const unlistedProducts = await Product.findAll({ where: { listing: 'unlisted' } });
+        const foundInCart = unlistedProducts.some(ele => products.some(item => item.id === ele.id));
+        if (foundInCart) {
+            return res.json({ status: 404, msg: `Product(s) in your cart are no longer listed for purchase, kindly re-add them and try again` });
+        }
+
+        const productsArray = Array.isArray(products) ? products : [products];
+        const gen_id = `mq_${crypto.randomBytes(8).toString("hex")}`;
+        const reference = `PR_${crypto.randomBytes(8).toString("hex")}`;
+        const productOrder = await ProductOrder.create({
+            gen_id,
+            reference,
+            email_address,
+            total_price,
+            total_discount,
+            amount_paid,
+            products: productsArray,
+            status: 'initialized'
+        });
+
+        const buyer = { email: productOrder.email_address };
+        const nairaSign = '₦';
+
+
+        const payload = {
+            email: productOrder.email_address,
+            amount: amount_paid * 100,
+            reference,
+            metadata: {
+                order_id: productOrder.gen_id,
+                narration: "product-purchase"
+            }
+        };
+
+        const response = await axios.post('https://api.paystack.co/transaction/initialize', payload, {
             headers: {
                 Authorization: `Bearer ${secret}`,
                 "Content-Type": 'application/json'
@@ -181,11 +331,62 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
 
         const data = response.data;
 
-        return res.json({ status: 200, msg: 'Payment initialized', data });
+        // await Mailing({
+        //     subject: 'New Order Placed',
+        //     eTitle: 'Order placed',
+        //     eBody: `
+        //        <div style="color: white;">
+        //            You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s). A total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} is to be made. If you didn’t proceed from the website to make payments, click the link below to continue: <a href="${data.data.authorization_url}" style="text-decoration: underline; color: #00fe5e">click here</a>
+        //              <br>
+        //            <span style="font-style: italic; margin-top: 10px; display: block; color: white;">Note:</span>
+        //              NB: If you did proceed from the website to make payments, kindly ignore this email. 
+        //            If you didn't, kindly follow the link above as it will expire in 20 minutes.
+        //         </div>`,
+
+        //     account: buyer
+        // });
+
+        const formattedTime = formatToUserTimezone(productOrder.createdAt);
+        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } });
+
+        // if (admins && admins.length > 0) {
+        //     admins.map(async ele => {
+        //         await Notification.create({
+        //             user: ele.id,
+        //             title: 'Product order alert',
+        //             content: `Hello Admin, a new product order with ID (#${productOrder.gen_id}) for ${productsArray.length} product(s) totaling ${nairaSign}${productOrder.amount_paid.toLocaleString()} has been initialized. Order was placed on ${moment(productOrder.createdAt).format('DD-MM-yyyy')} at ${formattedTime}`,
+        //             url: '/admin/products/orders',
+        //         });
+
+        //         await Mailing({
+        //             subject: 'Product Order Alert',
+        //             eTitle: 'Product order placed',
+        //             eBody: `
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">order ID:</span><span style="padding-left: 1rem">#${productOrder.gen_id}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">${productsArray.length}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">amount to be paid:</span><span style="padding-left: 1rem">${nairaSign}${productOrder.amount_paid.toLocaleString()}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment method:</span><span style="padding-left: 1rem">Paystack</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment status:</span><span style="padding-left: 1rem">${productOrder.status}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">buyer's email:</span><span style="padding-left: 1rem">${productOrder.email_address}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">date:</span><span style="padding-left: 1rem">${moment(productOrder.createdAt).format('DD-MM-yyyy')}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">time:</span><span style="padding-left: 1rem">${formattedTime}</span></div>
+        //                 <div style="color:white ;margin-top: 1rem">See more details <a href='${webURL}/admin/products/orders' style="text-decoration: underline; color: #00fe5e">here</a></div>`,
+        //             account: ele
+        //         });
+        //     });
+        // }
+
+        return res.json({ status: 200, msg: "Product payment initialized", data });
+
     } catch (error) {
-        ServerError(res, error);
+        console.error("🔥 Error initializing product payment:", error.message);
+        return res.status(500).json({ status: 500, msg: "Internal server error", error: error.message });
     }
 };
+
+
+
+
 
 
 
@@ -196,24 +397,6 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
  */
 
 
-exports.getBanksFromPayStack = async (req, res) => {
-    try {
-        const response = await axios.get("https://api.paystack.co/bank", {
-            headers: {
-                Authorization: `Bearer ${secret}`,
-                "Content-Type": "application/json"
-            }
-        });
-        const data = response.data.data
-        const filteredBanks = []
-        const filter = data.filter((trans) => trans.supports_transfer === true)
-        filteredBanks.push(filter)
-        res.json({ status: 200, msg: "banks that support transfers", data: filteredBanks });
-
-    } catch (error) {
-        ServerError(res.error)
-    }
-};
 
 
 exports.adminTransfer = async (req, res) => {
@@ -277,7 +460,10 @@ exports.adminTransfer = async (req, res) => {
                 amount: withdrawal.amount * 100,
                 recipient: recipient.data.data.recipient_code,
                 reason,
-                reference: `TRANS_${crypto.randomBytes(8).toString("hex")}`
+                reference: `TRANS_${crypto.randomBytes(8).toString("hex")}`,
+                metadata: {
+                    narration: 'transfer'
+                }
             },
             { headers: { Authorization: `Bearer ${secret}` } }
         );
@@ -342,3 +528,22 @@ exports.checkAccount = async (req, res) => {
 
     }
 }
+
+exports.getBanksFromPayStack = async (req, res) => {
+    try {
+        const response = await axios.get("https://api.paystack.co/bank", {
+            headers: {
+                Authorization: `Bearer ${secret}`,
+                "Content-Type": "application/json"
+            }
+        });
+        const data = response.data.data
+        const filteredBanks = []
+        const filter = data.filter((trans) => trans.supports_transfer === true)
+        filteredBanks.push(filter)
+        res.json({ status: 200, msg: "banks that support transfers", data: filteredBanks });
+
+    } catch (error) {
+        ServerError(res.error)
+    }
+};
