@@ -27,6 +27,7 @@ const Tools = require('../models').tools
 const Card = require('../models').cards
 const CardCategory = require('../models').cardCategory
 const Subscriber = require('../models').subscribers
+var cron = require('node-cron');
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -171,7 +172,6 @@ exports.UpdateAirdrop = async (req, res) => {
             const imageToUpload = [{ field: 'logo', file: logoImage }]
             const newLogoImage = await GlobalImageUploads(imageToUpload, 'airdrops', airdrop.gen_id)
             airdrop.logo_image = newLogoImage.logo
-
         }
         if (bannerImage) {
             if (!bannerImage.mimetype.startsWith('image/')) return res.json({ status: 404, msg: `File error, upload a valid image format (jpg, jpeg, png, svg)` })
@@ -478,6 +478,7 @@ exports.UpdateProduct = async (req, res) => {
                                 title: `Product submitted declined`,
                                 content: `The Product submitted with the ID (${product.gen_id}) have been successfully declined.`,
                                 url: '/admin/products/all',
+                                status: 'failed'
                             })
                             await Mailing({
                                 subject: 'Product Submitted Declined',
@@ -696,6 +697,8 @@ exports.UpdateKyc = async (req, res) => {
     try {
         const { kyc_id, status, message } = req.body
         if (!kyc_id) return res.json({ status: 404, msg: 'KYC id is required' })
+        const statusArray = ["verified", "failed"]
+        if (!statusArray.includes(status)) return res.json({ status: 404, msg: `Invalid status provided` })
         const kyc = await Kyc.findOne({ where: { id: kyc_id } })
         if (!kyc) return res.json({ status: 404, msg: 'User KYC not found' })
         const kycUser = await User.findOne({ where: { id: kyc.user } })
@@ -733,6 +736,7 @@ exports.UpdateKyc = async (req, res) => {
                 content: message,
                 status: 'failed',
                 url: '/user/profile/kyc',
+                status: 'failed'
             })
 
             await Mailing({
@@ -1269,6 +1273,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                 title: `Credit Failed`,
                 content: `Hi dear, Your crypto buy order with the ID of ${findBuy?.order_no} has been marked failed. Kindly check your email to learn more.`,
                 url: '/user/transactions_history',
+                status: 'failed'
             })
             await Mailing({
                 subject: `Crypto Buy Failed`,
@@ -1288,6 +1293,7 @@ exports.closeAndConfirmBuyOrder = async (req, res) => {
                         title: `Crypto Buy Order Failed`,
                         content: `You have failed the crypto buy order payment  with the ID of ${findBuy?.order_no}`,
                         url: '/admin/transactions_history',
+                        status: 'failed'
                     })
                     const formattedTime = formatToUserTimezone(findBuy.updatedAt)
 
@@ -1398,6 +1404,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                 title: `Crypto Credit Failed`,
                 content: `Hi dear, Your Crypto Sell order with the ID of ${findSell?.order_no} has been marked failed. Kindly check email to learn more.`,
                 url: '/user/transactions_history',
+                status: 'failed'
             })
             await Mailing({
                 subject: `Crypto Credit Failed`,
@@ -1415,6 +1422,7 @@ exports.closeAndConfirmSellOrder = async (req, res) => {
                         title: `Crypto Sell Order Failed`,
                         content: `You have marked the crypto sell order payment  with the ID of ${findSell?.order_no} as failed and user has been notified.`,
                         url: '/admin/transactions_history',
+                        status: 'failed'
                     })
                     const formattedTime = formatToUserTimezone(findSell.updatedAt)
 
@@ -1443,6 +1451,24 @@ exports.getGiftCardOrders = async (req, res) => {
     try {
         const all_orders = await GiftCard.findAll({
             where: { status: 'pending' },
+            include: [
+                {
+                    model: User, as: 'gift_seller',
+                    attributes: [`id`, `first_name`, `surname`]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+        return res.json({ status: 200, msg: "fetch success", data: all_orders })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.CompletedGiftCardOrders = async (req, res) => {
+    try {
+        const all_orders = await GiftCard.findAll({
+            where: { status: 'completed' },
             include: [
                 {
                     model: User, as: 'gift_seller',
@@ -1507,7 +1533,6 @@ exports.creditGiftCustomer = async (req, res) => {
             if (findAdmin.giftcard_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update gift-card orders' })
         }
 
-
         if (tag === 'success') {
             //credit the customer
             findUserWallet.balance = parseFloat(findUserWallet.balance || 0) + parseFloat(amount)
@@ -1568,6 +1593,7 @@ exports.creditGiftCustomer = async (req, res) => {
                 title: `Credit Failed`,
                 content: `Hi dear, Your Gift-Card order with the ID of ${order?.order_no} has been marked as failed. Kindly check your email to learn more.`,
                 url: '/user/transactions_history',
+                status: 'failed'
             })
             await Mailing({
                 subject: `Gift-Card Failed Transaction`,
@@ -1586,6 +1612,7 @@ exports.creditGiftCustomer = async (req, res) => {
                         title: `Gift-Card Order Failed`,
                         content: `You have marked failed to the giftcard order payment with the ID of ${order?.order_no}`,
                         url: '/admin/transactions_history',
+                        status: 'failed'
                     })
                     const formattedTime = formatToUserTimezone(order.updatedAt)
 
@@ -1763,6 +1790,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                 title: `Withdrawal request failed`,
                 content: `Your withdrawal request with the ID of (${findWithdrawal?.trans_id}) has been marked failed. Kindly check your email to learn more.`,
                 url: '/user/transactions_history',
+                status: 'failed'
             })
             await Mailing({
                 subject: `Withdrawal Request Failed`,
@@ -1782,6 +1810,7 @@ exports.closeAndConfirmWithdrawal = async (req, res) => {
                         title: `Withdrawal request failed`,
                         content: `You have failed the withdrawal request with the ID of (${findWithdrawal?.trans_id})`,
                         url: '/admin/transactions_history',
+                        status: 'failed'
                     })
                     const formattedTime = formatToUserTimezone(newAirdrop.updatedAt)
 
@@ -1910,6 +1939,12 @@ exports.addOrUpdateCryptos = async (req, res) => {
         const { name, network, wallet_add, symbol, buy_min, buy_max, sell_min, sell_max, gas_fee, kyc_buymax, kyc_sellmax, tag, id } = req.body;
         const reqFields = [name, wallet_add, network, symbol, buy_min, buy_max, sell_min, sell_max, gas_fee, kyc_buymax, kyc_sellmax];
         const tags = ['create', 'update', 'delete'];
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.exchange_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to add, update or delete crypto' })
+        }
 
         if (!tag) return res.json({ status: 400, msg: "Tag not found" });
         if (!tags.includes(tag)) return res.json({ status: 400, msg: "Invalid Tag Found" });
@@ -2164,6 +2199,13 @@ exports.AddGiftCard = async (req, res) => {
         if (!name) {
             return res.json({ status: 400, msg: 'Giftcard Name missing' });
         }
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.giftcard_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to create gift-card' })
+        }
+
         const findCard = await Card.findOne({ where: { name } });
         if (findCard) {
             return res.json({ status: 400, msg: "Card already added to list" });
@@ -2235,6 +2277,12 @@ exports.UpdateGiftCard = async (req, res) => {
         const { id, name, } = req.body;
         if (!id) return res.json({ status: 400, msg: "ID missing" });
 
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.giftcard_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to update gift-card' })
+        }
+
         const findCard = await Card.findOne({ where: { id } });
         if (!findCard) return res.json({ status: 400, msg: "Card ID not found" });
 
@@ -2285,6 +2333,12 @@ exports.DeleteGiftCard = async (req, res) => {
     try {
         const { id } = req.params;
         if (!id) return res.json({ status: 400, msg: "ID missing" });
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (!findAdmin) return res.json({ status: 400, msg: 'Admin not found' })
+        if (findAdmin.role !== 'super admin') {
+            if (findAdmin.giftcard_permit === 'false') return res.json({ status: 400, msg: 'Unauthorized access to delete gift-card' })
+        }
 
         const findCard = await Card.findOne({ where: { id } });
         if (!findCard) return res.json({ status: 404, msg: "Card ID not found" });
@@ -2343,5 +2397,23 @@ exports.ChangeAdminPermissions = async (req, res) => {
         ServerError(res, error);
     }
 };
+
+cron.schedule('0 * * * *', async () => {
+
+    const products = await Product.findAll({ where: { discount_endDate: { [Op.not]: null } } })
+
+    if (products && products.length > 0) {
+        for (const ele of products) {
+            if (moment().isSameOrAfter(new Date(ele.discount_endDate))) {
+                ele.discount_percentage = null
+                ele.discount_duration = null
+                ele.discount_duration_type = null
+                ele.discount_endDate = null
+                await ele.save()
+            }
+        }
+    }
+})
+
 
 

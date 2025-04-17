@@ -18,9 +18,10 @@ const { Op } = require('sequelize');
 const Notification = require('../models').notifications
 
 const confirmOrDeclineProductPayment = async (status, reference) => {
-    try {
-        const productTransaction = await Product.findOne({ where: { reference } });
         console.log(`details received`, status, reference)
+
+    try {
+        const productTransaction = await ProductOrder.findOne({ where: { reference } });
 
         if (!productTransaction) {
             console.log('product reference not found')
@@ -101,7 +102,7 @@ const handleCryptoBuyPayment = async (status, reference, data) => {
 };
 
 // Handle Bank Withdrawal
-const handleBankWithdrawal = async (status, reference, data) => {
+const handleBankWithdrawal = async (status, reference) => {
     try {
         let withdrawal = await BankWithdraw.findOne({
             where: { reference_id: reference },
@@ -182,19 +183,17 @@ exports.handleWebhook = async (req, res) => {
         const narration = data?.metadata?.narration;
         const status = eventType === "charge.success" ? "success" : "failed";
 
-        console.log(`Webhook received with narration: ${narration}`);
-        console.log(`Product reference: ${reference}, Status: ${status}`);
 
         // Handle based on narration type
         if (narration === "product-purchase") {
-            console.log("Calling confirmOrDeclineProductPayment with:", status, reference);
+            // console.log("Calling confirmOrDeclineProductPayment with:", status, reference);
             const result = await confirmOrDeclineProductPayment(status, reference);
             return res.json({ status: result.success ? 200 : 400, msg: result.msg });
         } else if (narration === "p2p_buy") {
             const result = await handleCryptoBuyPayment(status, reference, data);
             return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
         } else if (narration === "transfer") {
-            const result = await handleBankWithdrawal(status, reference, data);
+            const result = await handleBankWithdrawal(status, reference);
             return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
         }
 

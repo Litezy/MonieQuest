@@ -417,8 +417,6 @@ exports.UpdateProfile = async (req, res) => {
     }
 }
 
-
-
 exports.CreateUpdateBankAccount = async (req, res) => {
     try {
         const { bank_name, account_number } = req.body;
@@ -462,7 +460,6 @@ exports.CreateUpdateBankAccount = async (req, res) => {
         return res.json({ status: 500, msg: error.message });
     }
 };
-
 
 exports.GetWalletBankAndUtils = async (req, res) => {
     try {
