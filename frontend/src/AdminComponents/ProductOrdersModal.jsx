@@ -44,7 +44,7 @@ const ProductsOrdersModal = ({ selected }) => {
                         <div>Transaction Status</div>
                         <div>{selected?.status}</div>
                     </div>
-                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
+                    <div className="flex items-center border-b pb-2 border-zinc-600 w-full flex-col gap-2 md:flex-row md:justify-between md:gap-4">
                         <div>Email Address</div>
                         <div className='flex items-center gap-2'>
                             <div>{selected?.email_address}</div>
