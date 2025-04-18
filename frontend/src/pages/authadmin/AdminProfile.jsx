@@ -380,17 +380,16 @@ const AdminProfile = () => {
                         <div className='flex flex-col gap-5'>
                             <div className='text-xl capitalize font-medium text-lightgreen'>add a bank account</div>
                             <div className='w-fit h-fit bg-primary rounded-2xl p-4 flex flex-col gap-3 relative'>
-                                {loading.sub && <Loader />}
+                                {loading.sub1 && <Loader />}
                                 <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={handleAccNum} className='!bg-secondary !w-64' border={false} />
                                 {form.account_name && <FormInput name={`account_name`} value={form.account_name} className='!bg-secondary !w-64' border={false} read={true} />}
-
-
+                                
                                 <SelectComp
                                     value={form.bank_name}
                                     title={`Select bank`}
                                     options={bankNames}
-                                    width={450} size={false}
-                                    style={{ bg: '#212134', color: 'lightgrey', font: '0.8rem' }} handleChange={(e) => setForm({ ...form, bank_name: e.target.value })} />
+                                    fullWidth size={false}
+                                    style={{ bg: '#171828', color: 'lightgrey', font: '0.8rem' }} handleChange={(e) => setForm({ ...form, bank_name: e.target.value })} />
 
 
                                 <FormButton title={Object.keys(bank).length !== 0 ? 'Update' : 'Save'} className='!py-3 !text-base' type='button' onClick={AddBankAccount} />

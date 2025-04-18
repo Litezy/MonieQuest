@@ -249,6 +249,7 @@ const formsal = () => {
                                         </div> :
                                         <div className="w-11/12">
                                             <SelectComp
+                                                title={`Select bank`}
                                                 value={forms.bank}
                                                 options={bankNames}
                                                 fullWidth size={false}
