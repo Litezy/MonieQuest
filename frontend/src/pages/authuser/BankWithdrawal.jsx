@@ -244,7 +244,7 @@ const formsal = () => {
                                 <div className="">
                                     <div className="text-lightgreen">Bank Name</div>
                                     {show ?
-                                        <div className="w-full">
+                                        <div className="w-full mt-2">
                                             <FormInput read={true} value={bankAcc.bank_name} />
                                         </div> :
                                         <div className="w-11/12">

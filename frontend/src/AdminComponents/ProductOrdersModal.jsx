@@ -73,12 +73,14 @@ const ProductsOrdersModal = ({ selected }) => {
                                     </div>
                                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
                                         <div>Category</div>
-                                        {categories.length > 0 &&
+                                        {categories.length > 0 ?
                                             <div className='flex flex-col gap-1'>
                                                 {categories.map((ele, i) => (
                                                     <div key={i}>{ele}{i !== categories.length - 1 && ','}</div>
                                                 ))}
                                             </div>
+                                            :
+                                            <div>(Other Specify)</div>
                                         }
                                     </div>
                                     <div className="flex items-center border-b pb-2 border-zinc-600 w-full justify-between gap-4">
