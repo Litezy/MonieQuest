@@ -17,5 +17,6 @@ module.exports = (sequelize, DataTypes) => {
         product_permit: { type: DataTypes.STRING, defaultValue: 'false' },
         giftcard_permit: { type: DataTypes.STRING, defaultValue: 'false' },
         exchange_permit: { type: DataTypes.STRING, defaultValue: 'false' },
+        suspend: { type: DataTypes.STRING, defaultValue: 'false' },
     })
 }

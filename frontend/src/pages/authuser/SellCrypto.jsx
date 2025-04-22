@@ -104,8 +104,10 @@ const SellCrypto = () => {
         if (forms.trans_hash.length < 64) return ErrorAlert(`Please input a valid transaction hash.`)
         setConfirm(false)
         setLoading(true)
+
+        const amt = forms.amount.replace(/,/g, '')
         const formdata = {
-            amount: parseFloat(forms.amount),
+            amount: parseFloat(amt),
             crypto_currency: forms.crypto,
             type: 'sell',
             trans_hash: forms.trans_hash,
@@ -255,7 +257,6 @@ const SellCrypto = () => {
                                         </div>
                                         <div className="">{selectedCurr.name}</div>
                                     </div>
-
                                 </div>
 
                                 <div className="flex item-center text-sm justify-between w-full">

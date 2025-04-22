@@ -2398,6 +2398,123 @@ exports.ChangeAdminPermissions = async (req, res) => {
     }
 };
 
+exports.SuspendUnSuspendUsers = async (req, res) => {
+    try {
+        const { id } = req.body
+        if (!id) return res.json({ status: 400, msg: 'ID is required' })
+        const findUser = await User.findOne({ where: { id } })
+        if (!findUser) return res.json({ status: 404, msg: 'User not found' })
+        if (findUser.role === 'super admin') return res.json({ status: 400, msg: `You can't suspend a super admin account` })
+
+        findUser.suspend = findUser.suspend === 'true' ? 'false' : 'true'
+        await findUser.save()
+
+        const allusers = await User.findAll({
+            attributes: {
+                exclude: [`password`, `image`, `resetcode`],
+            },
+            include: [
+                {
+                    model: Wallet, as: 'user_wallets',
+                    attributes: [`balance`]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: `You have successfully ${findUser.suspend === 'true' ? 'suspend' : 'unsuspend'} ${findUser.first_name} ${findUser.surname}'s account`, data: allusers })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
+exports.DeleteAccount = async (req, res) => {
+    try {
+        const { id } = req.body
+        if (!id) return res.json({ status: 400, msg: 'ID is required' })
+        const findUser = await User.findOne({ where: { id } })
+        if (!findUser) return res.json({ status: 404, msg: 'User not found' })
+        if (findUser.role === 'super admin') return res.json({ status: 400, msg: `You can't delete a super admin account` })
+
+        const userWallet = await Wallet.findOne({ where: { user: findUser.id } })
+        if (userWallet) {
+            await userWallet.destroy()
+        }
+        const userBank = await Bank.findOne({ where: { user: findUser.id } })
+        if (userBank) {
+            await userBank.destroy()
+        }
+        const userKyc = await Kyc.findOne({ where: { user: findUser.id } })
+        if (userKyc) {
+            if (userKyc.front_image) {
+                await GlobalDeleteImage(userKyc.front_image)
+            }
+            if (userKyc.back_image) {
+                await GlobalDeleteImage(userKyc.back_image)
+            }
+            await userKyc.destroy()
+        }
+        const userNotifications = await Notification.findAll({ where: { user: findUser.id } })
+        if (userNotifications) {
+            for (const ele of userNotifications) {
+                await ele.destroy()
+            }
+        }
+        const userCryptoBuys = await BuyCrypto.findAll({ where: { userid: findUser.id } })
+        if (userCryptoBuys) {
+            for (const ele of userCryptoBuys) {
+                await ele.destroy()
+            }
+        }
+        const userCryptoSells = await SellCrypto.findAll({ where: { userid: findUser.id } })
+        if (userCryptoSells) {
+            for (const ele of userCryptoSells) {
+                await ele.destroy()
+            }
+        }
+        const userGiftcardSells = await GiftCard.findAll({ where: { userid: findUser.id } })
+        if (userGiftcardSells) {
+            for (const ele of userGiftcardSells) {
+                await ele.destroy()
+            }
+        }
+        const userWithdrawals = await Bank_Withdrawals.findAll({ where: { userid: findUser.id } })
+        if (userWithdrawals) {
+            for (const ele of userWithdrawals) {
+                await ele.destroy()
+            }
+        }
+        const userProducts = await Product.findAll({ where: { user: findUser.id } })
+        if (userProducts) {
+            for (const ele of userProducts) {
+                await ele.destroy()
+            }
+        }
+
+        if (findUser.image) {
+            await GlobalDeleteImage(findUser.image)
+        }
+        await findUser.destroy()
+
+        const allusers = await User.findAll({
+            attributes: {
+                exclude: [`password`, `image`, `resetcode`],
+            },
+            include: [
+                {
+                    model: Wallet, as: 'user_wallets',
+                    attributes: [`balance`]
+                }
+            ],
+            order: [['createdAt', 'DESC']]
+        })
+
+        return res.json({ status: 200, msg: `You have successfully deleted ${findUser.first_name} ${findUser.surname}'s account`, data: allusers })
+    } catch (error) {
+        return res.json({ status: 400, msg: error.message })
+    }
+}
+
 cron.schedule('0 * * * *', async () => {
 
     const products = await Product.findAll({ where: { discount_endDate: { [Op.not]: null } } })

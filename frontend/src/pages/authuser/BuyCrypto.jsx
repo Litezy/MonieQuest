@@ -107,12 +107,13 @@ const BuyCrypto = () => {
         e.preventDefault();
         setModal(false);
 
+        const amt = forms.amount.replace(/,/g, '')
         const formdata = {
             crypto_currency: forms.crypto,
             type: 'buy',
             wallet_address: forms.wallet_add,
             network: forms.network,
-            amount: parseFloat(forms.amount),
+            amount: parseFloat(amt),
             gas_fee: parseFloat(forms.gas_fee),
             wallet_exp: forms.isExpired,
             rate: rate

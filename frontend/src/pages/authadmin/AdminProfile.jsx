@@ -183,7 +183,7 @@ const AdminProfile = () => {
     }
 
     const AddBankAccount = async () => {
-        if (!form.account_number || !form.account_name || !form.bank_name) return ErrorAlert('Enter all fields')
+        if (!form.account_number || !form.bank_name) return ErrorAlert('Enter all fields')
         const formbody = {
             bank_name: form.bank_name,
             account_number: form.account_number,
@@ -300,17 +300,16 @@ const AdminProfile = () => {
 
 
     const [bankNames, setBankNames] = useState([]);
-    
-      useEffect(() => {
+    useEffect(() => {
         if (NigerianBanks && NigerianBanks.length > 0) {
-          // Extract just the names and sort alphabetically
-          const names = NigerianBanks
-            .map(bank => bank.name)
-            .sort((a, b) => a.localeCompare(b));
-    
-          setBankNames(names);
+            // Extract just the names and sort alphabetically
+            const names = NigerianBanks
+                .map(bank => bank.name)
+                .sort((a, b) => a.localeCompare(b));
+
+            setBankNames(names);
         }
-      }, []);
+    }, []);
 
     return (
         <AdminPageLayout>
@@ -383,7 +382,7 @@ const AdminProfile = () => {
                                 {loading.sub1 && <Loader />}
                                 <FormInput placeholder='Account number' name='account_number' value={form.account_number} onChange={handleAccNum} className='!bg-secondary !w-64' border={false} />
                                 {form.account_name && <FormInput name={`account_name`} value={form.account_name} className='!bg-secondary !w-64' border={false} read={true} />}
-                                
+
                                 <SelectComp
                                     value={form.bank_name}
                                     title={`Select bank`}

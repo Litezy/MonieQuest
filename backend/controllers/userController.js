@@ -224,6 +224,9 @@ exports.LoginAccount = async (req, res) => {
         if (!findEmail) return res.json({ status: 400, msg: `Email not found` })
         if (password !== findEmail.password) return res.json({ status: 404, msg: `Incorrect password entered` })
 
+        const findIfSuspended = await User.findOne({ where: { id: findEmail.id, suspend: 'true' } })
+        if (findIfSuspended) return res.json({ status: 400, msg: `Your account has been suspended, kindly contact support team for possible reactivation` })
+
         const token = jwt.sign({ id: findEmail.id, role: findEmail.role }, process.env.JWT_SECRET, { expiresIn: '10h' })
 
         return res.json({ status: 200, msg: `Login successfully`, token })
@@ -316,25 +319,23 @@ exports.Contacts = async (req, res) => {
         const { full_name, email, message } = req.body
         if (!email || !message) return res.json({ status: 404, msg: `Incomplete request found` })
 
-        const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } })
-        if (admins) {
-            admins.map(async ele => {
-
-                await Mailing({
-                    subject: `Contact From ${webName} User`,
-                    eTitle: `${webName} user sends message`,
-                    eBody: `
-                     <div style="margin-top: 0.5rem"><span style="font-style: italic; font-size: 0.85rem;">full name:</span><span style="padding-left: 1rem">${full_name ? full_name : 'no name provided'}</span></div>
-                     <div><span style="font-style: italic; font-size: 0.85rem">from:</span><span style="padding-left: 1rem">${email}</span></div>
-                     <div style="margin-top: 1rem; font-style: italic; font-size: 0.85rem">message:</div>
-                     <div style="margin-top: 0.5rem">${message}</div>
-                    `,
-                    account: ele,
-                })
-            })
+        const admin = {
+            email: 'officialmoniequest@gmail.com'
         }
 
-        return res.json({ status: 200, msg: 'Message delivered successfully', admins: admins })
+        await Mailing({
+            subject: `Contact From ${webName} User`,
+            eTitle: `${webName} user sends message`,
+            eBody: `
+                 <div style="margin-top: 0.5rem"><span style="font-style: italic; font-size: 0.85rem;">full name:</span><span style="padding-left: 1rem">${full_name ? full_name : 'no name provided'}</span></div>
+                 <div><span style="font-style: italic; font-size: 0.85rem">from:</span><span style="padding-left: 1rem">${email}</span></div>
+                 <div style="margin-top: 1rem; font-style: italic; font-size: 0.85rem">message:</div>
+                 <div style="margin-top: 0.5rem">${message}</div>
+                `,
+            account: admin,
+        })
+
+        return res.json({ status: 200, msg: 'Message delivered successfully' })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }

@@ -25,6 +25,7 @@ const OrderPage = () => {
             const res = await AuthGetApi(`${Apis.transaction.single_history}/${id}/${tag}`)
             if (res.status !== 200) return ErrorAlert(res.msg)
             setData(res.data[0])
+        console.log(res.data)
         } catch (error) {
             ErrorAlert(error.message)
         } finally {
@@ -165,7 +166,7 @@ const OrderPage = () => {
                         )
                     })
                 }
-                <div className="w-full text-center capitalize font-bold poppins">Order Number  <span className={`${green}`}> {data.order_no}</span></div>
+                {!loading && <div className="w-full text-center capitalize font-bold poppins">Order Number  <span className={`${green}`}> {data.order_no}</span></div>}
 
                 {!loading && screen === 1 && tag === 'buy' &&
 

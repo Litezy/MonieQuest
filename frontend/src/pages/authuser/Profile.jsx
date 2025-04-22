@@ -14,7 +14,6 @@ import FormButton from '../../utils/FormButton';
 import AuthPageLayout from '../../AuthComponents/AuthPageLayout';
 import { FaRegIdCard } from "react-icons/fa";
 import Loader from '../../GeneralComponents/Loader';
-import Loading from '../../GeneralComponents/Loading';
 import Cookies from 'js-cookie'
 import { useAtom } from 'jotai';
 import { BANK, PROFILE } from '../../services/store';
@@ -174,7 +173,6 @@ const Profile = () => {
 
 
   const [bankNames, setBankNames] = useState([]);
-
   useEffect(() => {
     if (NigerianBanks && NigerianBanks.length > 0) {
       // Extract just the names and sort alphabetically
