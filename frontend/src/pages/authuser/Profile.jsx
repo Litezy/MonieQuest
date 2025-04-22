@@ -294,7 +294,7 @@ const Profile = () => {
 
                 <SelectComp
                   value={form.bank_name}
-                  title={`Select bank`}
+                  title={`${form.bank_name ? '' : 'Select bank'}`}
                   options={bankNames}
                   fullWidth size={false}
                   style={{ bg: '#171828', color: 'lightgrey', font: '0.8rem' }} handleChange={(e) => setForm({ ...form, bank_name: e.target.value })} />

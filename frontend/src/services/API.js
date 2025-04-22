@@ -197,8 +197,6 @@ export const AuthPostApi = async (endpoint, data) => {
     return response.data
 }
 
-
-
 export const AuthPutApi = async (endpoint, data) => {
     const token = Cookies.get(CookieName)
     const response = await axios.put(`${URL}/${endpoint}`, data, {
