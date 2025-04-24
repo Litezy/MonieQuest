@@ -226,6 +226,7 @@ const AdminProfile = () => {
         try {
             const response = await AuthPutApi(Apis.admin.update_utils, formbody)
             if (response.status === 200) {
+                console.log(response)
                 setUtils(response.utils)
                 await new Promise((resolve) => setTimeout(resolve, 2000))
                 SuccessAlert(response.msg)

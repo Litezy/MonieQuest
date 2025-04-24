@@ -75,7 +75,7 @@ const SellCrypto = () => {
                 usd = parseFloat(forms.amount.replace(/,/g, '')) / rate
                 naira = usd * rate
             }
-            setInUSD(usd.toLocaleString())
+            setInUSD(Number(usd).toFixed(2).toLocaleString())
             setInNaira(naira.toLocaleString())
         }
     }, [forms.amount, selectedCurr.name])

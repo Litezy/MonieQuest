@@ -76,8 +76,8 @@ const BuyCrypto = () => {
                 toPay = parseFloat(usd) + parseFloat(forms.gas_fee)
                 naira = toPay * rate
             }
-            setAmountToPay(toPay.toLocaleString())
-            setInUSD(usd.toLocaleString())
+            setAmountToPay(Number(toPay).toFixed(2).toLocaleString())
+            setInUSD(Number(usd).toFixed(2).toLocaleString())
             setInNaira(naira.toLocaleString())
         }
     }, [forms.amount, forms.gas_fee, selectedCurr.name])

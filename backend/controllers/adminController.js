@@ -61,7 +61,7 @@ exports.UpdateUtils = async (req, res) => {
 
             await utils.save()
 
-            return res.json({ status: 200, msg: 'Rate(s) updated successfully' })
+            return res.json({ status: 200, msg: 'Rate(s) updated successfully', utils })
         }
 
     } catch (error) {
