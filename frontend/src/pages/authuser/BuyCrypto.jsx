@@ -10,6 +10,7 @@ import { Apis, AuthGetApi, AuthPostApi } from '../../services/API';
 import ExchangeLayout from '../../AuthComponents/ExchangeLayout';
 import { useAtom } from 'jotai';
 import { CRYPTOS, PROFILE, UTILS } from '../../services/store';
+import { GoArrowSwitch } from "react-icons/go";
 
 
 const BuyCrypto = () => {
@@ -58,17 +59,28 @@ const BuyCrypto = () => {
         name: currencies[0].name,
         symbol: currencies[0].symbol
     })
-
     const [inNaira, setInNaira] = useState('')
+    const [inUSD, setInUSD] = useState('')
     const [amountToPay, setAmountToPay] = useState('')
     useEffect(() => {
-        if (forms.amount && forms.gas_fee) {
-            const toPay = parseFloat(forms.amount.replace(/,/g, '')) + parseFloat(forms.gas_fee)
+        if (forms.amount && forms.gas_fee && rate) {
+            let toPay;
+            let naira;
+            let usd;
+            if (selectedCurr.name === 'USD') {
+                usd = parseFloat(forms.amount.replace(/,/g, ''))
+                toPay = parseFloat(usd) + parseFloat(forms.gas_fee)
+                naira = toPay * rate
+            } else {
+                usd = parseFloat(forms.amount.replace(/,/g, '')) / rate
+                toPay = parseFloat(usd) + parseFloat(forms.gas_fee)
+                naira = toPay * rate
+            }
             setAmountToPay(toPay.toLocaleString())
-            const naira = toPay * rate
+            setInUSD(usd.toLocaleString())
             setInNaira(naira.toLocaleString())
         }
-    }, [forms.amount, rate, forms.gas_fee])
+    }, [forms.amount, forms.gas_fee, selectedCurr.name])
 
     const proceedFunc = () => {
         if (!forms.wallet_add) return ErrorAlert(`Please input your wallet address`)
@@ -77,7 +89,7 @@ const BuyCrypto = () => {
 
     const submit = (e) => {
         e.preventDefault()
-        const amt = forms.amount.replace(/,/g, '')
+        const amt = inUSD.replace(/,/g, '')
         if (!forms.crypto) return ErrorAlert('Select a cryptocurrency')
         if (!forms.amount) return ErrorAlert('Enter an amount')
         if (amt < forms.minimum) return ErrorAlert(`Minimum ${forms.crypto} buy amount is $${forms.minimum}`)
@@ -107,7 +119,7 @@ const BuyCrypto = () => {
         e.preventDefault();
         setModal(false);
 
-        const amt = forms.amount.replace(/,/g, '')
+        const amt = inUSD.replace(/,/g, '')
         const formdata = {
             crypto_currency: forms.crypto,
             type: 'buy',
@@ -127,7 +139,6 @@ const BuyCrypto = () => {
             await new Promise((resolve) => setTimeout(resolve, 2000));
             SuccessAlert(response.msg);
             navigate(`/user/exchange/orders`);
-
         } catch (error) {
             ErrorAlert(error.message);
         } finally {
@@ -220,21 +231,33 @@ const BuyCrypto = () => {
                                         <div className="">{selectedCurr.name}</div>
                                     </div>
                                 </div>
+                                {selectedCurr.name === 'NGN' && <div className="flex w-full item-center text-sm justify-between">
+                                    <div>Amount in USD</div>
+                                    <div>${inUSD}</div>
+                                </div>}
                                 <div className="flex w-full item-center text-sm justify-between">
                                     <div>Gas fee</div>
                                     <div>${forms.gas_fee}</div>
                                 </div>
                                 <div className="flex w-full item-center text-sm justify-between">
-                                    <div>Amount to pay</div>
+                                    <div>Amount to Pay</div>
                                     <div>${amountToPay}</div>
                                 </div>
                                 <div className="flex item-center text-sm justify-between w-full">
-                                    <div>Amount in Naira</div>
-                                    <div>₦{inNaira}</div>
+                                    <div className='flex gap-2 items-center'>
+                                        <div>Amount in Naira</div>
+                                        {inNaira !== '' && <div>₦{inNaira}</div>}
+                                    </div>
+                                    <div className='flex gap-1.5 items-center cursor-pointer text-lightgreen'
+                                        onClick={() => setSelectedCurr(selectedCurr.name === 'USD' ? { name: currencies[1].name, symbol: currencies[1].symbol } : { name: currencies[0].name, symbol: currencies[0].symbol })}
+                                    >
+                                        <div className='capitalize'>{selectedCurr.name === 'USD' ? 'set by naira' : 'set by USD'}</div>
+                                        <div><GoArrowSwitch /></div>
+                                    </div>
                                 </div>
                                 <div className="flex w-full item-center text-sm justify-between">
                                     <div>Buying rate</div>
-                                    <div className="">{rate}/$</div>
+                                    <div>₦{rate}/$</div>
                                 </div>
                                 <button onClick={submit} className={`bg-green-500 hover:bg-lightgreen text-white hover:text-ash w-full h-fit py-3.5 text-lg rounded-xl`}>Buy Crypto</button>
 
