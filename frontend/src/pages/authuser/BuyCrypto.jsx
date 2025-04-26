@@ -72,17 +72,17 @@ const BuyCrypto = () => {
             if (selectedCurr.name === 'USD') {
                 gas = parseFloat(forms.gas_fee)
                 toPay = parseFloat(forms.amount.replace(/,/g, '')) + gas
-                usd = parseFloat(forms.amount.replace(/,/g, ''))
+                usd = toPay
                 naira = toPay * rate
             } else {
                 gas = parseFloat(forms.gas_fee) * parseFloat(rate)
                 toPay = parseFloat(forms.amount.replace(/,/g, '')) + gas
                 usd = toPay / rate
-                naira = toPay * rate
+                naira = usd * rate
             }
             setGasFee(gas.toLocaleString())
             setAmountToPay(toPay.toLocaleString())
-            setInUSD(Number(usd).toFixed(2).toLocaleString())
+            setInUSD(usd.toLocaleString())
             setInNaira(naira.toLocaleString())
         }
     }, [forms.amount, forms.gas_fee, selectedCurr.name])
@@ -108,7 +108,13 @@ const BuyCrypto = () => {
 
     const submit = (e) => {
         e.preventDefault()
-        const amt = inUSD.replace(/,/g, '')
+        let amt;
+        if (selectedCurr.name === 'USD') {
+            amt = parseFloat(forms.amount.replace(/,/g, ''))
+        } else {
+            amt = parseFloat(forms.amount.replace(/,/g, '')) / rate
+        }
+        console.log(amt)
         if (!forms.crypto) return ErrorAlert('Select a cryptocurrency')
         if (!forms.amount) return ErrorAlert('Enter an amount')
         if (amt < forms.minimum) return ErrorAlert(`Minimum ${forms.crypto} buy amount is $${forms.minimum}`)
@@ -138,7 +144,12 @@ const BuyCrypto = () => {
         e.preventDefault();
         setModal(false);
 
-        const amt = inUSD.replace(/,/g, '')
+        let amt;
+        if (selectedCurr.name === 'USD') {
+            amt = parseFloat(forms.amount.replace(/,/g, ''))
+        } else {
+            amt = parseFloat(forms.amount.replace(/,/g, '')) / rate
+        }
         const formdata = {
             crypto_currency: forms.crypto,
             type: 'buy',
@@ -315,7 +326,7 @@ const BuyCrypto = () => {
                                     </ModalLayout>
                                 }
                                 <div className="flex items-start gap-2 flex-col w-full">
-                                    <div className="text-center  w-full text-2xl">Buying <span className='text-lightgreen font-bold'>{currencies[0].symbol}{amountToPay.toLocaleString()}</span> worth of {forms.symbol} at <br /> <span className='text-lightgreen font-bold'>{currencies[1].symbol}{inNaira}</span></div>
+                                    <div className="text-center  w-full text-2xl">Buying <span className='text-lightgreen font-bold'>{currencies[0].symbol}{inUSD}</span> worth of {forms.symbol} at <br /> <span className='text-lightgreen font-bold'>{currencies[1].symbol}{inNaira}</span></div>
                                 </div>
                                 <div className="text-sm text-center w-full">kindly provide your wallet address</div>
 

@@ -25,7 +25,6 @@ const OrderPage = () => {
             const res = await AuthGetApi(`${Apis.transaction.single_history}/${id}/${tag}`)
             if (res.status !== 200) return ErrorAlert(res.msg)
             setData(res.data[0])
-        console.log(res.data)
         } catch (error) {
             ErrorAlert(error.message)
         } finally {
@@ -90,7 +89,7 @@ const OrderPage = () => {
             setReferenceCode(data?.reference)
             await new Promise((resolve) => setTimeout(resolve, 2000))
             SuccessAlert(response.msg)
-    
+
             // Redirect to Paystack checkout page
             window.location.href = data?.authorization_url
         } catch (error) {
@@ -99,7 +98,7 @@ const OrderPage = () => {
             setLoad(false)
         }
     }
-    
+
 
     const confirmAndPay = async () => {
         setConfirm(false)
