@@ -43,18 +43,18 @@ const confirmOrDeclineProductPayment = async (status, reference) => {
                 eTitle: 'Order Purchased Successfully',
                 eBody: `
                     <div style="color: white;">
-                        <p>You have successfully paid for order <strong>#${productTransaction.gen_id}</strong> for ${productsArray.length} product(s).</p>
+                        <p>Thank you for your payment. Your order <strong>#${productTransaction.gen_id}</strong> for ${productsArray.length} product(s) has been successfully processed and confirmed.</p>
                         <p>Total amount: <strong>${nairaSign}${productTransaction.amount_paid.toLocaleString()}</strong></p>
                         
-                        <p style="margin-top: 20px;">Please allow up to <strong>48 hours</strong> for processing and delivery.</p>
+                        <p style="margin-top: 20px;">Your tool will be delivered to your email within<strong> 48 hours</strong></p>
                         
-                        <p>Need help with your order?<br>
-                        Contact our support team on WhatsApp:<br>
-                        <a href="https://api.whatsapp.com/send/?phone=2348106149391" 
+                        <p>If you do not receive your tool within the 48-hour window, feel free to reach out to our support team via WhatsApp:<br>
+                        <a href="https://api.whatsapp.com/send?phone=2348106149391&text=Hi+MonieQuest,+I+made+a+payment+over+48hrs+ago+but+haven't+received+the+tool+yet.+My+email+is+" 
                            style="color: #4CAF50; text-decoration: none; font-weight: bold;">
                            Click to Chat on WhatsApp
                         </a></p>
                         
+                        <p style="margin-top: 20px;">We appreciate your purchase! Don't forget — there's always another tool ready to take your progress even further.</p>
                         <p style="margin-top: 20px;">Thank you for your purchase!</p>
                     </div>
                 `,
