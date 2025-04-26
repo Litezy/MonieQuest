@@ -62,30 +62,55 @@ const BuyCrypto = () => {
     const [inNaira, setInNaira] = useState('')
     const [inUSD, setInUSD] = useState('')
     const [amountToPay, setAmountToPay] = useState('')
+    const [gasFee, setGasFee] = useState('')
     useEffect(() => {
         if (forms.amount && forms.gas_fee && rate) {
+            let gas;
             let toPay;
             let naira;
             let usd;
             let amt =parseFloat(forms.amount.replace(/,/g, ''))
             if (selectedCurr.name === 'USD') {
-                usd = parseFloat(forms.amount.replace(/,/g, ''))
-                toPay = parseFloat(usd) + parseFloat(forms.gas_fee)
+                gas = parseFloat(forms.gas_fee)
+                toPay = parseFloat(forms.amount.replace(/,/g, '')) + gas
+                usd = toPay
                 naira = toPay * rate
             //    const  newamt = amt / rate
             //     setForms({...forms,amount:newamt.toLocaleString()})
             } else {
+<<<<<<< HEAD
                 usd = parseFloat(forms.amount.replace(/,/g, '')) / rate
                 toPay = parseFloat(usd) + parseFloat(forms.gas_fee)
                 naira = toPay * rate
             //    const newamt = amt * rate
             //     setForms({...forms,amount:newamt.toLocaleString()})
+=======
+                gas = parseFloat(forms.gas_fee) * parseFloat(rate)
+                toPay = parseFloat(forms.amount.replace(/,/g, '')) + gas
+                usd = toPay / rate
+                naira = usd * rate
+>>>>>>> 58e2df026766a5a587a2c93fbfad2d5de282bea9
             }
-            setAmountToPay(Number(toPay).toFixed(2).toLocaleString())
-            setInUSD(Number(usd).toFixed(2).toLocaleString())
+            setGasFee(gas.toLocaleString())
+            setAmountToPay(toPay.toLocaleString())
+            setInUSD(usd.toLocaleString())
             setInNaira(naira.toLocaleString())
         }
     }, [forms.amount, forms.gas_fee, selectedCurr.name])
+
+    const ChangeCurrency = () => {
+        setSelectedCurr(selectedCurr.name === 'USD' ? { name: currencies[1].name, symbol: currencies[1].symbol } : { name: currencies[0].name, symbol: currencies[0].symbol })
+        const amt = parseFloat(forms.amount.replace(/,/g, ''))
+        let convertedAmt;
+        if (forms.amount) {
+            if (selectedCurr.name === 'USD') {
+                convertedAmt = amt * rate
+            } else {
+                convertedAmt = amt / rate
+            }
+            setForms({ ...forms, amount: convertedAmt.toLocaleString() })
+        }
+    }
 
     const proceedFunc = () => {
         if (!forms.wallet_add) return ErrorAlert(`Please input your wallet address`)
@@ -94,7 +119,13 @@ const BuyCrypto = () => {
 
     const submit = (e) => {
         e.preventDefault()
-        const amt = inUSD.replace(/,/g, '')
+        let amt;
+        if (selectedCurr.name === 'USD') {
+            amt = parseFloat(forms.amount.replace(/,/g, ''))
+        } else {
+            amt = parseFloat(forms.amount.replace(/,/g, '')) / rate
+        }
+        console.log(amt)
         if (!forms.crypto) return ErrorAlert('Select a cryptocurrency')
         if (!forms.amount) return ErrorAlert('Enter an amount')
         if (amt < forms.minimum) return ErrorAlert(`Minimum ${forms.crypto} buy amount is $${forms.minimum}`)
@@ -124,7 +155,12 @@ const BuyCrypto = () => {
         e.preventDefault();
         setModal(false);
 
-        const amt = inUSD.replace(/,/g, '')
+        let amt;
+        if (selectedCurr.name === 'USD') {
+            amt = parseFloat(forms.amount.replace(/,/g, ''))
+        } else {
+            amt = parseFloat(forms.amount.replace(/,/g, '')) / rate
+        }
         const formdata = {
             crypto_currency: forms.crypto,
             type: 'buy',
@@ -236,25 +272,28 @@ const BuyCrypto = () => {
                                         <div className="">{selectedCurr.name}</div>
                                     </div>
                                 </div>
-                                {selectedCurr.name === 'NGN' && <div className="flex w-full item-center text-sm justify-between">
-                                    <div>Amount in USD</div>
-                                    <div>${inUSD}</div>
-                                </div>}
                                 <div className="flex w-full item-center text-sm justify-between">
                                     <div>Gas fee</div>
-                                    <div>${forms.gas_fee}</div>
+                                    <div>{selectedCurr.symbol}{gasFee}</div>
                                 </div>
                                 <div className="flex w-full item-center text-sm justify-between">
                                     <div>Amount to Pay</div>
-                                    <div>${amountToPay}</div>
+                                    <div>{selectedCurr.symbol}{amountToPay}</div>
                                 </div>
                                 <div className="flex item-center text-sm justify-between w-full">
-                                    <div className='flex gap-2 items-center'>
-                                        <div>Amount in Naira</div>
-                                        {inNaira !== '' && <div>₦{inNaira}</div>}
-                                    </div>
+                                    {selectedCurr.name === 'USD' ?
+                                        <div className='flex gap-2 items-center'>
+                                            <div>Amount in Naira</div>
+                                            {inNaira !== '' && <div>₦{inNaira}</div>}
+                                        </div>
+                                        :
+                                        <div className='flex gap-2 items-center'>
+                                            <div>Amount in USD</div>
+                                            {inUSD !== '' && <div>${inUSD}</div>}
+                                        </div>
+                                    }
                                     <div className='flex gap-1.5 items-center cursor-pointer text-lightgreen'
-                                        onClick={() => setSelectedCurr(selectedCurr.name === 'USD' ? { name: currencies[1].name, symbol: currencies[1].symbol } : { name: currencies[0].name, symbol: currencies[0].symbol })}
+                                        onClick={ChangeCurrency}
                                     >
                                         <div className='capitalize'>{selectedCurr.name === 'USD' ? 'set by naira' : 'set by USD'}</div>
                                         <div><GoArrowSwitch /></div>
@@ -298,7 +337,7 @@ const BuyCrypto = () => {
                                     </ModalLayout>
                                 }
                                 <div className="flex items-start gap-2 flex-col w-full">
-                                    <div className="text-center  w-full text-2xl">Buying <span className='text-lightgreen font-bold'>{currencies[0].symbol}{amountToPay.toLocaleString()}</span> worth of {forms.symbol} at <br /> <span className='text-lightgreen font-bold'>{currencies[1].symbol}{inNaira}</span></div>
+                                    <div className="text-center  w-full text-2xl">Buying <span className='text-lightgreen font-bold'>{currencies[0].symbol}{inUSD}</span> worth of {forms.symbol} at <br /> <span className='text-lightgreen font-bold'>{currencies[1].symbol}{inNaira}</span></div>
                                 </div>
                                 <div className="text-sm text-center w-full">kindly provide your wallet address</div>
 
