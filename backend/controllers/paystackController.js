@@ -3,7 +3,7 @@ const BuyCrypto = require('../models').exchangeBuys;
 const BankWithdraw = require('../models').withdrawals
 const Wallet = require('../models').wallets
 const User = require('../models').users;
-const { ServerError, formatToUserTimezone, webURL } = require('../utils/utils');
+const { ServerError, formatToUserTimezone, webURL, nairaSign } = require('../utils/utils');
 require('dotenv').config();
 const secret = process.env.PAYSTACK_SECRET;
 const axios = require('axios');
@@ -18,7 +18,7 @@ const { Op } = require('sequelize');
 const Notification = require('../models').notifications
 
 const confirmOrDeclineProductPayment = async (status, reference) => {
-        console.log(`details received`, status, reference)
+    console.log(`details received`, status, reference)
 
     try {
         const productTransaction = await ProductOrder.findOne({ where: { reference } });
@@ -32,11 +32,34 @@ const confirmOrDeclineProductPayment = async (status, reference) => {
             console.log('product already marked paid')
             return { success: true, msg: `Transaction already marked as ${productTransaction.status}` };
         }
-
+        const productsArray = Array.isArray(productTransaction.products) ? productTransaction.products : [productTransaction.products];
         if (status === "success") {
             productTransaction.status = "paid";
             await productTransaction.save();
             console.log('product marked as paid and saved')
+            const buyer = { email: productTransaction.email_address }
+            await Mailing({
+                subject: 'New Order Purchase',
+                eTitle: 'Order Purchased Successfully',
+                eBody: `
+                    <div style="color: white;">
+                        <p>You have successfully paid for order <strong>#${productTransaction.gen_id}</strong> for ${productsArray.length} product(s).</p>
+                        <p>Total amount: <strong>${nairaSign}${productTransaction.amount_paid.toLocaleString()}</strong></p>
+                        
+                        <p style="margin-top: 20px;">Please allow up to <strong>48 hours</strong> for processing and delivery.</p>
+                        
+                        <p>Need help with your order?<br>
+                        Contact our support team on WhatsApp:<br>
+                        <a href="https://api.whatsapp.com/send/?phone=2348106149391" 
+                           style="color: #4CAF50; text-decoration: none; font-weight: bold;">
+                           Click to Chat on WhatsApp
+                        </a></p>
+                        
+                        <p style="margin-top: 20px;">Thank you for your purchase!</p>
+                    </div>
+                `,
+                account: buyer
+            });
             return { success: true, msg: "Product transaction marked as paid" };
         }
 
@@ -86,6 +109,7 @@ const handleCryptoBuyPayment = async (status, reference, data) => {
 
             transaction.amount_in_naira = parseFloat(newAmt);
             transaction.status = "paid";
+            transaction.url = null
             await transaction.save();
 
             console.log(`✅ Crypto transaction ${reference} updated successfully.`);
@@ -242,7 +266,8 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
             reference: reference,
             metadata: {
                 narration: 'p2p_buy'
-            }
+            },
+            callback_url:'http://localhost:5173/user/exchange/buy/verify_payment'
         };
 
         try {
@@ -255,6 +280,9 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
             });
 
             // Return response data if successful
+            findOrder.url = response.data.data?.authorization_url
+            findOrder.status = 'initialized'
+            await findOrder.save()
             return res.json({ status: 200, msg: 'Payment initialized', data: response.data });
         } catch (error) {
             // Handle Paystack API error
@@ -314,7 +342,8 @@ exports.InitializeProductBuyPayment = async (req, res) => {
             metadata: {
                 order_id: productOrder.gen_id,
                 narration: "product-purchase"
-            }
+            },
+            callback_url: `http://localhost:5173/payment_status`
         };
 
         const response = await axios.post('https://api.paystack.co/transaction/initialize', payload, {
@@ -326,50 +355,50 @@ exports.InitializeProductBuyPayment = async (req, res) => {
 
         const data = response.data;
 
-        await Mailing({
-            subject: 'New Order Placed',
-            eTitle: 'Order placed',
-            eBody: `
-               <div style="color: white;">
-                   You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s). A total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} is to be made. If you didn’t proceed from the website to make payments, click the link below to continue: <a href="${data.data.authorization_url}" style="text-decoration: underline; color: #00fe5e">click here</a>
-                     <br>
-                   <span style="font-style: italic; margin-top: 10px; display: block; color: white;">Note:</span>
-                     NB: If you did proceed from the website to make payments, kindly ignore this email. 
-                   If you didn't, kindly follow the link above as it will expire in 20 minutes.
-                </div>`,
+        // await Mailing({
+        //     subject: 'New Order Placed',
+        //     eTitle: 'Order placed',
+        //     eBody: `
+        //        <div style="color: white;">
+        //            You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s). A total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} is to be made. If you didn’t proceed from the website to make payments, click the link below to continue: <a href="${data.data.authorization_url}" style="text-decoration: underline; color: #00fe5e">click here</a>
+        //              <br>
+        //            <span style="font-style: italic; margin-top: 10px; display: block; color: white;">Note:</span>
+        //              NB: If you did proceed from the website to make payments, kindly ignore this email. 
+        //            If you didn't, kindly follow the link above as it will expire in 20 minutes.
+        //         </div>`,
 
-            account: buyer
-        });
+        //     account: buyer
+        // });
 
         const formattedTime = formatToUserTimezone(productOrder.createdAt);
         const admins = await User.findAll({ where: { role: { [Op.in]: ['admin', 'super admin'] } } });
 
-        if (admins && admins.length > 0) {
-            admins.map(async ele => {
-                await Notification.create({
-                    user: ele.id,
-                    title: 'Product order alert',
-                    content: `Hello Admin, a new product order with ID (#${productOrder.gen_id}) for ${productsArray.length} product(s) totaling ${nairaSign}${productOrder.amount_paid.toLocaleString()} has been initialized. Order was placed on ${moment(productOrder.createdAt).format('DD-MM-yyyy')} at ${formattedTime}`,
-                    url: '/admin/products/orders',
-                });
+        // if (admins && admins.length > 0) {
+        //     admins.map(async ele => {
+        //         await Notification.create({
+        //             user: ele.id,
+        //             title: 'Product order alert',
+        //             content: `Hello Admin, a new product order with ID (#${productOrder.gen_id}) for ${productsArray.length} product(s) totaling ${nairaSign}${productOrder.amount_paid.toLocaleString()} has been initialized. Order was placed on ${moment(productOrder.createdAt).format('DD-MM-yyyy')} at ${formattedTime}`,
+        //             url: '/admin/products/orders',
+        //         });
 
-                await Mailing({
-                    subject: 'Product Order Alert',
-                    eTitle: 'Product order placed',
-                    eBody: `
-                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">order ID:</span><span style="padding-left: 1rem">#${productOrder.gen_id}</span></div>
-                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">${productsArray.length}</span></div>
-                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">amount to be paid:</span><span style="padding-left: 1rem">${nairaSign}${productOrder.amount_paid.toLocaleString()}</span></div>
-                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment method:</span><span style="padding-left: 1rem">Paystack</span></div>
-                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment status:</span><span style="padding-left: 1rem">${productOrder.status}</span></div>
-                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">buyer's email:</span><span style="padding-left: 1rem">${productOrder.email_address}</span></div>
-                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">date:</span><span style="padding-left: 1rem">${moment(productOrder.createdAt).format('DD-MM-yyyy')}</span></div>
-                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">time:</span><span style="padding-left: 1rem">${formattedTime}</span></div>
-                        <div style="color:white ;margin-top: 1rem">See more details <a href='${webURL}/admin/products/orders' style="text-decoration: underline; color: #00fe5e">here</a></div>`,
-                    account: ele
-                });
-            });
-        }
+        //         await Mailing({
+        //             subject: 'Product Order Alert',
+        //             eTitle: 'Product order placed',
+        //             eBody: `
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">order ID:</span><span style="padding-left: 1rem">#${productOrder.gen_id}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">${productsArray.length}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">amount to be paid:</span><span style="padding-left: 1rem">${nairaSign}${productOrder.amount_paid.toLocaleString()}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment method:</span><span style="padding-left: 1rem">Paystack</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment status:</span><span style="padding-left: 1rem">${productOrder.status}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">buyer's email:</span><span style="padding-left: 1rem">${productOrder.email_address}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">date:</span><span style="padding-left: 1rem">${moment(productOrder.createdAt).format('DD-MM-yyyy')}</span></div>
+        //                 <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">time:</span><span style="padding-left: 1rem">${formattedTime}</span></div>
+        //                 <div style="color:white ;margin-top: 1rem">See more details <a href='${webURL}/admin/products/orders' style="text-decoration: underline; color: #00fe5e">here</a></div>`,
+        //             account: ele
+        //         });
+        //     });
+        // }
 
         return res.json({ status: 200, msg: "Product payment initialized", data });
 
@@ -380,6 +409,78 @@ exports.InitializeProductBuyPayment = async (req, res) => {
 };
 
 
+
+exports.checkPaymentStatus = async (req, res) => {
+    try {
+        const { reference } = req.body;
+        if (!reference) return res.json({ status: 400, msg: "Transaction reference missing" });
+
+        // Verify payment from Paystack
+        const response = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
+            headers: {
+                Authorization: `Bearer ${secret}`, 
+                "Content-Type": "application/json"
+            }
+        });
+
+        const paymentData = response.data.data;
+        if (paymentData.status !== "success") {
+            return res.json({ status: 400, msg: "Payment not successful",data:reference });
+        }
+
+        // Payment successful on Paystack
+        const findProductReference = await ProductOrder.findOne({ where: { reference } });
+        if (!findProductReference) return res.json({ status: 404, msg: "Order reference not found" });
+
+        if (findProductReference.status !== 'paid') {
+            findProductReference.status = 'paid';
+            await findProductReference.save();
+        }
+
+        return res.json({ status: 200, msg: "Payment confirmed", data: reference });
+
+    } catch (error) {
+        console.error(error.response ? error.response.data : error.message);
+        ServerError(res, error);
+    }
+}
+
+
+
+exports.checkCryptoPaymentStatus = async (req, res) => {
+    try {
+        const { reference } = req.body;
+        if (!reference) return res.json({ status: 400, msg: "Transaction reference missing" });
+
+        // Verify payment from Paystack
+        const response = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
+            headers: {
+                Authorization: `Bearer ${secret}`, 
+                "Content-Type": "application/json"
+            }
+        });
+
+        const paymentData = response.data.data;
+        if (paymentData.status !== "success") {
+            return res.json({ status: 400, msg: "Payment not successful",data:reference });
+        }
+
+        // Payment successful on Paystack
+        const findProductReference = await BuyCrypto.findOne({ where: { reference } });
+        if (!findProductReference) return res.json({ status: 404, msg: "Order reference not found" });
+
+        if (findProductReference.status !== 'paid') {
+            findProductReference.status = 'paid';
+            await findProductReference.save();
+        }
+
+        return res.json({ status: 200, msg: "Payment confirmed", data: reference });
+
+    } catch (error) {
+        console.error(error.response ? error.response.data : error.message);
+        ServerError(res, error);
+    }
+}
 
 
 

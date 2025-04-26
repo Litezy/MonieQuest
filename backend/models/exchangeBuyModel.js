@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
         userid: { type: DataTypes.INTEGER, },
         status: { type: DataTypes.STRING, defaultValue: 'unpaid' },
         trans_hash: { type: DataTypes.STRING, allowNull: true },
-        reference: { type: DataTypes.STRING, allowNull: true }
+        reference: { type: DataTypes.STRING, allowNull: true },
+        url: { type: DataTypes.STRING,allowNull:true},
+
     })
 }

@@ -22,9 +22,8 @@ exports.nairaSign = '₦'
 
 
 exports.formatToUserTimezone = (dateInput = new Date(), format = 'hh:mm a') => {
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return moment(dateInput).tz(userTimezone).format(format);
-  }
+    return moment(dateInput).tz('Africa/Lagos').format(format);
+};
 
   exports.ServerError = (res, error) => {
     if (!res) {

@@ -63,8 +63,11 @@ const UserDetails = () => {
         },
     ]
 
+    const [searchVal,setSearchVal] = useState('')
+
     const handleFilter = (e) => {
         const { value } = e.target;
+        setSearchVal(value)
         if (!value) {
             setFilteredData(data);
             return;
@@ -221,7 +224,7 @@ const UserDetails = () => {
                 <ModalLayout setModal={setModal} clas={`lg:w-1/2 w-10/12 mx-auto`}>
                     <div className="p-5  bg-white text-dark shadow-xl rounded-md">
                         <div className="text-base text-center mb-1 font-medium">Are you sure you want to delete {selectedUser?.first_name} {selectedUser?.surname} account?</div>
-                        <div className='text-sm text-red-600 font-medium mb-3 border w-fit mx-auto py-1 px-2'>Action is irreversible and all user assets will lost!</div>
+                        <div className='text-sm text-red-600 font-medium mb-3 border w-fit mx-auto py-1 px-2'>Action is irreversible and all user assets will be lost!</div>
                         <div className="flex items-center justify-between">
                             <button onClick={() => setModal4(false)} className='px-4 py-2 bg-red-600 text-white rounded-md'>Cancel</button>
                             <button onClick={DeleteAccount} className='px-4 py-2 bg-green-600 text-white rounded-md'>Confirm</button>
@@ -239,7 +242,11 @@ const UserDetails = () => {
                 </div>
                 <div className="my-5 text-xl font-bold text-center">Below are Users Details on MonieQuest</div>
                 <div className="w-full lg:w-2/3 mx-auto relative">
-                    <FormInput placeholder='Search by FullName and Email' className="!rounded-lg" onChange={(e) => handleFilter(e)} />
+                    <FormInput
+                    value={searchVal} 
+                    placeholder='Search by FullName and Email' className="!rounded-lg" 
+                    onChange={(e) => handleFilter(e)} />
+                    
                     <div className="absolute top-3 right-3">
                         <CiSearch className='text-xl cursor-pointer text-white' />
                     </div>

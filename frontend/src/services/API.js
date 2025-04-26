@@ -150,6 +150,8 @@ const paystack_urls = {
     buy_crypto: paystack + 'initialize_buy_payment',
     admin_transfer: paystack + "admin_transfer",
     purchase_products: paystack + 'initialize_product_purchase',
+    check_product_payment_status: paystack +'check_product_payment_status',
+    check_crypto_payment_status: paystack +'check_crypto_payment_status'
 }
 
 export const Apis = {
