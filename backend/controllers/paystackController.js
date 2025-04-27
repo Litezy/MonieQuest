@@ -177,9 +177,6 @@ const handleBankWithdrawal = async (status, reference) => {
     }
 };
 
-
-
-
 // Main webhook handler function
 exports.handleWebhook = async (req, res) => {
     try {
@@ -235,8 +232,6 @@ exports.handleWebhook = async (req, res) => {
         return res.json({ status: 500, msg: "Internal server error" });
     }
 };
-
-
 
 
 exports.InitializeCryptoBuyPayment = async (req, res) => {
@@ -299,7 +294,6 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
         console.error("Error initializing crypto payment:", error.message);
     }
 };
-
 
 
 exports.InitializeProductBuyPayment = async (req, res) => {
@@ -413,7 +407,6 @@ exports.InitializeProductBuyPayment = async (req, res) => {
 };
 
 
-
 exports.checkPaymentStatus = async (req, res) => {
     try {
         const { reference } = req.body;
@@ -448,7 +441,6 @@ exports.checkPaymentStatus = async (req, res) => {
         ServerError(res, error);
     }
 }
-
 
 
 exports.checkCryptoPaymentStatus = async (req, res) => {
@@ -488,15 +480,11 @@ exports.checkCryptoPaymentStatus = async (req, res) => {
 
 
 
-
-
 /**
  * @desc Admin initiates a transfer to a user
  * @route POST /admin/transfer
  * @access Admin
  */
-
-
 
 
 exports.adminTransfer = async (req, res) => {

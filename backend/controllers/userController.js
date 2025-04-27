@@ -179,8 +179,8 @@ exports.continueWithGoogle = async (req, res) => {
             const token = jwt.sign({ id: newUser.id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '15h' });
             return res.json({ status: 201, msg: 'User created successfully', token });
         } else {
-            if(findUser.suspend === 'true'){
-                return res.json({status:401, msg:"sorry your account has been suspended"})
+            if (findUser.suspend === 'true') {
+                return res.json({ status: 401, msg: `Your account has been suspended, kindly contact support team for possible reactivation`  })
             }
             const token = jwt.sign({ id: findUser.id, role: findUser.role }, process.env.JWT_SECRET, { expiresIn: '15h' });
             return res.json({ status: 200, msg: 'User logged in successfully', token });
