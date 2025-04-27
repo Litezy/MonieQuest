@@ -17,6 +17,8 @@ const Mailing = require('../config/emailDesign');
 const { Op } = require('sequelize');
 const Notification = require('../models').notifications
 
+const isproduction = process.env.NODE_ENV ==='production'
+
 const confirmOrDeclineProductPayment = async (status, reference) => {
     console.log(`details received`, status, reference)
 
@@ -267,7 +269,8 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
             metadata: {
                 narration: 'p2p_buy'
             },
-            callback_url:'http://localhost:5173/user/exchange/buy/verify_payment'
+            callback_url: isproduction ? 'https://moniequest-front.vercel.app/user/exchange/buy/verify_payment':
+            'http://localhost:5173/user/exchange/buy/verify_payment'
         };
 
         try {
@@ -343,7 +346,8 @@ exports.InitializeProductBuyPayment = async (req, res) => {
                 order_id: productOrder.gen_id,
                 narration: "product-purchase"
             },
-            callback_url: `http://localhost:5173/payment_status`
+            callback_url:isproduction ? `https://moniequest-front.vercel.app/payment_status`: 
+            `http://localhost:5173/payment_status`
         };
 
         const response = await axios.post('https://api.paystack.co/transaction/initialize', payload, {
