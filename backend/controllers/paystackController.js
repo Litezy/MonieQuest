@@ -358,7 +358,7 @@ exports.InitializeProductBuyPayment = async (req, res) => {
             eTitle: 'Order placed',
             eBody: `
                <div style="color: white;">
-                   You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s). A total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} is to be made. If you didn’t proceed from the website to make payments, click the link below to continue: <a href="${data.data.authorization_url}" style="text-decoration: underline; color: #00fe5e">click here</a>
+                   You have successfully placed an order with the ID (${productOrder.gen_id}) for ${productsArray.length} product(s). A total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} is to be made. If you didn’t proceed from the website to make payments, click the link below to continue: <a href="${data.data.authorization_url}" style="text-decoration: underline; color: #00fe5e">click here</a>
                      <br>
                    <span style="font-style: italic; margin-top: 10px; display: block; color: white;">Note:</span>
                      NB: If you did proceed from the website to make payments, kindly ignore this email. 

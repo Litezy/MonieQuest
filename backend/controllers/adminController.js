@@ -1125,7 +1125,7 @@ exports.AllBlogComments = async (req, res) => {
 exports.getCryptoBuysOrders = async (req, res) => {
     try {
         const allbuys = await BuyCrypto.findAll({
-            where: { status: [`unpaid`, `paid`] },
+            where: { status: [`unpaid`, `paid`, `initialized`] },
             include: [
                 {
                     model: User, as: 'crypto_buyer',

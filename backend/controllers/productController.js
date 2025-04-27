@@ -173,6 +173,7 @@ exports.ProductOrder = async (req, res) => {
             email: productOrder.email_address
         }
         const formattedTime = formatToUserTimezone(productOrder.createdAt)
+
         await Mailing({
             subject: 'New Order Placed',
             eTitle: `Order placed`,
@@ -189,11 +190,9 @@ exports.ProductOrder = async (req, res) => {
                 await Notification.create({
                     user: ele.id,
                     title: `Product order alert`,
-                    content: `Hello Admin, a new product order with the ID (#${productOrder.gen_id}) has been placed for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} payment made via bank transfer, kindly confirm this transaction.`,
+                    content: `Hello Admin, a new product order with the ID (${productOrder.gen_id}) has been placed for ${productsArray.length} product(s) purchase, a total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} payment made via bank transfer, kindly confirm this transaction.`,
                     url: '/admin/products/orders',
                 })
-
-                const formattedTime = formatToUserTimezone(productOrder.createdAt)
 
                 await Mailing({
                     subject: 'Product Order Alert',
