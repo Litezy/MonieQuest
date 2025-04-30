@@ -247,9 +247,6 @@ const handleBankWithdrawal = async (status, reference) => {
     }
 };
 
-
-
-
 // Main webhook handler function
 exports.handleWebhook = async (req, res) => {
     try {
@@ -381,7 +378,6 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
 };
 
 
-
 exports.InitializeProductBuyPayment = async (req, res) => {
     try {
         const { email_address, total_price, total_discount, products, amount_paid } = req.body;
@@ -444,7 +440,7 @@ exports.InitializeProductBuyPayment = async (req, res) => {
             eTitle: 'Order placed',
             eBody: `
                <div style="color: white;">
-                   You have successfully placed an order with the ID (#${productOrder.gen_id}) for ${productsArray.length} product(s). A total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} is to be made. If you didn’t proceed from the website to make payments, click the link below to continue: <a href="${data.data.authorization_url}" style="text-decoration: underline; color: #00fe5e">click here</a>
+                   You have successfully placed an order with the ID (${productOrder.gen_id}) for ${productsArray.length} product(s). A total amount of ${nairaSign}${productOrder.amount_paid.toLocaleString()} is to be made. If you didn’t proceed from the website to make payments, click the link below to continue: <a href="${data.data.authorization_url}" style="text-decoration: underline; color: #00fe5e">click here</a>
                      <br>
                    <span style="font-style: italic; margin-top: 10px; display: block; color: white;">Note:</span>
                      NB: If you did proceed from the website to make payments, kindly ignore this email. 
@@ -491,7 +487,6 @@ exports.InitializeProductBuyPayment = async (req, res) => {
         return res.status(500).json({ status: 500, msg: "Internal server error", error: error.message });
     }
 };
-
 
 
 exports.checkPaymentStatus = async (req, res) => {
@@ -559,7 +554,6 @@ exports.checkPaymentStatus = async (req, res) => {
 
 
 
-
 exports.checkCryptoPaymentStatus = async (req, res) => {
     try {
         const { reference } = req.body;
@@ -600,15 +594,11 @@ exports.checkCryptoPaymentStatus = async (req, res) => {
 
 
 
-
-
 /**
  * @desc Admin initiates a transfer to a user
  * @route POST /admin/transfer
  * @access Admin
  */
-
-
 
 
 exports.adminTransfer = async (req, res) => {

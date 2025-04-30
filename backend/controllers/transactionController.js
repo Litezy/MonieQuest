@@ -275,7 +275,7 @@ exports.getUserCryptoOrderHistory = async (req, res) => {
     try {
         const user = await User.findOne({ where: { id: req.user } })
         if (!user) return res.json({ status: 401, msg: 'User not auntorized' })
-        const buytrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user, status: [`unpaid`, `paid`] } })
+        const buytrans = await CryptoBuyModel.findAll({ where: { userid: user ? user.id : req.user, status: [`unpaid`, `paid`, `initialized`] } })
         const selltrans = await CryptoSellModel.findAll({ where: { userid: user ? user.id : req.user, status: 'pending' } })
         if (!buytrans && !selltrans) return res.json({ status: 404, msg: 'No crypto oder history found' })
         const alltrans = [...buytrans, ...selltrans]
