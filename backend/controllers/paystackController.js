@@ -3,7 +3,7 @@ const BuyCrypto = require('../models').exchangeBuys;
 const BankWithdraw = require('../models').withdrawals
 const Wallet = require('../models').wallets
 const User = require('../models').users;
-const { ServerError, formatToUserTimezone, webURL, nairaSign } = require('../utils/utils');
+const { ServerError, formatToUserTimezone, webURL, nairaSign, dollarSign } = require('../utils/utils');
 require('dotenv').config();
 const secret = process.env.PAYSTACK_SECRET;
 const axios = require('axios');
@@ -17,7 +17,7 @@ const Mailing = require('../config/emailDesign');
 const { Op } = require('sequelize');
 const Notification = require('../models').notifications
 
-const isproduction = process.env.NODE_ENV ==='production'
+const isproduction = process.env.NODE_ENV === 'production'
 
 const confirmOrDeclineProductPayment = async (status, reference) => {
     console.log(`details received`, status, reference)
@@ -34,36 +34,45 @@ const confirmOrDeclineProductPayment = async (status, reference) => {
             console.log('product already marked paid')
             return { success: true, msg: `Transaction already marked as ${productTransaction.status}` };
         }
+        const amt = parseInt(productTransaction.amount_paid)
+        const amtformat = amt.toLocaleString()
         const productsArray = Array.isArray(productTransaction.products) ? productTransaction.products : [productTransaction.products];
         if (status === "success") {
             productTransaction.status = "paid";
             await productTransaction.save();
             console.log('product marked as paid and saved')
             const buyer = { email: productTransaction.email_address }
-            await Mailing({
-                subject: 'New Order Purchase',
-                eTitle: 'Order Purchased Successfully',
-                eBody: `
-                    <div style="color: white;">
-                        <p>Thank you for your payment. Your order <strong>#${productTransaction.gen_id}</strong> for ${productsArray.length} product(s) has been successfully processed and confirmed.</p>
-                        <p>Total amount: <strong>${nairaSign}${productTransaction.amount_paid.toLocaleString()}</strong></p>
-                        
-                        <p style="margin-top: 20px;">Your tool will be delivered to your email within<strong> 48 hours</strong></p>
-                        
-                        <p>If you do not receive your tool within the 48-hour window, feel free to reach out to our support team via WhatsApp:<br>
-                        <a href="https://api.whatsapp.com/send?phone=2348106149391&text=Hi+MonieQuest,+I+made+a+payment+over+48hrs+ago+but+haven't+received+the+tool+yet.+My+email+is+" 
-                           style="color: #4CAF50; text-decoration: none; font-weight: bold;">
-                           Click to Chat on WhatsApp
-                        </a></p>
-                        
-                        <p style="margin-top: 20px;">We appreciate your purchase! Don't forget — there's always another tool ready to take your progress even further.</p>
-                        <p style="margin-top: 20px;">Thank you for your purchase!</p>
-                    </div>
-                `,
-                account: buyer
-            });
+            try {
+                await Mailing({
+                    subject: 'New Order Purchase',
+                    eTitle: 'Order Purchase Successful',
+                    eBody: `
+                        <div style="color: white;">
+                            <p>Thank you for your payment. Your order <strong>#${productTransaction.gen_id}</strong> for ${productsArray.length} product(s) has been successfully processed and confirmed.</p>
+                            <p>Total amount: <strong>₦${amtformat}</strong></p>
+                            
+                            <p style="margin-top: 10px;color: white;">Your tool will be delivered to your email within<strong> 48 hours</strong></p>
+                            
+                            <p style="margin: 10px 0px;color: white;">
+                            If you haven't received your tool after 48 hours, please 
+                            <a href="https://api.whatsapp.com/send?phone=2348106149391&text=Hi+MonieQuest,+I+made+a+payment+over+48hrs+ago+but+haven't+received+the+tool+yet.+My+email+is+" target="_blank" style="color: #25D366; text-decoration: underline;">
+                            click here to chat with support on WhatsApp</a>.
+                            </p>
+
+                            <p style="margin-top: 10px; color: white;">We appreciate your purchase! Don't forget — there's always another tool ready to take your progress even further.</p>
+                            <p style="margin-top: 20px; color:white">Thank you for your purchase!</p>
+                        </div>
+                    `,
+                    account: buyer
+                });
+                console.log('Email sent successfully');
+            } catch (error) {
+                console.error('Error while sending email:', error);
+            }
             return { success: true, msg: "Product transaction marked as paid" };
         }
+
+
 
         else if (status === "failed") {
             productTransaction.status = "failed";
@@ -86,17 +95,20 @@ const confirmOrDeclineProductPayment = async (status, reference) => {
 // Handle Crypto Buy Payment
 const handleCryptoBuyPayment = async (status, reference, data) => {
     try {
-        const { customer, amount } = data;
+        const { amount } = data;
         const newAmt = amount / 100;
 
-        let transaction = await BuyCrypto.findOne({ where: { reference } });
+        let transaction = await BuyCrypto.findOne({
+            where: { reference },
+            include: [
+                {
+                    model: User, as: 'crypto_buyer'
+                }
+            ]
+        });
 
+        console.log(transaction?.crypto_buyer?.email)
         if (!transaction) {
-            transaction = await BuyCrypto.findOne({
-                where: { email: customer.email },
-                include: [{ model: User, as: 'crypto_buyer' }]
-            });
-
             if (!transaction) {
                 console.log(`❌ Crypto transaction not found: ${reference}`);
                 return { success: false, msg: "Transaction not found" };
@@ -113,8 +125,32 @@ const handleCryptoBuyPayment = async (status, reference, data) => {
             transaction.status = "paid";
             transaction.url = null
             await transaction.save();
+            const buyer = { email: transaction?.crypto_buyer?.email }
+            await Notification.create({
+                user: transaction?.userid,
+                title: 'Crypto Purchase Successful',
+                content: `Your payment of ₦${newAmt.toLocaleString()} is succesful  `,
+                url: `/user/transactions_history`
+            })
+            try {
 
-            console.log(`✅ Crypto transaction ${reference} updated successfully.`);
+                await Mailing({
+                    subject: 'Crypto Purchase Successful',
+                    eTitle: 'Crypto Order Purchase Confirmed',
+                    eBody: `
+                        <div style="color: white;">
+                            <p>Thank you for your payment of ₦${newAmt.toLocaleString()} which has been successfully processed and confirmed. please allow upto 1hr for your ${transaction?.crypto_currency} asset to be sent to your wallet ending in ****${transaction?.wallet_address.slice(-5)}.</p>
+                             <p style="margin-top: 20px;">Thank you for your purchase!</p>
+                        </div>
+                    `,
+                    account: buyer
+                });
+                console.log('Email sent successfully');
+            } catch (error) {
+                console.error('Error while sending email:', error);
+            }
+
+            console.log(`✅ Crypto transaction reference ${reference} updated successfully.`);
             return { success: true, msg: "Crypto transaction marked as paid successfully", data: transaction };
         } else {
             transaction.status = "failed";
@@ -130,7 +166,7 @@ const handleCryptoBuyPayment = async (status, reference, data) => {
 // Handle Bank Withdrawal
 const handleBankWithdrawal = async (status, reference) => {
     try {
-        let withdrawal = await BankWithdraw.findOne({
+        const withdrawal = await BankWithdraw.findOne({
             where: { reference_id: reference },
             include: [{ model: User, as: "user_withdrawal" }]
         });
@@ -138,11 +174,30 @@ const handleBankWithdrawal = async (status, reference) => {
         if (!withdrawal) {
             return { success: false, msg: "Withdrawal transaction not found" };
         }
-
+        const amt = parseInt(withdrawal?.amount).toLocaleString()
+        const user = { email: withdrawal?.user_withdrawal?.email, firstname: withdrawal?.user_withdrawal?.first_name }
+        console.log(`status:`, status)
         if (status === "success") {
             withdrawal.status = "completed";
             withdrawal.transfer_status = 'completed';
             await withdrawal.save();
+
+
+            await Notification.create({
+                user: withdrawal?.userid,
+                title: 'Bank wihdrawal Successful',
+                content: `Your bank withdrawal of ₦${amt} is succesful.  `,
+                url: `/user/transactions_history`
+            })
+            await Mailing({
+                subject: 'Bank Withdrawal',
+                eTitle: `Bank Withdrawal Successful`,
+                eBody: `
+                 <div style="font-size: 2rem">Hi ${user.firstname},</div>
+                 <div style="margin-top: 1.5rem">Your withdrawal of ₦${amt} is successful and has been sent to your local bank account ending in *****${withdrawal?.account_number.slice(-5)}. Kindly login to your ${withdrawal?.bank_name} to check your balance. Thank you for choosing us.</div>
+                `,
+                account: user,
+            })
             return { success: true, msg: "Bank withdrawal approved", data: withdrawal };
         } else {
             try {
@@ -165,6 +220,21 @@ const handleBankWithdrawal = async (status, reference) => {
                     await withdrawal.save({ transaction: t });
                 });
 
+                await Notification.create({
+                    user: withdrawal?.userid,
+                    title: 'Bank wihdrawal Failed',
+                    content: `Your bank withdrawal of ₦${amt} is unsuccesful  `,
+                    url: `/user/transactions_history`
+                })
+                await Mailing({
+                    subject: 'Bank Withdrawal',
+                    eTitle: `Bank Withdrawal Failed`,
+                    eBody: `
+                     <div style="font-size: 2rem">Hi ${user.firstname},</div>
+                     <div style="margin-top: 1.5rem">Your withdrawal of ₦${amt} is unsuccessful and has been reverted to your Moniequest account, kindly contact support to learn more. Thank you for choosing us.</div>
+                    `,
+                    account: user,
+                })
                 return { success: true, msg: "Bank withdrawal failed and funds reversed", data: withdrawal };
             } catch (error) {
                 console.error("Error handling failed transfer:", error);
@@ -183,58 +253,68 @@ const handleBankWithdrawal = async (status, reference) => {
 // Main webhook handler function
 exports.handleWebhook = async (req, res) => {
     try {
-        // Generate hash using your secret key and request body
         const hash = crypto.createHmac('sha512', secret)
             .update(JSON.stringify(req.body))
             .digest('hex');
 
-        // Compare the hash with Paystack's signature
         if (hash !== req.headers['x-paystack-signature']) {
-            return res.json({ status: 400, msg: "Invalid signature" });
+            return res.status(400).json({ msg: "Invalid signature" });
         }
 
         const event = req.body;
-        console.log(`received a webhook rn`)
+        console.log(`🔔 Webhook received: ${event.event}`);
 
-        if (!event.data || !event.event) {
-            return res.json({ status: 400, msg: "Invalid webhook data" });
+        if (!event?.data || !event?.event) {
+            return res.status(400).json({ msg: "Invalid webhook data" });
         }
 
         const { event: eventType, data } = event;
         const { reference } = data;
         const narration = data?.metadata?.narration;
-        const status = eventType === "charge.success" ? "success" : "failed";
 
+        // 🟢 Handle incoming payments (charge.success)
+        if (eventType === "charge.success") {
+            if (narration === "product-purchase") {
+                const result = await confirmOrDeclineProductPayment("success", reference);
+                return res.status(result.success ? 200 : 400).json({ msg: result.msg });
+            }
 
-        // Handle based on narration type
-        if (narration === "product-purchase") {
-            // console.log("Calling confirmOrDeclineProductPayment with:", status, reference);
-            const result = await confirmOrDeclineProductPayment(status, reference);
-            return res.json({ status: result.success ? 200 : 400, msg: result.msg });
-        } else if (narration === "p2p_buy") {
-            const result = await handleCryptoBuyPayment(status, reference, data);
-            return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
-        } else if (narration === "transfer") {
+            if (narration === "p2p_buy") {
+                const result = await handleCryptoBuyPayment("success", reference, data);
+                return res.status(result.success ? 200 : 400).json({ msg: result.msg, data: result.data });
+            }
+        }
+
+        // Handle failed charges
+        if (eventType === "charge.failed") {
+            if (narration === "product-purchase") {
+                const result = await confirmOrDeclineProductPayment("failed", reference);
+                return res.status(result.success ? 200 : 400).json({ msg: result.msg });
+            }
+
+            if (narration === "p2p_buy") {
+                const result = await handleCryptoBuyPayment("failed", reference, data);
+                return res.status(result.success ? 200 : 400).json({ msg: result.msg });
+            }
+        }
+
+        // 🔁 Handle transfers (outgoing payouts)
+        if (eventType === "transfer.success" || eventType === "transfer.failed") {
+            const status = eventType === "transfer.success" ? "success" : "failed";
             const result = await handleBankWithdrawal(status, reference);
-            return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
+            return res.status(result.success ? 200 : 400).json({ msg: result.msg, data: result.data });
         }
 
-        // If no narration match, fallback to event type handling
-        if (eventType === "charge.success" || eventType === "charge.failed") {
-            const result = await handleCryptoBuyPayment(status, reference, data);
-            return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
-        } else if (eventType === "transfer.success" || eventType === "transfer.failed") {
-            const result = await handleBankWithdrawal(status, reference, data);
-            return res.json({ status: result.success ? 200 : 400, msg: result.msg, data: result.data });
-        } else {
-            console.log(`⚠️ Unhandled event type: ${eventType}`);
-            return res.json({ status: 400, msg: `Unhandled event type: ${eventType}` });
-        }
+
+        console.log(`⚠️ Unhandled webhook event or narration: ${eventType} / ${narration}`);
+        return res.status(400).json({ msg: "Unhandled webhook type or narration" });
+
     } catch (error) {
-        console.error("Error processing webhook:", error.message);
-        return res.json({ status: 500, msg: "Internal server error" });
+        console.error("❌ Error processing webhook:", error.message);
+        return res.status(500).json({ msg: "Internal server error" });
     }
 };
+
 
 
 
@@ -269,8 +349,8 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
             metadata: {
                 narration: 'p2p_buy'
             },
-            callback_url: isproduction ? 'https://moniequest-front.vercel.app/user/exchange/buy/verify_payment':
-            'http://localhost:5173/user/exchange/buy/verify_payment'
+            callback_url: isproduction ? 'https://moniequest-front.vercel.app/user/exchange/buy/verify_payment' :
+                'http://localhost:5173/user/exchange/buy/verify_payment'
         };
 
         try {
@@ -346,8 +426,8 @@ exports.InitializeProductBuyPayment = async (req, res) => {
                 order_id: productOrder.gen_id,
                 narration: "product-purchase"
             },
-            callback_url:isproduction ? `https://moniequest-front.vercel.app/payment_status`: 
-            `http://localhost:5173/payment_status`
+            callback_url: isproduction ? `https://moniequest-front.vercel.app/payment_status` :
+                `http://localhost:5173/payment_status`
         };
 
         const response = await axios.post('https://api.paystack.co/transaction/initialize', payload, {
@@ -422,32 +502,61 @@ exports.checkPaymentStatus = async (req, res) => {
         // Verify payment from Paystack
         const response = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
             headers: {
-                Authorization: `Bearer ${secret}`, 
+                Authorization: `Bearer ${secret}`,
                 "Content-Type": "application/json"
             }
         });
 
         const paymentData = response.data.data;
         if (paymentData.status !== "success") {
-            return res.json({ status: 400, msg: "Payment not successful",data:reference });
+            return res.json({ status: 400, msg: "Payment not successful", data: reference });
         }
 
         // Payment successful on Paystack
         const findProductReference = await ProductOrder.findOne({ where: { reference } });
         if (!findProductReference) return res.json({ status: 404, msg: "Order reference not found" });
 
-        if (findProductReference.status !== 'paid') {
-            findProductReference.status = 'paid';
-            await findProductReference.save();
+        let prodStatus;
+        if (findProductReference.status === 'paid') {
+            prodStatus = true;
+            const amt = parseInt(findProductReference.amount_paid)
+            // const amtformat = amt.toLocaleString()
+            // const productsArray = Array.isArray(findProductReference.products) ? findProductReference.products : [findProductReference.products]
+            // const buyer = {email:findProductReference.email_address}
+            // try {
+            //     await Mailing({
+            //         subject: 'New Order Purchase',
+            //         eTitle: 'Order Purchase Successful',
+            //         eBody: `
+            //             <div style="color: white;">
+            //                 <p>Thank you for your payment. Your order <strong>#${findProductReference.gen_id}</strong> for ${productsArray.length} product(s) has been successfully processed and confirmed.</p>
+            //                 <p>Total amount: <strong>₦${amtformat}</strong></p>
+
+            //                 <p style="margin-top: 20px;">Your tool will be delivered to your email within<strong> 48 hours</strong></p>
+
+
+            //                 <p style="margin-top: 20px;">We appreciate your purchase! Don't forget — there's always another tool ready to take your progress even further.</p>
+            //                 <p style="margin-top: 20px; color:white">Thank you for your purchase!</p>
+            //             </div>
+            //         `,
+            //         account: buyer
+            //     });
+            //     console.log('Email sent successfully');
+            // } catch (error) {
+            //     console.error('Error while sending email:', error);
+            // }
+        } else {
+            prodStatus = false;
         }
 
-        return res.json({ status: 200, msg: "Payment confirmed", data: reference });
+        return res.json({ status: 200, prodstatus: prodStatus, msg: "Payment confirmed", data: reference });
 
     } catch (error) {
         console.error(error.response ? error.response.data : error.message);
         ServerError(res, error);
     }
-}
+};
+
 
 
 
@@ -459,26 +568,29 @@ exports.checkCryptoPaymentStatus = async (req, res) => {
         // Verify payment from Paystack
         const response = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
             headers: {
-                Authorization: `Bearer ${secret}`, 
+                Authorization: `Bearer ${secret}`,
                 "Content-Type": "application/json"
             }
         });
 
         const paymentData = response.data.data;
         if (paymentData.status !== "success") {
-            return res.json({ status: 400, msg: "Payment not successful",data:reference });
+            return res.json({ status: 400, msg: "Payment not successful", data: reference });
         }
 
         // Payment successful on Paystack
         const findProductReference = await BuyCrypto.findOne({ where: { reference } });
         if (!findProductReference) return res.json({ status: 404, msg: "Order reference not found" });
 
-        if (findProductReference.status !== 'paid') {
-            findProductReference.status = 'paid';
-            await findProductReference.save();
+
+        let prodStatus;
+        if (findProductReference.status === 'paid') {
+            prodStatus = true
+        } else {
+            prodStatus = false
         }
 
-        return res.json({ status: 200, msg: "Payment confirmed", data: reference });
+        return res.json({ status: 200, prodstatus: prodStatus, msg: "Payment confirmed", data: reference });
 
     } catch (error) {
         console.error(error.response ? error.response.data : error.message);

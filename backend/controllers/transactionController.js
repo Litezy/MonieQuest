@@ -90,7 +90,7 @@ exports.SellCrypto = async (req, res) => {
             rate,
             trans_hash,
             userid: req.user,
-            order_no: orderId 
+            order_no: orderId
         })
         await Notify.create({
             user: req.user, title: 'crypto sell order', content: `Your crypto sell order of ${orderId} is being processed. Please keep an eye on your dashboard and email for futher details.  `, url: `/user/transactions_history`
@@ -451,7 +451,10 @@ exports.requestWithdrawal = async (req, res) => {
         const formattedAmt = parseInt(amount).toLocaleString("en-US");
 
         await Notify.create({
-            user: req.user, title: 'Withdrawal Request', content: `You placed a bank withdrawal of NGN${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `, url: `/user/bank_withdrawal`
+            user: req.user, 
+            title: 'Withdrawal Request', 
+            content: `You placed a bank withdrawal of NGN${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `, 
+            url: `/user/bank_withdrawal`
         })
         await Mailing({
             subject: 'Bank Withdrawal ',
@@ -474,7 +477,7 @@ exports.requestWithdrawal = async (req, res) => {
                     user: admin.id,
                     title: `Bank withdrawal Request`,
                     content: `Hi Admin, A bank withdrawal request with the transaction ID of: ${transId} has been made, kindly review and credit customer ${user.first_name}.`,
-                    url: '/admin/exchange/buy_orders',
+                    url: '/admin/transactions_history',
                 })
                 await Mailing({
                     subject: 'Bank Withdrawal Request',
