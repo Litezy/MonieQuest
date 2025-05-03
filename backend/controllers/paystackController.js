@@ -346,8 +346,8 @@ exports.InitializeCryptoBuyPayment = async (req, res) => {
             metadata: {
                 narration: 'p2p_buy'
             },
-            callback_url: isproduction ? 'https://moniequest-front.vercel.app/user/exchange/buy/verify_payment' :
-                'http://localhost:5173/user/exchange/buy/verify_payment'
+            callback_url: isproduction ? 'https://moniequest.com/user/exchange/buy/verify_payment' :
+                'https://moniequest-front.vercel.app/user/exchange/buy/verify_payment'
         };
 
         try {
@@ -422,8 +422,8 @@ exports.InitializeProductBuyPayment = async (req, res) => {
                 order_id: productOrder.gen_id,
                 narration: "product-purchase"
             },
-            callback_url: isproduction ? `https://moniequest-front.vercel.app/payment_status` :
-                `http://localhost:5173/payment_status`
+            callback_url: isproduction ? `https://moniequest.com/payment_status` :
+                `https://moniequest-front.vercel.app/payment_status`
         };
 
         const response = await axios.post('https://api.paystack.co/transaction/initialize', payload, {
