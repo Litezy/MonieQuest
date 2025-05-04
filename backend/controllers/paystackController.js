@@ -3,9 +3,9 @@ const BuyCrypto = require('../models').exchangeBuys;
 const BankWithdraw = require('../models').withdrawals
 const Wallet = require('../models').wallets
 const User = require('../models').users;
-const { ServerError, formatToUserTimezone, webURL, nairaSign, dollarSign } = require('../utils/utils');
+const { ServerError, formatToUserTimezone, webURL} = require('../utils/utils');
 require('dotenv').config();
-const secret = process.env.PAYSTACK_SECRET;
+const secret= process.env.PAYSTACK_SECRET;
 const axios = require('axios');
 const otpGenerator = require('otp-generator');
 const Product = require('../models').products
@@ -727,12 +727,12 @@ exports.checkAccount = async (req, res) => {
         }
     } catch (error) {
         return res.json({ status: 500, msg: "Error", data: error.response?.data || error.message });
-
     }
 }
 
 exports.getBanksFromPayStack = async (req, res) => {
     try {
+        console.log(secret)
         const response = await axios.get("https://api.paystack.co/bank", {
             headers: {
                 Authorization: `Bearer ${secret}`,

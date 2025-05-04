@@ -19,7 +19,8 @@ app.use(cors({
         const allowedOrigins = [
             /^http:\/\/localhost:(5173|5174|5175)$/, // Localhost ports
             /\.vercel\.app$/, // Any Vercel app domain
-            'https://moniequest-front.vercel.app', 
+            'https://moniequest.com', 
+            'https://www.moniequest.com',
         ];
 
         // Check if origin matches any allowed pattern

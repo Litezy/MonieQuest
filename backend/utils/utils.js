@@ -3,7 +3,7 @@ exports.webShort = 'MQ'
 require('dotenv').config()
 const path = require('path')
 const fs = require('fs')
-exports.webURL = 'https://moniequest-front.vercel.app/'
+exports.webURL = 'https://moniequest.com/'
 const cloudinary = require('cloudinary').v2
 const axios = require('axios')
 const moment = require('moment-timezone') 

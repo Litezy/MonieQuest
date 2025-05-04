@@ -3,6 +3,7 @@ require("dotenv").config();
 const secret = process.env.PAYSTACK_SECRET;
 
 const verifyBankAccount = async (account_number, bank_name) => {
+    // console.log(secret)
     if (!account_number || !bank_name) {
         return { success: false, msg: "Incomplete request" };
     }

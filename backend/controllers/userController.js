@@ -423,20 +423,12 @@ exports.UpdateProfile = async (req, res) => {
 
 exports.CreateUpdateBankAccount = async (req, res) => {
     try {
-        const { bank_name, account_number } = req.body;
+        const { bank_name, account_number,account_name } = req.body;
 
         // Check required fields
-        if (!bank_name || !account_number) {
+        if (!bank_name || !account_number || !account_name) {
             return res.json({ status: 404, msg: `Incomplete request found` });
         }
-
-        // ✅ Verify account via Paystack
-        const result = await verifyBankAccount(account_number, bank_name);
-        if (!result.success) {
-            return res.json({ status: 400, msg: result.msg, error: result.error });
-        }
-
-        const { account_name } = result.data; // Paystack verified name
 
         // Check if user already has a bank record
         let bank = await Bank.findOne({ where: { user: req.user } });
