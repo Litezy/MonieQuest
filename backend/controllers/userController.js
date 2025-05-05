@@ -19,7 +19,6 @@ const Mailing = require('../config/emailDesign')
 const slug = require('slug')
 const path = require('path');
 const { Op } = require('sequelize')
-const verifyBankAccount = require('../utils/verifyAccount')
 
 
 exports.CreateAccount = async (req, res) => {
@@ -323,7 +322,7 @@ exports.Contacts = async (req, res) => {
         if (!email || !message) return res.json({ status: 404, msg: `Incomplete request found` })
 
         const admin = {
-            email: 'officialmoniequest@gmail.com'
+            email: 'support@moniequest.com'
         }
 
         await Mailing({

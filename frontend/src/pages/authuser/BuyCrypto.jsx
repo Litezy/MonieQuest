@@ -17,7 +17,7 @@ const BuyCrypto = () => {
     const [screen, setScreen] = useState(1)
     const [check, setCheck] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [isPageLoading, setIsPageLoading] = useState(!navigator.onLine)
+    const [isPageLoading, setIsPageLoading] = useState(!navigator.onLine) 
     const [modal, setModal] = useState(false)
     const [utils] = useAtom(UTILS)
     const [user] = useAtom(PROFILE)
@@ -34,6 +34,7 @@ const BuyCrypto = () => {
         gas_fee: '',
         kyc_limit: ''
     })
+    console.log(forms)
     const rate = utils?.exchange_buy_rate
     const verified = user?.kyc_verified
 
@@ -251,7 +252,7 @@ const BuyCrypto = () => {
                                                 </option>
                                             ))}
                                     </select>
-                                    {forms.crypto && <div className="text-red-600 text-xs">Please Note: you can only buy a minimum of ${forms.minimum} and maximum of {user?.kyc_verified === 'false' ? `$${forms.limit.toLocaleString()}` : `$${forms.kyc_limit.toLocaleString()}`} of {forms.crypto}. {user?.kyc_verified === 'false' ? 'Verify your account to increase limit.' : ''}</div>}
+                                    {forms.crypto && <div className="text-red-600 text-xs">Please Note: you can only buy a minimum of ${forms.minimum} and maximum of {verified === 'false' ? `$${forms.limit.toLocaleString()}` : `$${forms.kyc_limit.toLocaleString()}`} of {forms.crypto}. {verified === 'false' ? 'Verify your account to increase limit.' : ''}</div>}
                                 </div>
                                 <div className="flex w-full items-start gap-2 flex-col  ">
                                     <div className="font-bold text-lg">Amount:</div>
@@ -377,10 +378,7 @@ const BuyCrypto = () => {
                             </div>
                         </div>
                     }
-
-
                 </div>}
-
             </div>
         </ExchangeLayout>
     )

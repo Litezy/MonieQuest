@@ -156,7 +156,7 @@ const AuthPageLayout = ({ children }) => {
             })}
             <a
               target="_blank"
-              href={`mailto:corporate@moniequest.com?subject=Contact%20support`}
+              href={`mailto:support@moniequest.com?subject=Contact%Support`}
               className="text-sm px-3 py-2 mb-2 rounded-md bg-ash text-white"
             >
               Not Seeing What You Need? Tap and Contact Support Now!
