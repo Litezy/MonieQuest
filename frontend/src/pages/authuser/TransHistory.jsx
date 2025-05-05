@@ -36,7 +36,7 @@ const TransHistory = () => {
     if (searchValue.length > 1) {
       const filtered = mainData.filter(trans => {
         const lowerSearch = searchValue.toLowerCase();
-  
+
         return (
           String(trans.type).toLowerCase().startsWith(lowerSearch) ||
           String(trans.trans_id).toLowerCase().startsWith(lowerSearch) ||
@@ -51,7 +51,6 @@ const TransHistory = () => {
           )
         );
       });
-  
       setTransactions(filtered);
     } else {
       setTransactions(mainData);
