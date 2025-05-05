@@ -255,7 +255,7 @@ const formsal = () => {
                                 </div>
                             </div>
                             <div className={`w-full cursor-pointer lg:w-1/2 mx-auto mb-10`}>
-                                <FormButton type='button' onClick={confirmRequest} disabled={wallet.balance < utils.bank_withdraw_min ? true : false} className={`${wallet.balance > utils.bank_withdraw_min && 'hover:!bg-none !bg-[#2b4347] hover:!text-white !cursor-default'}`} title={`Request Withdrawal`} />
+                                <FormButton type='button' onClick={confirmRequest} disabled={wallet.balance < utils.bank_withdraw_min ? true : false} className={`${wallet.balance < utils.bank_withdraw_min && 'hover:!bg-none !bg-[#2b4347] hover:!text-white !cursor-default'}`} title={`Request Withdrawal`} />
                             </div>
                         </div>
 
