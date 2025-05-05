@@ -17,7 +17,7 @@ const BuyCrypto = () => {
     const [screen, setScreen] = useState(1)
     const [check, setCheck] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [isPageLoading, setIsPageLoading] = useState(!navigator.onLine)
+    const [isPageLoading, setIsPageLoading] = useState(false)
     const [modal, setModal] = useState(false)
     const [utils] = useAtom(UTILS)
     const [user] = useAtom(PROFILE)
@@ -80,7 +80,7 @@ const BuyCrypto = () => {
                 gas = parseFloat(forms.gas_fee) * parseFloat(rate)
                 toPay = parseFloat(forms.amount.replace(/,/g, '')) + gas
                 usd = toPay / rate
-                naira = usd * rate
+                naira = toPay
             }
             setGasFee(gas.toLocaleString())
             setAmountToPay(toPay.toLocaleString())
@@ -336,9 +336,7 @@ const BuyCrypto = () => {
                                     <div className="font-bold text-lg">Network</div>
                                     <div className="w-full ">
                                         <FormInput read={true} value={forms.network} />
-
                                         <div className="text-red-600 mt-1 text-sm">Please ensure that the network you select matches the wallet address provided to prevent any loss of funds.</div>
-
                                     </div>
                                 </div>
                                 <div className="flex w-full items-start gap-2 flex-col  ">

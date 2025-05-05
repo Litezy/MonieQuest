@@ -45,6 +45,8 @@ const TransHistory = () => {
           (
             trans.tag === 'bank'
               ? String(trans.amount).includes(searchValue)
+              : trans.type === 'buy'
+              ? String((trans.amount + trans.gas_fee) * trans.rate).includes(searchValue)
               : String(trans.amount * trans.rate).includes(searchValue)
           )
         );
