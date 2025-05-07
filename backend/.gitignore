@@ -11,6 +11,7 @@ node_modules/
 # Build directories
 dist/
 build/
+.zip
 
 # Environment variables
 .env
