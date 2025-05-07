@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+require('dotenv').config()
 const BuyCrypto = require('../models').exchangeBuys;
 const BankWithdraw = require('../models').withdrawals
 const Wallet = require('../models').wallets
@@ -604,7 +605,7 @@ exports.checkCryptoPaymentStatus = async (req, res) => {
 exports.adminTransfer = async (req, res) => {
     try {
         const { id, reason } = req.body;
-
+        console.log(secret)
         // 1. Validate Inputs
         if (!id || !reason) {
             return res.status(400).json({ msg: "All fields are required" });

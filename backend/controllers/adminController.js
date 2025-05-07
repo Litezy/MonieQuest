@@ -1,5 +1,6 @@
 const User = require('../models').users
 const Util = require('../models').utils
+require('dotenv').config();
 const Airdrop = require('../models').airdrops
 const Product = require('../models').products
 const ProductOrder = require('../models').productOrders
@@ -28,6 +29,7 @@ const Card = require('../models').cards
 const CardCategory = require('../models').cardCategory
 const Subscriber = require('../models').subscribers
 var cron = require('node-cron');
+const { sequelize } = require('../models')
 
 
 exports.UpdateUtils = async (req, res) => {
@@ -1697,6 +1699,68 @@ exports.getBankWithdrawals = async (req, res) => {
             order: [['createdAt', 'DESC']]
         })
         return res.json({ status: 200, msg: 'fetch success', data: allWithdrawals })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
+exports.reverseTransfers = async (req, res) => {
+    try {
+        const { id, message } = req.body
+        if (!id || !message) return res.json({ status: 400, msg: "ID or message missing from request" })
+        const withdrawal = await Bank_Withdrawals.findOne({
+            where: { id, status: 'pending' },
+            include: [
+                {
+                    model: User, as: "user_withdrawal", attributes: [`email`, `first_name`, `id`]
+                }
+            ]
+        })
+        if (!withdrawal) return res.json({ status: 404, msg: "Bank withdrawal ID not found or has been completed" })
+
+
+        const findAdmin = await User.findOne({ where: { id: req.user } })
+        if (findAdmin?.role !== 'super admin') return res.json({ status: 400, msg: "Unauthorized access to reverse transfers" })
+
+        // Find the user's wallet
+        const findWallet = await Wallet.findOne({ where: { user: withdrawal?.user_withdrawal.id } });
+
+        if (!findWallet) {
+            return { success: false, status: 404, msg: "User wallet not found for reverse" };
+        }
+        const amt = parseInt(withdrawal?.amount).toLocaleString()
+        const user = { email: withdrawal?.user_withdrawal?.email, firstname: withdrawal?.user_withdrawal?.first_name }
+        // return res.json({status:200, msg:withdrawal,user:user})
+
+        // Start a database transaction
+        await sequelize.transaction(async (t) => {
+            // Reverse the funds
+            findWallet.total_outflow = parseFloat(findWallet.total_outflow || 0) - parseFloat(withdrawal?.amount);
+            findWallet.balance = parseFloat(findWallet.balance || 0) + parseFloat(withdrawal.amount);
+            await findWallet.save({ transaction: t });
+
+            // Update withdrawal status
+            withdrawal.status = "reversed";
+            await withdrawal.save({ transaction: t });
+        });
+
+        try {
+            await Mailing({
+                subject: 'Bank Withdrawal',
+                eTitle: 'Bank Withdrawal Reversed',
+                eBody: `
+                    <div style="font-size: 2rem">Hi ${user.firstname},</div>
+                    <div style="margin-top: 1.5rem">Your withdrawal of ₦${amt} is unsuccessful and has been reverted to your Moniequest account with the following reason "${message}."</div>
+                `,
+                account: user,
+            });
+            console.log("Email sent successfully");
+        } catch (emailErr) {
+            console.error("❌ Failed to send email:", emailErr);
+        }
+
+        return res.json({ status: 200, msg: "Bank withdrawal failed and funds reversed", data: withdrawal });
+
     } catch (error) {
         ServerError(res, error)
     }

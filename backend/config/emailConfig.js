@@ -1,34 +1,30 @@
 "use strict";
 const nodemailer = require("nodemailer");
-require('dotenv').config()
 
-const sendMail = ({ to, subject, html, text}) => {
-
+const sendMail = ({ to, subject, html, text }) => {
   const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST,
-    port: 465,
-    secure: true,
+    host: "da6.host-ww.net",      
+    port: 465,                        
+    secure: true,                    
     auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASSWORD,
+      user: "support@moniequest.com",   
+      pass: "Moniequestmail@123",      
     },
   });
 
-  async function main() {
-
+  async function main() { 
     const info = await transporter.sendMail({
-      from: process.env.MAIL_USER,
+      from: '"Moniequest Support" <support@moniequest.com>', // Sender name + email
       to: to,
       subject: subject,
       text: text,
       html: html,
     });
 
-    console.log("Message sent: %s", info.messageId);
+    console.log("✅ Email sent:", info.messageId);
   }
 
   main().catch(console.error);
+};
 
-}
-
-module.exports = sendMail
+module.exports = sendMail;

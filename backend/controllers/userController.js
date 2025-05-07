@@ -229,7 +229,7 @@ exports.LoginAccount = async (req, res) => {
         const findIfSuspended = await User.findOne({ where: { id: findEmail.id, suspend: 'true' } })
         if (findIfSuspended) return res.json({ status: 400, msg: `Your account has been suspended, kindly contact support team for possible reactivation` })
 
-        const token = jwt.sign({ id: findEmail.id, role: findEmail.role }, process.env.JWT_SECRET, { expiresIn: '10h' })
+        const token = jwt.sign({ id: findEmail.id, role: findEmail.role }, process.env.JWT_SECRET, { expiresIn: '60h' })
 
         return res.json({ status: 200, msg: `Login successfully`, token })
     } catch (error) {

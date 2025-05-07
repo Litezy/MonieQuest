@@ -451,9 +451,9 @@ exports.requestWithdrawal = async (req, res) => {
         const formattedAmt = parseInt(amount).toLocaleString("en-US");
 
         await Notify.create({
-            user: req.user, 
-            title: 'Withdrawal Request', 
-            content: `You placed a bank withdrawal of NGN${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `, 
+            user: req.user,
+            title: 'Withdrawal Request',
+            content: `You placed a bank withdrawal of NGN${formattedAmt}. The team is currently reviewing your request and soon your funds will arrive in your local account. `,
             url: `/user/bank_withdrawal`
         })
         await Mailing({
@@ -497,6 +497,10 @@ exports.requestWithdrawal = async (req, res) => {
         ServerError(res, error)
     }
 }
+
+
+
+
 
 exports.getUserLatestWithdrawals = async (req, res) => {
     try {

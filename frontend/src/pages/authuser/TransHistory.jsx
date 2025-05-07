@@ -42,6 +42,7 @@ const TransHistory = () => {
           String(trans.trans_id).toLowerCase().startsWith(lowerSearch) ||
           String(trans.tag).toLowerCase().startsWith(lowerSearch) ||
           String(trans.order_no).toLowerCase().startsWith(lowerSearch) ||
+          String(trans.amount).startsWith(lowerSearch) ||
           (
             trans.tag === 'bank'
               ? String(trans.amount).includes(searchValue)
