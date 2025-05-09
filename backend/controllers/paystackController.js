@@ -459,7 +459,7 @@ exports.InitializeProductBuyPayment = async (req, res) => {
                 await Notification.create({
                     user: ele.id,
                     title: 'Product order alert',
-                    content: `Hello Admin, a new product order with ID (#${productOrder.gen_id}) for ${productsArray.length} product(s) totaling ${nairaSign}${productOrder.amount_paid.toLocaleString()} has been initialized. Order was placed on ${moment(productOrder.createdAt).format('DD-MM-yyyy')} at ${formattedTime}`,
+                    content: `Hello Admin, a new product order with ID (${productOrder.gen_id}) for ${productsArray.length} product(s) totaling ${nairaSign}${productOrder.amount_paid.toLocaleString()} has been initialized. Order was placed on ${moment(productOrder.createdAt).format('DD-MM-yyyy')} at ${formattedTime}`,
                     url: '/admin/products/orders',
                 });
 
@@ -467,7 +467,7 @@ exports.InitializeProductBuyPayment = async (req, res) => {
                     subject: 'Product Order Alert',
                     eTitle: 'Product order placed',
                     eBody: `
-                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">order ID:</span><span style="padding-left: 1rem">#${productOrder.gen_id}</span></div>
+                        <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">order ID:</span><span style="padding-left: 1rem">${productOrder.gen_id}</span></div>
                         <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">product(s) purchased:</span><span style="padding-left: 1rem">${productsArray.length}</span></div>
                         <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">amount to be paid:</span><span style="padding-left: 1rem">${nairaSign}${productOrder.amount_paid.toLocaleString()}</span></div>
                         <div style="color:white ;font-size: 0.85rem; margin-top: 0.5rem"><span style="font-style: italic">payment method:</span><span style="padding-left: 1rem">Paystack</span></div>
