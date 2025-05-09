@@ -179,7 +179,7 @@ exports.continueWithGoogle = async (req, res) => {
             return res.json({ status: 201, msg: 'User created successfully', token });
         } else {
             if (findUser.suspend === 'true') {
-                return res.json({ status: 401, msg: `Your account has been suspended, kindly contact support team for possible reactivation`  })
+                return res.json({ status: 401, msg: `Your account has been suspended, kindly contact support team for possible reactivation` })
             }
             const token = jwt.sign({ id: findUser.id, role: findUser.role }, process.env.JWT_SECRET, { expiresIn: '15h' });
             return res.json({ status: 200, msg: 'User logged in successfully', token });
@@ -422,7 +422,7 @@ exports.UpdateProfile = async (req, res) => {
 
 exports.CreateUpdateBankAccount = async (req, res) => {
     try {
-        const { bank_name, account_number,account_name } = req.body;
+        const { bank_name, account_number, account_name } = req.body;
 
         // Check required fields
         if (!bank_name || !account_number || !account_name) {
@@ -763,6 +763,24 @@ exports.DeleteCarouselImage = async (req, res) => {
         await GlobalDeleteSingleImage(singleCarousel.image)
         await singleCarousel.destroy()
         return res.json({ status: 200, msg: 'Carousel image deleted successfully' })
+    } catch (error) {
+        return res.json({ status: 500, msg: error.message })
+    }
+}
+
+exports.DeleteProfilePhoto = async (req, res) => {
+    try {
+        const user = await User.findOne({ where: { id: req.user } })
+        if (!user) return res.json({ status: 404, msg: 'Account not found' })
+        if (!user.image) return res.json({ status: 404, msg: 'Profile image not found' })
+
+        if (user.image) {
+            await GlobalDeleteImage(user.image)
+        }
+        user.image = null
+        await user.save()
+
+        return res.json({ status: 200, msg: 'Profile image deleted successfully', user })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }

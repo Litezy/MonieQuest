@@ -44,52 +44,56 @@ const AdminCompletedGiftcards = () => {
             <div className='w-11/12 mx-auto'>
                 <div className=" text-lg font-bold w-full text-center my-5 capitalize">See Completed Giftcards Sell Orders below</div>
                 {!loading ?
-                    <div className='relative overflow-x-auto rounded-md'>
-                        <table className="w-full text-sm text-left rtl:text-right">
-                            <thead className=" bg-primary text-sm md:text-base poppins ">
-                                <tr>
-                                    {Topheaders.map((item, i) => (
-                                        <th key={i} scope="col" className="px-3 truncate text-lightgreen py-3">{item}</th>
-                                    ))}
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data.length > 0 ?
-                                    data.slice(0, visibleCount).map((item, i) => (
-                                        <tr className=" border-b " key={i}>
-                                            <th scope="row" className="px-6 text-white py-4 font-medium  whitespace-nowrap ">
-                                                {item?.gift_seller?.first_name}  {item?.gift_seller?.surname}
-                                            </th>
-                                            <td className="px-3 py-3 text-lightgreen">
-                                                {item?.brand}
-                                            </td>
-                                            <td className="px-3 py-3">
-                                                {item?.code ? 'Code' : 'Image'}
-                                            </td>
-                                            <td className="px-3 py-3">
-                                                {item?.pin ? item?.pin : 'n/a'}
-                                            </td>
-
-                                            <td className="px-3 py-3">
-                                                {currencies[0].symbol}{item.amount?.toLocaleString()}
-                                            </td>
-                                            <td className="px-3 py-3">
-                                                <Link
-                                                    to={isCompletedOrders ? `/admin/giftcards/completed_orders/${item?.id}` :
-                                                        `/admin/giftcards/orders/${item.id}`}
-                                                    className="bg-primary to-sec truncate text-white px-5 rounded-lg py-2">view details</Link>
-                                            </td>
-
-                                        </tr>
-                                    )) :
-                                    <tr className="w-full truncate text-lg font-semibold">
-                                        <td colSpan="6" className='text-center py-2'>No Giftcard Orders</td>
+                    <>
+                        <div className='relative overflow-x-auto rounded-md'>
+                            <table className="w-full text-sm text-left rtl:text-right">
+                                <thead className=" bg-primary text-sm md:text-base poppins ">
+                                    <tr>
+                                        {Topheaders.map((item, i) => (
+                                            <th key={i} scope="col" className="px-3 truncate text-lightgreen py-3">{item}</th>
+                                        ))}
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {data.length > 0 ?
+                                        data.slice(0, visibleCount).map((item, i) => (
+                                            <tr className=" border-b " key={i}>
+                                                <th scope="row" className="px-6 text-white py-4 font-medium  whitespace-nowrap ">
+                                                    {item?.gift_seller?.first_name}  {item?.gift_seller?.surname}
+                                                </th>
+                                                <td className="px-3 py-3 text-lightgreen">
+                                                    {item?.brand}
+                                                </td>
+                                                <td className="px-3 py-3">
+                                                    {item?.code ? 'Code' : 'Image'}
+                                                </td>
+                                                <td className="px-3 py-3">
+                                                    {item?.pin ? item?.pin : 'n/a'}
+                                                </td>
+
+                                                <td className="px-3 py-3">
+                                                    {currencies[0].symbol}{item.amount?.toLocaleString()}
+                                                </td>
+                                                <td className="px-3 py-3">
+                                                    <Link
+                                                        to={isCompletedOrders ? `/admin/giftcards/completed_orders/${item?.id}` :
+                                                            `/admin/giftcards/orders/${item.id}`}
+                                                        className="bg-primary to-sec truncate text-white px-5 rounded-lg py-2">view details</Link>
+                                                </td>
+
+                                            </tr>
+                                        )) :
+                                        <tr className="w-full truncate text-lg font-semibold">
+                                            <td colSpan="6" className='text-center py-2'>No Giftcard Orders</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        {visibleCount < data.length &&
+                            <button onClick={() => setVisibleCount(visibleCount + 10)} className='md:w-1/2 w-full h-fit py-2 px-14 text-sm md:text-base flex items-center justify-center text-center capitalize rounded-md bg-ash hover:bg-primary cursor-pointer mx-auto mt-6'>show older transactions</button>
+                        }
+                    </>
                     :
                     <div className="w-full ">
                         <div className="mt-5 w-11/12 mx-auto">
@@ -104,9 +108,6 @@ const AdminCompletedGiftcards = () => {
                             <div className="text-center">...loading</div>
                         </div>
                     </div>
-                }
-                {visibleCount < data.length &&
-                    <button onClick={() => setVisibleCount(visibleCount + 10)} className='md:w-1/2 w-full h-fit py-2 px-14 text-sm md:text-base flex items-center justify-center text-center capitalize rounded-md bg-ash hover:bg-primary cursor-pointer mx-auto mt-6'>show older transactions</button>
                 }
             </div>
         </AdminGiftcardLayout>

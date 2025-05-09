@@ -37,7 +37,8 @@ const user_urls = {
     add_carousel_image: user + 'add-carousel-image',
     get_carousel_images: user + 'get-carousel-images',
     delete_carousel_image: user + 'delete-carousel-image',
-    get_testimonials: user + 'get_testimonials'
+    get_testimonials: user + 'get_testimonials',
+    delete_profile_photo: user + 'delete-profile-image'
 }
 
 const notification = 'api/notification/'

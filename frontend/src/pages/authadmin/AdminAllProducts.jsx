@@ -13,7 +13,7 @@ const AdminAllProducts = () => {
     const [dataLoading, setDataLoading] = useState(true)
     const [staticData, setStaticData] = useState([])
     const [allProducts, setAllProducts] = useState([])
-    const [visibleCount, setVisibleCount] = useState(1)
+    const [visibleCount, setVisibleCount] = useState(10)
     const [length, setLength] = useState(0)
 
     useEffect(() => {
@@ -56,10 +56,9 @@ const AdminAllProducts = () => {
     }
 
     useEffect(() => {
-        setVisibleCount(1)
+        setVisibleCount(10)
         const filtered = allProducts.filter((item) => active === tags[1] ? item.status === 'pending' : active === tags[2] ? item.status === 'approved' : active === tags[3] ? item.status === 'declined' : item)
         setLength(filtered.length)
-        console.log(filtered)
     }, [active, allProducts])
 
     return (
@@ -147,7 +146,7 @@ const AdminAllProducts = () => {
                                 <div className="text-gray-400 text-center">No record found...</div>
                             }
                             {visibleCount < length &&
-                                <button onClick={() => setVisibleCount(visibleCount + 1)} className='md:w-1/2 w-full h-fit py-2 px-14 text-sm md:text-base flex items-center justify-center text-center capitalize rounded-md bg-ash hover:bg-primary cursor-pointer mx-auto mt-6'>show older products</button>
+                                <button onClick={() => setVisibleCount(visibleCount + 10)} className='md:w-1/2 w-full h-fit py-2 px-14 text-sm md:text-base flex items-center justify-center text-center capitalize rounded-md bg-ash hover:bg-primary cursor-pointer mx-auto mt-6'>show older products</button>
                             }
                         </>
                     }
