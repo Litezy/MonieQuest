@@ -314,9 +314,6 @@ exports.handleWebhook = async (req, res) => {
 };
 
 
-
-
-
 exports.InitializeCryptoBuyPayment = async (req, res) => {
     try {
         const { id, amount } = req.body;
@@ -459,7 +456,7 @@ exports.InitializeProductBuyPayment = async (req, res) => {
                 await Notification.create({
                     user: ele.id,
                     title: 'Product order alert',
-                    content: `Hello Admin, a new product order with ID (${productOrder.gen_id}) for ${productsArray.length} product(s) totaling ${nairaSign}${productOrder.amount_paid.toLocaleString()} has been initialized. Order was placed on ${moment(productOrder.createdAt).format('DD-MM-yyyy')} at ${formattedTime}`,
+                    content: `Hello Admin, a new product order with ID (${productOrder.gen_id}) for ${productsArray.length} product(s) totaling ${nairaSign || '₦'}${productOrder.amount_paid.toLocaleString()} has been initialized. Order was placed on ${moment(productOrder.createdAt).format('DD-MM-yyyy')} at ${formattedTime}`,
                     url: '/admin/products/orders',
                 });
 
@@ -554,7 +551,6 @@ exports.checkPaymentStatus = async (req, res) => {
 };
 
 
-
 exports.checkCryptoPaymentStatus = async (req, res) => {
     try {
         const { reference } = req.body;
@@ -592,7 +588,6 @@ exports.checkCryptoPaymentStatus = async (req, res) => {
         ServerError(res, error);
     }
 }
-
 
 
 /**
