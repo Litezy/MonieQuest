@@ -1669,7 +1669,7 @@ exports.getAdminTransHistory = async (req, res) => {
             ]
         })
         const bankWithdrawals = await Bank_Withdrawals.findAll({
-            where: { status: [`pending`, 'completed', 'failed'] },
+            where: { status: [`pending`, 'completed', 'failed','reversed'] },
             include: [
                 {
                     model: User, as: 'user_withdrawal',
