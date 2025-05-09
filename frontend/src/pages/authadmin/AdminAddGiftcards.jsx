@@ -229,16 +229,16 @@ const AdminAddGiftcards = () => {
                                                     onClick={() => navigate(`/admin/utilities/manage_giftcards/${item?.id}`)}
                                                     className="px-1 text-dark relative">
                                                     <button
-                                                        className="w-full h-fit bg-white rounded-md py-1.5">explore</button>
+                                                        className="w-full h-fit bg-white rounded-md py-1.5 px-1">explore</button>
                                                 </td>
                                                 <td className="px-1 text-white relative">
                                                     <button
-                                                        onClick={() => { setDel(true); setSelected(item) }} className="w-full h-fit bg-red-600 rounded-md py-1.5">delete</button>
+                                                        onClick={() => { setDel(true); setSelected(item) }} className="w-full h-fit bg-red-600 rounded-md py-1.5 px-1">delete</button>
                                                 </td>
                                             </tr>
                                         )) :
                                         <tr className=" w-full text-lg  font-semibold ">
-                                            <td colSpan='7' className='text-center py-2'>No giftcard  added  </td>
+                                            <td colSpan='5' className='text-center py-2'>No giftcard  added  </td>
                                         </tr>
                                     }
                                 </tbody>

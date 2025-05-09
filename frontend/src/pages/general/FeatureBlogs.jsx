@@ -29,8 +29,8 @@ const FeatureBlogs = () => {
 
     return (
         <PageLayout>
-            <div className="bg-dark py-1 w-full text-white">
-                <div className="w-11/12 mx-auto my-10 poppins">
+            <div className="bg-dark py-10 w-full text-white">
+                <div className="w-11/12 mx-auto poppins">
                     {dataLoading ?
                         <div className='flex flex-col gap-6 animate-pulse'>
                             <div className='flex gap-3 items-center'>
@@ -58,7 +58,7 @@ const FeatureBlogs = () => {
                         </div>
                         :
                         <div className='flex flex-col gap-6'>
-                            <div className="flex items-center gap-5 w-11/12 lg:w-1/2 ">
+                            <div className="flex items-center gap-5 w-11/12 lg:w-1/2">
                                 <div className="text-xl"><GiArrowScope /></div>
                                 <div className="text-lg capitalize">Latest articles on {feature === 'personal_finance' ? "Personal Finance" : feature}</div>
                             </div>

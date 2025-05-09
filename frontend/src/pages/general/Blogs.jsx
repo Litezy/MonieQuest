@@ -46,7 +46,7 @@ const Blogs = () => {
                         <div className='md:text-4xl text-2xl capitalize font-bold text-white text-center'>blogs</div>
                     </div>
                 </div>
-                <div className='w-11/12 mx-auto py-10'>
+                <div className='w-11/12 mx-auto pt-10'>
                     {dataLoading ?
                         <div className='flex flex-col gap-6 animate-pulse'>
                             <div className='flex justify-between items-center'>

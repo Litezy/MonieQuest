@@ -182,7 +182,7 @@ const AdminSingleAirdrop = () => {
         setModal(false)
         setLoading({ status: true, desc: 'deleting' })
         try {
-            const response = await AuthPostApi(Apis.admin.delete_closed_airdrop, { airdrop_id: singleAirdrop.id })
+            const response = await AuthPostApi(Apis.admin.delete_airdrop, { airdrop_id: singleAirdrop.id })
             if (response.status === 200) {
                 await new Promise((resolve) => setTimeout(resolve, 2000))
                 SuccessAlert(response.msg)
@@ -388,14 +388,14 @@ const AdminSingleAirdrop = () => {
                             </div>
                         </div>
                         <FormButton title='Save Changes' className='md:!w-1/2 w-full mx-auto' />
-                        {singleAirdrop.status === 'closed' && <FormButton title='Delete Airdrop' type='button' className='md:!w-1/2 w-full mx-auto !bg-red-700 hover:!bg-red-400' onClick={() => setModal(true)} />}
+                        <FormButton title='Delete Airdrop' type='button' className='md:!w-1/2 w-full mx-auto !bg-red-700 hover:!bg-red-400' onClick={() => setModal(true)} />
                         {modal &&
                             <ModalLayout setModal={setModal} clas={`lg:w-[50%] w-10/12 mx-auto`}>
                                 <div className="p-5 bg-white text-dark rounded-md">
                                     <div className="text-base text-center mb-3">Are you sure you want to delete this airdrop?</div>
                                     <div className="flex items-center justify-between">
                                         <button onClick={() => setModal(false)} className='px-4 py-2 bg-red-600 text-white rounded-md' type='button'>Cancel</button>
-                                        <button className='px-4 py-2 bg-green-600 text-white rounded-md' type='button' onClick={DeleteAirdrop}>confirm delete</button>
+                                        <button className='px-4 py-2 bg-green-600 text-white rounded-md' type='button' onClick={DeleteAirdrop}>Confirm</button>
                                     </div>
 
                                 </div>

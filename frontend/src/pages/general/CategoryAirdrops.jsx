@@ -30,7 +30,7 @@ const CategoryAirdropsPage = () => {
 
     return (
         <PageLayout>
-            <div className='w-full bg-dark py-20'>
+            <div className='w-full bg-dark py-10'>
                 <div className='w-11/12 mx-auto text-gray-200'>
                     {dataLoading ?
                         <div className='flex flex-col gap-6 animate-pulse'>

@@ -314,7 +314,7 @@ exports.CategoryAirdrops = async (req, res) => {
     }
 }
 
-exports.DeleteClosedAirdrop = async (req, res) => {
+exports.DeleteAirdrop = async (req, res) => {
     try {
         const { airdrop_id } = req.body
         if (!airdrop_id) return res.json({ status: 404, msg: `Provide an airdrop id` })
@@ -327,7 +327,6 @@ exports.DeleteClosedAirdrop = async (req, res) => {
 
         const airdrop = await Airdrop.findOne({ where: { id: airdrop_id } })
         if (!airdrop) return res.json({ status: 404, msg: 'Airdrop not found' })
-        if (airdrop.status !== 'closed') return res.json({ status: 404, msg: 'You can only delete an airdrop with a closed status' })
 
         const imagesToDelete = [airdrop.logo_image, airdrop.banner_image]
         await GlobalDeleteMultiImages(imagesToDelete, 'airdrops', airdrop.gen_id)

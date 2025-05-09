@@ -68,7 +68,7 @@ const AdminLeaderboards = () => {
                                                 {item.unique_Id}
                                             </th>
                                             <td className="px-6 py-4">
-                                                {item.first_name.slice(0, 1)}*****{item.first_name.slice(-3)}
+                                                {item.first_name}
                                             </td>
                                             <td className="px-6 py-4 text-lightgreen">
                                                 {currencySign[1]}{item?.user_wallets?.total_deposit && item.user_wallets.total_deposit.toLocaleString()}

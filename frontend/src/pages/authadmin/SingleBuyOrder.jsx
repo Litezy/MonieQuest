@@ -184,13 +184,13 @@ const SingleBuyOrder = () => {
                                         </div>
                                     </div>
                                     <div className="w-full flex flex-col gap-2">
-                                        <div className="text-sm">Amount {data?.status == 'unpaid' && 'to be'} paid (USD):</div>
+                                        <div className="text-sm">Amount {['paid', 'completed'].includes(data?.status) ? 'paid' : 'to be paid'} (USD):</div>
                                         <div className="w-full">
                                             <FormInput read={true} value={`${currencies[0].symbol}${amountToPay}`} className={`${green}`} />
                                         </div>
                                     </div>
                                     <div className="w-full flex flex-col gap-2">
-                                        <div className="text-sm">Amount {data?.status == 'unpaid' && 'to be'} paid (NGN):</div>
+                                        <div className="text-sm">Amount {['paid', 'completed'].includes(data?.status) ? 'paid' : 'to be paid'} (NGN):</div>
                                         <div className="w-full">
                                             <FormInput read={true} value={`${currencies[1].symbol}${naira}`} className={`${green}`} />
                                         </div>

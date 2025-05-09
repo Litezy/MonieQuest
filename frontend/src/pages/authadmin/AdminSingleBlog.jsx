@@ -378,7 +378,7 @@ const AdminSingleBlog = () => {
                                     <div className="text-base text-center mb-3">Are you sure you want to delete this blog?</div>
                                     <div className="flex items-center justify-between">
                                         <button onClick={() => setModal(false)} className='px-4 py-2 bg-red-600 text-white rounded-md' type='button'>Cancel</button>
-                                        <button className='px-4 py-2 bg-green-600 text-white rounded-md' type='button' onClick={DeleteBlog}>confirm delete</button>
+                                        <button className='px-4 py-2 bg-green-600 text-white rounded-md' type='button' onClick={DeleteBlog}>Confirm</button>
                                     </div>
 
                                 </div>

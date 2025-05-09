@@ -190,9 +190,9 @@ const GiftCardSingleOrder = () => {
                 {screen === 1 &&
                     <>
                         <div className="">
-                            <Link 
-                            to={isCompletedOrders? `/admin/giftcards/completed_orders`:`/admin/giftcards/orders`} 
-                            className="w-fit px-4 py-1.5 rounded-md bg-ash">back to orders</Link>
+                            <Link
+                                to={isCompletedOrders ? `/admin/giftcards/completed_orders` : `/admin/giftcards/orders`}
+                                className="w-fit px-4 py-1.5 rounded-md bg-ash">back to orders</Link>
                         </div>
                         <div className="mt-5 md:mt-10 mont">
 
@@ -205,6 +205,10 @@ const GiftCardSingleOrder = () => {
                                             <div className="text-sm">Customer ID:</div>
                                             <FormInput read={true} value={data?.gift_seller?.id} className={`${green}`} />
                                         </div>
+                                        <div className="flex flex-col gap-2">
+                                            <div className="text-sm">FullName:</div>
+                                            <FormInput read={true} value={`${data?.gift_seller?.first_name} ${data?.gift_seller?.surname}`} className={`${green}`} />
+                                        </div>
                                         <div className="w-full flex flex-col gap-2">
                                             <div className="text-sm">GiftCard Brand:</div>
                                             <FormInput read={true} value={data?.brand} className={`${green}`} />
@@ -213,22 +217,15 @@ const GiftCardSingleOrder = () => {
                                             <div className="text-sm">Country:</div>
                                             <FormInput read={true} value={data?.country} className={`${green}`} />
                                         </div>
+                                    </div>
+                                    <div className=" flex flex-col gap-3 w-full">
                                         <div className="w-full flex flex-col gap-2">
                                             <div className="text-sm">Amount:</div>
                                             <FormInput read={true} value={`${currencies[0].symbol}${data?.amount?.toLocaleString()}`} className={`${green}`} />
                                         </div>
-
-
-                                    </div>
-                                    <div className=" flex flex-col gap-3 w-full">
                                         <div className="w-full flex flex-col gap-2">
                                             <div className="text-sm">Rate:</div>
                                             <FormInput read={true} value={`${currencies[1].symbol}${data?.rate}`} className={`${green}`} />
-                                        </div>
-
-                                        <div className="flex flex-col gap-2">
-                                            <div className="text-sm">FullName:</div>
-                                            <FormInput read={true} value={`${data?.gift_seller?.first_name} ${data?.gift_seller?.surname}`} className={`${green}`} />
                                         </div>
                                         {data?.code && <div className="flex flex-col gap-2">
                                             <div className="text-sm">GitfCard Code:</div>
@@ -309,7 +306,7 @@ const GiftCardSingleOrder = () => {
                                         </div>
                                     </div>
                                 )}
-                               {!isCompletedOrders &&  <div className="w-11/12 mt-5 mx-auto md:w-5/6">
+                                {!isCompletedOrders && <div className="w-11/12 mt-5 mx-auto md:w-5/6">
                                     <FormButton type='button' onClick={closeOrder} title={`Close Order`} />
                                 </div>}
                             </form>
