@@ -1003,26 +1003,34 @@ exports.AllBlogs = async (req, res) => {
 
 exports.SingleBlog = async (req, res) => {
     try {
-        const { id } = req.params
-        if (!id) return res.json({ status: 404, msg: `Blog id is required` })
+        const { id } = req.params;
+        if (!id) return res.json({ status: 404, msg: `Blog id is required` });
 
         const blog = await Blog.findOne({
             where: { id },
             include: [
                 {
-                    model: User, as: 'blog_user',
+                    model: User,
+                    as: 'blog_user',
                     attributes: ['id', 'image', 'first_name', 'surname', 'email']
                 },
-                { model: Comment, as: 'blog_comments' },
+                {
+                    model: Comment,
+                    as: 'blog_comments',
+                    separate: true,
+                    order: [['createdAt', 'DESC']]
+                }
             ]
-        })
-        if (!blog) return res.json({ status: 404, msg: 'Blog not found' })
+        });
 
-        return res.json({ status: 200, msg: blog })
+        if (!blog) return res.json({ status: 404, msg: 'Blog not found' });
+
+        return res.json({ status: 200, msg: blog });
     } catch (error) {
-        return res.json({ status: 400, msg: error.message })
+        return res.json({ status: 400, msg: error.message });
     }
-}
+};
+
 
 exports.DeleteSingleBlogImages = async (req, res) => {
     try {

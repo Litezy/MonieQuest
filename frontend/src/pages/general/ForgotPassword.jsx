@@ -140,7 +140,7 @@ const ForgotPassword = () => {
             </div>
             <div className='text-3xl font-bold text-center text-zinc-300'>Forgot password</div>
             {screen === 1 &&
-              <form onSubmit={SendOTP} className='pb-10'>
+              <form onSubmit={SendOTP}>
                 <div className='flex justify-center text-zinc-300 flex-col gap-2 items-center mt-6'>
                   <div className='w-12 h-12 border-2 border-lightgreen rounded-full flex items-center justify-center'>
                     <IoLockClosedOutline className='text-2xl text-lightgreen' />
@@ -196,7 +196,7 @@ const ForgotPassword = () => {
               </form>
             }
             {screen === 4 &&
-              <div className='flex flex-col gap-6 py-10'>
+              <div className='flex flex-col gap-6 mt-6'>
                 <div className='flex flex-col gap-4 items-center justify-center'>
                   <SuccessCheck />
                   <div className='text-3xl font-bold text-center text-lightgreen'>Password Reset <br></br>Succcessful</div>
@@ -207,6 +207,7 @@ const ForgotPassword = () => {
                 </Link>
               </div>
             }
+             <Link className='text-sm text-center mt-5 text-lightgreen underline' to={'/'}>Go Back Home</Link>
           </div>
         </div>
       </div>

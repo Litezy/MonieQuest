@@ -56,15 +56,15 @@ const SingleAirdropPage = () => {
 
   return (
     <PageLayout>
-      <div className='w-full bg-dark md:py-20 py-10'>
+      <div className='w-full bg-dark py-10'>
         <div className='md:w-5/6 w-11/12 mx-auto text-gray-200'>
           <Link to={`/airdrops`}
-            className="flex mb-5 w-fit px-4 py-1 rounded-2xl items-center gap-2 bg-ash">
+            className="flex mb-10 w-fit px-4 py-1 rounded-2xl items-center gap-2 bg-ash">
             <FaLongArrowAltLeft className='text-white text-2xl' />
             <div>back to all</div>
           </Link>
           {dataLoading || Object.values(singleAirdrop).length === 0 ?
-            <div className='flex flex-col gap-14 md:mt-10 mt-5'>
+            <div className='flex flex-col gap-14'>
               <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
                 <div className='flex items-center gap-2'>
                   <div className='w-12 h-12 rounded-full bg-slate-400 animate-pulse'></div>
@@ -114,7 +114,7 @@ const SingleAirdropPage = () => {
               <div className='w-full h-36 bg-slate-400 animate-pulse rounded-md'></div>
             </div>
             :
-            <div className='flex flex-col gap-14 md:mt-10 mt-5'>
+            <div className='flex flex-col gap-14'>
               <div className='flex lg:flex-row lg:justify-between flex-col gap-4'>
                 <div className='flex items-center gap-2'>
                   <div>
